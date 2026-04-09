@@ -86,7 +86,7 @@ import qualified Hydra.Json.Model as JM
 import qualified Hydra.Ext.Sources.Avro.Schema as AvroSchema
 import qualified Hydra.Ext.Avro.Environment as AvroEnv
 -- Local type aliases
-type Result a = Either (InContext Error) a
+type Result a = Either Error a
 type AvroHydraAdapter = Adapter Avro.Schema Type JM.Value Term
 
 
@@ -287,7 +287,7 @@ avroHydraAdapter = define "avroHydraAdapter" $
                         (Eithers.mapList (lambda "e" $ var "pairToHydra" @@ var "cx1" @@ var "e") (Maps.toList (var "m")))])
                 (lambda "cx1" $ lambda "m" $
                   Eithers.map (lambda "mp'" $ inject JM._Value JM._Value_object (var "mp'"))
-                    (ExtractCore.map @@ var "cx" @@ (lambda "t" $ ExtractCore.string @@ var "cx" @@ Graph.emptyGraph @@ var "t")
+                    (ExtractCore.map @@ (lambda "t" $ ExtractCore.string @@ Graph.emptyGraph @@ var "t")
                       @@ (lambda "t" $ Coders.coderDecode (Coders.adapterCoder (var "ad")) @@ var "cx1" @@ var "t")
                       @@ Graph.emptyGraph @@ var "m"))))
             (var "env1"))),
@@ -340,7 +340,7 @@ avroHydraAdapter = define "avroHydraAdapter" $
                         right (Core.termLiteral (Core.literalBinary (Literals.stringToBinary (var "s"))))])
                   @@ (lambda "cx1" $ lambda "t" $
                     Eithers.map (lambda "b" $ inject JM._Value JM._Value_string (Literals.binaryToString (var "b")))
-                      (ExtractCore.binary @@ var "cx1" @@ Graph.emptyGraph @@ var "t")),
+                      (ExtractCore.binary @@ Graph.emptyGraph @@ var "t")),
 
               -- Record
               Avro._NamedType_record>>: lambda "r" $ lets [
@@ -421,7 +421,7 @@ avroHydraAdapter = define "avroHydraAdapter" $
                   JM._Value_string>>: lambda "s" $ right (MetaTerms.stringLift (var "s"))])
               @@ (lambda "cx1" $ lambda "t" $
                 Eithers.map (lambda "s" $ inject JM._Value JM._Value_string (var "s"))
-                  (ExtractCore.string @@ var "cx1" @@ Graph.emptyGraph @@ var "t")),
+                  (ExtractCore.string @@ Graph.emptyGraph @@ var "t")),
           -- Boolean
           Avro._Primitive_boolean>>: constant $
             var "simpleAdapter" @@ var "env0" @@ MetaTypes.boolean
@@ -430,7 +430,7 @@ avroHydraAdapter = define "avroHydraAdapter" $
                   JM._Value_boolean>>: lambda "b" $ right (MetaTerms.booleanLift (var "b"))])
               @@ (lambda "cx1" $ lambda "t" $
                 Eithers.map (lambda "b" $ inject JM._Value JM._Value_boolean (var "b"))
-                  (ExtractCore.boolean @@ var "cx1" @@ Graph.emptyGraph @@ var "t")),
+                  (ExtractCore.boolean @@ Graph.emptyGraph @@ var "t")),
           -- Int
           Avro._Primitive_int>>: constant $
             var "simpleAdapter" @@ var "env0" @@ MetaTypes.int32
@@ -439,7 +439,7 @@ avroHydraAdapter = define "avroHydraAdapter" $
                   JM._Value_number>>: lambda "d" $ right (Core.termLiteral (Core.literalInteger (Core.integerValueInt32 (var "doubleToInt" @@ var "d"))))])
               @@ (lambda "cx1" $ lambda "t" $
                 Eithers.map (lambda "i" $ inject JM._Value JM._Value_number (Literals.bigintToBigfloat (Literals.int32ToBigint (var "i"))))
-                  (ExtractCore.int32 @@ var "cx1" @@ Graph.emptyGraph @@ var "t")),
+                  (ExtractCore.int32 @@ Graph.emptyGraph @@ var "t")),
           -- Long
           Avro._Primitive_long>>: constant $
             var "simpleAdapter" @@ var "env0" @@ MetaTypes.int64
@@ -448,7 +448,7 @@ avroHydraAdapter = define "avroHydraAdapter" $
                   JM._Value_number>>: lambda "d" $ right (Core.termLiteral (Core.literalInteger (Core.integerValueInt64 (var "doubleToLong" @@ var "d"))))])
               @@ (lambda "cx1" $ lambda "t" $
                 Eithers.map (lambda "i" $ inject JM._Value JM._Value_number (Literals.bigintToBigfloat (Literals.int64ToBigint (var "i"))))
-                  (ExtractCore.int64 @@ var "cx1" @@ Graph.emptyGraph @@ var "t")),
+                  (ExtractCore.int64 @@ Graph.emptyGraph @@ var "t")),
           -- Float
           Avro._Primitive_float>>: constant $
             var "simpleAdapter" @@ var "env0" @@ MetaTypes.float32
@@ -457,7 +457,7 @@ avroHydraAdapter = define "avroHydraAdapter" $
                   JM._Value_number>>: lambda "d" $ right (Core.termLiteral (Core.literalFloat (Core.floatValueFloat32 (Literals.bigfloatToFloat32 (var "d")))))])
               @@ (lambda "cx1" $ lambda "t" $
                 Eithers.map (lambda "f" $ inject JM._Value JM._Value_number (Literals.float32ToBigfloat (var "f")))
-                  (ExtractCore.float32 @@ var "cx1" @@ Graph.emptyGraph @@ var "t")),
+                  (ExtractCore.float32 @@ Graph.emptyGraph @@ var "t")),
           -- Double
           Avro._Primitive_double>>: constant $
             var "simpleAdapter" @@ var "env0" @@ MetaTypes.float64
@@ -466,7 +466,7 @@ avroHydraAdapter = define "avroHydraAdapter" $
                   JM._Value_number>>: lambda "d" $ right (Core.termLiteral (Core.literalFloat (Core.floatValueFloat64 (Literals.bigfloatToFloat64 (var "d")))))])
               @@ (lambda "cx1" $ lambda "t" $
                 Eithers.map (lambda "d" $ inject JM._Value JM._Value_number (Literals.float64ToBigfloat (var "d")))
-                  (ExtractCore.float64 @@ var "cx1" @@ Graph.emptyGraph @@ var "t")),
+                  (ExtractCore.float64 @@ Graph.emptyGraph @@ var "t")),
           -- Bytes
           Avro._Primitive_bytes>>: constant $
             var "simpleAdapter" @@ var "env0" @@ MetaTypes.binary
@@ -475,7 +475,7 @@ avroHydraAdapter = define "avroHydraAdapter" $
                   JM._Value_string>>: lambda "s" $ right (Core.termLiteral (Core.literalBinary (Literals.stringToBinary (var "s"))))])
               @@ (lambda "cx1" $ lambda "t" $
                 Eithers.map (lambda "b" $ inject JM._Value JM._Value_string (Literals.binaryToString (var "b")))
-                  (ExtractCore.binary @@ var "cx1" @@ Graph.emptyGraph @@ var "t")),
+                  (ExtractCore.binary @@ Graph.emptyGraph @@ var "t")),
           -- String
           Avro._Primitive_string>>: constant $
             var "simpleAdapter" @@ var "env0" @@ MetaTypes.string
@@ -484,7 +484,7 @@ avroHydraAdapter = define "avroHydraAdapter" $
                   JM._Value_string>>: lambda "s" $ right (MetaTerms.stringLift (var "s"))])
               @@ (lambda "cx1" $ lambda "t" $
                 Eithers.map (lambda "s" $ inject JM._Value JM._Value_string (var "s"))
-                  (ExtractCore.string @@ var "cx1" @@ Graph.emptyGraph @@ var "t"))],
+                  (ExtractCore.string @@ Graph.emptyGraph @@ var "t"))],
 
       -- SchemaReference
       Avro._Schema_reference>>: lambda "name_" $ lets [

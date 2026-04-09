@@ -122,26 +122,26 @@ jsonValue :: Type
 jsonValue = Bootstrap.typeref JsonModel.ns "Value"
 
 -- | Encode a String value to GraphSON
-encodeStringValue :: TTermDefinition (String -> Either (InContext Error) G.Value)
+encodeStringValue :: TTermDefinition (String -> Either Error G.Value)
 encodeStringValue = define "encodeStringValue" $
   doc "Encode a String value as a GraphSON Value" $
   "s" ~>
     right $ inject G._Value G._Value_string (var "s")
 
 -- | Encode a Term value to GraphSON
-encodeTermValue :: TTermDefinition (Term -> Either (InContext Error) G.Value)
+encodeTermValue :: TTermDefinition (Term -> Either Error G.Value)
 encodeTermValue = define "encodeTermValue" $
   doc "Encode a Hydra Term as a GraphSON Value. Supports literals and unit values." $
   "term" ~>
-    match _Term (Just $ left (Ctx.inContext (Error.errorOther $ Error.otherError (string "unsupported term variant for GraphSON encoding")) (asTerm Lexical.emptyContext))) [
+    match _Term (Just $ left (Error.errorOther $ Error.otherError (string "unsupported term variant for GraphSON encoding"))) [
       _Term_literal>>: "lit" ~>
-        match _Literal (Just $ left (Ctx.inContext (Error.errorOther $ Error.otherError (string "unsupported literal type for GraphSON encoding")) (asTerm Lexical.emptyContext))) [
+        match _Literal (Just $ left (Error.errorOther $ Error.otherError (string "unsupported literal type for GraphSON encoding"))) [
           _Literal_binary>>: "b" ~>
             right $ inject G._Value G._Value_binary (Literals.binaryToString $ var "b"),
           _Literal_boolean>>: "b" ~>
             right $ inject G._Value G._Value_boolean (var "b"),
           _Literal_float>>: "fv" ~>
-            match _FloatValue (Just $ left (Ctx.inContext (Error.errorOther $ Error.otherError (string "unsupported float type")) (asTerm Lexical.emptyContext))) [
+            match _FloatValue (Just $ left (Error.errorOther $ Error.otherError (string "unsupported float type"))) [
               _FloatValue_bigfloat>>: "f" ~>
                 right $ inject G._Value G._Value_bigDecimal
                   (wrap G._BigDecimalValue $ Literals.showBigfloat $ var "f"),
@@ -153,7 +153,7 @@ encodeTermValue = define "encodeTermValue" $
                   (inject G._DoubleValue G._DoubleValue_finite (var "f"))]
             @@ var "fv",
           _Literal_integer>>: "iv" ~>
-            match _IntegerValue (Just $ left (Ctx.inContext (Error.errorOther $ Error.otherError (string "unsupported integer type")) (asTerm Lexical.emptyContext))) [
+            match _IntegerValue (Just $ left (Error.errorOther $ Error.otherError (string "unsupported integer type"))) [
               _IntegerValue_bigint>>: "i" ~>
                 right $ inject G._Value G._Value_bigInteger (var "i"),
               _IntegerValue_int32>>: "i" ~>
@@ -248,7 +248,7 @@ elementsToVerticesWithAdjacentEdges = define "elementsToVerticesWithAdjacentEdge
     Maps.elems (var "vertexMap1")
 
 -- | Convert PG elements to GraphSON JSON values
-pgElementsToGraphson :: TTermDefinition ((v -> Either (InContext Error) G.Value) -> [PG.Element v] -> Either (InContext Error) [JM.Value])
+pgElementsToGraphson :: TTermDefinition ((v -> Either Error G.Value) -> [PG.Element v] -> Either Error [JM.Value])
 pgElementsToGraphson = define "pgElementsToGraphson" $
   doc "Convert property graph elements to a list of GraphSON JSON values" $
   "encodeValue" ~> "els" ~>

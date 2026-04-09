@@ -133,7 +133,7 @@ object Generation:
   /** Generate source files and write them to disk. Returns number of files written. */
   def generateSources(
       coder: Module => Seq[Definition] => hydra.context.Context => Graph =>
-        Either[hydra.context.InContext[hydra.errors.Error], Map[String, String]],
+        Either[hydra.errors.Error, Map[String, String]],
       language: hydra.coders.Language,
       doInfer: Boolean,
       doExpand: Boolean,
@@ -147,8 +147,8 @@ object Generation:
     hydra.codegen.generateSourceFiles(
       coder)(language)(doInfer)(doExpand)(doHoistCaseStatements)(doHoistPolymorphicLetBindings)(
       bsGraph)(universe)(modsToGenerate)(cx) match
-      case Left(ic) =>
-        throw new RuntimeException(s"Code generation failed: ${ic.`object`}")
+      case Left(err) =>
+        throw new RuntimeException(s"Code generation failed: $err")
       case Right(pairs) =>
         var count = 0
         for (filePath, content) <- pairs do

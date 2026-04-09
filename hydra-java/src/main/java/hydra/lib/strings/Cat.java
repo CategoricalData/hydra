@@ -15,7 +15,6 @@ import static hydra.dsl.Types.list;
 import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.string;
 import hydra.context.Context;
-import hydra.context.InContext;
 import hydra.errors.Error_;
 import hydra.util.Either;
 
@@ -45,8 +44,8 @@ public class Cat extends PrimitiveFunction {
      * @return a function that transforms terms to a flow of graph and term
      */
     @Override
-    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Map.apply(strings -> Terms.string(apply(strings)), hydra.extract.Core.listOf(cx, t -> hydra.extract.Core.string(cx, graph, t), graph, args.get(0)));
+    protected Function<List<Term>, Function<Context, Function<Graph, Either<Error_, Term>>>> implementation() {
+        return args -> cx -> graph -> hydra.lib.eithers.Map.apply(strings -> Terms.string(apply(strings)), hydra.extract.Core.listOf(t -> hydra.extract.Core.string(graph, t), graph, args.get(0)));
     }
 
     /**

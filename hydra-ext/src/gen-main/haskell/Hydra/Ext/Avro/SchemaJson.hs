@@ -5,7 +5,6 @@
 module Hydra.Ext.Avro.SchemaJson where
 
 import qualified Hydra.Coders as Coders
-import qualified Hydra.Context as Context
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Ext.Org.Apache.Avro.Schema as Schema
 import qualified Hydra.Json.Model as Model
@@ -128,20 +127,20 @@ decodeAliases cx m =
     Eithers.bind (optArrayE cx avro_aliases m) (\mArr -> Maybes.maybe (Right Nothing) (\arr -> Eithers.map (\strs -> Maybes.pure strs) (Eithers.mapList (expectStringE cx) arr)) mArr)
 
 -- | Decode an Avro array schema from a JSON object map
-decodeArraySchema :: Context.Context -> M.Map String Model.Value -> Either (Context.InContext Errors.Error) Schema.Schema
+decodeArraySchema :: t0 -> M.Map String Model.Value -> Either Errors.Error Schema.Schema
 decodeArraySchema cx m =
     Eithers.bind (requireE cx avro_items m) (\items -> Eithers.map (\s -> Schema.SchemaArray (Schema.Array {
       Schema.arrayItems = s})) (decodeSchema cx items))
 
 -- | Decode an Avro enum type from a JSON object map
-decodeEnum :: Context.Context -> M.Map String Model.Value -> Either (Context.InContext Errors.Error) Schema.NamedType
+decodeEnum :: t0 -> M.Map String Model.Value -> Either Errors.Error Schema.NamedType
 decodeEnum cx m =
     Eithers.bind (requireArrayE cx avro_symbols m) (\syms -> Eithers.bind (Eithers.mapList (expectStringE cx) syms) (\symbols -> Eithers.bind (optStringE cx avro_default m) (\defVal -> Right (Schema.NamedTypeEnum (Schema.Enum {
       Schema.enumSymbols = symbols,
       Schema.enumDefault = defVal})))))
 
 -- | Decode an Avro field from a JSON object map
-decodeField :: Context.Context -> M.Map String Model.Value -> Either (Context.InContext Errors.Error) Schema.Field
+decodeField :: t0 -> M.Map String Model.Value -> Either Errors.Error Schema.Field
 decodeField cx m =
     Eithers.bind (requireStringE cx avro_name m) (\name -> Eithers.bind (optStringE cx avro_doc m) (\fdoc -> Eithers.bind (requireE cx avro_type m) (\typeJson -> Eithers.bind (decodeSchema cx typeJson) (\fieldType -> Eithers.bind (Eithers.bind (optStringE cx avro_order m) (\mOrd -> Eithers.mapMaybe (decodeOrder cx) mOrd)) (\order -> Eithers.bind (decodeAliases cx m) (\aliases -> Right (Schema.Field {
       Schema.fieldName = name,
@@ -153,7 +152,7 @@ decodeField cx m =
       Schema.fieldAnnotations = (getAnnotations m)})))))))
 
 -- | Decode an Avro fixed type from a JSON object map
-decodeFixed :: Context.Context -> M.Map String Model.Value -> Either (Context.InContext Errors.Error) Schema.NamedType
+decodeFixed :: t0 -> M.Map String Model.Value -> Either Errors.Error Schema.NamedType
 decodeFixed cx m =
     Eithers.bind (requireNumberE cx avro_size m) (\n ->
       let size = Literals.bigintToInt32 (Literals.bigfloatToBigint n)
@@ -161,13 +160,13 @@ decodeFixed cx m =
         Schema.fixedSize = size}))))
 
 -- | Decode an Avro map schema from a JSON object map
-decodeMapSchema :: Context.Context -> M.Map String Model.Value -> Either (Context.InContext Errors.Error) Schema.Schema
+decodeMapSchema :: t0 -> M.Map String Model.Value -> Either Errors.Error Schema.Schema
 decodeMapSchema cx m =
     Eithers.bind (requireE cx avro_values m) (\values -> Eithers.map (\s -> Schema.SchemaMap (Schema.Map {
       Schema.mapValues = s})) (decodeSchema cx values))
 
 -- | Decode a named Avro schema from a JSON object map and a decoded named type result
-decodeNamedSchema :: Context.Context -> M.Map String Model.Value -> Either (Context.InContext Errors.Error) Schema.NamedType -> Either (Context.InContext Errors.Error) Schema.Schema
+decodeNamedSchema :: t0 -> M.Map String Model.Value -> Either Errors.Error Schema.NamedType -> Either Errors.Error Schema.Schema
 decodeNamedSchema cx m namedTypeResult =
     Eithers.bind (requireStringE cx avro_name m) (\name -> Eithers.bind (optStringE cx avro_namespace m) (\ns -> Eithers.bind (optStringE cx avro_doc m) (\sdoc -> Eithers.bind (decodeAliases cx m) (\aliases -> Eithers.bind namedTypeResult (\namedType -> Right (Schema.SchemaNamed (Schema.Named {
       Schema.namedName = name,
@@ -178,14 +177,14 @@ decodeNamedSchema cx m namedTypeResult =
       Schema.namedAnnotations = (getAnnotations m)})))))))
 
 -- | Decode an Avro schema from a JSON object given the type name
-decodeObjectSchema :: Context.Context -> M.Map String Model.Value -> String -> Either (Context.InContext Errors.Error) Schema.Schema
+decodeObjectSchema :: t0 -> M.Map String Model.Value -> String -> Either Errors.Error Schema.Schema
 decodeObjectSchema cx m typeName =
     Logic.ifElse (Equality.equal typeName "array") (decodeArraySchema cx m) (Logic.ifElse (Equality.equal typeName "map") (decodeMapSchema cx m) (Logic.ifElse (Equality.equal typeName "record") (decodeNamedSchema cx m (decodeRecord cx m)) (Logic.ifElse (Equality.equal typeName "enum") (decodeNamedSchema cx m (decodeEnum cx m)) (Logic.ifElse (Equality.equal typeName "fixed") (decodeNamedSchema cx m (decodeFixed cx m)) (Maybes.maybe (err cx (Strings.cat [
       "unknown type: ",
       typeName])) (\p -> Right (Schema.SchemaPrimitive p)) (decodePrimitiveName typeName))))))
 
 -- | Decode an Avro field ordering from a string
-decodeOrder :: Context.Context -> String -> Either (Context.InContext Errors.Error) Schema.Order
+decodeOrder :: t0 -> String -> Either Errors.Error Schema.Order
 decodeOrder cx o =
     Logic.ifElse (Equality.equal o "ascending") (Right Schema.OrderAscending) (Logic.ifElse (Equality.equal o "descending") (Right Schema.OrderDescending) (Logic.ifElse (Equality.equal o "ignore") (Right Schema.OrderIgnore) (err cx (Strings.cat [
       "unknown order: ",
@@ -197,13 +196,13 @@ decodePrimitiveName s =
     Logic.ifElse (Equality.equal s "null") (Just Schema.PrimitiveNull) (Logic.ifElse (Equality.equal s "boolean") (Just Schema.PrimitiveBoolean) (Logic.ifElse (Equality.equal s "int") (Just Schema.PrimitiveInt) (Logic.ifElse (Equality.equal s "long") (Just Schema.PrimitiveLong) (Logic.ifElse (Equality.equal s "float") (Just Schema.PrimitiveFloat) (Logic.ifElse (Equality.equal s "double") (Just Schema.PrimitiveDouble) (Logic.ifElse (Equality.equal s "bytes") (Just Schema.PrimitiveBytes) (Logic.ifElse (Equality.equal s "string") (Just Schema.PrimitiveString) Nothing)))))))
 
 -- | Decode an Avro record type from a JSON object map
-decodeRecord :: Context.Context -> M.Map String Model.Value -> Either (Context.InContext Errors.Error) Schema.NamedType
+decodeRecord :: t0 -> M.Map String Model.Value -> Either Errors.Error Schema.NamedType
 decodeRecord cx m =
     Eithers.bind (requireArrayE cx avro_fields m) (\fieldJsons -> Eithers.bind (Eithers.mapList (\fj -> Eithers.bind (expectObjectE cx fj) (\fm -> decodeField cx fm)) fieldJsons) (\fields -> Right (Schema.NamedTypeRecord (Schema.Record {
       Schema.recordFields = fields}))))
 
 -- | Decode an Avro schema from a JSON value
-decodeSchema :: Context.Context -> Model.Value -> Either (Context.InContext Errors.Error) Schema.Schema
+decodeSchema :: t0 -> Model.Value -> Either Errors.Error Schema.Schema
 decodeSchema cx v =
     case v of
       Model.ValueString v0 -> Maybes.maybe (Right (Schema.SchemaReference v0)) (\p -> Right (Schema.SchemaPrimitive p)) (decodePrimitiveName v0)
@@ -334,11 +333,8 @@ encodeUnion :: Schema.Union -> Model.Value
 encodeUnion u = Model.ValueArray (Lists.map encodeSchema (Schema.unUnion u))
 
 -- | Construct an error result with a message in context
-err :: Context.Context -> String -> Either (Context.InContext Errors.Error) t0
-err cx msg =
-    Left (Context.InContext {
-      Context.inContextObject = (Errors.ErrorOther (Errors.OtherError msg)),
-      Context.inContextContext = cx})
+err :: t0 -> String -> Either Errors.Error t1
+err cx msg = Left (Errors.ErrorOther (Errors.OtherError msg))
 
 -- | Extract a JSON array or return an error
 expectArrayE :: t0 -> Model.Value -> Either t1 [Model.Value]
@@ -387,11 +383,11 @@ optStringE cx fname m =
     Maybes.maybe (Right Nothing) (\v -> Eithers.map (\s -> Maybes.pure s) (expectStringE cx v)) (Maps.lookup fname m)
 
 -- | Look up a required array attribute in a JSON object map
-requireArrayE :: Context.Context -> String -> M.Map String Model.Value -> Either (Context.InContext Errors.Error) [Model.Value]
+requireArrayE :: t0 -> String -> M.Map String Model.Value -> Either Errors.Error [Model.Value]
 requireArrayE cx fname m = Eithers.bind (requireE cx fname m) (\v -> expectArrayE cx v)
 
 -- | Look up a required attribute in a JSON object map
-requireE :: Context.Context -> String -> M.Map String t0 -> Either (Context.InContext Errors.Error) t0
+requireE :: t0 -> String -> M.Map String t1 -> Either Errors.Error t1
 requireE cx fname m =
     Maybes.maybe (err cx (Strings.cat [
       "required attribute ",
@@ -399,11 +395,11 @@ requireE cx fname m =
       " not found"])) (\v -> Right v) (Maps.lookup fname m)
 
 -- | Look up a required number attribute in a JSON object map
-requireNumberE :: Context.Context -> String -> M.Map String Model.Value -> Either (Context.InContext Errors.Error) Double
+requireNumberE :: t0 -> String -> M.Map String Model.Value -> Either Errors.Error Double
 requireNumberE cx fname m = Eithers.bind (requireE cx fname m) (\v -> expectNumberE cx v)
 
 -- | Look up a required string attribute in a JSON object map
-requireStringE :: Context.Context -> String -> M.Map String Model.Value -> Either (Context.InContext Errors.Error) String
+requireStringE :: t0 -> String -> M.Map String Model.Value -> Either Errors.Error String
 requireStringE cx fname m = Eithers.bind (requireE cx fname m) (\v -> expectStringE cx v)
 
 -- | Convert a JSON value to its string representation
@@ -418,7 +414,7 @@ stringToJsonValue s =
       Parsing.ParseResultFailure v0 -> Left (Parsing.parseErrorMessage v0)) (Parser.parseJson s)
 
 -- | Construct an error for unexpected values
-unexpectedE :: Context.Context -> String -> String -> Either (Context.InContext Errors.Error) t0
+unexpectedE :: t0 -> String -> String -> Either Errors.Error t1
 unexpectedE cx expected found =
     err cx (Strings.cat [
       "Expected ",

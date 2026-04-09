@@ -17,7 +17,6 @@ import java.util.function.Function;
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.map;
 import hydra.context.Context;
-import hydra.context.InContext;
 import hydra.errors.Error_;
 import hydra.util.Either;
 
@@ -49,19 +48,19 @@ public class Bimap extends PrimitiveFunction {
      * @return the implementation function
      */
     @Override
-    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
+    protected Function<List<Term>, Function<Context, Function<Graph, Either<Error_, Term>>>> implementation() {
         return args -> cx -> graph ->
-            hydra.lib.eithers.Bind.apply(hydra.extract.Core.map(cx, t -> Either.right(t), t -> Either.right(t), graph, args.get(2)), mp -> {
+            hydra.lib.eithers.Bind.apply(hydra.extract.Core.map(t -> Either.right(t), t -> Either.right(t), graph, args.get(2)), mp -> {
                 java.util.TreeMap<Term, Term> result = new java.util.TreeMap<>();
                 for (Map.Entry<Term, Term> entry : mp.entrySet()) {
-                    Either<InContext<Error_>, Term> kr = hydra.Reduction.reduceTerm(
+                    Either<Error_, Term> kr = hydra.Reduction.reduceTerm(
                         hydra.Lexical.emptyContext(), graph, true, Terms.apply(args.get(0), entry.getKey()));
                     if (kr.isLeft()) return (Either) kr;
-                    Either<InContext<Error_>, Term> vr = hydra.Reduction.reduceTerm(
+                    Either<Error_, Term> vr = hydra.Reduction.reduceTerm(
                         hydra.Lexical.emptyContext(), graph, true, Terms.apply(args.get(1), entry.getValue()));
                     if (vr.isLeft()) return (Either) vr;
-                    result.put(((Either.Right<InContext<Error_>, Term>) kr).value,
-                               ((Either.Right<InContext<Error_>, Term>) vr).value);
+                    result.put(((Either.Right<Error_, Term>) kr).value,
+                               ((Either.Right<Error_, Term>) vr).value);
                 }
                 return Either.right(Terms.map(FromList.orderedMap(result)));
             });

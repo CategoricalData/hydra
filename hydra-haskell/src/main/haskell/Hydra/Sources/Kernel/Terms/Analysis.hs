@@ -130,7 +130,7 @@ analyzeFunctionTerm :: TTermDefinition (
   (Graph -> env -> env) ->
   env ->
   Term ->
-  Either (InContext Error) (FunctionStructure env))
+  Either Error (FunctionStructure env))
 analyzeFunctionTerm = define "analyzeFunctionTerm" $
   doc "Analyze a function term, collecting lambdas, type lambdas, lets, and type applications" $
   "cx" ~> "getTC" ~> "setTC" ~> "env" ~> "term" ~>
@@ -145,7 +145,7 @@ analyzeFunctionTermWith :: TTermDefinition (
   (Graph -> env -> env) ->
   env ->
   Term ->
-  Either (InContext Error) (FunctionStructure env))
+  Either Error (FunctionStructure env))
 analyzeFunctionTermWith = define "analyzeFunctionTermWith" $
   doc "Analyze a function term with configurable binding metadata" $
   "cx" ~> "forBinding" ~> "getTC" ~> "setTC" ~> "env" ~> "term" ~>
@@ -162,7 +162,7 @@ analyzeFunctionTermWith_finish :: TTermDefinition (
   Context ->
   (env -> Graph) ->
   env -> [Name] -> [Name] -> [Binding] -> [Type] -> [Type] -> Term ->
-  Either (InContext Error) (FunctionStructure env))
+  Either Error (FunctionStructure env))
 analyzeFunctionTermWith_finish = define "analyzeFunctionTermWith_finish" $
   "cx" ~> "getTC" ~> "fEnv" ~> "tparams" ~> "args" ~> "bindings" ~> "doms" ~> "tapps" ~> "body" ~>
   "bodyWithTapps" <~ Lists.foldl
@@ -187,7 +187,7 @@ analyzeFunctionTermWith_gather :: TTermDefinition (
   (env -> Graph) ->
   (Graph -> env -> env) ->
   Bool -> env -> [Name] -> [Name] -> [Binding] -> [Type] -> [Type] -> Term ->
-  Either (InContext Error) (FunctionStructure env))
+  Either Error (FunctionStructure env))
 analyzeFunctionTermWith_gather = define "analyzeFunctionTermWith_gather" $
   "cx" ~> "forBinding" ~> "getTC" ~> "setTC" ~>
   "argMode" ~> "gEnv" ~> "tparams" ~> "args" ~> "bindings" ~> "doms" ~> "tapps" ~> "t" ~>
@@ -260,7 +260,7 @@ definitionDependencyNamespaces = define "definitionDependencyNamespaces" $
   "allNames" <~ Sets.unions (Lists.map (var "defNames") (var "defs")) $
   Sets.fromList (Maybes.cat (Lists.map (Names.namespaceOf) (Sets.toList (var "allNames"))))
 
-dependencyNamespaces :: TTermDefinition (Context -> Graph -> Bool -> Bool -> Bool -> Bool -> [Binding] -> Either (InContext Error) (S.Set Namespace))
+dependencyNamespaces :: TTermDefinition (Context -> Graph -> Bool -> Bool -> Bool -> Bool -> [Binding] -> Either Error (S.Set Namespace))
 dependencyNamespaces = define "dependencyNamespaces" $
   doc "Find dependency namespaces in all of a set of terms (Either version)" $
   "cx" ~> "graph" ~> "binds" ~> "withPrims" ~> "withNoms" ~> "withSchema" ~> "els" ~>
@@ -278,17 +278,15 @@ dependencyNamespaces = define "dependencyNamespaces" $
       (Eithers.map ("typ" ~> Sets.unions (list [
           var "dataNames", var "schemaNames",
           Dependencies.typeDependencyNames @@ true @@ var "typ"]))
-        (Ctx.withContext (Ctx.pushTrace (string "dependency namespace (type)") (var "cx"))
-          (Eithers.bimap ("_e" ~> Error.errorOther $ Error.otherError (unwrap _DecodingError @@ var "_e")) ("_a" ~> var "_a")
-            (decoderFor _Type @@ var "graph" @@ var "term"))))
+        (Eithers.bimap ("_e" ~> Error.errorDecoding $ var "_e") ("_a" ~> var "_a")
+            (decoderFor _Type @@ var "graph" @@ var "term")))
       -- Handle encoded terms: decode as Term and extract term dependency names
       (Logic.ifElse (Predicates.isEncodedTerm @@ var "deannotatedTerm")
         (Eithers.map ("decodedTerm" ~> Sets.unions (list [
             var "dataNames", var "schemaNames",
             Dependencies.termDependencyNames @@ var "binds" @@ var "withPrims" @@ var "withNoms" @@ var "decodedTerm"]))
-          (Ctx.withContext (Ctx.pushTrace (string "dependency namespace (term)") (var "cx"))
-            (Eithers.bimap ("_e" ~> Error.errorOther $ Error.otherError (unwrap _DecodingError @@ var "_e")) ("_a" ~> var "_a")
-              (decoderFor _Term @@ var "graph" @@ var "term"))))
+          (Eithers.bimap ("_e" ~> Error.errorDecoding $ var "_e") ("_a" ~> var "_a")
+              (decoderFor _Term @@ var "graph" @@ var "term")))
         (right (Sets.unions (list [var "dataNames", var "schemaNames"]))))) $
   Eithers.map ("namesList" ~> Sets.fromList (Maybes.cat (Lists.map (Names.namespaceOf) (
       Sets.toList (Sets.unions (var "namesList"))))))
@@ -497,7 +495,7 @@ moduleContainsBinaryLiterals = define "moduleContainsBinaryLiterals" $
     false
     (var "defTerms")
 
-moduleDependencyNamespaces :: TTermDefinition (Context -> Graph -> Bool -> Bool -> Bool -> Bool -> Module -> Either (InContext Error) (S.Set Namespace))
+moduleDependencyNamespaces :: TTermDefinition (Context -> Graph -> Bool -> Bool -> Bool -> Bool -> Module -> Either Error (S.Set Namespace))
 moduleDependencyNamespaces = define "moduleDependencyNamespaces" $
   doc "Find dependency namespaces in all elements of a module, excluding the module's own namespace (Either version)" $
   "cx" ~> "graph" ~> "binds" ~> "withPrims" ~> "withNoms" ~> "withSchema" ~> "mod" ~>

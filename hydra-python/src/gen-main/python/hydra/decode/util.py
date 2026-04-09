@@ -10,7 +10,6 @@ from typing import cast
 import hydra.core
 import hydra.errors
 import hydra.extract.core
-import hydra.lexical
 import hydra.lib.eithers
 import hydra.lib.maps
 import hydra.lib.maybes
@@ -31,7 +30,7 @@ def case_convention(cx: hydra.graph.Graph, raw: hydra.core.Term):
 
             case _:
                 return Left(hydra.errors.DecodingError("expected union"))
-    return hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_util_case_convention_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
+    return hydra.lib.eithers.either((lambda err: Left(err)), (lambda stripped: _hoist_hydra_decode_util_case_convention_1(cx, stripped)), hydra.extract.core.strip_with_decoding_error(cx, raw))
 
 def comparison(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_util_comparison_1(cx, v1):
@@ -47,7 +46,7 @@ def comparison(cx: hydra.graph.Graph, raw: hydra.core.Term):
 
             case _:
                 return Left(hydra.errors.DecodingError("expected union"))
-    return hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_util_comparison_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
+    return hydra.lib.eithers.either((lambda err: Left(err)), (lambda stripped: _hoist_hydra_decode_util_comparison_1(cx, stripped)), hydra.extract.core.strip_with_decoding_error(cx, raw))
 
 def precision(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_util_precision_1(cx, v1):
@@ -79,9 +78,9 @@ def precision(cx: hydra.graph.Graph, raw: hydra.core.Term):
 
                             case _:
                                 return Left(hydra.errors.DecodingError("expected literal"))
-                    return hydra.lib.maps.from_list(((hydra.core.Name("arbitrary"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.util.Precision, hydra.util.PrecisionArbitrary())), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("bits"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.util.Precision, hydra.util.PrecisionBits(t))), hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped2: _hoist_variant_map_3(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx, input)))))))
+                    return hydra.lib.maps.from_list(((hydra.core.Name("arbitrary"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.util.Precision, hydra.util.PrecisionArbitrary())), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("bits"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.util.Precision, hydra.util.PrecisionBits(t))), hydra.lib.eithers.either((lambda err: Left(err)), (lambda stripped2: _hoist_variant_map_3(stripped2)), hydra.extract.core.strip_with_decoding_error(cx, input)))))))
                 return hydra.lib.maybes.maybe((lambda : Left(hydra.errors.DecodingError(hydra.lib.strings.cat(("no such field ", fname.value, " in union"))))), (lambda f: f(fterm)), hydra.lib.maps.lookup(fname, variant_map()))
 
             case _:
                 return Left(hydra.errors.DecodingError("expected union"))
-    return hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_util_precision_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
+    return hydra.lib.eithers.either((lambda err: Left(err)), (lambda stripped: _hoist_hydra_decode_util_precision_1(cx, stripped)), hydra.extract.core.strip_with_decoding_error(cx, raw))

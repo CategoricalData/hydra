@@ -18,7 +18,6 @@ import static hydra.dsl.Types.list;
 import static hydra.dsl.Types.map;
 import static hydra.dsl.Types.scheme;
 import hydra.context.Context;
-import hydra.context.InContext;
 import hydra.errors.Error_;
 import hydra.util.Either;
 
@@ -51,9 +50,9 @@ public class Keys extends PrimitiveFunction {
      * @return the implementation function
      */
     @Override
-    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
+    protected Function<List<Term>, Function<Context, Function<Graph, Either<Error_, Term>>>> implementation() {
         return args -> cx -> graph -> {
-            Either<InContext<Error_>, Map<Term, Term>> r = hydra.extract.Core.map(cx, t -> Either.right(t), t -> Either.right(t), graph, args.get(0));
+            Either<Error_, Map<Term, Term>> r = hydra.extract.Core.map(t -> Either.right(t), t -> Either.right(t), graph, args.get(0));
             return hydra.lib.eithers.Map.apply(map -> Terms.list(new ArrayList<>(map.keySet())), r);
         };
     }

@@ -17,9 +17,9 @@ import qualified Hydra.Dsl.Meta.Lib.Eithers as Eithers
 import qualified Hydra.Dsl.Meta.Lib.Lists as Lists
 
 
--- | Wrap an Either's Left side with a Context
-withContext :: TTerm Context -> TTerm (Either e a) -> TTerm (Either (InContext e) a)
-withContext cx e = Eithers.bimap ("_wc_e" ~> inContext (var "_wc_e") cx) ("_wc_a" ~> var "_wc_a") e
+-- | Identity function on Either (Context wrapping removed; retained for API compatibility during migration)
+withContext :: TTerm Context -> TTerm (Either e a) -> TTerm (Either e a)
+withContext _cx e = e
 
 -- | Push a trace frame onto a Context
 pushTrace :: TTerm String -> TTerm Context -> TTerm Context
@@ -28,6 +28,6 @@ pushTrace label cx = context
     (DslCtx.contextMessages cx)
     (DslCtx.contextOther cx)
 
--- | Create a Left (InContext error cx)
-failInContext :: TTerm e -> TTerm Context -> TTerm (Either (InContext e) a)
-failInContext err cx = left (inContext err cx)
+-- | Create a Left error (Context parameter is ignored; retained for API compatibility during migration)
+failInContext :: TTerm e -> TTerm Context -> TTerm (Either e a)
+failInContext err _cx = left err

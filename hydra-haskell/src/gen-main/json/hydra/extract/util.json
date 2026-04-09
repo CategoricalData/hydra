@@ -4,70 +4,98 @@
       "term": {
         "name": "hydra.extract.util.comparison",
         "term": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {"literal": {"string": "Extract a comparison from a term"}}}],
+          "typeLambda": {
             "body": {
-              "function": {
-                "lambda": {
-                  "body": {
-                    "function": {
-                      "lambda": {
-                        "body": {
-                          "function": {
-                            "lambda": {
-                              "body": {
-                                "application": {
-                                  "argument": {
-                                    "function": {
-                                      "lambda": {
-                                        "body": {
-                                          "application": {
-                                            "argument": {
+              "annotated": {
+                "annotation": [
+                  {
+                    "@key": "description",
+                    "@value": {"literal": {"string": "Extract a comparison from a term"}}}],
+                "body": {
+                  "function": {
+                    "lambda": {
+                      "body": {
+                        "function": {
+                          "lambda": {
+                            "body": {
+                              "function": {
+                                "lambda": {
+                                  "body": {
+                                    "application": {
+                                      "argument": {
+                                        "function": {
+                                          "lambda": {
+                                            "body": {
                                               "application": {
                                                 "argument": {
                                                   "application": {
                                                     "argument": {
-                                                      "typeApplication": {
-                                                        "body": {
+                                                      "application": {
+                                                        "argument": {
                                                           "typeApplication": {
                                                             "body": {
-                                                              "either": {
-                                                                "@left": {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "either": {
+                                                                    "@left": {
+                                                                      "union": {
+                                                                        "field": {
+                                                                          "name": "extraction",
+                                                                          "term": {
+                                                                            "union": {
+                                                                              "field": {
+                                                                                "name": "unexpectedShape",
+                                                                                "term": {
+                                                                                  "record": {
+                                                                                    "fields": [
+                                                                                      {"name": "expected", "term": {"literal": {"string": "comparison"}}},
+                                                                                      {
+                                                                                        "name": "actual",
+                                                                                        "term": {
+                                                                                          "application": {
+                                                                                            "argument": {"variable": "fname"},
+                                                                                            "function": {"function": {"elimination": {"wrap": "hydra.core.Name"}}}}}}],
+                                                                                    "typeName": "hydra.errors.UnexpectedShapeError"}}},
+                                                                              "typeName": "hydra.errors.ExtractionError"}}},
+                                                                        "typeName": "hydra.errors.Error"}}}},
+                                                                "type": {"variable": "hydra.errors.Error"}}},
+                                                            "type": {"variable": "hydra.util.Comparison"}}},
+                                                        "function": {
+                                                          "application": {
+                                                            "argument": {
+                                                              "typeApplication": {
+                                                                "body": {
                                                                   "typeApplication": {
                                                                     "body": {
-                                                                      "record": {
-                                                                        "fields": [
-                                                                          {
-                                                                            "name": "object",
-                                                                            "term": {
-                                                                              "union": {
-                                                                                "field": {
-                                                                                  "name": "other",
-                                                                                  "term": {
-                                                                                    "wrap": {
-                                                                                      "body": {
-                                                                                        "application": {
-                                                                                          "argument": {
-                                                                                            "application": {
-                                                                                              "argument": {"variable": "fname"},
-                                                                                              "function": {"function": {"elimination": {"wrap": "hydra.core.Name"}}}}},
-                                                                                          "function": {
-                                                                                            "application": {
-                                                                                              "argument": {"literal": {"string": "expected comparison but found "}},
-                                                                                              "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                                                                      "typeName": "hydra.errors.OtherError"}}},
-                                                                                "typeName": "hydra.errors.Error"}}},
-                                                                          {"name": "context", "term": {"variable": "cx"}}],
-                                                                        "typeName": "hydra.context.InContext"}},
-                                                                    "type": {"variable": "hydra.errors.Error"}}}}},
-                                                            "type": {
+                                                                      "either": {
+                                                                        "@right": {
+                                                                          "union": {
+                                                                            "field": {"name": "greaterThan", "term": {"unit": {}}},
+                                                                            "typeName": "hydra.util.Comparison"}}}},
+                                                                    "type": {"variable": "hydra.errors.Error"}}},
+                                                                "type": {"variable": "hydra.util.Comparison"}}},
+                                                            "function": {
                                                               "application": {
-                                                                "argument": {"variable": "hydra.errors.Error"},
-                                                                "function": {"variable": "hydra.context.InContext"}}}}},
-                                                        "type": {"variable": "hydra.util.Comparison"}}},
+                                                                "argument": {
+                                                                  "application": {
+                                                                    "argument": {"literal": {"string": "greaterThan"}},
+                                                                    "function": {
+                                                                      "application": {
+                                                                        "argument": {
+                                                                          "application": {
+                                                                            "argument": {"variable": "fname"},
+                                                                            "function": {"function": {"elimination": {"wrap": "hydra.core.Name"}}}}},
+                                                                        "function": {
+                                                                          "typeApplication": {
+                                                                            "body": {"variable": "hydra.lib.equality.equal"},
+                                                                            "type": {"literal": {"string": {}}}}}}}}},
+                                                                "function": {
+                                                                  "typeApplication": {
+                                                                    "body": {"variable": "hydra.lib.logic.ifElse"},
+                                                                    "type": {
+                                                                      "either": {
+                                                                        "left": {"variable": "hydra.errors.Error"},
+                                                                        "right": {"variable": "hydra.util.Comparison"}}}}}}}}}}},
                                                     "function": {
                                                       "application": {
                                                         "argument": {
@@ -78,18 +106,15 @@
                                                                   "either": {
                                                                     "@right": {
                                                                       "union": {
-                                                                        "field": {"name": "greaterThan", "term": {"unit": {}}},
+                                                                        "field": {"name": "lessThan", "term": {"unit": {}}},
                                                                         "typeName": "hydra.util.Comparison"}}}},
-                                                                "type": {
-                                                                  "application": {
-                                                                    "argument": {"variable": "hydra.errors.Error"},
-                                                                    "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                "type": {"variable": "hydra.errors.Error"}}},
                                                             "type": {"variable": "hydra.util.Comparison"}}},
                                                         "function": {
                                                           "application": {
                                                             "argument": {
                                                               "application": {
-                                                                "argument": {"literal": {"string": "greaterThan"}},
+                                                                "argument": {"literal": {"string": "lessThan"}},
                                                                 "function": {
                                                                   "application": {
                                                                     "argument": {
@@ -105,10 +130,7 @@
                                                                 "body": {"variable": "hydra.lib.logic.ifElse"},
                                                                 "type": {
                                                                   "either": {
-                                                                    "left": {
-                                                                      "application": {
-                                                                        "argument": {"variable": "hydra.errors.Error"},
-                                                                        "function": {"variable": "hydra.context.InContext"}}},
+                                                                    "left": {"variable": "hydra.errors.Error"},
                                                                     "right": {"variable": "hydra.util.Comparison"}}}}}}}}}}},
                                                 "function": {
                                                   "application": {
@@ -120,18 +142,15 @@
                                                               "either": {
                                                                 "@right": {
                                                                   "union": {
-                                                                    "field": {"name": "lessThan", "term": {"unit": {}}},
+                                                                    "field": {"name": "equalTo", "term": {"unit": {}}},
                                                                     "typeName": "hydra.util.Comparison"}}}},
-                                                            "type": {
-                                                              "application": {
-                                                                "argument": {"variable": "hydra.errors.Error"},
-                                                                "function": {"variable": "hydra.context.InContext"}}}}},
+                                                            "type": {"variable": "hydra.errors.Error"}}},
                                                         "type": {"variable": "hydra.util.Comparison"}}},
                                                     "function": {
                                                       "application": {
                                                         "argument": {
                                                           "application": {
-                                                            "argument": {"literal": {"string": "lessThan"}},
+                                                            "argument": {"literal": {"string": "equalTo"}},
                                                             "function": {
                                                               "application": {
                                                                 "argument": {
@@ -147,92 +166,42 @@
                                                             "body": {"variable": "hydra.lib.logic.ifElse"},
                                                             "type": {
                                                               "either": {
-                                                                "left": {
-                                                                  "application": {
-                                                                    "argument": {"variable": "hydra.errors.Error"},
-                                                                    "function": {"variable": "hydra.context.InContext"}}},
+                                                                "left": {"variable": "hydra.errors.Error"},
                                                                 "right": {"variable": "hydra.util.Comparison"}}}}}}}}}}},
-                                            "function": {
-                                              "application": {
-                                                "argument": {
-                                                  "typeApplication": {
-                                                    "body": {
-                                                      "typeApplication": {
-                                                        "body": {
-                                                          "either": {
-                                                            "@right": {
-                                                              "union": {
-                                                                "field": {"name": "equalTo", "term": {"unit": {}}},
-                                                                "typeName": "hydra.util.Comparison"}}}},
-                                                        "type": {
-                                                          "application": {
-                                                            "argument": {"variable": "hydra.errors.Error"},
-                                                            "function": {"variable": "hydra.context.InContext"}}}}},
-                                                    "type": {"variable": "hydra.util.Comparison"}}},
-                                                "function": {
-                                                  "application": {
-                                                    "argument": {
-                                                      "application": {
-                                                        "argument": {"literal": {"string": "equalTo"}},
-                                                        "function": {
-                                                          "application": {
-                                                            "argument": {
-                                                              "application": {
-                                                                "argument": {"variable": "fname"},
-                                                                "function": {"function": {"elimination": {"wrap": "hydra.core.Name"}}}}},
-                                                            "function": {
-                                                              "typeApplication": {
-                                                                "body": {"variable": "hydra.lib.equality.equal"},
-                                                                "type": {"literal": {"string": {}}}}}}}}},
-                                                    "function": {
-                                                      "typeApplication": {
-                                                        "body": {"variable": "hydra.lib.logic.ifElse"},
-                                                        "type": {
-                                                          "either": {
-                                                            "left": {
-                                                              "application": {
-                                                                "argument": {"variable": "hydra.errors.Error"},
-                                                                "function": {"variable": "hydra.context.InContext"}}},
-                                                            "right": {"variable": "hydra.util.Comparison"}}}}}}}}}}},
-                                        "domain": {"variable": "hydra.core.Name"},
-                                        "parameter": "fname"}}},
-                                  "function": {
-                                    "application": {
-                                      "argument": {
+                                            "domain": {"variable": "hydra.core.Name"},
+                                            "parameter": "fname"}}},
+                                      "function": {
                                         "application": {
-                                          "argument": {"variable": "term"},
-                                          "function": {
+                                          "argument": {
                                             "application": {
-                                              "argument": {"variable": "graph"},
+                                              "argument": {"variable": "term"},
                                               "function": {
                                                 "application": {
-                                                  "argument": {
-                                                    "wrap": {
-                                                      "body": {"literal": {"string": "hydra.util.Comparison"}},
-                                                      "typeName": "hydra.core.Name"}},
+                                                  "argument": {"variable": "graph"},
                                                   "function": {
                                                     "application": {
-                                                      "argument": {"variable": "cx"},
-                                                      "function": {"variable": "hydra.extract.core.unitVariant"}}}}}}}}},
-                                      "function": {
-                                        "typeApplication": {
-                                          "body": {
+                                                      "argument": {
+                                                        "wrap": {
+                                                          "body": {"literal": {"string": "hydra.util.Comparison"}},
+                                                          "typeName": "hydra.core.Name"}},
+                                                      "function": {"variable": "hydra.extract.core.unitVariant"}}}}}}},
+                                          "function": {
                                             "typeApplication": {
                                               "body": {
                                                 "typeApplication": {
-                                                  "body": {"variable": "hydra.lib.eithers.bind"},
-                                                  "type": {
-                                                    "application": {
-                                                      "argument": {"variable": "hydra.errors.Error"},
-                                                      "function": {"variable": "hydra.context.InContext"}}}}},
-                                              "type": {"variable": "hydra.core.Name"}}},
-                                          "type": {"variable": "hydra.util.Comparison"}}}}}}},
-                              "domain": {"variable": "hydra.core.Term"},
-                              "parameter": "term"}}},
-                        "domain": {"variable": "hydra.graph.Graph"},
-                        "parameter": "graph"}}},
-                  "domain": {"variable": "hydra.context.Context"},
-                  "parameter": "cx"}}}}},
+                                                  "body": {
+                                                    "typeApplication": {
+                                                      "body": {"variable": "hydra.lib.eithers.bind"},
+                                                      "type": {"variable": "hydra.errors.Error"}}},
+                                                  "type": {"variable": "hydra.core.Name"}}},
+                                              "type": {"variable": "hydra.util.Comparison"}}}}}}},
+                                  "domain": {"variable": "hydra.core.Term"},
+                                  "parameter": "term"}}},
+                            "domain": {"variable": "hydra.graph.Graph"},
+                            "parameter": "graph"}}},
+                      "domain": {"variable": "t0"},
+                      "parameter": "cx"}}}}},
+            "parameter": "t0"}},
         "type": {
           "type": {
             "function": {
@@ -242,15 +211,12 @@
                     "function": {
                       "codomain": {
                         "either": {
-                          "left": {
-                            "application": {
-                              "argument": {"variable": "hydra.errors.Error"},
-                              "function": {"variable": "hydra.context.InContext"}}},
+                          "left": {"variable": "hydra.errors.Error"},
                           "right": {"variable": "hydra.util.Comparison"}}},
                       "domain": {"variable": "hydra.core.Term"}}},
                   "domain": {"variable": "hydra.graph.Graph"}}},
-              "domain": {"variable": "hydra.context.Context"}}},
-          "variables": []}}}],
+              "domain": {"variable": "t0"}}},
+          "variables": ["t0"]}}}],
   "description": "Extraction and validation for hydra.util types",
   "namespace": "hydra.extract.util",
   "termDependencies": ["hydra.extract.core", "hydra.show.errors"],

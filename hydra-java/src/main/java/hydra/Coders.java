@@ -2,7 +2,6 @@ package hydra;
 
 import hydra.coders.Coder;
 import hydra.context.Context;
-import hydra.context.InContext;
 import hydra.errors.Error_;
 import hydra.util.Either;
 
@@ -83,35 +82,35 @@ public class Coders {
             new ArrayList<>(),
             new ArrayList<>(),
             new HashMap<>());
-        Either<InContext<Error_>, V2> encResult = coder.encode.apply(cx).apply(initialValue);
+        Either<Error_, V2> encResult = coder.encode.apply(cx).apply(initialValue);
         if (encResult.isLeft()) {
-            return Either.left(hydra.show.Errors.error(((Either.Left<InContext<Error_>, V2>) encResult).value.object));
+            return Either.left(hydra.show.Errors.error(((Either.Left<Error_, V2>) encResult).value));
         }
-        V2 encoded = ((Either.Right<InContext<Error_>, V2>) encResult).value;
-        Either<InContext<Error_>, V1> decResult = coder.decode.apply(cx).apply(encoded);
+        V2 encoded = ((Either.Right<Error_, V2>) encResult).value;
+        Either<Error_, V1> decResult = coder.decode.apply(cx).apply(encoded);
         if (decResult.isLeft()) {
-            return Either.left(hydra.show.Errors.error(((Either.Left<InContext<Error_>, V1>) decResult).value.object));
+            return Either.left(hydra.show.Errors.error(((Either.Left<Error_, V1>) decResult).value));
         }
-        return Either.right(((Either.Right<InContext<Error_>, V1>) decResult).value);
+        return Either.right(((Either.Right<Error_, V1>) decResult).value);
     }
 
     /**
      * Compose two Coder-style encode functions.
      */
-    private static <A, B, C> Function<Context, Function<A, Either<InContext<Error_>, C>>>
+    private static <A, B, C> Function<Context, Function<A, Either<Error_, C>>>
             composeEncode(
-                Function<Context, Function<A, Either<InContext<Error_>, B>>> first,
-                Function<Context, Function<B, Either<InContext<Error_>, C>>> second) {
+                Function<Context, Function<A, Either<Error_, B>>> first,
+                Function<Context, Function<B, Either<Error_, C>>> second) {
         return cx -> a -> {
-            Either<InContext<Error_>, B> r1 = first.apply(cx).apply(a);
-            return r1.accept(new Either.Visitor<InContext<Error_>, B, Either<InContext<Error_>, C>>() {
+            Either<Error_, B> r1 = first.apply(cx).apply(a);
+            return r1.accept(new Either.Visitor<Error_, B, Either<Error_, C>>() {
                 @Override
-                public Either<InContext<Error_>, C> visit(Either.Left<InContext<Error_>, B> left) {
+                public Either<Error_, C> visit(Either.Left<Error_, B> left) {
                     return Either.left(left.value);
                 }
 
                 @Override
-                public Either<InContext<Error_>, C> visit(Either.Right<InContext<Error_>, B> right) {
+                public Either<Error_, C> visit(Either.Right<Error_, B> right) {
                     return second.apply(cx).apply(right.value);
                 }
             });

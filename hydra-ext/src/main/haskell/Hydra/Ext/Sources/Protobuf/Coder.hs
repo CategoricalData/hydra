@@ -132,21 +132,21 @@ key_proto_field_index = def "key_proto_field_index" $
 -- Error helpers
 -- =============================================================================
 
-err :: TTermDefinition (Context -> String -> Either (InContext Error) a)
+err :: TTermDefinition (Context -> String -> Either Error a)
 err = def "err" $
   "cx" ~> "msg" ~>
   Ctx.failInContext (Error.errorOther $ Error.otherError (var "msg")) (var "cx")
 
-unexpectedE :: TTermDefinition (Context -> String -> String -> Either (InContext Error) a)
+unexpectedE :: TTermDefinition (Context -> String -> String -> Either Error a)
 unexpectedE = def "unexpectedE" $
   "cx" ~> "expected" ~> "found" ~>
   asTerm err @@ var "cx" @@ (Strings.cat (list [string "Expected ", var "expected", string ", found: ", var "found"]))
 
-fromEitherString :: TTermDefinition (Context -> Either String a -> Either (InContext Error) a)
+fromEitherString :: TTermDefinition (Context -> Either String a -> Either Error a)
 fromEitherString = def "fromEitherString" $
   "cx" ~> "e" ~>
   Eithers.bimap
-    ("msg" ~> Ctx.inContext (Error.errorOther $ Error.otherError (var "msg")) (var "cx"))
+    ("msg" ~> Error.errorOther (Error.otherError (var "msg")))
     ("a" ~> var "a")
     (var "e")
 
@@ -203,7 +203,7 @@ structuralTypeName = def "structuralTypeName" $
 
 -- | Generate a helper message definition for a structural type.
 -- Returns the definition and the updated context (counter state).
-generateStructuralTypeMessage :: TTermDefinition (Context -> Graph -> Namespace -> Term -> Either (InContext Error) (P3.Definition, Context))
+generateStructuralTypeMessage :: TTermDefinition (Context -> Graph -> Namespace -> Term -> Either Error (P3.Definition, Context))
 generateStructuralTypeMessage = def "generateStructuralTypeMessage" $
   doc "Generate a helper message definition for a structural type" $
   "cx" ~> "g" ~> "localNs" ~> "ref" ~> lets [
@@ -257,7 +257,7 @@ generateStructuralTypeMessage = def "generateStructuralTypeMessage" $
           (var "cx4")] @@ var "ref"
 
 -- | Encode a simple type for helper message fields
-encodeSimpleTypeForHelper :: TTermDefinition (Context -> Namespace -> Type -> Either (InContext Error) P3.SimpleType)
+encodeSimpleTypeForHelper :: TTermDefinition (Context -> Namespace -> Type -> Either Error P3.SimpleType)
 encodeSimpleTypeForHelper = def "encodeSimpleTypeForHelper" $
   doc "Encode a simple type for helper message fields" $
   "cx" ~> "localNs" ~> "typ" ~> lets [
@@ -308,7 +308,7 @@ collectStructuralTypes_collectFromType = def "collectStructuralTypes_collectFrom
 -- =============================================================================
 
 -- | Note: follows the Protobuf Style Guide (https://protobuf.dev/programming-guides/style)
-moduleToProtobuf :: TTermDefinition (Module -> [Definition] -> Context -> Graph -> Either (InContext Error) (M.Map FilePath String))
+moduleToProtobuf :: TTermDefinition (Module -> [Definition] -> Context -> Graph -> Either Error (M.Map FilePath String))
 moduleToProtobuf = def "moduleToProtobuf" $
   doc "Convert a Hydra module to Protocol Buffers v3 source files" $
   "mod" ~> "defs" ~> "cx" ~> "g" ~> lets [
@@ -336,7 +336,7 @@ javaPackageOptionName = def "javaPackageOptionName" $
 -- Module construction
 -- =============================================================================
 
-constructModule :: TTermDefinition (Context -> Graph -> Module -> [TypeDefinition] -> Either (InContext Error) P3.ProtoFile)
+constructModule :: TTermDefinition (Context -> Graph -> Module -> [TypeDefinition] -> Either Error P3.ProtoFile)
 constructModule = def "constructModule" $
   doc "Construct a Protobuf file from a Hydra module and its type definitions" $
   "cx" ~> "g" ~> "mod" ~> "typeDefs" ~> lets [
@@ -348,8 +348,7 @@ constructModule = def "constructModule" $
       "encodeDefEither">: "n" ~> "t" ~> asTerm encodeDefinition @@ var "cx" @@ var "g" @@ var "ns_" @@ var "n" @@ var "t",
       "flatTyp">: asTerm flattenType @@ var "typ",
       "enc">: var "encodeDefEither" @@ var "name"] $
-      asTerm fromEitherString @@ var "cx" @@
-        (cases _Type (Strip.deannotateType @@ var "flatTyp")
+      (cases _Type (Strip.deannotateType @@ var "flatTyp")
           (Just ("adaptedType" <<~ Adapt.adaptTypeForLanguage @@ ProtobufLanguageSource.protobufLanguage @@ var "flatTyp" $
             var "enc" @@ var "adaptedType")) [
           _Type_variable>>: constant (var "enc" @@ var "flatTyp")]),
@@ -415,7 +414,7 @@ constructModule = def "constructModule" $
 -- =============================================================================
 
 -- | Helper to thread context through a list, accumulating results
-mapAccumResult :: TTermDefinition ((Context -> a -> Either (InContext Error) (b, Context)) -> Context -> [a] -> Either (InContext Error) ([b], Context))
+mapAccumResult :: TTermDefinition ((Context -> a -> Either Error (b, Context)) -> Context -> [a] -> Either Error ([b], Context))
 mapAccumResult = def "mapAccumResult" $
   doc "Thread context through a list, accumulating results" $
   "f" ~> "cx0" ~> "xs" ~>
@@ -436,7 +435,7 @@ mapAccumResult = def "mapAccumResult" $
 -- Definition encoding
 -- =============================================================================
 
-encodeDefinition :: TTermDefinition (Context -> Graph -> Namespace -> Name -> Type -> Either String P3.Definition)
+encodeDefinition :: TTermDefinition (Context -> Graph -> Namespace -> Name -> Type -> Either Error P3.Definition)
 encodeDefinition = def "encodeDefinition" $
   doc "Encode a Hydra type as a Protobuf definition" $
   "cx" ~> "g" ~> "localNs" ~> "name" ~> "typ" ~> lets [
@@ -444,11 +443,7 @@ encodeDefinition = def "encodeDefinition" $
     "cx2">: Pairs.second (Annotations.nextCount @@ asTerm key_proto_field_index @@ var "cx1"),
     "wrapAsRecordType">: "t" ~>
       inject _Type _Type_record (list [Core.fieldType (Core.name (string "value")) (var "t")]),
-    "toEitherString">: "result" ~>
-      Eithers.bimap
-        ("ic" ~> ShowError.error_ @@ (project _InContext _InContext_object @@ var "ic"))
-        ("a" ~> var "a")
-        (var "result"),
+    "toEitherString">: "result" ~> var "result",
     "encode">: "cx0" ~> "options" ~> "t" ~>
       cases _Type (asTerm simplifyType @@ var "t")
         (Just $ var "encode" @@ var "cx0" @@ var "options" @@ (var "wrapAsRecordType" @@ var "t")) [
@@ -468,7 +463,7 @@ encodeDefinition = def "encodeDefinition" $
 -- Enum encoding
 -- =============================================================================
 
-encodeEnumDefinition :: TTermDefinition (Context -> Graph -> [P3.Option] -> Name -> [FieldType] -> Either (InContext Error) P3.EnumDefinition)
+encodeEnumDefinition :: TTermDefinition (Context -> Graph -> [P3.Option] -> Name -> [FieldType] -> Either Error P3.EnumDefinition)
 encodeEnumDefinition = def "encodeEnumDefinition" $
   doc "Encode a Hydra union type as a Protobuf enum definition" $
   "cx" ~> "g" ~> "options" ~> "tname" ~> "fts" ~> lets [
@@ -515,7 +510,7 @@ encodeFieldName = def "encodeFieldName" $
         (Formatting.convertCaseCamelToLowerSnake @@ (unwrap _Name @@ var "name"))
 
 -- | Returns the field and updated context (for counter threading)
-encodeFieldType :: TTermDefinition (Context -> Graph -> Namespace -> FieldType -> Either (InContext Error) (P3.Field, Context))
+encodeFieldType :: TTermDefinition (Context -> Graph -> Namespace -> FieldType -> Either Error (P3.Field, Context))
 encodeFieldType = def "encodeFieldType" $
   doc "Encode a Hydra field type as a Protobuf field" $
   "cx" ~> "g" ~> "localNs" ~> "ft" ~> lets [
@@ -575,11 +570,11 @@ encodeFieldType = def "encodeFieldType" $
         _Type_unit>>: constant $ right (inject P3._SimpleType P3._SimpleType_reference (wrap P3._TypeName (string "google.protobuf.Empty"))),
         _Type_variable>>: "name" ~> Logic.ifElse (var "noms")
           (var "forNominal" @@ var "name")
-          ("el" <<~ (Lexical.requireBinding @@ var "cx0" @@ var "g0" @@ var "name") $ lets [
+          ("el" <<~ (Lexical.requireBinding @@ var "g0" @@ var "name") $ lets [
             "term">: Core.bindingTerm (var "el")] $
             Eithers.bind
               (Eithers.bimap
-                ("de" ~> Ctx.inContext (Error.errorOther $ Error.otherError ((unwrap _DecodingError) @@ var "de")) (var "cx0"))
+                ("de" ~> Error.errorOther (Error.otherError ((unwrap _DecodingError) @@ var "de")))
                 ("t" ~> var "t")
                 (decodeType @@ var "g0" @@ var "term"))
               ("resolvedTyp" ~> var "encodeSimpleType_" @@ var "cx0" @@ var "g0" @@ var "ns0" @@ var "noms" @@ var "resolvedTyp"))]] $
@@ -603,7 +598,7 @@ encodeFieldType = def "encodeFieldType" $
 -- =============================================================================
 
 -- | Returns the message definition; counter is threaded via context
-encodeRecordType :: TTermDefinition (Context -> Graph -> Namespace -> [P3.Option] -> Name -> [FieldType] -> Either (InContext Error) P3.MessageDefinition)
+encodeRecordType :: TTermDefinition (Context -> Graph -> Namespace -> [P3.Option] -> Name -> [FieldType] -> Either Error P3.MessageDefinition)
 encodeRecordType = def "encodeRecordType" $
   doc "Encode a Hydra record type as a Protobuf message definition" $
   "cx" ~> "g" ~> "localNs" ~> "options" ~> "tname" ~> "fts" ~>
@@ -621,7 +616,7 @@ encodeRecordType = def "encodeRecordType" $
 -- Scalar type encoding
 -- =============================================================================
 
-encodeScalarType :: TTermDefinition (Context -> LiteralType -> Either (InContext Error) P3.ScalarType)
+encodeScalarType :: TTermDefinition (Context -> LiteralType -> Either Error P3.ScalarType)
 encodeScalarType = def "encodeScalarType" $
   doc "Encode a Hydra literal type as a Protobuf scalar type" $
   "cx" ~> "lt" ~>
@@ -643,7 +638,7 @@ encodeScalarType = def "encodeScalarType" $
           _IntegerType_uint64>>: constant $ right (inject P3._ScalarType P3._ScalarType_uint64 unit)],
       _LiteralType_string>>: constant $ right (inject P3._ScalarType P3._ScalarType_string unit)]
 
-encodeScalarTypeWrapped :: TTermDefinition (Context -> LiteralType -> Either (InContext Error) P3.SimpleType)
+encodeScalarTypeWrapped :: TTermDefinition (Context -> LiteralType -> Either Error P3.SimpleType)
 encodeScalarTypeWrapped = def "encodeScalarTypeWrapped" $
   doc "Encode a Hydra literal type as a wrapped Protobuf type (for optional scalars)" $
   "cx" ~> "lt" ~> lets [
@@ -715,7 +710,7 @@ flattenType = def "flattenType" $
 -- Options
 -- =============================================================================
 
-findOptions :: TTermDefinition (Context -> Graph -> Type -> Either (InContext Error) [P3.Option])
+findOptions :: TTermDefinition (Context -> Graph -> Type -> Either Error [P3.Option])
 findOptions = def "findOptions" $
   doc "Find Protobuf options for a type (description and deprecated)" $
   "cx" ~> "g" ~> "typ" ~>
@@ -780,13 +775,13 @@ namespaceToPackageName = def "namespaceToPackageName" $
 -- Boolean annotation reading
 -- =============================================================================
 
-readBooleanAnnotation :: TTermDefinition (Context -> Graph -> Name -> Type -> Either (InContext Error) Bool)
+readBooleanAnnotation :: TTermDefinition (Context -> Graph -> Name -> Type -> Either Error Bool)
 readBooleanAnnotation = def "readBooleanAnnotation" $
   doc "Read a boolean annotation from a type" $
   "cx" ~> "g" ~> "key" ~> "typ" ~>
     Maybes.maybe
       (right false)
-      ("term" ~> ExtractCore.boolean @@ var "cx" @@ var "g" @@ var "term")
+      ("term" ~> ExtractCore.boolean @@ var "g" @@ var "term")
       (Maps.lookup (var "key") (Annotations.typeAnnotationInternal @@ var "typ"))
 
 -- =============================================================================

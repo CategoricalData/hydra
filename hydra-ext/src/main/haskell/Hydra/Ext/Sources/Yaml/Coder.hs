@@ -36,9 +36,9 @@ import qualified Data.Set                                  as S
 import qualified Hydra.Ext.Org.Yaml.Model as YM
 
 
--- | Lift Either String to Either (InContext Error) using a context
-liftStringError :: TTerm Context -> TTerm (Either String a) -> TTerm (Either (InContext Error) a)
-liftStringError cx = Eithers.bimap ("_s" ~> Ctx.inContext (Error.errorOther $ Error.otherError $ var "_s") cx) ("_x" ~> var "_x")
+-- | Lift Either String to Either Error using a context
+liftStringError :: TTerm Context -> TTerm (Either String a) -> TTerm (Either Error a)
+liftStringError cx = Eithers.bimap ("_s" ~> Error.errorOther (Error.otherError $ var "_s")) ("_x" ~> var "_x")
 
 ns :: Namespace
 ns = Namespace "hydra.ext.org.yaml.coder"
@@ -62,16 +62,16 @@ module_ = Module ns definitions
       toDefinition termCoder,
       toDefinition unitCoder]
 
-yamlCoder :: TTermDefinition (Type -> Context -> Graph -> Either (InContext Error) (Coder Term YM.Node))
+yamlCoder :: TTermDefinition (Type -> Context -> Graph -> Either Error (Coder Term YM.Node))
 yamlCoder = define "yamlCoder" $
   doc "Create a YAML coder for a given type" $
   "typ" ~> "cx" ~> "g" ~>
   "mkTermCoder" <~ ("t" ~> termCoder @@ var "t" @@ var "cx" @@ var "g") $
-  "adapter" <<~ liftStringError (var "cx") (Adapt.simpleLanguageAdapter @@ YamlLanguage.yamlLanguage @@ var "cx" @@ var "g" @@ var "typ") $
+  "adapter" <<~ (Adapt.simpleLanguageAdapter @@ YamlLanguage.yamlLanguage @@ var "cx" @@ var "g" @@ var "typ") $
   "coder" <<~ var "mkTermCoder" @@ (Coders.adapterTarget $ var "adapter") $
   right $ Adapt.composeCoders @@ (Coders.adapterCoder $ var "adapter") @@ var "coder"
 
-literalYamlCoder :: TTermDefinition (LiteralType -> Either (InContext Error) (Coder Literal YM.Scalar))
+literalYamlCoder :: TTermDefinition (LiteralType -> Either Error (Coder Literal YM.Scalar))
 literalYamlCoder = define "literalYamlCoder" $
   doc "Create a YAML coder for literal types" $
   "lt" ~>
@@ -94,29 +94,29 @@ literalYamlCoder = define "literalYamlCoder" $
   "encoded" <~ (cases _LiteralType (var "lt") Nothing [
     _LiteralType_boolean>>: constant $ Coders.coder
       ("cx" ~> "lit" ~>
-        "b" <<~ ExtractCore.booleanLiteral @@ var "cx" @@ var "lit" $
+        "b" <<~ ExtractCore.booleanLiteral @@ var "lit" $
         right (Yaml.scalarBool $ var "b"))
       (var "decodeBool"),
     _LiteralType_float>>: constant $ Coders.coder
       ("cx" ~> "lit" ~>
-        "f" <<~ ExtractCore.floatLiteral @@ var "cx" @@ var "lit" $
-        "bf" <<~ ExtractCore.bigfloatValue @@ var "cx" @@ var "f" $
+        "f" <<~ ExtractCore.floatLiteral @@ var "lit" $
+        "bf" <<~ ExtractCore.bigfloatValue @@ var "f" $
         right (Yaml.scalarFloat $ var "bf"))
       (var "decodeFloat"),
     _LiteralType_integer>>: constant $ Coders.coder
       ("cx" ~> "lit" ~>
-        "i" <<~ ExtractCore.integerLiteral @@ var "cx" @@ var "lit" $
-        "bi" <<~ ExtractCore.bigintValue @@ var "cx" @@ var "i" $
+        "i" <<~ ExtractCore.integerLiteral @@ var "lit" $
+        "bi" <<~ ExtractCore.bigintValue @@ var "i" $
         right (Yaml.scalarInt $ var "bi"))
       (var "decodeInteger"),
     _LiteralType_string>>: constant $ Coders.coder
       ("cx" ~> "lit" ~>
-        "s" <<~ ExtractCore.stringLiteral @@ var "cx" @@ var "lit" $
+        "s" <<~ ExtractCore.stringLiteral @@ var "lit" $
         right (Yaml.scalarStr $ var "s"))
       (var "decodeString")]) $
   right $ var "encoded"
 
-recordCoder :: TTermDefinition (Name -> [FieldType] -> Context -> Graph -> Either (InContext Error) (Coder Term YM.Node))
+recordCoder :: TTermDefinition (Name -> [FieldType] -> Context -> Graph -> Either Error (Coder Term YM.Node))
 recordCoder = define "recordCoder" $
   doc "Create a YAML coder for record types" $
   "tname" ~> "rt" ~> "cx" ~> "g" ~>
@@ -128,7 +128,7 @@ recordCoder = define "recordCoder" $
     ("cx" ~> "term" ~> encodeRecord @@ var "coders" @@ var "cx" @@ var "g" @@ var "term")
     ("cx" ~> "val" ~> decodeRecord @@ var "tname" @@ var "coders" @@ var "cx" @@ var "val")
 
-encodeRecord :: TTermDefinition ([(FieldType, Coder Term YM.Node)] -> Context -> Graph -> Term -> Either (InContext Error) YM.Node)
+encodeRecord :: TTermDefinition ([(FieldType, Coder Term YM.Node)] -> Context -> Graph -> Term -> Either Error YM.Node)
 encodeRecord = define "encodeRecord" $
   doc "Encode a record term to YAML" $
   "coders" ~> "cx" ~> "graph" ~> "term" ~>
@@ -152,12 +152,12 @@ encodeRecord = define "encodeRecord" $
       (right nothing)
       ("encoded" <<~ Coders.coderEncode (var "coder'") @@ var "cx" @@ var "fvalue" $
         right (just $ pair (Yaml.nodeScalar $ Yaml.scalarStr $ Core.unName $ var "fname") (var "encoded")))) $
-  "record" <<~ ExtractCore.termRecord @@ var "cx" @@ var "graph" @@ var "stripped" $
+  "record" <<~ ExtractCore.termRecord @@ var "graph" @@ var "stripped" $
   "fields" <~ (Core.recordFields $ var "record") $
   "maybeFields" <<~ Eithers.mapList (var "encodeField") (Lists.zip (var "coders") (var "fields")) $
   right (Yaml.nodeMapping $ Maps.fromList $ Maybes.cat $ var "maybeFields")
 
-decodeRecord :: TTermDefinition (Name -> [(FieldType, Coder Term YM.Node)] -> Context -> YM.Node -> Either (InContext Error) Term)
+decodeRecord :: TTermDefinition (Name -> [(FieldType, Coder Term YM.Node)] -> Context -> YM.Node -> Either Error Term)
 decodeRecord = define "decodeRecord" $
   doc "Decode a YAML value to a record term" $
   "tname" ~> "coders" ~> "cx" ~> "n" ~>
@@ -176,7 +176,7 @@ decodeRecord = define "decodeRecord" $
     (Just $ Ctx.failInContext (Error.errorOther $ Error.otherError (string "expected mapping")) (var "cx")) [
     YM._Node_mapping>>: var "decodeObjectBody"]
 
-termCoder :: TTermDefinition (Type -> Context -> Graph -> Either (InContext Error) (Coder Term YM.Node))
+termCoder :: TTermDefinition (Type -> Context -> Graph -> Either Error (Coder Term YM.Node))
 termCoder = define "termCoder" $
   doc "Create a YAML coder for term types" $
   "typ" ~> "cx" ~> "g" ~>

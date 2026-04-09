@@ -2,7 +2,6 @@ package hydra.demos.genpg;
 
 import hydra.Generation;
 import hydra.context.Context;
-import hydra.context.InContext;
 import hydra.core.Term;
 import hydra.errors.Error_;
 import hydra.graph.Graph;
@@ -85,13 +84,13 @@ public class Demo {
             List<Edge<Term>> especs) throws IOException {
         Table<Term> table = decodeTableIo(tableType, path);
         Context cx = new Context(Collections.emptyList(), Collections.emptyList(), Collections.emptyMap());
-        Either<InContext<Error_>, Pair<List<Vertex<Term>>, List<Edge<Term>>>> result =
+        Either<Error_, Pair<List<Vertex<Term>>, List<Edge<Term>>>> result =
             Transform.transformTableRows(cx, graphContext, vspecs, especs, tableType, table.data);
         if (result.isLeft()) {
             throw new RuntimeException(
-                "Transform error: " + hydra.show.Errors.error(((Either.Left<InContext<Error_>, ?>) result).value.object));
+                "Transform error: " + hydra.show.Errors.error(((Either.Left<Error_, ?>) result).value));
         }
-        return ((Either.Right<InContext<Error_>, Pair<List<Vertex<Term>>, List<Edge<Term>>>>) result).value;
+        return ((Either.Right<Error_, Pair<List<Vertex<Term>>, List<Edge<Term>>>>) result).value;
     }
 
     /**

@@ -139,7 +139,7 @@ tab :: String -> Type
 tab = Bootstrap.typeref TabularModel.ns
 
 -- | Evaluate properties by applying each spec to the record and extracting optional values
-evaluateProperties :: TTermDefinition (Context -> Graph -> M.Map PG.PropertyKey Term -> Term -> Either (InContext Error) (M.Map PG.PropertyKey Term))
+evaluateProperties :: TTermDefinition (Context -> Graph -> M.Map PG.PropertyKey Term -> Term -> Either Error (M.Map PG.PropertyKey Term))
 evaluateProperties = define "evaluateProperties" $
   doc "Evaluate property specifications against a record term" $
   "cx" ~> "g" ~> "specs" ~> "record" ~>
@@ -162,7 +162,7 @@ evaluateProperties = define "evaluateProperties" $
         (Maps.toList $ var "specs"))
 
 -- | Evaluate an edge specification against a record term
-evaluateEdge :: TTermDefinition (Context -> Graph -> PG.Edge Term -> Term -> Either (InContext Error) (Maybe (PG.Edge Term)))
+evaluateEdge :: TTermDefinition (Context -> Graph -> PG.Edge Term -> Term -> Either Error (Maybe (PG.Edge Term)))
 evaluateEdge = define "evaluateEdge" $
   doc "Evaluate an edge specification against a record term to produce an optional edge" $
   "cx" ~> "g" ~> "edgeSpec" ~> "record" ~>
@@ -178,13 +178,13 @@ evaluateEdge = define "evaluateEdge" $
           (Eithers.bind
             (Reduction.reduceTerm @@ var "cx" @@ var "g" @@ boolean True @@ (Core.termApplication $ Core.application (var "outSpec") (var "record")))
             ("__term" ~>
-              ExtractCore.maybeTerm @@ var "cx" @@ ("t" ~> right (var "t")) @@ var "g" @@ var "__term"))
+              ExtractCore.maybeTerm @@ ("t" ~> right (var "t")) @@ var "g" @@ var "__term"))
           ("mOutId" ~>
             Eithers.bind
               (Eithers.bind
                 (Reduction.reduceTerm @@ var "cx" @@ var "g" @@ boolean True @@ (Core.termApplication $ Core.application (var "inSpec") (var "record")))
                 ("__term" ~>
-                  ExtractCore.maybeTerm @@ var "cx" @@ ("t" ~> right (var "t")) @@ var "g" @@ var "__term"))
+                  ExtractCore.maybeTerm @@ ("t" ~> right (var "t")) @@ var "g" @@ var "__term"))
               ("mInId" ~>
                 Eithers.bind
                   (evaluateProperties @@ var "cx" @@ var "g" @@ var "propSpecs" @@ var "record")
@@ -203,7 +203,7 @@ evaluateEdge = define "evaluateEdge" $
                             (var "mInId"))))))
 
 -- | Evaluate a vertex specification against a record term
-evaluateVertex :: TTermDefinition (Context -> Graph -> PG.Vertex Term -> Term -> Either (InContext Error) (Maybe (PG.Vertex Term)))
+evaluateVertex :: TTermDefinition (Context -> Graph -> PG.Vertex Term -> Term -> Either Error (Maybe (PG.Vertex Term)))
 evaluateVertex = define "evaluateVertex" $
   doc "Evaluate a vertex specification against a record term to produce an optional vertex" $
   "cx" ~> "g" ~> "vertexSpec" ~> "record" ~>
@@ -214,7 +214,7 @@ evaluateVertex = define "evaluateVertex" $
       (Eithers.bind
         (Reduction.reduceTerm @@ var "cx" @@ var "g" @@ boolean True @@ (Core.termApplication $ Core.application (var "idSpec") (var "record")))
         ("__term" ~>
-          ExtractCore.maybeTerm @@ var "cx" @@ ("t" ~> right (var "t")) @@ var "g" @@ var "__term"))
+          ExtractCore.maybeTerm @@ ("t" ~> right (var "t")) @@ var "g" @@ var "__term"))
       ("mId" ~>
         Eithers.bind
           (evaluateProperties @@ var "cx" @@ var "g" @@ var "propSpecs" @@ var "record")
@@ -371,7 +371,7 @@ termRowToRecord = define "termRowToRecord" $
         (var "cells")
 
 -- | Transform a record through vertex and edge specifications
-transformRecord :: TTermDefinition (Context -> Graph -> [PG.Vertex Term] -> [PG.Edge Term] -> Term -> Either (InContext Error) ([PG.Vertex Term], [PG.Edge Term]))
+transformRecord :: TTermDefinition (Context -> Graph -> [PG.Vertex Term] -> [PG.Edge Term] -> Term -> Either Error ([PG.Vertex Term], [PG.Edge Term]))
 transformRecord = define "transformRecord" $
   doc "Transform a record through vertex and edge specifications to produce vertices and edges" $
   "cx" ~> "g" ~> "vspecs" ~> "especs" ~> "record" ~>
@@ -520,7 +520,7 @@ parseTableLines = define "parseTableLines" $
 
 -- | Transform all rows from a decoded table through vertex/edge specs
 -- This is the pure part of table transformation (runs in Either monad)
-transformTableRows :: TTermDefinition (Context -> Graph -> [PG.Vertex Term] -> [PG.Edge Term] -> Tab.TableType -> [Tab.DataRow Term] -> Either (InContext Error) ([PG.Vertex Term], [PG.Edge Term]))
+transformTableRows :: TTermDefinition (Context -> Graph -> [PG.Vertex Term] -> [PG.Edge Term] -> Tab.TableType -> [Tab.DataRow Term] -> Either Error ([PG.Vertex Term], [PG.Edge Term]))
 transformTableRows = define "transformTableRows" $
   doc "Transform all rows from a table through vertex/edge specifications" $
   "cx" ~> "g" ~> "vspecs" ~> "especs" ~> "tableType" ~> "rows" ~>

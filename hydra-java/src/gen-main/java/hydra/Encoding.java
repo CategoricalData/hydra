@@ -6,15 +6,12 @@ package hydra;
  * Functions for generating term encoders from type modules
  */
 public interface Encoding {
-  static hydra.util.Either<hydra.context.InContext<hydra.errors.DecodingError>, hydra.core.Binding> encodeBinding(hydra.context.Context cx, hydra.graph.Graph graph, hydra.core.Binding b) {
+  static <T0> hydra.util.Either<hydra.errors.DecodingError, hydra.core.Binding> encodeBinding(T0 cx, hydra.graph.Graph graph, hydra.core.Binding b) {
     return hydra.lib.eithers.Bind.apply(
-      hydra.lib.eithers.Bimap.apply(
-        (java.util.function.Function<hydra.errors.DecodingError, hydra.context.InContext<hydra.errors.DecodingError>>) (_wc_e -> (hydra.context.InContext<hydra.errors.DecodingError>) (new hydra.context.InContext<hydra.errors.DecodingError>(_wc_e, cx))),
-        (java.util.function.Function<hydra.core.Type, hydra.core.Type>) (_wc_a -> _wc_a),
-        hydra.decode.Core.type(
-          graph,
-          (b).term)),
-      (java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.context.InContext<hydra.errors.DecodingError>, hydra.core.Binding>>) (typ -> hydra.util.Either.<hydra.context.InContext<hydra.errors.DecodingError>, hydra.core.Binding>right(new hydra.core.Binding(hydra.Encoding.encodeBindingName((b).name), hydra.Encoding.encodeTypeNamed(
+      hydra.decode.Core.type(
+        graph,
+        (b).term),
+      (java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.errors.DecodingError, hydra.core.Binding>>) (typ -> hydra.util.Either.<hydra.errors.DecodingError, hydra.core.Binding>right(new hydra.core.Binding(hydra.Encoding.encodeBindingName((b).name), hydra.Encoding.encodeTypeNamed(
         (b).name,
         typ), hydra.util.Maybe.just(hydra.Encoding.encoderTypeSchemeNamed(
         (b).name,
@@ -177,7 +174,7 @@ public interface Encoding {
     return new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(new hydra.core.Name("m"), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("map"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.maps.bimap")), hydra.Encoding.encodeType((mt).keys))), hydra.Encoding.encodeType((mt).values))), new hydra.core.Term.Variable(new hydra.core.Name("m"))))))))));
   }
 
-  static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<hydra.packaging.Module>> encodeModule(hydra.context.Context cx, hydra.graph.Graph graph, hydra.packaging.Module mod) {
+  static hydra.util.Either<hydra.errors.Error_, hydra.util.Maybe<hydra.packaging.Module>> encodeModule(hydra.context.Context cx, hydra.graph.Graph graph, hydra.packaging.Module mod) {
     return hydra.lib.eithers.Bind.apply(
       hydra.Encoding.filterTypeBindings(
         cx,
@@ -201,20 +198,20 @@ public interface Encoding {
             }
           })),
           (mod).definitions))),
-      (java.util.function.Function<java.util.List<hydra.core.Binding>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<hydra.packaging.Module>>>) (typeBindings -> hydra.lib.logic.IfElse.lazy(
+      (java.util.function.Function<java.util.List<hydra.core.Binding>, hydra.util.Either<hydra.errors.Error_, hydra.util.Maybe<hydra.packaging.Module>>>) (typeBindings -> hydra.lib.logic.IfElse.lazy(
         hydra.lib.lists.Null.apply(typeBindings),
-        () -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<hydra.packaging.Module>>right((hydra.util.Maybe<hydra.packaging.Module>) (hydra.util.Maybe.<hydra.packaging.Module>nothing())),
+        () -> hydra.util.Either.<hydra.errors.Error_, hydra.util.Maybe<hydra.packaging.Module>>right((hydra.util.Maybe<hydra.packaging.Module>) (hydra.util.Maybe.<hydra.packaging.Module>nothing())),
         () -> hydra.lib.eithers.Bind.apply(
           hydra.lib.eithers.MapList.apply(
-            (java.util.function.Function<hydra.core.Binding, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Binding>>) (b -> hydra.lib.eithers.Bimap.apply(
-              (java.util.function.Function<hydra.context.InContext<hydra.errors.DecodingError>, hydra.context.InContext<hydra.errors.Error_>>) (ic -> (hydra.context.InContext<hydra.errors.Error_>) (new hydra.context.InContext<hydra.errors.Error_>(new hydra.errors.Error_.Other(new hydra.errors.OtherError(((java.util.function.Function<hydra.context.InContext<hydra.errors.DecodingError>, hydra.errors.DecodingError>) (projected -> projected.object)).apply(ic).value)), ((java.util.function.Function<hydra.context.InContext<hydra.errors.DecodingError>, hydra.context.Context>) (projected -> projected.context)).apply(ic)))),
+            (java.util.function.Function<hydra.core.Binding, hydra.util.Either<hydra.errors.Error_, hydra.core.Binding>>) (b -> hydra.lib.eithers.Bimap.apply(
+              (java.util.function.Function<hydra.errors.DecodingError, hydra.errors.Error_>) (_e -> new hydra.errors.Error_.Decoding(_e)),
               (java.util.function.Function<hydra.core.Binding, hydra.core.Binding>) (x -> x),
               hydra.Encoding.encodeBinding(
                 cx,
                 graph,
                 b))),
             typeBindings),
-          (java.util.function.Function<java.util.List<hydra.core.Binding>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<hydra.packaging.Module>>>) (encodedBindings -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<hydra.packaging.Module>>right(hydra.util.Maybe.just(new hydra.packaging.Module(hydra.Encoding.encodeNamespace((mod).namespace), hydra.lib.lists.Map.apply(
+          (java.util.function.Function<java.util.List<hydra.core.Binding>, hydra.util.Either<hydra.errors.Error_, hydra.util.Maybe<hydra.packaging.Module>>>) (encodedBindings -> hydra.util.Either.<hydra.errors.Error_, hydra.util.Maybe<hydra.packaging.Module>>right(hydra.util.Maybe.just(new hydra.packaging.Module(hydra.Encoding.encodeNamespace((mod).namespace), hydra.lib.lists.Map.apply(
             (java.util.function.Function<hydra.core.Binding, hydra.packaging.Definition>) (b -> new hydra.packaging.Definition.Term(new hydra.packaging.TermDefinition((b).name, (b).term, (b).type))),
             encodedBindings), hydra.lib.lists.Nub.apply(hydra.lib.lists.Concat2.apply(
             hydra.lib.lists.Map.apply(
@@ -916,11 +913,11 @@ public interface Encoding {
     return new hydra.core.TypeScheme(typeVars, encoderFunType, constraints.get());
   }
 
-  static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.List<hydra.core.Binding>> filterTypeBindings(hydra.context.Context cx, hydra.graph.Graph graph, java.util.List<hydra.core.Binding> bindings) {
+  static hydra.util.Either<hydra.errors.Error_, java.util.List<hydra.core.Binding>> filterTypeBindings(hydra.context.Context cx, hydra.graph.Graph graph, java.util.List<hydra.core.Binding> bindings) {
     return hydra.lib.eithers.Map.apply(
       (java.util.function.Function<java.util.List<hydra.util.Maybe<hydra.core.Binding>>, java.util.List<hydra.core.Binding>>) (hydra.lib.maybes.Cat::apply),
       hydra.lib.eithers.MapList.apply(
-        (java.util.function.Function<hydra.core.Binding, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<hydra.core.Binding>>>) (v1 -> hydra.Encoding.isEncodableBinding(
+        (java.util.function.Function<hydra.core.Binding, hydra.util.Either<hydra.errors.Error_, hydra.util.Maybe<hydra.core.Binding>>>) (v1 -> hydra.Encoding.isEncodableBinding(
           cx,
           graph,
           v1)),
@@ -929,13 +926,13 @@ public interface Encoding {
           bindings)));
   }
 
-  static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<hydra.core.Binding>> isEncodableBinding(hydra.context.Context cx, hydra.graph.Graph graph, hydra.core.Binding b) {
+  static hydra.util.Either<hydra.errors.Error_, hydra.util.Maybe<hydra.core.Binding>> isEncodableBinding(hydra.context.Context cx, hydra.graph.Graph graph, hydra.core.Binding b) {
     return hydra.lib.eithers.Bind.apply(
       hydra.Predicates.isSerializableByName(
         cx,
         graph,
         (b).name),
-      (java.util.function.Function<Boolean, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<hydra.core.Binding>>>) (serializable -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<hydra.core.Binding>>right(hydra.lib.logic.IfElse.lazy(
+      (java.util.function.Function<Boolean, hydra.util.Either<hydra.errors.Error_, hydra.util.Maybe<hydra.core.Binding>>>) (serializable -> hydra.util.Either.<hydra.errors.Error_, hydra.util.Maybe<hydra.core.Binding>>right(hydra.lib.logic.IfElse.lazy(
         serializable,
         () -> hydra.util.Maybe.just(b),
         () -> (hydra.util.Maybe<hydra.core.Binding>) (hydra.util.Maybe.<hydra.core.Binding>nothing())))));

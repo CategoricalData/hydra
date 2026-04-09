@@ -8,7 +8,7 @@ package hydra.decode;
 public interface Parsing {
   static hydra.util.Either<hydra.errors.DecodingError, hydra.parsing.ParseError> parseError(hydra.graph.Graph cx, hydra.core.Term raw) {
     return hydra.lib.eithers.Either.apply(
-      (java.util.function.Function<String, hydra.util.Either<hydra.errors.DecodingError, hydra.parsing.ParseError>>) (err -> hydra.util.Either.<hydra.errors.DecodingError, hydra.parsing.ParseError>left(new hydra.errors.DecodingError(err))),
+      (java.util.function.Function<hydra.errors.DecodingError, hydra.util.Either<hydra.errors.DecodingError, hydra.parsing.ParseError>>) (err -> hydra.util.Either.<hydra.errors.DecodingError, hydra.parsing.ParseError>left(err)),
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.parsing.ParseError>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.errors.DecodingError, hydra.parsing.ParseError> otherwise(hydra.core.Term instance) {
@@ -22,7 +22,7 @@ public interface Parsing {
             hydra.extract.Core.requireField(
               "message",
               (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, String>>>) (cx2 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, String>>) (raw2 -> hydra.lib.eithers.Either.apply(
-                (java.util.function.Function<String, hydra.util.Either<hydra.errors.DecodingError, String>>) (err -> hydra.util.Either.<hydra.errors.DecodingError, String>left(new hydra.errors.DecodingError(err))),
+                (java.util.function.Function<hydra.errors.DecodingError, hydra.util.Either<hydra.errors.DecodingError, String>>) (err -> hydra.util.Either.<hydra.errors.DecodingError, String>left(err)),
                 (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, String>>) (stripped2 -> (stripped2).accept(new hydra.core.Term.PartialVisitor<>() {
                   @Override
                   public hydra.util.Either<hydra.errors.DecodingError, String> otherwise(hydra.core.Term instance) {
@@ -44,7 +44,7 @@ public interface Parsing {
                     });
                   }
                 })),
-                hydra.Lexical.stripAndDereferenceTermEither(
+                hydra.extract.Core.stripWithDecodingError(
                   cx2,
                   raw2)))),
               fieldMap,
@@ -53,7 +53,7 @@ public interface Parsing {
               hydra.extract.Core.requireField(
                 "remainder",
                 (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, String>>>) (cx2 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, String>>) (raw2 -> hydra.lib.eithers.Either.apply(
-                  (java.util.function.Function<String, hydra.util.Either<hydra.errors.DecodingError, String>>) (err -> hydra.util.Either.<hydra.errors.DecodingError, String>left(new hydra.errors.DecodingError(err))),
+                  (java.util.function.Function<hydra.errors.DecodingError, hydra.util.Either<hydra.errors.DecodingError, String>>) (err -> hydra.util.Either.<hydra.errors.DecodingError, String>left(err)),
                   (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, String>>) (stripped2 -> (stripped2).accept(new hydra.core.Term.PartialVisitor<>() {
                     @Override
                     public hydra.util.Either<hydra.errors.DecodingError, String> otherwise(hydra.core.Term instance) {
@@ -75,7 +75,7 @@ public interface Parsing {
                       });
                     }
                   })),
-                  hydra.Lexical.stripAndDereferenceTermEither(
+                  hydra.extract.Core.stripWithDecodingError(
                     cx2,
                     raw2)))),
                 fieldMap,
@@ -83,14 +83,14 @@ public interface Parsing {
               (java.util.function.Function<String, hydra.util.Either<hydra.errors.DecodingError, hydra.parsing.ParseError>>) (field_remainder -> hydra.util.Either.<hydra.errors.DecodingError, hydra.parsing.ParseError>right(new hydra.parsing.ParseError(field_message, field_remainder))))));
         }
       })),
-      hydra.Lexical.stripAndDereferenceTermEither(
+      hydra.extract.Core.stripWithDecodingError(
         cx,
         raw));
   }
 
   static <T0> hydra.util.Either<hydra.errors.DecodingError, hydra.parsing.ParseResult<T0>> parseResult(java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, T0>>> a, hydra.graph.Graph cx, hydra.core.Term raw) {
     return hydra.lib.eithers.Either.apply(
-      (java.util.function.Function<String, hydra.util.Either<hydra.errors.DecodingError, hydra.parsing.ParseResult<T0>>>) (err -> hydra.util.Either.<hydra.errors.DecodingError, hydra.parsing.ParseResult<T0>>left(new hydra.errors.DecodingError(err))),
+      (java.util.function.Function<hydra.errors.DecodingError, hydra.util.Either<hydra.errors.DecodingError, hydra.parsing.ParseResult<T0>>>) (err -> hydra.util.Either.<hydra.errors.DecodingError, hydra.parsing.ParseResult<T0>>left(err)),
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.parsing.ParseResult<T0>>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.errors.DecodingError, hydra.parsing.ParseResult<T0>> otherwise(hydra.core.Term instance) {
@@ -118,7 +118,7 @@ public interface Parsing {
                   p1)))));
         }
       })),
-      hydra.Lexical.stripAndDereferenceTermEither(
+      hydra.extract.Core.stripWithDecodingError(
         cx,
         raw));
   }
@@ -138,7 +138,7 @@ public interface Parsing {
 
   static <T0> hydra.util.Either<hydra.errors.DecodingError, hydra.parsing.ParseSuccess<T0>> parseSuccess(java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, T0>>> a, hydra.graph.Graph cx, hydra.core.Term raw) {
     return hydra.lib.eithers.Either.apply(
-      (java.util.function.Function<String, hydra.util.Either<hydra.errors.DecodingError, hydra.parsing.ParseSuccess<T0>>>) (err -> hydra.util.Either.<hydra.errors.DecodingError, hydra.parsing.ParseSuccess<T0>>left(new hydra.errors.DecodingError(err))),
+      (java.util.function.Function<hydra.errors.DecodingError, hydra.util.Either<hydra.errors.DecodingError, hydra.parsing.ParseSuccess<T0>>>) (err -> hydra.util.Either.<hydra.errors.DecodingError, hydra.parsing.ParseSuccess<T0>>left(err)),
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.parsing.ParseSuccess<T0>>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.errors.DecodingError, hydra.parsing.ParseSuccess<T0>> otherwise(hydra.core.Term instance) {
@@ -158,7 +158,7 @@ public interface Parsing {
               hydra.extract.Core.requireField(
                 "remainder",
                 (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, String>>>) (cx2 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, String>>) (raw2 -> hydra.lib.eithers.Either.apply(
-                  (java.util.function.Function<String, hydra.util.Either<hydra.errors.DecodingError, String>>) (err -> hydra.util.Either.<hydra.errors.DecodingError, String>left(new hydra.errors.DecodingError(err))),
+                  (java.util.function.Function<hydra.errors.DecodingError, hydra.util.Either<hydra.errors.DecodingError, String>>) (err -> hydra.util.Either.<hydra.errors.DecodingError, String>left(err)),
                   (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, String>>) (stripped2 -> (stripped2).accept(new hydra.core.Term.PartialVisitor<>() {
                     @Override
                     public hydra.util.Either<hydra.errors.DecodingError, String> otherwise(hydra.core.Term instance) {
@@ -180,7 +180,7 @@ public interface Parsing {
                       });
                     }
                   })),
-                  hydra.Lexical.stripAndDereferenceTermEither(
+                  hydra.extract.Core.stripWithDecodingError(
                     cx2,
                     raw2)))),
                 fieldMap,
@@ -188,7 +188,7 @@ public interface Parsing {
               (java.util.function.Function<String, hydra.util.Either<hydra.errors.DecodingError, hydra.parsing.ParseSuccess<T0>>>) (field_remainder -> hydra.util.Either.<hydra.errors.DecodingError, hydra.parsing.ParseSuccess<T0>>right((hydra.parsing.ParseSuccess<T0>) (new hydra.parsing.ParseSuccess<T0>(field_value, field_remainder)))))));
         }
       })),
-      hydra.Lexical.stripAndDereferenceTermEither(
+      hydra.extract.Core.stripWithDecodingError(
         cx,
         raw));
   }

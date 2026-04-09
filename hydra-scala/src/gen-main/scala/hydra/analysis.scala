@@ -2,8 +2,6 @@ package hydra.analysis
 
 import hydra.coders.*
 
-import hydra.context.*
-
 import hydra.core.*
 
 import hydra.errors.*
@@ -37,8 +35,8 @@ def analyzeFunctionTermWith_finish[T0, T1](cx: hydra.context.Context)(getTC: (T0
   lazy val bodyWithTapps: hydra.core.Term = hydra.lib.lists.foldl[hydra.core.Term, hydra.core.Type]((trm: hydra.core.Term) =>
     (typ: hydra.core.Type) =>
     hydra.core.Term.typeApplication(hydra.core.TypeApplicationTerm(trm, typ)))(body)(tapps)
-  lazy val mcod: Option[hydra.core.Type] = hydra.lib.eithers.either[hydra.context.InContext[hydra.errors.Error],
-     hydra.core.Type, Option[hydra.core.Type]]((_x: hydra.context.InContext[hydra.errors.Error]) => None)((c: hydra.core.Type) => Some(c))(hydra.checking.typeOfTerm(cx)(getTC(fEnv))(bodyWithTapps))
+  lazy val mcod: Option[hydra.core.Type] = hydra.lib.eithers.either[hydra.errors.Error, hydra.core.Type,
+     Option[hydra.core.Type]]((_x: hydra.errors.Error) => None)((c: hydra.core.Type) => Some(c))(hydra.checking.typeOfTerm(cx)(getTC(fEnv))(bodyWithTapps))
   Right(hydra.typing.FunctionStructure(hydra.lib.lists.reverse[hydra.core.Name](tparams), hydra.lib.lists.reverse[hydra.core.Name](args),
      bindings, bodyWithTapps, hydra.lib.lists.reverse[hydra.core.Type](doms), mcod, fEnv))
 }
@@ -102,37 +100,31 @@ def definitionDependencyNamespaces(defs: Seq[hydra.packaging.Definition]): scala
      Option[hydra.packaging.Namespace]](hydra.names.namespaceOf)(hydra.lib.sets.toList[hydra.core.Name](allNames))))
 }
 
-def dependencyNamespaces(cx: hydra.context.Context)(graph: hydra.graph.Graph)(binds: Boolean)(withPrims: Boolean)(withNoms: Boolean)(withSchema: Boolean)(els: Seq[hydra.core.Binding]): Either[hydra.context.InContext[hydra.errors.Error],
+def dependencyNamespaces[T0](cx: T0)(graph: hydra.graph.Graph)(binds: Boolean)(withPrims: Boolean)(withNoms: Boolean)(withSchema: Boolean)(els: Seq[hydra.core.Binding]): Either[hydra.errors.Error,
    scala.collection.immutable.Set[hydra.packaging.Namespace]] =
   {
-  def depNames(el: hydra.core.Binding): Either[hydra.context.InContext[hydra.errors.Error], scala.collection.immutable.Set[hydra.core.Name]] =
+  def depNames(el: hydra.core.Binding): Either[hydra.errors.Error, scala.collection.immutable.Set[hydra.core.Name]] =
     {
     lazy val term: hydra.core.Term = (el.term)
     lazy val deannotatedTerm: hydra.core.Term = hydra.strip.deannotateTerm(term)
     lazy val dataNames: scala.collection.immutable.Set[hydra.core.Name] = hydra.dependencies.termDependencyNames(binds)(withPrims)(withNoms)(term)
     lazy val schemaNames: scala.collection.immutable.Set[hydra.core.Name] = hydra.lib.logic.ifElse[scala.collection.immutable.Set[hydra.core.Name]](withSchema)(hydra.lib.maybes.maybe[scala.collection.immutable.Set[hydra.core.Name],
        hydra.core.TypeScheme](hydra.lib.sets.empty[hydra.core.Name])((ts: hydra.core.TypeScheme) => hydra.dependencies.typeDependencyNames(true)(ts.`type`))(el.`type`))(hydra.lib.sets.empty[hydra.core.Name])
-    hydra.lib.logic.ifElse[Either[hydra.context.InContext[hydra.errors.Error], scala.collection.immutable.Set[hydra.core.Name]]](hydra.predicates.isEncodedType(deannotatedTerm))(hydra.lib.eithers.map[hydra.core.Type,
-       scala.collection.immutable.Set[hydra.core.Name], hydra.context.InContext[hydra.errors.Error]]((typ: hydra.core.Type) =>
-      hydra.lib.sets.unions[hydra.core.Name](Seq(dataNames, schemaNames, hydra.dependencies.typeDependencyNames(true)(typ))))(hydra.lib.eithers.bimap[hydra.errors.Error,
-         hydra.core.Type, hydra.context.InContext[hydra.errors.Error], hydra.core.Type]((_wc_e: hydra.errors.Error) =>
-      hydra.context.InContext(_wc_e, hydra.context.Context(hydra.lib.lists.cons[scala.Predef.String]("dependency namespace (type)")(cx.trace),
-         (cx.messages), (cx.other))))((_wc_a: hydra.core.Type) => _wc_a)(hydra.lib.eithers.bimap[hydra.errors.DecodingError,
-         hydra.core.Type, hydra.errors.Error, hydra.core.Type]((_e: hydra.errors.DecodingError) => hydra.errors.Error.other(_e))((_a: hydra.core.Type) => _a)(hydra.decode.core.`type`(graph)(term)))))(hydra.lib.logic.ifElse[Either[hydra.context.InContext[hydra.errors.Error],
+    hydra.lib.logic.ifElse[Either[hydra.errors.Error, scala.collection.immutable.Set[hydra.core.Name]]](hydra.predicates.isEncodedType(deannotatedTerm))(hydra.lib.eithers.map[hydra.core.Type,
+       scala.collection.immutable.Set[hydra.core.Name], hydra.errors.Error]((typ: hydra.core.Type) =>
+      hydra.lib.sets.unions[hydra.core.Name](Seq(dataNames, schemaNames, hydra.dependencies.typeDependencyNames(true)(typ))))(hydra.lib.eithers.bimap[hydra.errors.DecodingError,
+         hydra.core.Type, hydra.errors.Error, hydra.core.Type]((_e: hydra.errors.DecodingError) => hydra.errors.Error.decoding(_e))((_a: hydra.core.Type) => _a)(hydra.decode.core.`type`(graph)(term))))(hydra.lib.logic.ifElse[Either[hydra.errors.Error,
          scala.collection.immutable.Set[hydra.core.Name]]](hydra.predicates.isEncodedTerm(deannotatedTerm))(hydra.lib.eithers.map[hydra.core.Term,
-         scala.collection.immutable.Set[hydra.core.Name], hydra.context.InContext[hydra.errors.Error]]((decodedTerm: hydra.core.Term) =>
-      hydra.lib.sets.unions[hydra.core.Name](Seq(dataNames, schemaNames, hydra.dependencies.termDependencyNames(binds)(withPrims)(withNoms)(decodedTerm))))(hydra.lib.eithers.bimap[hydra.errors.Error,
-         hydra.core.Term, hydra.context.InContext[hydra.errors.Error], hydra.core.Term]((_wc_e: hydra.errors.Error) =>
-      hydra.context.InContext(_wc_e, hydra.context.Context(hydra.lib.lists.cons[scala.Predef.String]("dependency namespace (term)")(cx.trace),
-         (cx.messages), (cx.other))))((_wc_a: hydra.core.Term) => _wc_a)(hydra.lib.eithers.bimap[hydra.errors.DecodingError,
-         hydra.core.Term, hydra.errors.Error, hydra.core.Term]((_e: hydra.errors.DecodingError) => hydra.errors.Error.other(_e))((_a: hydra.core.Term) => _a)(hydra.decode.core.term(graph)(term)))))(Right(hydra.lib.sets.unions[hydra.core.Name](Seq(dataNames,
+         scala.collection.immutable.Set[hydra.core.Name], hydra.errors.Error]((decodedTerm: hydra.core.Term) =>
+      hydra.lib.sets.unions[hydra.core.Name](Seq(dataNames, schemaNames, hydra.dependencies.termDependencyNames(binds)(withPrims)(withNoms)(decodedTerm))))(hydra.lib.eithers.bimap[hydra.errors.DecodingError,
+         hydra.core.Term, hydra.errors.Error, hydra.core.Term]((_e: hydra.errors.DecodingError) => hydra.errors.Error.decoding(_e))((_a: hydra.core.Term) => _a)(hydra.decode.core.term(graph)(term))))(Right(hydra.lib.sets.unions[hydra.core.Name](Seq(dataNames,
          schemaNames)))))
   }
   hydra.lib.eithers.map[Seq[scala.collection.immutable.Set[hydra.core.Name]], scala.collection.immutable.Set[hydra.packaging.Namespace],
-     hydra.context.InContext[hydra.errors.Error]]((namesList: Seq[scala.collection.immutable.Set[hydra.core.Name]]) =>
+     hydra.errors.Error]((namesList: Seq[scala.collection.immutable.Set[hydra.core.Name]]) =>
     hydra.lib.sets.fromList[hydra.packaging.Namespace](hydra.lib.maybes.cat[hydra.packaging.Namespace](hydra.lib.lists.map[hydra.core.Name,
        Option[hydra.packaging.Namespace]](hydra.names.namespaceOf)(hydra.lib.sets.toList[hydra.core.Name](hydra.lib.sets.unions[hydra.core.Name](namesList))))))(hydra.lib.eithers.mapList[hydra.core.Binding,
-       scala.collection.immutable.Set[hydra.core.Name], hydra.context.InContext[hydra.errors.Error]](depNames)(els))
+       scala.collection.immutable.Set[hydra.core.Name], hydra.errors.Error](depNames)(els))
 }
 
 def gatherApplications(term: hydra.core.Term): Tuple2[Seq[hydra.core.Term], hydra.core.Term] =
@@ -311,7 +303,7 @@ def moduleContainsBinaryLiterals(mod: hydra.packaging.Module): Boolean =
     (t: hydra.core.Term) => hydra.lib.logic.or(acc)(termContainsBinary(t)))(false)(defTerms)
 }
 
-def moduleDependencyNamespaces(cx: hydra.context.Context)(graph: hydra.graph.Graph)(binds: Boolean)(withPrims: Boolean)(withNoms: Boolean)(withSchema: Boolean)(mod: hydra.packaging.Module): Either[hydra.context.InContext[hydra.errors.Error],
+def moduleDependencyNamespaces[T0](cx: T0)(graph: hydra.graph.Graph)(binds: Boolean)(withPrims: Boolean)(withNoms: Boolean)(withSchema: Boolean)(mod: hydra.packaging.Module): Either[hydra.errors.Error,
    scala.collection.immutable.Set[hydra.packaging.Namespace]] =
   {
   lazy val allBindings: Seq[hydra.core.Binding] = hydra.lib.maybes.cat[hydra.core.Binding](hydra.lib.lists.map[hydra.packaging.Definition,
@@ -330,7 +322,7 @@ def moduleDependencyNamespaces(cx: hydra.context.Context)(graph: hydra.graph.Gra
        (v_Definition_term_td.term), (v_Definition_term_td.`type`)))
     case _ => None)(mod.definitions))
   hydra.lib.eithers.map[scala.collection.immutable.Set[hydra.packaging.Namespace], scala.collection.immutable.Set[hydra.packaging.Namespace],
-     hydra.context.InContext[hydra.errors.Error]]((deps: scala.collection.immutable.Set[hydra.packaging.Namespace]) =>
+     hydra.errors.Error]((deps: scala.collection.immutable.Set[hydra.packaging.Namespace]) =>
     hydra.lib.sets.delete[hydra.packaging.Namespace](mod.namespace)(deps))(hydra.analysis.dependencyNamespaces(cx)(graph)(binds)(withPrims)(withNoms)(withSchema)(allBindings))
 }
 

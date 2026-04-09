@@ -16,7 +16,6 @@ import static hydra.dsl.Types.list;
 import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.string;
 import hydra.context.Context;
-import hydra.context.InContext;
 import hydra.errors.Error_;
 import hydra.util.Either;
 
@@ -34,12 +33,12 @@ public class Split extends PrimitiveFunction {
     }
 
     @Override
-    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
+    protected Function<List<Term>, Function<Context, Function<Graph, Either<Error_, Term>>>> implementation() {
         return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(
-            hydra.extract.Core.string(cx, graph, args.get(0)),
+            hydra.extract.Core.string(graph, args.get(0)),
             pat -> hydra.lib.eithers.Map.apply(
                 input -> Terms.listOfStrings(apply(pat, input)),
-                hydra.extract.Core.string(cx, graph, args.get(1))));
+                hydra.extract.Core.string(graph, args.get(1))));
     }
 
     public static Function<String, List<String>> apply(String pattern) {

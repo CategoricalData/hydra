@@ -32,10 +32,10 @@ T3 = TypeVar("T3")
 # Default Tinkerpop annotation schema.
 default_tinkerpop_annotations = hydra.pg.mapping.AnnotationSchema("vertexLabel", "edgeLabel", "vertexId", "edgeId", "key", "value", "outVertex", "outVertexLabel", "inVertex", "inVertexLabel", "outEdge", "outEdgeLabel", "inEdge", "inEdgeLabel", "ignore")
 
-def exp_string(cx: hydra.context.Context, term: hydra.core.Term) -> Either[hydra.context.InContext[hydra.errors.Error], str]:
+def exp_string(cx: T0, term: hydra.core.Term) -> Either[hydra.errors.Error, str]:
     r"""Extract a string from a term using the empty graph."""
 
-    return hydra.extract.core.string(cx, hydra.graph.Graph(hydra.lib.maps.empty(), hydra.lib.maps.empty(), hydra.lib.maps.empty(), hydra.lib.sets.empty(), hydra.lib.maps.empty(), hydra.lib.maps.empty(), hydra.lib.maps.empty(), hydra.lib.sets.empty()), term)
+    return hydra.extract.core.string(hydra.graph.Graph(hydra.lib.maps.empty(), hydra.lib.maps.empty(), hydra.lib.maps.empty(), hydra.lib.sets.empty(), hydra.lib.maps.empty(), hydra.lib.maps.empty(), hydra.lib.maps.empty(), hydra.lib.sets.empty()), term)
 
 @lru_cache(1)
 def example_pg_schema() -> hydra.pg.mapping.Schema[T0, None, str]:
@@ -61,7 +61,7 @@ def pg_element_to_json(schema: hydra.pg.mapping.Schema[T0, T1, T2], el: hydra.pg
                 raise AssertionError("Unreachable: all variants handled")
     return _hoist_hydra_pg_utils_pg_element_to_json_1(cx, schema, el)
 
-def pg_elements_to_json(schema: hydra.pg.mapping.Schema[T0, T1, T2], els: frozenlist[hydra.pg.model.Element[T2]], cx: hydra.context.Context) -> Either[hydra.context.InContext[hydra.errors.Error], hydra.json.model.Value]:
+def pg_elements_to_json(schema: hydra.pg.mapping.Schema[T0, T1, T2], els: frozenlist[hydra.pg.model.Element[T2]], cx: hydra.context.Context) -> Either[hydra.errors.Error, hydra.json.model.Value]:
     r"""Convert a list of property graph elements to JSON."""
 
     return hydra.lib.eithers.map((lambda els_: cast(hydra.json.model.Value, hydra.json.model.ValueArray(els_))), hydra.lib.eithers.map_list((lambda el: pg_element_to_json(schema, el, cx)), els))
@@ -71,7 +71,7 @@ def property_graph_elements(g: hydra.pg.model.Graph[T0]) -> frozenlist[hydra.pg.
 
     return hydra.lib.lists.concat2(hydra.lib.lists.map((lambda x: cast(hydra.pg.model.Element, hydra.pg.model.ElementVertex(x))), hydra.lib.maps.elems(g.vertices)), hydra.lib.lists.map((lambda x: cast(hydra.pg.model.Element, hydra.pg.model.ElementEdge(x))), hydra.lib.maps.elems(g.edges)))
 
-def type_application_term_to_property_graph(schema: hydra.pg.mapping.Schema[T0, T1, T2], typ: hydra.core.Type, vid_type: T1, eid_type: T1, cx: hydra.context.Context, g: hydra.graph.Graph) -> Either[hydra.context.InContext[hydra.errors.Error], Callable[[hydra.core.Term, hydra.context.Context], Either[hydra.context.InContext[hydra.errors.Error], frozenlist[hydra.pg.model.Element[T2]]]]]:
+def type_application_term_to_property_graph(schema: hydra.pg.mapping.Schema[T0, T1, T2], typ: hydra.core.Type, vid_type: T1, eid_type: T1, cx: hydra.context.Context, g: hydra.graph.Graph) -> Either[hydra.errors.Error, Callable[[hydra.core.Term, hydra.context.Context], Either[hydra.errors.Error, frozenlist[hydra.pg.model.Element[T2]]]]]:
     r"""Convert a type-annotated term to property graph elements."""
 
     return hydra.lib.eithers.bind(hydra.pg.coder.element_coder(Nothing(), schema, typ, vid_type, eid_type, cx, g), (lambda adapter: Right((lambda term, cx_: hydra.lib.eithers.map((lambda tree: (flatten_tree := (lambda t: hydra.lib.lists.cons(t.self, hydra.lib.lists.concat(hydra.lib.lists.map((lambda x1: flatten_tree(x1)), t.dependencies)))), flatten_tree(tree))[1]), adapter.coder.encode(cx_, term))))))

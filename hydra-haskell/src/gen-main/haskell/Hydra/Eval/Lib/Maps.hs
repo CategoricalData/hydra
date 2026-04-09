@@ -4,18 +4,16 @@
 
 module Hydra.Eval.Lib.Maps where
 
-import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Pairs as Pairs
-import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Show.Core as Core_
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 
 -- | Interpreter-friendly alter for Map terms.
-alter :: Context.Context -> t0 -> Core.Term -> Core.Term -> Core.Term -> Either (Context.InContext Errors.Error) Core.Term
+alter :: t0 -> t1 -> Core.Term -> Core.Term -> Core.Term -> Either Errors.Error Core.Term
 alter cx g funTerm keyTerm mapTerm =
     case mapTerm of
       Core.TermMap v0 ->
@@ -44,12 +42,12 @@ alter cx g funTerm keyTerm mapTerm =
                   Core.applicationArgument = (Core.TermVariable (Core.Name "newV"))})),
                 Core.applicationArgument = mapTerm}))})))})),
           Core.applicationArgument = newVal})))
-      _ -> Left (Context.InContext {
-        Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "map value") " but found ") (Core_.term mapTerm)))),
-        Context.inContextContext = cx})
+      _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
+        Errors.unexpectedShapeErrorExpected = "map value",
+        Errors.unexpectedShapeErrorActual = (Core_.term mapTerm)})))
 
 -- | Interpreter-friendly bimap for Map terms.
-bimap :: Context.Context -> t0 -> Core.Term -> Core.Term -> Core.Term -> Either (Context.InContext Errors.Error) Core.Term
+bimap :: t0 -> t1 -> Core.Term -> Core.Term -> Core.Term -> Either Errors.Error Core.Term
 bimap cx g keyFun valFun mapTerm =
     case mapTerm of
       Core.TermMap v0 ->
@@ -62,12 +60,12 @@ bimap cx g keyFun valFun mapTerm =
             Core.applicationArgument = k}), (Core.TermApplication (Core.Application {
             Core.applicationFunction = valFun,
             Core.applicationArgument = v})))) pairs))))
-      _ -> Left (Context.InContext {
-        Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "map value") " but found ") (Core_.term mapTerm)))),
-        Context.inContextContext = cx})
+      _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
+        Errors.unexpectedShapeErrorExpected = "map value",
+        Errors.unexpectedShapeErrorActual = (Core_.term mapTerm)})))
 
 -- | Interpreter-friendly filter for Map terms.
-filter :: Context.Context -> t0 -> Core.Term -> Core.Term -> Either (Context.InContext Errors.Error) Core.Term
+filter :: t0 -> t1 -> Core.Term -> Core.Term -> Either Errors.Error Core.Term
 filter cx g valPred mapTerm =
     case mapTerm of
       Core.TermMap v0 ->
@@ -87,12 +85,12 @@ filter cx g valPred mapTerm =
                       Core.applicationArgument = v}))})),
                   Core.applicationArgument = (Core.TermList (Lists.pure (Core.TermPair (Pairs.first p, v))))})),
                 Core.applicationArgument = (Core.TermList [])}))) pairs))}))})))
-      _ -> Left (Context.InContext {
-        Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "map value") " but found ") (Core_.term mapTerm)))),
-        Context.inContextContext = cx})
+      _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
+        Errors.unexpectedShapeErrorExpected = "map value",
+        Errors.unexpectedShapeErrorActual = (Core_.term mapTerm)})))
 
 -- | Interpreter-friendly filterWithKey for Map terms.
-filterWithKey :: Context.Context -> t0 -> Core.Term -> Core.Term -> Either (Context.InContext Errors.Error) Core.Term
+filterWithKey :: t0 -> t1 -> Core.Term -> Core.Term -> Either Errors.Error Core.Term
 filterWithKey cx g pred mapTerm =
     case mapTerm of
       Core.TermMap v0 ->
@@ -115,9 +113,9 @@ filterWithKey cx g pred mapTerm =
                       Core.applicationArgument = v}))})),
                   Core.applicationArgument = (Core.TermList (Lists.pure (Core.TermPair (k, v))))})),
                 Core.applicationArgument = (Core.TermList [])}))) pairs))}))})))
-      _ -> Left (Context.InContext {
-        Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "map value") " but found ") (Core_.term mapTerm)))),
-        Context.inContextContext = cx})
+      _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
+        Errors.unexpectedShapeErrorExpected = "map value",
+        Errors.unexpectedShapeErrorActual = (Core_.term mapTerm)})))
 
 -- | Interpreter-friendly findWithDefault for Map terms.
 findWithDefault :: t0 -> t1 -> Core.Term -> Core.Term -> Core.Term -> Either t2 Core.Term
@@ -133,7 +131,7 @@ findWithDefault cx g defaultTerm keyTerm mapTerm =
         Core.applicationArgument = mapTerm}))}))
 
 -- | Interpreter-friendly map for Map terms.
-map :: Context.Context -> t0 -> Core.Term -> Core.Term -> Either (Context.InContext Errors.Error) Core.Term
+map :: t0 -> t1 -> Core.Term -> Core.Term -> Either Errors.Error Core.Term
 map cx g valFun mapTerm =
     case mapTerm of
       Core.TermMap v0 ->
@@ -144,12 +142,12 @@ map cx g valFun mapTerm =
           in (k, (Core.TermApplication (Core.Application {
             Core.applicationFunction = valFun,
             Core.applicationArgument = v})))) pairs))))
-      _ -> Left (Context.InContext {
-        Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "map value") " but found ") (Core_.term mapTerm)))),
-        Context.inContextContext = cx})
+      _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
+        Errors.unexpectedShapeErrorExpected = "map value",
+        Errors.unexpectedShapeErrorActual = (Core_.term mapTerm)})))
 
 -- | Interpreter-friendly mapKeys for Map terms.
-mapKeys :: Context.Context -> t0 -> Core.Term -> Core.Term -> Either (Context.InContext Errors.Error) Core.Term
+mapKeys :: t0 -> t1 -> Core.Term -> Core.Term -> Either Errors.Error Core.Term
 mapKeys cx g keyFun mapTerm =
     case mapTerm of
       Core.TermMap v0 ->
@@ -160,6 +158,6 @@ mapKeys cx g keyFun mapTerm =
           in (Core.TermApplication (Core.Application {
             Core.applicationFunction = keyFun,
             Core.applicationArgument = k}), v)) pairs))))
-      _ -> Left (Context.InContext {
-        Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "map value") " but found ") (Core_.term mapTerm)))),
-        Context.inContextContext = cx})
+      _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
+        Errors.unexpectedShapeErrorExpected = "map value",
+        Errors.unexpectedShapeErrorActual = (Core_.term mapTerm)})))

@@ -60,7 +60,7 @@ applyVar fterm avar =
           Core.applicationArgument = (Core.TermVariable avar)})
 
 -- | Construct a Scala package from a Hydra module and its definitions
-constructModule :: Context.Context -> Graph.Graph -> Packaging.Module -> [Packaging.Definition] -> Either (Context.InContext Errors.Error) Syntax.Pkg
+constructModule :: t0 -> Graph.Graph -> Packaging.Module -> [Packaging.Definition] -> Either Errors.Error Syntax.Pkg
 constructModule cx g mod defs =
 
       let partitioned = Environment.partitionDefinitions defs
@@ -88,7 +88,7 @@ dropDomains n t =
       _ -> t)
 
 -- | Encode a case branch
-encodeCase :: Context.Context -> Graph.Graph -> M.Map Core.Name Core.Type -> Maybe Core.Name -> Core.Field -> Either (Context.InContext Errors.Error) Syntax.Case
+encodeCase :: t0 -> Graph.Graph -> M.Map Core.Name Core.Type -> Maybe Core.Name -> Core.Field -> Either Errors.Error Syntax.Case
 encodeCase cx g ftypes sn f =
 
       let fname = Core.fieldName f
@@ -146,7 +146,7 @@ encodeCase cx g ftypes sn f =
         Syntax.caseBody = body})))
 
 -- | Encode a complex term definition with proper parameter types from the type signature
-encodeComplexTermDef :: Context.Context -> Graph.Graph -> String -> Core.Term -> Core.Type -> Either (Context.InContext Errors.Error) Syntax.Stat
+encodeComplexTermDef :: t0 -> Graph.Graph -> String -> Core.Term -> Core.Type -> Either Errors.Error Syntax.Stat
 encodeComplexTermDef cx g lname term typ =
 
       let doms = extractDomains typ
@@ -189,7 +189,7 @@ encodeComplexTermDef cx g lname term typ =
             Syntax.defn_DefBody = defBody}))))))))))
 
 -- | Encode a Hydra function as a Scala expression
-encodeFunction :: Context.Context -> Graph.Graph -> M.Map Core.Name Core.Term -> Core.Function -> Maybe Core.Term -> Either (Context.InContext Errors.Error) Syntax.Data
+encodeFunction :: t0 -> Graph.Graph -> M.Map Core.Name Core.Term -> Core.Function -> Maybe Core.Term -> Either Errors.Error Syntax.Data
 encodeFunction cx g meta fun arg =
     case fun of
       Core.FunctionLambda v0 ->
@@ -235,15 +235,11 @@ encodeFunction cx g meta fun arg =
             Syntax.data_MatchCases = scases})) sdom))) (\a -> Eithers.bind (encodeTerm cx g a) (\sa -> Right (Syntax.DataMatch (Syntax.Data_Match {
             Syntax.data_MatchExpr = sa,
             Syntax.data_MatchCases = scases})))) arg)))
-        _ -> Left (Context.InContext {
-          Context.inContextObject = (Errors.ErrorOther (Errors.OtherError "unsupported elimination")),
-          Context.inContextContext = cx})
-      _ -> Left (Context.InContext {
-        Context.inContextObject = (Errors.ErrorOther (Errors.OtherError "unsupported function")),
-        Context.inContextContext = cx})
+        _ -> Left (Errors.ErrorOther (Errors.OtherError "unsupported elimination"))
+      _ -> Left (Errors.ErrorOther (Errors.OtherError "unsupported function"))
 
 -- | Encode a let binding as a val or def declaration. outerTypeVars are type params from the enclosing scope.
-encodeLetBinding :: Context.Context -> Graph.Graph -> S.Set Core.Name -> Core.Binding -> Either (Context.InContext Errors.Error) Syntax.Stat
+encodeLetBinding :: t0 -> Graph.Graph -> S.Set Core.Name -> Core.Binding -> Either Errors.Error Syntax.Stat
 encodeLetBinding cx g outerTypeVars b =
 
       let bname = Utils.scalaEscapeName (Core.unName (Core.bindingName b))
@@ -278,7 +274,7 @@ encodeLetBinding cx g outerTypeVars b =
           Syntax.defn_ValRhs = srhs})))))))) mts)
 
 -- | Encode a literal value as a Scala literal
-encodeLiteral :: Context.Context -> t0 -> Core.Literal -> Either (Context.InContext Errors.Error) Syntax.Lit
+encodeLiteral :: t0 -> t1 -> Core.Literal -> Either Errors.Error Syntax.Lit
 encodeLiteral cx g av =
     case av of
       Core.LiteralBinary v0 -> Right (Syntax.LitBytes (Literals.binaryToBytes v0))
@@ -287,9 +283,7 @@ encodeLiteral cx g av =
         Core.FloatValueBigfloat v1 -> Right (Syntax.LitDouble (Literals.bigfloatToFloat64 v1))
         Core.FloatValueFloat32 v1 -> Right (Syntax.LitFloat v1)
         Core.FloatValueFloat64 v1 -> Right (Syntax.LitDouble v1)
-        _ -> Left (Context.InContext {
-          Context.inContextObject = (Errors.ErrorOther (Errors.OtherError "unexpected float value")),
-          Context.inContextContext = cx})
+        _ -> Left (Errors.ErrorOther (Errors.OtherError "unexpected float value"))
       Core.LiteralInteger v0 -> case v0 of
         Core.IntegerValueBigint v1 -> Right (Syntax.LitLong (Literals.bigintToInt64 v1))
         Core.IntegerValueInt8 v1 -> Right (Syntax.LitByte v1)
@@ -300,16 +294,12 @@ encodeLiteral cx g av =
         Core.IntegerValueUint16 v1 -> Right (Syntax.LitInt (Literals.bigintToInt32 (Literals.uint16ToBigint v1)))
         Core.IntegerValueUint32 v1 -> Right (Syntax.LitLong (Literals.bigintToInt64 (Literals.uint32ToBigint v1)))
         Core.IntegerValueUint64 v1 -> Right (Syntax.LitLong (Literals.bigintToInt64 (Literals.uint64ToBigint v1)))
-        _ -> Left (Context.InContext {
-          Context.inContextObject = (Errors.ErrorOther (Errors.OtherError "unexpected integer value")),
-          Context.inContextContext = cx})
+        _ -> Left (Errors.ErrorOther (Errors.OtherError "unexpected integer value"))
       Core.LiteralString v0 -> Right (Syntax.LitString v0)
-      _ -> Left (Context.InContext {
-        Context.inContextObject = (Errors.ErrorOther (Errors.OtherError "unexpected literal")),
-        Context.inContextContext = cx})
+      _ -> Left (Errors.ErrorOther (Errors.OtherError "unexpected literal"))
 
 -- | Encode a local def. outerTypeVars are type params already in scope (don't redeclare them).
-encodeLocalDef :: Context.Context -> Graph.Graph -> S.Set Core.Name -> String -> Core.Term -> Core.Type -> Either (Context.InContext Errors.Error) Syntax.Stat
+encodeLocalDef :: t0 -> Graph.Graph -> S.Set Core.Name -> String -> Core.Term -> Core.Type -> Either Errors.Error Syntax.Stat
 encodeLocalDef cx g outerTypeVars lname term typ =
 
       let freeTypeVars =
@@ -353,7 +343,7 @@ encodeLocalDef cx g outerTypeVars lname term typ =
             Syntax.defn_DefBody = defBody}))))))))))
 
 -- | Encode a Hydra term as a Scala expression
-encodeTerm :: Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Errors.Error) Syntax.Data
+encodeTerm :: t0 -> Graph.Graph -> Core.Term -> Either Errors.Error Syntax.Data
 encodeTerm cx g term0 =
 
       let term = stripWrapEliminations term0
@@ -492,12 +482,10 @@ encodeTerm cx g term0 =
           in (Eithers.bind (Eithers.mapList (encodeLetBinding cx gLet (Graph.graphTypeVariables gLet)) bindings) (\sbindings -> Eithers.bind (encodeTerm cx gLet body) (\sbody -> Right (Syntax.DataBlock (Syntax.Data_Block {
             Syntax.data_BlockStats = (Lists.concat2 sbindings [
               Syntax.StatTerm sbody])})))))
-        _ -> Left (Context.InContext {
-          Context.inContextObject = (Errors.ErrorOther (Errors.OtherError "unexpected term")),
-          Context.inContextContext = cx})
+        _ -> Left (Errors.ErrorOther (Errors.OtherError "unexpected term"))
 
 -- | Encode a term definition as a Scala statement
-encodeTermDefinition :: Context.Context -> Graph.Graph -> Packaging.TermDefinition -> Either (Context.InContext Errors.Error) Syntax.Stat
+encodeTermDefinition :: t0 -> Graph.Graph -> Packaging.TermDefinition -> Either Errors.Error Syntax.Stat
 encodeTermDefinition cx g td =
 
       let name = Packaging.termDefinitionName td
@@ -522,7 +510,7 @@ encodeTermDefinition cx g td =
         Syntax.defn_ValRhs = rhs})))))))
 
 -- | Encode a Hydra type as a Scala type
-encodeType :: Context.Context -> t0 -> Core.Type -> Either (Context.InContext Errors.Error) Syntax.Type
+encodeType :: t0 -> t1 -> Core.Type -> Either Errors.Error Syntax.Type
 encodeType cx g t =
     case (Strip.deannotateType t) of
       Core.TypeApplication v0 ->
@@ -567,9 +555,7 @@ encodeType cx g t =
             Syntax.type_NameValue = "Float"})))
           Core.FloatTypeFloat64 -> Right (Syntax.TypeRef (Syntax.Type_RefName (Syntax.Type_Name {
             Syntax.type_NameValue = "Double"})))
-          _ -> Left (Context.InContext {
-            Context.inContextObject = (Errors.ErrorOther (Errors.OtherError "unsupported float type")),
-            Context.inContextContext = cx})
+          _ -> Left (Errors.ErrorOther (Errors.OtherError "unsupported float type"))
         Core.LiteralTypeInteger v1 -> case v1 of
           Core.IntegerTypeBigint -> Right (Syntax.TypeRef (Syntax.Type_RefName (Syntax.Type_Name {
             Syntax.type_NameValue = "BigInt"})))
@@ -589,14 +575,10 @@ encodeType cx g t =
             Syntax.type_NameValue = "Long"})))
           Core.IntegerTypeUint64 -> Right (Syntax.TypeRef (Syntax.Type_RefName (Syntax.Type_Name {
             Syntax.type_NameValue = "BigInt"})))
-          _ -> Left (Context.InContext {
-            Context.inContextObject = (Errors.ErrorOther (Errors.OtherError "unsupported integer type")),
-            Context.inContextContext = cx})
+          _ -> Left (Errors.ErrorOther (Errors.OtherError "unsupported integer type"))
         Core.LiteralTypeString -> Right (Syntax.TypeRef (Syntax.Type_RefName (Syntax.Type_Name {
           Syntax.type_NameValue = "scala.Predef.String"})))
-        _ -> Left (Context.InContext {
-          Context.inContextObject = (Errors.ErrorOther (Errors.OtherError "unsupported literal type")),
-          Context.inContextContext = cx})
+        _ -> Left (Errors.ErrorOther (Errors.OtherError "unsupported literal type"))
       Core.TypeMap v0 ->
         let kt = Core.mapTypeKeys v0
             vt = Core.mapTypeValues v0
@@ -609,17 +591,11 @@ encodeType cx g t =
             st = Core.pairTypeSecond v0
         in (Eithers.bind (encodeType cx g ft) (\sft -> Eithers.bind (encodeType cx g st) (\sst -> Right (Utils.stapply2 (Syntax.TypeRef (Syntax.Type_RefName (Syntax.Type_Name {
           Syntax.type_NameValue = "Tuple2"}))) sft sst))))
-      Core.TypeRecord _ -> Left (Context.InContext {
-        Context.inContextObject = (Errors.ErrorOther (Errors.OtherError "unexpected anonymous record type")),
-        Context.inContextContext = cx})
+      Core.TypeRecord _ -> Left (Errors.ErrorOther (Errors.OtherError "unexpected anonymous record type"))
       Core.TypeSet v0 -> Eithers.bind (encodeType cx g v0) (\sst -> Right (Utils.stapply1 (Syntax.TypeRef (Syntax.Type_RefName (Syntax.Type_Name {
         Syntax.type_NameValue = "scala.collection.immutable.Set"}))) sst))
-      Core.TypeUnion _ -> Left (Context.InContext {
-        Context.inContextObject = (Errors.ErrorOther (Errors.OtherError "unexpected anonymous union type")),
-        Context.inContextContext = cx})
-      Core.TypeWrap _ -> Left (Context.InContext {
-        Context.inContextObject = (Errors.ErrorOther (Errors.OtherError "unexpected anonymous wrap type")),
-        Context.inContextContext = cx})
+      Core.TypeUnion _ -> Left (Errors.ErrorOther (Errors.OtherError "unexpected anonymous union type"))
+      Core.TypeWrap _ -> Left (Errors.ErrorOther (Errors.OtherError "unexpected anonymous wrap type"))
       Core.TypeForall v0 ->
         let v = Core.forallTypeParameter v0
             body = Core.forallTypeBody v0
@@ -633,12 +609,10 @@ encodeType cx g t =
         in (Right (Syntax.TypeVar (Syntax.Type_Var {
           Syntax.type_VarName = Syntax.Type_Name {
             Syntax.type_NameValue = typeName}})))
-      _ -> Left (Context.InContext {
-        Context.inContextObject = (Errors.ErrorOther (Errors.OtherError "unsupported type")),
-        Context.inContextContext = cx})
+      _ -> Left (Errors.ErrorOther (Errors.OtherError "unsupported type"))
 
 -- | Encode a type definition as a Scala statement
-encodeTypeDefinition :: Context.Context -> t0 -> Packaging.TypeDefinition -> Either (Context.InContext Errors.Error) Syntax.Stat
+encodeTypeDefinition :: t0 -> t1 -> Packaging.TypeDefinition -> Either Errors.Error Syntax.Stat
 encodeTypeDefinition cx g td =
 
       let name = Packaging.typeDefinitionName td
@@ -769,7 +743,7 @@ encodeTypeDefinition cx g td =
           in (Eithers.either (\_ -> mkAlias (Utils.stref "Any")) mkAlias (encodeType cx g typ))
 
 -- | Encode a parameter with its type annotation
-encodeTypedParam :: Context.Context -> t0 -> (Core.Name, Core.Type) -> Either (Context.InContext Errors.Error) Syntax.Data_Param
+encodeTypedParam :: t0 -> t1 -> (Core.Name, Core.Type) -> Either Errors.Error Syntax.Data_Param
 encodeTypedParam cx g pair =
 
       let pname = Utils.scalaEscapeName (Names.localNameOf (Pairs.first pair))
@@ -781,7 +755,7 @@ encodeTypedParam cx g pair =
         Syntax.data_ParamDefault = Nothing})))
 
 -- | Encode an untyped application term by first inferring types
-encodeUntypeApplicationTerm :: Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Errors.Error) Syntax.Data
+encodeUntypeApplicationTerm :: Context.Context -> Graph.Graph -> Core.Term -> Either Errors.Error Syntax.Data
 encodeUntypeApplicationTerm cx g term =
     Eithers.bind (Inference.inferInGraphContext cx g term) (\result -> encodeTerm cx g (Typing.inferenceResultTerm result))
 
@@ -838,7 +812,7 @@ extractParams t =
       _ -> []
 
 -- | Convert a field type to a Scala enum case
-fieldToEnumCase :: Context.Context -> t0 -> String -> [Syntax.Type_Param] -> Core.FieldType -> Either (Context.InContext Errors.Error) Syntax.Stat
+fieldToEnumCase :: t0 -> t1 -> String -> [Syntax.Type_Param] -> Core.FieldType -> Either Errors.Error Syntax.Stat
 fieldToEnumCase cx g parentName tparams ft =
 
       let fname = Utils.scalaEscapeName (Core.unName (Core.fieldTypeName ft))
@@ -877,7 +851,7 @@ fieldToEnumCase cx g parentName tparams ft =
             Syntax.initArgss = []}]})))))
 
 -- | Convert a field type to a Scala parameter
-fieldToParam :: Context.Context -> t0 -> Core.FieldType -> Either (Context.InContext Errors.Error) Syntax.Data_Param
+fieldToParam :: t0 -> t1 -> Core.FieldType -> Either Errors.Error Syntax.Data_Param
 fieldToParam cx g ft =
 
       let fname = Utils.scalaEscapeName (Core.unName (Core.fieldTypeName ft))
@@ -889,31 +863,23 @@ fieldToParam cx g ft =
         Syntax.data_ParamDefault = Nothing})))
 
 -- | Find the domain type from annotations
-findDomain :: Context.Context -> Graph.Graph -> M.Map Core.Name Core.Term -> Either (Context.InContext Errors.Error) Core.Type
+findDomain :: t0 -> Graph.Graph -> M.Map Core.Name Core.Term -> Either Errors.Error Core.Type
 findDomain cx g meta =
-    Eithers.bind (Eithers.bimap (\_de -> Context.InContext {
-      Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Errors.unDecodingError _de))),
-      Context.inContextContext = cx}) (\_a -> _a) (Annotations.getType g meta)) (\r -> Maybes.maybe (Left (Context.InContext {
-      Context.inContextObject = (Errors.ErrorOther (Errors.OtherError "expected a typed term")),
-      Context.inContextContext = cx})) (\t -> case (Strip.deannotateType t) of
+    Eithers.bind (Eithers.bimap (\_de -> Errors.ErrorOther (Errors.OtherError (Errors.unDecodingError _de))) (\_a -> _a) (Annotations.getType g meta)) (\r -> Maybes.maybe (Left (Errors.ErrorOther (Errors.OtherError "expected a typed term"))) (\t -> case (Strip.deannotateType t) of
       Core.TypeFunction v0 -> Right (Core.functionTypeDomain v0)
-      _ -> Left (Context.InContext {
-        Context.inContextObject = (Errors.ErrorOther (Errors.OtherError "expected a function type")),
-        Context.inContextContext = cx})) r)
+      _ -> Left (Errors.ErrorOther (Errors.OtherError "expected a function type"))) r)
 
 -- | Find import statements for the module
-findImports :: Context.Context -> Graph.Graph -> Packaging.Module -> Either (Context.InContext Errors.Error) [Syntax.Stat]
+findImports :: t0 -> Graph.Graph -> Packaging.Module -> Either Errors.Error [Syntax.Stat]
 findImports cx g mod =
     Eithers.bind (Analysis.moduleDependencyNamespaces cx g False False True False mod) (\elImps -> Eithers.bind (Analysis.moduleDependencyNamespaces cx g False True False False mod) (\primImps -> Right (Lists.concat [
       Lists.map toElImport (Sets.toList elImps),
       (Lists.map toPrimImport (Sets.toList primImps))])))
 
 -- | Find the Scala domain type for a function from annotations
-findSdom :: Context.Context -> Graph.Graph -> M.Map Core.Name Core.Term -> Either (Context.InContext Errors.Error) (Maybe Syntax.Type)
+findSdom :: t0 -> Graph.Graph -> M.Map Core.Name Core.Term -> Either Errors.Error (Maybe Syntax.Type)
 findSdom cx g meta =
-    Eithers.bind (Eithers.bimap (\_de -> Context.InContext {
-      Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Errors.unDecodingError _de))),
-      Context.inContextContext = cx}) (\_a -> _a) (Annotations.getType g meta)) (\mtyp -> Maybes.maybe (Right Nothing) (\t -> case (Strip.deannotateType t) of
+    Eithers.bind (Eithers.bimap (\_de -> Errors.ErrorOther (Errors.OtherError (Errors.unDecodingError _de))) (\_a -> _a) (Annotations.getType g meta)) (\mtyp -> Maybes.maybe (Right Nothing) (\t -> case (Strip.deannotateType t) of
       Core.TypeFunction v0 ->
         let dom = Core.functionTypeDomain v0
         in (Eithers.bind (encodeType cx g dom) (\sdom -> Right (Just sdom)))
@@ -925,7 +891,7 @@ findSdom cx g meta =
       _ -> Eithers.bind (encodeType cx g t) (\st -> Right (Just st))) mtyp)
 
 -- | Convert a Hydra module to Scala source code
-moduleToScala :: Packaging.Module -> [Packaging.Definition] -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) (M.Map String String)
+moduleToScala :: Packaging.Module -> [Packaging.Definition] -> t0 -> Graph.Graph -> Either Errors.Error (M.Map String String)
 moduleToScala mod defs cx g =
     Eithers.bind (constructModule cx g mod defs) (\pkg ->
       let s = Serialization.printExpr (Serialization.parenthesize (Serde.writePkg pkg))

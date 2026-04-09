@@ -86,10 +86,10 @@ coder = define "Coder" $
   T.forAlls ["v1", "v2"] $ T.record [
     "encode">:
       doc "A function which encodes source values as target values in a given context" $
-      Context.context ~> "v1" ~> T.either_ (Context.inContext @@ Error.error_) "v2",
+      Context.context ~> "v1" ~> T.either_ Error.error_ "v2",
     "decode">:
       doc "A function which decodes target values as source values in a given context" $
-      Context.context ~> "v2" ~> T.either_ (Context.inContext @@ Error.error_) "v1"]
+      Context.context ~> "v2" ~> T.either_ Error.error_ "v1"]
 
 coderDirection :: Binding
 coderDirection = define "CoderDirection" $

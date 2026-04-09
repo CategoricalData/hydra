@@ -71,9 +71,9 @@ def :: String -> TTerm a -> TTermDefinition a
 def = definitionInModule module_
 
 -- | Get a type annotation, converting DecodingError to InContext Error.
-getTypeE :: TTerm Context -> TTerm Graph -> TTerm (M.Map Name Term) -> TTerm (Either (InContext Error) (Maybe Type))
+getTypeE :: TTerm Context -> TTerm Graph -> TTerm (M.Map Name Term) -> TTerm (Either Error (Maybe Type))
 getTypeE cx g ann = Eithers.bimap
-  ("__de" ~> Ctx.inContext (Error.errorOther $ Error.otherError ((unwrap _DecodingError) @@ var "__de")) cx)
+  ("__de" ~> Error.errorOther (Error.otherError ((unwrap _DecodingError) @@ var "__de")))
   ("__a" ~> var "__a")
   (Annotations.getType @@ g @@ ann)
 
@@ -287,7 +287,7 @@ module_ = Module ns definitions
       toDefinition wrapLazyArguments]
 
 -- | Add a comment from a FieldType to a class body declaration
-addComment :: TTermDefinition (Java.ClassBodyDeclaration -> FieldType -> Context -> Graph -> Either (InContext Error) Java.ClassBodyDeclarationWithComments)
+addComment :: TTermDefinition (Java.ClassBodyDeclaration -> FieldType -> Context -> Graph -> Either Error Java.ClassBodyDeclarationWithComments)
 addComment = def "addComment" $
   lambda "decl" $ lambda "field" $
         "cx" ~> "g" ~>
@@ -296,7 +296,7 @@ addComment = def "addComment" $
           (Annotations.commentsFromFieldType @@ var "cx" @@ var "g" @@ var "field")
 
 -- | Analyze a Java function term, collecting lambdas, type lambdas, lets, and type applications
-analyzeJavaFunction :: TTermDefinition (JavaHelpers.JavaEnvironment -> Term -> Context -> Graph -> Either (InContext Error) (FunctionStructure JavaHelpers.JavaEnvironment))
+analyzeJavaFunction :: TTermDefinition (JavaHelpers.JavaEnvironment -> Term -> Context -> Graph -> Either Error (FunctionStructure JavaHelpers.JavaEnvironment))
 analyzeJavaFunction = def "analyzeJavaFunction" $
   lambda "env" $ lambda "term" $
     "cx" ~> "g" ~>
@@ -332,7 +332,7 @@ annotateBodyWithCod = def "annotateBodyWithCod" $
 -- | Annotate lambda arguments with expected types computed from the callee's type scheme
 -- and type applications. This corrects type annotations that normalizeTypeVariablesInTerm
 -- may have made inconsistent with the outer scope.
-annotateLambdaArgs :: TTermDefinition (Name -> [Type] -> [Term] -> Context -> Graph -> Either (InContext Error) [Term])
+annotateLambdaArgs :: TTermDefinition (Name -> [Type] -> [Term] -> Context -> Graph -> Either Error [Term])
 annotateLambdaArgs = def "annotateLambdaArgs" $
   lambda "cname" $ lambda "tApps" $ lambda "argTerms" $
     "cx" ~> "g" ~>
@@ -366,7 +366,7 @@ annotateLambdaArgs = def "annotateLambdaArgs" $
                   (Lists.replicate (Lists.length (var "argTerms")) (inject _Type _Type_variable (wrap _Name (string "unused")))))))))
 
 -- | Apply a lambda cast if the type is safe (doesn't contain potentially wrong type variables).
-applyCastIfSafe :: TTermDefinition (JavaHelpers.Aliases -> Type -> Java.Expression -> Context -> Graph -> Either (InContext Error) Java.Expression)
+applyCastIfSafe :: TTermDefinition (JavaHelpers.Aliases -> Type -> Java.Expression -> Context -> Graph -> Either Error Java.Expression)
 applyCastIfSafe = def "applyCastIfSafe" $
   lambda "aliases" $ lambda "castType" $ lambda "expr" $
     "cx" ~> "g" ~>
@@ -401,7 +401,7 @@ applyJavaArg = def "applyJavaArg" $
 
 -- | Apply a type substitution to all type annotations in a term.
 -- Monadic wrapper that gets the graph state and delegates to the pure helper.
-applyOvergenSubstToTermAnnotations :: TTermDefinition (M.Map Name Type -> Term -> Context -> Graph -> Either (InContext Error) Term)
+applyOvergenSubstToTermAnnotations :: TTermDefinition (M.Map Name Type -> Term -> Context -> Graph -> Either Error Term)
 applyOvergenSubstToTermAnnotations = def "applyOvergenSubstToTermAnnotations" $
   lambda "subst" $ lambda "term0" $
     "cx" ~> "g" ~>
@@ -614,7 +614,7 @@ bindingNameToFilePath = def "bindingNameToFilePath" $
       @@ wrap _FileExtension (string "java") @@ var "unq"
 
 -- | Convert let-bindings to Java block statements.
-bindingsToStatements :: TTermDefinition (JavaHelpers.JavaEnvironment -> [Binding] -> Context -> Graph -> Either (InContext Error) ([Java.BlockStatement], JavaHelpers.JavaEnvironment))
+bindingsToStatements :: TTermDefinition (JavaHelpers.JavaEnvironment -> [Binding] -> Context -> Graph -> Either Error ([Java.BlockStatement], JavaHelpers.JavaEnvironment))
 bindingsToStatements = def "bindingsToStatements" $
   lambda "env" $ lambda "bindings" $
     "cx" ~> "g0" ~>
@@ -755,7 +755,7 @@ buildCurriedLambda = def "buildCurriedLambda" $
 
 -- | Build a type variable substitution by walking a term and comparing lambda domain types
 -- against annotation map types. Returns a Map Name Name (fresh→canonical mapping).
-buildSubstFromAnnotations :: TTermDefinition (S.Set Name -> Term -> Context -> Graph -> Either (InContext Error) (M.Map Name Name))
+buildSubstFromAnnotations :: TTermDefinition (S.Set Name -> Term -> Context -> Graph -> Either Error (M.Map Name Name))
 buildSubstFromAnnotations = def "buildSubstFromAnnotations" $
   lambda "schemeVarSet" $ lambda "term" $
     "cx" ~> "g" ~>
@@ -1039,7 +1039,7 @@ buildTypeVarSubst_go = def "buildTypeVarSubst_go" $
             var "goSub" @@ Core.forallTypeBody (var "ffa") @@ Core.forallTypeBody (var "cfa")]]
 
 -- | Classify a data reference by looking up its element and classifying its term
-classifyDataReference :: TTermDefinition (Name -> Context -> Graph -> Either (InContext Error) JavaHelpers.JavaSymbolClass)
+classifyDataReference :: TTermDefinition (Name -> Context -> Graph -> Either Error JavaHelpers.JavaSymbolClass)
 classifyDataReference = def "classifyDataReference" $
   lambda "name" $
     "cx" ~> "g" ~>
@@ -1291,7 +1291,7 @@ compareToZeroClause = def "compareToZeroClause" $
       @@ (JavaDsl.equalityExpressionEqual (JavaDsl.equalityExpressionBinary (var "lhs") (var "rhs")))
 
 -- | Create a constant field declaration (e.g., public static final Name TYPE_ = new Name("..."))
-constantDecl :: TTermDefinition (String -> JavaHelpers.Aliases -> Name -> Context -> Graph -> Either (InContext Error) Java.ClassBodyDeclarationWithComments)
+constantDecl :: TTermDefinition (String -> JavaHelpers.Aliases -> Name -> Context -> Graph -> Either Error Java.ClassBodyDeclarationWithComments)
 constantDecl = def "constantDecl" $
   lambda "javaName" $ lambda "aliases" $ lambda "name" $
     "cx" ~> "g" ~>
@@ -1312,7 +1312,7 @@ constantDecl = def "constantDecl" $
     right (noComment @@ (JavaUtilsSource.javaMemberField @@ var "mods" @@ var "jt" @@ var "var"))
 
 -- | Create a constant field declaration for a field name.
-constantDeclForFieldType :: TTermDefinition (JavaHelpers.Aliases -> FieldType -> Context -> Graph -> Either (InContext Error) Java.ClassBodyDeclarationWithComments)
+constantDeclForFieldType :: TTermDefinition (JavaHelpers.Aliases -> FieldType -> Context -> Graph -> Either Error Java.ClassBodyDeclarationWithComments)
 constantDeclForFieldType = def "constantDeclForFieldType" $
   lambda "aliases" $ lambda "ftyp" $
     "cx" ~> "g" ~>
@@ -1322,7 +1322,7 @@ constantDeclForFieldType = def "constantDeclForFieldType" $
     constantDecl @@ var "javaName" @@ var "aliases" @@ var "name" @@ var "cx" @@ var "g"
 
 -- | Create a constant field declaration for a type name.
-constantDeclForTypeName :: TTermDefinition (JavaHelpers.Aliases -> Name -> Context -> Graph -> Either (InContext Error) Java.ClassBodyDeclarationWithComments)
+constantDeclForTypeName :: TTermDefinition (JavaHelpers.Aliases -> Name -> Context -> Graph -> Either Error Java.ClassBodyDeclarationWithComments)
 constantDeclForTypeName = def "constantDeclForTypeName" $
   lambda "aliases" $ lambda "name" $
     "cx" ~> "g" ~>
@@ -1367,7 +1367,7 @@ constructElementsInterface = def "constructElementsInterface" $
 -- a TermPair with exactly 2 type args, reconstruct the pair type from the type args
 -- (which have been correctly renamed by normalizeTypeVariablesInTerm) instead of using
 -- the annotation type (which may have stale variable names).
-correctCastType :: TTermDefinition (Term -> [Type] -> Type -> Context -> Graph -> Either (InContext Error) Type)
+correctCastType :: TTermDefinition (Term -> [Type] -> Type -> Context -> Graph -> Either Error Type)
 correctCastType = def "correctCastType" $
   lambda "innerBody" $ lambda "typeArgs" $ lambda "fallback" $
     "cx" ~> "g" ~>
@@ -1381,7 +1381,7 @@ correctCastType = def "correctCastType" $
           (right (var "fallback"))]
 
 -- | Compute corrected type applications for a function call.
-correctTypeApps :: TTermDefinition (Graph -> Name -> [Term] -> [Type] -> Context -> Graph -> Either (InContext Error) [Type])
+correctTypeApps :: TTermDefinition (Graph -> Name -> [Term] -> [Type] -> Context -> Graph -> Either Error [Type])
 correctTypeApps = def "correctTypeApps" $
   lambda "gr" $ lambda "name" $ lambda "args" $ lambda "fallbackTypeApps" $
     "cx" ~> "g" ~>
@@ -1423,7 +1423,7 @@ correctTypeApps = def "correctTypeApps" $
               (correctTypeAppsWithArgs @@ var "schemeVars" @@ var "filteredFallback" @@ var "schemeType" @@ var "args" @@ var "cx" @@ var "g")))
 
 -- | Try to verify and correct IR type args using annotation-based arg types.
-correctTypeAppsWithArgs :: TTermDefinition ([Name] -> [Type] -> Type -> [Term] -> Context -> Graph -> Either (InContext Error) [Type])
+correctTypeAppsWithArgs :: TTermDefinition ([Name] -> [Type] -> Type -> [Term] -> Context -> Graph -> Either Error [Type])
 correctTypeAppsWithArgs = def "correctTypeAppsWithArgs" $
   lambda "schemeVars" $ lambda "fallbackTypeApps" $ lambda "schemeType" $ lambda "args" $
     "cx" ~> "g" ~>
@@ -1461,7 +1461,7 @@ countFunctionParams = def "countFunctionParams" $
 
 -- | Create a record type class declaration (without parent class).
 declarationForRecordType :: TTermDefinition (Bool -> Bool -> JavaHelpers.Aliases -> [Java.TypeParameter] -> Name
-  -> [FieldType] -> Context -> Graph -> Either (InContext Error) Java.ClassDeclaration)
+  -> [FieldType] -> Context -> Graph -> Either Error Java.ClassDeclaration)
 declarationForRecordType = def "declarationForRecordType" $
   lambda "isInner" $ lambda "isSer" $ lambda "aliases" $ lambda "tparams" $ lambda "elName" $ lambda "fields" $
     "cx" ~> "g" ~>
@@ -1469,7 +1469,7 @@ declarationForRecordType = def "declarationForRecordType" $
 
 -- | Create a record type class declaration (with optional parent class).
 declarationForRecordType' :: TTermDefinition (Bool -> Bool -> JavaHelpers.Aliases -> [Java.TypeParameter] -> Name -> Maybe Name -> [FieldType]
-  -> Context -> Graph -> Either (InContext Error) Java.ClassDeclaration)
+  -> Context -> Graph -> Either Error Java.ClassDeclaration)
 declarationForRecordType' = def "declarationForRecordType'" $
   lambda "isInner" $ lambda "isSer" $ lambda "aliases" $ lambda "tparams" $ lambda "elName" $ lambda "parentName" $ lambda "fields" $
     "cx" ~> "g" ~>
@@ -1506,7 +1506,7 @@ declarationForRecordType' = def "declarationForRecordType'" $
       @@ asTerm classModsPublic @@ nothing @@ var "ifaces" @@ var "bodyDecls")
 
 -- | Generate class declaration for a union type.
-declarationForUnionType :: TTermDefinition (Bool -> JavaHelpers.Aliases -> [Java.TypeParameter] -> Name -> [FieldType] -> Context -> Graph -> Either (InContext Error) Java.ClassDeclaration)
+declarationForUnionType :: TTermDefinition (Bool -> JavaHelpers.Aliases -> [Java.TypeParameter] -> Name -> [FieldType] -> Context -> Graph -> Either Error Java.ClassDeclaration)
 declarationForUnionType = def "declarationForUnionType" $
   lambda "isSer" $ lambda "aliases" $ lambda "tparams" $ lambda "elName" $ lambda "fields" $
     "cx" ~> "g" ~>
@@ -1807,7 +1807,7 @@ directRefSubstitution_processGroup = def "directRefSubstitution_processGroup" $
 
 -- | Extract Java type arguments from a domain type.
 -- Uses actual type application args when available, falling back to javaTypeArgumentsForType.
-domTypeArgs :: TTermDefinition (JavaHelpers.Aliases -> Type -> Context -> Graph -> Either (InContext Error) [Java.TypeArgument])
+domTypeArgs :: TTermDefinition (JavaHelpers.Aliases -> Type -> Context -> Graph -> Either Error [Java.TypeArgument])
 domTypeArgs = def "domTypeArgs" $
   lambda "aliases" $ lambda "d" $
     "cx" ~> "g" ~>
@@ -1868,7 +1868,7 @@ elementsQualifiedName = def "elementsQualifiedName" $
     Names.unqualifyName @@ Packaging.qualifiedName (namespaceParent @@ var "ns") (elementsClassName @@ var "ns")
 
 -- | Encode a function application.
-encodeApplication :: TTermDefinition (JavaHelpers.JavaEnvironment -> Application -> Context -> Graph -> Either (InContext Error) Java.Expression)
+encodeApplication :: TTermDefinition (JavaHelpers.JavaEnvironment -> Application -> Context -> Graph -> Either Error Java.Expression)
 encodeApplication = def "encodeApplication" $
   lambda "env" $ lambda "app" $
     "cx" ~> "g0" ~>
@@ -1949,7 +1949,7 @@ encodeApplication = def "encodeApplication" $
               (var "initialCall") (var "rargs")))]
 
 -- | Fallback path for encodeApplication — used for eliminations and default expressions.
-encodeApplication_fallback :: TTermDefinition (JavaHelpers.JavaEnvironment -> JavaHelpers.Aliases -> Graph -> [Type] -> Term -> Term -> Context -> Graph -> Either (InContext Error) Java.Expression)
+encodeApplication_fallback :: TTermDefinition (JavaHelpers.JavaEnvironment -> JavaHelpers.Aliases -> Graph -> [Type] -> Term -> Term -> Context -> Graph -> Either Error Java.Expression)
 encodeApplication_fallback = def "encodeApplication_fallback" $
   lambda "env" $ lambda "aliases" $ lambda "gr" $ lambda "typeApps" $ lambda "lhs" $ lambda "rhs" $
     "cx" ~> "g" ~>
@@ -1998,7 +1998,7 @@ encodeApplication_fallback = def "encodeApplication_fallback" $
                 encodeElimination @@ var "env" @@ just (var "jarg") @@ var "enrichedDom" @@ var "cod" @@ var "e" @@ var "cx" @@ var "g"]]])
 
 -- | Encode all definitions in a module to Java compilation units.
-encodeDefinitions :: TTermDefinition (Module -> [Definition] -> Context -> Graph -> Either (InContext Error) (M.Map Name Java.CompilationUnit))
+encodeDefinitions :: TTermDefinition (Module -> [Definition] -> Context -> Graph -> Either Error (M.Map Name Java.CompilationUnit))
 encodeDefinitions = def "encodeDefinitions" $
   lambda "mod" $ lambda "defs" $
     "cx" ~> "g" ~>
@@ -2023,7 +2023,7 @@ encodeDefinitions = def "encodeDefinitions" $
     right (Maps.fromList (Lists.concat2 (var "typeUnits") (var "termUnits")))
 
 -- | Encode an elimination expression.
-encodeElimination :: TTermDefinition (JavaHelpers.JavaEnvironment -> Maybe Java.Expression -> Type -> Type -> Elimination -> Context -> Graph -> Either (InContext Error) Java.Expression)
+encodeElimination :: TTermDefinition (JavaHelpers.JavaEnvironment -> Maybe Java.Expression -> Type -> Type -> Elimination -> Context -> Graph -> Either Error Java.Expression)
 encodeElimination = def "encodeElimination" $
   lambda "env" $ lambda "marg" $ lambda "dom" $ lambda "cod" $ lambda "elm" $
     "cx" ~> "g" ~>
@@ -2103,7 +2103,7 @@ encodeElimination = def "encodeElimination" $
           (lambda "jarg" $ var "withArg" @@ var "jarg"))]
 
 -- | Encode a primitive reference (by name) with function-type arity, as a method reference or curried wrapper.
-encodeFunctionPrimitiveByName :: TTermDefinition (JavaHelpers.JavaEnvironment -> Type -> Type -> Name -> Context -> Graph -> Either (InContext Error) Java.Expression)
+encodeFunctionPrimitiveByName :: TTermDefinition (JavaHelpers.JavaEnvironment -> Type -> Type -> Name -> Context -> Graph -> Either Error Java.Expression)
 encodeFunctionPrimitiveByName = def "encodeFunctionPrimitiveByName" $
   lambda "env" $ lambda "dom" $ lambda "cod" $ lambda "name" $
     "cx" ~> "g" ~>
@@ -2137,7 +2137,7 @@ encodeFunctionPrimitiveByName = def "encodeFunctionPrimitiveByName" $
           (JavaUtilsSource.javaCastExpression @@ var "rt" @@ (JavaUtilsSource.javaExpressionToJavaUnaryExpression @@ var "curried"))))
 
 -- | Encode a nullary primitive reference (by name) as a Java expression.
-encodeNullaryPrimitiveByName :: TTermDefinition (JavaHelpers.JavaEnvironment -> Type -> Name -> Context -> Graph -> Either (InContext Error) Java.Expression)
+encodeNullaryPrimitiveByName :: TTermDefinition (JavaHelpers.JavaEnvironment -> Type -> Name -> Context -> Graph -> Either Error Java.Expression)
 encodeNullaryPrimitiveByName = def "encodeNullaryPrimitiveByName" $
   lambda "env" $ lambda "typ" $ lambda "name" $
     "cx" ~> "g" ~>
@@ -2159,7 +2159,7 @@ encodeNullaryPrimitiveByName = def "encodeNullaryPrimitiveByName" $
          (JavaUtilsSource.methodInvocationStaticWithTypeArgs @@ var "className" @@ var "methodName" @@ var "targs" @@ (list ([] :: [TTerm Java.Expression])))))
 
 -- | Encode a function.
-encodeFunction :: TTermDefinition (JavaHelpers.JavaEnvironment -> Type -> Type -> Function -> Context -> Graph -> Either (InContext Error) Java.Expression)
+encodeFunction :: TTermDefinition (JavaHelpers.JavaEnvironment -> Type -> Type -> Function -> Context -> Graph -> Either Error Java.Expression)
 encodeFunction = def "encodeFunction" $
   lambda "env" $ lambda "dom" $ lambda "cod" $ lambda "fun" $
     "cx" ~> "g" ~>
@@ -2376,7 +2376,7 @@ encodeLiteral_primCast = def "encodeLiteral_primCast" $
         (JavaUtilsSource.javaExpressionToJavaUnaryExpression @@ var "expr"))
 
 -- | Encode a Hydra literal type to a Java type
-encodeLiteralType :: TTermDefinition (LiteralType -> Context -> Graph -> Either (InContext Error) Java.Type)
+encodeLiteralType :: TTermDefinition (LiteralType -> Context -> Graph -> Either Error Java.Type)
 encodeLiteralType = def "encodeLiteralType" $
   lambda "lt" $ 
     "cx" ~> "g" ~>
@@ -2433,7 +2433,7 @@ encodeLiteralType = def "encodeLiteralType" $
       encodeLiteralType_simple @@ string "String" @@ var "cx" @@ var "g"]
 
 -- | Helper: encode a simple Java reference type by class name (no package, no type arguments)
-encodeLiteralType_simple :: TTermDefinition (String -> Context -> Graph -> Either (InContext Error) Java.Type)
+encodeLiteralType_simple :: TTermDefinition (String -> Context -> Graph -> Either Error Java.Type)
 encodeLiteralType_simple = def "encodeLiteralType_simple" $
   lambda "n" $ 
     "cx" ~> "g" ~>
@@ -2443,14 +2443,14 @@ encodeLiteralType_simple = def "encodeLiteralType_simple" $
     @@ var "n")
 
 -- | Encode a nullary constant function as a Java expression
-encodeNullaryConstant :: TTermDefinition (JavaHelpers.JavaEnvironment -> Type -> Function -> Context -> Graph -> Either (InContext Error) Java.Expression)
+encodeNullaryConstant :: TTermDefinition (JavaHelpers.JavaEnvironment -> Type -> Function -> Context -> Graph -> Either Error Java.Expression)
 encodeNullaryConstant = def "encodeNullaryConstant" $
   lambda "env" $ lambda "typ" $ lambda "fun" $
     "cx" ~> "g" ~>
     Ctx.failInContext (Error.errorOther $ Error.otherError $ Strings.cat2 (string "unexpected ") (Strings.cat2 (string "nullary function") (Strings.cat2 (string " in ") (ShowCore.function @@ var "fun")))) (var "cx")
 
 -- | Extract type arguments from the return type for generic method calls
-encodeNullaryConstant_typeArgsFromReturnType :: TTermDefinition (JavaHelpers.Aliases -> Type -> Context -> Graph -> Either (InContext Error) [Java.TypeArgument])
+encodeNullaryConstant_typeArgsFromReturnType :: TTermDefinition (JavaHelpers.Aliases -> Type -> Context -> Graph -> Either Error [Java.TypeArgument])
 encodeNullaryConstant_typeArgsFromReturnType = def "encodeNullaryConstant_typeArgsFromReturnType" $
   lambda "aliases" $ lambda "t" $
     "cx" ~> "g" ~>
@@ -2477,7 +2477,7 @@ encodeNullaryConstant_typeArgsFromReturnType = def "encodeNullaryConstant_typeAr
 
 -- | Encode a Hydra term as a Java expression.
 -- Wrapper that calls encodeTermInternal with empty accumulators.
-encodeTerm :: TTermDefinition (JavaHelpers.JavaEnvironment -> Term -> Context -> Graph -> Either (InContext Error) Java.Expression)
+encodeTerm :: TTermDefinition (JavaHelpers.JavaEnvironment -> Term -> Context -> Graph -> Either Error Java.Expression)
 encodeTerm = def "encodeTerm" $
   lambda "env" $ lambda "term" $
     "cx" ~> "g" ~>
@@ -2486,7 +2486,7 @@ encodeTerm = def "encodeTerm" $
 -- | Encode a term definition as a Java interface method declaration.
 -- This is the most complex function — it handles type parameters, lambda analysis,
 -- type variable substitution, accumulator unification, and body annotation.
-encodeTermDefinition :: TTermDefinition (JavaHelpers.JavaEnvironment -> TermDefinition -> Context -> Graph -> Either (InContext Error) Java.InterfaceMemberDeclaration)
+encodeTermDefinition :: TTermDefinition (JavaHelpers.JavaEnvironment -> TermDefinition -> Context -> Graph -> Either Error Java.InterfaceMemberDeclaration)
 encodeTermDefinition = def "encodeTermDefinition" $
   lambda "env" $ lambda "tdef" $
     "cx" ~> "g" ~>
@@ -2642,7 +2642,7 @@ encodeTermDefinition = def "encodeTermDefinition" $
         @@ just (var "methodBody")))
 
 -- | Internal term encoder with annotation and type-application accumulators.
-encodeTermInternal :: TTermDefinition (JavaHelpers.JavaEnvironment -> [M.Map Name Term] -> [Java.Type] -> Term -> Context -> Graph -> Either (InContext Error) Java.Expression)
+encodeTermInternal :: TTermDefinition (JavaHelpers.JavaEnvironment -> [M.Map Name Term] -> [Java.Type] -> Term -> Context -> Graph -> Either Error Java.Expression)
 encodeTermInternal = def "encodeTermInternal" $
   lambda "env" $ lambda "anns" $ lambda "tyapps" $ lambda "term" $
     "cx" ~> "g0" ~>
@@ -3080,7 +3080,7 @@ encodeTermInternal = def "encodeTermInternal" $
 --   Returns a list of Java BlockStatements (if/instanceof checks + return/continue).
 --   tcoVarRenames maps original parameter names to snapshot names (e.g. term -> term_tco).
 --   Non-continue paths use the snapshot names so lambdas capture effectively-final variables.
-encodeTermTCO :: TTermDefinition (JavaHelpers.JavaEnvironment -> Name -> [Name] -> M.Map Name Name -> Int -> Term -> Context -> Graph -> Either (InContext Error) [Java.BlockStatement])
+encodeTermTCO :: TTermDefinition (JavaHelpers.JavaEnvironment -> Name -> [Name] -> M.Map Name Name -> Int -> Term -> Context -> Graph -> Either Error [Java.BlockStatement])
 encodeTermTCO = def "encodeTermTCO" $
   "env0" ~> "funcName" ~> "paramNames" ~> "tcoVarRenames" ~> "tcoDepth" ~> "term" ~>
     "cx" ~> "g" ~>
@@ -3272,7 +3272,7 @@ encodeTermTCO = def "encodeTermTCO" $
           right $ Lists.concat2 (var "letStmts") (var "tcoBodyStmts")])
 
 -- | Encode a Hydra type as a Java type
-encodeType :: TTermDefinition (JavaHelpers.Aliases -> S.Set Name -> Type -> Context -> Graph -> Either (InContext Error) Java.Type)
+encodeType :: TTermDefinition (JavaHelpers.Aliases -> S.Set Name -> Type -> Context -> Graph -> Either Error Java.Type)
 encodeType = def "encodeType" $
   lambda "aliases" $ lambda "boundVars" $ lambda "t" $
     "cx" ~> "g" ~>
@@ -3412,7 +3412,7 @@ encodeType = def "encodeType" $
         Ctx.failInContext (Error.errorOther $ Error.otherError (string "unexpected anonymous wrap type")) (var "cx")]
 
 -- | Resolve a TypeVariable name if it refers to a typedef (simple type alias)
-encodeType_resolveIfTypedef :: TTermDefinition (JavaHelpers.Aliases -> S.Set Name -> S.Set Name -> Name -> Context -> Graph -> Either (InContext Error) (Maybe Type))
+encodeType_resolveIfTypedef :: TTermDefinition (JavaHelpers.Aliases -> S.Set Name -> S.Set Name -> Name -> Context -> Graph -> Either Error (Maybe Type))
 encodeType_resolveIfTypedef = def "encodeType_resolveIfTypedef" $
   lambda "aliases" $ lambda "boundVars" $ lambda "inScopeTypeParams" $ lambda "name" $
     "cx" ~> "g" ~>
@@ -3433,7 +3433,7 @@ encodeType_resolveIfTypedef = def "encodeType_resolveIfTypedef" $
                   _Type_wrap>>: lambda "_" $ right nothing]))))
 
 -- | Encode a type definition as a Java compilation unit.
-encodeTypeDefinition :: TTermDefinition (Java.PackageDeclaration -> JavaHelpers.Aliases -> TypeDefinition -> Context -> Graph -> Either (InContext Error) (Name, Java.CompilationUnit))
+encodeTypeDefinition :: TTermDefinition (Java.PackageDeclaration -> JavaHelpers.Aliases -> TypeDefinition -> Context -> Graph -> Either Error (Name, Java.CompilationUnit))
 encodeTypeDefinition = def "encodeTypeDefinition" $
   lambda "pkg" $ lambda "aliases" $ lambda "tdef" $
     "cx" ~> "g" ~>
@@ -3459,7 +3459,7 @@ encodeTypeDefinition = def "encodeTypeDefinition" $
         Java._OrdinaryCompilationUnit_types>>: list [var "tdecl"]])))
 
 -- | Encode a variable reference as a Java expression
-encodeVariable :: TTermDefinition (JavaHelpers.JavaEnvironment -> Name -> Context -> Graph -> Either (InContext Error) Java.Expression)
+encodeVariable :: TTermDefinition (JavaHelpers.JavaEnvironment -> Name -> Context -> Graph -> Either Error Java.Expression)
 encodeVariable = def "encodeVariable" $
   lambda "env" $ lambda "name" $
     "cx" ~> "g" ~>
@@ -3536,7 +3536,7 @@ encodeVariable_buildCurried = def "encodeVariable_buildCurried" $
           Lists.tail (var "params") @@ var "inner"))
 
 -- | Handle the HoistedLambda case of encodeVariable
-encodeVariable_hoistedLambdaCase :: TTermDefinition (JavaHelpers.Aliases -> Name -> Int -> Context -> Graph -> Either (InContext Error) Java.Expression)
+encodeVariable_hoistedLambdaCase :: TTermDefinition (JavaHelpers.Aliases -> Name -> Int -> Context -> Graph -> Either Error Java.Expression)
 encodeVariable_hoistedLambdaCase = def "encodeVariable_hoistedLambdaCase" $
   lambda "aliases" $ lambda "name" $ lambda "arity" $
     "cx" ~> "g" ~>
@@ -3696,7 +3696,7 @@ extractTypeApplicationArgs_go = def "extractTypeApplicationArgs_go" $
         (extractTypeApplicationArgs_go @@ (Core.applicationTypeFunction (var "at")))]
 
 -- | Convert a field type to a Java formal parameter
-fieldTypeToFormalParam :: TTermDefinition (JavaHelpers.Aliases -> FieldType -> Context -> Graph -> Either (InContext Error) Java.FormalParameter)
+fieldTypeToFormalParam :: TTermDefinition (JavaHelpers.Aliases -> FieldType -> Context -> Graph -> Either Error Java.FormalParameter)
 fieldTypeToFormalParam = def "fieldTypeToFormalParam" $
   lambda "aliases" $ lambda "ft" $
     "cx" ~> "g" ~>
@@ -3713,7 +3713,7 @@ filterByFlags = def "filterByFlags" $
 
 -- | Filter type arguments to remove those at positions corresponding to phantom
 -- or over-generalized scheme variables.
-filterPhantomTypeArgs :: TTermDefinition (Name -> [Type] -> Context -> Graph -> Either (InContext Error) [Type])
+filterPhantomTypeArgs :: TTermDefinition (Name -> [Type] -> Context -> Graph -> Either Error [Type])
 filterPhantomTypeArgs = def "filterPhantomTypeArgs" $
   lambda "calleeName" $ lambda "allTypeArgs" $
     "cx" ~> "g" ~>
@@ -3844,7 +3844,7 @@ freshJavaName_go = def "freshJavaName_go" $
       (var "candidate")
 
 -- | Generate a method invocation for a function call.
-functionCall :: TTermDefinition (JavaHelpers.JavaEnvironment -> Bool -> Name -> [Term] -> [Type] -> Context -> Graph -> Either (InContext Error) Java.Expression)
+functionCall :: TTermDefinition (JavaHelpers.JavaEnvironment -> Bool -> Name -> [Term] -> [Type] -> Context -> Graph -> Either Error Java.Expression)
 functionCall = def "functionCall" $
   lambda "env" $ lambda "isPrim" $ lambda "name" $ lambda "args" $ lambda "typeApps" $
     "cx" ~> "g" ~>
@@ -3904,7 +3904,7 @@ functionCall = def "functionCall" $
                       (JavaUtilsSource.methodInvocationStaticWithTypeArgs @@ var "classId" @@ var "methodId" @@ var "jTypeArgs" @@ var "jargs"))))))
 
 -- | Get the codomain type from annotations
-getCodomain :: TTermDefinition (M.Map Name Term -> Context -> Graph -> Either (InContext Error) Type)
+getCodomain :: TTermDefinition (M.Map Name Term -> Context -> Graph -> Either Error Type)
 getCodomain = def "getCodomain" $
   lambda "ann" $
     "cx" ~> "g" ~>
@@ -3913,7 +3913,7 @@ getCodomain = def "getCodomain" $
       (getFunctionType @@ var "ann" @@ var "cx" @@ var "g")
 
 -- | Get the function type from annotations
-getFunctionType :: TTermDefinition (M.Map Name Term -> Context -> Graph -> Either (InContext Error) FunctionType)
+getFunctionType :: TTermDefinition (M.Map Name Term -> Context -> Graph -> Either Error FunctionType)
 getFunctionType = def "getFunctionType" $
   lambda "ann" $
     "cx" ~> "g" ~>
@@ -4085,7 +4085,7 @@ isBinaryType = def "isBinaryType" $
         _LiteralType_binary>>: constant $ boolean True]]
 
 -- | Check if a union variant field's type is a unit type, by looking up the union type schema.
-isFieldUnitType :: TTermDefinition (Name -> Name -> Context -> Graph -> Either (InContext Error) Bool)
+isFieldUnitType :: TTermDefinition (Name -> Name -> Context -> Graph -> Either Error Bool)
 isFieldUnitType = def "isFieldUnitType" $
   lambda "typeName" $ lambda "fieldName" $
     "cx" ~> "g" ~>
@@ -4245,7 +4245,7 @@ javaIdentifierToString = def "javaIdentifierToString" $
   lambda "id" $ unwrap Java._Identifier @@ var "id"
 
 -- | Get type arguments for a named type by looking up its definition
-javaTypeArgumentsForNamedType :: TTermDefinition (Name -> Context -> Graph -> Either (InContext Error) [Java.TypeArgument])
+javaTypeArgumentsForNamedType :: TTermDefinition (Name -> Context -> Graph -> Either Error [Java.TypeArgument])
 javaTypeArgumentsForNamedType = def "javaTypeArgumentsForNamedType" $
   lambda "tname" $
     "cx" ~> "g" ~>
@@ -4281,7 +4281,7 @@ javaTypeParametersForType_bvars = def "javaTypeParametersForType_bvars" $
         (javaTypeParametersForType_bvars @@ (Core.forallTypeBody (var "ft")))]
 
 -- | Top-level entry point: convert a module to Java source files.
-moduleToJava :: TTermDefinition (Module -> [Definition] -> Context -> Graph -> Either (InContext Error) (M.Map FilePath String))
+moduleToJava :: TTermDefinition (Module -> [Definition] -> Context -> Graph -> Either Error (M.Map FilePath String))
 moduleToJava = def "moduleToJava" $
   lambda "mod" $ lambda "defs" $
     "cx" ~> "g" ~>
@@ -4330,7 +4330,7 @@ noComment = def "noComment" $
   lambda "decl" $ JavaDsl.classBodyDeclarationWithComments (var "decl") nothing
 
 -- | Generate the otherwise (default) branch of a visitor.
-otherwiseBranch :: TTermDefinition (JavaHelpers.JavaEnvironment -> JavaHelpers.Aliases -> Type -> Type -> Name -> Java.Type -> [Java.TypeArgument] -> Term -> Context -> Graph -> Either (InContext Error) Java.ClassBodyDeclarationWithComments)
+otherwiseBranch :: TTermDefinition (JavaHelpers.JavaEnvironment -> JavaHelpers.Aliases -> Type -> Type -> Name -> Java.Type -> [Java.TypeArgument] -> Term -> Context -> Graph -> Either Error Java.ClassBodyDeclarationWithComments)
 otherwiseBranch = def "otherwiseBranch" $
   lambda "env" $ lambda "aliases" $ lambda "dom" $ lambda "cod" $ lambda "tname" $ lambda "jcod" $ lambda "targs" $ lambda "d" $
     "cx" ~> "g" ~>
@@ -4565,7 +4565,7 @@ recordCompareToMethod = def "recordCompareToMethod" $
       @@ just (compareToBody @@ var "aliases" @@ (asTerm JavaNamesSource.otherInstanceName) @@ var "fields")
 
 -- | Build a record constructor.
-recordConstructor :: TTermDefinition (JavaHelpers.Aliases -> Name -> [FieldType] -> Context -> Graph -> Either (InContext Error) Java.ClassBodyDeclaration)
+recordConstructor :: TTermDefinition (JavaHelpers.Aliases -> Name -> [FieldType] -> Context -> Graph -> Either Error Java.ClassBodyDeclaration)
 recordConstructor = def "recordConstructor" $
   lambda "aliases" $ lambda "elName" $ lambda "fields" $
     "cx" ~> "g" ~>
@@ -4643,7 +4643,7 @@ recordHashCodeMethod = def "recordHashCodeMethod" $
       @@ just (list [var "returnSum"])
 
 -- | Build a record field as a public final member variable declaration.
-recordMemberVar :: TTermDefinition (JavaHelpers.Aliases -> FieldType -> Context -> Graph -> Either (InContext Error) Java.ClassBodyDeclaration)
+recordMemberVar :: TTermDefinition (JavaHelpers.Aliases -> FieldType -> Context -> Graph -> Either Error Java.ClassBodyDeclaration)
 recordMemberVar = def "recordMemberVar" $
   lambda "aliases" $ lambda "ft" $
     "cx" ~> "g" ~>
@@ -4657,7 +4657,7 @@ recordMemberVar = def "recordMemberVar" $
       @@ (JavaUtilsSource.fieldNameToJavaVariableDeclarator @@ var "fname"))
 
 -- | Build a "with" method for a record field.
-recordWithMethod :: TTermDefinition (JavaHelpers.Aliases -> Name -> [FieldType] -> FieldType -> Context -> Graph -> Either (InContext Error) Java.ClassBodyDeclaration)
+recordWithMethod :: TTermDefinition (JavaHelpers.Aliases -> Name -> [FieldType] -> FieldType -> Context -> Graph -> Either Error Java.ClassBodyDeclaration)
 recordWithMethod = def "recordWithMethod" $
   lambda "aliases" $ lambda "elName" $ lambda "fields" $ lambda "field" $
     "cx" ~> "g" ~>
@@ -4903,7 +4903,7 @@ tagCompareExpr = def "tagCompareExpr" $ lets [
 
 -- | Take N type arguments from the accumulated type applications list,
 -- converting them to Java TypeArguments via javaTypeToJavaReferenceType.
-takeTypeArgs :: TTermDefinition (String -> Int -> [Java.Type] -> Context -> Graph -> Either (InContext Error) [Java.TypeArgument])
+takeTypeArgs :: TTermDefinition (String -> Int -> [Java.Type] -> Context -> Graph -> Either Error [Java.TypeArgument])
 takeTypeArgs = def "takeTypeArgs" $
   lambda "label" $ lambda "n" $ lambda "tyapps" $
     "cx" ~> "g" ~>
@@ -4915,7 +4915,7 @@ takeTypeArgs = def "takeTypeArgs" $
         (Lists.take (var "n") (var "tyapps")))
 
 -- | Dispatch type to class declaration.
-toClassDecl :: TTermDefinition (Bool -> Bool -> JavaHelpers.Aliases -> [Java.TypeParameter] -> Name -> Type -> Context -> Graph -> Either (InContext Error) Java.ClassDeclaration)
+toClassDecl :: TTermDefinition (Bool -> Bool -> JavaHelpers.Aliases -> [Java.TypeParameter] -> Name -> Type -> Context -> Graph -> Either Error Java.ClassDeclaration)
 toClassDecl = def "toClassDecl" $
   lambda "isInner" $ lambda "isSer" $ lambda "aliases" $ lambda "tparams" $ lambda "elName" $ lambda "t" $
     "cx" ~> "g" ~>
@@ -4941,7 +4941,7 @@ toClassDecl = def "toClassDecl" $
           @@ (list [Core.fieldType (wrap _Name (string "value")) (var "wt")]) @@ var "cx" @@ var "g"]
 
 -- | Initialize a recursive binding with AtomicReference (for toDeclInit).
-toDeclInit :: TTermDefinition (JavaHelpers.Aliases -> Graph -> S.Set Name -> [Binding] -> Name -> Context -> Graph -> Either (InContext Error) (Maybe Java.BlockStatement))
+toDeclInit :: TTermDefinition (JavaHelpers.Aliases -> Graph -> S.Set Name -> [Binding] -> Name -> Context -> Graph -> Either Error (Maybe Java.BlockStatement))
 toDeclInit = def "toDeclInit" $
   lambda "aliasesExt" $ lambda "gExt" $ lambda "recursiveVars" $ lambda "flatBindings" $ lambda "name" $
     "cx" ~> "g" ~>
@@ -4967,7 +4967,7 @@ toDeclInit = def "toDeclInit" $
       (right nothing)
 
 -- | Declare or set a binding value (for toDeclStatement).
-toDeclStatement :: TTermDefinition (JavaHelpers.JavaEnvironment -> JavaHelpers.Aliases -> Graph -> S.Set Name -> S.Set Name -> [Binding] -> Name -> Context -> Graph -> Either (InContext Error) Java.BlockStatement)
+toDeclStatement :: TTermDefinition (JavaHelpers.JavaEnvironment -> JavaHelpers.Aliases -> Graph -> S.Set Name -> S.Set Name -> [Binding] -> Name -> Context -> Graph -> Either Error Java.BlockStatement)
 toDeclStatement = def "toDeclStatement" $
   lambda "envExt" $ lambda "aliasesExt" $ lambda "gExt" $ lambda "recursiveVars" $ lambda "thunkedVars" $ lambda "flatBindings" $ lambda "name" $
     "cx" ~> "g" ~>
@@ -5027,7 +5027,7 @@ tryInferFunctionType = def "tryInferFunctionType" $
 
 -- | Fallback cast for TermTypeApplication: re-annotate the body with corrected type
 -- before encoding, then cast.
-typeAppFallbackCast :: TTermDefinition (JavaHelpers.JavaEnvironment -> JavaHelpers.Aliases -> [M.Map Name Term] -> [Java.Type] -> Java.Type -> Term -> Type -> Context -> Graph -> Either (InContext Error) Java.Expression)
+typeAppFallbackCast :: TTermDefinition (JavaHelpers.JavaEnvironment -> JavaHelpers.Aliases -> [M.Map Name Term] -> [Java.Type] -> Java.Type -> Term -> Type -> Context -> Graph -> Either Error Java.Expression)
 typeAppFallbackCast = def "typeAppFallbackCast" $
   lambda "env" $ lambda "aliases" $ lambda "anns" $ lambda "tyapps" $
     lambda "jatyp" $ lambda "body" $ lambda "typ" $
@@ -5043,7 +5043,7 @@ typeAppFallbackCast = def "typeAppFallbackCast" $
 -- | Handle TermTypeApplication when the innermost body is a variable.
 -- Generates explicit type witnesses for nullary static methods and hoisted lambdas
 -- instead of casts, which Java can't resolve for methods with unconstrained type params.
-typeAppNullaryOrHoisted :: TTermDefinition (JavaHelpers.JavaEnvironment -> JavaHelpers.Aliases -> [M.Map Name Term] -> [Java.Type] -> Java.Type -> Term -> Type -> Name -> JavaHelpers.JavaSymbolClass -> [Type] -> Context -> Graph -> Either (InContext Error) Java.Expression)
+typeAppNullaryOrHoisted :: TTermDefinition (JavaHelpers.JavaEnvironment -> JavaHelpers.Aliases -> [M.Map Name Term] -> [Java.Type] -> Java.Type -> Term -> Type -> Name -> JavaHelpers.JavaSymbolClass -> [Type] -> Context -> Graph -> Either Error Java.Expression)
 typeAppNullaryOrHoisted = def "typeAppNullaryOrHoisted" $
   lambda "env" $ lambda "aliases" $ lambda "anns" $ lambda "tyapps" $
     lambda "jatyp" $ lambda "body" $ lambda "correctedTyp" $ lambda "varName" $
@@ -5170,7 +5170,7 @@ variantCompareToMethod = def "variantCompareToMethod" $
       @@ just (var "body")
 
 -- | Generate a visit branch for a field of a union type.
-visitBranch :: TTermDefinition (JavaHelpers.JavaEnvironment -> JavaHelpers.Aliases -> Type -> Name -> Java.Type -> [Java.TypeArgument] -> Field -> Context -> Graph -> Either (InContext Error) Java.ClassBodyDeclarationWithComments)
+visitBranch :: TTermDefinition (JavaHelpers.JavaEnvironment -> JavaHelpers.Aliases -> Type -> Name -> Java.Type -> [Java.TypeArgument] -> Field -> Context -> Graph -> Either Error Java.ClassBodyDeclarationWithComments)
 visitBranch = def "visitBranch" $
   lambda "env" $ lambda "aliases" $ lambda "dom" $ lambda "tname" $ lambda "jcod" $ lambda "targs" $ lambda "field" $
     "cx" ~> "g" ~>

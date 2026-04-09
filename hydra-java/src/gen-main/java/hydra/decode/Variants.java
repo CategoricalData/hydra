@@ -8,7 +8,7 @@ package hydra.decode;
 public interface Variants {
   static hydra.util.Either<hydra.errors.DecodingError, hydra.variants.EliminationVariant> eliminationVariant(hydra.graph.Graph cx, hydra.core.Term raw) {
     return hydra.lib.eithers.Either.apply(
-      (java.util.function.Function<String, hydra.util.Either<hydra.errors.DecodingError, hydra.variants.EliminationVariant>>) (err -> hydra.util.Either.<hydra.errors.DecodingError, hydra.variants.EliminationVariant>left(new hydra.errors.DecodingError(err))),
+      (java.util.function.Function<hydra.errors.DecodingError, hydra.util.Either<hydra.errors.DecodingError, hydra.variants.EliminationVariant>>) (err -> hydra.util.Either.<hydra.errors.DecodingError, hydra.variants.EliminationVariant>left(err)),
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.variants.EliminationVariant>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.errors.DecodingError, hydra.variants.EliminationVariant> otherwise(hydra.core.Term instance) {
@@ -47,14 +47,14 @@ public interface Variants {
               variantMap.get()));
         }
       })),
-      hydra.Lexical.stripAndDereferenceTermEither(
+      hydra.extract.Core.stripWithDecodingError(
         cx,
         raw));
   }
 
   static hydra.util.Either<hydra.errors.DecodingError, hydra.variants.FunctionVariant> functionVariant(hydra.graph.Graph cx, hydra.core.Term raw) {
     return hydra.lib.eithers.Either.apply(
-      (java.util.function.Function<String, hydra.util.Either<hydra.errors.DecodingError, hydra.variants.FunctionVariant>>) (err -> hydra.util.Either.<hydra.errors.DecodingError, hydra.variants.FunctionVariant>left(new hydra.errors.DecodingError(err))),
+      (java.util.function.Function<hydra.errors.DecodingError, hydra.util.Either<hydra.errors.DecodingError, hydra.variants.FunctionVariant>>) (err -> hydra.util.Either.<hydra.errors.DecodingError, hydra.variants.FunctionVariant>left(err)),
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.variants.FunctionVariant>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.errors.DecodingError, hydra.variants.FunctionVariant> otherwise(hydra.core.Term instance) {
@@ -88,14 +88,14 @@ public interface Variants {
               variantMap.get()));
         }
       })),
-      hydra.Lexical.stripAndDereferenceTermEither(
+      hydra.extract.Core.stripWithDecodingError(
         cx,
         raw));
   }
 
   static hydra.util.Either<hydra.errors.DecodingError, hydra.variants.LiteralVariant> literalVariant(hydra.graph.Graph cx, hydra.core.Term raw) {
     return hydra.lib.eithers.Either.apply(
-      (java.util.function.Function<String, hydra.util.Either<hydra.errors.DecodingError, hydra.variants.LiteralVariant>>) (err -> hydra.util.Either.<hydra.errors.DecodingError, hydra.variants.LiteralVariant>left(new hydra.errors.DecodingError(err))),
+      (java.util.function.Function<hydra.errors.DecodingError, hydra.util.Either<hydra.errors.DecodingError, hydra.variants.LiteralVariant>>) (err -> hydra.util.Either.<hydra.errors.DecodingError, hydra.variants.LiteralVariant>left(err)),
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.variants.LiteralVariant>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.errors.DecodingError, hydra.variants.LiteralVariant> otherwise(hydra.core.Term instance) {
@@ -144,14 +144,14 @@ public interface Variants {
               variantMap.get()));
         }
       })),
-      hydra.Lexical.stripAndDereferenceTermEither(
+      hydra.extract.Core.stripWithDecodingError(
         cx,
         raw));
   }
 
   static hydra.util.Either<hydra.errors.DecodingError, hydra.variants.TermVariant> termVariant(hydra.graph.Graph cx, hydra.core.Term raw) {
     return hydra.lib.eithers.Either.apply(
-      (java.util.function.Function<String, hydra.util.Either<hydra.errors.DecodingError, hydra.variants.TermVariant>>) (err -> hydra.util.Either.<hydra.errors.DecodingError, hydra.variants.TermVariant>left(new hydra.errors.DecodingError(err))),
+      (java.util.function.Function<hydra.errors.DecodingError, hydra.util.Either<hydra.errors.DecodingError, hydra.variants.TermVariant>>) (err -> hydra.util.Either.<hydra.errors.DecodingError, hydra.variants.TermVariant>left(err)),
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.variants.TermVariant>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.errors.DecodingError, hydra.variants.TermVariant> otherwise(hydra.core.Term instance) {
@@ -265,14 +265,14 @@ public interface Variants {
               variantMap.get()));
         }
       })),
-      hydra.Lexical.stripAndDereferenceTermEither(
+      hydra.extract.Core.stripWithDecodingError(
         cx,
         raw));
   }
 
   static hydra.util.Either<hydra.errors.DecodingError, hydra.variants.TypeVariant> typeVariant(hydra.graph.Graph cx, hydra.core.Term raw) {
     return hydra.lib.eithers.Either.apply(
-      (java.util.function.Function<String, hydra.util.Either<hydra.errors.DecodingError, hydra.variants.TypeVariant>>) (err -> hydra.util.Either.<hydra.errors.DecodingError, hydra.variants.TypeVariant>left(new hydra.errors.DecodingError(err))),
+      (java.util.function.Function<hydra.errors.DecodingError, hydra.util.Either<hydra.errors.DecodingError, hydra.variants.TypeVariant>>) (err -> hydra.util.Either.<hydra.errors.DecodingError, hydra.variants.TypeVariant>left(err)),
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.variants.TypeVariant>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.errors.DecodingError, hydra.variants.TypeVariant> otherwise(hydra.core.Term instance) {
@@ -381,7 +381,7 @@ public interface Variants {
               variantMap.get()));
         }
       })),
-      hydra.Lexical.stripAndDereferenceTermEither(
+      hydra.extract.Core.stripWithDecodingError(
         cx,
         raw));
   }

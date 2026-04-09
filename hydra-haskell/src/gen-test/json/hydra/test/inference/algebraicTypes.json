@@ -184,10 +184,7 @@
                                                                               "application": {
                                                                                 "argument": {"literal": {"string": "INFERENCE ERROR: "}},
                                                                                 "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                                                        "domain": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "hydra.errors.Error"},
-                                                                            "function": {"variable": "hydra.context.InContext"}}},
+                                                                        "domain": {"variable": "hydra.errors.Error"},
                                                                         "parameter": "e"}}},
                                                                   "function": {
                                                                     "typeApplication": {
@@ -196,10 +193,7 @@
                                                                           "body": {
                                                                             "typeApplication": {
                                                                               "body": {"variable": "hydra.lib.eithers.either"},
-                                                                              "type": {
-                                                                                "application": {
-                                                                                  "argument": {"variable": "hydra.errors.Error"},
-                                                                                  "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                              "type": {"variable": "hydra.errors.Error"}}},
                                                                           "type": {
                                                                             "pair": {
                                                                               "first": {
@@ -477,10 +471,7 @@
                                                                               "application": {
                                                                                 "argument": {"literal": {"string": "INFERENCE ERROR: "}},
                                                                                 "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                                                        "domain": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "hydra.errors.Error"},
-                                                                            "function": {"variable": "hydra.context.InContext"}}},
+                                                                        "domain": {"variable": "hydra.errors.Error"},
                                                                         "parameter": "e"}}},
                                                                   "function": {
                                                                     "typeApplication": {
@@ -489,10 +480,7 @@
                                                                           "body": {
                                                                             "typeApplication": {
                                                                               "body": {"variable": "hydra.lib.eithers.either"},
-                                                                              "type": {
-                                                                                "application": {
-                                                                                  "argument": {"variable": "hydra.errors.Error"},
-                                                                                  "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                              "type": {"variable": "hydra.errors.Error"}}},
                                                                           "type": {
                                                                             "pair": {
                                                                               "first": {
@@ -734,10 +722,7 @@
                                                                               "application": {
                                                                                 "argument": {"literal": {"string": "INFERENCE ERROR: "}},
                                                                                 "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                                                        "domain": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "hydra.errors.Error"},
-                                                                            "function": {"variable": "hydra.context.InContext"}}},
+                                                                        "domain": {"variable": "hydra.errors.Error"},
                                                                         "parameter": "e"}}},
                                                                   "function": {
                                                                     "typeApplication": {
@@ -746,10 +731,7 @@
                                                                           "body": {
                                                                             "typeApplication": {
                                                                               "body": {"variable": "hydra.lib.eithers.either"},
-                                                                              "type": {
-                                                                                "application": {
-                                                                                  "argument": {"variable": "hydra.errors.Error"},
-                                                                                  "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                              "type": {"variable": "hydra.errors.Error"}}},
                                                                           "type": {
                                                                             "pair": {
                                                                               "first": {
@@ -1032,10 +1014,7 @@
                                                                               "application": {
                                                                                 "argument": {"literal": {"string": "INFERENCE ERROR: "}},
                                                                                 "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                                                        "domain": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "hydra.errors.Error"},
-                                                                            "function": {"variable": "hydra.context.InContext"}}},
+                                                                        "domain": {"variable": "hydra.errors.Error"},
                                                                         "parameter": "e"}}},
                                                                   "function": {
                                                                     "typeApplication": {
@@ -1044,10 +1023,7 @@
                                                                           "body": {
                                                                             "typeApplication": {
                                                                               "body": {"variable": "hydra.lib.eithers.either"},
-                                                                              "type": {
-                                                                                "application": {
-                                                                                  "argument": {"variable": "hydra.errors.Error"},
-                                                                                  "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                              "type": {"variable": "hydra.errors.Error"}}},
                                                                           "type": {
                                                                             "pair": {
                                                                               "first": {
@@ -1253,10 +1229,7 @@
                                                                               "application": {
                                                                                 "argument": {"literal": {"string": "INFERENCE ERROR: "}},
                                                                                 "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                                                        "domain": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "hydra.errors.Error"},
-                                                                            "function": {"variable": "hydra.context.InContext"}}},
+                                                                        "domain": {"variable": "hydra.errors.Error"},
                                                                         "parameter": "e"}}},
                                                                   "function": {
                                                                     "typeApplication": {
@@ -1265,10 +1238,7 @@
                                                                           "body": {
                                                                             "typeApplication": {
                                                                               "body": {"variable": "hydra.lib.eithers.either"},
-                                                                              "type": {
-                                                                                "application": {
-                                                                                  "argument": {"variable": "hydra.errors.Error"},
-                                                                                  "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                              "type": {"variable": "hydra.errors.Error"}}},
                                                                           "type": {
                                                                             "pair": {
                                                                               "first": {
@@ -1544,10 +1514,7 @@
                                                                               "application": {
                                                                                 "argument": {"literal": {"string": "INFERENCE ERROR: "}},
                                                                                 "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                                                        "domain": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "hydra.errors.Error"},
-                                                                            "function": {"variable": "hydra.context.InContext"}}},
+                                                                        "domain": {"variable": "hydra.errors.Error"},
                                                                         "parameter": "e"}}},
                                                                   "function": {
                                                                     "typeApplication": {
@@ -1556,10 +1523,7 @@
                                                                           "body": {
                                                                             "typeApplication": {
                                                                               "body": {"variable": "hydra.lib.eithers.either"},
-                                                                              "type": {
-                                                                                "application": {
-                                                                                  "argument": {"variable": "hydra.errors.Error"},
-                                                                                  "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                              "type": {"variable": "hydra.errors.Error"}}},
                                                                           "type": {
                                                                             "pair": {
                                                                               "first": {
@@ -1947,10 +1911,7 @@
                                                                               "application": {
                                                                                 "argument": {"literal": {"string": "INFERENCE ERROR: "}},
                                                                                 "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                                                        "domain": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "hydra.errors.Error"},
-                                                                            "function": {"variable": "hydra.context.InContext"}}},
+                                                                        "domain": {"variable": "hydra.errors.Error"},
                                                                         "parameter": "e"}}},
                                                                   "function": {
                                                                     "typeApplication": {
@@ -1959,10 +1920,7 @@
                                                                           "body": {
                                                                             "typeApplication": {
                                                                               "body": {"variable": "hydra.lib.eithers.either"},
-                                                                              "type": {
-                                                                                "application": {
-                                                                                  "argument": {"variable": "hydra.errors.Error"},
-                                                                                  "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                              "type": {"variable": "hydra.errors.Error"}}},
                                                                           "type": {
                                                                             "pair": {
                                                                               "first": {
@@ -2223,10 +2181,7 @@
                                                                               "application": {
                                                                                 "argument": {"literal": {"string": "INFERENCE ERROR: "}},
                                                                                 "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                                                        "domain": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "hydra.errors.Error"},
-                                                                            "function": {"variable": "hydra.context.InContext"}}},
+                                                                        "domain": {"variable": "hydra.errors.Error"},
                                                                         "parameter": "e"}}},
                                                                   "function": {
                                                                     "typeApplication": {
@@ -2235,10 +2190,7 @@
                                                                           "body": {
                                                                             "typeApplication": {
                                                                               "body": {"variable": "hydra.lib.eithers.either"},
-                                                                              "type": {
-                                                                                "application": {
-                                                                                  "argument": {"variable": "hydra.errors.Error"},
-                                                                                  "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                              "type": {"variable": "hydra.errors.Error"}}},
                                                                           "type": {
                                                                             "pair": {
                                                                               "first": {
@@ -2553,10 +2505,7 @@
                                                                               "application": {
                                                                                 "argument": {"literal": {"string": "INFERENCE ERROR: "}},
                                                                                 "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                                                        "domain": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "hydra.errors.Error"},
-                                                                            "function": {"variable": "hydra.context.InContext"}}},
+                                                                        "domain": {"variable": "hydra.errors.Error"},
                                                                         "parameter": "e"}}},
                                                                   "function": {
                                                                     "typeApplication": {
@@ -2565,10 +2514,7 @@
                                                                           "body": {
                                                                             "typeApplication": {
                                                                               "body": {"variable": "hydra.lib.eithers.either"},
-                                                                              "type": {
-                                                                                "application": {
-                                                                                  "argument": {"variable": "hydra.errors.Error"},
-                                                                                  "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                              "type": {"variable": "hydra.errors.Error"}}},
                                                                           "type": {
                                                                             "pair": {
                                                                               "first": {
@@ -2908,10 +2854,7 @@
                                                                               "application": {
                                                                                 "argument": {"literal": {"string": "INFERENCE ERROR: "}},
                                                                                 "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                                                        "domain": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "hydra.errors.Error"},
-                                                                            "function": {"variable": "hydra.context.InContext"}}},
+                                                                        "domain": {"variable": "hydra.errors.Error"},
                                                                         "parameter": "e"}}},
                                                                   "function": {
                                                                     "typeApplication": {
@@ -2920,10 +2863,7 @@
                                                                           "body": {
                                                                             "typeApplication": {
                                                                               "body": {"variable": "hydra.lib.eithers.either"},
-                                                                              "type": {
-                                                                                "application": {
-                                                                                  "argument": {"variable": "hydra.errors.Error"},
-                                                                                  "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                              "type": {"variable": "hydra.errors.Error"}}},
                                                                           "type": {
                                                                             "pair": {
                                                                               "first": {
@@ -3180,10 +3120,7 @@
                                                                               "application": {
                                                                                 "argument": {"literal": {"string": "INFERENCE ERROR: "}},
                                                                                 "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                                                        "domain": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "hydra.errors.Error"},
-                                                                            "function": {"variable": "hydra.context.InContext"}}},
+                                                                        "domain": {"variable": "hydra.errors.Error"},
                                                                         "parameter": "e"}}},
                                                                   "function": {
                                                                     "typeApplication": {
@@ -3192,10 +3129,7 @@
                                                                           "body": {
                                                                             "typeApplication": {
                                                                               "body": {"variable": "hydra.lib.eithers.either"},
-                                                                              "type": {
-                                                                                "application": {
-                                                                                  "argument": {"variable": "hydra.errors.Error"},
-                                                                                  "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                              "type": {"variable": "hydra.errors.Error"}}},
                                                                           "type": {
                                                                             "pair": {
                                                                               "first": {
@@ -3490,10 +3424,7 @@
                                                                               "application": {
                                                                                 "argument": {"literal": {"string": "INFERENCE ERROR: "}},
                                                                                 "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                                                        "domain": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "hydra.errors.Error"},
-                                                                            "function": {"variable": "hydra.context.InContext"}}},
+                                                                        "domain": {"variable": "hydra.errors.Error"},
                                                                         "parameter": "e"}}},
                                                                   "function": {
                                                                     "typeApplication": {
@@ -3502,10 +3433,7 @@
                                                                           "body": {
                                                                             "typeApplication": {
                                                                               "body": {"variable": "hydra.lib.eithers.either"},
-                                                                              "type": {
-                                                                                "application": {
-                                                                                  "argument": {"variable": "hydra.errors.Error"},
-                                                                                  "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                              "type": {"variable": "hydra.errors.Error"}}},
                                                                           "type": {
                                                                             "pair": {
                                                                               "first": {
@@ -3768,10 +3696,7 @@
                                                                               "application": {
                                                                                 "argument": {"literal": {"string": "INFERENCE ERROR: "}},
                                                                                 "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                                                        "domain": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "hydra.errors.Error"},
-                                                                            "function": {"variable": "hydra.context.InContext"}}},
+                                                                        "domain": {"variable": "hydra.errors.Error"},
                                                                         "parameter": "e"}}},
                                                                   "function": {
                                                                     "typeApplication": {
@@ -3780,10 +3705,7 @@
                                                                           "body": {
                                                                             "typeApplication": {
                                                                               "body": {"variable": "hydra.lib.eithers.either"},
-                                                                              "type": {
-                                                                                "application": {
-                                                                                  "argument": {"variable": "hydra.errors.Error"},
-                                                                                  "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                              "type": {"variable": "hydra.errors.Error"}}},
                                                                           "type": {
                                                                             "pair": {
                                                                               "first": {
@@ -3966,10 +3888,7 @@
                                                                               "application": {
                                                                                 "argument": {"literal": {"string": "INFERENCE ERROR: "}},
                                                                                 "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                                                        "domain": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "hydra.errors.Error"},
-                                                                            "function": {"variable": "hydra.context.InContext"}}},
+                                                                        "domain": {"variable": "hydra.errors.Error"},
                                                                         "parameter": "e"}}},
                                                                   "function": {
                                                                     "typeApplication": {
@@ -3978,10 +3897,7 @@
                                                                           "body": {
                                                                             "typeApplication": {
                                                                               "body": {"variable": "hydra.lib.eithers.either"},
-                                                                              "type": {
-                                                                                "application": {
-                                                                                  "argument": {"variable": "hydra.errors.Error"},
-                                                                                  "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                              "type": {"variable": "hydra.errors.Error"}}},
                                                                           "type": {
                                                                             "pair": {
                                                                               "first": {
@@ -4207,10 +4123,7 @@
                                                                               "application": {
                                                                                 "argument": {"literal": {"string": "INFERENCE ERROR: "}},
                                                                                 "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                                                        "domain": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "hydra.errors.Error"},
-                                                                            "function": {"variable": "hydra.context.InContext"}}},
+                                                                        "domain": {"variable": "hydra.errors.Error"},
                                                                         "parameter": "e"}}},
                                                                   "function": {
                                                                     "typeApplication": {
@@ -4219,10 +4132,7 @@
                                                                           "body": {
                                                                             "typeApplication": {
                                                                               "body": {"variable": "hydra.lib.eithers.either"},
-                                                                              "type": {
-                                                                                "application": {
-                                                                                  "argument": {"variable": "hydra.errors.Error"},
-                                                                                  "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                              "type": {"variable": "hydra.errors.Error"}}},
                                                                           "type": {
                                                                             "pair": {
                                                                               "first": {
@@ -4410,10 +4320,7 @@
                                                                               "application": {
                                                                                 "argument": {"literal": {"string": "INFERENCE ERROR: "}},
                                                                                 "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                                                        "domain": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "hydra.errors.Error"},
-                                                                            "function": {"variable": "hydra.context.InContext"}}},
+                                                                        "domain": {"variable": "hydra.errors.Error"},
                                                                         "parameter": "e"}}},
                                                                   "function": {
                                                                     "typeApplication": {
@@ -4422,10 +4329,7 @@
                                                                           "body": {
                                                                             "typeApplication": {
                                                                               "body": {"variable": "hydra.lib.eithers.either"},
-                                                                              "type": {
-                                                                                "application": {
-                                                                                  "argument": {"variable": "hydra.errors.Error"},
-                                                                                  "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                              "type": {"variable": "hydra.errors.Error"}}},
                                                                           "type": {
                                                                             "pair": {
                                                                               "first": {
@@ -4622,10 +4526,7 @@
                                                                               "application": {
                                                                                 "argument": {"literal": {"string": "INFERENCE ERROR: "}},
                                                                                 "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                                                        "domain": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "hydra.errors.Error"},
-                                                                            "function": {"variable": "hydra.context.InContext"}}},
+                                                                        "domain": {"variable": "hydra.errors.Error"},
                                                                         "parameter": "e"}}},
                                                                   "function": {
                                                                     "typeApplication": {
@@ -4634,10 +4535,7 @@
                                                                           "body": {
                                                                             "typeApplication": {
                                                                               "body": {"variable": "hydra.lib.eithers.either"},
-                                                                              "type": {
-                                                                                "application": {
-                                                                                  "argument": {"variable": "hydra.errors.Error"},
-                                                                                  "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                              "type": {"variable": "hydra.errors.Error"}}},
                                                                           "type": {
                                                                             "pair": {
                                                                               "first": {
@@ -4813,10 +4711,7 @@
                                                                               "application": {
                                                                                 "argument": {"literal": {"string": "INFERENCE ERROR: "}},
                                                                                 "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                                                        "domain": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "hydra.errors.Error"},
-                                                                            "function": {"variable": "hydra.context.InContext"}}},
+                                                                        "domain": {"variable": "hydra.errors.Error"},
                                                                         "parameter": "e"}}},
                                                                   "function": {
                                                                     "typeApplication": {
@@ -4825,10 +4720,7 @@
                                                                           "body": {
                                                                             "typeApplication": {
                                                                               "body": {"variable": "hydra.lib.eithers.either"},
-                                                                              "type": {
-                                                                                "application": {
-                                                                                  "argument": {"variable": "hydra.errors.Error"},
-                                                                                  "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                              "type": {"variable": "hydra.errors.Error"}}},
                                                                           "type": {
                                                                             "pair": {
                                                                               "first": {
@@ -5109,10 +5001,7 @@
                                                                               "application": {
                                                                                 "argument": {"literal": {"string": "INFERENCE ERROR: "}},
                                                                                 "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                                                        "domain": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "hydra.errors.Error"},
-                                                                            "function": {"variable": "hydra.context.InContext"}}},
+                                                                        "domain": {"variable": "hydra.errors.Error"},
                                                                         "parameter": "e"}}},
                                                                   "function": {
                                                                     "typeApplication": {
@@ -5121,10 +5010,7 @@
                                                                           "body": {
                                                                             "typeApplication": {
                                                                               "body": {"variable": "hydra.lib.eithers.either"},
-                                                                              "type": {
-                                                                                "application": {
-                                                                                  "argument": {"variable": "hydra.errors.Error"},
-                                                                                  "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                              "type": {"variable": "hydra.errors.Error"}}},
                                                                           "type": {
                                                                             "pair": {
                                                                               "first": {
@@ -5411,10 +5297,7 @@
                                                                               "application": {
                                                                                 "argument": {"literal": {"string": "INFERENCE ERROR: "}},
                                                                                 "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                                                        "domain": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "hydra.errors.Error"},
-                                                                            "function": {"variable": "hydra.context.InContext"}}},
+                                                                        "domain": {"variable": "hydra.errors.Error"},
                                                                         "parameter": "e"}}},
                                                                   "function": {
                                                                     "typeApplication": {
@@ -5423,10 +5306,7 @@
                                                                           "body": {
                                                                             "typeApplication": {
                                                                               "body": {"variable": "hydra.lib.eithers.either"},
-                                                                              "type": {
-                                                                                "application": {
-                                                                                  "argument": {"variable": "hydra.errors.Error"},
-                                                                                  "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                              "type": {"variable": "hydra.errors.Error"}}},
                                                                           "type": {
                                                                             "pair": {
                                                                               "first": {
@@ -5672,10 +5552,7 @@
                                                                               "application": {
                                                                                 "argument": {"literal": {"string": "INFERENCE ERROR: "}},
                                                                                 "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                                                        "domain": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "hydra.errors.Error"},
-                                                                            "function": {"variable": "hydra.context.InContext"}}},
+                                                                        "domain": {"variable": "hydra.errors.Error"},
                                                                         "parameter": "e"}}},
                                                                   "function": {
                                                                     "typeApplication": {
@@ -5684,10 +5561,7 @@
                                                                           "body": {
                                                                             "typeApplication": {
                                                                               "body": {"variable": "hydra.lib.eithers.either"},
-                                                                              "type": {
-                                                                                "application": {
-                                                                                  "argument": {"variable": "hydra.errors.Error"},
-                                                                                  "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                              "type": {"variable": "hydra.errors.Error"}}},
                                                                           "type": {
                                                                             "pair": {
                                                                               "first": {
@@ -5902,10 +5776,7 @@
                                                                               "application": {
                                                                                 "argument": {"literal": {"string": "INFERENCE ERROR: "}},
                                                                                 "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                                                        "domain": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "hydra.errors.Error"},
-                                                                            "function": {"variable": "hydra.context.InContext"}}},
+                                                                        "domain": {"variable": "hydra.errors.Error"},
                                                                         "parameter": "e"}}},
                                                                   "function": {
                                                                     "typeApplication": {
@@ -5914,10 +5785,7 @@
                                                                           "body": {
                                                                             "typeApplication": {
                                                                               "body": {"variable": "hydra.lib.eithers.either"},
-                                                                              "type": {
-                                                                                "application": {
-                                                                                  "argument": {"variable": "hydra.errors.Error"},
-                                                                                  "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                              "type": {"variable": "hydra.errors.Error"}}},
                                                                           "type": {
                                                                             "pair": {
                                                                               "first": {
@@ -6165,10 +6033,7 @@
                                                                               "application": {
                                                                                 "argument": {"literal": {"string": "INFERENCE ERROR: "}},
                                                                                 "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                                                        "domain": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "hydra.errors.Error"},
-                                                                            "function": {"variable": "hydra.context.InContext"}}},
+                                                                        "domain": {"variable": "hydra.errors.Error"},
                                                                         "parameter": "e"}}},
                                                                   "function": {
                                                                     "typeApplication": {
@@ -6177,10 +6042,7 @@
                                                                           "body": {
                                                                             "typeApplication": {
                                                                               "body": {"variable": "hydra.lib.eithers.either"},
-                                                                              "type": {
-                                                                                "application": {
-                                                                                  "argument": {"variable": "hydra.errors.Error"},
-                                                                                  "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                              "type": {"variable": "hydra.errors.Error"}}},
                                                                           "type": {
                                                                             "pair": {
                                                                               "first": {
@@ -6417,10 +6279,7 @@
                                                                               "application": {
                                                                                 "argument": {"literal": {"string": "INFERENCE ERROR: "}},
                                                                                 "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                                                        "domain": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "hydra.errors.Error"},
-                                                                            "function": {"variable": "hydra.context.InContext"}}},
+                                                                        "domain": {"variable": "hydra.errors.Error"},
                                                                         "parameter": "e"}}},
                                                                   "function": {
                                                                     "typeApplication": {
@@ -6429,10 +6288,7 @@
                                                                           "body": {
                                                                             "typeApplication": {
                                                                               "body": {"variable": "hydra.lib.eithers.either"},
-                                                                              "type": {
-                                                                                "application": {
-                                                                                  "argument": {"variable": "hydra.errors.Error"},
-                                                                                  "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                              "type": {"variable": "hydra.errors.Error"}}},
                                                                           "type": {
                                                                             "pair": {
                                                                               "first": {
@@ -6695,10 +6551,7 @@
                                                                               "application": {
                                                                                 "argument": {"literal": {"string": "INFERENCE ERROR: "}},
                                                                                 "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                                                        "domain": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "hydra.errors.Error"},
-                                                                            "function": {"variable": "hydra.context.InContext"}}},
+                                                                        "domain": {"variable": "hydra.errors.Error"},
                                                                         "parameter": "e"}}},
                                                                   "function": {
                                                                     "typeApplication": {
@@ -6707,10 +6560,7 @@
                                                                           "body": {
                                                                             "typeApplication": {
                                                                               "body": {"variable": "hydra.lib.eithers.either"},
-                                                                              "type": {
-                                                                                "application": {
-                                                                                  "argument": {"variable": "hydra.errors.Error"},
-                                                                                  "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                              "type": {"variable": "hydra.errors.Error"}}},
                                                                           "type": {
                                                                             "pair": {
                                                                               "first": {
@@ -6965,10 +6815,7 @@
                                                                               "application": {
                                                                                 "argument": {"literal": {"string": "INFERENCE ERROR: "}},
                                                                                 "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                                                        "domain": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "hydra.errors.Error"},
-                                                                            "function": {"variable": "hydra.context.InContext"}}},
+                                                                        "domain": {"variable": "hydra.errors.Error"},
                                                                         "parameter": "e"}}},
                                                                   "function": {
                                                                     "typeApplication": {
@@ -6977,10 +6824,7 @@
                                                                           "body": {
                                                                             "typeApplication": {
                                                                               "body": {"variable": "hydra.lib.eithers.either"},
-                                                                              "type": {
-                                                                                "application": {
-                                                                                  "argument": {"variable": "hydra.errors.Error"},
-                                                                                  "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                              "type": {"variable": "hydra.errors.Error"}}},
                                                                           "type": {
                                                                             "pair": {
                                                                               "first": {
@@ -7298,10 +7142,7 @@
                                                                               "application": {
                                                                                 "argument": {"literal": {"string": "INFERENCE ERROR: "}},
                                                                                 "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                                                        "domain": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "hydra.errors.Error"},
-                                                                            "function": {"variable": "hydra.context.InContext"}}},
+                                                                        "domain": {"variable": "hydra.errors.Error"},
                                                                         "parameter": "e"}}},
                                                                   "function": {
                                                                     "typeApplication": {
@@ -7310,10 +7151,7 @@
                                                                           "body": {
                                                                             "typeApplication": {
                                                                               "body": {"variable": "hydra.lib.eithers.either"},
-                                                                              "type": {
-                                                                                "application": {
-                                                                                  "argument": {"variable": "hydra.errors.Error"},
-                                                                                  "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                              "type": {"variable": "hydra.errors.Error"}}},
                                                                           "type": {
                                                                             "pair": {
                                                                               "first": {
@@ -7530,10 +7368,7 @@
                                                                               "application": {
                                                                                 "argument": {"literal": {"string": "INFERENCE ERROR: "}},
                                                                                 "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                                                        "domain": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "hydra.errors.Error"},
-                                                                            "function": {"variable": "hydra.context.InContext"}}},
+                                                                        "domain": {"variable": "hydra.errors.Error"},
                                                                         "parameter": "e"}}},
                                                                   "function": {
                                                                     "typeApplication": {
@@ -7542,10 +7377,7 @@
                                                                           "body": {
                                                                             "typeApplication": {
                                                                               "body": {"variable": "hydra.lib.eithers.either"},
-                                                                              "type": {
-                                                                                "application": {
-                                                                                  "argument": {"variable": "hydra.errors.Error"},
-                                                                                  "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                              "type": {"variable": "hydra.errors.Error"}}},
                                                                           "type": {
                                                                             "pair": {
                                                                               "first": {
@@ -7806,10 +7638,7 @@
                                                                               "application": {
                                                                                 "argument": {"literal": {"string": "INFERENCE ERROR: "}},
                                                                                 "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                                                        "domain": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "hydra.errors.Error"},
-                                                                            "function": {"variable": "hydra.context.InContext"}}},
+                                                                        "domain": {"variable": "hydra.errors.Error"},
                                                                         "parameter": "e"}}},
                                                                   "function": {
                                                                     "typeApplication": {
@@ -7818,10 +7647,7 @@
                                                                           "body": {
                                                                             "typeApplication": {
                                                                               "body": {"variable": "hydra.lib.eithers.either"},
-                                                                              "type": {
-                                                                                "application": {
-                                                                                  "argument": {"variable": "hydra.errors.Error"},
-                                                                                  "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                              "type": {"variable": "hydra.errors.Error"}}},
                                                                           "type": {
                                                                             "pair": {
                                                                               "first": {
@@ -8037,10 +7863,7 @@
                                                                               "application": {
                                                                                 "argument": {"literal": {"string": "INFERENCE ERROR: "}},
                                                                                 "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                                                        "domain": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "hydra.errors.Error"},
-                                                                            "function": {"variable": "hydra.context.InContext"}}},
+                                                                        "domain": {"variable": "hydra.errors.Error"},
                                                                         "parameter": "e"}}},
                                                                   "function": {
                                                                     "typeApplication": {
@@ -8049,10 +7872,7 @@
                                                                           "body": {
                                                                             "typeApplication": {
                                                                               "body": {"variable": "hydra.lib.eithers.either"},
-                                                                              "type": {
-                                                                                "application": {
-                                                                                  "argument": {"variable": "hydra.errors.Error"},
-                                                                                  "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                              "type": {"variable": "hydra.errors.Error"}}},
                                                                           "type": {
                                                                             "pair": {
                                                                               "first": {
@@ -8285,10 +8105,7 @@
                                                                               "application": {
                                                                                 "argument": {"literal": {"string": "INFERENCE ERROR: "}},
                                                                                 "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                                                        "domain": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "hydra.errors.Error"},
-                                                                            "function": {"variable": "hydra.context.InContext"}}},
+                                                                        "domain": {"variable": "hydra.errors.Error"},
                                                                         "parameter": "e"}}},
                                                                   "function": {
                                                                     "typeApplication": {
@@ -8297,10 +8114,7 @@
                                                                           "body": {
                                                                             "typeApplication": {
                                                                               "body": {"variable": "hydra.lib.eithers.either"},
-                                                                              "type": {
-                                                                                "application": {
-                                                                                  "argument": {"variable": "hydra.errors.Error"},
-                                                                                  "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                              "type": {"variable": "hydra.errors.Error"}}},
                                                                           "type": {
                                                                             "pair": {
                                                                               "first": {
@@ -8543,10 +8357,7 @@
                                                                               "application": {
                                                                                 "argument": {"literal": {"string": "INFERENCE ERROR: "}},
                                                                                 "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                                                        "domain": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "hydra.errors.Error"},
-                                                                            "function": {"variable": "hydra.context.InContext"}}},
+                                                                        "domain": {"variable": "hydra.errors.Error"},
                                                                         "parameter": "e"}}},
                                                                   "function": {
                                                                     "typeApplication": {
@@ -8555,10 +8366,7 @@
                                                                           "body": {
                                                                             "typeApplication": {
                                                                               "body": {"variable": "hydra.lib.eithers.either"},
-                                                                              "type": {
-                                                                                "application": {
-                                                                                  "argument": {"variable": "hydra.errors.Error"},
-                                                                                  "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                              "type": {"variable": "hydra.errors.Error"}}},
                                                                           "type": {
                                                                             "pair": {
                                                                               "first": {
@@ -8788,10 +8596,7 @@
                                                                               "application": {
                                                                                 "argument": {"literal": {"string": "INFERENCE ERROR: "}},
                                                                                 "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                                                        "domain": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "hydra.errors.Error"},
-                                                                            "function": {"variable": "hydra.context.InContext"}}},
+                                                                        "domain": {"variable": "hydra.errors.Error"},
                                                                         "parameter": "e"}}},
                                                                   "function": {
                                                                     "typeApplication": {
@@ -8800,10 +8605,7 @@
                                                                           "body": {
                                                                             "typeApplication": {
                                                                               "body": {"variable": "hydra.lib.eithers.either"},
-                                                                              "type": {
-                                                                                "application": {
-                                                                                  "argument": {"variable": "hydra.errors.Error"},
-                                                                                  "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                              "type": {"variable": "hydra.errors.Error"}}},
                                                                           "type": {
                                                                             "pair": {
                                                                               "first": {
@@ -8988,10 +8790,7 @@
                                                                               "application": {
                                                                                 "argument": {"literal": {"string": "INFERENCE ERROR: "}},
                                                                                 "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                                                        "domain": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "hydra.errors.Error"},
-                                                                            "function": {"variable": "hydra.context.InContext"}}},
+                                                                        "domain": {"variable": "hydra.errors.Error"},
                                                                         "parameter": "e"}}},
                                                                   "function": {
                                                                     "typeApplication": {
@@ -9000,10 +8799,7 @@
                                                                           "body": {
                                                                             "typeApplication": {
                                                                               "body": {"variable": "hydra.lib.eithers.either"},
-                                                                              "type": {
-                                                                                "application": {
-                                                                                  "argument": {"variable": "hydra.errors.Error"},
-                                                                                  "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                              "type": {"variable": "hydra.errors.Error"}}},
                                                                           "type": {
                                                                             "pair": {
                                                                               "first": {
@@ -9168,10 +8964,7 @@
                                                                               "application": {
                                                                                 "argument": {"literal": {"string": "INFERENCE ERROR: "}},
                                                                                 "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                                                        "domain": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "hydra.errors.Error"},
-                                                                            "function": {"variable": "hydra.context.InContext"}}},
+                                                                        "domain": {"variable": "hydra.errors.Error"},
                                                                         "parameter": "e"}}},
                                                                   "function": {
                                                                     "typeApplication": {
@@ -9180,10 +8973,7 @@
                                                                           "body": {
                                                                             "typeApplication": {
                                                                               "body": {"variable": "hydra.lib.eithers.either"},
-                                                                              "type": {
-                                                                                "application": {
-                                                                                  "argument": {"variable": "hydra.errors.Error"},
-                                                                                  "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                              "type": {"variable": "hydra.errors.Error"}}},
                                                                           "type": {
                                                                             "pair": {
                                                                               "first": {
@@ -9352,10 +9142,7 @@
                                                                               "application": {
                                                                                 "argument": {"literal": {"string": "INFERENCE ERROR: "}},
                                                                                 "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                                                        "domain": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "hydra.errors.Error"},
-                                                                            "function": {"variable": "hydra.context.InContext"}}},
+                                                                        "domain": {"variable": "hydra.errors.Error"},
                                                                         "parameter": "e"}}},
                                                                   "function": {
                                                                     "typeApplication": {
@@ -9364,10 +9151,7 @@
                                                                           "body": {
                                                                             "typeApplication": {
                                                                               "body": {"variable": "hydra.lib.eithers.either"},
-                                                                              "type": {
-                                                                                "application": {
-                                                                                  "argument": {"variable": "hydra.errors.Error"},
-                                                                                  "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                              "type": {"variable": "hydra.errors.Error"}}},
                                                                           "type": {
                                                                             "pair": {
                                                                               "first": {
@@ -9565,10 +9349,7 @@
                                                                               "application": {
                                                                                 "argument": {"literal": {"string": "INFERENCE ERROR: "}},
                                                                                 "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                                                        "domain": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "hydra.errors.Error"},
-                                                                            "function": {"variable": "hydra.context.InContext"}}},
+                                                                        "domain": {"variable": "hydra.errors.Error"},
                                                                         "parameter": "e"}}},
                                                                   "function": {
                                                                     "typeApplication": {
@@ -9577,10 +9358,7 @@
                                                                           "body": {
                                                                             "typeApplication": {
                                                                               "body": {"variable": "hydra.lib.eithers.either"},
-                                                                              "type": {
-                                                                                "application": {
-                                                                                  "argument": {"variable": "hydra.errors.Error"},
-                                                                                  "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                              "type": {"variable": "hydra.errors.Error"}}},
                                                                           "type": {
                                                                             "pair": {
                                                                               "first": {
@@ -9807,10 +9585,7 @@
                                                                               "application": {
                                                                                 "argument": {"literal": {"string": "INFERENCE ERROR: "}},
                                                                                 "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                                                        "domain": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "hydra.errors.Error"},
-                                                                            "function": {"variable": "hydra.context.InContext"}}},
+                                                                        "domain": {"variable": "hydra.errors.Error"},
                                                                         "parameter": "e"}}},
                                                                   "function": {
                                                                     "typeApplication": {
@@ -9819,10 +9594,7 @@
                                                                           "body": {
                                                                             "typeApplication": {
                                                                               "body": {"variable": "hydra.lib.eithers.either"},
-                                                                              "type": {
-                                                                                "application": {
-                                                                                  "argument": {"variable": "hydra.errors.Error"},
-                                                                                  "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                              "type": {"variable": "hydra.errors.Error"}}},
                                                                           "type": {
                                                                             "pair": {
                                                                               "first": {
@@ -10063,10 +9835,7 @@
                                                                               "application": {
                                                                                 "argument": {"literal": {"string": "INFERENCE ERROR: "}},
                                                                                 "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                                                        "domain": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "hydra.errors.Error"},
-                                                                            "function": {"variable": "hydra.context.InContext"}}},
+                                                                        "domain": {"variable": "hydra.errors.Error"},
                                                                         "parameter": "e"}}},
                                                                   "function": {
                                                                     "typeApplication": {
@@ -10075,10 +9844,7 @@
                                                                           "body": {
                                                                             "typeApplication": {
                                                                               "body": {"variable": "hydra.lib.eithers.either"},
-                                                                              "type": {
-                                                                                "application": {
-                                                                                  "argument": {"variable": "hydra.errors.Error"},
-                                                                                  "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                              "type": {"variable": "hydra.errors.Error"}}},
                                                                           "type": {
                                                                             "pair": {
                                                                               "first": {
@@ -10309,10 +10075,7 @@
                                                                   "application": {
                                                                     "argument": {"literal": {"string": "INFERENCE ERROR: "}},
                                                                     "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                                            "domain": {
-                                                              "application": {
-                                                                "argument": {"variable": "hydra.errors.Error"},
-                                                                "function": {"variable": "hydra.context.InContext"}}},
+                                                            "domain": {"variable": "hydra.errors.Error"},
                                                             "parameter": "e"}}},
                                                       "function": {
                                                         "typeApplication": {
@@ -10321,10 +10084,7 @@
                                                               "body": {
                                                                 "typeApplication": {
                                                                   "body": {"variable": "hydra.lib.eithers.either"},
-                                                                  "type": {
-                                                                    "application": {
-                                                                      "argument": {"variable": "hydra.errors.Error"},
-                                                                      "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                  "type": {"variable": "hydra.errors.Error"}}},
                                                               "type": {
                                                                 "pair": {
                                                                   "first": {
@@ -10489,10 +10249,7 @@
                                                                   "application": {
                                                                     "argument": {"literal": {"string": "INFERENCE ERROR: "}},
                                                                     "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                                            "domain": {
-                                                              "application": {
-                                                                "argument": {"variable": "hydra.errors.Error"},
-                                                                "function": {"variable": "hydra.context.InContext"}}},
+                                                            "domain": {"variable": "hydra.errors.Error"},
                                                             "parameter": "e"}}},
                                                       "function": {
                                                         "typeApplication": {
@@ -10501,10 +10258,7 @@
                                                               "body": {
                                                                 "typeApplication": {
                                                                   "body": {"variable": "hydra.lib.eithers.either"},
-                                                                  "type": {
-                                                                    "application": {
-                                                                      "argument": {"variable": "hydra.errors.Error"},
-                                                                      "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                  "type": {"variable": "hydra.errors.Error"}}},
                                                               "type": {
                                                                 "pair": {
                                                                   "first": {
@@ -10769,10 +10523,7 @@
                                                                   "application": {
                                                                     "argument": {"literal": {"string": "INFERENCE ERROR: "}},
                                                                     "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                                            "domain": {
-                                                              "application": {
-                                                                "argument": {"variable": "hydra.errors.Error"},
-                                                                "function": {"variable": "hydra.context.InContext"}}},
+                                                            "domain": {"variable": "hydra.errors.Error"},
                                                             "parameter": "e"}}},
                                                       "function": {
                                                         "typeApplication": {
@@ -10781,10 +10532,7 @@
                                                               "body": {
                                                                 "typeApplication": {
                                                                   "body": {"variable": "hydra.lib.eithers.either"},
-                                                                  "type": {
-                                                                    "application": {
-                                                                      "argument": {"variable": "hydra.errors.Error"},
-                                                                      "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                  "type": {"variable": "hydra.errors.Error"}}},
                                                               "type": {
                                                                 "pair": {
                                                                   "first": {
@@ -11038,10 +10786,7 @@
                                                                   "application": {
                                                                     "argument": {"literal": {"string": "INFERENCE ERROR: "}},
                                                                     "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                                            "domain": {
-                                                              "application": {
-                                                                "argument": {"variable": "hydra.errors.Error"},
-                                                                "function": {"variable": "hydra.context.InContext"}}},
+                                                            "domain": {"variable": "hydra.errors.Error"},
                                                             "parameter": "e"}}},
                                                       "function": {
                                                         "typeApplication": {
@@ -11050,10 +10795,7 @@
                                                               "body": {
                                                                 "typeApplication": {
                                                                   "body": {"variable": "hydra.lib.eithers.either"},
-                                                                  "type": {
-                                                                    "application": {
-                                                                      "argument": {"variable": "hydra.errors.Error"},
-                                                                      "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                  "type": {"variable": "hydra.errors.Error"}}},
                                                               "type": {
                                                                 "pair": {
                                                                   "first": {
@@ -11203,10 +10945,7 @@
                                                                   "application": {
                                                                     "argument": {"literal": {"string": "INFERENCE ERROR: "}},
                                                                     "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                                            "domain": {
-                                                              "application": {
-                                                                "argument": {"variable": "hydra.errors.Error"},
-                                                                "function": {"variable": "hydra.context.InContext"}}},
+                                                            "domain": {"variable": "hydra.errors.Error"},
                                                             "parameter": "e"}}},
                                                       "function": {
                                                         "typeApplication": {
@@ -11215,10 +10954,7 @@
                                                               "body": {
                                                                 "typeApplication": {
                                                                   "body": {"variable": "hydra.lib.eithers.either"},
-                                                                  "type": {
-                                                                    "application": {
-                                                                      "argument": {"variable": "hydra.errors.Error"},
-                                                                      "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                  "type": {"variable": "hydra.errors.Error"}}},
                                                               "type": {
                                                                 "pair": {
                                                                   "first": {
@@ -11427,10 +11163,7 @@
                                                                               "application": {
                                                                                 "argument": {"literal": {"string": "INFERENCE ERROR: "}},
                                                                                 "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                                                        "domain": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "hydra.errors.Error"},
-                                                                            "function": {"variable": "hydra.context.InContext"}}},
+                                                                        "domain": {"variable": "hydra.errors.Error"},
                                                                         "parameter": "e"}}},
                                                                   "function": {
                                                                     "typeApplication": {
@@ -11439,10 +11172,7 @@
                                                                           "body": {
                                                                             "typeApplication": {
                                                                               "body": {"variable": "hydra.lib.eithers.either"},
-                                                                              "type": {
-                                                                                "application": {
-                                                                                  "argument": {"variable": "hydra.errors.Error"},
-                                                                                  "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                              "type": {"variable": "hydra.errors.Error"}}},
                                                                           "type": {
                                                                             "pair": {
                                                                               "first": {
@@ -11663,10 +11393,7 @@
                                                                               "application": {
                                                                                 "argument": {"literal": {"string": "INFERENCE ERROR: "}},
                                                                                 "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                                                        "domain": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "hydra.errors.Error"},
-                                                                            "function": {"variable": "hydra.context.InContext"}}},
+                                                                        "domain": {"variable": "hydra.errors.Error"},
                                                                         "parameter": "e"}}},
                                                                   "function": {
                                                                     "typeApplication": {
@@ -11675,10 +11402,7 @@
                                                                           "body": {
                                                                             "typeApplication": {
                                                                               "body": {"variable": "hydra.lib.eithers.either"},
-                                                                              "type": {
-                                                                                "application": {
-                                                                                  "argument": {"variable": "hydra.errors.Error"},
-                                                                                  "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                              "type": {"variable": "hydra.errors.Error"}}},
                                                                           "type": {
                                                                             "pair": {
                                                                               "first": {
@@ -11891,10 +11615,7 @@
                                                                               "application": {
                                                                                 "argument": {"literal": {"string": "INFERENCE ERROR: "}},
                                                                                 "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                                                        "domain": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "hydra.errors.Error"},
-                                                                            "function": {"variable": "hydra.context.InContext"}}},
+                                                                        "domain": {"variable": "hydra.errors.Error"},
                                                                         "parameter": "e"}}},
                                                                   "function": {
                                                                     "typeApplication": {
@@ -11903,10 +11624,7 @@
                                                                           "body": {
                                                                             "typeApplication": {
                                                                               "body": {"variable": "hydra.lib.eithers.either"},
-                                                                              "type": {
-                                                                                "application": {
-                                                                                  "argument": {"variable": "hydra.errors.Error"},
-                                                                                  "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                              "type": {"variable": "hydra.errors.Error"}}},
                                                                           "type": {
                                                                             "pair": {
                                                                               "first": {
@@ -12093,10 +11811,7 @@
                                                                               "application": {
                                                                                 "argument": {"literal": {"string": "INFERENCE ERROR: "}},
                                                                                 "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                                                        "domain": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "hydra.errors.Error"},
-                                                                            "function": {"variable": "hydra.context.InContext"}}},
+                                                                        "domain": {"variable": "hydra.errors.Error"},
                                                                         "parameter": "e"}}},
                                                                   "function": {
                                                                     "typeApplication": {
@@ -12105,10 +11820,7 @@
                                                                           "body": {
                                                                             "typeApplication": {
                                                                               "body": {"variable": "hydra.lib.eithers.either"},
-                                                                              "type": {
-                                                                                "application": {
-                                                                                  "argument": {"variable": "hydra.errors.Error"},
-                                                                                  "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                              "type": {"variable": "hydra.errors.Error"}}},
                                                                           "type": {
                                                                             "pair": {
                                                                               "first": {
@@ -12350,10 +12062,7 @@
                                                                               "application": {
                                                                                 "argument": {"literal": {"string": "INFERENCE ERROR: "}},
                                                                                 "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                                                        "domain": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "hydra.errors.Error"},
-                                                                            "function": {"variable": "hydra.context.InContext"}}},
+                                                                        "domain": {"variable": "hydra.errors.Error"},
                                                                         "parameter": "e"}}},
                                                                   "function": {
                                                                     "typeApplication": {
@@ -12362,10 +12071,7 @@
                                                                           "body": {
                                                                             "typeApplication": {
                                                                               "body": {"variable": "hydra.lib.eithers.either"},
-                                                                              "type": {
-                                                                                "application": {
-                                                                                  "argument": {"variable": "hydra.errors.Error"},
-                                                                                  "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                              "type": {"variable": "hydra.errors.Error"}}},
                                                                           "type": {
                                                                             "pair": {
                                                                               "first": {
@@ -12619,10 +12325,7 @@
                                                                               "application": {
                                                                                 "argument": {"literal": {"string": "INFERENCE ERROR: "}},
                                                                                 "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                                                        "domain": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "hydra.errors.Error"},
-                                                                            "function": {"variable": "hydra.context.InContext"}}},
+                                                                        "domain": {"variable": "hydra.errors.Error"},
                                                                         "parameter": "e"}}},
                                                                   "function": {
                                                                     "typeApplication": {
@@ -12631,10 +12334,7 @@
                                                                           "body": {
                                                                             "typeApplication": {
                                                                               "body": {"variable": "hydra.lib.eithers.either"},
-                                                                              "type": {
-                                                                                "application": {
-                                                                                  "argument": {"variable": "hydra.errors.Error"},
-                                                                                  "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                              "type": {"variable": "hydra.errors.Error"}}},
                                                                           "type": {
                                                                             "pair": {
                                                                               "first": {
@@ -12898,10 +12598,7 @@
                                                                               "application": {
                                                                                 "argument": {"literal": {"string": "INFERENCE ERROR: "}},
                                                                                 "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                                                        "domain": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "hydra.errors.Error"},
-                                                                            "function": {"variable": "hydra.context.InContext"}}},
+                                                                        "domain": {"variable": "hydra.errors.Error"},
                                                                         "parameter": "e"}}},
                                                                   "function": {
                                                                     "typeApplication": {
@@ -12910,10 +12607,7 @@
                                                                           "body": {
                                                                             "typeApplication": {
                                                                               "body": {"variable": "hydra.lib.eithers.either"},
-                                                                              "type": {
-                                                                                "application": {
-                                                                                  "argument": {"variable": "hydra.errors.Error"},
-                                                                                  "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                              "type": {"variable": "hydra.errors.Error"}}},
                                                                           "type": {
                                                                             "pair": {
                                                                               "first": {
@@ -13139,10 +12833,7 @@
                                                                               "application": {
                                                                                 "argument": {"literal": {"string": "INFERENCE ERROR: "}},
                                                                                 "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                                                        "domain": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "hydra.errors.Error"},
-                                                                            "function": {"variable": "hydra.context.InContext"}}},
+                                                                        "domain": {"variable": "hydra.errors.Error"},
                                                                         "parameter": "e"}}},
                                                                   "function": {
                                                                     "typeApplication": {
@@ -13151,10 +12842,7 @@
                                                                           "body": {
                                                                             "typeApplication": {
                                                                               "body": {"variable": "hydra.lib.eithers.either"},
-                                                                              "type": {
-                                                                                "application": {
-                                                                                  "argument": {"variable": "hydra.errors.Error"},
-                                                                                  "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                              "type": {"variable": "hydra.errors.Error"}}},
                                                                           "type": {
                                                                             "pair": {
                                                                               "first": {
@@ -13427,10 +13115,7 @@
                                                                               "application": {
                                                                                 "argument": {"literal": {"string": "INFERENCE ERROR: "}},
                                                                                 "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                                                        "domain": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "hydra.errors.Error"},
-                                                                            "function": {"variable": "hydra.context.InContext"}}},
+                                                                        "domain": {"variable": "hydra.errors.Error"},
                                                                         "parameter": "e"}}},
                                                                   "function": {
                                                                     "typeApplication": {
@@ -13439,10 +13124,7 @@
                                                                           "body": {
                                                                             "typeApplication": {
                                                                               "body": {"variable": "hydra.lib.eithers.either"},
-                                                                              "type": {
-                                                                                "application": {
-                                                                                  "argument": {"variable": "hydra.errors.Error"},
-                                                                                  "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                              "type": {"variable": "hydra.errors.Error"}}},
                                                                           "type": {
                                                                             "pair": {
                                                                               "first": {
@@ -13643,10 +13325,7 @@
                                                                               "application": {
                                                                                 "argument": {"literal": {"string": "INFERENCE ERROR: "}},
                                                                                 "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                                                        "domain": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "hydra.errors.Error"},
-                                                                            "function": {"variable": "hydra.context.InContext"}}},
+                                                                        "domain": {"variable": "hydra.errors.Error"},
                                                                         "parameter": "e"}}},
                                                                   "function": {
                                                                     "typeApplication": {
@@ -13655,10 +13334,7 @@
                                                                           "body": {
                                                                             "typeApplication": {
                                                                               "body": {"variable": "hydra.lib.eithers.either"},
-                                                                              "type": {
-                                                                                "application": {
-                                                                                  "argument": {"variable": "hydra.errors.Error"},
-                                                                                  "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                              "type": {"variable": "hydra.errors.Error"}}},
                                                                           "type": {
                                                                             "pair": {
                                                                               "first": {
@@ -13878,10 +13554,7 @@
                                                                               "application": {
                                                                                 "argument": {"literal": {"string": "INFERENCE ERROR: "}},
                                                                                 "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                                                        "domain": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "hydra.errors.Error"},
-                                                                            "function": {"variable": "hydra.context.InContext"}}},
+                                                                        "domain": {"variable": "hydra.errors.Error"},
                                                                         "parameter": "e"}}},
                                                                   "function": {
                                                                     "typeApplication": {
@@ -13890,10 +13563,7 @@
                                                                           "body": {
                                                                             "typeApplication": {
                                                                               "body": {"variable": "hydra.lib.eithers.either"},
-                                                                              "type": {
-                                                                                "application": {
-                                                                                  "argument": {"variable": "hydra.errors.Error"},
-                                                                                  "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                              "type": {"variable": "hydra.errors.Error"}}},
                                                                           "type": {
                                                                             "pair": {
                                                                               "first": {
@@ -14082,10 +13752,7 @@
                                                                               "application": {
                                                                                 "argument": {"literal": {"string": "INFERENCE ERROR: "}},
                                                                                 "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                                                        "domain": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "hydra.errors.Error"},
-                                                                            "function": {"variable": "hydra.context.InContext"}}},
+                                                                        "domain": {"variable": "hydra.errors.Error"},
                                                                         "parameter": "e"}}},
                                                                   "function": {
                                                                     "typeApplication": {
@@ -14094,10 +13761,7 @@
                                                                           "body": {
                                                                             "typeApplication": {
                                                                               "body": {"variable": "hydra.lib.eithers.either"},
-                                                                              "type": {
-                                                                                "application": {
-                                                                                  "argument": {"variable": "hydra.errors.Error"},
-                                                                                  "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                              "type": {"variable": "hydra.errors.Error"}}},
                                                                           "type": {
                                                                             "pair": {
                                                                               "first": {
@@ -14284,10 +13948,7 @@
                                                                               "application": {
                                                                                 "argument": {"literal": {"string": "INFERENCE ERROR: "}},
                                                                                 "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                                                        "domain": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "hydra.errors.Error"},
-                                                                            "function": {"variable": "hydra.context.InContext"}}},
+                                                                        "domain": {"variable": "hydra.errors.Error"},
                                                                         "parameter": "e"}}},
                                                                   "function": {
                                                                     "typeApplication": {
@@ -14296,10 +13957,7 @@
                                                                           "body": {
                                                                             "typeApplication": {
                                                                               "body": {"variable": "hydra.lib.eithers.either"},
-                                                                              "type": {
-                                                                                "application": {
-                                                                                  "argument": {"variable": "hydra.errors.Error"},
-                                                                                  "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                              "type": {"variable": "hydra.errors.Error"}}},
                                                                           "type": {
                                                                             "pair": {
                                                                               "first": {
@@ -14510,10 +14168,7 @@
                                                                   "application": {
                                                                     "argument": {"literal": {"string": "INFERENCE ERROR: "}},
                                                                     "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                                            "domain": {
-                                                              "application": {
-                                                                "argument": {"variable": "hydra.errors.Error"},
-                                                                "function": {"variable": "hydra.context.InContext"}}},
+                                                            "domain": {"variable": "hydra.errors.Error"},
                                                             "parameter": "e"}}},
                                                       "function": {
                                                         "typeApplication": {
@@ -14522,10 +14177,7 @@
                                                               "body": {
                                                                 "typeApplication": {
                                                                   "body": {"variable": "hydra.lib.eithers.either"},
-                                                                  "type": {
-                                                                    "application": {
-                                                                      "argument": {"variable": "hydra.errors.Error"},
-                                                                      "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                  "type": {"variable": "hydra.errors.Error"}}},
                                                               "type": {
                                                                 "pair": {
                                                                   "first": {
@@ -14677,10 +14329,7 @@
                                                                   "application": {
                                                                     "argument": {"literal": {"string": "INFERENCE ERROR: "}},
                                                                     "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                                            "domain": {
-                                                              "application": {
-                                                                "argument": {"variable": "hydra.errors.Error"},
-                                                                "function": {"variable": "hydra.context.InContext"}}},
+                                                            "domain": {"variable": "hydra.errors.Error"},
                                                             "parameter": "e"}}},
                                                       "function": {
                                                         "typeApplication": {
@@ -14689,10 +14338,7 @@
                                                               "body": {
                                                                 "typeApplication": {
                                                                   "body": {"variable": "hydra.lib.eithers.either"},
-                                                                  "type": {
-                                                                    "application": {
-                                                                      "argument": {"variable": "hydra.errors.Error"},
-                                                                      "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                  "type": {"variable": "hydra.errors.Error"}}},
                                                               "type": {
                                                                 "pair": {
                                                                   "first": {

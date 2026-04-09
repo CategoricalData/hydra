@@ -59,6 +59,7 @@ import qualified Hydra.Sources.Kernel.Terms.Rewriting as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Constants as Constants
 import qualified Hydra.Sources.Kernel.Terms.Predicates as Predicates
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
+import qualified Hydra.Sources.Kernel.Terms.Show.Errors as ShowError
 import           Prelude hiding ((++))
 import qualified Data.Int                    as I
 import qualified Data.List                   as L
@@ -121,8 +122,8 @@ define :: String -> TTerm x -> TTermDefinition x
 define = definitionInModule module_
 
 -- | Bridge helper: format InContext DecodingError as a string
-formatDecodingError :: TTerm (InContext DecodingError -> String)
-formatDecodingError = "ic" ~> unwrap _DecodingError @@ Ctx.inContextObject (var "ic")
+formatDecodingError :: TTerm (DecodingError -> String)
+formatDecodingError = "e" ~> unwrap _DecodingError @@ var "e"
 
 --------------------------------------------------------------------------------
 -- Helper functions
@@ -135,12 +136,12 @@ formatDecodingError = "ic" ~> unwrap _DecodingError @@ Ctx.inContextObject (var 
 deannotateAndMatch :: TTerm (Maybe Term) -> [TTerm Field] -> TTerm Term
 deannotateAndMatch dflt cses = DC.lambda "cx" $ DC.lambda "raw" $
   DC.primitive _eithers_either
-    -- If Left (error string), convert to DecodingError
-    @@@ (DC.lambda "err" $ DC.left $ DC.wrap _DecodingError $ DC.var "err")
+    -- If Left (decoding error), propagate it
+    @@@ (DC.lambda "err" $ DC.left $ DC.var "err")
     -- If Right (stripped term), do the case match
     @@@ (DC.lambda "stripped" $ DC.cases _Term (DC.var "stripped") dflt cses)
-    -- Call stripAndDereferenceTermEither cx raw
-    @@@ (DC.ref Lexical.stripAndDereferenceTermEither @@@ DC.var "cx" @@@ DC.var "raw")
+    -- Call stripWithDecodingError cx raw (returns Either DecodingError Term)
+    @@@ (DC.ref ExtractCore.stripWithDecodingError @@@ DC.var "cx" @@@ DC.var "raw")
 
 -- | Helper to create a decoding error term from a message (object-level)
 -- Returns: Term.wrap (WrappedTerm "hydra.util.DecodingError" (Term.literal (Literal.string msg)))
@@ -152,12 +153,9 @@ decodingErrorTerm msg = DC.wrap _DecodingError $ DC.string msg
 leftError :: TTerm String -> TTerm Term
 leftError msg = DC.left $ decodingErrorTerm msg
 
--- | Helper to convert Either String Term to Either DecodingError Term
+-- | Helper to strip and dereference with DecodingError — delegates to the module-level definition
 stripWithDecodingError :: TTerm Graph -> TTerm Term -> TTerm (Either DecodingError Term)
-stripWithDecodingError g term = Eithers.bimap
-  (unaryFunction Error.decodingError)
-  ("x" ~> var "x")
-  (Lexical.stripAndDereferenceTermEither @@ g @@ term)
+stripWithDecodingError g term = ExtractCore.stripWithDecodingError @@ g @@ term
 
 --------------------------------------------------------------------------------
 -- Main decoder functions
@@ -509,11 +507,11 @@ decoderFullResultType = define "decoderFullResultType" $
 
 -- | Decode a single type binding into a decoder binding
 -- Decodes the Type from the binding's term, then generates decoder
-decodeBinding :: TTermDefinition (Context -> Graph -> Binding -> Either (InContext DecodingError) Binding)
+decodeBinding :: TTermDefinition (Context -> Graph -> Binding -> Either DecodingError Binding)
 decodeBinding = define "decodeBinding" $
   doc "Transform a type binding into a decoder binding" $
   "cx" ~> "graph" ~> "b" ~>
-    Eithers.bind (Ctx.withContext (var "cx") (decoderFor _Type @@ var "graph" @@ (Core.bindingTerm (var "b")))) (
+    Eithers.bind (decoderFor _Type @@ var "graph" @@ (Core.bindingTerm (var "b"))) (
       "typ" ~>
       right (Core.binding
         (decodeBindingName @@ (Core.bindingName (var "b")))
@@ -608,7 +606,7 @@ decodeLiteralType = define "decodeLiteralType" $
 
 -- | Transform a type module into a decoder module
 -- Returns Nothing if the module has no decodable type definitions
-decodeModule :: TTermDefinition (Context -> Graph -> Module -> Prelude.Either (InContext Error) (Maybe Module))
+decodeModule :: TTermDefinition (Context -> Graph -> Module -> Prelude.Either Error (Maybe Module))
 decodeModule = define "decodeModule" $
   doc "Transform a type module into a decoder module" $
   "cx" ~> "graph" ~> "mod" ~>
@@ -622,7 +620,7 @@ decodeModule = define "decodeModule" $
       (right nothing)
       ("decodedBindings" <<~ Eithers.mapList ("b" ~>
         Eithers.bimap
-          ("ic" ~> Ctx.inContext (Error.errorOther $ Error.otherError (unwrap _DecodingError @@ Ctx.inContextObject (var "ic"))) (Ctx.inContextContext (var "ic")))
+          ("_e" ~> Error.errorDecoding $ var "_e")
           ("x" ~> var "x")
           (decodeBinding @@ var "cx" @@ var "graph" @@ var "b")) (var "typeBindings") $
         -- Decoder modules need:
@@ -843,7 +841,7 @@ decodeType = define "decodeType" $
 decodeUnitType :: TTermDefinition Term
 decodeUnitType = define "decodeUnitType" $
   doc "Generate a decoder for the unit type" $
-  DC.ref ExtractCore.decodeUnit
+  DC.lambda "cx" $ DC.lambda "t" $ DC.ref ExtractCore.decodeUnit @@@ DC.var "cx" @@@ DC.var "t"
 
 -- | Generate a decoder for a union type with element name
 decodeUnionTypeNamed :: TTermDefinition (Name -> [FieldType] -> Term)
@@ -902,7 +900,7 @@ decodeWrappedType = define "decodeWrappedType" $
   "wt" ~> decodeWrappedTypeNamed @@ Core.name (string "unknown") @@ var "wt"
 
 -- | Filter bindings to only decodable type definitions
-filterTypeBindings :: TTermDefinition (Context -> Graph -> [Binding] -> Prelude.Either (InContext Error) [Binding])
+filterTypeBindings :: TTermDefinition (Context -> Graph -> [Binding] -> Prelude.Either Error [Binding])
 filterTypeBindings = define "filterTypeBindings" $
   doc "Filter bindings to only decodable type definitions" $
   "cx" ~> "graph" ~> "bindings" ~>
@@ -911,7 +909,7 @@ filterTypeBindings = define "filterTypeBindings" $
       primitive _lists_filter @@ Annotations.isNativeType @@ var "bindings"
 
 -- | Check if a binding is decodable and return Just binding if so, Nothing otherwise
-isDecodableBinding :: TTermDefinition (Context -> Graph -> Binding -> Prelude.Either (InContext Error) (Maybe Binding))
+isDecodableBinding :: TTermDefinition (Context -> Graph -> Binding -> Prelude.Either Error (Maybe Binding))
 isDecodableBinding = define "isDecodableBinding" $
   doc "Check if a binding is decodable (serializable type)" $
   "cx" ~> "graph" ~> "b" ~>

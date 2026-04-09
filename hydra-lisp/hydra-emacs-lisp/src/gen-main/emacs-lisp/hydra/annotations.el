@@ -36,15 +36,13 @@
 
 (require 'hydra.lib.sets)
 
-(require 'hydra.lib.strings)
-
 (require 'hydra.show.core)
 
 (require 'hydra.strip)
 
 (defvar hydra_annotations_aggregate_annotations (lambda (get_value) (lambda (get_x) (lambda (get_anns) (lambda (t_) (letrec ((to_pairs (lambda (rest) (lambda (t2) (funcall (funcall (hydra_lib_maybes_maybe (lambda () rest)) (lambda (yy) (funcall (to_pairs (funcall (hydra_lib_lists_cons (hydra_lib_maps_to_list (get_anns yy))) rest)) (get_x yy)))) (get_value t2)))))) (hydra_lib_maps_from_list (hydra_lib_lists_concat (funcall (to_pairs (list)) t_)))))))))
 
-(defvar hydra_annotations_get_description (lambda (cx) (lambda (graph) (lambda (anns) (funcall (funcall (hydra_lib_maybes_maybe (lambda () (list :right (list :nothing)))) (lambda (term) (funcall (hydra_lib_eithers_map hydra_lib_maybes_pure) (funcall (funcall (hydra_extract_core_string cx) graph) term)))) (funcall (hydra_lib_maps_lookup "description") anns))))))
+(defvar hydra_annotations_get_description (lambda (cx) (lambda (graph) (lambda (anns) (funcall (funcall (hydra_lib_maybes_maybe (lambda () (list :right (list :nothing)))) (lambda (term) (funcall (hydra_lib_eithers_map hydra_lib_maybes_pure) (funcall (hydra_extract_core_string graph) term)))) (funcall (hydra_lib_maps_lookup "description") anns))))))
 
 (defvar hydra_annotations_term_annotation_internal (lambda (term) (let ((get_ann (lambda (t_) (funcall (lambda (match_target) (funcall (lambda (match_value) (cond ((equal (car match_target) :annotated) (funcall (lambda (a) (list :just a)) match_value)) (t (list :nothing)))) (cadr match_target))) t_)))) (funcall (funcall (funcall (hydra_annotations_aggregate_annotations get_ann) (lambda (at) (funcall (lambda (v) (hydra_core_annotated_term-body v)) at))) (lambda (at) (funcall (lambda (v) (hydra_core_annotated_term-annotation v)) at))) term))))
 
@@ -60,15 +58,15 @@
 
 (defvar hydra_annotations_get_attr (lambda (key) (lambda (cx) (funcall (hydra_lib_maps_lookup key) (funcall (lambda (v) (hydra_context_context-other v)) cx)))))
 
-(defvar hydra_annotations_get_debug_id (lambda (cx) (funcall (funcall (hydra_lib_maybes_maybe (lambda () (list :right (list :nothing)))) (lambda (term) (funcall (hydra_lib_eithers_map hydra_lib_maybes_pure) (funcall (funcall (hydra_extract_core_string cx) (make-hydra_graph_graph hydra_lib_maps_empty hydra_lib_maps_empty hydra_lib_maps_empty hydra_lib_sets_empty hydra_lib_maps_empty hydra_lib_maps_empty hydra_lib_maps_empty hydra_lib_sets_empty)) term)))) (funcall (hydra_annotations_get_attr hydra_constants_key_debug_id) cx))))
+(defvar hydra_annotations_get_debug_id (lambda (cx) (funcall (funcall (hydra_lib_maybes_maybe (lambda () (list :right (list :nothing)))) (lambda (term) (funcall (hydra_lib_eithers_map hydra_lib_maybes_pure) (funcall (hydra_extract_core_string (make-hydra_graph_graph hydra_lib_maps_empty hydra_lib_maps_empty hydra_lib_maps_empty hydra_lib_sets_empty hydra_lib_maps_empty hydra_lib_maps_empty hydra_lib_maps_empty hydra_lib_sets_empty)) term)))) (funcall (hydra_annotations_get_attr hydra_constants_key_debug_id) cx))))
 
-(defvar hydra_annotations_debug_if (lambda (cx) (lambda (debug_id) (lambda (message) (funcall (hydra_lib_eithers_bind (hydra_annotations_get_debug_id cx)) (lambda (mid) (if (funcall (hydra_lib_equality_equal mid) (list :just debug_id)) (list :left (make-hydra_context_in_context (list :other message) cx)) (list :right nil))))))))
+(defvar hydra_annotations_debug_if (lambda (cx) (lambda (debug_id) (lambda (message) (funcall (hydra_lib_eithers_bind (hydra_annotations_get_debug_id cx)) (lambda (mid) (if (funcall (hydra_lib_equality_equal mid) (list :just debug_id)) (list :left (list :other message)) (list :right nil))))))))
 
 (defvar hydra_annotations_get_attr_with_default (lambda (key) (lambda (def_) (lambda (cx) (funcall (hydra_lib_maybes_from_maybe (lambda () def_)) (funcall (hydra_annotations_get_attr key) cx))))))
 
-(defvar hydra_annotations_has_flag (lambda (cx) (lambda (flag) (let ((term (funcall (funcall (hydra_annotations_get_attr_with_default flag) (list :literal (list :boolean nil))) cx))) (funcall (funcall (hydra_extract_core_boolean cx) (make-hydra_graph_graph hydra_lib_maps_empty hydra_lib_maps_empty hydra_lib_maps_empty hydra_lib_sets_empty hydra_lib_maps_empty hydra_lib_maps_empty hydra_lib_maps_empty hydra_lib_sets_empty)) term)))))
+(defvar hydra_annotations_has_flag (lambda (cx) (lambda (flag) (let ((term (funcall (funcall (hydra_annotations_get_attr_with_default flag) (list :literal (list :boolean nil))) cx))) (funcall (hydra_extract_core_boolean (make-hydra_graph_graph hydra_lib_maps_empty hydra_lib_maps_empty hydra_lib_maps_empty hydra_lib_sets_empty hydra_lib_maps_empty hydra_lib_maps_empty hydra_lib_maps_empty hydra_lib_sets_empty)) term)))))
 
-(defvar hydra_annotations_fail_on_flag (lambda (cx) (lambda (flag) (lambda (msg) (funcall (hydra_lib_eithers_bind (funcall (hydra_annotations_has_flag cx) flag)) (lambda (val) (if val (list :left (make-hydra_context_in_context (list :other msg) cx)) (list :right nil))))))))
+(defvar hydra_annotations_fail_on_flag (lambda (cx) (lambda (flag) (lambda (msg) (funcall (hydra_lib_eithers_bind (funcall (hydra_annotations_has_flag cx) flag)) (lambda (val) (if val (list :left (list :other msg)) (list :right nil))))))))
 
 (defvar hydra_annotations_get_count (lambda (key) (lambda (cx) (funcall (funcall (hydra_lib_maybes_maybe (lambda () 0)) (lambda (term) (funcall (lambda (match_target) (funcall (lambda (match_value) (cond ((equal (car match_target) :literal) (funcall (lambda (lit) (funcall (lambda (match_target) (funcall (lambda (match_value) (cond ((equal (car match_target) :integer) (funcall (lambda (iv) (funcall (lambda (match_target) (funcall (lambda (match_value) (cond ((equal (car match_target) :int32) (funcall (lambda (i) i) match_value)) (t 0))) (cadr match_target))) iv)) match_value)) (t 0))) (cadr match_target))) lit)) match_value)) (t 0))) (cadr match_target))) term))) (funcall (hydra_lib_maps_lookup key) (funcall (lambda (v) (hydra_context_context-other v)) cx))))))
 
@@ -78,7 +76,7 @@
 
 (defvar hydra_annotations_get_type_annotation (lambda (key) (lambda (typ) (funcall (hydra_lib_maps_lookup key) (hydra_annotations_type_annotation_internal typ)))))
 
-(defvar hydra_annotations_get_type_classes (lambda (cx) (lambda (graph) (lambda (term) (let ((decode_class (lambda (term2) (let ((by_name (hydra_lib_maps_from_list (list (list "equality" (list :equality nil)) (list "ordering" (list :ordering nil)))))) (funcall (hydra_lib_eithers_bind (funcall (funcall (funcall (hydra_extract_core_unit_variant cx) "hydra.classes.TypeClass") graph) term2)) (lambda (fn_) (funcall (funcall (hydra_lib_maybes_maybe (lambda () (list :left (make-hydra_context_in_context (list :other (funcall (hydra_lib_strings_cat2 "unexpected: expected type class, got ") (hydra_show_core_term term2))) cx)))) (lambda (x) (list :right x))) (funcall (hydra_lib_maps_lookup fn_) by_name)))))))) (funcall (funcall (hydra_lib_maybes_maybe (lambda () (list :right hydra_lib_maps_empty))) (lambda (term2) (funcall (funcall (funcall (funcall (hydra_extract_core_map cx) (lambda (t_) (funcall (funcall (hydra_lib_eithers_bimap (lambda (de) (make-hydra_context_in_context (list :other (funcall (lambda (v) v) de)) cx))) (lambda (x) x)) (funcall (hydra_decode_core_name graph) t_)))) (funcall (funcall (hydra_extract_core_set_of cx) decode_class) graph)) graph) term2))) (funcall (hydra_annotations_get_term_annotation hydra_constants_key_classes) term)))))))
+(defvar hydra_annotations_get_type_classes (lambda (cx) (lambda (graph) (lambda (term) (let ((decode_class (lambda (term2) (let ((by_name (hydra_lib_maps_from_list (list (list "equality" (list :equality nil)) (list "ordering" (list :ordering nil)))))) (funcall (hydra_lib_eithers_bind (funcall (funcall (hydra_extract_core_unit_variant "hydra.classes.TypeClass") graph) term2)) (lambda (fn_) (funcall (funcall (hydra_lib_maybes_maybe (lambda () (list :left (list :extraction (list :unexpected_shape (make-hydra_errors_unexpected_shape_error "type class" (hydra_show_core_term term2))))))) (lambda (x) (list :right x))) (funcall (hydra_lib_maps_lookup fn_) by_name)))))))) (funcall (funcall (hydra_lib_maybes_maybe (lambda () (list :right hydra_lib_maps_empty))) (lambda (term2) (funcall (funcall (funcall (hydra_extract_core_map (lambda (t_) (funcall (funcall (hydra_lib_eithers_bimap (lambda (de) (list :decoding de))) (lambda (x) x)) (funcall (hydra_decode_core_name graph) t_)))) (funcall (hydra_extract_core_set_of decode_class) graph)) graph) term2))) (funcall (hydra_annotations_get_term_annotation hydra_constants_key_classes) term)))))))
 
 (defvar hydra_annotations_has_description (lambda (anns) (hydra_lib_maybes_is_just (funcall (hydra_lib_maps_lookup hydra_constants_key_description) anns))))
 

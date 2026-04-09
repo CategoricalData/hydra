@@ -119,18 +119,18 @@ define :: String -> TTerm x -> TTermDefinition x
 define = definitionInModule module_
 
 -- | Bridge helper: format InContext DecodingError as a string
-formatDecodingError :: TTerm (InContext DecodingError -> String)
-formatDecodingError = "ic" ~> unwrap _DecodingError @@ Ctx.inContextObject (var "ic")
+formatDecodingError :: TTerm (DecodingError -> String)
+formatDecodingError = "e" ~> unwrap _DecodingError @@ var "e"
 
 -- | Encode a single type binding into an encoder binding
 -- This decodes the term to a Type, then generates an encoder function.
 -- Type variables that appear as Map keys or Set elements get Ord constraints
 -- via the encoder type scheme.
-encodeBinding :: TTermDefinition (Context -> Graph -> Binding -> Either (InContext DecodingError) Binding)
+encodeBinding :: TTermDefinition (Context -> Graph -> Binding -> Either DecodingError Binding)
 encodeBinding = define "encodeBinding" $
   doc "Transform a type binding into an encoder binding" $
   "cx" ~> "graph" ~> "b" ~>
-    Eithers.bind (Ctx.withContext (var "cx") (decoderFor _Type @@ var "graph" @@ (Core.bindingTerm (var "b")))) (
+    Eithers.bind (decoderFor _Type @@ var "graph" @@ (Core.bindingTerm (var "b"))) (
       "typ" ~>
       right (Core.binding
         (encodeBindingName @@ (Core.bindingName (var "b")))
@@ -494,7 +494,7 @@ encodeLiteralType = define "encodeLiteralType" $
 
 -- | Transform a type module into an encoder module
 -- Returns Nothing if the module has no encodable type definitions
-encodeModule :: TTermDefinition (Context -> Graph -> Module -> Prelude.Either (InContext Error) (Maybe Module))
+encodeModule :: TTermDefinition (Context -> Graph -> Module -> Prelude.Either Error (Maybe Module))
 encodeModule = define "encodeModule" $
   doc "Transform a type module into an encoder module" $
   "cx" ~> "graph" ~> "mod" ~>
@@ -508,7 +508,7 @@ encodeModule = define "encodeModule" $
       (right nothing)
       ("encodedBindings" <<~ Eithers.mapList ("b" ~>
         Eithers.bimap
-          ("ic" ~> Ctx.inContext (Error.errorOther $ Error.otherError (unwrap _DecodingError @@ Ctx.inContextObject (var "ic"))) (Ctx.inContextContext (var "ic")))
+          ("_e" ~> Error.errorDecoding $ var "_e")
           ("x" ~> var "x")
           (encodeBinding @@ var "cx" @@ var "graph" @@ var "b")) (var "typeBindings") $
         -- The encoder module depends on encoder modules for both the type and term dependencies
@@ -711,7 +711,7 @@ encodeWrappedType = define "encodeWrappedType" $
 
 -- | Filter bindings to only encodable type definitions
 -- A binding is encodable if it is a native type AND is serializable (no function types in dependencies)
-filterTypeBindings :: TTermDefinition (Context -> Graph -> [Binding] -> Prelude.Either (InContext Error) [Binding])
+filterTypeBindings :: TTermDefinition (Context -> Graph -> [Binding] -> Prelude.Either Error [Binding])
 filterTypeBindings = define "filterTypeBindings" $
   doc "Filter bindings to only encodable type definitions" $
   "cx" ~> "graph" ~> "bindings" ~>
@@ -721,7 +721,7 @@ filterTypeBindings = define "filterTypeBindings" $
         primitive _lists_filter @@ Annotations.isNativeType @@ var "bindings"
 
 -- | Check if a binding is encodable and return Just binding if so, Nothing otherwise
-isEncodableBinding :: TTermDefinition (Context -> Graph -> Binding -> Prelude.Either (InContext Error) (Maybe Binding))
+isEncodableBinding :: TTermDefinition (Context -> Graph -> Binding -> Prelude.Either Error (Maybe Binding))
 isEncodableBinding = define "isEncodableBinding" $
   doc "Check if a binding is encodable (serializable type)" $
   "cx" ~> "graph" ~> "b" ~>

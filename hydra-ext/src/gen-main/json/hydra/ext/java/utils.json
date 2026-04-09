@@ -321,305 +321,263 @@
       "term": {
         "name": "hydra.ext.java.utils.addJavaTypeParameter",
         "term": {
-          "function": {
-            "lambda": {
-              "body": {
-                "function": {
-                  "lambda": {
-                    "body": {
-                      "function": {
-                        "lambda": {
-                          "body": {
-                            "application": {
-                              "argument": {"variable": "t"},
-                              "function": {
-                                "function": {
-                                  "elimination": {
-                                    "union": {
-                                      "cases": [
-                                        {
-                                          "name": "reference",
-                                          "term": {
-                                            "function": {
-                                              "lambda": {
-                                                "body": {
-                                                  "application": {
-                                                    "argument": {"variable": "rt1"},
-                                                    "function": {
-                                                      "function": {
-                                                        "elimination": {
-                                                          "union": {
-                                                            "cases": [
-                                                              {
-                                                                "name": "classOrInterface",
-                                                                "term": {
-                                                                  "function": {
-                                                                    "lambda": {
-                                                                      "body": {
-                                                                        "application": {
-                                                                          "argument": {"variable": "cit"},
-                                                                          "function": {
-                                                                            "function": {
-                                                                              "elimination": {
-                                                                                "union": {
-                                                                                  "cases": [
-                                                                                    {
-                                                                                      "name": "class",
-                                                                                      "term": {
-                                                                                        "function": {
-                                                                                          "lambda": {
-                                                                                            "body": {
-                                                                                              "let": {
-                                                                                                "bindings": [
-                                                                                                  {
-                                                                                                    "name": "anns",
-                                                                                                    "term": {
-                                                                                                      "application": {
-                                                                                                        "argument": {"variable": "ct"},
-                                                                                                        "function": {
-                                                                                                          "function": {
-                                                                                                            "elimination": {
-                                                                                                              "record": {
-                                                                                                                "field": "annotations",
-                                                                                                                "typeName": "hydra.ext.java.syntax.ClassType"}}}}}},
-                                                                                                    "type": {
-                                                                                                      "type": {"list": {"variable": "hydra.ext.java.syntax.Annotation"}},
-                                                                                                      "variables": []}},
-                                                                                                  {
-                                                                                                    "name": "qual",
-                                                                                                    "term": {
-                                                                                                      "application": {
-                                                                                                        "argument": {"variable": "ct"},
-                                                                                                        "function": {
-                                                                                                          "function": {
-                                                                                                            "elimination": {
-                                                                                                              "record": {"field": "qualifier", "typeName": "hydra.ext.java.syntax.ClassType"}}}}}},
-                                                                                                    "type": {
-                                                                                                      "type": {"variable": "hydra.ext.java.syntax.ClassTypeQualifier"},
-                                                                                                      "variables": []}},
-                                                                                                  {
-                                                                                                    "name": "id",
-                                                                                                    "term": {
-                                                                                                      "application": {
-                                                                                                        "argument": {"variable": "ct"},
-                                                                                                        "function": {
-                                                                                                          "function": {
-                                                                                                            "elimination": {
-                                                                                                              "record": {"field": "identifier", "typeName": "hydra.ext.java.syntax.ClassType"}}}}}},
-                                                                                                    "type": {
-                                                                                                      "type": {"variable": "hydra.ext.java.syntax.TypeIdentifier"},
-                                                                                                      "variables": []}},
-                                                                                                  {
-                                                                                                    "name": "args",
-                                                                                                    "term": {
-                                                                                                      "application": {
-                                                                                                        "argument": {"variable": "ct"},
-                                                                                                        "function": {
-                                                                                                          "function": {
-                                                                                                            "elimination": {
-                                                                                                              "record": {"field": "arguments", "typeName": "hydra.ext.java.syntax.ClassType"}}}}}},
-                                                                                                    "type": {
-                                                                                                      "type": {"list": {"variable": "hydra.ext.java.syntax.TypeArgument"}},
-                                                                                                      "variables": []}}],
+          "typeLambda": {
+            "body": {
+              "function": {
+                "lambda": {
+                  "body": {
+                    "function": {
+                      "lambda": {
+                        "body": {
+                          "function": {
+                            "lambda": {
+                              "body": {
+                                "application": {
+                                  "argument": {"variable": "t"},
+                                  "function": {
+                                    "function": {
+                                      "elimination": {
+                                        "union": {
+                                          "cases": [
+                                            {
+                                              "name": "reference",
+                                              "term": {
+                                                "function": {
+                                                  "lambda": {
+                                                    "body": {
+                                                      "application": {
+                                                        "argument": {"variable": "rt1"},
+                                                        "function": {
+                                                          "function": {
+                                                            "elimination": {
+                                                              "union": {
+                                                                "cases": [
+                                                                  {
+                                                                    "name": "classOrInterface",
+                                                                    "term": {
+                                                                      "function": {
+                                                                        "lambda": {
+                                                                          "body": {
+                                                                            "application": {
+                                                                              "argument": {"variable": "cit"},
+                                                                              "function": {
+                                                                                "function": {
+                                                                                  "elimination": {
+                                                                                    "union": {
+                                                                                      "cases": [
+                                                                                        {
+                                                                                          "name": "class",
+                                                                                          "term": {
+                                                                                            "function": {
+                                                                                              "lambda": {
+                                                                                                "body": {
+                                                                                                  "let": {
+                                                                                                    "bindings": [
+                                                                                                      {
+                                                                                                        "name": "anns",
+                                                                                                        "term": {
+                                                                                                          "application": {
+                                                                                                            "argument": {"variable": "ct"},
+                                                                                                            "function": {
+                                                                                                              "function": {
+                                                                                                                "elimination": {
+                                                                                                                  "record": {
+                                                                                                                    "field": "annotations",
+                                                                                                                    "typeName": "hydra.ext.java.syntax.ClassType"}}}}}},
+                                                                                                        "type": {
+                                                                                                          "type": {"list": {"variable": "hydra.ext.java.syntax.Annotation"}},
+                                                                                                          "variables": []}},
+                                                                                                      {
+                                                                                                        "name": "qual",
+                                                                                                        "term": {
+                                                                                                          "application": {
+                                                                                                            "argument": {"variable": "ct"},
+                                                                                                            "function": {
+                                                                                                              "function": {
+                                                                                                                "elimination": {
+                                                                                                                  "record": {"field": "qualifier", "typeName": "hydra.ext.java.syntax.ClassType"}}}}}},
+                                                                                                        "type": {
+                                                                                                          "type": {"variable": "hydra.ext.java.syntax.ClassTypeQualifier"},
+                                                                                                          "variables": []}},
+                                                                                                      {
+                                                                                                        "name": "id",
+                                                                                                        "term": {
+                                                                                                          "application": {
+                                                                                                            "argument": {"variable": "ct"},
+                                                                                                            "function": {
+                                                                                                              "function": {
+                                                                                                                "elimination": {
+                                                                                                                  "record": {"field": "identifier", "typeName": "hydra.ext.java.syntax.ClassType"}}}}}},
+                                                                                                        "type": {
+                                                                                                          "type": {"variable": "hydra.ext.java.syntax.TypeIdentifier"},
+                                                                                                          "variables": []}},
+                                                                                                      {
+                                                                                                        "name": "args",
+                                                                                                        "term": {
+                                                                                                          "application": {
+                                                                                                            "argument": {"variable": "ct"},
+                                                                                                            "function": {
+                                                                                                              "function": {
+                                                                                                                "elimination": {
+                                                                                                                  "record": {"field": "arguments", "typeName": "hydra.ext.java.syntax.ClassType"}}}}}},
+                                                                                                        "type": {
+                                                                                                          "type": {"list": {"variable": "hydra.ext.java.syntax.TypeArgument"}},
+                                                                                                          "variables": []}}],
+                                                                                                    "body": {
+                                                                                                      "typeApplication": {
+                                                                                                        "body": {
+                                                                                                          "typeApplication": {
+                                                                                                            "body": {
+                                                                                                              "either": {
+                                                                                                                "@right": {
+                                                                                                                  "union": {
+                                                                                                                    "field": {
+                                                                                                                      "name": "reference",
+                                                                                                                      "term": {
+                                                                                                                        "union": {
+                                                                                                                          "field": {
+                                                                                                                            "name": "classOrInterface",
+                                                                                                                            "term": {
+                                                                                                                              "union": {
+                                                                                                                                "field": {
+                                                                                                                                  "name": "class",
+                                                                                                                                  "term": {
+                                                                                                                                    "record": {
+                                                                                                                                      "fields": [
+                                                                                                                                        {"name": "annotations", "term": {"variable": "anns"}},
+                                                                                                                                        {"name": "qualifier", "term": {"variable": "qual"}},
+                                                                                                                                        {"name": "identifier", "term": {"variable": "id"}},
+                                                                                                                                        {
+                                                                                                                                          "name": "arguments",
+                                                                                                                                          "term": {
+                                                                                                                                            "application": {
+                                                                                                                                              "argument": {
+                                                                                                                                                "list": [
+                                                                                                                                                  {
+                                                                                                                                                    "union": {
+                                                                                                                                                      "field": {"name": "reference", "term": {"variable": "rt"}},
+                                                                                                                                                      "typeName": "hydra.ext.java.syntax.TypeArgument"}}]},
+                                                                                                                                              "function": {
+                                                                                                                                                "application": {
+                                                                                                                                                  "argument": {"variable": "args"},
+                                                                                                                                                  "function": {
+                                                                                                                                                    "typeApplication": {
+                                                                                                                                                      "body": {"variable": "hydra.lib.lists.concat2"},
+                                                                                                                                                      "type": {"variable": "hydra.ext.java.syntax.TypeArgument"}}}}}}}}],
+                                                                                                                                      "typeName": "hydra.ext.java.syntax.ClassType"}}},
+                                                                                                                                "typeName": "hydra.ext.java.syntax.ClassOrInterfaceType"}}},
+                                                                                                                          "typeName": "hydra.ext.java.syntax.ReferenceType"}}},
+                                                                                                                    "typeName": "hydra.ext.java.syntax.Type"}}}},
+                                                                                                            "type": {"variable": "hydra.errors.Error"}}},
+                                                                                                        "type": {"variable": "hydra.ext.java.syntax.Type"}}}}},
+                                                                                                "domain": {"variable": "hydra.ext.java.syntax.ClassType"},
+                                                                                                "parameter": "ct"}}}},
+                                                                                        {
+                                                                                          "name": "interface",
+                                                                                          "term": {
+                                                                                            "function": {
+                                                                                              "lambda": {
                                                                                                 "body": {
                                                                                                   "typeApplication": {
                                                                                                     "body": {
                                                                                                       "typeApplication": {
                                                                                                         "body": {
                                                                                                           "either": {
-                                                                                                            "@right": {
+                                                                                                            "@left": {
                                                                                                               "union": {
                                                                                                                 "field": {
-                                                                                                                  "name": "reference",
+                                                                                                                  "name": "other",
                                                                                                                   "term": {
-                                                                                                                    "union": {
-                                                                                                                      "field": {
-                                                                                                                        "name": "classOrInterface",
-                                                                                                                        "term": {
-                                                                                                                          "union": {
-                                                                                                                            "field": {
-                                                                                                                              "name": "class",
-                                                                                                                              "term": {
-                                                                                                                                "record": {
-                                                                                                                                  "fields": [
-                                                                                                                                    {"name": "annotations", "term": {"variable": "anns"}},
-                                                                                                                                    {"name": "qualifier", "term": {"variable": "qual"}},
-                                                                                                                                    {"name": "identifier", "term": {"variable": "id"}},
-                                                                                                                                    {
-                                                                                                                                      "name": "arguments",
-                                                                                                                                      "term": {
-                                                                                                                                        "application": {
-                                                                                                                                          "argument": {
-                                                                                                                                            "list": [
-                                                                                                                                              {
-                                                                                                                                                "union": {
-                                                                                                                                                  "field": {"name": "reference", "term": {"variable": "rt"}},
-                                                                                                                                                  "typeName": "hydra.ext.java.syntax.TypeArgument"}}]},
-                                                                                                                                          "function": {
-                                                                                                                                            "application": {
-                                                                                                                                              "argument": {"variable": "args"},
-                                                                                                                                              "function": {
-                                                                                                                                                "typeApplication": {
-                                                                                                                                                  "body": {"variable": "hydra.lib.lists.concat2"},
-                                                                                                                                                  "type": {"variable": "hydra.ext.java.syntax.TypeArgument"}}}}}}}}],
-                                                                                                                                  "typeName": "hydra.ext.java.syntax.ClassType"}}},
-                                                                                                                            "typeName": "hydra.ext.java.syntax.ClassOrInterfaceType"}}},
-                                                                                                                      "typeName": "hydra.ext.java.syntax.ReferenceType"}}},
-                                                                                                                "typeName": "hydra.ext.java.syntax.Type"}}}},
-                                                                                                        "type": {
-                                                                                                          "application": {
-                                                                                                            "argument": {"variable": "hydra.errors.Error"},
-                                                                                                            "function": {"variable": "hydra.context.InContext"}}}}},
-                                                                                                    "type": {"variable": "hydra.ext.java.syntax.Type"}}}}},
-                                                                                            "domain": {"variable": "hydra.ext.java.syntax.ClassType"},
-                                                                                            "parameter": "ct"}}}},
-                                                                                    {
-                                                                                      "name": "interface",
-                                                                                      "term": {
-                                                                                        "function": {
-                                                                                          "lambda": {
-                                                                                            "body": {
-                                                                                              "typeApplication": {
+                                                                                                                    "wrap": {
+                                                                                                                      "body": {"literal": {"string": "expected a Java class type"}},
+                                                                                                                      "typeName": "hydra.errors.OtherError"}}},
+                                                                                                                "typeName": "hydra.errors.Error"}}}},
+                                                                                                        "type": {"variable": "hydra.errors.Error"}}},
+                                                                                                    "type": {"variable": "hydra.ext.java.syntax.Type"}}},
+                                                                                                "domain": {"variable": "hydra.ext.java.syntax.InterfaceType"},
+                                                                                                "parameter": "_"}}}}],
+                                                                                      "typeName": "hydra.ext.java.syntax.ClassOrInterfaceType"}}}}}},
+                                                                          "domain": {"variable": "hydra.ext.java.syntax.ClassOrInterfaceType"},
+                                                                          "parameter": "cit"}}}},
+                                                                  {
+                                                                    "name": "variable",
+                                                                    "term": {
+                                                                      "function": {
+                                                                        "lambda": {
+                                                                          "body": {
+                                                                            "typeApplication": {
+                                                                              "body": {
+                                                                                "typeApplication": {
+                                                                                  "body": {
+                                                                                    "either": {
+                                                                                      "@right": {
+                                                                                        "application": {
+                                                                                          "argument": {"variable": "tv"},
+                                                                                          "function": {"variable": "hydra.ext.java.utils.javaTypeVariableToType"}}}}},
+                                                                                  "type": {"variable": "hydra.errors.Error"}}},
+                                                                              "type": {"variable": "hydra.ext.java.syntax.Type"}}},
+                                                                          "domain": {"variable": "hydra.ext.java.syntax.TypeVariable"},
+                                                                          "parameter": "tv"}}}},
+                                                                  {
+                                                                    "name": "array",
+                                                                    "term": {
+                                                                      "function": {
+                                                                        "lambda": {
+                                                                          "body": {
+                                                                            "typeApplication": {
+                                                                              "body": {
+                                                                                "typeApplication": {
+                                                                                  "body": {
+                                                                                    "either": {
+                                                                                      "@left": {
+                                                                                        "union": {
+                                                                                          "field": {
+                                                                                            "name": "other",
+                                                                                            "term": {
+                                                                                              "wrap": {
                                                                                                 "body": {
-                                                                                                  "typeApplication": {
-                                                                                                    "body": {
-                                                                                                      "either": {
-                                                                                                        "@left": {
-                                                                                                          "typeApplication": {
-                                                                                                            "body": {
-                                                                                                              "record": {
-                                                                                                                "fields": [
-                                                                                                                  {
-                                                                                                                    "name": "object",
-                                                                                                                    "term": {
-                                                                                                                      "union": {
-                                                                                                                        "field": {
-                                                                                                                          "name": "other",
-                                                                                                                          "term": {
-                                                                                                                            "wrap": {
-                                                                                                                              "body": {"literal": {"string": "expected a Java class type"}},
-                                                                                                                              "typeName": "hydra.errors.OtherError"}}},
-                                                                                                                        "typeName": "hydra.errors.Error"}}},
-                                                                                                                  {"name": "context", "term": {"variable": "cx"}}],
-                                                                                                                "typeName": "hydra.context.InContext"}},
-                                                                                                            "type": {"variable": "hydra.errors.Error"}}}}},
-                                                                                                    "type": {
-                                                                                                      "application": {
-                                                                                                        "argument": {"variable": "hydra.errors.Error"},
-                                                                                                        "function": {"variable": "hydra.context.InContext"}}}}},
-                                                                                                "type": {"variable": "hydra.ext.java.syntax.Type"}}},
-                                                                                            "domain": {"variable": "hydra.ext.java.syntax.InterfaceType"},
-                                                                                            "parameter": "_"}}}}],
-                                                                                  "typeName": "hydra.ext.java.syntax.ClassOrInterfaceType"}}}}}},
-                                                                      "domain": {"variable": "hydra.ext.java.syntax.ClassOrInterfaceType"},
-                                                                      "parameter": "cit"}}}},
-                                                              {
-                                                                "name": "variable",
-                                                                "term": {
-                                                                  "function": {
-                                                                    "lambda": {
-                                                                      "body": {
-                                                                        "typeApplication": {
-                                                                          "body": {
-                                                                            "typeApplication": {
-                                                                              "body": {
-                                                                                "either": {
-                                                                                  "@right": {
-                                                                                    "application": {
-                                                                                      "argument": {"variable": "tv"},
-                                                                                      "function": {"variable": "hydra.ext.java.utils.javaTypeVariableToType"}}}}},
-                                                                              "type": {
-                                                                                "application": {
-                                                                                  "argument": {"variable": "hydra.errors.Error"},
-                                                                                  "function": {"variable": "hydra.context.InContext"}}}}},
-                                                                          "type": {"variable": "hydra.ext.java.syntax.Type"}}},
-                                                                      "domain": {"variable": "hydra.ext.java.syntax.TypeVariable"},
-                                                                      "parameter": "tv"}}}},
-                                                              {
-                                                                "name": "array",
-                                                                "term": {
-                                                                  "function": {
-                                                                    "lambda": {
-                                                                      "body": {
-                                                                        "typeApplication": {
-                                                                          "body": {
-                                                                            "typeApplication": {
-                                                                              "body": {
-                                                                                "either": {
-                                                                                  "@left": {
-                                                                                    "typeApplication": {
-                                                                                      "body": {
-                                                                                        "record": {
-                                                                                          "fields": [
-                                                                                            {
-                                                                                              "name": "object",
-                                                                                              "term": {
-                                                                                                "union": {
-                                                                                                  "field": {
-                                                                                                    "name": "other",
-                                                                                                    "term": {
-                                                                                                      "wrap": {
-                                                                                                        "body": {
-                                                                                                          "literal": {"string": "expected a Java class or interface type, or a variable"}},
-                                                                                                        "typeName": "hydra.errors.OtherError"}}},
-                                                                                                  "typeName": "hydra.errors.Error"}}},
-                                                                                            {"name": "context", "term": {"variable": "cx"}}],
-                                                                                          "typeName": "hydra.context.InContext"}},
-                                                                                      "type": {"variable": "hydra.errors.Error"}}}}},
-                                                                              "type": {
-                                                                                "application": {
-                                                                                  "argument": {"variable": "hydra.errors.Error"},
-                                                                                  "function": {"variable": "hydra.context.InContext"}}}}},
-                                                                          "type": {"variable": "hydra.ext.java.syntax.Type"}}},
-                                                                      "domain": {"variable": "hydra.ext.java.syntax.ArrayType"},
-                                                                      "parameter": "_"}}}}],
-                                                            "typeName": "hydra.ext.java.syntax.ReferenceType"}}}}}},
-                                                "domain": {"variable": "hydra.ext.java.syntax.ReferenceType"},
-                                                "parameter": "rt1"}}}},
-                                        {
-                                          "name": "primitive",
-                                          "term": {
-                                            "function": {
-                                              "lambda": {
-                                                "body": {
-                                                  "typeApplication": {
+                                                                                                  "literal": {"string": "expected a Java class or interface type, or a variable"}},
+                                                                                                "typeName": "hydra.errors.OtherError"}}},
+                                                                                          "typeName": "hydra.errors.Error"}}}},
+                                                                                  "type": {"variable": "hydra.errors.Error"}}},
+                                                                              "type": {"variable": "hydra.ext.java.syntax.Type"}}},
+                                                                          "domain": {"variable": "hydra.ext.java.syntax.ArrayType"},
+                                                                          "parameter": "_"}}}}],
+                                                                "typeName": "hydra.ext.java.syntax.ReferenceType"}}}}}},
+                                                    "domain": {"variable": "hydra.ext.java.syntax.ReferenceType"},
+                                                    "parameter": "rt1"}}}},
+                                            {
+                                              "name": "primitive",
+                                              "term": {
+                                                "function": {
+                                                  "lambda": {
                                                     "body": {
                                                       "typeApplication": {
                                                         "body": {
-                                                          "either": {
-                                                            "@left": {
-                                                              "typeApplication": {
-                                                                "body": {
-                                                                  "record": {
-                                                                    "fields": [
-                                                                      {
-                                                                        "name": "object",
-                                                                        "term": {
-                                                                          "union": {
-                                                                            "field": {
-                                                                              "name": "other",
-                                                                              "term": {
-                                                                                "wrap": {
-                                                                                  "body": {"literal": {"string": "expected a reference type"}},
-                                                                                  "typeName": "hydra.errors.OtherError"}}},
-                                                                            "typeName": "hydra.errors.Error"}}},
-                                                                      {"name": "context", "term": {"variable": "cx"}}],
-                                                                    "typeName": "hydra.context.InContext"}},
-                                                                "type": {"variable": "hydra.errors.Error"}}}}},
-                                                        "type": {
-                                                          "application": {
-                                                            "argument": {"variable": "hydra.errors.Error"},
-                                                            "function": {"variable": "hydra.context.InContext"}}}}},
-                                                    "type": {"variable": "hydra.ext.java.syntax.Type"}}},
-                                                "domain": {"variable": "hydra.ext.java.syntax.PrimitiveTypeWithAnnotations"},
-                                                "parameter": "_"}}}}],
-                                      "typeName": "hydra.ext.java.syntax.Type"}}}}}},
-                          "domain": {"variable": "hydra.context.Context"},
-                          "parameter": "cx"}}},
-                    "domain": {"variable": "hydra.ext.java.syntax.Type"},
-                    "parameter": "t"}}},
-              "domain": {"variable": "hydra.ext.java.syntax.ReferenceType"},
-              "parameter": "rt"}}},
+                                                          "typeApplication": {
+                                                            "body": {
+                                                              "either": {
+                                                                "@left": {
+                                                                  "union": {
+                                                                    "field": {
+                                                                      "name": "other",
+                                                                      "term": {
+                                                                        "wrap": {
+                                                                          "body": {"literal": {"string": "expected a reference type"}},
+                                                                          "typeName": "hydra.errors.OtherError"}}},
+                                                                    "typeName": "hydra.errors.Error"}}}},
+                                                            "type": {"variable": "hydra.errors.Error"}}},
+                                                        "type": {"variable": "hydra.ext.java.syntax.Type"}}},
+                                                    "domain": {"variable": "hydra.ext.java.syntax.PrimitiveTypeWithAnnotations"},
+                                                    "parameter": "_"}}}}],
+                                          "typeName": "hydra.ext.java.syntax.Type"}}}}}},
+                              "domain": {"variable": "t0"},
+                              "parameter": "cx"}}},
+                        "domain": {"variable": "hydra.ext.java.syntax.Type"},
+                        "parameter": "t"}}},
+                  "domain": {"variable": "hydra.ext.java.syntax.ReferenceType"},
+                  "parameter": "rt"}}},
+            "parameter": "t0"}},
         "type": {
           "type": {
             "function": {
@@ -629,15 +587,12 @@
                     "function": {
                       "codomain": {
                         "either": {
-                          "left": {
-                            "application": {
-                              "argument": {"variable": "hydra.errors.Error"},
-                              "function": {"variable": "hydra.context.InContext"}}},
+                          "left": {"variable": "hydra.errors.Error"},
                           "right": {"variable": "hydra.ext.java.syntax.Type"}}},
-                      "domain": {"variable": "hydra.context.Context"}}},
+                      "domain": {"variable": "t0"}}},
                   "domain": {"variable": "hydra.ext.java.syntax.Type"}}},
               "domain": {"variable": "hydra.ext.java.syntax.ReferenceType"}}},
-          "variables": []}}},
+          "variables": ["t0"]}}},
     {
       "term": {
         "name": "hydra.ext.java.utils.addVarRename",
@@ -5803,78 +5758,65 @@
       "term": {
         "name": "hydra.ext.java.utils.javaTypeToJavaReferenceType",
         "term": {
-          "function": {
-            "lambda": {
-              "body": {
-                "function": {
-                  "lambda": {
-                    "body": {
-                      "application": {
-                        "argument": {"variable": "t"},
-                        "function": {
-                          "function": {
-                            "elimination": {
-                              "union": {
-                                "cases": [
-                                  {
-                                    "name": "reference",
-                                    "term": {
-                                      "function": {
-                                        "lambda": {
-                                          "body": {
-                                            "typeApplication": {
-                                              "body": {
-                                                "typeApplication": {
-                                                  "body": {"either": {"@right": {"variable": "rt"}}},
-                                                  "type": {
-                                                    "application": {
-                                                      "argument": {"variable": "hydra.errors.Error"},
-                                                      "function": {"variable": "hydra.context.InContext"}}}}},
-                                              "type": {"variable": "hydra.ext.java.syntax.ReferenceType"}}},
-                                          "domain": {"variable": "hydra.ext.java.syntax.ReferenceType"},
-                                          "parameter": "rt"}}}},
-                                  {
-                                    "name": "primitive",
-                                    "term": {
-                                      "function": {
-                                        "lambda": {
-                                          "body": {
-                                            "typeApplication": {
+          "typeLambda": {
+            "body": {
+              "function": {
+                "lambda": {
+                  "body": {
+                    "function": {
+                      "lambda": {
+                        "body": {
+                          "application": {
+                            "argument": {"variable": "t"},
+                            "function": {
+                              "function": {
+                                "elimination": {
+                                  "union": {
+                                    "cases": [
+                                      {
+                                        "name": "reference",
+                                        "term": {
+                                          "function": {
+                                            "lambda": {
                                               "body": {
                                                 "typeApplication": {
                                                   "body": {
-                                                    "either": {
-                                                      "@left": {
-                                                        "typeApplication": {
-                                                          "body": {
-                                                            "record": {
-                                                              "fields": [
-                                                                {
-                                                                  "name": "object",
-                                                                  "term": {
-                                                                    "union": {
-                                                                      "field": {
-                                                                        "name": "other",
-                                                                        "term": {
-                                                                          "wrap": {
-                                                                            "body": {"literal": {"string": "expected a Java reference type"}},
-                                                                            "typeName": "hydra.errors.OtherError"}}},
-                                                                      "typeName": "hydra.errors.Error"}}},
-                                                                {"name": "context", "term": {"variable": "cx"}}],
-                                                              "typeName": "hydra.context.InContext"}},
-                                                          "type": {"variable": "hydra.errors.Error"}}}}},
-                                                  "type": {
-                                                    "application": {
-                                                      "argument": {"variable": "hydra.errors.Error"},
-                                                      "function": {"variable": "hydra.context.InContext"}}}}},
-                                              "type": {"variable": "hydra.ext.java.syntax.ReferenceType"}}},
-                                          "domain": {"variable": "hydra.ext.java.syntax.PrimitiveTypeWithAnnotations"},
-                                          "parameter": "_"}}}}],
-                                "typeName": "hydra.ext.java.syntax.Type"}}}}}},
-                    "domain": {"variable": "hydra.context.Context"},
-                    "parameter": "cx"}}},
-              "domain": {"variable": "hydra.ext.java.syntax.Type"},
-              "parameter": "t"}}},
+                                                    "typeApplication": {
+                                                      "body": {"either": {"@right": {"variable": "rt"}}},
+                                                      "type": {"variable": "hydra.errors.Error"}}},
+                                                  "type": {"variable": "hydra.ext.java.syntax.ReferenceType"}}},
+                                              "domain": {"variable": "hydra.ext.java.syntax.ReferenceType"},
+                                              "parameter": "rt"}}}},
+                                      {
+                                        "name": "primitive",
+                                        "term": {
+                                          "function": {
+                                            "lambda": {
+                                              "body": {
+                                                "typeApplication": {
+                                                  "body": {
+                                                    "typeApplication": {
+                                                      "body": {
+                                                        "either": {
+                                                          "@left": {
+                                                            "union": {
+                                                              "field": {
+                                                                "name": "other",
+                                                                "term": {
+                                                                  "wrap": {
+                                                                    "body": {"literal": {"string": "expected a Java reference type"}},
+                                                                    "typeName": "hydra.errors.OtherError"}}},
+                                                              "typeName": "hydra.errors.Error"}}}},
+                                                      "type": {"variable": "hydra.errors.Error"}}},
+                                                  "type": {"variable": "hydra.ext.java.syntax.ReferenceType"}}},
+                                              "domain": {"variable": "hydra.ext.java.syntax.PrimitiveTypeWithAnnotations"},
+                                              "parameter": "_"}}}}],
+                                    "typeName": "hydra.ext.java.syntax.Type"}}}}}},
+                        "domain": {"variable": "t0"},
+                        "parameter": "cx"}}},
+                  "domain": {"variable": "hydra.ext.java.syntax.Type"},
+                  "parameter": "t"}}},
+            "parameter": "t0"}},
         "type": {
           "type": {
             "function": {
@@ -5882,14 +5824,11 @@
                 "function": {
                   "codomain": {
                     "either": {
-                      "left": {
-                        "application": {
-                          "argument": {"variable": "hydra.errors.Error"},
-                          "function": {"variable": "hydra.context.InContext"}}},
+                      "left": {"variable": "hydra.errors.Error"},
                       "right": {"variable": "hydra.ext.java.syntax.ReferenceType"}}},
-                  "domain": {"variable": "hydra.context.Context"}}},
+                  "domain": {"variable": "t0"}}},
               "domain": {"variable": "hydra.ext.java.syntax.Type"}}},
-          "variables": []}}},
+          "variables": ["t0"]}}},
     {
       "term": {
         "name": "hydra.ext.java.utils.javaTypeToJavaResult",
@@ -8032,137 +7971,39 @@
       "term": {
         "name": "hydra.ext.java.utils.toJavaArrayType",
         "term": {
-          "function": {
-            "lambda": {
-              "body": {
-                "function": {
-                  "lambda": {
-                    "body": {
-                      "application": {
-                        "argument": {"variable": "t"},
-                        "function": {
-                          "function": {
-                            "elimination": {
-                              "union": {
-                                "cases": [
-                                  {
-                                    "name": "reference",
-                                    "term": {
-                                      "function": {
-                                        "lambda": {
-                                          "body": {
-                                            "application": {
-                                              "argument": {"variable": "rt"},
-                                              "function": {
-                                                "function": {
-                                                  "elimination": {
-                                                    "union": {
-                                                      "cases": [
-                                                        {
-                                                          "name": "classOrInterface",
-                                                          "term": {
-                                                            "function": {
-                                                              "lambda": {
-                                                                "body": {
-                                                                  "typeApplication": {
-                                                                    "body": {
-                                                                      "typeApplication": {
-                                                                        "body": {
-                                                                          "either": {
-                                                                            "@right": {
-                                                                              "union": {
-                                                                                "field": {
-                                                                                  "name": "reference",
-                                                                                  "term": {
-                                                                                    "union": {
-                                                                                      "field": {
-                                                                                        "name": "array",
-                                                                                        "term": {
-                                                                                          "record": {
-                                                                                            "fields": [
-                                                                                              {
-                                                                                                "name": "dims",
-                                                                                                "term": {
-                                                                                                  "wrap": {
-                                                                                                    "body": {
-                                                                                                      "list": [
-                                                                                                        {
-                                                                                                          "typeApplication": {
-                                                                                                            "body": {"list": []},
-                                                                                                            "type": {"variable": "hydra.ext.java.syntax.Annotation"}}}]},
-                                                                                                    "typeName": "hydra.ext.java.syntax.Dims"}}},
-                                                                                              {
-                                                                                                "name": "variant",
-                                                                                                "term": {
-                                                                                                  "union": {
-                                                                                                    "field": {"name": "classOrInterface", "term": {"variable": "cit"}},
-                                                                                                    "typeName": "hydra.ext.java.syntax.ArrayType_Variant"}}}],
-                                                                                            "typeName": "hydra.ext.java.syntax.ArrayType"}}},
-                                                                                      "typeName": "hydra.ext.java.syntax.ReferenceType"}}},
-                                                                                "typeName": "hydra.ext.java.syntax.Type"}}}},
-                                                                        "type": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "hydra.errors.Error"},
-                                                                            "function": {"variable": "hydra.context.InContext"}}}}},
-                                                                    "type": {"variable": "hydra.ext.java.syntax.Type"}}},
-                                                                "domain": {"variable": "hydra.ext.java.syntax.ClassOrInterfaceType"},
-                                                                "parameter": "cit"}}}},
-                                                        {
-                                                          "name": "array",
-                                                          "term": {
-                                                            "function": {
-                                                              "lambda": {
-                                                                "body": {
-                                                                  "let": {
-                                                                    "bindings": [
-                                                                      {
-                                                                        "name": "oldDims",
-                                                                        "term": {
-                                                                          "application": {
-                                                                            "argument": {
-                                                                              "application": {
-                                                                                "argument": {"variable": "at"},
-                                                                                "function": {
-                                                                                  "function": {
-                                                                                    "elimination": {
-                                                                                      "record": {"field": "dims", "typeName": "hydra.ext.java.syntax.ArrayType"}}}}}},
-                                                                            "function": {"function": {"elimination": {"wrap": "hydra.ext.java.syntax.Dims"}}}}},
-                                                                        "type": {
-                                                                          "type": {"list": {"list": {"variable": "hydra.ext.java.syntax.Annotation"}}},
-                                                                          "variables": []}},
-                                                                      {
-                                                                        "name": "newDims",
-                                                                        "term": {
-                                                                          "wrap": {
-                                                                            "body": {
-                                                                              "application": {
-                                                                                "argument": {
-                                                                                  "list": [
-                                                                                    {
-                                                                                      "typeApplication": {
-                                                                                        "body": {"list": []},
-                                                                                        "type": {"variable": "hydra.ext.java.syntax.Annotation"}}}]},
-                                                                                "function": {
-                                                                                  "application": {
-                                                                                    "argument": {"variable": "oldDims"},
-                                                                                    "function": {
-                                                                                      "typeApplication": {
-                                                                                        "body": {"variable": "hydra.lib.lists.concat2"},
-                                                                                        "type": {"list": {"variable": "hydra.ext.java.syntax.Annotation"}}}}}}}},
-                                                                            "typeName": "hydra.ext.java.syntax.Dims"}},
-                                                                        "type": {"type": {"variable": "hydra.ext.java.syntax.Dims"}, "variables": []}},
-                                                                      {
-                                                                        "name": "variant",
-                                                                        "term": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "at"},
-                                                                            "function": {
-                                                                              "function": {
-                                                                                "elimination": {
-                                                                                  "record": {"field": "variant", "typeName": "hydra.ext.java.syntax.ArrayType"}}}}}},
-                                                                        "type": {
-                                                                          "type": {"variable": "hydra.ext.java.syntax.ArrayType_Variant"},
-                                                                          "variables": []}}],
+          "typeLambda": {
+            "body": {
+              "function": {
+                "lambda": {
+                  "body": {
+                    "function": {
+                      "lambda": {
+                        "body": {
+                          "application": {
+                            "argument": {"variable": "t"},
+                            "function": {
+                              "function": {
+                                "elimination": {
+                                  "union": {
+                                    "cases": [
+                                      {
+                                        "name": "reference",
+                                        "term": {
+                                          "function": {
+                                            "lambda": {
+                                              "body": {
+                                                "application": {
+                                                  "argument": {"variable": "rt"},
+                                                  "function": {
+                                                    "function": {
+                                                      "elimination": {
+                                                        "union": {
+                                                          "cases": [
+                                                            {
+                                                              "name": "classOrInterface",
+                                                              "term": {
+                                                                "function": {
+                                                                  "lambda": {
                                                                     "body": {
                                                                       "typeApplication": {
                                                                         "body": {
@@ -8180,103 +8021,172 @@
                                                                                             "term": {
                                                                                               "record": {
                                                                                                 "fields": [
-                                                                                                  {"name": "dims", "term": {"variable": "newDims"}},
-                                                                                                  {"name": "variant", "term": {"variable": "variant"}}],
+                                                                                                  {
+                                                                                                    "name": "dims",
+                                                                                                    "term": {
+                                                                                                      "wrap": {
+                                                                                                        "body": {
+                                                                                                          "list": [
+                                                                                                            {
+                                                                                                              "typeApplication": {
+                                                                                                                "body": {"list": []},
+                                                                                                                "type": {"variable": "hydra.ext.java.syntax.Annotation"}}}]},
+                                                                                                        "typeName": "hydra.ext.java.syntax.Dims"}}},
+                                                                                                  {
+                                                                                                    "name": "variant",
+                                                                                                    "term": {
+                                                                                                      "union": {
+                                                                                                        "field": {"name": "classOrInterface", "term": {"variable": "cit"}},
+                                                                                                        "typeName": "hydra.ext.java.syntax.ArrayType_Variant"}}}],
                                                                                                 "typeName": "hydra.ext.java.syntax.ArrayType"}}},
                                                                                           "typeName": "hydra.ext.java.syntax.ReferenceType"}}},
                                                                                     "typeName": "hydra.ext.java.syntax.Type"}}}},
-                                                                            "type": {
+                                                                            "type": {"variable": "hydra.errors.Error"}}},
+                                                                        "type": {"variable": "hydra.ext.java.syntax.Type"}}},
+                                                                    "domain": {"variable": "hydra.ext.java.syntax.ClassOrInterfaceType"},
+                                                                    "parameter": "cit"}}}},
+                                                            {
+                                                              "name": "array",
+                                                              "term": {
+                                                                "function": {
+                                                                  "lambda": {
+                                                                    "body": {
+                                                                      "let": {
+                                                                        "bindings": [
+                                                                          {
+                                                                            "name": "oldDims",
+                                                                            "term": {
                                                                               "application": {
-                                                                                "argument": {"variable": "hydra.errors.Error"},
-                                                                                "function": {"variable": "hydra.context.InContext"}}}}},
-                                                                        "type": {"variable": "hydra.ext.java.syntax.Type"}}}}},
-                                                                "domain": {"variable": "hydra.ext.java.syntax.ArrayType"},
-                                                                "parameter": "at"}}}},
-                                                        {
-                                                          "name": "variable",
-                                                          "term": {
-                                                            "function": {
-                                                              "lambda": {
-                                                                "body": {
-                                                                  "typeApplication": {
+                                                                                "argument": {
+                                                                                  "application": {
+                                                                                    "argument": {"variable": "at"},
+                                                                                    "function": {
+                                                                                      "function": {
+                                                                                        "elimination": {
+                                                                                          "record": {"field": "dims", "typeName": "hydra.ext.java.syntax.ArrayType"}}}}}},
+                                                                                "function": {"function": {"elimination": {"wrap": "hydra.ext.java.syntax.Dims"}}}}},
+                                                                            "type": {
+                                                                              "type": {"list": {"list": {"variable": "hydra.ext.java.syntax.Annotation"}}},
+                                                                              "variables": []}},
+                                                                          {
+                                                                            "name": "newDims",
+                                                                            "term": {
+                                                                              "wrap": {
+                                                                                "body": {
+                                                                                  "application": {
+                                                                                    "argument": {
+                                                                                      "list": [
+                                                                                        {
+                                                                                          "typeApplication": {
+                                                                                            "body": {"list": []},
+                                                                                            "type": {"variable": "hydra.ext.java.syntax.Annotation"}}}]},
+                                                                                    "function": {
+                                                                                      "application": {
+                                                                                        "argument": {"variable": "oldDims"},
+                                                                                        "function": {
+                                                                                          "typeApplication": {
+                                                                                            "body": {"variable": "hydra.lib.lists.concat2"},
+                                                                                            "type": {"list": {"variable": "hydra.ext.java.syntax.Annotation"}}}}}}}},
+                                                                                "typeName": "hydra.ext.java.syntax.Dims"}},
+                                                                            "type": {"type": {"variable": "hydra.ext.java.syntax.Dims"}, "variables": []}},
+                                                                          {
+                                                                            "name": "variant",
+                                                                            "term": {
+                                                                              "application": {
+                                                                                "argument": {"variable": "at"},
+                                                                                "function": {
+                                                                                  "function": {
+                                                                                    "elimination": {
+                                                                                      "record": {"field": "variant", "typeName": "hydra.ext.java.syntax.ArrayType"}}}}}},
+                                                                            "type": {
+                                                                              "type": {"variable": "hydra.ext.java.syntax.ArrayType_Variant"},
+                                                                              "variables": []}}],
+                                                                        "body": {
+                                                                          "typeApplication": {
+                                                                            "body": {
+                                                                              "typeApplication": {
+                                                                                "body": {
+                                                                                  "either": {
+                                                                                    "@right": {
+                                                                                      "union": {
+                                                                                        "field": {
+                                                                                          "name": "reference",
+                                                                                          "term": {
+                                                                                            "union": {
+                                                                                              "field": {
+                                                                                                "name": "array",
+                                                                                                "term": {
+                                                                                                  "record": {
+                                                                                                    "fields": [
+                                                                                                      {"name": "dims", "term": {"variable": "newDims"}},
+                                                                                                      {"name": "variant", "term": {"variable": "variant"}}],
+                                                                                                    "typeName": "hydra.ext.java.syntax.ArrayType"}}},
+                                                                                              "typeName": "hydra.ext.java.syntax.ReferenceType"}}},
+                                                                                        "typeName": "hydra.ext.java.syntax.Type"}}}},
+                                                                                "type": {"variable": "hydra.errors.Error"}}},
+                                                                            "type": {"variable": "hydra.ext.java.syntax.Type"}}}}},
+                                                                    "domain": {"variable": "hydra.ext.java.syntax.ArrayType"},
+                                                                    "parameter": "at"}}}},
+                                                            {
+                                                              "name": "variable",
+                                                              "term": {
+                                                                "function": {
+                                                                  "lambda": {
                                                                     "body": {
                                                                       "typeApplication": {
                                                                         "body": {
-                                                                          "either": {
-                                                                            "@left": {
-                                                                              "typeApplication": {
-                                                                                "body": {
-                                                                                  "record": {
-                                                                                    "fields": [
-                                                                                      {
-                                                                                        "name": "object",
-                                                                                        "term": {
-                                                                                          "union": {
-                                                                                            "field": {
-                                                                                              "name": "other",
-                                                                                              "term": {
-                                                                                                "wrap": {
-                                                                                                  "body": {
-                                                                                                    "literal": {
-                                                                                                      "string": "don't know how to make Java reference type into array type"}},
-                                                                                                  "typeName": "hydra.errors.OtherError"}}},
-                                                                                            "typeName": "hydra.errors.Error"}}},
-                                                                                      {"name": "context", "term": {"variable": "cx"}}],
-                                                                                    "typeName": "hydra.context.InContext"}},
-                                                                                "type": {"variable": "hydra.errors.Error"}}}}},
-                                                                        "type": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "hydra.errors.Error"},
-                                                                            "function": {"variable": "hydra.context.InContext"}}}}},
-                                                                    "type": {"variable": "hydra.ext.java.syntax.Type"}}},
-                                                                "domain": {"variable": "hydra.ext.java.syntax.TypeVariable"},
-                                                                "parameter": "_"}}}}],
-                                                      "typeName": "hydra.ext.java.syntax.ReferenceType"}}}}}},
-                                          "domain": {"variable": "hydra.ext.java.syntax.ReferenceType"},
-                                          "parameter": "rt"}}}},
-                                  {
-                                    "name": "primitive",
-                                    "term": {
-                                      "function": {
-                                        "lambda": {
-                                          "body": {
-                                            "typeApplication": {
+                                                                          "typeApplication": {
+                                                                            "body": {
+                                                                              "either": {
+                                                                                "@left": {
+                                                                                  "union": {
+                                                                                    "field": {
+                                                                                      "name": "other",
+                                                                                      "term": {
+                                                                                        "wrap": {
+                                                                                          "body": {
+                                                                                            "literal": {
+                                                                                              "string": "don't know how to make Java reference type into array type"}},
+                                                                                          "typeName": "hydra.errors.OtherError"}}},
+                                                                                    "typeName": "hydra.errors.Error"}}}},
+                                                                            "type": {"variable": "hydra.errors.Error"}}},
+                                                                        "type": {"variable": "hydra.ext.java.syntax.Type"}}},
+                                                                    "domain": {"variable": "hydra.ext.java.syntax.TypeVariable"},
+                                                                    "parameter": "_"}}}}],
+                                                          "typeName": "hydra.ext.java.syntax.ReferenceType"}}}}}},
+                                              "domain": {"variable": "hydra.ext.java.syntax.ReferenceType"},
+                                              "parameter": "rt"}}}},
+                                      {
+                                        "name": "primitive",
+                                        "term": {
+                                          "function": {
+                                            "lambda": {
                                               "body": {
                                                 "typeApplication": {
                                                   "body": {
-                                                    "either": {
-                                                      "@left": {
-                                                        "typeApplication": {
-                                                          "body": {
-                                                            "record": {
-                                                              "fields": [
-                                                                {
-                                                                  "name": "object",
-                                                                  "term": {
-                                                                    "union": {
-                                                                      "field": {
-                                                                        "name": "other",
-                                                                        "term": {
-                                                                          "wrap": {
-                                                                            "body": {
-                                                                              "literal": {"string": "don't know how to make Java type into array type"}},
-                                                                            "typeName": "hydra.errors.OtherError"}}},
-                                                                      "typeName": "hydra.errors.Error"}}},
-                                                                {"name": "context", "term": {"variable": "cx"}}],
-                                                              "typeName": "hydra.context.InContext"}},
-                                                          "type": {"variable": "hydra.errors.Error"}}}}},
-                                                  "type": {
-                                                    "application": {
-                                                      "argument": {"variable": "hydra.errors.Error"},
-                                                      "function": {"variable": "hydra.context.InContext"}}}}},
-                                              "type": {"variable": "hydra.ext.java.syntax.Type"}}},
-                                          "domain": {"variable": "hydra.ext.java.syntax.PrimitiveTypeWithAnnotations"},
-                                          "parameter": "_"}}}}],
-                                "typeName": "hydra.ext.java.syntax.Type"}}}}}},
-                    "domain": {"variable": "hydra.context.Context"},
-                    "parameter": "cx"}}},
-              "domain": {"variable": "hydra.ext.java.syntax.Type"},
-              "parameter": "t"}}},
+                                                    "typeApplication": {
+                                                      "body": {
+                                                        "either": {
+                                                          "@left": {
+                                                            "union": {
+                                                              "field": {
+                                                                "name": "other",
+                                                                "term": {
+                                                                  "wrap": {
+                                                                    "body": {
+                                                                      "literal": {"string": "don't know how to make Java type into array type"}},
+                                                                    "typeName": "hydra.errors.OtherError"}}},
+                                                              "typeName": "hydra.errors.Error"}}}},
+                                                      "type": {"variable": "hydra.errors.Error"}}},
+                                                  "type": {"variable": "hydra.ext.java.syntax.Type"}}},
+                                              "domain": {"variable": "hydra.ext.java.syntax.PrimitiveTypeWithAnnotations"},
+                                              "parameter": "_"}}}}],
+                                    "typeName": "hydra.ext.java.syntax.Type"}}}}}},
+                        "domain": {"variable": "t0"},
+                        "parameter": "cx"}}},
+                  "domain": {"variable": "hydra.ext.java.syntax.Type"},
+                  "parameter": "t"}}},
+            "parameter": "t0"}},
         "type": {
           "type": {
             "function": {
@@ -8284,14 +8194,11 @@
                 "function": {
                   "codomain": {
                     "either": {
-                      "left": {
-                        "application": {
-                          "argument": {"variable": "hydra.errors.Error"},
-                          "function": {"variable": "hydra.context.InContext"}}},
+                      "left": {"variable": "hydra.errors.Error"},
                       "right": {"variable": "hydra.ext.java.syntax.Type"}}},
-                  "domain": {"variable": "hydra.context.Context"}}},
+                  "domain": {"variable": "t0"}}},
               "domain": {"variable": "hydra.ext.java.syntax.Type"}}},
-          "variables": []}}},
+          "variables": ["t0"]}}},
     {
       "term": {
         "name": "hydra.ext.java.utils.typeParameterToReferenceType",

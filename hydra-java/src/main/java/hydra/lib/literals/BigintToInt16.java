@@ -15,7 +15,6 @@ import java.util.function.Function;
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.scheme;
 import hydra.context.Context;
-import hydra.context.InContext;
 import hydra.errors.Error_;
 import hydra.util.Either;
 
@@ -46,8 +45,8 @@ public class BigintToInt16 extends PrimitiveFunction {
      * @return a function that converts bigint terms to int16 terms
      */
     @Override
-    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Map.apply(s -> Terms.int16(apply(s)), hydra.extract.Core.bigint(cx, graph, args.get(0)));
+    protected Function<List<Term>, Function<Context, Function<Graph, Either<Error_, Term>>>> implementation() {
+        return args -> cx -> graph -> hydra.lib.eithers.Map.apply(s -> Terms.int16(apply(s)), hydra.extract.Core.bigint(graph, args.get(0)));
     }
 
     /**

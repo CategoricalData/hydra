@@ -257,7 +257,7 @@ emptyMetadata ns =
       Environment_.pythonModuleMetadataUsesTypeVar = False}
 
 -- | Encode a function application to a Python expression
-encodeApplication :: Context.Context -> Environment_.PythonEnvironment -> Core.Application -> Either (Context.InContext Errors.Error) Syntax.Expression
+encodeApplication :: Context.Context -> Environment_.PythonEnvironment -> Core.Application -> Either Errors.Error Syntax.Expression
 encodeApplication cx env app =
 
       let g = pythonEnvironmentGetGraph env
@@ -278,7 +278,7 @@ encodeApplication cx env app =
           in (Right pyapp)))))
 
 -- | Inner helper for encodeApplication
-encodeApplicationInner :: Context.Context -> Environment_.PythonEnvironment -> Core.Term -> [Syntax.Expression] -> [Syntax.Expression] -> Either (Context.InContext Errors.Error) (Syntax.Expression, [Syntax.Expression])
+encodeApplicationInner :: Context.Context -> Environment_.PythonEnvironment -> Core.Term -> [Syntax.Expression] -> [Syntax.Expression] -> Either Errors.Error (Syntax.Expression, [Syntax.Expression])
 encodeApplicationInner cx env fun hargs rargs =
 
       let firstArg = Lists.head hargs
@@ -343,7 +343,7 @@ encodeApplicationType env at =
       in (Eithers.bind (encodeType env body) (\pyBody -> Eithers.bind (Eithers.mapList (encodeType env) args) (\pyArgs -> Right (Utils.primaryAndParams (Utils.pyExpressionToPyPrimary pyBody) pyArgs))))
 
 -- | Encode a binding as a Python statement (function definition or assignment)
-encodeBindingAs :: Context.Context -> Environment_.PythonEnvironment -> Core.Binding -> Either (Context.InContext Errors.Error) Syntax.Statement
+encodeBindingAs :: Context.Context -> Environment_.PythonEnvironment -> Core.Binding -> Either Errors.Error Syntax.Statement
 encodeBindingAs cx env binding =
 
       let name1 = Core.bindingName binding
@@ -501,7 +501,7 @@ encodeBindingAs cx env binding =
         in (encodeTermAssignment cx env name1 term1 ts normComment))) mts)
 
 -- | Encode a binding as a walrus operator assignment
-encodeBindingAsAssignment :: Context.Context -> Bool -> Environment_.PythonEnvironment -> Core.Binding -> Either (Context.InContext Errors.Error) Syntax.NamedExpression
+encodeBindingAsAssignment :: Context.Context -> Bool -> Environment_.PythonEnvironment -> Core.Binding -> Either Errors.Error Syntax.NamedExpression
 encodeBindingAsAssignment cx allowThunking env binding =
 
       let name = Core.bindingName binding
@@ -583,7 +583,7 @@ encodeDefaultCaseBlock encodeTerm isFull mdflt tname =
           Syntax.caseBlockBody = body}]))
 
 -- | Encode a definition (term or type) to Python statements
-encodeDefinition :: Context.Context -> Environment_.PythonEnvironment -> Packaging.Definition -> Either (Context.InContext Errors.Error) [[Syntax.Statement]]
+encodeDefinition :: Context.Context -> Environment_.PythonEnvironment -> Packaging.Definition -> Either Errors.Error [[Syntax.Statement]]
 encodeDefinition cx env def_ =
     case def_ of
       Packaging.DefinitionTerm v0 ->
@@ -607,7 +607,7 @@ encodeDefinition cx env def_ =
           in (encodeTypeAssignment cx env name typ normComment)))
 
 -- | Encode an enum value assignment statement with optional comment
-encodeEnumValueAssignment :: Context.Context -> Environment_.PythonEnvironment -> Core.FieldType -> Either (Context.InContext Errors.Error) [Syntax.Statement]
+encodeEnumValueAssignment :: t0 -> Environment_.PythonEnvironment -> Core.FieldType -> Either Errors.Error [Syntax.Statement]
 encodeEnumValueAssignment cx env fieldType =
 
       let fname = Core.fieldTypeName fieldType
@@ -633,7 +633,7 @@ encodeField cx env field encodeTerm =
       in (Eithers.bind (encodeTerm fterm) (\pterm -> Right (Names.encodeFieldName env fname, pterm)))
 
 -- | Encode a field type for record definitions (field: type annotation)
-encodeFieldType :: Context.Context -> Environment_.PythonEnvironment -> Core.FieldType -> Either (Context.InContext Errors.Error) Syntax.Statement
+encodeFieldType :: t0 -> Environment_.PythonEnvironment -> Core.FieldType -> Either Errors.Error Syntax.Statement
 encodeFieldType cx env fieldType =
 
       let fname = Core.fieldTypeName fieldType
@@ -722,7 +722,7 @@ encodeForallType env lt =
             Syntax.comparisonRhs = []})]])) params))))
 
 -- | Encode a function term to a Python expression
-encodeFunction :: Context.Context -> Environment_.PythonEnvironment -> Core.Function -> Either (Context.InContext Errors.Error) Syntax.Expression
+encodeFunction :: Context.Context -> Environment_.PythonEnvironment -> Core.Function -> Either Errors.Error Syntax.Expression
 encodeFunction cx env f =
     case f of
       Core.FunctionLambda v0 -> Eithers.bind (analyzePythonFunction cx env (Core.TermFunction (Core.FunctionLambda v0))) (\fs ->
@@ -803,7 +803,7 @@ encodeFunction cx env f =
         Core.EliminationUnion _ -> Right (unsupportedExpression "case expressions as values are not yet supported")
 
 -- | Encode a function definition with parameters and body
-encodeFunctionDefinition :: Context.Context -> Environment_.PythonEnvironment -> Core.Name -> [Core.Name] -> [Core.Name] -> Core.Term -> [Core.Type] -> Maybe Core.Type -> Maybe String -> [Syntax.Statement] -> Either (Context.InContext Errors.Error) Syntax.Statement
+encodeFunctionDefinition :: Context.Context -> Environment_.PythonEnvironment -> Core.Name -> [Core.Name] -> [Core.Name] -> Core.Term -> [Core.Type] -> Maybe Core.Type -> Maybe String -> [Syntax.Statement] -> Either Errors.Error Syntax.Statement
 encodeFunctionDefinition cx env name tparams args body doms mcod comment prefixes =
     Eithers.bind (Eithers.mapList (\pair ->
       let argName = Pairs.first pair
@@ -959,7 +959,7 @@ encodeNameConstants env name fields =
       in (Lists.map toStmt (Lists.cons namePair fieldPairs))
 
 -- | Encode a Hydra module to a Python module AST
-encodePythonModule :: Context.Context -> Graph.Graph -> Packaging.Module -> [Packaging.Definition] -> Either (Context.InContext Errors.Error) Syntax.Module
+encodePythonModule :: Context.Context -> Graph.Graph -> Packaging.Module -> [Packaging.Definition] -> Either Errors.Error Syntax.Module
 encodePythonModule cx g mod defs0 =
 
       let defs = Environment.reorderDefs defs0
@@ -989,7 +989,7 @@ encodePythonModule cx g mod defs0 =
         in (Right (Syntax.Module body)))))
 
 -- | Encode a record type as a Python dataclass
-encodeRecordType :: Context.Context -> Environment_.PythonEnvironment -> Core.Name -> [Core.FieldType] -> Maybe String -> Either (Context.InContext Errors.Error) Syntax.Statement
+encodeRecordType :: t0 -> Environment_.PythonEnvironment -> Core.Name -> [Core.FieldType] -> Maybe String -> Either Errors.Error Syntax.Statement
 encodeRecordType cx env name rowType comment =
     Eithers.bind (Eithers.mapList (encodeFieldType cx env) rowType) (\pyFields ->
       let constStmts = encodeNameConstants env name rowType
@@ -1014,7 +1014,7 @@ encodeRecordType cx env name rowType comment =
         Syntax.classDefinitionBody = body}))))
 
 -- | Encode a term assignment to a Python statement
-encodeTermAssignment :: Context.Context -> Environment_.PythonEnvironment -> Core.Name -> Core.Term -> Core.TypeScheme -> Maybe String -> Either (Context.InContext Errors.Error) Syntax.Statement
+encodeTermAssignment :: Context.Context -> Environment_.PythonEnvironment -> Core.Name -> Core.Term -> Core.TypeScheme -> Maybe String -> Either Errors.Error Syntax.Statement
 encodeTermAssignment cx env name term ts comment =
     Eithers.bind (analyzePythonFunction cx env term) (\fs ->
       let tparams = Typing.functionStructureTypeParams fs
@@ -1037,7 +1037,7 @@ encodeTermAssignment cx env name term ts comment =
         in (Right (Utils.annotatedStatement comment (Utils.assignmentStatement pyName bodyExpr)))))))
 
 -- | Encode a term to a Python expression (inline form)
-encodeTermInline :: Context.Context -> Environment_.PythonEnvironment -> Bool -> Core.Term -> Either (Context.InContext Errors.Error) Syntax.Expression
+encodeTermInline :: Context.Context -> Environment_.PythonEnvironment -> Bool -> Core.Term -> Either Errors.Error Syntax.Expression
 encodeTermInline cx env noCast term =
 
       let encode = \t -> encodeTermInline cx env False t
@@ -1120,7 +1120,7 @@ encodeTermInline cx env noCast term =
             parg])))
 
 -- | Encode a term to a list of statements with return as final statement
-encodeTermMultiline :: Context.Context -> Environment_.PythonEnvironment -> Core.Term -> Either (Context.InContext Errors.Error) [Syntax.Statement]
+encodeTermMultiline :: Context.Context -> Environment_.PythonEnvironment -> Core.Term -> Either Errors.Error [Syntax.Statement]
 encodeTermMultiline cx env term =
 
       let dfltLogic =
@@ -1159,7 +1159,7 @@ encodeTermMultiline cx env term =
           _ -> dfltLogic) dfltLogic)
 
 -- | Encode a term body for TCO: tail self-calls become param reassignment + continue
-encodeTermMultilineTCO :: Context.Context -> Environment_.PythonEnvironment -> Core.Name -> [Core.Name] -> Core.Term -> Either (Context.InContext Errors.Error) [Syntax.Statement]
+encodeTermMultilineTCO :: Context.Context -> Environment_.PythonEnvironment -> Core.Name -> [Core.Name] -> Core.Term -> Either Errors.Error [Syntax.Statement]
 encodeTermMultilineTCO cx env funcName paramNames term =
 
       let stripped = Strip.deannotateAndDetypeTerm term
@@ -1246,13 +1246,13 @@ encodeType env typ =
         Core.TypeAnnotated _ -> dflt
 
 -- | Encode a type definition, dispatching based on type structure
-encodeTypeAssignment :: Context.Context -> Environment_.PythonEnvironment -> Core.Name -> Core.Type -> Maybe String -> Either (Context.InContext Errors.Error) [[Syntax.Statement]]
+encodeTypeAssignment :: t0 -> Environment_.PythonEnvironment -> Core.Name -> Core.Type -> Maybe String -> Either Errors.Error [[Syntax.Statement]]
 encodeTypeAssignment cx env name typ comment =
     Eithers.bind (encodeTypeAssignmentInner cx env name typ comment) (\defStmts -> Right (Lists.map (\s -> [
       s]) defStmts))
 
 -- | Encode the inner type definition, unwrapping forall types
-encodeTypeAssignmentInner :: Context.Context -> Environment_.PythonEnvironment -> Core.Name -> Core.Type -> Maybe String -> Either (Context.InContext Errors.Error) [Syntax.Statement]
+encodeTypeAssignmentInner :: t0 -> Environment_.PythonEnvironment -> Core.Name -> Core.Type -> Maybe String -> Either Errors.Error [Syntax.Statement]
 encodeTypeAssignmentInner cx env name typ comment =
 
       let stripped = Strip.deannotateType typ
@@ -1284,7 +1284,7 @@ encodeTypeQuoted env typ =
     Eithers.bind (encodeType env typ) (\pytype -> Right (Logic.ifElse (Sets.null (Variables.freeVariablesInType typ)) pytype (Utils.doubleQuotedString (Serialization.printExpr (Serde.encodeExpression pytype)))))
 
 -- | Encode a union elimination as an inline conditional chain (isinstance-based ternary)
-encodeUnionEliminationInline :: Context.Context -> Environment_.PythonEnvironment -> Core.CaseStatement -> Syntax.Expression -> Either (Context.InContext Errors.Error) Syntax.Expression
+encodeUnionEliminationInline :: Context.Context -> Environment_.PythonEnvironment -> Core.CaseStatement -> Syntax.Expression -> Either Errors.Error Syntax.Expression
 encodeUnionEliminationInline cx env cs pyArg =
 
       let tname = Core.caseStatementTypeName cs
@@ -1331,7 +1331,7 @@ encodeUnionEliminationInline cx env cs pyArg =
             in (Right (Lists.foldl buildChain pyDefault (Lists.reverse encodedBranches)))))))))
 
 -- | Encode a union field as a variant class
-encodeUnionField :: Context.Context -> Environment_.PythonEnvironment -> Core.Name -> Core.FieldType -> Either (Context.InContext Errors.Error) Syntax.Statement
+encodeUnionField :: t0 -> Environment_.PythonEnvironment -> Core.Name -> Core.FieldType -> Either Errors.Error Syntax.Statement
 encodeUnionField cx env unionName fieldType =
 
       let fname = Core.fieldTypeName fieldType
@@ -1366,7 +1366,7 @@ encodeUnionFieldAlt env unionName fieldType =
         in (Utils.primaryWithExpressionSlices namePrim tparamExprs)))
 
 -- | Encode a union type as an enum (for unit-only fields) or variant classes
-encodeUnionType :: Context.Context -> Environment_.PythonEnvironment -> Core.Name -> [Core.FieldType] -> Maybe String -> Either (Context.InContext Errors.Error) [Syntax.Statement]
+encodeUnionType :: t0 -> Environment_.PythonEnvironment -> Core.Name -> [Core.FieldType] -> Maybe String -> Either Errors.Error [Syntax.Statement]
 encodeUnionType cx env name rowType comment =
     Logic.ifElse (Predicates.isEnumRowType rowType) (Eithers.bind (Eithers.mapList (encodeEnumValueAssignment cx env) rowType) (\vals ->
       let body = Utils.indentedBlock comment vals
@@ -1394,7 +1394,7 @@ encodeUnionType cx env name rowType comment =
         in (Right (Lists.concat2 fieldStmts unionStmts)))))
 
 -- | Encode a variable reference to a Python expression
-encodeVariable :: Context.Context -> Environment_.PythonEnvironment -> Core.Name -> [Syntax.Expression] -> Either (Context.InContext Errors.Error) Syntax.Expression
+encodeVariable :: t0 -> Environment_.PythonEnvironment -> Core.Name -> [Syntax.Expression] -> Either Errors.Error Syntax.Expression
 encodeVariable cx env name args =
 
       let g = pythonEnvironmentGetGraph env
@@ -1438,9 +1438,7 @@ encodeVariable cx env name args =
               allArgs = Lists.concat2 args remainingExprs
               fullCall =
                       Utils.functionCall (Utils.pyNameToPyPrimary (Names.encodeName True Util.CaseConventionLowerSnake env name)) allArgs
-          in (Right (makeUncurriedLambda remainingParams fullCall))))) (Lexical.lookupPrimitive g name)) (Maybes.maybe (Logic.ifElse (Sets.member name tcLambdaVars) (Right asVariable) (Logic.ifElse (Sets.member name inlineVars) (Right asVariable) (Maybes.maybe (Maybes.maybe (Maybes.maybe (Left (Context.InContext {
-        Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "Unknown variable: " (Core.unName name)))),
-        Context.inContextContext = cx})) (\_ -> Right asFunctionCall) (Maps.lookup name tcMetadata)) (\el ->
+          in (Right (makeUncurriedLambda remainingParams fullCall))))) (Lexical.lookupPrimitive g name)) (Maybes.maybe (Logic.ifElse (Sets.member name tcLambdaVars) (Right asVariable) (Logic.ifElse (Sets.member name inlineVars) (Right asVariable) (Maybes.maybe (Maybes.maybe (Maybes.maybe (Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "Unknown variable: " (Core.unName name))))) (\_ -> Right asFunctionCall) (Maps.lookup name tcMetadata)) (\el ->
         let elTrivial1 = Predicates.isTrivialTerm (Core.bindingTerm el)
         in (Maybes.maybe (Right asVariable) (\ts -> Logic.ifElse (Logic.and (Logic.and (Equality.equal (Arity.typeSchemeArity ts) 0) (Predicates.isComplexBinding tc el)) (Logic.not elTrivial1)) (Right asFunctionCall) (
           let asFunctionRef =
@@ -1924,7 +1922,7 @@ moduleStandardImports meta =
       in (Lists.map (\p -> standardImportStatement (Pairs.first p) (Pairs.second p)) simplified)
 
 -- | Convert a Hydra module to Python source files
-moduleToPython :: Packaging.Module -> [Packaging.Definition] -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) (M.Map String String)
+moduleToPython :: Packaging.Module -> [Packaging.Definition] -> Context.Context -> Graph.Graph -> Either Errors.Error (M.Map String String)
 moduleToPython mod defs cx g =
     Eithers.bind (encodePythonModule cx g mod defs) (\file ->
       let s = Serialization.printExpr (Serialization.parenthesize (Serde.encodeModule file))

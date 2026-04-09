@@ -18,7 +18,7 @@ public interface NominalTypes {
   static hydra.testing.TestGroup testGroupForCaseStatements() {
     return new hydra.testing.TestGroup("Case statements", (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.TestGroup>) (java.util.Collections.<hydra.testing.TestGroup>emptyList()), java.util.Arrays.asList(
       new hydra.testing.TestCaseWithMetadata("#1", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.eithers.Either.apply(
-        (java.util.function.Function<hydra.context.InContext<hydra.errors.Error_>, String>) (e -> hydra.lib.strings.Cat2.apply(
+        (java.util.function.Function<hydra.errors.Error_, String>) (e -> hydra.lib.strings.Cat2.apply(
           "INFERENCE ERROR: ",
           "failed")),
         (java.util.function.Function<hydra.util.Pair<hydra.util.Pair<hydra.core.Term, hydra.core.TypeScheme>, hydra.context.Context>, String>) (result -> hydra.show.Core.typeScheme(hydra.lib.pairs.Second.apply(hydra.lib.pairs.First.apply(result)))),
@@ -29,7 +29,7 @@ public interface NominalTypes {
             new hydra.core.Field(new hydra.core.Name("int"), new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(new hydra.core.Name("x"), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), new hydra.core.Term.Variable(new hydra.core.Name("x")))))),
             new hydra.core.Field(new hydra.core.Name("float"), new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(new hydra.core.Name("x"), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(42)))))))))))))), hydra.show.Core.typeScheme(new hydra.core.TypeScheme((java.util.List<hydra.core.Name>) (java.util.Collections.<hydra.core.Name>emptyList()), new hydra.core.Type.Function(new hydra.core.FunctionType(new hydra.core.Type.Variable(hydra.test.TestTypes.testTypeSimpleNumberName()), new hydra.core.Type.Literal(new hydra.core.LiteralType.Integer_(new hydra.core.IntegerType.Int32())))), (hydra.util.Maybe<java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>>) (hydra.util.Maybe.<java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>>nothing()))))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), java.util.Arrays.asList(new hydra.testing.Tag("disabledForMinimalInference"))),
       new hydra.testing.TestCaseWithMetadata("#2", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.eithers.Either.apply(
-        (java.util.function.Function<hydra.context.InContext<hydra.errors.Error_>, String>) (e -> hydra.lib.strings.Cat2.apply(
+        (java.util.function.Function<hydra.errors.Error_, String>) (e -> hydra.lib.strings.Cat2.apply(
           "INFERENCE ERROR: ",
           "failed")),
         (java.util.function.Function<hydra.util.Pair<hydra.util.Pair<hydra.core.Term, hydra.core.TypeScheme>, hydra.context.Context>, String>) (result -> hydra.show.Core.typeScheme(hydra.lib.pairs.Second.apply(hydra.lib.pairs.First.apply(result)))),
@@ -45,7 +45,7 @@ public interface NominalTypes {
   static hydra.testing.TestGroup testGroupForProjections() {
     return new hydra.testing.TestGroup("Projections", (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), java.util.Arrays.asList(
       new hydra.testing.TestGroup("Record eliminations", (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.TestGroup>) (java.util.Collections.<hydra.testing.TestGroup>emptyList()), java.util.Arrays.asList(new hydra.testing.TestCaseWithMetadata("#1", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.eithers.Either.apply(
-        (java.util.function.Function<hydra.context.InContext<hydra.errors.Error_>, String>) (e -> hydra.lib.strings.Cat2.apply(
+        (java.util.function.Function<hydra.errors.Error_, String>) (e -> hydra.lib.strings.Cat2.apply(
           "INFERENCE ERROR: ",
           "failed")),
         (java.util.function.Function<hydra.util.Pair<hydra.util.Pair<hydra.core.Term, hydra.core.TypeScheme>, hydra.context.Context>, String>) (result -> hydra.show.Core.typeScheme(hydra.lib.pairs.Second.apply(hydra.lib.pairs.First.apply(result)))),
@@ -55,7 +55,7 @@ public interface NominalTypes {
           new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(hydra.test.TestTypes.testTypePersonName(), new hydra.core.Name("firstName"))))))), hydra.show.Core.typeScheme(new hydra.core.TypeScheme((java.util.List<hydra.core.Name>) (java.util.Collections.<hydra.core.Name>emptyList()), new hydra.core.Type.Function(new hydra.core.FunctionType(new hydra.core.Type.Variable(hydra.test.TestTypes.testTypePersonName()), new hydra.core.Type.Literal(new hydra.core.LiteralType.String_()))), (hydra.util.Maybe<java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>>) (hydra.util.Maybe.<java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>>nothing()))))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), java.util.Arrays.asList(new hydra.testing.Tag("disabledForMinimalInference"))))),
       new hydra.testing.TestGroup("Pair projections", (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.TestGroup>) (java.util.Collections.<hydra.testing.TestGroup>emptyList()), java.util.Arrays.asList(
         new hydra.testing.TestCaseWithMetadata("#1", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.eithers.Either.apply(
-          (java.util.function.Function<hydra.context.InContext<hydra.errors.Error_>, String>) (e -> hydra.lib.strings.Cat2.apply(
+          (java.util.function.Function<hydra.errors.Error_, String>) (e -> hydra.lib.strings.Cat2.apply(
             "INFERENCE ERROR: ",
             "failed")),
           (java.util.function.Function<hydra.util.Pair<hydra.util.Pair<hydra.core.Term, hydra.core.TypeScheme>, hydra.context.Context>, String>) (result -> hydra.show.Core.typeScheme(hydra.lib.pairs.Second.apply(hydra.lib.pairs.First.apply(result)))),
@@ -66,7 +66,7 @@ public interface NominalTypes {
           new hydra.core.Name("t0"),
           new hydra.core.Name("t1")), new hydra.core.Type.Function(new hydra.core.FunctionType(new hydra.core.Type.Pair(new hydra.core.PairType(new hydra.core.Type.Variable(new hydra.core.Name("t0")), new hydra.core.Type.Variable(new hydra.core.Name("t1")))), new hydra.core.Type.Variable(new hydra.core.Name("t0")))), (hydra.util.Maybe<java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>>) (hydra.util.Maybe.<java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>>nothing()))))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), java.util.Arrays.asList(new hydra.testing.Tag("disabledForMinimalInference"))),
         new hydra.testing.TestCaseWithMetadata("#2", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.eithers.Either.apply(
-          (java.util.function.Function<hydra.context.InContext<hydra.errors.Error_>, String>) (e -> hydra.lib.strings.Cat2.apply(
+          (java.util.function.Function<hydra.errors.Error_, String>) (e -> hydra.lib.strings.Cat2.apply(
             "INFERENCE ERROR: ",
             "failed")),
           (java.util.function.Function<hydra.util.Pair<hydra.util.Pair<hydra.core.Term, hydra.core.TypeScheme>, hydra.context.Context>, String>) (result -> hydra.show.Core.typeScheme(hydra.lib.pairs.Second.apply(hydra.lib.pairs.First.apply(result)))),
@@ -80,7 +80,7 @@ public interface NominalTypes {
     return new hydra.testing.TestGroup("Records", (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), java.util.Arrays.asList(
       new hydra.testing.TestGroup("Simple records", (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.TestGroup>) (java.util.Collections.<hydra.testing.TestGroup>emptyList()), java.util.Arrays.asList(
         new hydra.testing.TestCaseWithMetadata("#1", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.eithers.Either.apply(
-          (java.util.function.Function<hydra.context.InContext<hydra.errors.Error_>, String>) (e -> hydra.lib.strings.Cat2.apply(
+          (java.util.function.Function<hydra.errors.Error_, String>) (e -> hydra.lib.strings.Cat2.apply(
             "INFERENCE ERROR: ",
             "failed")),
           (java.util.function.Function<hydra.util.Pair<hydra.util.Pair<hydra.core.Term, hydra.core.TypeScheme>, hydra.context.Context>, String>) (result -> hydra.show.Core.typeScheme(hydra.lib.pairs.Second.apply(hydra.lib.pairs.First.apply(result)))),
@@ -91,7 +91,7 @@ public interface NominalTypes {
               new hydra.core.Field(new hydra.core.Name("lat"), new hydra.core.Term.Literal(new hydra.core.Literal.Float_(new hydra.core.FloatValue.Float32((float) (37.774898529052734))))),
               new hydra.core.Field(new hydra.core.Name("lon"), new hydra.core.Term.Literal(new hydra.core.Literal.Float_(new hydra.core.FloatValue.Float32((float) (-122.41940307617188)))))))))), hydra.show.Core.typeScheme(new hydra.core.TypeScheme((java.util.List<hydra.core.Name>) (java.util.Collections.<hydra.core.Name>emptyList()), new hydra.core.Type.Variable(hydra.test.TestTypes.testTypeLatLonName()), (hydra.util.Maybe<java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>>) (hydra.util.Maybe.<java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>>nothing()))))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), java.util.Arrays.asList(new hydra.testing.Tag("disabledForMinimalInference"))),
         new hydra.testing.TestCaseWithMetadata("#2", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.eithers.Either.apply(
-          (java.util.function.Function<hydra.context.InContext<hydra.errors.Error_>, String>) (e -> hydra.lib.strings.Cat2.apply(
+          (java.util.function.Function<hydra.errors.Error_, String>) (e -> hydra.lib.strings.Cat2.apply(
             "INFERENCE ERROR: ",
             "failed")),
           (java.util.function.Function<hydra.util.Pair<hydra.util.Pair<hydra.core.Term, hydra.core.TypeScheme>, hydra.context.Context>, String>) (result -> hydra.show.Core.typeScheme(hydra.lib.pairs.Second.apply(hydra.lib.pairs.First.apply(result)))),
@@ -102,7 +102,7 @@ public interface NominalTypes {
               new hydra.core.Field(new hydra.core.Name("lat"), new hydra.core.Term.Literal(new hydra.core.Literal.Float_(new hydra.core.FloatValue.Float32((float) (37.774898529052734))))),
               new hydra.core.Field(new hydra.core.Name("lon"), new hydra.core.Term.Literal(new hydra.core.Literal.Float_(new hydra.core.FloatValue.Float32((float) (-122.41940307617188)))))))))), hydra.show.Core.typeScheme(new hydra.core.TypeScheme((java.util.List<hydra.core.Name>) (java.util.Collections.<hydra.core.Name>emptyList()), new hydra.core.Type.Application(new hydra.core.ApplicationType(new hydra.core.Type.Variable(hydra.test.TestTypes.testTypeLatLonPolyName()), new hydra.core.Type.Literal(new hydra.core.LiteralType.Float_(new hydra.core.FloatType.Float32())))), (hydra.util.Maybe<java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>>) (hydra.util.Maybe.<java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>>nothing()))))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), java.util.Arrays.asList(new hydra.testing.Tag("disabledForMinimalInference"))),
         new hydra.testing.TestCaseWithMetadata("#3", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.eithers.Either.apply(
-          (java.util.function.Function<hydra.context.InContext<hydra.errors.Error_>, String>) (e -> hydra.lib.strings.Cat2.apply(
+          (java.util.function.Function<hydra.errors.Error_, String>) (e -> hydra.lib.strings.Cat2.apply(
             "INFERENCE ERROR: ",
             "failed")),
           (java.util.function.Function<hydra.util.Pair<hydra.util.Pair<hydra.core.Term, hydra.core.TypeScheme>, hydra.context.Context>, String>) (result -> hydra.show.Core.typeScheme(hydra.lib.pairs.Second.apply(hydra.lib.pairs.First.apply(result)))),
@@ -113,7 +113,7 @@ public interface NominalTypes {
               new hydra.core.Field(new hydra.core.Name("lat"), new hydra.core.Term.Literal(new hydra.core.Literal.Float_(new hydra.core.FloatValue.Float32((float) (37.774898529052734))))),
               new hydra.core.Field(new hydra.core.Name("lon"), new hydra.core.Term.Variable(new hydra.core.Name("lon"))))))))))), hydra.show.Core.typeScheme(new hydra.core.TypeScheme((java.util.List<hydra.core.Name>) (java.util.Collections.<hydra.core.Name>emptyList()), new hydra.core.Type.Function(new hydra.core.FunctionType(new hydra.core.Type.Literal(new hydra.core.LiteralType.Float_(new hydra.core.FloatType.Float32())), new hydra.core.Type.Application(new hydra.core.ApplicationType(new hydra.core.Type.Variable(hydra.test.TestTypes.testTypeLatLonPolyName()), new hydra.core.Type.Literal(new hydra.core.LiteralType.Float_(new hydra.core.FloatType.Float32())))))), (hydra.util.Maybe<java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>>) (hydra.util.Maybe.<java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>>nothing()))))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), java.util.Arrays.asList(new hydra.testing.Tag("disabledForMinimalInference"))),
         new hydra.testing.TestCaseWithMetadata("#4", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.eithers.Either.apply(
-          (java.util.function.Function<hydra.context.InContext<hydra.errors.Error_>, String>) (e -> hydra.lib.strings.Cat2.apply(
+          (java.util.function.Function<hydra.errors.Error_, String>) (e -> hydra.lib.strings.Cat2.apply(
             "INFERENCE ERROR: ",
             "failed")),
           (java.util.function.Function<hydra.util.Pair<hydra.util.Pair<hydra.core.Term, hydra.core.TypeScheme>, hydra.context.Context>, String>) (result -> hydra.show.Core.typeScheme(hydra.lib.pairs.Second.apply(hydra.lib.pairs.First.apply(result)))),
@@ -124,7 +124,7 @@ public interface NominalTypes {
               new hydra.core.Field(new hydra.core.Name("lat"), new hydra.core.Term.Variable(new hydra.core.Name("latlon"))),
               new hydra.core.Field(new hydra.core.Name("lon"), new hydra.core.Term.Variable(new hydra.core.Name("latlon"))))))))))), hydra.show.Core.typeScheme(new hydra.core.TypeScheme(java.util.Arrays.asList(new hydra.core.Name("t0")), new hydra.core.Type.Function(new hydra.core.FunctionType(new hydra.core.Type.Variable(new hydra.core.Name("t0")), new hydra.core.Type.Application(new hydra.core.ApplicationType(new hydra.core.Type.Variable(hydra.test.TestTypes.testTypeLatLonPolyName()), new hydra.core.Type.Variable(new hydra.core.Name("t0")))))), (hydra.util.Maybe<java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>>) (hydra.util.Maybe.<java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>>nothing()))))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), java.util.Arrays.asList(new hydra.testing.Tag("disabledForMinimalInference"))),
         new hydra.testing.TestCaseWithMetadata("#5", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.eithers.Either.apply(
-          (java.util.function.Function<hydra.context.InContext<hydra.errors.Error_>, String>) (e -> hydra.lib.strings.Cat2.apply(
+          (java.util.function.Function<hydra.errors.Error_, String>) (e -> hydra.lib.strings.Cat2.apply(
             "INFERENCE ERROR: ",
             "failed")),
           (java.util.function.Function<hydra.util.Pair<hydra.util.Pair<hydra.core.Term, hydra.core.TypeScheme>, hydra.context.Context>, String>) (result -> hydra.show.Core.typeScheme(hydra.lib.pairs.Second.apply(hydra.lib.pairs.First.apply(result)))),
@@ -134,7 +134,7 @@ public interface NominalTypes {
             hydra.test.TestTerms.testDataArthur())), hydra.show.Core.typeScheme(new hydra.core.TypeScheme((java.util.List<hydra.core.Name>) (java.util.Collections.<hydra.core.Name>emptyList()), new hydra.core.Type.Variable(hydra.test.TestTypes.testTypePersonName()), (hydra.util.Maybe<java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>>) (hydra.util.Maybe.<java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>>nothing()))))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), java.util.Arrays.asList(new hydra.testing.Tag("disabledForMinimalInference"))))),
       new hydra.testing.TestGroup("Record instances of simply recursive record types", (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.TestGroup>) (java.util.Collections.<hydra.testing.TestGroup>emptyList()), java.util.Arrays.asList(
         new hydra.testing.TestCaseWithMetadata("#1", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.eithers.Either.apply(
-          (java.util.function.Function<hydra.context.InContext<hydra.errors.Error_>, String>) (e -> hydra.lib.strings.Cat2.apply(
+          (java.util.function.Function<hydra.errors.Error_, String>) (e -> hydra.lib.strings.Cat2.apply(
             "INFERENCE ERROR: ",
             "failed")),
           (java.util.function.Function<hydra.util.Pair<hydra.util.Pair<hydra.core.Term, hydra.core.TypeScheme>, hydra.context.Context>, String>) (result -> hydra.show.Core.typeScheme(hydra.lib.pairs.Second.apply(hydra.lib.pairs.First.apply(result)))),
@@ -147,7 +147,7 @@ public interface NominalTypes {
                 new hydra.core.Field(new hydra.core.Name("head"), new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(43)))),
                 new hydra.core.Field(new hydra.core.Name("tail"), new hydra.core.Term.Maybe((hydra.util.Maybe<hydra.core.Term>) (hydra.util.Maybe.<hydra.core.Term>nothing())))))))))))))), hydra.show.Core.typeScheme(new hydra.core.TypeScheme((java.util.List<hydra.core.Name>) (java.util.Collections.<hydra.core.Name>emptyList()), new hydra.core.Type.Variable(hydra.test.TestTypes.testTypeIntListName()), (hydra.util.Maybe<java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>>) (hydra.util.Maybe.<java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>>nothing()))))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), java.util.Arrays.asList(new hydra.testing.Tag("disabledForMinimalInference"))),
         new hydra.testing.TestCaseWithMetadata("#2", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.eithers.Either.apply(
-          (java.util.function.Function<hydra.context.InContext<hydra.errors.Error_>, String>) (e -> hydra.lib.strings.Cat2.apply(
+          (java.util.function.Function<hydra.errors.Error_, String>) (e -> hydra.lib.strings.Cat2.apply(
             "INFERENCE ERROR: ",
             "failed")),
           (java.util.function.Function<hydra.util.Pair<hydra.util.Pair<hydra.core.Term, hydra.core.TypeScheme>, hydra.context.Context>, String>) (result -> hydra.show.Core.typeScheme(hydra.lib.pairs.Second.apply(hydra.lib.pairs.First.apply(result)))),
@@ -160,7 +160,7 @@ public interface NominalTypes {
                 new hydra.core.Field(new hydra.core.Name("head"), new hydra.core.Term.Variable(new hydra.core.Name("x"))),
                 new hydra.core.Field(new hydra.core.Name("tail"), new hydra.core.Term.Maybe((hydra.util.Maybe<hydra.core.Term>) (hydra.util.Maybe.<hydra.core.Term>nothing()))))))))))))))), new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(42))))))), hydra.show.Core.typeScheme(new hydra.core.TypeScheme((java.util.List<hydra.core.Name>) (java.util.Collections.<hydra.core.Name>emptyList()), new hydra.core.Type.Variable(hydra.test.TestTypes.testTypeIntListName()), (hydra.util.Maybe<java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>>) (hydra.util.Maybe.<java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>>nothing()))))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), java.util.Arrays.asList(new hydra.testing.Tag("disabledForMinimalInference"))),
         new hydra.testing.TestCaseWithMetadata("#3", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.eithers.Either.apply(
-          (java.util.function.Function<hydra.context.InContext<hydra.errors.Error_>, String>) (e -> hydra.lib.strings.Cat2.apply(
+          (java.util.function.Function<hydra.errors.Error_, String>) (e -> hydra.lib.strings.Cat2.apply(
             "INFERENCE ERROR: ",
             "failed")),
           (java.util.function.Function<hydra.util.Pair<hydra.util.Pair<hydra.core.Term, hydra.core.TypeScheme>, hydra.context.Context>, String>) (result -> hydra.show.Core.typeScheme(hydra.lib.pairs.Second.apply(hydra.lib.pairs.First.apply(result)))),
@@ -173,7 +173,7 @@ public interface NominalTypes {
                 new hydra.core.Field(new hydra.core.Name("head"), new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(43)))),
                 new hydra.core.Field(new hydra.core.Name("tail"), new hydra.core.Term.Maybe((hydra.util.Maybe<hydra.core.Term>) (hydra.util.Maybe.<hydra.core.Term>nothing())))))))))))))), hydra.show.Core.typeScheme(new hydra.core.TypeScheme((java.util.List<hydra.core.Name>) (java.util.Collections.<hydra.core.Name>emptyList()), new hydra.core.Type.Application(new hydra.core.ApplicationType(new hydra.core.Type.Variable(hydra.test.TestTypes.testTypeListName()), new hydra.core.Type.Literal(new hydra.core.LiteralType.Integer_(new hydra.core.IntegerType.Int32())))), (hydra.util.Maybe<java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>>) (hydra.util.Maybe.<java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>>nothing()))))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), java.util.Arrays.asList(new hydra.testing.Tag("disabledForMinimalInference"))),
         new hydra.testing.TestCaseWithMetadata("#4", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.eithers.Either.apply(
-          (java.util.function.Function<hydra.context.InContext<hydra.errors.Error_>, String>) (e -> hydra.lib.strings.Cat2.apply(
+          (java.util.function.Function<hydra.errors.Error_, String>) (e -> hydra.lib.strings.Cat2.apply(
             "INFERENCE ERROR: ",
             "failed")),
           (java.util.function.Function<hydra.util.Pair<hydra.util.Pair<hydra.core.Term, hydra.core.TypeScheme>, hydra.context.Context>, String>) (result -> hydra.show.Core.typeScheme(hydra.lib.pairs.Second.apply(hydra.lib.pairs.First.apply(result)))),
@@ -186,7 +186,7 @@ public interface NominalTypes {
                 new hydra.core.Field(new hydra.core.Name("head"), new hydra.core.Term.Variable(new hydra.core.Name("x"))),
                 new hydra.core.Field(new hydra.core.Name("tail"), new hydra.core.Term.Maybe((hydra.util.Maybe<hydra.core.Term>) (hydra.util.Maybe.<hydra.core.Term>nothing()))))))))))))))), new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(42))))))), hydra.show.Core.typeScheme(new hydra.core.TypeScheme((java.util.List<hydra.core.Name>) (java.util.Collections.<hydra.core.Name>emptyList()), new hydra.core.Type.Application(new hydra.core.ApplicationType(new hydra.core.Type.Variable(hydra.test.TestTypes.testTypeListName()), new hydra.core.Type.Literal(new hydra.core.LiteralType.Integer_(new hydra.core.IntegerType.Int32())))), (hydra.util.Maybe<java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>>) (hydra.util.Maybe.<java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>>nothing()))))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), java.util.Arrays.asList(new hydra.testing.Tag("disabledForMinimalInference"))),
         new hydra.testing.TestCaseWithMetadata("#5", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.eithers.Either.apply(
-          (java.util.function.Function<hydra.context.InContext<hydra.errors.Error_>, String>) (e -> hydra.lib.strings.Cat2.apply(
+          (java.util.function.Function<hydra.errors.Error_, String>) (e -> hydra.lib.strings.Cat2.apply(
             "INFERENCE ERROR: ",
             "failed")),
           (java.util.function.Function<hydra.util.Pair<hydra.util.Pair<hydra.core.Term, hydra.core.TypeScheme>, hydra.context.Context>, String>) (result -> hydra.show.Core.typeScheme(hydra.lib.pairs.Second.apply(hydra.lib.pairs.First.apply(result)))),
@@ -200,7 +200,7 @@ public interface NominalTypes {
                 new hydra.core.Field(new hydra.core.Name("tail"), new hydra.core.Term.Maybe((hydra.util.Maybe<hydra.core.Term>) (hydra.util.Maybe.<hydra.core.Term>nothing()))))))))))))))))), hydra.show.Core.typeScheme(new hydra.core.TypeScheme(java.util.Arrays.asList(new hydra.core.Name("t0")), new hydra.core.Type.Function(new hydra.core.FunctionType(new hydra.core.Type.Variable(new hydra.core.Name("t0")), new hydra.core.Type.Application(new hydra.core.ApplicationType(new hydra.core.Type.Variable(hydra.test.TestTypes.testTypeListName()), new hydra.core.Type.Variable(new hydra.core.Name("t0")))))), (hydra.util.Maybe<java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>>) (hydra.util.Maybe.<java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>>nothing()))))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), java.util.Arrays.asList(new hydra.testing.Tag("disabledForMinimalInference"))))),
       new hydra.testing.TestGroup("Record instances of mutually recursive record types", (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.TestGroup>) (java.util.Collections.<hydra.testing.TestGroup>emptyList()), java.util.Arrays.asList(
         new hydra.testing.TestCaseWithMetadata("#1", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.eithers.Either.apply(
-          (java.util.function.Function<hydra.context.InContext<hydra.errors.Error_>, String>) (e -> hydra.lib.strings.Cat2.apply(
+          (java.util.function.Function<hydra.errors.Error_, String>) (e -> hydra.lib.strings.Cat2.apply(
             "INFERENCE ERROR: ",
             "failed")),
           (java.util.function.Function<hydra.util.Pair<hydra.util.Pair<hydra.core.Term, hydra.core.TypeScheme>, hydra.context.Context>, String>) (result -> hydra.show.Core.typeScheme(hydra.lib.pairs.Second.apply(hydra.lib.pairs.First.apply(result)))),
@@ -213,7 +213,7 @@ public interface NominalTypes {
                 new hydra.core.Field(new hydra.core.Name("head"), new hydra.core.Term.Variable(new hydra.core.Name("x"))),
                 new hydra.core.Field(new hydra.core.Name("tail"), new hydra.core.Term.Maybe((hydra.util.Maybe<hydra.core.Term>) (hydra.util.Maybe.<hydra.core.Term>nothing()))))))))))))))), new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(42))))))), hydra.show.Core.typeScheme(new hydra.core.TypeScheme((java.util.List<hydra.core.Name>) (java.util.Collections.<hydra.core.Name>emptyList()), new hydra.core.Type.Application(new hydra.core.ApplicationType(new hydra.core.Type.Variable(hydra.test.TestTypes.testTypeBuddyListAName()), new hydra.core.Type.Literal(new hydra.core.LiteralType.Integer_(new hydra.core.IntegerType.Int32())))), (hydra.util.Maybe<java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>>) (hydra.util.Maybe.<java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>>nothing()))))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), java.util.Arrays.asList(new hydra.testing.Tag("disabledForMinimalInference"))),
         new hydra.testing.TestCaseWithMetadata("#2", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.eithers.Either.apply(
-          (java.util.function.Function<hydra.context.InContext<hydra.errors.Error_>, String>) (e -> hydra.lib.strings.Cat2.apply(
+          (java.util.function.Function<hydra.errors.Error_, String>) (e -> hydra.lib.strings.Cat2.apply(
             "INFERENCE ERROR: ",
             "failed")),
           (java.util.function.Function<hydra.util.Pair<hydra.util.Pair<hydra.core.Term, hydra.core.TypeScheme>, hydra.context.Context>, String>) (result -> hydra.show.Core.typeScheme(hydra.lib.pairs.Second.apply(hydra.lib.pairs.First.apply(result)))),
@@ -231,7 +231,7 @@ public interface NominalTypes {
     return new hydra.testing.TestGroup("Variant terms", (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), java.util.Arrays.asList(
       new hydra.testing.TestGroup("Variants", (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.TestGroup>) (java.util.Collections.<hydra.testing.TestGroup>emptyList()), java.util.Arrays.asList(
         new hydra.testing.TestCaseWithMetadata("#1", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.eithers.Either.apply(
-          (java.util.function.Function<hydra.context.InContext<hydra.errors.Error_>, String>) (e -> hydra.lib.strings.Cat2.apply(
+          (java.util.function.Function<hydra.errors.Error_, String>) (e -> hydra.lib.strings.Cat2.apply(
             "INFERENCE ERROR: ",
             "failed")),
           (java.util.function.Function<hydra.util.Pair<hydra.util.Pair<hydra.core.Term, hydra.core.TypeScheme>, hydra.context.Context>, String>) (result -> hydra.show.Core.typeScheme(hydra.lib.pairs.Second.apply(hydra.lib.pairs.First.apply(result)))),
@@ -240,7 +240,7 @@ public interface NominalTypes {
             hydra.test.TestGraph.testGraph(),
             new hydra.core.Term.Union(new hydra.core.Injection(hydra.test.TestTypes.testTypeTimestampName(), new hydra.core.Field(new hydra.core.Name("unixTimeMillis"), new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Uint64(new java.math.BigInteger("1638200308368"))))))))), hydra.show.Core.typeScheme(new hydra.core.TypeScheme((java.util.List<hydra.core.Name>) (java.util.Collections.<hydra.core.Name>emptyList()), new hydra.core.Type.Variable(hydra.test.TestTypes.testTypeTimestampName()), (hydra.util.Maybe<java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>>) (hydra.util.Maybe.<java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>>nothing()))))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), java.util.Arrays.asList(new hydra.testing.Tag("disabledForMinimalInference"))),
         new hydra.testing.TestCaseWithMetadata("#2", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.eithers.Either.apply(
-          (java.util.function.Function<hydra.context.InContext<hydra.errors.Error_>, String>) (e -> hydra.lib.strings.Cat2.apply(
+          (java.util.function.Function<hydra.errors.Error_, String>) (e -> hydra.lib.strings.Cat2.apply(
             "INFERENCE ERROR: ",
             "failed")),
           (java.util.function.Function<hydra.util.Pair<hydra.util.Pair<hydra.core.Term, hydra.core.TypeScheme>, hydra.context.Context>, String>) (result -> hydra.show.Core.typeScheme(hydra.lib.pairs.Second.apply(hydra.lib.pairs.First.apply(result)))),
@@ -250,7 +250,7 @@ public interface NominalTypes {
             new hydra.core.Term.Union(new hydra.core.Injection(hydra.test.TestTypes.testTypeUnionMonomorphicName(), new hydra.core.Field(new hydra.core.Name("string"), new hydra.core.Term.Literal(new hydra.core.Literal.String_("bar"))))))), hydra.show.Core.typeScheme(new hydra.core.TypeScheme((java.util.List<hydra.core.Name>) (java.util.Collections.<hydra.core.Name>emptyList()), new hydra.core.Type.Variable(hydra.test.TestTypes.testTypeUnionMonomorphicName()), (hydra.util.Maybe<java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>>) (hydra.util.Maybe.<java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>>nothing()))))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), java.util.Arrays.asList(new hydra.testing.Tag("disabledForMinimalInference"))))),
       new hydra.testing.TestGroup("Polymorphic and recursive variants", (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.TestGroup>) (java.util.Collections.<hydra.testing.TestGroup>emptyList()), java.util.Arrays.asList(
         new hydra.testing.TestCaseWithMetadata("#1", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.eithers.Either.apply(
-          (java.util.function.Function<hydra.context.InContext<hydra.errors.Error_>, String>) (e -> hydra.lib.strings.Cat2.apply(
+          (java.util.function.Function<hydra.errors.Error_, String>) (e -> hydra.lib.strings.Cat2.apply(
             "INFERENCE ERROR: ",
             "failed")),
           (java.util.function.Function<hydra.util.Pair<hydra.util.Pair<hydra.core.Term, hydra.core.TypeScheme>, hydra.context.Context>, String>) (result -> hydra.show.Core.typeScheme(hydra.lib.pairs.Second.apply(hydra.lib.pairs.First.apply(result)))),
@@ -259,7 +259,7 @@ public interface NominalTypes {
             hydra.test.TestGraph.testGraph(),
             new hydra.core.Term.Union(new hydra.core.Injection(hydra.test.TestTypes.testTypeUnionPolymorphicRecursiveName(), new hydra.core.Field(new hydra.core.Name("bool"), new hydra.core.Term.Literal(new hydra.core.Literal.Boolean_(true))))))), hydra.show.Core.typeScheme(new hydra.core.TypeScheme(java.util.Arrays.asList(new hydra.core.Name("t0")), new hydra.core.Type.Application(new hydra.core.ApplicationType(new hydra.core.Type.Variable(hydra.test.TestTypes.testTypeUnionPolymorphicRecursiveName()), new hydra.core.Type.Variable(new hydra.core.Name("t0")))), (hydra.util.Maybe<java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>>) (hydra.util.Maybe.<java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>>nothing()))))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), java.util.Arrays.asList(new hydra.testing.Tag("disabledForMinimalInference"))),
         new hydra.testing.TestCaseWithMetadata("#2", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.eithers.Either.apply(
-          (java.util.function.Function<hydra.context.InContext<hydra.errors.Error_>, String>) (e -> hydra.lib.strings.Cat2.apply(
+          (java.util.function.Function<hydra.errors.Error_, String>) (e -> hydra.lib.strings.Cat2.apply(
             "INFERENCE ERROR: ",
             "failed")),
           (java.util.function.Function<hydra.util.Pair<hydra.util.Pair<hydra.core.Term, hydra.core.TypeScheme>, hydra.context.Context>, String>) (result -> hydra.show.Core.typeScheme(hydra.lib.pairs.Second.apply(hydra.lib.pairs.First.apply(result)))),
@@ -268,7 +268,7 @@ public interface NominalTypes {
             hydra.test.TestGraph.testGraph(),
             new hydra.core.Term.Union(new hydra.core.Injection(hydra.test.TestTypes.testTypeUnionPolymorphicRecursiveName(), new hydra.core.Field(new hydra.core.Name("value"), new hydra.core.Term.Literal(new hydra.core.Literal.String_("foo"))))))), hydra.show.Core.typeScheme(new hydra.core.TypeScheme((java.util.List<hydra.core.Name>) (java.util.Collections.<hydra.core.Name>emptyList()), new hydra.core.Type.Application(new hydra.core.ApplicationType(new hydra.core.Type.Variable(hydra.test.TestTypes.testTypeUnionPolymorphicRecursiveName()), new hydra.core.Type.Literal(new hydra.core.LiteralType.String_()))), (hydra.util.Maybe<java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>>) (hydra.util.Maybe.<java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>>nothing()))))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), java.util.Arrays.asList(new hydra.testing.Tag("disabledForMinimalInference"))),
         new hydra.testing.TestCaseWithMetadata("#3", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.eithers.Either.apply(
-          (java.util.function.Function<hydra.context.InContext<hydra.errors.Error_>, String>) (e -> hydra.lib.strings.Cat2.apply(
+          (java.util.function.Function<hydra.errors.Error_, String>) (e -> hydra.lib.strings.Cat2.apply(
             "INFERENCE ERROR: ",
             "failed")),
           (java.util.function.Function<hydra.util.Pair<hydra.util.Pair<hydra.core.Term, hydra.core.TypeScheme>, hydra.context.Context>, String>) (result -> hydra.show.Core.typeScheme(hydra.lib.pairs.Second.apply(hydra.lib.pairs.First.apply(result)))),
@@ -282,7 +282,7 @@ public interface NominalTypes {
     return new hydra.testing.TestGroup("Wrapper introductions and eliminations", (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), java.util.Arrays.asList(
       new hydra.testing.TestGroup("Wrapper introductions", (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.TestGroup>) (java.util.Collections.<hydra.testing.TestGroup>emptyList()), java.util.Arrays.asList(
         new hydra.testing.TestCaseWithMetadata("#1", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.eithers.Either.apply(
-          (java.util.function.Function<hydra.context.InContext<hydra.errors.Error_>, String>) (e -> hydra.lib.strings.Cat2.apply(
+          (java.util.function.Function<hydra.errors.Error_, String>) (e -> hydra.lib.strings.Cat2.apply(
             "INFERENCE ERROR: ",
             "failed")),
           (java.util.function.Function<hydra.util.Pair<hydra.util.Pair<hydra.core.Term, hydra.core.TypeScheme>, hydra.context.Context>, String>) (result -> hydra.show.Core.typeScheme(hydra.lib.pairs.Second.apply(hydra.lib.pairs.First.apply(result)))),
@@ -291,7 +291,7 @@ public interface NominalTypes {
             hydra.test.TestGraph.testGraph(),
             new hydra.core.Term.Wrap(new hydra.core.WrappedTerm(hydra.test.TestTypes.testTypeStringAliasName(), new hydra.core.Term.Literal(new hydra.core.Literal.String_("foo")))))), hydra.show.Core.typeScheme(new hydra.core.TypeScheme((java.util.List<hydra.core.Name>) (java.util.Collections.<hydra.core.Name>emptyList()), new hydra.core.Type.Variable(hydra.test.TestTypes.testTypeStringAliasName()), (hydra.util.Maybe<java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>>) (hydra.util.Maybe.<java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>>nothing()))))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), java.util.Arrays.asList(new hydra.testing.Tag("disabledForMinimalInference"))),
         new hydra.testing.TestCaseWithMetadata("#2", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.eithers.Either.apply(
-          (java.util.function.Function<hydra.context.InContext<hydra.errors.Error_>, String>) (e -> hydra.lib.strings.Cat2.apply(
+          (java.util.function.Function<hydra.errors.Error_, String>) (e -> hydra.lib.strings.Cat2.apply(
             "INFERENCE ERROR: ",
             "failed")),
           (java.util.function.Function<hydra.util.Pair<hydra.util.Pair<hydra.core.Term, hydra.core.TypeScheme>, hydra.context.Context>, String>) (result -> hydra.show.Core.typeScheme(hydra.lib.pairs.Second.apply(hydra.lib.pairs.First.apply(result)))),
@@ -301,7 +301,7 @@ public interface NominalTypes {
             new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(new hydra.core.Name("v"), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), new hydra.core.Term.Wrap(new hydra.core.WrappedTerm(hydra.test.TestTypes.testTypeStringAliasName(), new hydra.core.Term.Variable(new hydra.core.Name("v"))))))))), hydra.show.Core.typeScheme(new hydra.core.TypeScheme((java.util.List<hydra.core.Name>) (java.util.Collections.<hydra.core.Name>emptyList()), new hydra.core.Type.Function(new hydra.core.FunctionType(new hydra.core.Type.Literal(new hydra.core.LiteralType.String_()), new hydra.core.Type.Variable(hydra.test.TestTypes.testTypeStringAliasName()))), (hydra.util.Maybe<java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>>) (hydra.util.Maybe.<java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>>nothing()))))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), java.util.Arrays.asList(new hydra.testing.Tag("disabledForMinimalInference"))))),
       new hydra.testing.TestGroup("Wrapper eliminations", (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.TestGroup>) (java.util.Collections.<hydra.testing.TestGroup>emptyList()), java.util.Arrays.asList(
         new hydra.testing.TestCaseWithMetadata("#1", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.eithers.Either.apply(
-          (java.util.function.Function<hydra.context.InContext<hydra.errors.Error_>, String>) (e -> hydra.lib.strings.Cat2.apply(
+          (java.util.function.Function<hydra.errors.Error_, String>) (e -> hydra.lib.strings.Cat2.apply(
             "INFERENCE ERROR: ",
             "failed")),
           (java.util.function.Function<hydra.util.Pair<hydra.util.Pair<hydra.core.Term, hydra.core.TypeScheme>, hydra.context.Context>, String>) (result -> hydra.show.Core.typeScheme(hydra.lib.pairs.Second.apply(hydra.lib.pairs.First.apply(result)))),
@@ -310,7 +310,7 @@ public interface NominalTypes {
             hydra.test.TestGraph.testGraph(),
             new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Wrap(hydra.test.TestTypes.testTypeStringAliasName()))))), hydra.show.Core.typeScheme(new hydra.core.TypeScheme((java.util.List<hydra.core.Name>) (java.util.Collections.<hydra.core.Name>emptyList()), new hydra.core.Type.Function(new hydra.core.FunctionType(new hydra.core.Type.Variable(hydra.test.TestTypes.testTypeStringAliasName()), new hydra.core.Type.Literal(new hydra.core.LiteralType.String_()))), (hydra.util.Maybe<java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>>) (hydra.util.Maybe.<java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>>nothing()))))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), java.util.Arrays.asList(new hydra.testing.Tag("disabledForMinimalInference"))),
         new hydra.testing.TestCaseWithMetadata("#2", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.eithers.Either.apply(
-          (java.util.function.Function<hydra.context.InContext<hydra.errors.Error_>, String>) (e -> hydra.lib.strings.Cat2.apply(
+          (java.util.function.Function<hydra.errors.Error_, String>) (e -> hydra.lib.strings.Cat2.apply(
             "INFERENCE ERROR: ",
             "failed")),
           (java.util.function.Function<hydra.util.Pair<hydra.util.Pair<hydra.core.Term, hydra.core.TypeScheme>, hydra.context.Context>, String>) (result -> hydra.show.Core.typeScheme(hydra.lib.pairs.Second.apply(hydra.lib.pairs.First.apply(result)))),

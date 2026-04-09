@@ -10,7 +10,6 @@ from typing import TypeVar, cast
 import hydra.core
 import hydra.errors
 import hydra.extract.core
-import hydra.lexical
 import hydra.lib.eithers
 import hydra.relational
 
@@ -34,11 +33,11 @@ def column_name(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_relational_column_name_3(cx, v1):
         match v1:
             case hydra.core.TermWrap(value=wrapped_term):
-                return hydra.lib.eithers.map((lambda b: hydra.relational.ColumnName(b)), hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped2: _hoist_hydra_decode_relational_column_name_2(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx, wrapped_term.body)))
+                return hydra.lib.eithers.map((lambda b: hydra.relational.ColumnName(b)), hydra.lib.eithers.either((lambda err: Left(err)), (lambda stripped2: _hoist_hydra_decode_relational_column_name_2(stripped2)), hydra.extract.core.strip_with_decoding_error(cx, wrapped_term.body)))
 
             case _:
                 return Left(hydra.errors.DecodingError("expected wrapped type"))
-    return hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_relational_column_name_3(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
+    return hydra.lib.eithers.either((lambda err: Left(err)), (lambda stripped: _hoist_hydra_decode_relational_column_name_3(cx, stripped)), hydra.extract.core.strip_with_decoding_error(cx, raw))
 
 def column_schema(t: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.errors.DecodingError, T0]], cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_relational_column_schema_1(cx, t, v1):
@@ -51,7 +50,7 @@ def column_schema(t: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra
 
             case _:
                 return Left(hydra.errors.DecodingError("expected record"))
-    return hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_relational_column_schema_1(cx, t, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
+    return hydra.lib.eithers.either((lambda err: Left(err)), (lambda stripped: _hoist_hydra_decode_relational_column_schema_1(cx, t, stripped)), hydra.extract.core.strip_with_decoding_error(cx, raw))
 
 def relation_name(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_relational_relation_name_1(v1):
@@ -71,11 +70,11 @@ def relation_name(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_relational_relation_name_3(cx, v1):
         match v1:
             case hydra.core.TermWrap(value=wrapped_term):
-                return hydra.lib.eithers.map((lambda b: hydra.relational.RelationName(b)), hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped2: _hoist_hydra_decode_relational_relation_name_2(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx, wrapped_term.body)))
+                return hydra.lib.eithers.map((lambda b: hydra.relational.RelationName(b)), hydra.lib.eithers.either((lambda err: Left(err)), (lambda stripped2: _hoist_hydra_decode_relational_relation_name_2(stripped2)), hydra.extract.core.strip_with_decoding_error(cx, wrapped_term.body)))
 
             case _:
                 return Left(hydra.errors.DecodingError("expected wrapped type"))
-    return hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_relational_relation_name_3(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
+    return hydra.lib.eithers.either((lambda err: Left(err)), (lambda stripped: _hoist_hydra_decode_relational_relation_name_3(cx, stripped)), hydra.extract.core.strip_with_decoding_error(cx, raw))
 
 def foreign_key(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_relational_foreign_key_1(cx, v1):
@@ -88,7 +87,7 @@ def foreign_key(cx: hydra.graph.Graph, raw: hydra.core.Term):
 
             case _:
                 return Left(hydra.errors.DecodingError("expected record"))
-    return hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_relational_foreign_key_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
+    return hydra.lib.eithers.either((lambda err: Left(err)), (lambda stripped: _hoist_hydra_decode_relational_foreign_key_1(cx, stripped)), hydra.extract.core.strip_with_decoding_error(cx, raw))
 
 def primary_key(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_relational_primary_key_1(cx, v1):
@@ -98,7 +97,7 @@ def primary_key(cx: hydra.graph.Graph, raw: hydra.core.Term):
 
             case _:
                 return Left(hydra.errors.DecodingError("expected wrapped type"))
-    return hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_relational_primary_key_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
+    return hydra.lib.eithers.either((lambda err: Left(err)), (lambda stripped: _hoist_hydra_decode_relational_primary_key_1(cx, stripped)), hydra.extract.core.strip_with_decoding_error(cx, raw))
 
 def row(v: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.errors.DecodingError, T0]], cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_relational_row_1(cx, v, v1):
@@ -108,7 +107,7 @@ def row(v: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.errors.De
 
             case _:
                 return Left(hydra.errors.DecodingError("expected wrapped type"))
-    return hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_relational_row_1(cx, v, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
+    return hydra.lib.eithers.either((lambda err: Left(err)), (lambda stripped: _hoist_hydra_decode_relational_row_1(cx, v, stripped)), hydra.extract.core.strip_with_decoding_error(cx, raw))
 
 def relation(v: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.errors.DecodingError, T0]], cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_relational_relation_1(cx, v, v1):
@@ -118,7 +117,7 @@ def relation(v: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.erro
 
             case _:
                 return Left(hydra.errors.DecodingError("expected wrapped type"))
-    return hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_relational_relation_1(cx, v, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
+    return hydra.lib.eithers.either((lambda err: Left(err)), (lambda stripped: _hoist_hydra_decode_relational_relation_1(cx, v, stripped)), hydra.extract.core.strip_with_decoding_error(cx, raw))
 
 def relation_schema(t: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.errors.DecodingError, T0]], cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_relational_relation_schema_1(cx, t, v1):
@@ -131,7 +130,7 @@ def relation_schema(t: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hyd
 
             case _:
                 return Left(hydra.errors.DecodingError("expected record"))
-    return hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_relational_relation_schema_1(cx, t, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
+    return hydra.lib.eithers.either((lambda err: Left(err)), (lambda stripped: _hoist_hydra_decode_relational_relation_schema_1(cx, t, stripped)), hydra.extract.core.strip_with_decoding_error(cx, raw))
 
 def relationship(v: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.errors.DecodingError, T0]], cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_relational_relationship_1(cx, v, v1):
@@ -141,4 +140,4 @@ def relationship(v: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.
 
             case _:
                 return Left(hydra.errors.DecodingError("expected wrapped type"))
-    return hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_relational_relationship_1(cx, v, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
+    return hydra.lib.eithers.either((lambda err: Left(err)), (lambda stripped: _hoist_hydra_decode_relational_relationship_1(cx, v, stripped)), hydra.extract.core.strip_with_decoding_error(cx, raw))

@@ -18,7 +18,6 @@ import java.util.function.Function;
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.list;
 import hydra.context.Context;
-import hydra.context.InContext;
 import hydra.errors.Error_;
 import hydra.util.Either;
 
@@ -40,19 +39,19 @@ public class ZipWith extends PrimitiveFunction {
     }
 
     @Override
-    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.Core.list(cx, graph, args.get(1)), lst1 ->
-                hydra.lib.eithers.Bind.apply(hydra.extract.Core.list(cx, graph, args.get(2)), lst2 -> {
+    protected Function<List<Term>, Function<Context, Function<Graph, Either<Error_, Term>>>> implementation() {
+        return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.Core.list(graph, args.get(1)), lst1 ->
+                hydra.lib.eithers.Bind.apply(hydra.extract.Core.list(graph, args.get(2)), lst2 -> {
                     Term f = args.get(0);
                     ArrayList<Term> items1 = new ArrayList<>(lst1);
                     ArrayList<Term> items2 = new ArrayList<>(lst2);
                     List<Term> results = new ArrayList<>();
                     int minSize = Math.min(items1.size(), items2.size());
                     for (int i = 0; i < minSize; i++) {
-                        Either<InContext<Error_>, Term> r = hydra.Reduction.reduceTerm(
+                        Either<Error_, Term> r = hydra.Reduction.reduceTerm(
                             hydra.Lexical.emptyContext(), graph, true, Terms.apply(Terms.apply(f, items1.get(i)), items2.get(i)));
                         if (r.isLeft()) return (Either) r;
-                        results.add(((Either.Right<InContext<Error_>, Term>) r).value);
+                        results.add(((Either.Right<Error_, Term>) r).value);
                     }
                     return Either.right(Terms.list(results));
                 }));

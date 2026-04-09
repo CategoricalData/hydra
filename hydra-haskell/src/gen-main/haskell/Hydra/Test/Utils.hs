@@ -4,7 +4,6 @@
 
 module Hydra.Test.Utils where
 
-import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Inference as Inference
@@ -18,7 +17,7 @@ import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pur
 -- | Run type inference on a single term
 inferTerm :: Graph.Graph -> Core.Term -> Either String Core.Term
 inferTerm g term =
-    Eithers.bimap (\ic -> Errors.error (Context.inContextObject ic)) (\x -> Typing.inferenceResultTerm x) (Inference.inferInGraphContext Lexical.emptyContext g term)
+    Eithers.bimap (\e -> Errors.error e) (\x -> Typing.inferenceResultTerm x) (Inference.inferInGraphContext Lexical.emptyContext g term)
 
 -- | Run type inference on the terms in a test case
 inferTestCase :: t0 -> Testing.TestCaseWithMetadata -> Either t1 Testing.TestCaseWithMetadata

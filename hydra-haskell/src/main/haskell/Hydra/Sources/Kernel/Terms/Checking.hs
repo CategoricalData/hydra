@@ -168,8 +168,8 @@ noTypeArgs = list ([] :: [TTerm Type])
 
 --
 
-formatError :: TTerm (InContext Error -> String)
-formatError = "ic" ~> ShowError.error_ @@ Ctx.inContextObject (var "ic")
+formatError :: TTerm (Error -> String)
+formatError = "e" ~> ShowError.error_ @@ var "e"
 
 allEqual :: TTermDefinition ([a] -> Bool)
 allEqual = define "allEqual" $
@@ -181,7 +181,7 @@ allEqual = define "allEqual" $
        true
        (Lists.tail $ var "els"))
 
-applyTypeArgumentsToType :: TTermDefinition (Context -> Graph -> [Type] -> Type -> Prelude.Either (InContext Error) Type)
+applyTypeArgumentsToType :: TTermDefinition (Context -> Graph -> [Type] -> Type -> Prelude.Either Error Type)
 applyTypeArgumentsToType = define "applyTypeArgumentsToType" $
   doc "Apply type arguments to a type, substituting forall-bound variables" $
   "cx" ~> "tx" ~> "typeArgs" ~> "t" ~>
@@ -189,8 +189,7 @@ applyTypeArgumentsToType = define "applyTypeArgumentsToType" $
   Logic.ifElse (Lists.null $ var "typeArgs")
     (right $ var "t")
     ("nonnull" <~ (cases _Type (var "t")
-      (Just $ Ctx.failInContext (Error.errorOther $ Error.otherError $ Strings.cat $ list [
-        string "not a forall type: ",
+      (Just $ Ctx.failInContext (Error.errorExtraction $ Error.extractionErrorUnexpectedShape $ Error.unexpectedShapeError (string "forall type") (Strings.cat $ list [
         ShowCore.type_ @@ var "t",
         string ". Trying to apply ",
         Literals.showInt32 (Lists.length $ var "typeArgs"),
@@ -198,7 +197,7 @@ applyTypeArgumentsToType = define "applyTypeArgumentsToType" $
         Formatting.showList @@ ShowCore.type_ @@ var "typeArgs",
         string ". Context has vars: {",
         Strings.intercalate (string ", ") (Lists.map (unaryFunction $ Core.unName) $ Maps.keys $ Graph.graphBoundTypes $ var "tx"),
-        string "}"]) (var "cx")) [
+        string "}"])) (var "cx")) [
       _Type_forall>>: "ft" ~>
         "v" <~ Core.forallTypeParameter (var "ft") $
         "tbody" <~ Core.forallTypeBody (var "ft") $
@@ -211,7 +210,7 @@ applyTypeArgumentsToType = define "applyTypeArgumentsToType" $
             @@ (var "tbody"))]) $
     var "nonnull")
 
-checkForUnboundTypeVariables :: TTermDefinition (Context -> Graph -> Term -> Prelude.Either (InContext Error) ())
+checkForUnboundTypeVariables :: TTermDefinition (Context -> Graph -> Term -> Prelude.Either Error ())
 checkForUnboundTypeVariables = define "checkForUnboundTypeVariables" $
   doc "Check that a term has no unbound type variables (Either version)" $
   "cx" ~> "tx" ~> "term0" ~>
@@ -256,7 +255,7 @@ checkForUnboundTypeVariables = define "checkForUnboundTypeVariables" $
           ("_" ~> var "recurse" @@ (Core.typeLambdaBody $ var "tl"))]) $
   var "checkRecursive" @@ Sets.empty @@ list [string "top level"] @@ nothing @@ var "term0"
 
-checkNominalApplication :: TTermDefinition (Context -> Graph -> Name -> [Type] -> Prelude.Either (InContext Error) ((), Context))
+checkNominalApplication :: TTermDefinition (Context -> Graph -> Name -> [Type] -> Prelude.Either Error ((), Context))
 checkNominalApplication = define "checkNominalApplication" $
   doc "Check that a nominal type is applied to the correct number of type arguments (Either version)" $
   "cx" ~> "tx" ~> "tname" ~> "typeArgs" ~>
@@ -270,7 +269,7 @@ checkNominalApplication = define "checkNominalApplication" $
     (right $ pair unit (var "cx2"))
     (Ctx.failInContext (Error.errorChecking $ ErrorsChecking.checkingErrorTypeArityMismatch $ ErrorsChecking.typeArityMismatchError (Core.typeVariable (var "tname")) (var "varslen") (var "argslen") (var "typeArgs")) (var "cx2"))
 
-checkSameType :: TTermDefinition (Context -> Graph -> String -> [Type] -> Prelude.Either (InContext Error) Type)
+checkSameType :: TTermDefinition (Context -> Graph -> String -> [Type] -> Prelude.Either Error Type)
 checkSameType = define "checkSameType" $
   doc "Ensure all types in a list are equal and return the common type" $
   "cx" ~> "tx" ~> "desc" ~> "types" ~>
@@ -279,7 +278,7 @@ checkSameType = define "checkSameType" $
     (Ctx.failInContext (Error.errorChecking $ ErrorsChecking.checkingErrorUnequalTypes $ ErrorsChecking.unequalTypesError (var "types") (var "desc")) (var "cx"))
 
 -- TODO: unused
-checkType :: TTermDefinition (Context -> Graph -> Term -> Type -> Prelude.Either (InContext Error) ())
+checkType :: TTermDefinition (Context -> Graph -> Term -> Type -> Prelude.Either Error ())
 checkType = define "checkType" $
   doc "Check that a term has the expected type" $
   "cx" ~> "tx" ~> "term" ~> "typ" ~>
@@ -291,7 +290,7 @@ checkType = define "checkType" $
         (Ctx.failInContext (Error.errorChecking $ ErrorsChecking.checkingErrorTypeMismatch $ ErrorsChecking.typeMismatchError (var "typ") (var "t0")) (var "cx")))
     (right unit)
 
-checkTypeSubst :: TTermDefinition (Context -> Graph -> TypeSubst -> Prelude.Either (InContext Error) TypeSubst)
+checkTypeSubst :: TTermDefinition (Context -> Graph -> TypeSubst -> Prelude.Either Error TypeSubst)
 checkTypeSubst = define "checkTypeSubst" $
   doc ("Sanity-check a type substitution arising from unification. Specifically, check that schema types have not been"
     <> " inappropriately unified with type variables inferred from terms.") $
@@ -398,7 +397,7 @@ typesEffectivelyEqual = define "typesEffectivelyEqual" $
 -- The return type is (Type, Context) to propagate
 -- the updated counter.
 
-typeOf :: TTermDefinition (Context -> Graph -> [Type] -> Term -> Prelude.Either (InContext Error) (Type, Context))
+typeOf :: TTermDefinition (Context -> Graph -> [Type] -> Term -> Prelude.Either Error (Type, Context))
 typeOf = define "typeOf" $
   doc "Given a type context, reconstruct the type of a System F term" $
   "cx" ~> "tx" ~> "typeArgs" ~> "term" ~>
@@ -431,13 +430,13 @@ typeOf = define "typeOf" $
     _Term_variable>>: typeOfVariable @@ var "cx1" @@ var "tx" @@ var "typeArgs",
     _Term_wrap>>: typeOfWrappedTerm @@ var "cx1" @@ var "tx" @@ var "typeArgs"]
 
-typeOfAnnotatedTerm :: TTermDefinition (Context -> Graph -> [Type] -> AnnotatedTerm -> Prelude.Either (InContext Error) (Type, Context))
+typeOfAnnotatedTerm :: TTermDefinition (Context -> Graph -> [Type] -> AnnotatedTerm -> Prelude.Either Error (Type, Context))
 typeOfAnnotatedTerm = define "typeOfAnnotatedTerm" $
   doc "Reconstruct the type of an annotated term (Either/Context version)" $
   "cx" ~> "tx" ~> "typeArgs" ~> "at" ~>
   typeOf @@ var "cx" @@ var "tx" @@ var "typeArgs" @@ Core.annotatedTermBody (var "at")
 
-typeOfApplication :: TTermDefinition (Context -> Graph -> [Type] -> Application -> Prelude.Either (InContext Error) (Type, Context))
+typeOfApplication :: TTermDefinition (Context -> Graph -> [Type] -> Application -> Prelude.Either Error (Type, Context))
 typeOfApplication = define "typeOfApplication" $
   doc "Reconstruct the type of an application term (Either/Context version)" $
   "cx" ~> "tx" ~> "typeArgs" ~> "app" ~>
@@ -469,7 +468,7 @@ typeOfApplication = define "typeOfApplication" $
   "applied" <<~ applyTypeArgumentsToType @@ var "cx4" @@ var "tx" @@ var "typeArgs" @@ var "t" $
   right $ pair (var "applied") (var "cx4")
 
-typeOfCaseStatement :: TTermDefinition (Context -> Graph -> [Type] -> CaseStatement -> Prelude.Either (InContext Error) (Type, Context))
+typeOfCaseStatement :: TTermDefinition (Context -> Graph -> [Type] -> CaseStatement -> Prelude.Either Error (Type, Context))
 typeOfCaseStatement = define "typeOfCaseStatement" $
   doc "Reconstruct the type of a case statement (Either/Context version)" $
   "cx" ~> "tx" ~> "typeArgs" ~> "cs" ~>
@@ -485,7 +484,7 @@ typeOfCaseStatement = define "typeOfCaseStatement" $
   -- Type all case terms, threading context through the list
   "foldResult" <~ Lists.foldl
     ("acc" ~> "term" ~>
-      -- acc is Either (InContext Error) ([Type], Context)
+      -- acc is Either Error ([Type], Context)
       "accR" <<~ var "acc" $
       "types" <~ Pairs.first (var "accR") $
       "cxA" <~ Pairs.second (var "accR") $
@@ -503,7 +502,7 @@ typeOfCaseStatement = define "typeOfCaseStatement" $
     ("acc" ~> "t" ~>
       "accR" <<~ var "acc" $
       "cods" <~ Pairs.first (var "accR") $
-      "ft" <<~ ExtractCore.functionType @@ var "cx3" @@ var "t" $
+      "ft" <<~ ExtractCore.functionType @@ var "t" $
       right $ pair (Lists.concat2 (var "cods") (Lists.pure $ Core.functionTypeCodomain $ var "ft")) (var "cx3"))
     (right $ pair (list ([] :: [TTerm Type])) (var "cx3"))
     (var "tcterms") $
@@ -515,7 +514,7 @@ typeOfCaseStatement = define "typeOfCaseStatement" $
     (Resolution.nominalApplication @@ var "tname" @@ var "typeArgs")
     (var "cod")) (var "cx3")
 
-typeOfEither :: TTermDefinition (Context -> Graph -> [Type] -> Prelude.Either Term Term -> Prelude.Either (InContext Error) (Type, Context))
+typeOfEither :: TTermDefinition (Context -> Graph -> [Type] -> Prelude.Either Term Term -> Prelude.Either Error (Type, Context))
 typeOfEither = define "typeOfEither" $
   doc "Reconstruct the type of an either value (Either/Context version)" $
   "cx" ~> "tx" ~> "typeArgs" ~> "et" ~>
@@ -535,7 +534,7 @@ typeOfEither = define "typeOfEither" $
       (var "et"))
     (Ctx.failInContext (Error.errorChecking $ ErrorsChecking.checkingErrorTypeArityMismatch $ ErrorsChecking.typeArityMismatchError (Core.typeEither $ Core.eitherType Core.typeUnit Core.typeUnit) (int32 2) (var "n") (var "typeArgs")) (var "cx"))
 
-typeOfInjection :: TTermDefinition (Context -> Graph -> [Type] -> Injection -> Prelude.Either (InContext Error) (Type, Context))
+typeOfInjection :: TTermDefinition (Context -> Graph -> [Type] -> Injection -> Prelude.Either Error (Type, Context))
 typeOfInjection = define "typeOfInjection" $
   doc "Reconstruct the type of a union injection (Either/Context version)" $
   "cx" ~> "tx" ~> "typeArgs" ~> "injection" ~>
@@ -548,11 +547,11 @@ typeOfInjection = define "typeOfInjection" $
   "cx2" <~ Pairs.second (var "schemaResult") $
   "svars" <~ Core.typeSchemeVariables (var "schemaType") $
   "sbody" <~ Core.typeSchemeType (var "schemaType") $
-  "sfields" <<~ ExtractCore.unionType @@ var "cx2" @@ var "tname" @@ var "sbody" $
+  "sfields" <<~ ExtractCore.unionType @@ var "tname" @@ var "sbody" $
   "ftyp" <<~ Resolution.findFieldType @@ var "cx2" @@ var "fname" @@ var "sfields" $
   right $ pair (Resolution.nominalApplication @@ var "tname" @@ var "typeArgs") (var "cx2")
 
-typeOfLambda :: TTermDefinition (Context -> Graph -> [Type] -> Lambda -> Prelude.Either (InContext Error) (Type, Context))
+typeOfLambda :: TTermDefinition (Context -> Graph -> [Type] -> Lambda -> Prelude.Either Error (Type, Context))
 typeOfLambda = define "typeOfLambda" $
   doc "Reconstruct the type of a lambda function (Either/Context version)" $
   "cx" ~> "tx" ~> "typeArgs" ~> "l" ~>
@@ -572,7 +571,7 @@ typeOfLambda = define "typeOfLambda" $
   "applied" <<~ applyTypeArgumentsToType @@ var "cx3" @@ var "tx" @@ var "typeArgs" @@ var "tbody" $
   right $ pair (var "applied") (var "cx3")
 
-typeOfLet :: TTermDefinition (Context -> Graph -> [Type] -> Let -> Prelude.Either (InContext Error) (Type, Context))
+typeOfLet :: TTermDefinition (Context -> Graph -> [Type] -> Let -> Prelude.Either Error (Type, Context))
 typeOfLet = define "typeOfLet" $
   doc "Reconstruct the type of a let binding (Either/Context version)" $
   "cx" ~> "tx" ~> "typeArgs" ~> "letTerm" ~>
@@ -606,7 +605,7 @@ typeOfLet = define "typeOfLet" $
   "applied" <<~ applyTypeArgumentsToType @@ var "cx2" @@ var "tx" @@ var "typeArgs" @@ var "t" $
   right $ pair (var "applied") (var "cx2")
 
-typeOfList :: TTermDefinition (Context -> Graph -> [Type] -> [Term] -> Prelude.Either (InContext Error) (Type, Context))
+typeOfList :: TTermDefinition (Context -> Graph -> [Type] -> [Term] -> Prelude.Either Error (Type, Context))
 typeOfList = define "typeOfList" $
   doc "Reconstruct the type of a list (Either/Context version)" $
   "cx" ~> "tx" ~> "typeArgs" ~> "els" ~>
@@ -632,7 +631,7 @@ typeOfList = define "typeOfList" $
     "unifiedType" <<~ checkSameType @@ var "cx2" @@ var "tx" @@ (string "list elements") @@ var "eltypes" $
     right $ pair (Core.typeList $ var "unifiedType") (var "cx2"))
 
-typeOfLiteral :: TTermDefinition (Context -> Graph -> [Type] -> Literal -> Prelude.Either (InContext Error) (Type, Context))
+typeOfLiteral :: TTermDefinition (Context -> Graph -> [Type] -> Literal -> Prelude.Either Error (Type, Context))
 typeOfLiteral = define "typeOfLiteral" $
   doc "Reconstruct the type of a literal (Either/Context version)" $
   "cx" ~> "tx" ~> "typeArgs" ~> "lit" ~>
@@ -640,7 +639,7 @@ typeOfLiteral = define "typeOfLiteral" $
   "applied" <<~ applyTypeArgumentsToType @@ var "cx" @@ var "tx" @@ var "typeArgs" @@ var "t" $
   right $ pair (var "applied") (var "cx")
 
-typeOfMap :: TTermDefinition (Context -> Graph -> [Type] -> M.Map Term Term -> Prelude.Either (InContext Error) (Type, Context))
+typeOfMap :: TTermDefinition (Context -> Graph -> [Type] -> M.Map Term Term -> Prelude.Either Error (Type, Context))
 typeOfMap = define "typeOfMap" $
   doc "Reconstruct the type of a map (Either/Context version)" $
   "cx" ~> "tx" ~> "typeArgs" ~> "m" ~>
@@ -688,7 +687,7 @@ typeOfMap = define "typeOfMap" $
       @@ (Core.typeMap $ Core.mapType (var "kt") (var "vt")) $
     right $ pair (var "applied") (var "cx3"))
 
-typeOfMaybe :: TTermDefinition (Context -> Graph -> [Type] -> Maybe Term -> Prelude.Either (InContext Error) (Type, Context))
+typeOfMaybe :: TTermDefinition (Context -> Graph -> [Type] -> Maybe Term -> Prelude.Either Error (Type, Context))
 typeOfMaybe = define "typeOfMaybe" $
   doc "Reconstruct the type of an optional value (Either/Context version)" $
   "cx" ~> "tx" ~> "typeArgs" ~> "mt" ~>
@@ -706,7 +705,7 @@ typeOfMaybe = define "typeOfMaybe" $
     right $ pair (var "applied") (var "cx2")) $
   optCases (var "mt") (var "forNothing") (var "forJust")
 
-typeOfPair :: TTermDefinition (Context -> Graph -> [Type] -> (Term, Term) -> Prelude.Either (InContext Error) (Type, Context))
+typeOfPair :: TTermDefinition (Context -> Graph -> [Type] -> (Term, Term) -> Prelude.Either Error (Type, Context))
 typeOfPair = define "typeOfPair" $
   doc "Reconstruct the type of a pair (Either/Context version)" $
   "cx" ~> "tx" ~> "typeArgs" ~> "p" ~>
@@ -723,7 +722,7 @@ typeOfPair = define "typeOfPair" $
     right $ pair (Core.typePair $ Core.pairType (var "firstType") (var "secondType")) (var "cx3"))
     (Ctx.failInContext (Error.errorChecking $ ErrorsChecking.checkingErrorTypeArityMismatch $ ErrorsChecking.typeArityMismatchError (Core.typePair $ Core.pairType Core.typeUnit Core.typeUnit) (int32 2) (var "n") (var "typeArgs")) (var "cx"))
 
-typeOfPrimitive :: TTermDefinition (Context -> Graph -> [Type] -> Name -> Prelude.Either (InContext Error) (Type, Context))
+typeOfPrimitive :: TTermDefinition (Context -> Graph -> [Type] -> Name -> Prelude.Either Error (Type, Context))
 typeOfPrimitive = define "typeOfPrimitive" $
   doc "Reconstruct the type of a primitive function (Either/Context version)" $
   "cx" ~> "tx" ~> "typeArgs" ~> "name" ~>
@@ -742,7 +741,7 @@ typeOfPrimitive = define "typeOfPrimitive" $
       right $ pair (var "applied") (var "cx2"))
     (var "rawTs")
 
-typeOfProjection :: TTermDefinition (Context -> Graph -> [Type] -> Projection -> Prelude.Either (InContext Error) (Type, Context))
+typeOfProjection :: TTermDefinition (Context -> Graph -> [Type] -> Projection -> Prelude.Either Error (Type, Context))
 typeOfProjection = define "typeOfProjection" $
   doc "Reconstruct the type of a record projection (Either/Context version)" $
   "cx" ~> "tx" ~> "typeArgs" ~> "p" ~>
@@ -753,7 +752,7 @@ typeOfProjection = define "typeOfProjection" $
   "cx2" <~ Pairs.second (var "schemaResult") $
   "svars" <~ Core.typeSchemeVariables (var "schemaType") $
   "sbody" <~ Core.typeSchemeType (var "schemaType") $
-  "sfields" <<~ ExtractCore.recordType @@ var "cx2" @@ var "tname" @@ var "sbody" $
+  "sfields" <<~ ExtractCore.recordType @@ var "tname" @@ var "sbody" $
   "ftyp" <<~ Resolution.findFieldType @@ var "cx2" @@ var "fname" @@ var "sfields" $
   "subst" <~ Typing.typeSubst (Maps.fromList $ Lists.zip (var "svars") (var "typeArgs")) $
   "sftyp" <~ Substitution.substInType @@ var "subst" @@ var "ftyp" $
@@ -761,7 +760,7 @@ typeOfProjection = define "typeOfProjection" $
     (Resolution.nominalApplication @@ var "tname" @@ var "typeArgs")
     (var "sftyp")) (var "cx2")
 
-typeOfRecord :: TTermDefinition (Context -> Graph -> [Type] -> Record -> Prelude.Either (InContext Error) (Type, Context))
+typeOfRecord :: TTermDefinition (Context -> Graph -> [Type] -> Record -> Prelude.Either Error (Type, Context))
 typeOfRecord = define "typeOfRecord" $
   doc "Reconstruct the type of a record (Either/Context version)" $
   "cx" ~> "tx" ~> "typeArgs" ~> "record" ~>
@@ -783,7 +782,7 @@ typeOfRecord = define "typeOfRecord" $
   "cx2" <~ Pairs.second (var "foldR") $
   right $ pair (Resolution.nominalApplication @@ var "tname" @@ var "typeArgs") (var "cx2")
 
-typeOfSet :: TTermDefinition (Context -> Graph -> [Type] -> S.Set Term -> Prelude.Either (InContext Error) (Type, Context))
+typeOfSet :: TTermDefinition (Context -> Graph -> [Type] -> S.Set Term -> Prelude.Either Error (Type, Context))
 typeOfSet = define "typeOfSet" $
   doc "Reconstruct the type of a set (Either/Context version)" $
   "cx" ~> "tx" ~> "typeArgs" ~> "els" ~>
@@ -809,14 +808,14 @@ typeOfSet = define "typeOfSet" $
     "unifiedType" <<~ checkSameType @@ var "cx2" @@ var "tx" @@ (string "set elements") @@ var "eltypes" $
     right $ pair (Core.typeSet $ var "unifiedType") (var "cx2"))
 
-typeOfTerm :: TTermDefinition (Context -> Graph -> Term -> Either (InContext Error) Type)
+typeOfTerm :: TTermDefinition (Context -> Graph -> Term -> Either Error Type)
 typeOfTerm = define "typeOfTerm" $
   doc "Check the type of a term" $
   "cx" ~> "g" ~> "term" ~>
   Eithers.map (primitive _pairs_first)
     (typeOf @@ var "cx" @@ var "g" @@ list ([] :: [TTerm Type]) @@ var "term")
 
-typeOfTypeApplication :: TTermDefinition (Context -> Graph -> [Type] -> TypeApplicationTerm -> Prelude.Either (InContext Error) (Type, Context))
+typeOfTypeApplication :: TTermDefinition (Context -> Graph -> [Type] -> TypeApplicationTerm -> Prelude.Either Error (Type, Context))
 typeOfTypeApplication = define "typeOfTypeApplication" $
   doc "Reconstruct the type of a type application term (Either/Context version)" $
   "cx" ~> "tx" ~> "typeArgs" ~> "tyapp" ~>
@@ -824,7 +823,7 @@ typeOfTypeApplication = define "typeOfTypeApplication" $
   "t" <~ Core.typeApplicationTermType (var "tyapp") $
   typeOf @@ var "cx" @@ var "tx" @@ Lists.cons (var "t") (var "typeArgs") @@ var "body"
 
-typeOfTypeLambda :: TTermDefinition (Context -> Graph -> [Type] -> TypeLambda -> Prelude.Either (InContext Error) (Type, Context))
+typeOfTypeLambda :: TTermDefinition (Context -> Graph -> [Type] -> TypeLambda -> Prelude.Either Error (Type, Context))
 typeOfTypeLambda = define "typeOfTypeLambda" $
   doc "Reconstruct the type of a type lambda (type abstraction) term (Either/Context version)" $
   "cx" ~> "tx" ~> "typeArgs" ~> "tl" ~>
@@ -839,14 +838,14 @@ typeOfTypeLambda = define "typeOfTypeLambda" $
     @@ (Core.typeForall $ Core.forallType (var "v") (var "t1")) $
   right $ pair (var "applied") (var "cx2")
 
-typeOfUnit :: TTermDefinition (Context -> Graph -> [Type] -> Prelude.Either (InContext Error) (Type, Context))
+typeOfUnit :: TTermDefinition (Context -> Graph -> [Type] -> Prelude.Either Error (Type, Context))
 typeOfUnit = define "typeOfUnit" $
   doc "Reconstruct the type of the unit term (Either/Context version)" $
   "cx" ~> "tx" ~> "typeArgs" ~>
   "applied" <<~ applyTypeArgumentsToType @@ var "cx" @@ var "tx" @@ var "typeArgs" @@ Core.typeUnit $
   right $ pair (var "applied") (var "cx")
 
-typeOfUnwrap :: TTermDefinition (Context -> Graph -> [Type] -> Name -> Prelude.Either (InContext Error) (Type, Context))
+typeOfUnwrap :: TTermDefinition (Context -> Graph -> [Type] -> Name -> Prelude.Either Error (Type, Context))
 typeOfUnwrap = define "typeOfUnwrap" $
   doc "Reconstruct the type of an unwrap operation (Either/Context version)" $
   "cx" ~> "tx" ~> "typeArgs" ~> "tname" ~>
@@ -855,14 +854,14 @@ typeOfUnwrap = define "typeOfUnwrap" $
   "cx2" <~ Pairs.second (var "schemaResult") $
   "svars" <~ Core.typeSchemeVariables (var "schemaType") $
   "sbody" <~ Core.typeSchemeType (var "schemaType") $
-  "wrapped" <<~ ExtractCore.wrappedType @@ var "cx2" @@ var "tname" @@ var "sbody" $
+  "wrapped" <<~ ExtractCore.wrappedType @@ var "tname" @@ var "sbody" $
   "subst" <~ Typing.typeSubst (Maps.fromList $ Lists.zip (var "svars") (var "typeArgs")) $
   "swrapped" <~ Substitution.substInType @@ var "subst" @@ var "wrapped" $
   right $ pair (MetaTypes.function
     (Resolution.nominalApplication @@ var "tname" @@ var "typeArgs")
     (var "swrapped")) (var "cx2")
 
-typeOfVariable :: TTermDefinition (Context -> Graph -> [Type] -> Name -> Prelude.Either (InContext Error) (Type, Context))
+typeOfVariable :: TTermDefinition (Context -> Graph -> [Type] -> Name -> Prelude.Either Error (Type, Context))
 typeOfVariable = define "typeOfVariable" $
   doc "Reconstruct the type of a variable (Either/Context version)" $
   "cx" ~> "tx" ~> "typeArgs" ~> "name" ~>
@@ -885,7 +884,7 @@ typeOfVariable = define "typeOfVariable" $
     (var "forScheme")
     (var "rawTypeScheme")
 
-typeOfWrappedTerm :: TTermDefinition (Context -> Graph -> [Type] -> WrappedTerm -> Prelude.Either (InContext Error) (Type, Context))
+typeOfWrappedTerm :: TTermDefinition (Context -> Graph -> [Type] -> WrappedTerm -> Prelude.Either Error (Type, Context))
 typeOfWrappedTerm = define "typeOfWrappedTerm" $
   doc "Reconstruct the type of a wrapped term (Either/Context version)" $
   "cx" ~> "tx" ~> "typeArgs" ~> "wt" ~>

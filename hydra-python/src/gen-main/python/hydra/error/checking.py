@@ -8,6 +8,7 @@ from functools import lru_cache
 from hydra.dsl.python import Node, frozenlist
 from typing import Annotated, TypeAlias, cast
 import hydra.core
+import hydra.paths
 import hydra.typing
 import hydra.variants
 
@@ -20,6 +21,9 @@ class CheckingErrorNotAForallType(Node["NotAForallTypeError"]):
 class CheckingErrorNotAFunctionType(Node["NotAFunctionTypeError"]):
     r"""A type that is not a function type when one was expected"""
 
+class CheckingErrorOther(Node["OtherCheckingError"]):
+    r"""A generic checking error"""
+
 class CheckingErrorTypeArityMismatch(Node["TypeArityMismatchError"]):
     r"""A type constructor applied to the wrong number of arguments"""
 
@@ -28,6 +32,9 @@ class CheckingErrorTypeMismatch(Node["TypeMismatchError"]):
 
 class CheckingErrorUnboundTypeVariables(Node["UnboundTypeVariablesError"]):
     r"""Type variables that are not bound in scope"""
+
+class CheckingErrorUndefinedTermVariable(Node["UndefinedTermVariableCheckingError"]):
+    r"""A reference to a term variable that is not bound in scope, encountered during checking"""
 
 class CheckingErrorUnequalTypes(Node["UnequalTypesError"]):
     r"""Multiple types that should be equal but are not"""
@@ -41,25 +48,31 @@ class CheckingErrorUntypedLambda(Node["UntypedLambdaError"]):
 class CheckingErrorUntypedLetBinding(Node["UntypedLetBindingError"]):
     r"""A let binding without a type annotation"""
 
+class CheckingErrorUntypedTermVariable(Node["UntypedTermVariableCheckingError"]):
+    r"""A reference to a term variable whose type is not known, encountered during checking"""
+
 class _CheckingErrorMeta(type):
     def __getitem__(cls, item):
         return object
 
 # An error that occurred during type checking.
 class CheckingError(metaclass=_CheckingErrorMeta):
-    r"""CheckingErrorIncorrectUnification | CheckingErrorNotAForallType | CheckingErrorNotAFunctionType | CheckingErrorTypeArityMismatch | CheckingErrorTypeMismatch | CheckingErrorUnboundTypeVariables | CheckingErrorUnequalTypes | CheckingErrorUnsupportedTermVariant | CheckingErrorUntypedLambda | CheckingErrorUntypedLetBinding"""
+    r"""CheckingErrorIncorrectUnification | CheckingErrorNotAForallType | CheckingErrorNotAFunctionType | CheckingErrorOther | CheckingErrorTypeArityMismatch | CheckingErrorTypeMismatch | CheckingErrorUnboundTypeVariables | CheckingErrorUndefinedTermVariable | CheckingErrorUnequalTypes | CheckingErrorUnsupportedTermVariant | CheckingErrorUntypedLambda | CheckingErrorUntypedLetBinding | CheckingErrorUntypedTermVariable"""
 
     TYPE_ = hydra.core.Name("hydra.error.checking.CheckingError")
     INCORRECT_UNIFICATION = hydra.core.Name("incorrectUnification")
     NOT_A_FORALL_TYPE = hydra.core.Name("notAForallType")
     NOT_A_FUNCTION_TYPE = hydra.core.Name("notAFunctionType")
+    OTHER = hydra.core.Name("other")
     TYPE_ARITY_MISMATCH = hydra.core.Name("typeArityMismatch")
     TYPE_MISMATCH = hydra.core.Name("typeMismatch")
     UNBOUND_TYPE_VARIABLES = hydra.core.Name("unboundTypeVariables")
+    UNDEFINED_TERM_VARIABLE = hydra.core.Name("undefinedTermVariable")
     UNEQUAL_TYPES = hydra.core.Name("unequalTypes")
     UNSUPPORTED_TERM_VARIANT = hydra.core.Name("unsupportedTermVariant")
     UNTYPED_LAMBDA = hydra.core.Name("untypedLambda")
     UNTYPED_LET_BINDING = hydra.core.Name("untypedLetBinding")
+    UNTYPED_TERM_VARIABLE = hydra.core.Name("untypedTermVariable")
 
 @dataclass(frozen=True)
 class IncorrectUnificationError:
@@ -89,6 +102,17 @@ class NotAFunctionTypeError:
 
     TYPE_ = hydra.core.Name("hydra.error.checking.NotAFunctionTypeError")
     TYPE = hydra.core.Name("type")
+
+@dataclass(frozen=True)
+class OtherCheckingError:
+    r"""A generic checking error: message + subterm path."""
+
+    path: Annotated[hydra.paths.SubtermPath, "The subterm path at which the error was observed"]
+    message: Annotated[str, "A human-readable error message"]
+
+    TYPE_ = hydra.core.Name("hydra.error.checking.OtherCheckingError")
+    PATH = hydra.core.Name("path")
+    MESSAGE = hydra.core.Name("message")
 
 @dataclass(frozen=True)
 class TypeArityMismatchError:
@@ -128,6 +152,17 @@ class UnboundTypeVariablesError:
     TYPE = hydra.core.Name("type")
 
 @dataclass(frozen=True)
+class UndefinedTermVariableCheckingError:
+    r"""A reference to a term variable that is not bound in scope, encountered during checking."""
+
+    path: Annotated[hydra.paths.SubtermPath, "The subterm path at which the variable was referenced"]
+    name: Annotated[hydra.core.Name, "The name of the undefined variable"]
+
+    TYPE_ = hydra.core.Name("hydra.error.checking.UndefinedTermVariableCheckingError")
+    PATH = hydra.core.Name("path")
+    NAME = hydra.core.Name("name")
+
+@dataclass(frozen=True)
 class UnequalTypesError:
     r"""Multiple types that should all be equal but are not."""
 
@@ -161,3 +196,14 @@ class UntypedLetBindingError:
 
     TYPE_ = hydra.core.Name("hydra.error.checking.UntypedLetBindingError")
     BINDING = hydra.core.Name("binding")
+
+@dataclass(frozen=True)
+class UntypedTermVariableCheckingError:
+    r"""A reference to a term variable whose type is not known, encountered during checking."""
+
+    path: Annotated[hydra.paths.SubtermPath, "The subterm path at which the variable was referenced"]
+    name: Annotated[hydra.core.Name, "The name of the untyped variable"]
+
+    TYPE_ = hydra.core.Name("hydra.error.checking.UntypedTermVariableCheckingError")
+    PATH = hydra.core.Name("path")
+    NAME = hydra.core.Name("name")

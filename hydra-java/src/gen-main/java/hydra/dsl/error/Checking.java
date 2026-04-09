@@ -18,6 +18,10 @@ public interface Checking {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.checking.CheckingError"), new hydra.core.Field(new hydra.core.Name("notAFunctionType"), (x).value))));
   }
 
+  static hydra.phantoms.TTerm<hydra.error.checking.CheckingError> checkingErrorOther(hydra.phantoms.TTerm<hydra.error.checking.OtherCheckingError> x) {
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.checking.CheckingError"), new hydra.core.Field(new hydra.core.Name("other"), (x).value))));
+  }
+
   static hydra.phantoms.TTerm<hydra.error.checking.CheckingError> checkingErrorTypeArityMismatch(hydra.phantoms.TTerm<hydra.error.checking.TypeArityMismatchError> x) {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.checking.CheckingError"), new hydra.core.Field(new hydra.core.Name("typeArityMismatch"), (x).value))));
   }
@@ -28,6 +32,10 @@ public interface Checking {
 
   static hydra.phantoms.TTerm<hydra.error.checking.CheckingError> checkingErrorUnboundTypeVariables(hydra.phantoms.TTerm<hydra.error.checking.UnboundTypeVariablesError> x) {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.checking.CheckingError"), new hydra.core.Field(new hydra.core.Name("unboundTypeVariables"), (x).value))));
+  }
+
+  static hydra.phantoms.TTerm<hydra.error.checking.CheckingError> checkingErrorUndefinedTermVariable(hydra.phantoms.TTerm<hydra.error.checking.UndefinedTermVariableCheckingError> x) {
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.checking.CheckingError"), new hydra.core.Field(new hydra.core.Name("undefinedTermVariable"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.error.checking.CheckingError> checkingErrorUnequalTypes(hydra.phantoms.TTerm<hydra.error.checking.UnequalTypesError> x) {
@@ -44,6 +52,10 @@ public interface Checking {
 
   static hydra.phantoms.TTerm<hydra.error.checking.CheckingError> checkingErrorUntypedLetBinding(hydra.phantoms.TTerm<hydra.error.checking.UntypedLetBindingError> x) {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.checking.CheckingError"), new hydra.core.Field(new hydra.core.Name("untypedLetBinding"), (x).value))));
+  }
+
+  static hydra.phantoms.TTerm<hydra.error.checking.CheckingError> checkingErrorUntypedTermVariable(hydra.phantoms.TTerm<hydra.error.checking.UntypedTermVariableCheckingError> x) {
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.checking.CheckingError"), new hydra.core.Field(new hydra.core.Name("untypedTermVariable"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.error.checking.IncorrectUnificationError> incorrectUnificationError(hydra.phantoms.TTerm<hydra.typing.TypeSubst> substitution) {
@@ -94,6 +106,32 @@ public interface Checking {
 
   static hydra.phantoms.TTerm<hydra.error.checking.NotAFunctionTypeError> notAFunctionTypeErrorWithType(hydra.phantoms.TTerm<hydra.error.checking.NotAFunctionTypeError> original, hydra.phantoms.TTerm<hydra.core.Type> newVal) {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.checking.NotAFunctionTypeError"), java.util.Arrays.asList(new hydra.core.Field(new hydra.core.Name("type"), (newVal).value)))));
+  }
+
+  static hydra.phantoms.TTerm<hydra.error.checking.OtherCheckingError> otherCheckingError(hydra.phantoms.TTerm<hydra.paths.SubtermPath> path, hydra.phantoms.TTerm<String> message) {
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.checking.OtherCheckingError"), java.util.Arrays.asList(
+      new hydra.core.Field(new hydra.core.Name("path"), (path).value),
+      new hydra.core.Field(new hydra.core.Name("message"), (message).value)))));
+  }
+
+  static hydra.phantoms.TTerm<String> otherCheckingErrorMessage(hydra.phantoms.TTerm<hydra.error.checking.OtherCheckingError> x) {
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.error.checking.OtherCheckingError"), new hydra.core.Name("message"))))), (x).value)));
+  }
+
+  static hydra.phantoms.TTerm<hydra.paths.SubtermPath> otherCheckingErrorPath(hydra.phantoms.TTerm<hydra.error.checking.OtherCheckingError> x) {
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.error.checking.OtherCheckingError"), new hydra.core.Name("path"))))), (x).value)));
+  }
+
+  static hydra.phantoms.TTerm<hydra.error.checking.OtherCheckingError> otherCheckingErrorWithMessage(hydra.phantoms.TTerm<hydra.error.checking.OtherCheckingError> original, hydra.phantoms.TTerm<String> newVal) {
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.checking.OtherCheckingError"), java.util.Arrays.asList(
+      new hydra.core.Field(new hydra.core.Name("path"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.error.checking.OtherCheckingError"), new hydra.core.Name("path"))))), (original).value))),
+      new hydra.core.Field(new hydra.core.Name("message"), (newVal).value)))));
+  }
+
+  static hydra.phantoms.TTerm<hydra.error.checking.OtherCheckingError> otherCheckingErrorWithPath(hydra.phantoms.TTerm<hydra.error.checking.OtherCheckingError> original, hydra.phantoms.TTerm<hydra.paths.SubtermPath> newVal) {
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.checking.OtherCheckingError"), java.util.Arrays.asList(
+      new hydra.core.Field(new hydra.core.Name("path"), (newVal).value),
+      new hydra.core.Field(new hydra.core.Name("message"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.error.checking.OtherCheckingError"), new hydra.core.Name("message"))))), (original).value)))))));
   }
 
   static hydra.phantoms.TTerm<hydra.error.checking.TypeArityMismatchError> typeArityMismatchError(hydra.phantoms.TTerm<hydra.core.Type> type, hydra.phantoms.TTerm<Integer> expectedArity, hydra.phantoms.TTerm<Integer> actualArity, hydra.phantoms.TTerm<java.util.List<hydra.core.Type>> typeArguments) {
@@ -204,6 +242,32 @@ public interface Checking {
       new hydra.core.Field(new hydra.core.Name("type"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.error.checking.UnboundTypeVariablesError"), new hydra.core.Name("type"))))), (original).value)))))));
   }
 
+  static hydra.phantoms.TTerm<hydra.error.checking.UndefinedTermVariableCheckingError> undefinedTermVariableCheckingError(hydra.phantoms.TTerm<hydra.paths.SubtermPath> path, hydra.phantoms.TTerm<hydra.core.Name> name) {
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.checking.UndefinedTermVariableCheckingError"), java.util.Arrays.asList(
+      new hydra.core.Field(new hydra.core.Name("path"), (path).value),
+      new hydra.core.Field(new hydra.core.Name("name"), (name).value)))));
+  }
+
+  static hydra.phantoms.TTerm<hydra.core.Name> undefinedTermVariableCheckingErrorName(hydra.phantoms.TTerm<hydra.error.checking.UndefinedTermVariableCheckingError> x) {
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.error.checking.UndefinedTermVariableCheckingError"), new hydra.core.Name("name"))))), (x).value)));
+  }
+
+  static hydra.phantoms.TTerm<hydra.paths.SubtermPath> undefinedTermVariableCheckingErrorPath(hydra.phantoms.TTerm<hydra.error.checking.UndefinedTermVariableCheckingError> x) {
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.error.checking.UndefinedTermVariableCheckingError"), new hydra.core.Name("path"))))), (x).value)));
+  }
+
+  static hydra.phantoms.TTerm<hydra.error.checking.UndefinedTermVariableCheckingError> undefinedTermVariableCheckingErrorWithName(hydra.phantoms.TTerm<hydra.error.checking.UndefinedTermVariableCheckingError> original, hydra.phantoms.TTerm<hydra.core.Name> newVal) {
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.checking.UndefinedTermVariableCheckingError"), java.util.Arrays.asList(
+      new hydra.core.Field(new hydra.core.Name("path"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.error.checking.UndefinedTermVariableCheckingError"), new hydra.core.Name("path"))))), (original).value))),
+      new hydra.core.Field(new hydra.core.Name("name"), (newVal).value)))));
+  }
+
+  static hydra.phantoms.TTerm<hydra.error.checking.UndefinedTermVariableCheckingError> undefinedTermVariableCheckingErrorWithPath(hydra.phantoms.TTerm<hydra.error.checking.UndefinedTermVariableCheckingError> original, hydra.phantoms.TTerm<hydra.paths.SubtermPath> newVal) {
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.checking.UndefinedTermVariableCheckingError"), java.util.Arrays.asList(
+      new hydra.core.Field(new hydra.core.Name("path"), (newVal).value),
+      new hydra.core.Field(new hydra.core.Name("name"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.error.checking.UndefinedTermVariableCheckingError"), new hydra.core.Name("name"))))), (original).value)))))));
+  }
+
   static hydra.phantoms.TTerm<hydra.error.checking.UnequalTypesError> unequalTypesError(hydra.phantoms.TTerm<java.util.List<hydra.core.Type>> types, hydra.phantoms.TTerm<String> description) {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.checking.UnequalTypesError"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("types"), (types).value),
@@ -256,5 +320,31 @@ public interface Checking {
 
   static hydra.phantoms.TTerm<hydra.error.checking.UntypedLetBindingError> untypedLetBindingErrorWithBinding(hydra.phantoms.TTerm<hydra.error.checking.UntypedLetBindingError> original, hydra.phantoms.TTerm<hydra.core.Binding> newVal) {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.checking.UntypedLetBindingError"), java.util.Arrays.asList(new hydra.core.Field(new hydra.core.Name("binding"), (newVal).value)))));
+  }
+
+  static hydra.phantoms.TTerm<hydra.error.checking.UntypedTermVariableCheckingError> untypedTermVariableCheckingError(hydra.phantoms.TTerm<hydra.paths.SubtermPath> path, hydra.phantoms.TTerm<hydra.core.Name> name) {
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.checking.UntypedTermVariableCheckingError"), java.util.Arrays.asList(
+      new hydra.core.Field(new hydra.core.Name("path"), (path).value),
+      new hydra.core.Field(new hydra.core.Name("name"), (name).value)))));
+  }
+
+  static hydra.phantoms.TTerm<hydra.core.Name> untypedTermVariableCheckingErrorName(hydra.phantoms.TTerm<hydra.error.checking.UntypedTermVariableCheckingError> x) {
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.error.checking.UntypedTermVariableCheckingError"), new hydra.core.Name("name"))))), (x).value)));
+  }
+
+  static hydra.phantoms.TTerm<hydra.paths.SubtermPath> untypedTermVariableCheckingErrorPath(hydra.phantoms.TTerm<hydra.error.checking.UntypedTermVariableCheckingError> x) {
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.error.checking.UntypedTermVariableCheckingError"), new hydra.core.Name("path"))))), (x).value)));
+  }
+
+  static hydra.phantoms.TTerm<hydra.error.checking.UntypedTermVariableCheckingError> untypedTermVariableCheckingErrorWithName(hydra.phantoms.TTerm<hydra.error.checking.UntypedTermVariableCheckingError> original, hydra.phantoms.TTerm<hydra.core.Name> newVal) {
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.checking.UntypedTermVariableCheckingError"), java.util.Arrays.asList(
+      new hydra.core.Field(new hydra.core.Name("path"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.error.checking.UntypedTermVariableCheckingError"), new hydra.core.Name("path"))))), (original).value))),
+      new hydra.core.Field(new hydra.core.Name("name"), (newVal).value)))));
+  }
+
+  static hydra.phantoms.TTerm<hydra.error.checking.UntypedTermVariableCheckingError> untypedTermVariableCheckingErrorWithPath(hydra.phantoms.TTerm<hydra.error.checking.UntypedTermVariableCheckingError> original, hydra.phantoms.TTerm<hydra.paths.SubtermPath> newVal) {
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.checking.UntypedTermVariableCheckingError"), java.util.Arrays.asList(
+      new hydra.core.Field(new hydra.core.Name("path"), (newVal).value),
+      new hydra.core.Field(new hydra.core.Name("name"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.error.checking.UntypedTermVariableCheckingError"), new hydra.core.Name("name"))))), (original).value)))))));
   }
 }

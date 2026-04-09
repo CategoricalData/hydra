@@ -100,11 +100,11 @@ module_ = Module ns definitions
       toDefinition withLetContext,
       toDefinition withTypeLambdaContext]
 
-definitionAsTypeApplicationTerm :: TTermDefinition (Context -> Binding -> Either (InContext Error) TypeApplicationTerm)
+definitionAsTypeApplicationTerm :: TTermDefinition (Binding -> Either Error TypeApplicationTerm)
 definitionAsTypeApplicationTerm = define "definitionAsTypeApplicationTerm" $
   doc "Convert a definition to a typed term" $
-  "cx" ~> "el" ~>
-  Maybes.maybe (Ctx.failInContext (Error.errorOther $ Error.otherError (string "missing element type")) (var "cx"))
+  "el" ~>
+  Maybes.maybe (Ctx.failInContext (Error.errorExtraction $ Error.extractionErrorUnexpectedShape $ Error.unexpectedShapeError (string "typed binding") (string "untyped binding")) (var "cx"))
     ("ts" ~> right (Core.typeApplicationTerm (Core.bindingTerm (var "el")) (Core.typeSchemeType (var "ts"))))
     (Core.bindingType (var "el"))
 
@@ -121,14 +121,14 @@ graphAsTerm = define "graphAsTerm" $
   doc "Convert bindings and a body to a term, using let-term duality" $
   "bindings" ~> "body" ~> Core.termLet (graphAsLet @@ var "bindings" @@ var "body")
 
-graphAsTypes :: TTermDefinition (Context -> Graph -> [Binding] -> Either (InContext DecodingError) (M.Map Name Type))
+graphAsTypes :: TTermDefinition (Graph -> [Binding] -> Either DecodingError (M.Map Name Type))
 graphAsTypes = define "graphAsTypes" $
   doc "Decode a list of type-encoding bindings into a map of named types" $
-  "cx" ~> "graph" ~> "els" ~>
+  "graph" ~> "els" ~>
   "toPair" <~ ("el" ~>
     Eithers.map
       ("typ" ~> pair (Core.bindingName $ var "el") (var "typ"))
-      (Ctx.withContext (var "cx") (decoderFor _Type @@ var "graph" @@ (Core.bindingTerm $ var "el")))) $
+      (decoderFor _Type @@ var "graph" @@ (Core.bindingTerm $ var "el"))) $
   Eithers.map (unaryFunction Maps.fromList) (Eithers.mapList (var "toPair") (var "els"))
 
 partitionDefinitions :: TTermDefinition ([Definition] -> ([TypeDefinition], [TermDefinition]))
@@ -178,23 +178,21 @@ reorderDefs = define "reorderDefs" $
       @@ var "termDefsWrapped") $
     Lists.concat (list [var "typeDefs", var "sortedTermDefs"])
 
-schemaGraphToTypingEnvironment :: TTermDefinition (Context -> Graph -> Either (InContext Error) (M.Map Name TypeScheme))
+schemaGraphToTypingEnvironment :: TTermDefinition (Graph -> Either Error (M.Map Name TypeScheme))
 schemaGraphToTypingEnvironment = define "schemaGraphToTypingEnvironment" $
   doc "Convert a schema graph to a typing environment (Either version)" $
-  "cx" ~> "g" ~>
+  "g" ~>
   "toTypeScheme" <~ ("vars" ~> "typ" ~> cases _Type (Strip.deannotateType @@ var "typ")
     (Just (Core.typeScheme (Lists.reverse (var "vars")) (var "typ") Phantoms.nothing)) [
     _Type_forall>>: "ft" ~> var "toTypeScheme"
       @@ Lists.cons (Core.forallTypeParameter (var "ft")) (var "vars")
       @@ Core.forallTypeBody (var "ft")]) $
   "decodeType" <~ ("term" ~>
-    Ctx.withContext (var "cx")
-      (Eithers.bimap ("_e" ~> Error.errorOther $ Error.otherError (unwrap _DecodingError @@ var "_e")) ("_a" ~> var "_a")
-        (decoderFor _Type @@ var "g" @@ var "term"))) $
+    Eithers.bimap ("_e" ~> Error.errorDecoding $ var "_e") ("_a" ~> var "_a")
+        (decoderFor _Type @@ var "g" @@ var "term")) $
   "decodeTypeScheme" <~ ("term" ~>
-    Ctx.withContext (var "cx")
-      (Eithers.bimap ("_e" ~> Error.errorOther $ Error.otherError (unwrap _DecodingError @@ var "_e")) ("_a" ~> var "_a")
-        (decoderFor _TypeScheme @@ var "g" @@ var "term"))) $
+    Eithers.bimap ("_e" ~> Error.errorDecoding $ var "_e") ("_a" ~> var "_a")
+        (decoderFor _TypeScheme @@ var "g" @@ var "term")) $
   "toPair" <~ ("el" ~>
     "forTerm" <~ ("term" ~> cases _Term (var "term") (Just (right nothing)) [
       _Term_record>>: "r" ~>

@@ -16,7 +16,6 @@ import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.optional;
 import static hydra.dsl.Types.scheme;
 import hydra.context.Context;
-import hydra.context.InContext;
 import hydra.errors.Error_;
 import hydra.util.Either;
 
@@ -48,14 +47,14 @@ public class Apply extends PrimitiveFunction {
      * @return a function that applies an optional function to an optional argument
      */
     @Override
-    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
+    protected Function<List<Term>, Function<Context, Function<Graph, Either<Error_, Term>>>> implementation() {
         return args -> cx -> graph ->
-            hydra.lib.eithers.Bind.apply(hydra.extract.Core.maybeTerm(cx, t -> Either.right(t), graph, args.get(0)), optionalF ->
+            hydra.lib.eithers.Bind.apply(hydra.extract.Core.maybeTerm(t -> Either.right(t), graph, args.get(0)), optionalF ->
                 hydra.lib.eithers.Map.apply(optionalArg ->
                     (optionalF.isJust() && optionalArg.isJust())
                         ? Terms.optional(Maybe.just(Terms.apply(optionalF.fromJust(), optionalArg.fromJust())))
                         : Terms.optional(Maybe.nothing()),
-                    hydra.extract.Core.maybeTerm(cx, t -> Either.right(t), graph, args.get(1))));
+                    hydra.extract.Core.maybeTerm(t -> Either.right(t), graph, args.get(1))));
     }
 
     /**

@@ -43,6 +43,15 @@
                               "literal": {"string": "A type that is not a function type when one was expected"}}}],
                         "body": {"variable": "hydra.error.checking.NotAFunctionTypeError"}}}},
                   {
+                    "name": "other",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "A generic checking error"}}}],
+                        "body": {"variable": "hydra.error.checking.OtherCheckingError"}}}},
+                  {
                     "name": "typeArityMismatch",
                     "type": {
                       "annotated": {
@@ -72,6 +81,18 @@
                             "@key": "description",
                             "@value": {"literal": {"string": "Type variables that are not bound in scope"}}}],
                         "body": {"variable": "hydra.error.checking.UnboundTypeVariablesError"}}}},
+                  {
+                    "name": "undefinedTermVariable",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "A reference to a term variable that is not bound in scope, encountered during checking"}}}],
+                        "body": {
+                          "variable": "hydra.error.checking.UndefinedTermVariableCheckingError"}}}},
                   {
                     "name": "unequalTypes",
                     "type": {
@@ -111,7 +132,18 @@
                           {
                             "@key": "description",
                             "@value": {"literal": {"string": "A let binding without a type annotation"}}}],
-                        "body": {"variable": "hydra.error.checking.UntypedLetBindingError"}}}}]}}},
+                        "body": {"variable": "hydra.error.checking.UntypedLetBindingError"}}}},
+                  {
+                    "name": "untypedTermVariable",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "A reference to a term variable whose type is not known, encountered during checking"}}}],
+                        "body": {"variable": "hydra.error.checking.UntypedTermVariableCheckingError"}}}}]}}},
           "variables": []}}},
     {
       "type": {
@@ -193,6 +225,39 @@
                             "@key": "description",
                             "@value": {"literal": {"string": "The actual type encountered"}}}],
                         "body": {"variable": "hydra.core.Type"}}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.error.checking.OtherCheckingError",
+        "type": {
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {
+                    "literal": {"string": "A generic checking error: message + subterm path"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "path",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {"string": "The subterm path at which the error was observed"}}}],
+                        "body": {"variable": "hydra.paths.SubtermPath"}}}},
+                  {
+                    "name": "message",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "A human-readable error message"}}}],
+                        "body": {"literal": {"string": {}}}}}}]}}},
           "variables": []}}},
     {
       "type": {
@@ -313,6 +378,40 @@
           "variables": []}}},
     {
       "type": {
+        "name": "hydra.error.checking.UndefinedTermVariableCheckingError",
+        "type": {
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {
+                    "literal": {
+                      "string": "A reference to a term variable that is not bound in scope, encountered during checking"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "path",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {"string": "The subterm path at which the variable was referenced"}}}],
+                        "body": {"variable": "hydra.paths.SubtermPath"}}}},
+                  {
+                    "name": "name",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "The name of the undefined variable"}}}],
+                        "body": {"variable": "hydra.core.Name"}}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
         "name": "hydra.error.checking.UnequalTypesError",
         "type": {
           "type": {
@@ -403,8 +502,42 @@
                             "@key": "description",
                             "@value": {"literal": {"string": "The untyped binding"}}}],
                         "body": {"variable": "hydra.core.Binding"}}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.error.checking.UntypedTermVariableCheckingError",
+        "type": {
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {
+                    "literal": {
+                      "string": "A reference to a term variable whose type is not known, encountered during checking"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "path",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {"string": "The subterm path at which the variable was referenced"}}}],
+                        "body": {"variable": "hydra.paths.SubtermPath"}}}},
+                  {
+                    "name": "name",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "The name of the untyped variable"}}}],
+                        "body": {"variable": "hydra.core.Name"}}}}]}}},
           "variables": []}}}],
   "description": "Error types for type checking",
   "namespace": "hydra.error.checking",
-  "termDependencies": ["hydra.core", "hydra.typing", "hydra.variants"],
-  "typeDependencies": ["hydra.core", "hydra.typing", "hydra.variants"]}
+  "termDependencies": ["hydra.core", "hydra.paths", "hydra.typing", "hydra.variants"],
+  "typeDependencies": ["hydra.core", "hydra.paths", "hydra.typing", "hydra.variants"]}

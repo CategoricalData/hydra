@@ -77,13 +77,13 @@ module_ = Module ns definitions
 
 -- | Interpreter-friendly alter for Map terms.
 -- Applies funTerm to the current value (or Nothing) and updates accordingly.
-alter_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Term -> Either (InContext Error) Term)
+alter_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Term -> Either Error Term)
 alter_ = define "alter" $
   doc "Interpreter-friendly alter for Map terms." $
   "cx" ~> "g" ~>
   "funTerm" ~> "keyTerm" ~> "mapTerm" ~>
   cases _Term (var "mapTerm")
-    (Just (ExtractCore.unexpected (var "cx") (string "map value") (ShowCore.term @@ var "mapTerm"))) [
+    (Just (ExtractCore.unexpected (string "map value") (ShowCore.term @@ var "mapTerm"))) [
     _Term_map>>: "m" ~>
       -- Get current value: lookup key m
       "currentVal" <~ Maps.lookup (var "keyTerm") (var "m") $
@@ -117,13 +117,13 @@ alter_ = define "alter" $
 
 -- | Interpreter-friendly bimap for Map terms.
 -- Applies keyFun to each key and valFun to each value.
-bimap_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Term -> Either (InContext Error) Term)
+bimap_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Term -> Either Error Term)
 bimap_ = define "bimap" $
   doc "Interpreter-friendly bimap for Map terms." $
   "cx" ~> "g" ~>
   "keyFun" ~> "valFun" ~> "mapTerm" ~>
   cases _Term (var "mapTerm")
-    (Just (ExtractCore.unexpected (var "cx") (string "map value") (ShowCore.term @@ var "mapTerm"))) [
+    (Just (ExtractCore.unexpected (string "map value") (ShowCore.term @@ var "mapTerm"))) [
     _Term_map>>: "m" ~>
       -- m is Map Term Term, convert to list of pairs
       "pairs" <~ Maps.toList (var "m") $
@@ -139,13 +139,13 @@ bimap_ = define "bimap" $
 
 -- | Interpreter-friendly filter for Map terms.
 -- Keeps entries where valPred returns true for the value.
-filter_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
+filter_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Either Error Term)
 filter_ = define "filter" $
   doc "Interpreter-friendly filter for Map terms." $
   "cx" ~> "g" ~>
   "valPred" ~> "mapTerm" ~>
   cases _Term (var "mapTerm")
-    (Just (ExtractCore.unexpected (var "cx") (string "map value") (ShowCore.term @@ var "mapTerm"))) [
+    (Just (ExtractCore.unexpected (string "map value") (ShowCore.term @@ var "mapTerm"))) [
     _Term_map>>: "m" ~>
       "pairs" <~ Maps.toList (var "m") $
       -- Build: fromList (concat (map (\(k,v) -> if valPred v then [(k,v)] else []) pairs))
@@ -167,13 +167,13 @@ filter_ = define "filter" $
 
 -- | Interpreter-friendly filterWithKey for Map terms.
 -- Keeps entries where pred returns true for the key and value.
-filterWithKey_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
+filterWithKey_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Either Error Term)
 filterWithKey_ = define "filterWithKey" $
   doc "Interpreter-friendly filterWithKey for Map terms." $
   "cx" ~> "g" ~>
   "pred" ~> "mapTerm" ~>
   cases _Term (var "mapTerm")
-    (Just (ExtractCore.unexpected (var "cx") (string "map value") (ShowCore.term @@ var "mapTerm"))) [
+    (Just (ExtractCore.unexpected (string "map value") (ShowCore.term @@ var "mapTerm"))) [
     _Term_map>>: "m" ~>
       "pairs" <~ Maps.toList (var "m") $
       -- Build: fromList (concat (map (\(k,v) -> if pred k v then [(k,v)] else []) pairs))
@@ -198,7 +198,7 @@ filterWithKey_ = define "filterWithKey" $
 
 -- | Interpreter-friendly findWithDefault for Map terms.
 -- findWithDefault default key map: returns the value at key, or default if not found.
-findWithDefault_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Term -> Either (InContext Error) Term)
+findWithDefault_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Term -> Either Error Term)
 findWithDefault_ = define "findWithDefault" $
   doc "Interpreter-friendly findWithDefault for Map terms." $
   "cx" ~> "g" ~>
@@ -216,13 +216,13 @@ findWithDefault_ = define "findWithDefault" $
 
 -- | Interpreter-friendly map for Map terms.
 -- Applies valFun to each value.
-map_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
+map_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Either Error Term)
 map_ = define "map" $
   doc "Interpreter-friendly map for Map terms." $
   "cx" ~> "g" ~>
   "valFun" ~> "mapTerm" ~>
   cases _Term (var "mapTerm")
-    (Just (ExtractCore.unexpected (var "cx") (string "map value") (ShowCore.term @@ var "mapTerm"))) [
+    (Just (ExtractCore.unexpected (string "map value") (ShowCore.term @@ var "mapTerm"))) [
     _Term_map>>: "m" ~>
       "pairs" <~ Maps.toList (var "m") $
       -- Build: fromList (map (\(k,v) -> (k, valFun v)) pairs)
@@ -235,13 +235,13 @@ map_ = define "map" $
 
 -- | Interpreter-friendly mapKeys for Map terms.
 -- Applies keyFun to each key.
-mapKeys_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
+mapKeys_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Either Error Term)
 mapKeys_ = define "mapKeys" $
   doc "Interpreter-friendly mapKeys for Map terms." $
   "cx" ~> "g" ~>
   "keyFun" ~> "mapTerm" ~>
   cases _Term (var "mapTerm")
-    (Just (ExtractCore.unexpected (var "cx") (string "map value") (ShowCore.term @@ var "mapTerm"))) [
+    (Just (ExtractCore.unexpected (string "map value") (ShowCore.term @@ var "mapTerm"))) [
     _Term_map>>: "m" ~>
       "pairs" <~ Maps.toList (var "m") $
       -- Build: fromList (map (\(k,v) -> (keyFun k, v)) pairs)

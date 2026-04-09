@@ -71,9 +71,9 @@ _Bicoder_decode = Core.Name "decode"
 data Coder v1 v2 =
   Coder {
     -- | A function which encodes source values as target values in a given context
-    coderEncode :: (Context.Context -> v1 -> Either (Context.InContext Errors.Error) v2),
+    coderEncode :: (Context.Context -> v1 -> Either Errors.Error v2),
     -- | A function which decodes target values as source values in a given context
-    coderDecode :: (Context.Context -> v2 -> Either (Context.InContext Errors.Error) v1)}
+    coderDecode :: (Context.Context -> v2 -> Either Errors.Error v1)}
 
 _Coder = Core.Name "hydra.coders.Coder"
 

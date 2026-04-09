@@ -241,10 +241,7 @@
                                       "function": {
                                         "codomain": {
                                           "either": {
-                                            "left": {
-                                              "application": {
-                                                "argument": {"variable": "hydra.errors.Error"},
-                                                "function": {"variable": "hydra.context.InContext"}}},
+                                            "left": {"variable": "hydra.errors.Error"},
                                             "right": {"variable": "v2"}}},
                                         "domain": {"variable": "v1"}}},
                                     "domain": {"variable": "hydra.context.Context"}}}}}},
@@ -264,10 +261,7 @@
                                       "function": {
                                         "codomain": {
                                           "either": {
-                                            "left": {
-                                              "application": {
-                                                "argument": {"variable": "hydra.errors.Error"},
-                                                "function": {"variable": "hydra.context.InContext"}}},
+                                            "left": {"variable": "hydra.errors.Error"},
                                             "right": {"variable": "v1"}}},
                                         "domain": {"variable": "v2"}}},
                                     "domain": {"variable": "hydra.context.Context"}}}}}}]},
