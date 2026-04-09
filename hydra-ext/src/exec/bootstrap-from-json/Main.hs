@@ -19,7 +19,6 @@
 --   --output <dir>         Output base directory (default: repo target dir)
 --   --include-coders       Also load and generate ext coder modules
 --   --include-tests        Also load and generate kernel test modules
---   --include-gentests     Also generate generation tests
 --   --kernel-only          Only generate kernel modules (exclude hydra.ext.*)
 --   --types-only           Only generate type-defining modules
 --   --ext-only             Only generate hydraExtDemoModules from ext manifest
@@ -85,7 +84,7 @@ data Options = Options
   , optIncludeCoders   :: Bool
   , optIncludeDsls     :: Bool
   , optIncludeTests    :: Bool
-  , optIncludeGenTests :: Bool
+  , optIncludeGenTests :: Bool  -- deprecated; ignored
   , optKernelOnly      :: Bool
   , optTypesOnly       :: Bool
   , optExtJavaOnly     :: Bool
@@ -137,7 +136,7 @@ usage = unlines
   , "  --include-coders       Also generate ext coder modules (Java/Python coders)"
   , "  --include-dsls         Also generate DSL modules"
   , "  --include-tests        Also generate kernel test modules"
-  , "  --include-gentests     Also generate generation tests"
+  , "  --include-gentests     (deprecated, ignored)"
   , "  --kernel-only          Only generate kernel modules (exclude hydra.ext.*)"
   , "  --types-only           Only generate type-defining modules"
   , "  --ext-only             Only generate hydraExtDemoModules from ext manifest"
@@ -369,12 +368,7 @@ main = do
       return count
     else return 0
 
-  -- Optionally generate generation tests
-  genTestSuccess <- if optIncludeGenTests opts
-    then do
-      -- Note: generation tests removed in favor of universal test cases
-      return True
-    else return True
+  let genTestSuccess = True
 
   putStrLn "=========================================="
   putStrLn $ "Done: " ++ show mainFileCount ++ " main"
