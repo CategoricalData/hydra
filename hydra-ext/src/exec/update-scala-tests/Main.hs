@@ -2,7 +2,6 @@ module Main where
 
 import Hydra.Ext.Generation
 import Hydra.Kernel (moduleNamespace)
-import Hydra.Ext.Scala.TestingIo (scalaTestGenerator)
 
 
 main :: IO ()
