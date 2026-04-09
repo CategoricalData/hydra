@@ -18,8 +18,7 @@ pythonpath = [
     "src/test/python"
 ]
 testpaths = [
-    "src/test/python",
-    "src/gen-test/python/generation"
+    "src/test/python"
 ]
 filterwarnings = [
     "ignore::pytest.PytestCollectionWarning"

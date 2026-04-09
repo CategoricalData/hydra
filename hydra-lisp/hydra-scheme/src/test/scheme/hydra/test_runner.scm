@@ -1178,7 +1178,7 @@
     (define (run-topological-sort-bindings-test path tc)
       (let* ((binding-map (hydra_lib_maps_from_list
                             (hydra_testing_topological_sort_bindings_test_case-bindings tc)))
-             (result (hydra_rewriting_topological_sort_binding_map binding-map))
+             (result (hydra_dependencies_topological_sort_binding_map binding-map))
              ;; Compare as sets of sets (order within SCCs doesn't matter)
              (result-sets (map (lambda (scc) (my-list-sort string<? scc)) result))
              (expected-sets (map (lambda (scc) (my-list-sort string<? scc))

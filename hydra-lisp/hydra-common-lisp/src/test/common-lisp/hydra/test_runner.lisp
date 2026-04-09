@@ -1049,7 +1049,7 @@
 
 (defun run-topological-sort-bindings-test (path tc)
   (let* ((binding-map (funcall hydra_lib_maps_from_list (a :bindings tc)))
-         (result (funcall hydra_rewriting_topological_sort_binding_map binding-map))
+         (result (funcall hydra_dependencies_topological_sort_binding_map binding-map))
          (expected (a :expected tc)))
     (if (equal expected result) (list 1 0 0)
         (progn (format t "FAIL: ~A~%  Expected: ~S~%  Actual: ~S~%" path expected result) (list 0 1 0)))))

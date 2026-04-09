@@ -906,7 +906,7 @@
 ;; ---- Topological sort bindings ----
 
 (defn- run-topological-sort-bindings-test [path tc]
-  (let [f (resolve-fn 'hydra.rewriting 'hydra_rewriting_topological_sort_binding_map)
+  (let [f (resolve-fn 'hydra.dependencies 'hydra_dependencies_topological_sort_binding_map)
         ;; tc.bindings is a list of (Name, Term) pairs -- build a map
         from-list-fn (resolve-fn 'hydra.lib.maps 'hydra_lib_maps_from_list)
         binding-map (if from-list-fn

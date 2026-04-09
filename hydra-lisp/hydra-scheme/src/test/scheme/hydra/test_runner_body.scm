@@ -1129,7 +1129,7 @@
 (define (run-topological-sort-bindings-test path tc)
   (let* ((binding-map (hydra_lib_maps_from_list
                         (hydra_testing_topological_sort_bindings_test_case-bindings tc)))
-         (result (hydra_rewriting_topological_sort_binding_map binding-map))
+         (result (hydra_dependencies_topological_sort_binding_map binding-map))
          ;; Compare as sets of sets (order within SCCs doesn't matter)
          (result-sets (map (lambda (scc) (my-list-sort (lambda (a b) (string<? (car a) (car b))) scc)) result))
          (expected-sets (map (lambda (scc) (my-list-sort (lambda (a b) (string<? (car a) (car b))) scc))
@@ -1644,8 +1644,7 @@
                  (list 0 1 0 #f))))
     (let* ((gname (hydra_testing_test_group-name group))
            (full (if (string=? path "") gname (string-append path " > " gname)))
-           ;; Skip groups that require unsupported features (e.g. POSIX regex in R7RS)
-           (skip-groups '("hydra.lib.regex primitives")))
+           (skip-groups '()))
       (if (member gname skip-groups string=?)
           (list 0 0 1 #f)
       (let* ((bench-path (if (string=? bench-prefix "") gname (string-append bench-prefix "/" gname)))

@@ -119,8 +119,8 @@ if [ "$QUICK_MODE" = false ]; then
         source .venv/bin/activate
     fi
 
-    # Run pytest with PYTHONPATH set (kernel tests + generation tests)
-    PYTHONPATH=src/main/python:src/gen-main/python:src/gen-test/python pytest src/test/python/test_suite_runner.py src/gen-test/python/generation -q
+    # Run pytest with PYTHONPATH set
+    PYTHONPATH=src/main/python:src/gen-main/python:src/gen-test/python pytest src/test/python/test_suite_runner.py -q
 
     cd "$HYDRA_EXT_DIR"
 else

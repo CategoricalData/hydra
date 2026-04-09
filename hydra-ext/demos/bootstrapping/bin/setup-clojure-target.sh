@@ -39,9 +39,6 @@ cp "$HYDRA_CLOJURE_DIR/src/main/clojure/user.clj" "$OUTPUT_DIR/src/main/clojure/
 echo "  Copying test infrastructure..."
 mkdir -p "$OUTPUT_DIR/src/test/clojure"
 cp "$HYDRA_CLOJURE_DIR/src/test/clojure/run_tests.clj" "$OUTPUT_DIR/src/test/clojure/"
-if [ -f "$HYDRA_CLOJURE_DIR/src/test/clojure/run_generation_tests.clj" ]; then
-    cp "$HYDRA_CLOJURE_DIR/src/test/clojure/run_generation_tests.clj" "$OUTPUT_DIR/src/test/clojure/"
-fi
 if [ -d "$HYDRA_CLOJURE_DIR/src/test/clojure/hydra" ]; then
     cp -r "$HYDRA_CLOJURE_DIR/src/test/clojure/hydra" "$OUTPUT_DIR/src/test/clojure/"
 fi

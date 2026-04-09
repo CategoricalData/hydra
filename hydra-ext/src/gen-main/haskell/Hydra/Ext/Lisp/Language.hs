@@ -260,7 +260,8 @@ lispReservedWords =
           "eval-when",
           "load-time-value",
           "locally",
-          "the"]
+          "the",
+          "pi"]
     schemeKeywords =
         [
           "define",

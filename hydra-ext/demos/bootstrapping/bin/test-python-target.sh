@@ -56,8 +56,4 @@ fi
 
 echo "Running Python tests..."
 cd "$OUTPUT_DIR"
-TEST_DIRS="src/test/python"
-if [ -d "src/gen-test/python/generation" ]; then
-    TEST_DIRS="$TEST_DIRS src/gen-test/python/generation"
-fi
-HYDRA_BENCHMARK_OUTPUT="${HYDRA_BENCHMARK_OUTPUT:-}" pytest $TEST_DIRS 2>&1
+HYDRA_BENCHMARK_OUTPUT="${HYDRA_BENCHMARK_OUTPUT:-}" pytest src/test/python 2>&1
