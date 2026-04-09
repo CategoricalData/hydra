@@ -3,7 +3,6 @@ module Main where
 import Hydra.Ext.Generation
 import Hydra.Kernel (Module, moduleNamespace)
 import qualified Hydra.Sources.Haskell.Operators as HaskellOperators
-import Hydra.Ext.Lisp.TestingIo
 import System.Directory (createDirectoryIfMissing, copyFile, listDirectory, doesFileExist)
 import System.FilePath ((</>), takeExtension)
 
