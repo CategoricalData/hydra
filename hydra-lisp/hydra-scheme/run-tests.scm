@@ -6,6 +6,8 @@
         (hydra formatting) (hydra sorting) (hydra serialization)
         (hydra inference) (hydra checking) (hydra hoisting)
         (hydra unification) (hydra substitution) (hydra typing)
+        (hydra dependencies) (hydra strip) (hydra variables)
+        (hydra validate core)
         (hydra json bootstrap) (hydra json parser) (hydra json writer)
         (hydra json encode) (hydra json decode)
         (hydra encode core)

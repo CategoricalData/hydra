@@ -243,7 +243,8 @@ lispReservedWords = define "lispReservedWords" $
         "in-package", "use-package", "export", "import", "intern",
         "handler-case", "handler-bind", "restart-case", "condition",
         "unwind-protect", "catch", "throw",
-        "eval-when", "load-time-value", "locally", "the"],
+        "eval-when", "load-time-value", "locally", "the",
+        "pi"],
 
     -- Scheme R7RS keywords
     "schemeKeywords">:
