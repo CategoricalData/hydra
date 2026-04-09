@@ -8,7 +8,7 @@
 (define (t-app fun arg)
   (list 'application (make-hydra_core_application fun arg)))
 (define (t-prim name)
-  (list 'function (list 'primitive name)))
+  (list 'variable name))
 (define (t-let name val body)
   (list 'let (make-hydra_core_let
                (list (make-hydra_core_binding name val '()))

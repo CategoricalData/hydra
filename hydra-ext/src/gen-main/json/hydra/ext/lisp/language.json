@@ -540,7 +540,8 @@
                             {"literal": {"string": "eval-when"}},
                             {"literal": {"string": "load-time-value"}},
                             {"literal": {"string": "locally"}},
-                            {"literal": {"string": "the"}}]}}},
+                            {"literal": {"string": "the"}},
+                            {"literal": {"string": "pi"}}]}}},
                     "type": {"type": {"list": {"literal": {"string": {}}}}, "variables": []}},
                   {
                     "name": "schemeKeywords",

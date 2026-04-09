@@ -109,91 +109,91 @@
     (define (tc-bigfloat)
       (make-hydra_graph_term_coder
        (list 'literal (list 'float (list 'bigfloat '())))
-        (lambda (cx) (lambda (g) (lambda (t) (((hydra_extract_core_bigfloat cx) g) t))))
+        (lambda (cx) (lambda (g) (lambda (t) ((hydra_extract_core_bigfloat g) t))))
         (lambda (cx) (lambda (v) (list 'right (list 'literal (list 'float (list 'bigfloat (inexact v)))))))))
 
     (define (tc-bigint)
       (make-hydra_graph_term_coder
        (list 'literal (list 'integer (list 'bigint '())))
-        (lambda (cx) (lambda (g) (lambda (t) (((hydra_extract_core_bigint cx) g) t))))
+        (lambda (cx) (lambda (g) (lambda (t) ((hydra_extract_core_bigint g) t))))
         (lambda (cx) (lambda (v) (list 'right (list 'literal (list 'integer (list 'bigint v))))))))
 
     (define (tc-boolean)
       (make-hydra_graph_term_coder
        (list 'literal (list 'boolean '()))
-        (lambda (cx) (lambda (g) (lambda (t) (((hydra_extract_core_boolean cx) g) t))))
+        (lambda (cx) (lambda (g) (lambda (t) ((hydra_extract_core_boolean g) t))))
         (lambda (cx) (lambda (v) (list 'right (list 'literal (list 'boolean v)))))))
 
     (define (tc-float32)
       (make-hydra_graph_term_coder
        (list 'literal (list 'float (list 'float32 '())))
-        (lambda (cx) (lambda (g) (lambda (t) (((hydra_extract_core_float32 cx) g) t))))
+        (lambda (cx) (lambda (g) (lambda (t) ((hydra_extract_core_float32 g) t))))
         (lambda (cx) (lambda (v) (list 'right (list 'literal (list 'float (list 'float32 (inexact v)))))))))
 
     (define (tc-float64)
       (make-hydra_graph_term_coder
        (list 'literal (list 'float (list 'float64 '())))
-        (lambda (cx) (lambda (g) (lambda (t) (((hydra_extract_core_float64 cx) g) t))))
+        (lambda (cx) (lambda (g) (lambda (t) ((hydra_extract_core_float64 g) t))))
         (lambda (cx) (lambda (v) (list 'right (list 'literal (list 'float (list 'float64 (inexact v)))))))))
 
     (define (tc-int8)
       (make-hydra_graph_term_coder
        (list 'literal (list 'integer (list 'int8 '())))
-        (lambda (cx) (lambda (g) (lambda (t) (((hydra_extract_core_int8 cx) g) t))))
+        (lambda (cx) (lambda (g) (lambda (t) ((hydra_extract_core_int8 g) t))))
         (lambda (cx) (lambda (v) (list 'right (list 'literal (list 'integer (list 'int8 v))))))))
 
     (define (tc-int16)
       (make-hydra_graph_term_coder
        (list 'literal (list 'integer (list 'int16 '())))
-        (lambda (cx) (lambda (g) (lambda (t) (((hydra_extract_core_int16 cx) g) t))))
+        (lambda (cx) (lambda (g) (lambda (t) ((hydra_extract_core_int16 g) t))))
         (lambda (cx) (lambda (v) (list 'right (list 'literal (list 'integer (list 'int16 v))))))))
 
     (define (tc-int32)
       (make-hydra_graph_term_coder
        (list 'literal (list 'integer (list 'int32 '())))
-        (lambda (cx) (lambda (g) (lambda (t) (((hydra_extract_core_int32 cx) g) t))))
+        (lambda (cx) (lambda (g) (lambda (t) ((hydra_extract_core_int32 g) t))))
         (lambda (cx) (lambda (v) (list 'right (list 'literal (list 'integer (list 'int32 v))))))))
 
     (define (tc-int64)
       (make-hydra_graph_term_coder
        (list 'literal (list 'integer (list 'int64 '())))
-        (lambda (cx) (lambda (g) (lambda (t) (((hydra_extract_core_int64 cx) g) t))))
+        (lambda (cx) (lambda (g) (lambda (t) ((hydra_extract_core_int64 g) t))))
         (lambda (cx) (lambda (v) (list 'right (list 'literal (list 'integer (list 'int64 v))))))))
 
     (define (tc-uint8)
       (make-hydra_graph_term_coder
        (list 'literal (list 'integer (list 'uint8 '())))
-        (lambda (cx) (lambda (g) (lambda (t) (((hydra_extract_core_uint8 cx) g) t))))
+        (lambda (cx) (lambda (g) (lambda (t) ((hydra_extract_core_uint8 g) t))))
         (lambda (cx) (lambda (v) (list 'right (list 'literal (list 'integer (list 'uint8 v))))))))
 
     (define (tc-uint16)
       (make-hydra_graph_term_coder
        (list 'literal (list 'integer (list 'uint16 '())))
-        (lambda (cx) (lambda (g) (lambda (t) (((hydra_extract_core_uint16 cx) g) t))))
+        (lambda (cx) (lambda (g) (lambda (t) ((hydra_extract_core_uint16 g) t))))
         (lambda (cx) (lambda (v) (list 'right (list 'literal (list 'integer (list 'uint16 v))))))))
 
     (define (tc-uint32)
       (make-hydra_graph_term_coder
        (list 'literal (list 'integer (list 'uint32 '())))
-        (lambda (cx) (lambda (g) (lambda (t) (((hydra_extract_core_uint32 cx) g) t))))
+        (lambda (cx) (lambda (g) (lambda (t) ((hydra_extract_core_uint32 g) t))))
         (lambda (cx) (lambda (v) (list 'right (list 'literal (list 'integer (list 'uint32 v))))))))
 
     (define (tc-uint64)
       (make-hydra_graph_term_coder
        (list 'literal (list 'integer (list 'uint64 '())))
-        (lambda (cx) (lambda (g) (lambda (t) (((hydra_extract_core_uint64 cx) g) t))))
+        (lambda (cx) (lambda (g) (lambda (t) ((hydra_extract_core_uint64 g) t))))
         (lambda (cx) (lambda (v) (list 'right (list 'literal (list 'integer (list 'uint64 v))))))))
 
     (define (tc-string)
       (make-hydra_graph_term_coder
        (list 'literal (list 'string '()))
-        (lambda (cx) (lambda (g) (lambda (t) (((hydra_extract_core_string cx) g) t))))
+        (lambda (cx) (lambda (g) (lambda (t) ((hydra_extract_core_string g) t))))
         (lambda (cx) (lambda (v) (list 'right (list 'literal (list 'string v)))))))
 
     (define (tc-binary)
       (make-hydra_graph_term_coder
        (list 'literal (list 'binary '()))
-        (lambda (cx) (lambda (g) (lambda (t) (((hydra_extract_core_binary cx) g) t))))
+        (lambda (cx) (lambda (g) (lambda (t) ((hydra_extract_core_binary g) t))))
         (lambda (cx) (lambda (v) (list 'right (list 'literal (list 'binary v)))))))
 
     ;; Container TermCoders
@@ -204,7 +204,7 @@
         (lambda (cx)
           (lambda (g)
             (lambda (t)
-              ((((hydra_extract_core_list_of cx)
+              (((hydra_extract_core_list_of
                  (lambda (term) ((((hydra_graph_term_coder-encode el-coder) cx) g) term)))
                 g) t))))
         (lambda (cx)
@@ -223,7 +223,7 @@
         (lambda (cx)
           (lambda (g)
             (lambda (t)
-              ((((hydra_extract_core_set_of cx)
+              (((hydra_extract_core_set_of
                  (lambda (term) ((((hydra_graph_term_coder-encode el-coder) cx) g) term)))
                 g) t))))
         (lambda (cx)
@@ -242,7 +242,7 @@
         (lambda (cx)
           (lambda (g)
             (lambda (t)
-              (((((hydra_extract_core_map cx)
+              ((((hydra_extract_core_map
                   (lambda (term) ((((hydra_graph_term_coder-encode key-coder) cx) g) term)))
                  (lambda (term) ((((hydra_graph_term_coder-encode val-coder) cx) g) term)))
                 g) t))))
@@ -266,7 +266,7 @@
         (lambda (cx)
           (lambda (g)
             (lambda (t)
-              ((((hydra_extract_core_maybe_term cx)
+              (((hydra_extract_core_maybe_term
                  (lambda (term) ((((hydra_graph_term_coder-encode el-coder) cx) g) term)))
                 g) t))))
         (lambda (cx)
@@ -287,7 +287,7 @@
         (lambda (cx)
           (lambda (g)
             (lambda (t)
-              (((((hydra_extract_core_either_term cx)
+              ((((hydra_extract_core_either_term
                   (lambda (term) ((((hydra_graph_term_coder-encode left-coder) cx) g) term)))
                  (lambda (term) ((((hydra_graph_term_coder-encode right-coder) cx) g) term)))
                 g) t))))
@@ -305,7 +305,7 @@
         (lambda (cx)
           (lambda (g)
             (lambda (t)
-              (((((hydra_extract_core_pair cx)
+              ((((hydra_extract_core_pair
                   (lambda (term) ((((hydra_graph_term_coder-encode first-coder) cx) g) term)))
                  (lambda (term) ((((hydra_graph_term_coder-encode second-coder) cx) g) term)))
                 g) t))))
@@ -339,7 +339,7 @@
         (lambda (cx)
           (lambda (g)
             (lambda (t)
-              (let ((r ((((hydra_extract_core_unit_variant cx) "hydra.util.Comparison") g) t)))
+              (let ((r (((hydra_extract_core_unit_variant "hydra.util.Comparison") g) t)))
                 (if (eq? (car r) 'left) r
                     (let ((variant-name (cadr r)))
                       (cond
@@ -415,7 +415,7 @@
         (lambda (cx)
           (lambda (g)
             (lambda (args)
-              (let ((check ((((hydra_extract_core_n_args cx) pname) 1) args)))
+              (let ((check (((hydra_extract_core_n_args pname) 1) args)))
                 (if (eq? (car check) 'left) check
                     (let ((r1 ((((hydra_graph_term_coder-encode input1) cx) g) (car args))))
                       (if (eq? (car r1) 'left) (wrap-other-error cx r1)
@@ -428,7 +428,7 @@
         (lambda (cx)
           (lambda (g)
             (lambda (args)
-              (let ((check ((((hydra_extract_core_n_args cx) pname) 2) args)))
+              (let ((check (((hydra_extract_core_n_args pname) 2) args)))
                 (if (eq? (car check) 'left) check
                     (let ((r1 ((((hydra_graph_term_coder-encode input1) cx) g) (car args))))
                       (if (eq? (car r1) 'left) (wrap-other-error cx r1)
@@ -443,7 +443,7 @@
         (lambda (cx)
           (lambda (g)
             (lambda (args)
-              (let ((check ((((hydra_extract_core_n_args cx) pname) 3) args)))
+              (let ((check (((hydra_extract_core_n_args pname) 3) args)))
                 (if (eq? (car check) 'left) check
                     (let ((r1 ((((hydra_graph_term_coder-encode input1) cx) g) (car args))))
                       (if (eq? (car r1) 'left) (wrap-other-error cx r1)
