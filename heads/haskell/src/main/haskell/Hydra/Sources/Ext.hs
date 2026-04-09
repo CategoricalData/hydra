@@ -47,6 +47,7 @@ import qualified Hydra.Sources.Gql.PathAlgebra.Syntax      as PathAlgebraSyntax
 import qualified Hydra.Sources.Graphviz.Coder              as GraphvizCoder
 import qualified Hydra.Sources.Graphviz.Dot                as Dot
 import qualified Hydra.Sources.Graphviz.Serde              as GraphvizSerde
+import qualified Hydra.Sources.Imperative.Coder            as ImperativeCoder
 import qualified Hydra.Sources.Java.Environment            as JavaEnvironment
 import qualified Hydra.Sources.Java.Language               as JavaLanguage
 import qualified Hydra.Sources.Java.Names                  as JavaNames
@@ -164,6 +165,7 @@ hydraExtModules = otherExtModules
   ++ goModules
   ++ gqlModules
   ++ graphsonModules
+  ++ imperativeModules
   ++ javaModules
   ++ javaScriptModules
   ++ jsonSchemaModules
@@ -271,6 +273,10 @@ graphsonModules = [
   GraphsonConstruct.module_,
   GraphsonSyntax.module_,
   GraphsonUtils.module_]
+
+imperativeModules :: [Module]
+imperativeModules = [
+  ImperativeCoder.module_]
 
 javaModules :: [Module]
 javaModules = [
