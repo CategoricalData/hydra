@@ -132,6 +132,10 @@ import qualified Hydra.Sources.Tinkerpop.Features          as TinkerpopFeatures
 import qualified Hydra.Sources.Tinkerpop.Gremlin           as Gremlin
 import qualified Hydra.Sources.Tinkerpop.Language          as TinkerpopLanguage
 import qualified Hydra.Sources.TypeScript.Model            as TypeScriptModel
+import qualified Hydra.Sources.Wasm.Coder                  as WasmCoder
+import qualified Hydra.Sources.Wasm.Language               as WasmLanguage
+import qualified Hydra.Sources.Wasm.Serde                  as WasmSerde
+import qualified Hydra.Sources.Wasm.Syntax                 as WasmSyntax
 import qualified Hydra.Sources.Xml.Schema                  as XmlSchema
 import qualified Hydra.Sources.Workflow                     as Workflow
 import qualified Hydra.Sources.Yaml.Coder                  as YamlCoder
@@ -175,6 +179,7 @@ hydraExtModules = otherExtModules
   ++ rustModules
   ++ scalaModules
   ++ typescriptModules
+  ++ wasmModules
   ++ yamlModules
 
 -- | All modules that should be exported to JSON, including decode/encode modules
@@ -380,6 +385,13 @@ typescriptModules :: [Module]
 typescriptModules = [
   TypeScriptLanguage.module_,
   TypeScriptModel.module_]
+
+wasmModules :: [Module]
+wasmModules = [
+  WasmCoder.module_,
+  WasmLanguage.module_,
+  WasmSerde.module_,
+  WasmSyntax.module_]
 
 yamlModules :: [Module]
 yamlModules = [

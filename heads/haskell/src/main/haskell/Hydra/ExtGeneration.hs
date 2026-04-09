@@ -31,6 +31,8 @@ import Hydra.Protobuf.Coder (moduleToProtobuf)
 import Hydra.Python.Coder (moduleToPython)
 import Hydra.Rust.Coder (moduleToRust)
 import Hydra.Rust.Language (rustLanguage)
+import Hydra.Wasm.Coder (moduleToWasm)
+import Hydra.Wasm.Language (wasmLanguage)
 import Hydra.Lisp.Coder (moduleToLisp)
 import Hydra.Lisp.Language (lispLanguage)
 import Hydra.Lisp.Serde (programToExpr)
@@ -182,3 +184,10 @@ writeEmacsLisp = generateSources (moduleToLispDialect LispSyntax.DialectEmacsLis
 -- Third argument: modules to transform and generate
 writeScala :: FP.FilePath -> [Module] -> [Module] -> IO Int
 writeScala = generateSources moduleToScala scalaLanguage True True False False
+
+-- | Generate WebAssembly text format (WAT) files from modules.
+-- First argument: output directory
+-- Second argument: universe modules (all modules for type/term resolution)
+-- Third argument: modules to transform and generate
+writeWasm :: FP.FilePath -> [Module] -> [Module] -> IO Int
+writeWasm = generateSources moduleToWasm wasmLanguage True False False False
