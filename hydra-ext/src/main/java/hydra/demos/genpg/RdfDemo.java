@@ -2,7 +2,6 @@ package hydra.demos.genpg;
 
 import hydra.Generation;
 import hydra.context.Context;
-import hydra.context.InContext;
 import hydra.core.*;
 import hydra.errors.Error_;
 import hydra.errors.OtherError;
@@ -386,10 +385,10 @@ public class RdfDemo {
             if (tableType == null) throw new RuntimeException("Table not found: " + tname);
             Table<Term> table = decodeTableIo(tableType, sourceRoot.resolve(tname));
             Context cx = new Context(Collections.emptyList(), Collections.emptyList(), Collections.emptyMap());
-            Either<InContext<Error_>, Pair<List<Vertex<Term>>, List<Edge<Term>>>> result =
+            Either<Error_, Pair<List<Vertex<Term>>, List<Edge<Term>>>> result =
                 Transform.transformTableRows(cx, graphContext, entry.getValue().first, entry.getValue().second, tableType, table.data);
             if (result.isLeft()) throw new RuntimeException("Transform error");
-            Pair<List<Vertex<Term>>, List<Edge<Term>>> pair = ((Either.Right<InContext<Error_>, Pair<List<Vertex<Term>>, List<Edge<Term>>>>) result).value;
+            Pair<List<Vertex<Term>>, List<Edge<Term>>> pair = ((Either.Right<Error_, Pair<List<Vertex<Term>>, List<Edge<Term>>>>) result).value;
             allVertices.addAll(pair.first);
             allEdges.addAll(pair.second);
         }
