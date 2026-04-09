@@ -3,6 +3,7 @@ package hydra.dsl;
 import hydra.core.FloatValue;
 import hydra.core.IntegerValue;
 import hydra.core.Literal;
+import hydra.core.LiteralType;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -191,6 +192,27 @@ public interface Literals {
      */
     static Literal uint64(final BigInteger value) {
         return integer(new IntegerValue.Uint64(value));
+    }
+
+    /**
+     * Checks whether a literal value matches the expected literal type.
+     * Returns Nothing if the types match, or Just(errorMessage) if they don't.
+     *
+     * <p>This is the standard {@code checkValue} callback for
+     * {@link hydra.pg.validation.Validation#validateGraph} when property values are Literals.
+     *
+     * @param type the expected literal type
+     * @param value the actual literal value
+     * @return Nothing if the types match, Just(error message) otherwise
+     */
+    static hydra.util.Maybe<String> checkLiteral(LiteralType type, Literal value) {
+        LiteralType actual = hydra.Reflect.literalType(value);
+        if (type.equals(actual)) {
+            return hydra.util.Maybe.nothing();
+        }
+        return hydra.util.Maybe.just(
+                "expected " + LiteralTypes.showLiteralType(type)
+                + ", got " + LiteralTypes.showLiteralType(actual));
     }
 
     /**

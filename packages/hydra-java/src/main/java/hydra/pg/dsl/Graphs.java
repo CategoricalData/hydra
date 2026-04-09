@@ -5,12 +5,15 @@ import hydra.pg.model.EdgeLabel;
 import hydra.pg.model.EdgeType;
 import hydra.pg.model.Graph;
 import hydra.pg.model.GraphSchema;
+import hydra.pg.model.PropertyKey;
 import hydra.pg.model.Vertex;
 import hydra.pg.model.VertexLabel;
 import hydra.pg.model.VertexType;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import java.util.Optional;
 
 /**
  * DSL for constructing property graph types (vertex and edge types, property types)
@@ -117,6 +120,82 @@ public interface Graphs {
         }
         return new Graph<>(vertexMap, edgeMap);
     }
+
+    // -- Read-side convenience methods --
+
+    /**
+     * Looks up a vertex type by label string.
+     *
+     * @param <T> the type representation
+     * @param schema the graph schema
+     * @param label the vertex label
+     * @return the vertex type, or empty if not found
+     */
+    static <T> Optional<VertexType<T>> getVertexType(GraphSchema<T> schema, String label) {
+        return schema.vertices.lookup(new VertexLabel(label)).toOptional();
+    }
+
+    /**
+     * Looks up an edge type by label string.
+     *
+     * @param <T> the type representation
+     * @param schema the graph schema
+     * @param label the edge label
+     * @return the edge type, or empty if not found
+     */
+    static <T> Optional<EdgeType<T>> getEdgeType(GraphSchema<T> schema, String label) {
+        return schema.edges.lookup(new EdgeLabel(label)).toOptional();
+    }
+
+    /**
+     * Looks up a vertex by id.
+     *
+     * @param <V> the value type
+     * @param graph the graph
+     * @param id the vertex id
+     * @return the vertex, or empty if not found
+     */
+    static <V> Optional<Vertex<V>> getVertex(Graph<V> graph, V id) {
+        return graph.vertices.lookup(id).toOptional();
+    }
+
+    /**
+     * Looks up an edge by id.
+     *
+     * @param <V> the value type
+     * @param graph the graph
+     * @param id the edge id
+     * @return the edge, or empty if not found
+     */
+    static <V> Optional<Edge<V>> getEdge(Graph<V> graph, V id) {
+        return graph.edges.lookup(id).toOptional();
+    }
+
+    /**
+     * Looks up a property value by key string on a vertex.
+     *
+     * @param <V> the value type
+     * @param vertex the vertex
+     * @param key the property key
+     * @return the property value, or empty if not found
+     */
+    static <V> Optional<V> getProperty(Vertex<V> vertex, String key) {
+        return vertex.properties.lookup(new PropertyKey(key)).toOptional();
+    }
+
+    /**
+     * Looks up a property value by key string on an edge.
+     *
+     * @param <V> the value type
+     * @param edge the edge
+     * @param key the property key
+     * @return the property value, or empty if not found
+     */
+    static <V> Optional<V> getProperty(Edge<V> edge, String key) {
+        return edge.properties.lookup(new PropertyKey(key)).toOptional();
+    }
+
+    // -- Construction convenience methods --
 
     /**
      * Creates a graph schema from lists of vertex types and edge types.
