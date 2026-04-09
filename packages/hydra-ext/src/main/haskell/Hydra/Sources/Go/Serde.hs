@@ -40,7 +40,14 @@ writePackageClause (Go.PackageClause ident) = spaceSep [cst "package", writeIden
 writeImportDecl :: Go.ImportDecl -> Ast.Expr
 writeImportDecl (Go.ImportDecl specs) = case specs of
   [spec] -> spaceSep [cst "import", writeImportSpec spec]
-  _ -> spaceSep [cst "import", parenList True (writeImportSpec <$> specs)]
+  _ -> spaceSep [cst "import", goImportBlock (writeImportSpec <$> specs)]
+
+-- | Go import blocks use newline separation (not commas like most languages).
+goImportBlock :: [Ast.Expr] -> Ast.Expr
+goImportBlock items = Ast.ExprBrackets $ Ast.BracketExpr
+  (Ast.Brackets (Ast.Symbol "(") (Ast.Symbol ")"))
+  (newlineSep items)
+  (Ast.BlockStyle (Just "  ") True True)
 
 writeImportSpec :: Go.ImportSpec -> Ast.Expr
 writeImportSpec (Go.ImportSpec malias path) = case malias of
@@ -755,13 +762,12 @@ writeInterpretedStringLit (Go.InterpretedStringLit s) = cst $ "\"" ++ escapeGoSt
       _ | c < ' ' || c > '~' -> goUnicodeEscape (ord c)
         | otherwise -> [c]
     goUnicodeEscape n
-      | n > 0xFFFF = -- Supplementary plane: use UTF-16 surrogate pair
-          let n' = n - 0x10000
-              hi = 0xD800 + (n' `div` 0x400)
-              lo = 0xDC00 + (n' `mod` 0x400)
-          in "\\u" ++ padHex hi ++ "\\u" ++ padHex lo
-      | otherwise = "\\u" ++ padHex n
-    padHex n = replicate (4 - length hex) '0' ++ hex
+      | n > 0xFFFF = -- Supplementary plane: use \U with 8 hex digits (Go doesn't support surrogates)
+          "\\U" ++ padHex8 n
+      | otherwise = "\\u" ++ padHex4 n
+    padHex4 n = replicate (4 - length hex) '0' ++ hex
+      where hex = fmap toUpper $ showHex n ""
+    padHex8 n = replicate (8 - length hex) '0' ++ hex
       where hex = fmap toUpper $ showHex n ""
 
 -- ============================================================================
