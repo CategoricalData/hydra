@@ -43,6 +43,11 @@ def add(x: int, y: int) -> int:
     return x + y
 
 
+def add_float64(x: float, y: float) -> float:
+    """Add two Float64 numbers."""
+    return x + y
+
+
 def asin(x: float) -> float:
     """Return the arc sine of x in radians."""
     return _safe(math.asin, x)
@@ -192,8 +197,18 @@ def mul(x: int, y: int) -> int:
     return x * y
 
 
+def mul_float64(x: float, y: float) -> float:
+    """Multiply two Float64 numbers."""
+    return x * y
+
+
 def negate(x: int) -> int:
     """Negate a number."""
+    return -x
+
+
+def negate_float64(x: float) -> float:
+    """Negate a Float64 number."""
     return -x
 
 
@@ -310,6 +325,11 @@ def sqrt(x: float) -> float:
 
 def sub(x: int, y: int) -> int:
     """Subtract two numbers."""
+    return x - y
+
+
+def sub_float64(x: float, y: float) -> float:
+    """Subtract two Float64 numbers."""
     return x - y
 
 

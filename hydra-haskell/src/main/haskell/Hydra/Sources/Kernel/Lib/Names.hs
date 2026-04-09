@@ -205,6 +205,7 @@ module_ = Module ns definitions
       toDefinition mathAcos,
       toDefinition mathAcosh,
       toDefinition mathAdd,
+      toDefinition mathAddFloat64,
       toDefinition mathAsin,
       toDefinition mathAsinh,
       toDefinition mathAtan,
@@ -229,7 +230,9 @@ module_ = Module ns definitions
       toDefinition mathMin,
       toDefinition mathMod,
       toDefinition mathMul,
+      toDefinition mathMulFloat64,
       toDefinition mathNegate,
+      toDefinition mathNegateFloat64,
       toDefinition mathOdd,
       toDefinition mathPi,
       toDefinition mathPow,
@@ -245,6 +248,7 @@ module_ = Module ns definitions
       toDefinition mathSinh,
       toDefinition mathSqrt,
       toDefinition mathSub,
+      toDefinition mathSubFloat64,
       toDefinition mathSucc,
       toDefinition mathTan,
       toDefinition mathTanh,
@@ -548,6 +552,7 @@ mathAbs      = defineName "mathAbs" "hydra.lib.math" "abs"
 mathAcos     = defineName "mathAcos" "hydra.lib.math" "acos"
 mathAcosh    = defineName "mathAcosh" "hydra.lib.math" "acosh"
 mathAdd      = defineName "mathAdd" "hydra.lib.math" "add"
+mathAddFloat64 = defineName "mathAddFloat64" "hydra.lib.math" "addFloat64"
 mathAsin     = defineName "mathAsin" "hydra.lib.math" "asin"
 mathAsinh    = defineName "mathAsinh" "hydra.lib.math" "asinh"
 mathAtan     = defineName "mathAtan" "hydra.lib.math" "atan"
@@ -569,7 +574,9 @@ mathMin      = defineName "mathMin" "hydra.lib.math" "min"
 mathMaybeMod = defineName "mathMaybeMod" "hydra.lib.math" "maybeMod"
 mathMod      = defineName "mathMod" "hydra.lib.math" "mod"
 mathMul      = defineName "mathMul" "hydra.lib.math" "mul"
+mathMulFloat64 = defineName "mathMulFloat64" "hydra.lib.math" "mulFloat64"
 mathNegate   = defineName "mathNegate" "hydra.lib.math" "negate"
+mathNegateFloat64 = defineName "mathNegateFloat64" "hydra.lib.math" "negateFloat64"
 mathOdd      = defineName "mathOdd" "hydra.lib.math" "odd"
 mathPi       = defineName "mathPi" "hydra.lib.math" "pi"
 mathPow      = defineName "mathPow" "hydra.lib.math" "pow"
@@ -587,6 +594,7 @@ mathSin      = defineName "mathSin" "hydra.lib.math" "sin"
 mathSinh     = defineName "mathSinh" "hydra.lib.math" "sinh"
 mathSqrt     = defineName "mathSqrt" "hydra.lib.math" "sqrt"
 mathSub      = defineName "mathSub" "hydra.lib.math" "sub"
+mathSubFloat64 = defineName "mathSubFloat64" "hydra.lib.math" "subFloat64"
 mathMaybeSucc = defineName "mathMaybeSucc" "hydra.lib.math" "maybeSucc"
 mathSucc     = defineName "mathSucc" "hydra.lib.math" "succ"
 mathTan      = defineName "mathTan" "hydra.lib.math" "tan"

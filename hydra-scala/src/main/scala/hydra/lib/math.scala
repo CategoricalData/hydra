@@ -5,6 +5,7 @@ object math:
   def acos(x: Double): Double = scala.math.acos(x)
   def acosh(x: Double): Double = scala.math.log(x + scala.math.sqrt(x * x - 1))
   def add(x: Int)(y: Int): Int = x + y
+  def addFloat64(x: Double)(y: Double): Double = x + y
   def asin(x: Double): Double = scala.math.asin(x)
   def asinh(x: Double): Double =
     // Special-case infinities: asinh(±Inf) = ±Inf (naive formula gives NaN for -Inf).
@@ -39,7 +40,9 @@ object math:
   def min(x: Int)(y: Int): Int = scala.math.min(x, y)
   def mod(x: Int)(y: Int): Int = if y == 0 then 0 else Math.floorMod(x, y)
   def mul(x: Int)(y: Int): Int = x * y
+  def mulFloat64(x: Double)(y: Double): Double = x * y
   def negate(x: Int): Int = -x
+  def negateFloat64(x: Double): Double = -x
   def odd(x: Int): Boolean = x % 2 != 0
   def pi: Double = scala.math.Pi
   def pow(base: Double)(exp: Double): Double = scala.math.pow(base, exp)
@@ -75,6 +78,7 @@ object math:
   def sinh(x: Double): Double = scala.math.sinh(x)
   def sqrt(x: Double): Double = scala.math.sqrt(x)
   def sub(x: Int)(y: Int): Int = x - y
+  def subFloat64(x: Double)(y: Double): Double = x - y
   def succ(x: Int): Int = x + 1
   def tan(x: Double): Double = scala.math.tan(x)
   def tanh(x: Double): Double = scala.math.tanh(x)

@@ -214,6 +214,7 @@ _math_abs      = LibNames.mathAbs
 _math_acos     = LibNames.mathAcos
 _math_acosh    = LibNames.mathAcosh
 _math_add      = LibNames.mathAdd
+_math_addFloat64 = LibNames.mathAddFloat64
 _math_asin     = LibNames.mathAsin
 _math_asinh    = LibNames.mathAsinh
 _math_atan     = LibNames.mathAtan
@@ -235,7 +236,9 @@ _math_min      = LibNames.mathMin
 _math_maybeMod = LibNames.mathMaybeMod
 _math_mod      = LibNames.mathMod
 _math_mul      = LibNames.mathMul
+_math_mulFloat64 = LibNames.mathMulFloat64
 _math_negate   = LibNames.mathNegate
+_math_negateFloat64 = LibNames.mathNegateFloat64
 _math_odd      = LibNames.mathOdd
 _math_pi       = LibNames.mathPi
 _math_pow      = LibNames.mathPow
@@ -253,6 +256,7 @@ _math_sin      = LibNames.mathSin
 _math_sinh     = LibNames.mathSinh
 _math_sqrt     = LibNames.mathSqrt
 _math_sub      = LibNames.mathSub
+_math_subFloat64 = LibNames.mathSubFloat64
 _math_maybeSucc = LibNames.mathMaybeSucc
 _math_succ     = LibNames.mathSucc
 _math_tan      = LibNames.mathTan
@@ -579,6 +583,7 @@ hydraLibMathFloat64 :: Library
 hydraLibMathFloat64 = standardLibrary _hydra_lib_math [
   prim1 _math_acos     Math.acos     [] float64 float64,
   prim1 _math_acosh    Math.acosh    [] float64 float64,
+  prim2 _math_addFloat64 Math.addFloat64 [] float64 float64 float64,
   prim1 _math_asin     Math.asin     [] float64 float64,
   prim1 _math_asinh    Math.asinh    [] float64 float64,
   prim1 _math_atan     Math.atan     [] float64 float64,
@@ -592,6 +597,8 @@ hydraLibMathFloat64 = standardLibrary _hydra_lib_math [
   prim1 _math_floor    Math.floor    [] float64 float64,
   prim1 _math_log      Math.log      [] float64 float64,
   prim2 _math_logBase  Math.logBase  [] float64 float64 float64,
+  prim2 _math_mulFloat64 Math.mulFloat64 [] float64 float64 float64,
+  prim1 _math_negateFloat64 Math.negateFloat64 [] float64 float64,
   prim0 _math_pi       Math.pi       [] float64,
   prim2 _math_pow      Math.pow      [] float64 float64 float64,
   prim1 _math_round         Math.round         [] float64 float64,
@@ -601,6 +608,7 @@ hydraLibMathFloat64 = standardLibrary _hydra_lib_math [
   prim1 _math_sin            Math.sin           [] float64 float64,
   prim1 _math_sinh     Math.sinh     [] float64 float64,
   prim1 _math_sqrt     Math.sqrt     [] float64 float64,
+  prim2 _math_subFloat64 Math.subFloat64 [] float64 float64 float64,
   prim1 _math_tan      Math.tan      [] float64 float64,
   prim1 _math_tanh     Math.tanh     [] float64 float64,
   prim1 _math_truncate Math.truncate [] float64 float64]

@@ -650,6 +650,10 @@ public interface Names {
     return new hydra.core.Name("hydra.lib.math.add");
   }
 
+  static hydra.core.Name mathAddFloat64() {
+    return new hydra.core.Name("hydra.lib.math.addFloat64");
+  }
+
   static hydra.core.Name mathAsin() {
     return new hydra.core.Name("hydra.lib.math.asin");
   }
@@ -746,8 +750,16 @@ public interface Names {
     return new hydra.core.Name("hydra.lib.math.mul");
   }
 
+  static hydra.core.Name mathMulFloat64() {
+    return new hydra.core.Name("hydra.lib.math.mulFloat64");
+  }
+
   static hydra.core.Name mathNegate() {
     return new hydra.core.Name("hydra.lib.math.negate");
+  }
+
+  static hydra.core.Name mathNegateFloat64() {
+    return new hydra.core.Name("hydra.lib.math.negateFloat64");
   }
 
   static hydra.core.Name mathOdd() {
@@ -808,6 +820,10 @@ public interface Names {
 
   static hydra.core.Name mathSub() {
     return new hydra.core.Name("hydra.lib.math.sub");
+  }
+
+  static hydra.core.Name mathSubFloat64() {
+    return new hydra.core.Name("hydra.lib.math.subFloat64");
   }
 
   static hydra.core.Name mathSucc() {

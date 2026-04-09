@@ -12,6 +12,7 @@ import qualified Hydra.Sources.Kernel.Terms.Generation      as Generation
 import qualified Hydra.Sources.Kernel.Terms.Constants       as Constants
 import qualified Hydra.Sources.Kernel.Terms.Decoding        as Decoding
 import qualified Hydra.Sources.Kernel.Terms.Dependencies    as Dependencies
+import qualified Hydra.Sources.Kernel.Terms.Differentiation as Differentiation
 import qualified Hydra.Sources.Kernel.Terms.Dsls            as Dsls
 import qualified Hydra.Sources.Kernel.Terms.Encoding        as Encoding
 import qualified Hydra.Sources.Kernel.Terms.Environment     as Environment
@@ -112,6 +113,7 @@ kernelPrimaryTermsModules = [
   Constants.module_,
   Decoding.module_,
   Dependencies.module_,
+  Differentiation.module_,
 --  Dsls.module_,
   Encoding.module_,
   Environment.module_,

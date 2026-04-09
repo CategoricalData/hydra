@@ -579,6 +579,9 @@ def register_math_primitives() -> dict[Name, Primitive]:
     primitives[qname(namespace, "add")] = prims.prim2(
         qname(namespace, "add"), math.add, [], prims.int32(), prims.int32(), prims.int32()
     )
+    primitives[qname(namespace, "addFloat64")] = prims.prim2(
+        qname(namespace, "addFloat64"), math.add_float64, [], prims.float64(), prims.float64(), prims.float64()
+    )
     primitives[qname(namespace, "div")] = prims.prim2(
         qname(namespace, "div"), math.div, [], prims.int32(), prims.int32(), prims.int32()
     )
@@ -591,8 +594,14 @@ def register_math_primitives() -> dict[Name, Primitive]:
     primitives[qname(namespace, "mul")] = prims.prim2(
         qname(namespace, "mul"), math.mul, [], prims.int32(), prims.int32(), prims.int32()
     )
+    primitives[qname(namespace, "mulFloat64")] = prims.prim2(
+        qname(namespace, "mulFloat64"), math.mul_float64, [], prims.float64(), prims.float64(), prims.float64()
+    )
     primitives[qname(namespace, "negate")] = prims.prim1(
         qname(namespace, "negate"), math.negate, [], prims.int32(), prims.int32()
+    )
+    primitives[qname(namespace, "negateFloat64")] = prims.prim1(
+        qname(namespace, "negateFloat64"), math.negate_float64, [], prims.float64(), prims.float64()
     )
     primitives[qname(namespace, "odd")] = prims.prim1(
         qname(namespace, "odd"), math.odd, [], prims.int32(), prims.boolean()
@@ -611,6 +620,9 @@ def register_math_primitives() -> dict[Name, Primitive]:
     )
     primitives[qname(namespace, "sub")] = prims.prim2(
         qname(namespace, "sub"), math.sub, [], prims.int32(), prims.int32(), prims.int32()
+    )
+    primitives[qname(namespace, "subFloat64")] = prims.prim2(
+        qname(namespace, "subFloat64"), math.sub_float64, [], prims.float64(), prims.float64(), prims.float64()
     )
     primitives[qname(namespace, "succ")] = prims.prim1(
         qname(namespace, "succ"), math.succ, [], prims.int32(), prims.int32()

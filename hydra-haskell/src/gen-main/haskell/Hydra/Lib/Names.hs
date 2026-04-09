@@ -491,6 +491,9 @@ mathAcosh = Core.Name "hydra.lib.math.acosh"
 mathAdd :: Core.Name
 mathAdd = Core.Name "hydra.lib.math.add"
 
+mathAddFloat64 :: Core.Name
+mathAddFloat64 = Core.Name "hydra.lib.math.addFloat64"
+
 mathAsin :: Core.Name
 mathAsin = Core.Name "hydra.lib.math.asin"
 
@@ -563,8 +566,14 @@ mathMod = Core.Name "hydra.lib.math.mod"
 mathMul :: Core.Name
 mathMul = Core.Name "hydra.lib.math.mul"
 
+mathMulFloat64 :: Core.Name
+mathMulFloat64 = Core.Name "hydra.lib.math.mulFloat64"
+
 mathNegate :: Core.Name
 mathNegate = Core.Name "hydra.lib.math.negate"
+
+mathNegateFloat64 :: Core.Name
+mathNegateFloat64 = Core.Name "hydra.lib.math.negateFloat64"
 
 mathOdd :: Core.Name
 mathOdd = Core.Name "hydra.lib.math.odd"
@@ -610,6 +619,9 @@ mathSqrt = Core.Name "hydra.lib.math.sqrt"
 
 mathSub :: Core.Name
 mathSub = Core.Name "hydra.lib.math.sub"
+
+mathSubFloat64 :: Core.Name
+mathSubFloat64 = Core.Name "hydra.lib.math.subFloat64"
 
 mathSucc :: Core.Name
 mathSucc = Core.Name "hydra.lib.math.succ"

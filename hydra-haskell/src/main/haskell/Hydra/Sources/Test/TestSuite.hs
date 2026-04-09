@@ -55,6 +55,7 @@ import qualified Hydra.Sources.Test.Hoisting.All as HoistingAll
 import qualified Hydra.Sources.Test.Hoisting.Cases as HoistingCases
 import qualified Hydra.Sources.Test.Hoisting.Let as HoistingLet
 import qualified Hydra.Sources.Test.Dependencies as Dependencies
+import qualified Hydra.Sources.Test.Differentiation as Differentiation
 import qualified Hydra.Sources.Test.Reduction as Reduction
 import qualified Hydra.Sources.Test.Rewriting as Rewriting
 import qualified Hydra.Sources.Test.Serialization as Serialization
@@ -106,6 +107,7 @@ otherPairs = [
   (Annotations.ns, Annotations.allTests),
   (CheckingAll.ns, CheckingAll.allTests),
   (Dependencies.ns, Dependencies.allTests),
+  (Differentiation.ns, Differentiation.allTests),
   (EtaExpansion.ns, EtaExpansion.allTests),
   (Formatting.ns, Formatting.allTests),
   (HoistingAll.ns, HoistingAll.allTests),
@@ -138,7 +140,7 @@ testSuiteModules =
    -- Hoisting tests (including sub-modules)
    HoistingAll.module_, HoistingCases.module_, HoistingLet.module_,
    -- Other tests
-   Annotations.module_, Dependencies.module_, EtaExpansion.module_, Formatting.module_,
+   Annotations.module_, Dependencies.module_, Differentiation.module_, EtaExpansion.module_, Formatting.module_,
    JsonRoundtrip.module_, JsonWriter.module_,
    Reduction.module_, Rewriting.module_, Serialization.module_, Sorting.module_,
    Strip.module_, Variables.module_,

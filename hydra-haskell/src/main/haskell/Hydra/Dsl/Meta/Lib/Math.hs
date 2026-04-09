@@ -24,6 +24,10 @@ acosh = primitive1 _math_acosh
 add :: Num a => TTerm a -> TTerm a -> TTerm a
 add = primitive2 _math_add
 
+-- | Add two Float64 numbers.
+addFloat64 :: TTerm Double -> TTerm Double -> TTerm Double
+addFloat64 = primitive2 _math_addFloat64
+
 -- | Return the arc sine of x in radians.
 asin :: TTerm Double -> TTerm Double
 asin = primitive1 _math_asin
@@ -112,9 +116,17 @@ mod = primitive2 _math_mod
 mul :: Num a => TTerm a -> TTerm a -> TTerm a
 mul = primitive2 _math_mul
 
+-- | Multiply two Float64 numbers.
+mulFloat64 :: TTerm Double -> TTerm Double -> TTerm Double
+mulFloat64 = primitive2 _math_mulFloat64
+
 -- | Negate a number.
 negate :: Num a => TTerm a -> TTerm a
 negate = primitive1 _math_negate
+
+-- | Negate a Float64 number.
+negateFloat64 :: TTerm Double -> TTerm Double
+negateFloat64 = primitive1 _math_negateFloat64
 
 -- | Check if an integer is odd.
 odd :: Integral a => TTerm a -> TTerm Bool
@@ -185,6 +197,10 @@ sqrt = primitive1 _math_sqrt
 -- | Subtract two numbers.
 sub :: Num a => TTerm a -> TTerm a -> TTerm a
 sub = primitive2 _math_sub
+
+-- | Subtract two Float64 numbers.
+subFloat64 :: TTerm Double -> TTerm Double -> TTerm Double
+subFloat64 = primitive2 _math_subFloat64
 
 -- | Return the successor (x + 1), returning Nothing on maxBound.
 maybeSucc :: TTerm Int -> TTerm (Maybe Int)
