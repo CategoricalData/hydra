@@ -39,6 +39,9 @@ __pycache__/
 # Node
 node_modules/
 
+# Rust / Cargo
+packages/hydra-rust/target/
+
 # sbt build artifacts
 project/target/
 

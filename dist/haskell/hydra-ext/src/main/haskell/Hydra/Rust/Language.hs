@@ -97,7 +97,6 @@ rustLanguage =
           Variants.TypeVariantUnion,
           Variants.TypeVariantUnit,
           Variants.TypeVariantVariable,
-          Variants.TypeVariantVoid,
           Variants.TypeVariantWrap]
     typePredicate = \_ -> True
 
@@ -121,6 +120,7 @@ rustReservedWords =
           "const",
           "continue",
           "crate",
+          "default",
           "dyn",
           "else",
           "enum",

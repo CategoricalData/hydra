@@ -1,0 +1,9 @@
+[package]
+name = "hydra"
+version = "0.14.0"
+edition = "2021"
+description = "Hydra kernel implementation in Rust"
+license = "Apache-2.0"
+
+[dependencies]
+ordered-float = "4"
