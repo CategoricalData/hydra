@@ -4,7 +4,6 @@
 
 module Hydra.Ext.Rust.Coder where
 
-import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Environment as Environment
 import qualified Hydra.Errors as Errors
@@ -30,7 +29,7 @@ import qualified Hydra.Variables as Variables
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Map as M
 
-encodeElimination :: Context.Context -> t0 -> Core.Elimination -> Maybe Core.Term -> Either (Context.InContext Errors.Error) Syntax.Expression
+encodeElimination :: t0 -> t1 -> Core.Elimination -> Maybe Core.Term -> Either Errors.Error Syntax.Expression
 encodeElimination cx g elim marg =
     case elim of
       Core.EliminationRecord v0 ->
@@ -83,7 +82,7 @@ encodeElimination cx g elim marg =
         Syntax.tupleIndexExprTuple = sarg,
         Syntax.tupleIndexExprIndex = 0}))))
 
-encodeEnumVariant :: Context.Context -> t0 -> Core.FieldType -> Either (Context.InContext Errors.Error) Syntax.EnumVariant
+encodeEnumVariant :: t0 -> t1 -> Core.FieldType -> Either Errors.Error Syntax.EnumVariant
 encodeEnumVariant cx g ft =
 
       let fname = Core.unName (Core.fieldTypeName ft)
@@ -108,7 +107,7 @@ encodeEnumVariant cx g ft =
             sftyp]),
           Syntax.enumVariantDoc = Nothing}))))
 
-encodeFunction :: Context.Context -> t0 -> Core.Function -> Either (Context.InContext Errors.Error) Syntax.Expression
+encodeFunction :: t0 -> t1 -> Core.Function -> Either Errors.Error Syntax.Expression
 encodeFunction cx g fun =
     case fun of
       Core.FunctionLambda v0 ->
@@ -184,7 +183,7 @@ encodeLiteralType lt =
         Core.IntegerTypeUint64 -> rustPath "u64"
       Core.LiteralTypeString -> rustPath "String"
 
-encodeStructField :: Context.Context -> t0 -> Core.FieldType -> Either (Context.InContext Errors.Error) Syntax.StructField
+encodeStructField :: t0 -> t1 -> Core.FieldType -> Either Errors.Error Syntax.StructField
 encodeStructField cx g ft =
 
       let fname = Core.unName (Core.fieldTypeName ft)
@@ -195,7 +194,7 @@ encodeStructField cx g ft =
         Syntax.structFieldPublic = True,
         Syntax.structFieldDoc = Nothing})))
 
-encodeTerm :: Context.Context -> t0 -> Core.Term -> Either (Context.InContext Errors.Error) Syntax.Expression
+encodeTerm :: t0 -> t1 -> Core.Term -> Either Errors.Error Syntax.Expression
 encodeTerm cx g term =
     case term of
       Core.TermAnnotated v0 -> encodeTerm cx g (Core.annotatedTermBody v0)
@@ -260,11 +259,9 @@ encodeTerm cx g term =
         let tname = Formatting.capitalize (Names.localNameOf (Core.wrappedTermTypeName v0))
         in (Eithers.bind (encodeTerm cx g (Core.wrappedTermBody v0)) (\inner -> Right (rustCall (rustExprPath tname) [
           inner])))
-      _ -> Left (Context.InContext {
-        Context.inContextObject = (Errors.ErrorOther (Errors.OtherError "unexpected term variant")),
-        Context.inContextContext = cx})
+      _ -> Left (Errors.ErrorOther (Errors.OtherError "unexpected term variant"))
 
-encodeTermDefinition :: Context.Context -> t0 -> Packaging.TermDefinition -> Either (Context.InContext Errors.Error) Syntax.ItemWithComments
+encodeTermDefinition :: t0 -> t1 -> Packaging.TermDefinition -> Either Errors.Error Syntax.ItemWithComments
 encodeTermDefinition cx g tdef =
 
       let name = Packaging.termDefinitionName tdef
@@ -289,7 +286,7 @@ encodeTermDefinition cx g tdef =
           Syntax.fnDefUnsafe = False,
           Syntax.fnDefDoc = Nothing}))}))))
 
-encodeType :: Context.Context -> t0 -> Core.Type -> Either (Context.InContext Errors.Error) Syntax.Type
+encodeType :: t0 -> t1 -> Core.Type -> Either Errors.Error Syntax.Type
 encodeType cx g t =
 
       let typ = Strip.deannotateType t
@@ -317,19 +314,13 @@ encodeType cx g t =
                   Syntax.parenthesizedArgsInputs = [
                     dom],
                   Syntax.parenthesizedArgsOutput = (Just cod)}))}]})]))))
-        Core.TypeRecord _ -> Left (Context.InContext {
-          Context.inContextObject = (Errors.ErrorOther (Errors.OtherError "unexpected anonymous record type")),
-          Context.inContextContext = cx})
-        Core.TypeUnion _ -> Left (Context.InContext {
-          Context.inContextObject = (Errors.ErrorOther (Errors.OtherError "unexpected anonymous union type")),
-          Context.inContextContext = cx})
-        Core.TypeWrap _ -> Left (Context.InContext {
-          Context.inContextObject = (Errors.ErrorOther (Errors.OtherError "unexpected anonymous wrap type")),
-          Context.inContextContext = cx})
+        Core.TypeRecord _ -> Left (Errors.ErrorOther (Errors.OtherError "unexpected anonymous record type"))
+        Core.TypeUnion _ -> Left (Errors.ErrorOther (Errors.OtherError "unexpected anonymous union type"))
+        Core.TypeWrap _ -> Left (Errors.ErrorOther (Errors.OtherError "unexpected anonymous wrap type"))
         Core.TypeVariable v0 -> Right (rustPath (Formatting.capitalize (Core.unName v0)))
         Core.TypeForall v0 -> encodeType cx g (Core.forallTypeBody v0)
 
-encodeTypeDefinition :: Context.Context -> t0 -> Packaging.TypeDefinition -> Either (Context.InContext Errors.Error) Syntax.ItemWithComments
+encodeTypeDefinition :: t0 -> t1 -> Packaging.TypeDefinition -> Either Errors.Error Syntax.ItemWithComments
 encodeTypeDefinition cx g tdef =
 
       let name = Packaging.typeDefinitionName tdef
@@ -380,7 +371,7 @@ encodeTypeDefinition cx g tdef =
         Syntax.itemWithCommentsVisibility = Syntax.VisibilityPublic,
         Syntax.itemWithCommentsItem = item})))
 
-moduleToRust :: Packaging.Module -> [Packaging.Definition] -> Context.Context -> t0 -> Either (Context.InContext Errors.Error) (M.Map String String)
+moduleToRust :: Packaging.Module -> [Packaging.Definition] -> t0 -> t1 -> Either Errors.Error (M.Map String String)
 moduleToRust mod defs cx g =
 
       let partitioned = Environment.partitionDefinitions defs

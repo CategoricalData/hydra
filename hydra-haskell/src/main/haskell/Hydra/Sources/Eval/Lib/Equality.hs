@@ -70,7 +70,7 @@ module_ = Module ns definitions
 
 -- | Interpreter-friendly identity function.
 -- identity x = x
-identity_ :: TTermDefinition (Context -> Graph -> Term -> Either (InContext Error) Term)
+identity_ :: TTermDefinition (Context -> Graph -> Term -> Either Error Term)
 identity_ = define "identity" $
   doc "Interpreter-friendly identity function." $
   "cx" ~> "g" ~>
@@ -79,7 +79,7 @@ identity_ = define "identity" $
 
 -- | Interpreter-friendly max.
 -- max x y = ifElse (gte x y) x y
-max_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
+max_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Either Error Term)
 max_ = define "max" $
   doc "Interpreter-friendly max." $
   "cx" ~> "g" ~>
@@ -98,7 +98,7 @@ max_ = define "max" $
 
 -- | Interpreter-friendly min.
 -- min x y = ifElse (lte x y) x y
-min_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
+min_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Either Error Term)
 min_ = define "min" $
   doc "Interpreter-friendly min." $
   "cx" ~> "g" ~>

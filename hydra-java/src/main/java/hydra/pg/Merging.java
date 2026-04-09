@@ -180,11 +180,11 @@ public class Merging {
     private static <V> Either<String, V> applyCoderEncode(StatelessCoder<V, V> coder, V value) {
         hydra.context.Context cx = new hydra.context.Context(
             new ArrayList<>(), new ArrayList<>(), new HashMap<>());
-        hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, V> result = coder.encode.apply(cx).apply(value);
+        hydra.util.Either<hydra.errors.Error_, V> result = coder.encode.apply(cx).apply(value);
         if (result.isRight()) {
-            return Either.right(((Either.Right<hydra.context.InContext<hydra.errors.Error_>, V>) result).value);
+            return Either.right(((Either.Right<hydra.errors.Error_, V>) result).value);
         } else {
-            return Either.left(hydra.show.Errors.error(((Either.Left<hydra.context.InContext<hydra.errors.Error_>, V>) result).value.object));
+            return Either.left(hydra.show.Errors.error(((Either.Left<hydra.errors.Error_, V>) result).value));
         }
     }
 
@@ -194,11 +194,11 @@ public class Merging {
     private static <V> Either<String, V> applyCoderDecode(StatelessCoder<V, V> coder, V value) {
         hydra.context.Context cx = new hydra.context.Context(
             new ArrayList<>(), new ArrayList<>(), new HashMap<>());
-        hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, V> result = coder.decode.apply(cx).apply(value);
+        hydra.util.Either<hydra.errors.Error_, V> result = coder.decode.apply(cx).apply(value);
         if (result.isRight()) {
-            return Either.right(((Either.Right<hydra.context.InContext<hydra.errors.Error_>, V>) result).value);
+            return Either.right(((Either.Right<hydra.errors.Error_, V>) result).value);
         } else {
-            return Either.left(hydra.show.Errors.error(((Either.Left<hydra.context.InContext<hydra.errors.Error_>, V>) result).value.object));
+            return Either.left(hydra.show.Errors.error(((Either.Left<hydra.errors.Error_, V>) result).value));
         }
     }
 

@@ -10,7 +10,6 @@ from typing import cast
 import hydra.core
 import hydra.errors
 import hydra.extract.core
-import hydra.lexical
 import hydra.lib.eithers
 import hydra.lib.maps
 import hydra.lib.maybes
@@ -35,11 +34,11 @@ def tag(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_testing_tag_3(cx, v1):
         match v1:
             case hydra.core.TermWrap(value=wrapped_term):
-                return hydra.lib.eithers.map((lambda b: hydra.testing.Tag(b)), hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped2: _hoist_hydra_decode_testing_tag_2(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx, wrapped_term.body)))
+                return hydra.lib.eithers.map((lambda b: hydra.testing.Tag(b)), hydra.lib.eithers.either((lambda err: Left(err)), (lambda stripped2: _hoist_hydra_decode_testing_tag_2(stripped2)), hydra.extract.core.strip_with_decoding_error(cx, wrapped_term.body)))
 
             case _:
                 return Left(hydra.errors.DecodingError("expected wrapped type"))
-    return hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_testing_tag_3(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
+    return hydra.lib.eithers.either((lambda err: Left(err)), (lambda stripped: _hoist_hydra_decode_testing_tag_3(cx, stripped)), hydra.extract.core.strip_with_decoding_error(cx, raw))
 
 def universal_test_case(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_testing_universal_test_case_1(cx, v1):
@@ -76,11 +75,11 @@ def universal_test_case(cx: hydra.graph.Graph, raw: hydra.core.Term):
 
                         case _:
                             return Left(hydra.errors.DecodingError("expected literal"))
-                return hydra.lib.eithers.bind(hydra.extract.core.require_field("actual", (lambda cx2, raw2: hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped2: _hoist_field_map_body_2(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx2, raw2))), field_map(), cx), (lambda field_actual: hydra.lib.eithers.bind(hydra.extract.core.require_field("expected", (lambda cx2, raw2: hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped2: _hoist_field_map_body_4(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx2, raw2))), field_map(), cx), (lambda field_expected: Right(hydra.testing.UniversalTestCase(field_actual, field_expected))))))
+                return hydra.lib.eithers.bind(hydra.extract.core.require_field("actual", (lambda cx2, raw2: hydra.lib.eithers.either((lambda err: Left(err)), (lambda stripped2: _hoist_field_map_body_2(stripped2)), hydra.extract.core.strip_with_decoding_error(cx2, raw2))), field_map(), cx), (lambda field_actual: hydra.lib.eithers.bind(hydra.extract.core.require_field("expected", (lambda cx2, raw2: hydra.lib.eithers.either((lambda err: Left(err)), (lambda stripped2: _hoist_field_map_body_4(stripped2)), hydra.extract.core.strip_with_decoding_error(cx2, raw2))), field_map(), cx), (lambda field_expected: Right(hydra.testing.UniversalTestCase(field_actual, field_expected))))))
 
             case _:
                 return Left(hydra.errors.DecodingError("expected record"))
-    return hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_testing_universal_test_case_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
+    return hydra.lib.eithers.either((lambda err: Left(err)), (lambda stripped: _hoist_hydra_decode_testing_universal_test_case_1(cx, stripped)), hydra.extract.core.strip_with_decoding_error(cx, raw))
 
 def test_case(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_testing_test_case_1(cx, v1):
@@ -96,7 +95,7 @@ def test_case(cx: hydra.graph.Graph, raw: hydra.core.Term):
 
             case _:
                 return Left(hydra.errors.DecodingError("expected union"))
-    return hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_testing_test_case_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
+    return hydra.lib.eithers.either((lambda err: Left(err)), (lambda stripped: _hoist_hydra_decode_testing_test_case_1(cx, stripped)), hydra.extract.core.strip_with_decoding_error(cx, raw))
 
 def test_case_with_metadata(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_testing_test_case_with_metadata_1(cx, v1):
@@ -133,11 +132,11 @@ def test_case_with_metadata(cx: hydra.graph.Graph, raw: hydra.core.Term):
 
                         case _:
                             return Left(hydra.errors.DecodingError("expected literal"))
-                return hydra.lib.eithers.bind(hydra.extract.core.require_field("name", (lambda cx2, raw2: hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped2: _hoist_field_map_body_2(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx2, raw2))), field_map(), cx), (lambda field_name: hydra.lib.eithers.bind(hydra.extract.core.require_field("case", (lambda x1, x2: test_case(x1, x2)), field_map(), cx), (lambda field_case: hydra.lib.eithers.bind(hydra.extract.core.require_field("description", (lambda v12, v2: hydra.extract.core.decode_maybe((lambda cx2, raw2: hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped2: _hoist_field_map_body_4(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx2, raw2))), v12, v2)), field_map(), cx), (lambda field_description: hydra.lib.eithers.bind(hydra.extract.core.require_field("tags", (lambda v12, v2: hydra.extract.core.decode_list((lambda x1, x2: tag(x1, x2)), v12, v2)), field_map(), cx), (lambda field_tags: Right(hydra.testing.TestCaseWithMetadata(field_name, field_case, field_description, field_tags))))))))))
+                return hydra.lib.eithers.bind(hydra.extract.core.require_field("name", (lambda cx2, raw2: hydra.lib.eithers.either((lambda err: Left(err)), (lambda stripped2: _hoist_field_map_body_2(stripped2)), hydra.extract.core.strip_with_decoding_error(cx2, raw2))), field_map(), cx), (lambda field_name: hydra.lib.eithers.bind(hydra.extract.core.require_field("case", (lambda x1, x2: test_case(x1, x2)), field_map(), cx), (lambda field_case: hydra.lib.eithers.bind(hydra.extract.core.require_field("description", (lambda v12, v2: hydra.extract.core.decode_maybe((lambda cx2, raw2: hydra.lib.eithers.either((lambda err: Left(err)), (lambda stripped2: _hoist_field_map_body_4(stripped2)), hydra.extract.core.strip_with_decoding_error(cx2, raw2))), v12, v2)), field_map(), cx), (lambda field_description: hydra.lib.eithers.bind(hydra.extract.core.require_field("tags", (lambda v12, v2: hydra.extract.core.decode_list((lambda x1, x2: tag(x1, x2)), v12, v2)), field_map(), cx), (lambda field_tags: Right(hydra.testing.TestCaseWithMetadata(field_name, field_case, field_description, field_tags))))))))))
 
             case _:
                 return Left(hydra.errors.DecodingError("expected record"))
-    return hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_testing_test_case_with_metadata_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
+    return hydra.lib.eithers.either((lambda err: Left(err)), (lambda stripped: _hoist_hydra_decode_testing_test_case_with_metadata_1(cx, stripped)), hydra.extract.core.strip_with_decoding_error(cx, raw))
 
 def test_group(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_testing_test_group_1(cx, v1):
@@ -174,8 +173,8 @@ def test_group(cx: hydra.graph.Graph, raw: hydra.core.Term):
 
                         case _:
                             return Left(hydra.errors.DecodingError("expected literal"))
-                return hydra.lib.eithers.bind(hydra.extract.core.require_field("name", (lambda cx2, raw2: hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped2: _hoist_field_map_body_2(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx2, raw2))), field_map(), cx), (lambda field_name: hydra.lib.eithers.bind(hydra.extract.core.require_field("description", (lambda v12, v2: hydra.extract.core.decode_maybe((lambda cx2, raw2: hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped2: _hoist_field_map_body_4(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx2, raw2))), v12, v2)), field_map(), cx), (lambda field_description: hydra.lib.eithers.bind(hydra.extract.core.require_field("subgroups", (lambda v12, v2: hydra.extract.core.decode_list((lambda x1, x2: test_group(x1, x2)), v12, v2)), field_map(), cx), (lambda field_subgroups: hydra.lib.eithers.bind(hydra.extract.core.require_field("cases", (lambda v12, v2: hydra.extract.core.decode_list((lambda x1, x2: test_case_with_metadata(x1, x2)), v12, v2)), field_map(), cx), (lambda field_cases: Right(hydra.testing.TestGroup(field_name, field_description, field_subgroups, field_cases))))))))))
+                return hydra.lib.eithers.bind(hydra.extract.core.require_field("name", (lambda cx2, raw2: hydra.lib.eithers.either((lambda err: Left(err)), (lambda stripped2: _hoist_field_map_body_2(stripped2)), hydra.extract.core.strip_with_decoding_error(cx2, raw2))), field_map(), cx), (lambda field_name: hydra.lib.eithers.bind(hydra.extract.core.require_field("description", (lambda v12, v2: hydra.extract.core.decode_maybe((lambda cx2, raw2: hydra.lib.eithers.either((lambda err: Left(err)), (lambda stripped2: _hoist_field_map_body_4(stripped2)), hydra.extract.core.strip_with_decoding_error(cx2, raw2))), v12, v2)), field_map(), cx), (lambda field_description: hydra.lib.eithers.bind(hydra.extract.core.require_field("subgroups", (lambda v12, v2: hydra.extract.core.decode_list((lambda x1, x2: test_group(x1, x2)), v12, v2)), field_map(), cx), (lambda field_subgroups: hydra.lib.eithers.bind(hydra.extract.core.require_field("cases", (lambda v12, v2: hydra.extract.core.decode_list((lambda x1, x2: test_case_with_metadata(x1, x2)), v12, v2)), field_map(), cx), (lambda field_cases: Right(hydra.testing.TestGroup(field_name, field_description, field_subgroups, field_cases))))))))))
 
             case _:
                 return Left(hydra.errors.DecodingError("expected record"))
-    return hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_testing_test_group_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
+    return hydra.lib.eithers.either((lambda err: Left(err)), (lambda stripped: _hoist_hydra_decode_testing_test_group_1(cx, stripped)), hydra.extract.core.strip_with_decoding_error(cx, raw))

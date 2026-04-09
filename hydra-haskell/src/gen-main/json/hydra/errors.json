@@ -15,6 +15,20 @@
           "variables": []}}},
     {
       "type": {
+        "name": "hydra.errors.EmptyListError",
+        "type": {
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {
+                    "literal": {
+                      "string": "An empty list was encountered where a non-empty list was required"}}}],
+              "body": {"unit": {}}}},
+          "variables": []}}},
+    {
+      "type": {
         "name": "hydra.errors.Error",
         "type": {
           "type": {
@@ -65,6 +79,26 @@
                             "@value": {"literal": {"string": "A duplicate field name error"}}}],
                         "body": {"variable": "hydra.error.core.DuplicateFieldError"}}}},
                   {
+                    "name": "extraction",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "An error that occurred while extracting a value from a term"}}}],
+                        "body": {"variable": "hydra.errors.ExtractionError"}}}},
+                  {
+                    "name": "inference",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "A type inference error"}}}],
+                        "body": {"variable": "hydra.errors.InferenceError"}}}},
+                  {
                     "name": "other",
                     "type": {
                       "annotated": {
@@ -73,6 +107,15 @@
                             "@key": "description",
                             "@value": {"literal": {"string": "Any other error"}}}],
                         "body": {"variable": "hydra.errors.OtherError"}}}},
+                  {
+                    "name": "resolution",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "A name-resolution error"}}}],
+                        "body": {"variable": "hydra.errors.ResolutionError"}}}},
                   {
                     "name": "undefinedField",
                     "type": {
@@ -130,6 +173,271 @@
           "variables": []}}},
     {
       "type": {
+        "name": "hydra.errors.ExtractionError",
+        "type": {
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {
+                    "literal": {
+                      "string": "An error that occurred while extracting a typed value from a term"}}}],
+              "body": {
+                "union": [
+                  {
+                    "name": "emptyList",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "An empty list was encountered where a non-empty list was required"}}}],
+                        "body": {"variable": "hydra.errors.EmptyListError"}}}},
+                  {
+                    "name": "multipleBindings",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {"string": "Multiple let bindings were found with the same name"}}}],
+                        "body": {"variable": "hydra.errors.MultipleBindingsError"}}}},
+                  {
+                    "name": "multipleFields",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "Multiple record fields were found with the same field name"}}}],
+                        "body": {"variable": "hydra.errors.MultipleFieldsError"}}}},
+                  {
+                    "name": "noMatchingField",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {"string": "No field with the expected name was found in a record"}}}],
+                        "body": {"variable": "hydra.errors.NoMatchingFieldError"}}}},
+                  {
+                    "name": "noSuchBinding",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {"string": "No let binding with the expected name was found"}}}],
+                        "body": {"variable": "hydra.errors.NoSuchBindingError"}}}},
+                  {
+                    "name": "notEnoughCases",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "A case statement did not contain enough cases to match the target"}}}],
+                        "body": {"variable": "hydra.errors.NotEnoughCasesError"}}}},
+                  {
+                    "name": "unexpectedShape",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "A term, type, literal, or other value had an unexpected shape"}}}],
+                        "body": {"variable": "hydra.errors.UnexpectedShapeError"}}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.errors.InferenceError",
+        "type": {
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {
+                    "literal": {"string": "An error that occurred during type inference"}}}],
+              "body": {
+                "union": [
+                  {
+                    "name": "checking",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {"string": "A type checking error encountered during inference"}}}],
+                        "body": {"variable": "hydra.error.checking.CheckingError"}}}},
+                  {
+                    "name": "other",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "A generic inference error carrying a message and a subterm path. Placeholder arm; sites should migrate to typed variants."}}}],
+                        "body": {"variable": "hydra.errors.OtherInferenceError"}}}},
+                  {
+                    "name": "unification",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {"string": "A unification failure encountered while inferring types"}}}],
+                        "body": {"variable": "hydra.errors.UnificationInferenceError"}}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.errors.MultipleBindingsError",
+        "type": {
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {
+                    "literal": {"string": "Multiple let bindings with the same name were found"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "name",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "The binding name which was duplicated"}}}],
+                        "body": {"variable": "hydra.core.Name"}}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.errors.MultipleFieldsError",
+        "type": {
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {
+                    "literal": {
+                      "string": "Multiple fields with the same name were found in a record"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "fieldName",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {"string": "The field name which appeared more than once"}}}],
+                        "body": {"variable": "hydra.core.Name"}}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.errors.NoMatchingFieldError",
+        "type": {
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {"literal": {"string": "No field with the expected name was present"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "fieldName",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "The field name which was not found"}}}],
+                        "body": {"variable": "hydra.core.Name"}}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.errors.NoSuchBindingError",
+        "type": {
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {
+                    "literal": {"string": "No let binding with the expected name was present"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "name",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "The binding name which was not found"}}}],
+                        "body": {"variable": "hydra.core.Name"}}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.errors.NoSuchPrimitiveError",
+        "type": {
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {
+                    "literal": {
+                      "string": "No primitive function with the expected name was registered in the graph"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "name",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "The primitive name which was not found"}}}],
+                        "body": {"variable": "hydra.core.Name"}}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.errors.NotEnoughCasesError",
+        "type": {
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {
+                    "literal": {
+                      "string": "A case statement was missing a case for the requested variant"}}}],
+              "body": {"unit": {}}}},
+          "variables": []}}},
+    {
+      "type": {
         "name": "hydra.errors.OtherError",
         "type": {
           "type": {
@@ -139,6 +447,153 @@
                   "@key": "description",
                   "@value": {"literal": {"string": "Any other error"}}}],
               "body": {"wrap": {"literal": {"string": {}}}}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.errors.OtherInferenceError",
+        "type": {
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {
+                    "literal": {"string": "A generic inference error: message + subterm path"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "path",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {"string": "The subterm path at which the error was observed"}}}],
+                        "body": {"variable": "hydra.paths.SubtermPath"}}}},
+                  {
+                    "name": "message",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "A human-readable error message"}}}],
+                        "body": {"literal": {"string": {}}}}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.errors.OtherResolutionError",
+        "type": {
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {"literal": {"string": "A generic resolution error: message"}}}],
+              "body": {"wrap": {"literal": {"string": {}}}}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.errors.ResolutionError",
+        "type": {
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {
+                    "literal": {
+                      "string": "An error that occurred while resolving a name, primitive, or record/union shape in a graph"}}}],
+              "body": {
+                "union": [
+                  {
+                    "name": "noSuchBinding",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {"string": "No binding with the expected name was found in the graph"}}}],
+                        "body": {"variable": "hydra.errors.NoSuchBindingError"}}}},
+                  {
+                    "name": "noSuchPrimitive",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "No primitive function with the expected name was found in the graph"}}}],
+                        "body": {"variable": "hydra.errors.NoSuchPrimitiveError"}}}},
+                  {
+                    "name": "noMatchingField",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "No field with the expected name was present in a record or case statement"}}}],
+                        "body": {"variable": "hydra.errors.NoMatchingFieldError"}}}},
+                  {
+                    "name": "other",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {"string": "A generic resolution error carrying a message"}}}],
+                        "body": {"variable": "hydra.errors.OtherResolutionError"}}}},
+                  {
+                    "name": "unexpectedShape",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "A term had a shape other than the one expected (e.g. a record, an injection)"}}}],
+                        "body": {"variable": "hydra.errors.UnexpectedShapeError"}}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.errors.UnexpectedShapeError",
+        "type": {
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {
+                    "literal": {
+                      "string": "A term, type, literal, or related value had a shape other than the one expected"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "expected",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "A description of the expected shape"}}}],
+                        "body": {"literal": {"string": {}}}}}},
+                  {
+                    "name": "actual",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {"string": "A description of the shape actually encountered"}}}],
+                        "body": {"literal": {"string": {}}}}}}]}}},
           "variables": []}}},
     {
       "type": {
@@ -180,6 +635,41 @@
                             "@key": "description",
                             "@value": {"literal": {"string": "A human-readable error message"}}}],
                         "body": {"literal": {"string": {}}}}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.errors.UnificationInferenceError",
+        "type": {
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {
+                    "literal": {
+                      "string": "A unification failure at a specific subterm locus during inference"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "path",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "The subterm path at which the unification failure was observed"}}}],
+                        "body": {"variable": "hydra.paths.SubtermPath"}}}},
+                  {
+                    "name": "cause",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "The underlying unification error"}}}],
+                        "body": {"variable": "hydra.errors.UnificationError"}}}}]}}},
           "variables": []}}}],
   "description": "Top-level error types for the Hydra kernel",
   "namespace": "hydra.errors",
@@ -188,6 +678,7 @@
     "hydra.core",
     "hydra.error.checking",
     "hydra.error.core",
+    "hydra.paths",
     "hydra.typing",
     "hydra.variants"],
   "typeDependencies": [
@@ -195,5 +686,6 @@
     "hydra.core",
     "hydra.error.checking",
     "hydra.error.core",
+    "hydra.paths",
     "hydra.typing",
     "hydra.variants"]}

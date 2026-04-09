@@ -7,7 +7,6 @@ from collections.abc import Callable
 from functools import lru_cache
 from hydra.dsl.python import Either, Right, frozenlist
 from typing import TypeVar, cast
-import hydra.context
 import hydra.core
 import hydra.inference
 import hydra.lexical
@@ -22,7 +21,7 @@ T1 = TypeVar("T1")
 def infer_term(g: hydra.graph.Graph, term: hydra.core.Term) -> Either[str, hydra.core.Term]:
     r"""Run type inference on a single term."""
 
-    return hydra.lib.eithers.bimap((lambda ic: hydra.show.errors.error(ic.object)), (lambda x: x.term), hydra.inference.infer_in_graph_context(hydra.lexical.empty_context(), g, term))
+    return hydra.lib.eithers.bimap((lambda e: hydra.show.errors.error(e)), (lambda x: x.term), hydra.inference.infer_in_graph_context(hydra.lexical.empty_context(), g, term))
 
 def infer_test_case(g: T0, tcm: hydra.testing.TestCaseWithMetadata) -> Either[T1, hydra.testing.TestCaseWithMetadata]:
     r"""Run type inference on the terms in a test case."""

@@ -15,7 +15,6 @@ import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.optional;
 import static hydra.dsl.Types.scheme;
 import hydra.context.Context;
-import hydra.context.InContext;
 import hydra.errors.Error_;
 import hydra.util.Either;
 
@@ -37,16 +36,16 @@ public class Compose extends PrimitiveFunction {
     }
 
     @Override
-    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
+    protected Function<List<Term>, Function<Context, Function<Graph, Either<Error_, Term>>>> implementation() {
         return args -> cx -> graph -> {
-            Function<Term, Either<InContext<Error_>, Maybe<Term>>> nativeF = val ->
+            Function<Term, Either<Error_, Maybe<Term>>> nativeF = val ->
                 hydra.lib.eithers.Bind.apply(
                     hydra.Reduction.reduceTerm(hydra.Lexical.emptyContext(), graph, true, Terms.apply(args.get(0), val)),
-                    reduced -> hydra.extract.Core.maybeTerm(cx, t -> Either.right(t), graph, reduced));
-            Function<Term, Either<InContext<Error_>, Maybe<Term>>> nativeG = val ->
+                    reduced -> hydra.extract.Core.maybeTerm(t -> Either.right(t), graph, reduced));
+            Function<Term, Either<Error_, Maybe<Term>>> nativeG = val ->
                 hydra.lib.eithers.Bind.apply(
                     hydra.Reduction.reduceTerm(hydra.Lexical.emptyContext(), graph, true, Terms.apply(args.get(1), val)),
-                    reduced -> hydra.extract.Core.maybeTerm(cx, t -> Either.right(t), graph, reduced));
+                    reduced -> hydra.extract.Core.maybeTerm(t -> Either.right(t), graph, reduced));
             return hydra.lib.eithers.Bind.apply(nativeF.apply(args.get(2)), maybeB -> {
                 if (!maybeB.isJust()) {
                     return Either.right(Terms.optional(Maybe.nothing()));

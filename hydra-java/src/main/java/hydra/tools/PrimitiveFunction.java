@@ -1,7 +1,6 @@
 package hydra.tools;
 
 import hydra.context.Context;
-import hydra.context.InContext;
 import hydra.core.Name;
 import hydra.core.Term;
 import hydra.core.TypeScheme;
@@ -36,7 +35,7 @@ public abstract class PrimitiveFunction {
      * Subclasses implement this with Either-based logic.
      * @return the function implementation
      */
-    protected abstract Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation();
+    protected abstract Function<List<Term>, Function<Context, Function<Graph, Either<Error_, Term>>>> implementation();
 
     /**
      * The primitive function as a term.
@@ -51,14 +50,14 @@ public abstract class PrimitiveFunction {
      * @return the primitive function as a Hydra Primitive object
      */
     public Primitive toNative() {
-        Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> impl = implementation();
-        Function<Context, Function<Graph, Function<List<Term>, Either<InContext<Error_>, Term>>>> nativeImpl =
+        Function<List<Term>, Function<Context, Function<Graph, Either<Error_, Term>>>> impl = implementation();
+        Function<Context, Function<Graph, Function<List<Term>, Either<Error_, Term>>>> nativeImpl =
             cx -> graph -> args -> {
-                Either<InContext<Error_>, Term> result = impl.apply(args).apply(cx).apply(graph);
+                Either<Error_, Term> result = impl.apply(args).apply(cx).apply(graph);
                 if (result.isRight()) {
-                    return Either.right(((Either.Right<InContext<Error_>, Term>) result).value);
+                    return Either.right(((Either.Right<Error_, Term>) result).value);
                 } else {
-                    InContext<Error_> ic = ((Either.Left<InContext<Error_>, Term>) result).value;
+                    Error_ ic = ((Either.Left<Error_, Term>) result).value;
                     return Either.left(ic);
                 }
             };

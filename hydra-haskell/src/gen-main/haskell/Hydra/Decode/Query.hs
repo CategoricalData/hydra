@@ -9,7 +9,6 @@ import qualified Hydra.Decode.Core as Core_
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Extract.Core as Core__
 import qualified Hydra.Graph as Graph
-import qualified Hydra.Lexical as Lexical
 import qualified Hydra.Lib.Eithers as Eithers
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Maybes as Maybes
@@ -19,7 +18,7 @@ import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pur
 
 comparisonConstraint :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Query.ComparisonConstraint
 comparisonConstraint cx raw =
-    Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+    Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermUnion v0 ->
         let field = Core.injectionField v0
             fname = Core.fieldName field
@@ -36,32 +35,32 @@ comparisonConstraint cx raw =
           "no such field ",
           (Core.unName fname),
           " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
-      _ -> Left (Errors.DecodingError "expected union")) (Lexical.stripAndDereferenceTermEither cx raw)
+      _ -> Left (Errors.DecodingError "expected union")) (Core__.stripWithDecodingError cx raw)
 
 edge :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Query.Edge
 edge cx raw =
-    Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+    Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Core__.toFieldMap v0
         in (Eithers.bind (Core__.requireField "type" Core_.name fieldMap cx) (\field_type -> Eithers.bind (Core__.requireField "out" (Core__.decodeMaybe Core_.name) fieldMap cx) (\field_out -> Eithers.bind (Core__.requireField "in" (Core__.decodeMaybe Core_.name) fieldMap cx) (\field_in -> Right (Query.Edge {
           Query.edgeType = field_type,
           Query.edgeOut = field_out,
           Query.edgeIn = field_in})))))
-      _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
+      _ -> Left (Errors.DecodingError "expected record")) (Core__.stripWithDecodingError cx raw)
 
 graphPattern :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Query.GraphPattern
 graphPattern cx raw =
-    Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+    Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Core__.toFieldMap v0
         in (Eithers.bind (Core__.requireField "graph" Core_.name fieldMap cx) (\field_graph -> Eithers.bind (Core__.requireField "patterns" (Core__.decodeList pattern) fieldMap cx) (\field_patterns -> Right (Query.GraphPattern {
           Query.graphPatternGraph = field_graph,
           Query.graphPatternPatterns = field_patterns}))))
-      _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
+      _ -> Left (Errors.DecodingError "expected record")) (Core__.stripWithDecodingError cx raw)
 
 node :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Query.Node
 node cx raw =
-    Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+    Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermUnion v0 ->
         let field = Core.injectionField v0
             fname = Core.fieldName field
@@ -75,11 +74,11 @@ node cx raw =
           "no such field ",
           (Core.unName fname),
           " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
-      _ -> Left (Errors.DecodingError "expected union")) (Lexical.stripAndDereferenceTermEither cx raw)
+      _ -> Left (Errors.DecodingError "expected union")) (Core__.stripWithDecodingError cx raw)
 
 path :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Query.Path
 path cx raw =
-    Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+    Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermUnion v0 ->
         let field = Core.injectionField v0
             fname = Core.fieldName field
@@ -93,21 +92,21 @@ path cx raw =
           "no such field ",
           (Core.unName fname),
           " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
-      _ -> Left (Errors.DecodingError "expected union")) (Lexical.stripAndDereferenceTermEither cx raw)
+      _ -> Left (Errors.DecodingError "expected union")) (Core__.stripWithDecodingError cx raw)
 
 pathEquation :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Query.PathEquation
 pathEquation cx raw =
-    Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+    Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Core__.toFieldMap v0
         in (Eithers.bind (Core__.requireField "left" path fieldMap cx) (\field_left -> Eithers.bind (Core__.requireField "right" path fieldMap cx) (\field_right -> Right (Query.PathEquation {
           Query.pathEquationLeft = field_left,
           Query.pathEquationRight = field_right}))))
-      _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
+      _ -> Left (Errors.DecodingError "expected record")) (Core__.stripWithDecodingError cx raw)
 
 pattern :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Query.Pattern
 pattern cx raw =
-    Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+    Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermUnion v0 ->
         let field = Core.injectionField v0
             fname = Core.fieldName field
@@ -123,53 +122,53 @@ pattern cx raw =
           "no such field ",
           (Core.unName fname),
           " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
-      _ -> Left (Errors.DecodingError "expected union")) (Lexical.stripAndDereferenceTermEither cx raw)
+      _ -> Left (Errors.DecodingError "expected union")) (Core__.stripWithDecodingError cx raw)
 
 patternImplication :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Query.PatternImplication
 patternImplication cx raw =
-    Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+    Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Core__.toFieldMap v0
         in (Eithers.bind (Core__.requireField "antecedent" pattern fieldMap cx) (\field_antecedent -> Eithers.bind (Core__.requireField "consequent" pattern fieldMap cx) (\field_consequent -> Right (Query.PatternImplication {
           Query.patternImplicationAntecedent = field_antecedent,
           Query.patternImplicationConsequent = field_consequent}))))
-      _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
+      _ -> Left (Errors.DecodingError "expected record")) (Core__.stripWithDecodingError cx raw)
 
 query :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Query.Query
 query cx raw =
-    Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+    Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Core__.toFieldMap v0
         in (Eithers.bind (Core__.requireField "variables" (Core__.decodeList variable) fieldMap cx) (\field_variables -> Eithers.bind (Core__.requireField "patterns" (Core__.decodeList pattern) fieldMap cx) (\field_patterns -> Right (Query.Query {
           Query.queryVariables = field_variables,
           Query.queryPatterns = field_patterns}))))
-      _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
+      _ -> Left (Errors.DecodingError "expected record")) (Core__.stripWithDecodingError cx raw)
 
 range :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Query.Range
 range cx raw =
-    Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+    Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Core__.toFieldMap v0
-        in (Eithers.bind (Core__.requireField "min" (\cx2 -> \raw2 -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped2 -> case stripped2 of
+        in (Eithers.bind (Core__.requireField "min" (\cx2 -> \raw2 -> Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
           Core.TermLiteral v1 -> case v1 of
             Core.LiteralInteger v2 -> case v2 of
               Core.IntegerValueInt32 v3 -> Right v3
               _ -> Left (Errors.DecodingError "expected int32 value")
             _ -> Left (Errors.DecodingError "expected int32 literal")
-          _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx2 raw2)) fieldMap cx) (\field_min -> Eithers.bind (Core__.requireField "max" (\cx2 -> \raw2 -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped2 -> case stripped2 of
+          _ -> Left (Errors.DecodingError "expected literal")) (Core__.stripWithDecodingError cx2 raw2)) fieldMap cx) (\field_min -> Eithers.bind (Core__.requireField "max" (\cx2 -> \raw2 -> Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
           Core.TermLiteral v1 -> case v1 of
             Core.LiteralInteger v2 -> case v2 of
               Core.IntegerValueInt32 v3 -> Right v3
               _ -> Left (Errors.DecodingError "expected int32 value")
             _ -> Left (Errors.DecodingError "expected int32 literal")
-          _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx2 raw2)) fieldMap cx) (\field_max -> Right (Query.Range {
+          _ -> Left (Errors.DecodingError "expected literal")) (Core__.stripWithDecodingError cx2 raw2)) fieldMap cx) (\field_max -> Right (Query.Range {
           Query.rangeMin = field_min,
           Query.rangeMax = field_max}))))
-      _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
+      _ -> Left (Errors.DecodingError "expected record")) (Core__.stripWithDecodingError cx raw)
 
 regexQuantifier :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Query.RegexQuantifier
 regexQuantifier cx raw =
-    Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+    Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermUnion v0 ->
         let field = Core.injectionField v0
             fname = Core.fieldName field
@@ -180,40 +179,40 @@ regexQuantifier cx raw =
                       (Core.Name "zeroOrOne", (\input -> Eithers.map (\t -> Query.RegexQuantifierZeroOrOne) (Core__.decodeUnit cx input))),
                       (Core.Name "zeroOrMore", (\input -> Eithers.map (\t -> Query.RegexQuantifierZeroOrMore) (Core__.decodeUnit cx input))),
                       (Core.Name "oneOrMore", (\input -> Eithers.map (\t -> Query.RegexQuantifierOneOrMore) (Core__.decodeUnit cx input))),
-                      (Core.Name "exactly", (\input -> Eithers.map (\t -> Query.RegexQuantifierExactly t) (Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped2 -> case stripped2 of
+                      (Core.Name "exactly", (\input -> Eithers.map (\t -> Query.RegexQuantifierExactly t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
                         Core.TermLiteral v1 -> case v1 of
                           Core.LiteralInteger v2 -> case v2 of
                             Core.IntegerValueInt32 v3 -> Right v3
                             _ -> Left (Errors.DecodingError "expected int32 value")
                           _ -> Left (Errors.DecodingError "expected int32 literal")
-                        _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx input)))),
-                      (Core.Name "atLeast", (\input -> Eithers.map (\t -> Query.RegexQuantifierAtLeast t) (Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped2 -> case stripped2 of
+                        _ -> Left (Errors.DecodingError "expected literal")) (Core__.stripWithDecodingError cx input)))),
+                      (Core.Name "atLeast", (\input -> Eithers.map (\t -> Query.RegexQuantifierAtLeast t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
                         Core.TermLiteral v1 -> case v1 of
                           Core.LiteralInteger v2 -> case v2 of
                             Core.IntegerValueInt32 v3 -> Right v3
                             _ -> Left (Errors.DecodingError "expected int32 value")
                           _ -> Left (Errors.DecodingError "expected int32 literal")
-                        _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx input)))),
+                        _ -> Left (Errors.DecodingError "expected literal")) (Core__.stripWithDecodingError cx input)))),
                       (Core.Name "range", (\input -> Eithers.map (\t -> Query.RegexQuantifierRange t) (range cx input)))]
         in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),
           " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
-      _ -> Left (Errors.DecodingError "expected union")) (Lexical.stripAndDereferenceTermEither cx raw)
+      _ -> Left (Errors.DecodingError "expected union")) (Core__.stripWithDecodingError cx raw)
 
 regexSequence :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Query.RegexSequence
 regexSequence cx raw =
-    Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+    Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Core__.toFieldMap v0
         in (Eithers.bind (Core__.requireField "path" path fieldMap cx) (\field_path -> Eithers.bind (Core__.requireField "quantifier" regexQuantifier fieldMap cx) (\field_quantifier -> Right (Query.RegexSequence {
           Query.regexSequencePath = field_path,
           Query.regexSequenceQuantifier = field_quantifier}))))
-      _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
+      _ -> Left (Errors.DecodingError "expected record")) (Core__.stripWithDecodingError cx raw)
 
 step :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Query.Step
 step cx raw =
-    Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+    Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermUnion v0 ->
         let field = Core.injectionField v0
             fname = Core.fieldName field
@@ -227,25 +226,25 @@ step cx raw =
           "no such field ",
           (Core.unName fname),
           " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
-      _ -> Left (Errors.DecodingError "expected union")) (Lexical.stripAndDereferenceTermEither cx raw)
+      _ -> Left (Errors.DecodingError "expected union")) (Core__.stripWithDecodingError cx raw)
 
 triplePattern :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Query.TriplePattern
 triplePattern cx raw =
-    Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+    Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Core__.toFieldMap v0
         in (Eithers.bind (Core__.requireField "subject" node fieldMap cx) (\field_subject -> Eithers.bind (Core__.requireField "predicate" path fieldMap cx) (\field_predicate -> Eithers.bind (Core__.requireField "object" node fieldMap cx) (\field_object -> Right (Query.TriplePattern {
           Query.triplePatternSubject = field_subject,
           Query.triplePatternPredicate = field_predicate,
           Query.triplePatternObject = field_object})))))
-      _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
+      _ -> Left (Errors.DecodingError "expected record")) (Core__.stripWithDecodingError cx raw)
 
 variable :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Query.Variable
 variable cx raw =
-    Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
-      Core.TermWrap v0 -> Eithers.map (\b -> Query.Variable b) ((\raw2 -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped2 -> case stripped2 of
+    Eithers.either (\err -> Left err) (\stripped -> case stripped of
+      Core.TermWrap v0 -> Eithers.map (\b -> Query.Variable b) ((\raw2 -> Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
         Core.TermLiteral v1 -> case v1 of
           Core.LiteralString v2 -> Right v2
           _ -> Left (Errors.DecodingError "expected string literal")
-        _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx raw2)) (Core.wrappedTermBody v0))
-      _ -> Left (Errors.DecodingError "expected wrapped type")) (Lexical.stripAndDereferenceTermEither cx raw)
+        _ -> Left (Errors.DecodingError "expected literal")) (Core__.stripWithDecodingError cx raw2)) (Core.wrappedTermBody v0))
+      _ -> Left (Errors.DecodingError "expected wrapped type")) (Core__.stripWithDecodingError cx raw)

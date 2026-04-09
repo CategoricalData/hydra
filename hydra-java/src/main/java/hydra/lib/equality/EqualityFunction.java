@@ -1,7 +1,6 @@
 package hydra.lib.equality;
 
 import hydra.context.Context;
-import hydra.context.InContext;
 import hydra.core.Name;
 import hydra.core.Term;
 import hydra.core.Type;
@@ -41,7 +40,7 @@ public abstract class EqualityFunction<T> extends PrimitiveFunction {
 
     protected final Name name;
     protected final TypeScheme type;
-    protected final PrimitiveType.TriFunction<Context, Graph, Term, Either<InContext<Error_>, T>> expect;
+    protected final BiFunction<Graph, Term, Either<Error_, T>> expect;
     protected final BiFunction<T, T, Boolean> criterion;
 
     public EqualityFunction(PrimitiveType<T> type, Relation relation) {
@@ -50,7 +49,7 @@ public abstract class EqualityFunction<T> extends PrimitiveFunction {
 
     private EqualityFunction(String typeName,
                              Type datatype,
-                             PrimitiveType.TriFunction<Context, Graph, Term, Either<InContext<Error_>, T>> expect,
+                             BiFunction<Graph, Term, Either<Error_, T>> expect,
                              Comparator<T> comparator,
                              Relation relation) {
         this.name = new Name("hydra.lib.equality." + relation.prefix + capitalize(typeName));
@@ -90,12 +89,12 @@ public abstract class EqualityFunction<T> extends PrimitiveFunction {
     }
 
     @Override
-    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
+    protected Function<List<Term>, Function<Context, Function<Graph, Either<Error_, Term>>>> implementation() {
         return args -> cx -> graph ->
-            hydra.lib.eithers.Bind.apply(expect.apply(cx, graph, args.get(0)), arg0 ->
+            hydra.lib.eithers.Bind.apply(expect.apply(graph, args.get(0)), arg0 ->
                 hydra.lib.eithers.Map.apply(arg1 ->
                     Terms.boolean_(criterion.apply(arg0, arg1)),
-                    expect.apply(cx, graph, args.get(1))));
+                    expect.apply(graph, args.get(1))));
     }
 
     // TODO: inline implementation until hydra.basics.Basics is generated

@@ -1,11 +1,12 @@
 (ns hydra.dsl.prims
   (:require [hydra.core :refer :all]
             [hydra.graph :refer :all]
-            [hydra.context :refer :all])
+            [hydra.context :refer :all]
+            [hydra.errors :refer :all])
   (:import [hydra.core hydra_core_function_type hydra_core_type_scheme
                        hydra_core_application hydra_core_injection hydra_core_field]
            [hydra.graph hydra_graph_primitive hydra_graph_term_coder]
-           [hydra.context hydra_context_in_context]))
+           [hydra.errors hydra_errors_other_error]))
 
 ;; Type scheme helpers -- the reducer uses primitive arity (from TypeScheme)
 ;; to decide how many args to collect before calling the implementation.
@@ -80,111 +81,104 @@
 
 ;; Error helpers
 
-(defn- other-err [cx msg]
-  (->hydra_context_in_context msg cx))
+(defn- other-err [msg]
+  (list :other (->hydra_errors_other_error msg)))
 
 (defn- wrap-other
-  "Wrap Either (InContext OtherError) into Either (InContext Error).
-   In Clojure, errors are just strings, so this is mostly pass-through."
-  [cx result]
-  (if (= (first result) :right)
-    result
-    ;; Left side: wrap the OtherError into an Error
-    (let [ic (second result)
-          obj (if (instance? hydra_context_in_context ic) (.object ic) (:object ic))
-          ctx (if (instance? hydra_context_in_context ic) (.context ic) (:context ic))]
-      (list :left (->hydra_context_in_context (list :other (->hydra_context_in_context obj ctx)) ctx)))))
+  "Pass through Either Error results (no wrapping needed after InContext removal)."
+  [result]
+  result)
 
 ;; TermCoder constructors -- each returns a TermCoder record with :type, :encode, :decode
 
 (defn tc-bigfloat []
   (->hydra_graph_term_coder
    (list :literal (list :float (list :bigfloat nil)))
-   (fn [cx g t] (((@(ns-resolve 'hydra.extract.core 'hydra_extract_core_bigfloat) cx) g) t))
+   (fn [cx g t] ((@(ns-resolve 'hydra.extract.core 'hydra_extract_core_bigfloat) g) t))
    (fn [cx v] (list :right (list :literal (list :float (list :bigfloat (double v))))))))
 
 (defn tc-bigint []
   (->hydra_graph_term_coder
    (list :literal (list :integer (list :bigint nil)))
-   (fn [cx g t] (((@(ns-resolve 'hydra.extract.core 'hydra_extract_core_bigint) cx) g) t))
+   (fn [cx g t] ((@(ns-resolve 'hydra.extract.core 'hydra_extract_core_bigint) g) t))
    (fn [cx v] (list :right (list :literal (list :integer (list :bigint v)))))))
 
 (defn tc-boolean []
   (->hydra_graph_term_coder
    (list :literal (list :boolean nil))
-   (fn [cx g t] (((@(ns-resolve 'hydra.extract.core 'hydra_extract_core_boolean) cx) g) t))
+   (fn [cx g t] ((@(ns-resolve 'hydra.extract.core 'hydra_extract_core_boolean) g) t))
    (fn [cx v] (list :right (list :literal (list :boolean v))))))
 
 (defn tc-float32 []
   (->hydra_graph_term_coder
    (list :literal (list :float (list :float32 nil)))
-   (fn [cx g t] (((@(ns-resolve 'hydra.extract.core 'hydra_extract_core_float32) cx) g) t))
+   (fn [cx g t] ((@(ns-resolve 'hydra.extract.core 'hydra_extract_core_float32) g) t))
    (fn [cx v] (list :right (list :literal (list :float (list :float32 v)))))))
 
 (defn tc-float64 []
   (->hydra_graph_term_coder
    (list :literal (list :float (list :float64 nil)))
-   (fn [cx g t] (((@(ns-resolve 'hydra.extract.core 'hydra_extract_core_float64) cx) g) t))
+   (fn [cx g t] ((@(ns-resolve 'hydra.extract.core 'hydra_extract_core_float64) g) t))
    (fn [cx v] (list :right (list :literal (list :float (list :float64 (double v))))))))
 
 (defn tc-int8 []
   (->hydra_graph_term_coder
    (list :literal (list :integer (list :int8 nil)))
-   (fn [cx g t] (((@(ns-resolve 'hydra.extract.core 'hydra_extract_core_int8) cx) g) t))
+   (fn [cx g t] ((@(ns-resolve 'hydra.extract.core 'hydra_extract_core_int8) g) t))
    (fn [cx v] (list :right (list :literal (list :integer (list :int8 v)))))))
 
 (defn tc-int16 []
   (->hydra_graph_term_coder
    (list :literal (list :integer (list :int16 nil)))
-   (fn [cx g t] (((@(ns-resolve 'hydra.extract.core 'hydra_extract_core_int16) cx) g) t))
+   (fn [cx g t] ((@(ns-resolve 'hydra.extract.core 'hydra_extract_core_int16) g) t))
    (fn [cx v] (list :right (list :literal (list :integer (list :int16 v)))))))
 
 (defn tc-int32 []
   (->hydra_graph_term_coder
    (list :literal (list :integer (list :int32 nil)))
-   (fn [cx g t] (((@(ns-resolve 'hydra.extract.core 'hydra_extract_core_int32) cx) g) t))
+   (fn [cx g t] ((@(ns-resolve 'hydra.extract.core 'hydra_extract_core_int32) g) t))
    (fn [cx v] (list :right (list :literal (list :integer (list :int32 v)))))))
 
 (defn tc-int64 []
   (->hydra_graph_term_coder
    (list :literal (list :integer (list :int64 nil)))
-   (fn [cx g t] (((@(ns-resolve 'hydra.extract.core 'hydra_extract_core_int64) cx) g) t))
+   (fn [cx g t] ((@(ns-resolve 'hydra.extract.core 'hydra_extract_core_int64) g) t))
    (fn [cx v] (list :right (list :literal (list :integer (list :int64 v)))))))
 
 (defn tc-uint8 []
   (->hydra_graph_term_coder
    (list :literal (list :integer (list :uint8 nil)))
-   (fn [cx g t] (((@(ns-resolve 'hydra.extract.core 'hydra_extract_core_uint8) cx) g) t))
+   (fn [cx g t] ((@(ns-resolve 'hydra.extract.core 'hydra_extract_core_uint8) g) t))
    (fn [cx v] (list :right (list :literal (list :integer (list :uint8 v)))))))
 
 (defn tc-uint16 []
   (->hydra_graph_term_coder
    (list :literal (list :integer (list :uint16 nil)))
-   (fn [cx g t] (((@(ns-resolve 'hydra.extract.core 'hydra_extract_core_uint16) cx) g) t))
+   (fn [cx g t] ((@(ns-resolve 'hydra.extract.core 'hydra_extract_core_uint16) g) t))
    (fn [cx v] (list :right (list :literal (list :integer (list :uint16 v)))))))
 
 (defn tc-uint32 []
   (->hydra_graph_term_coder
    (list :literal (list :integer (list :uint32 nil)))
-   (fn [cx g t] (((@(ns-resolve 'hydra.extract.core 'hydra_extract_core_uint32) cx) g) t))
+   (fn [cx g t] ((@(ns-resolve 'hydra.extract.core 'hydra_extract_core_uint32) g) t))
    (fn [cx v] (list :right (list :literal (list :integer (list :uint32 v)))))))
 
 (defn tc-uint64 []
   (->hydra_graph_term_coder
    (list :literal (list :integer (list :uint64 nil)))
-   (fn [cx g t] (((@(ns-resolve 'hydra.extract.core 'hydra_extract_core_uint64) cx) g) t))
+   (fn [cx g t] ((@(ns-resolve 'hydra.extract.core 'hydra_extract_core_uint64) g) t))
    (fn [cx v] (list :right (list :literal (list :integer (list :uint64 v)))))))
 
 (defn tc-string []
   (->hydra_graph_term_coder
    (list :literal (list :string nil))
-   (fn [cx g t] (((@(ns-resolve 'hydra.extract.core 'hydra_extract_core_string) cx) g) t))
+   (fn [cx g t] ((@(ns-resolve 'hydra.extract.core 'hydra_extract_core_string) g) t))
    (fn [cx v] (list :right (list :literal (list :string v))))))
 
 (defn tc-binary []
   (->hydra_graph_term_coder
    (list :literal (list :binary nil))
-   (fn [cx g t] (((@(ns-resolve 'hydra.extract.core 'hydra_extract_core_binary) cx) g) t))
+   (fn [cx g t] ((@(ns-resolve 'hydra.extract.core 'hydra_extract_core_binary) g) t))
    (fn [cx v] (list :right (list :literal (list :binary v))))))
 
 ;; Container TermCoders
@@ -193,7 +187,7 @@
   (->hydra_graph_term_coder
    (list :list (:type el-coder))
    (fn [cx g t]
-     ((((@(ns-resolve 'hydra.extract.core 'hydra_extract_core_list_of) cx) (fn [term] ((.encode el-coder) cx g term))) g) t))
+     (((@(ns-resolve 'hydra.extract.core 'hydra_extract_core_list_of) (fn [term] ((.encode el-coder) cx g term))) g) t))
    (fn [cx lst]
      (loop [items lst result []]
        (if (empty? items)
@@ -207,7 +201,7 @@
   (->hydra_graph_term_coder
    (list :set (:type el-coder))
    (fn [cx g t]
-     ((((@(ns-resolve 'hydra.extract.core 'hydra_extract_core_set_of) cx) (fn [term] ((.encode el-coder) cx g term))) g) t))
+     (((@(ns-resolve 'hydra.extract.core 'hydra_extract_core_set_of) (fn [term] ((.encode el-coder) cx g term))) g) t))
    (fn [cx s]
      (loop [items (seq s) result []]
        (if (empty? items)
@@ -221,7 +215,7 @@
   (->hydra_graph_term_coder
    (list :map (->hydra_core_map_type (:type key-coder) (:type val-coder)))
    (fn [cx g t]
-     (((((@(ns-resolve 'hydra.extract.core 'hydra_extract_core_map) cx)
+     ((((@(ns-resolve 'hydra.extract.core 'hydra_extract_core_map)
          (fn [term] ((.encode key-coder) cx g term)))
         (fn [term] ((.encode val-coder) cx g term)))
        g) t))
@@ -242,7 +236,7 @@
   (->hydra_graph_term_coder
    (list :maybe (:type el-coder))
    (fn [cx g t]
-     ((((@(ns-resolve 'hydra.extract.core 'hydra_extract_core_maybe_term) cx)
+     (((@(ns-resolve 'hydra.extract.core 'hydra_extract_core_maybe_term)
         (fn [term] ((.encode el-coder) cx g term)))
        g) t))
    (fn [cx mv]
@@ -264,7 +258,7 @@
   (->hydra_graph_term_coder
    (list :either (->hydra_core_either_type (:type left-coder) (:type right-coder)))
    (fn [cx g t]
-     (((((@(ns-resolve 'hydra.extract.core 'hydra_extract_core_either_term) cx)
+     ((((@(ns-resolve 'hydra.extract.core 'hydra_extract_core_either_term)
          (fn [term] ((.encode left-coder) cx g term)))
         (fn [term] ((.encode right-coder) cx g term)))
        g) t))
@@ -281,7 +275,7 @@
   (->hydra_graph_term_coder
    (list :pair (->hydra_core_pair_type (:type first-coder) (:type second-coder)))
    (fn [cx g t]
-     (((((@(ns-resolve 'hydra.extract.core 'hydra_extract_core_pair) cx)
+     ((((@(ns-resolve 'hydra.extract.core 'hydra_extract_core_pair)
          (fn [term] ((.encode first-coder) cx g term)))
         (fn [term] ((.encode second-coder) cx g term)))
        g) t))
@@ -314,7 +308,7 @@
    (list :variable "hydra.util.Comparison")
    (fn [cx g t]
      ;; Extract a comparison union variant
-     (let [r (((@(ns-resolve 'hydra.extract.core 'hydra_extract_core_unit_variant) cx) "hydra.util.Comparison") g t)]
+     (let [r ((@(ns-resolve 'hydra.extract.core 'hydra_extract_core_unit_variant) "hydra.util.Comparison") g t)]
        (if (= (first r) :left)
          r
          (let [variant-name (second r)]
@@ -322,7 +316,7 @@
              (= variant-name "lessThan")    (list :right :lt)
              (= variant-name "equalTo")     (list :right :eq)
              (= variant-name "greaterThan") (list :right :gt)
-             :else (list :left (->hydra_context_in_context (str "unknown comparison: " variant-name) cx)))))))
+             :else (list :left (other-err (str "unknown comparison: " variant-name))))))))
    (fn [cx c]
      (let [variant-name (cond
                           ;; Comparison union: (list :less_than nil), etc.
@@ -344,8 +338,8 @@
   [_dom _cod]
   (->hydra_graph_term_coder
    (list :function (->hydra_core_function_type (:type _dom) (:type _cod)))
-   (fn [cx g t] (list :left (->hydra_context_in_context "cannot encode term to a function" cx)))
-   (fn [cx v] (list :left (->hydra_context_in_context "cannot decode functions to terms" cx)))))
+   (fn [cx g t] (list :left (other-err "cannot encode term to a function")))
+   (fn [cx v] (list :left (other-err "cannot decode functions to terms")))))
 
 (defn tc-function-with-reduce
   "TermCoder for function types, using a reducer to bridge term-level functions
@@ -369,7 +363,7 @@
                    (when (= (first decode-result) :left)
                      (throw (RuntimeException. "function_with_reduce: failed to decode result")))
                    (second decode-result)))))))
-   (fn [cx v] (list :left (->hydra_context_in_context "cannot decode functions to terms" cx)))))
+   (fn [cx v] (list :left (other-err "cannot decode functions to terms")))))
 
 ;; Primitive constructors
 
@@ -383,7 +377,7 @@
     (build-type-scheme _variables [] output constraints)
     (fn [cx] (fn [g] (fn [args]
       (let [result ((.decode output) cx (value-fn))]
-        (wrap-other cx result))))))))
+        (wrap-other result))))))))
 
 (defn prim1
   "Create a 1-argument primitive function."
@@ -394,14 +388,14 @@
     pname
     (build-type-scheme _variables [input1] output constraints)
     (fn [cx] (fn [g] (fn [args]
-      (let [check ((((@(ns-resolve 'hydra.extract.core 'hydra_extract_core_n_args) cx) pname) 1) args)]
+      (let [check (((@(ns-resolve 'hydra.extract.core 'hydra_extract_core_n_args) pname) 1) args)]
         (if (= (first check) :left)
           check
           (let [r1 ((.encode input1) cx g (first args))]
             (if (= (first r1) :left)
-              (wrap-other cx r1)
+              (wrap-other r1)
               (let [result ((.decode output) cx (compute (second r1)))]
-                (wrap-other cx result))))))))))))
+                (wrap-other result))))))))))))
 
 (defn prim2
   "Create a 2-argument primitive function."
@@ -412,17 +406,17 @@
    pname
    (build-type-scheme _variables [input1 input2] output constraints)
    (fn [cx] (fn [g] (fn [args]
-     (let [check ((((@(ns-resolve 'hydra.extract.core 'hydra_extract_core_n_args) cx) pname) 2) args)]
+     (let [check (((@(ns-resolve 'hydra.extract.core 'hydra_extract_core_n_args) pname) 2) args)]
        (if (= (first check) :left)
          check
          (let [r1 ((.encode input1) cx g (first args))]
            (if (= (first r1) :left)
-             (wrap-other cx r1)
+             (wrap-other r1)
              (let [r2 ((.encode input2) cx g (second args))]
                (if (= (first r2) :left)
-                 (wrap-other cx r2)
+                 (wrap-other r2)
                  (let [result ((.decode output) cx (compute (second r1) (second r2)))]
-                   (wrap-other cx result))))))))))))))
+                   (wrap-other result))))))))))))))
 
 (defn prim3
   "Create a 3-argument primitive function."
@@ -433,17 +427,17 @@
    pname
    (build-type-scheme _variables [input1 input2 input3] output constraints)
    (fn [cx] (fn [g] (fn [args]
-     (let [check ((((@(ns-resolve 'hydra.extract.core 'hydra_extract_core_n_args) cx) pname) 3) args)]
+     (let [check (((@(ns-resolve 'hydra.extract.core 'hydra_extract_core_n_args) pname) 3) args)]
        (if (= (first check) :left)
          check
          (let [r1 ((.encode input1) cx g (first args))]
            (if (= (first r1) :left)
-             (wrap-other cx r1)
+             (wrap-other r1)
              (let [r2 ((.encode input2) cx g (second args))]
                (if (= (first r2) :left)
-                 (wrap-other cx r2)
+                 (wrap-other r2)
                  (let [r3 ((.encode input3) cx g (nth args 2))]
                    (if (= (first r3) :left)
-                     (wrap-other cx r3)
+                     (wrap-other r3)
                      (let [result ((.decode output) cx (compute (second r1) (second r2) (second r3)))]
-                       (wrap-other cx result))))))))))))))))
+                       (wrap-other result))))))))))))))))

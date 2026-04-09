@@ -8,7 +8,7 @@ package hydra.test;
 public interface Utils {
   static hydra.util.Either<String, hydra.core.Term> inferTerm(hydra.graph.Graph g, hydra.core.Term term) {
     return hydra.lib.eithers.Bimap.apply(
-      (java.util.function.Function<hydra.context.InContext<hydra.errors.Error_>, String>) (ic -> hydra.show.Errors.error(((java.util.function.Function<hydra.context.InContext<hydra.errors.Error_>, hydra.errors.Error_>) (projected -> projected.object)).apply(ic))),
+      (java.util.function.Function<hydra.errors.Error_, String>) (e -> hydra.show.Errors.error(e)),
       (java.util.function.Function<hydra.typing.InferenceResult, hydra.core.Term>) (x -> (x).term),
       hydra.Inference.inferInGraphContext(
         hydra.Lexical.emptyContext(),

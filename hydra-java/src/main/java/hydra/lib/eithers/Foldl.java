@@ -17,7 +17,6 @@ import static hydra.dsl.Types.list;
 import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.var;
 import hydra.context.Context;
-import hydra.context.InContext;
 import hydra.errors.Error_;
 import hydra.util.Either;
 
@@ -43,22 +42,22 @@ public class Foldl extends PrimitiveFunction {
     }
 
     @Override
-    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.Core.list(cx, graph, args.get(2)), items -> {
+    protected Function<List<Term>, Function<Context, Function<Graph, Either<Error_, Term>>>> implementation() {
+        return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.Core.list(graph, args.get(2)), items -> {
                 Term fn = args.get(0);
                 Term init = args.get(1);
                 Term acc = init;
                 for (Term item : items) {
                     Term applied = Terms.apply(Terms.apply(fn, acc), item);
-                    Either<InContext<Error_>, Term> r = hydra.Reduction.reduceTerm(
+                    Either<Error_, Term> r = hydra.Reduction.reduceTerm(
                         hydra.Lexical.emptyContext(), graph, true, applied);
                     if (r.isLeft()) return r;
-                    Either<InContext<Error_>, hydra.util.Either<Term, Term>> eitherResult =
-                        hydra.extract.Core.eitherTerm(cx, t -> Either.right(t), t -> Either.right(t), graph,
-                            ((Either.Right<InContext<Error_>, Term>) r).value);
+                    Either<Error_, hydra.util.Either<Term, Term>> eitherResult =
+                        hydra.extract.Core.eitherTerm(t -> Either.right(t), t -> Either.right(t), graph,
+                            ((Either.Right<Error_, Term>) r).value);
                     if (eitherResult.isLeft()) return (Either) eitherResult;
                     hydra.util.Either<Term, Term> result =
-                        ((Either.Right<InContext<Error_>, hydra.util.Either<Term, Term>>) eitherResult).value;
+                        ((Either.Right<Error_, hydra.util.Either<Term, Term>>) eitherResult).value;
                     if (result.isLeft()) {
                         return Either.right(new Term.Either(new hydra.util.Either.Left<>(
                             ((hydra.util.Either.Left<Term, Term>) result).value)));

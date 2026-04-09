@@ -37,7 +37,7 @@ alphaConvert :: Core.Name -> Core.Name -> Core.Term -> Core.Term
 alphaConvert vold vnew term = Variables.replaceFreeTermVariable vold (Core.TermVariable vnew) term
 
 -- | Eagerly beta-reduce a type by substituting type arguments into type lambdas
-betaReduceType :: Context.Context -> Graph.Graph -> Core.Type -> Either (Context.InContext Errors.Error) Core.Type
+betaReduceType :: t0 -> Graph.Graph -> Core.Type -> Either Errors.Error Core.Type
 betaReduceType cx graph typ =
 
       let reduceApp =
@@ -277,7 +277,7 @@ etaExpandTerm tx0 term0 =
       in (contractTerm (rewriteWithArgs [] tx0 term0))
 
 -- | Recursively transform arbitrary terms like 'add 42' into terms like '\x.add 42 x', eliminating partial application. Variable references are not expanded. This is useful for targets like Python with weaker support for currying than Hydra or Haskell. Note: this is a "trusty" function which assumes the graph is well-formed, i.e. no dangling references. It also assumes that type inference has already been performed. After eta expansion, type inference needs to be performed again, as new, untyped lambdas may have been added.
-etaExpandTypedTerm :: Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Errors.Error) Core.Term
+etaExpandTypedTerm :: Context.Context -> Graph.Graph -> Core.Term -> Either Errors.Error Core.Term
 etaExpandTypedTerm cx tx0 term0 =
 
       let rewrite =
@@ -438,7 +438,7 @@ etaReduceTerm term =
         _ -> noChange
 
 -- | A term evaluation function which is alternatively lazy or eager
-reduceTerm :: Context.Context -> Graph.Graph -> Bool -> Core.Term -> Either (Context.InContext Errors.Error) Core.Term
+reduceTerm :: Context.Context -> Graph.Graph -> Bool -> Core.Term -> Either Errors.Error Core.Term
 reduceTerm cx graph eager term =
 
       let reduce = \eager2 -> reduceTerm cx graph eager2
@@ -459,35 +459,20 @@ reduceTerm cx graph eager term =
                   \fun -> \args -> Logic.ifElse (Lists.null args) fun (applyToArguments (Core.TermApplication (Core.Application {
                     Core.applicationFunction = fun,
                     Core.applicationArgument = (Lists.head args)})) (Lists.tail args))
-          mapErrorToString =
-                  \ic -> Context.InContext {
-                    Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Errors_.error (Context.inContextObject ic)))),
-                    Context.inContextContext = (Context.inContextContext ic)}
+          mapErrorToString = \e -> Errors.ErrorOther (Errors.OtherError (Errors_.error e))
           applyElimination =
                   \elm -> \reducedArg -> case elm of
-                    Core.EliminationRecord v0 -> Eithers.bind (Core__.record cx (Core.projectionTypeName v0) graph (Strip.deannotateTerm reducedArg)) (\fields ->
+                    Core.EliminationRecord v0 -> Eithers.bind (Core__.record (Core.projectionTypeName v0) graph (Strip.deannotateTerm reducedArg)) (\fields ->
                       let matchingFields = Lists.filter (\f -> Equality.equal (Core.fieldName f) (Core.projectionField v0)) fields
-                      in (Logic.ifElse (Lists.null matchingFields) (Left (Context.InContext {
-                        Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat [
-                          "no such field: ",
-                          (Core.unName (Core.projectionField v0)),
-                          " in ",
-                          (Core.unName (Core.projectionTypeName v0)),
-                          " record"]))),
-                        Context.inContextContext = cx})) (Right (Core.fieldTerm (Lists.head matchingFields)))))
-                    Core.EliminationUnion v0 -> Eithers.bind (Core__.injection cx (Core.caseStatementTypeName v0) graph reducedArg) (\field ->
+                      in (Logic.ifElse (Lists.null matchingFields) (Left (Errors.ErrorResolution (Errors.ResolutionErrorNoMatchingField (Errors.NoMatchingFieldError {
+                        Errors.noMatchingFieldErrorFieldName = (Core.projectionField v0)})))) (Right (Core.fieldTerm (Lists.head matchingFields)))))
+                    Core.EliminationUnion v0 -> Eithers.bind (Core__.injection (Core.caseStatementTypeName v0) graph reducedArg) (\field ->
                       let matchingFields = Lists.filter (\f -> Equality.equal (Core.fieldName f) (Core.fieldName field)) (Core.caseStatementCases v0)
-                      in (Logic.ifElse (Lists.null matchingFields) (Maybes.maybe (Left (Context.InContext {
-                        Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat [
-                          "no such field ",
-                          (Core.unName (Core.fieldName field)),
-                          " in ",
-                          (Core.unName (Core.caseStatementTypeName v0)),
-                          " case statement"]))),
-                        Context.inContextContext = cx})) (\x -> Right x) (Core.caseStatementDefault v0)) (Right (Core.TermApplication (Core.Application {
+                      in (Logic.ifElse (Lists.null matchingFields) (Maybes.maybe (Left (Errors.ErrorResolution (Errors.ResolutionErrorNoMatchingField (Errors.NoMatchingFieldError {
+                        Errors.noMatchingFieldErrorFieldName = (Core.fieldName field)})))) (\x -> Right x) (Core.caseStatementDefault v0)) (Right (Core.TermApplication (Core.Application {
                         Core.applicationFunction = (Core.fieldTerm (Lists.head matchingFields)),
                         Core.applicationArgument = (Core.fieldTerm field)})))))
-                    Core.EliminationWrap v0 -> Core__.wrap cx v0 graph reducedArg
+                    Core.EliminationWrap v0 -> Core__.wrap v0 graph reducedArg
           applyIfNullary =
                   \eager2 -> \original -> \args ->
                     let stripped = Strip.deannotateTerm original

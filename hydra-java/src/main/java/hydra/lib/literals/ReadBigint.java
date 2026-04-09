@@ -18,7 +18,6 @@ import static hydra.dsl.Types.optional;
 import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.string;
 import hydra.context.Context;
-import hydra.context.InContext;
 import hydra.errors.Error_;
 import hydra.util.Either;
 
@@ -50,8 +49,8 @@ public class ReadBigint extends PrimitiveFunction {
      * @return a function that parses string terms into optional bigint terms
      */
     @Override
-    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Map.apply((Function<String, Term>) s -> Terms.optional(apply(s).map(Terms::bigint)), hydra.extract.Core.string(cx, graph, args.get(0)));
+    protected Function<List<Term>, Function<Context, Function<Graph, Either<Error_, Term>>>> implementation() {
+        return args -> cx -> graph -> hydra.lib.eithers.Map.apply((Function<String, Term>) s -> Terms.optional(apply(s).map(Terms::bigint)), hydra.extract.Core.string(graph, args.get(0)));
     }
 
     /**

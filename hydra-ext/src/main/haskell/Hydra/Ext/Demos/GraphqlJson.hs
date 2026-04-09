@@ -76,7 +76,7 @@ generateGraphqlSchema outputDir = do
             typeDefs = bindingsToTypeDefinitions schemaGraph typeBindings
             defs = typeDefsToDefinitions typeDefs
         case GraphqlCoder.moduleToGraphql mod defs cx schemaGraph of
-          Left ic -> [(unNamespace (moduleNamespace mod), Left $ show (inContextObject ic))]
+          Left ic -> [(unNamespace (moduleNamespace mod), Left $ show ic)]
           Right files -> [(path, Right content) | (path, content) <- M.toList files]
 
   -- Write output files

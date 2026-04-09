@@ -53,7 +53,7 @@ import System.FilePath.Posix
 import System.Directory
 
 
-type Result a = Either (InContext Error) a
+type Result a = Either Error a
 
 -- | The last mile of a transformation, which encodes and serializes terms to a file
 data LastMile a =
@@ -72,7 +72,7 @@ parseJsonEither s = case JsonParser.parseJson s of
   ParseResultFailure err -> Left (parseErrorMessage err)
 
 eitherToIo :: Result a -> IO a
-eitherToIo (Left ic) = fail (ShowError.error (inContextObject ic))
+eitherToIo (Left ic) = fail (ShowError.error ic)
 eitherToIo (Right v) = return v
 
 data JsonPayloadFormat = Json | Jsonl

@@ -9,7 +9,6 @@ import qualified Hydra.Core as Core
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Extract.Core as Core_
 import qualified Hydra.Graph as Graph
-import qualified Hydra.Lexical as Lexical
 import qualified Hydra.Lib.Eithers as Eithers
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Maybes as Maybes
@@ -18,7 +17,7 @@ import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pur
 
 typeClass :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Classes.TypeClass
 typeClass cx raw =
-    Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+    Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermUnion v0 ->
         let field = Core.injectionField v0
             fname = Core.fieldName field
@@ -31,4 +30,4 @@ typeClass cx raw =
           "no such field ",
           (Core.unName fname),
           " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
-      _ -> Left (Errors.DecodingError "expected union")) (Lexical.stripAndDereferenceTermEither cx raw)
+      _ -> Left (Errors.DecodingError "expected union")) (Core_.stripWithDecodingError cx raw)

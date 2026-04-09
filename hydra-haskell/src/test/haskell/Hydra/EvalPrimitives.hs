@@ -36,7 +36,7 @@ evalLibraries = [
 
 -- Helpers
 
-mkPrim :: Name -> Int -> (Context -> Graph -> [Term] -> Either (InContext Error) Term) -> Primitive
+mkPrim :: Name -> Int -> (Context -> Graph -> [Term] -> Either Error Term) -> Primitive
 mkPrim name arity impl = Primitive {
   primitiveName = name,
   primitiveType = dummyType arity,
@@ -52,11 +52,16 @@ dummyType n = TypeScheme [] (go n) Nothing
 funType :: Type -> Type -> Type
 funType a b = TypeFunction (FunctionType a b)
 
--- | Coerce polymorphic error type to InContext Error for generated eval primitives
+-- | Coerce polymorphic error type to Error for generated eval primitives
 --   whose type parameters are universally quantified (they always return Right).
-coerceError :: Either e Term -> Either (InContext Error) Term
+coerceError :: Either e Term -> Either Error Term
 coerceError (Right t) = Right t
 coerceError (Left _) = error "coerceError: impossible Left from always-Right eval primitive"
+
+-- | Bridge: convert InContext Error to Error (temporary until gen-main is regenerated)
+dropCtx :: Either (InContext Error) Term -> Either Error Term
+dropCtx (Left ic) = Left (inContextObject ic)
+dropCtx (Right t) = Right t
 
 -- ---- Eithers ----
 
@@ -338,5 +343,5 @@ evalLibSets = standardLibrary _hydra_lib_sets [
     _ -> unexpected cx "sets.unions" 1]
 
 -- | Error helper for wrong argument count
-unexpected :: Context -> String -> Int -> Either (InContext Error) Term
-unexpected cx name arity = Left $ InContext (ErrorOther (OtherError (name ++ ": expected " ++ show arity ++ " args"))) cx
+unexpected :: Context -> String -> Int -> Either Error Term
+unexpected _cx name arity = Left $ ErrorOther (OtherError (name ++ ": expected " ++ show arity ++ " args"))

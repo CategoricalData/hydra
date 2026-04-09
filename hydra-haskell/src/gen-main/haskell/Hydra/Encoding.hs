@@ -26,11 +26,9 @@ import qualified Hydra.Predicates as Predicates
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 
 -- | Transform a type binding into an encoder binding
-encodeBinding :: Context.Context -> Graph.Graph -> Core.Binding -> Either (Context.InContext Errors.DecodingError) Core.Binding
+encodeBinding :: t0 -> Graph.Graph -> Core.Binding -> Either Errors.DecodingError Core.Binding
 encodeBinding cx graph b =
-    Eithers.bind (Eithers.bimap (\_wc_e -> Context.InContext {
-      Context.inContextObject = _wc_e,
-      Context.inContextContext = cx}) (\_wc_a -> _wc_a) (Core_.type_ graph (Core.bindingTerm b))) (\typ -> Right (Core.Binding {
+    Eithers.bind (Core_.type_ graph (Core.bindingTerm b)) (\typ -> Right (Core.Binding {
       Core.bindingName = (encodeBindingName (Core.bindingName b)),
       Core.bindingTerm = (encodeTypeNamed (Core.bindingName b) typ),
       Core.bindingType = (Just (encoderTypeSchemeNamed (Core.bindingName b) typ))}))
@@ -238,7 +236,7 @@ encodeMapType mt =
             Core.applicationArgument = (Core.TermVariable (Core.Name "m"))}))}}))}))
 
 -- | Transform a type module into an encoder module
-encodeModule :: Context.Context -> Graph.Graph -> Packaging.Module -> Either (Context.InContext Errors.Error) (Maybe Packaging.Module)
+encodeModule :: Context.Context -> Graph.Graph -> Packaging.Module -> Either Errors.Error (Maybe Packaging.Module)
 encodeModule cx graph mod =
     Eithers.bind (filterTypeBindings cx graph (Maybes.cat (Lists.map (\d -> case d of
       Packaging.DefinitionType v0 -> Just ((\name -> \typ ->
@@ -255,9 +253,7 @@ encodeModule cx graph mod =
             Core.typeSchemeVariables = [],
             Core.typeSchemeType = (Core.TypeVariable (Core.Name "hydra.core.Type")),
             Core.typeSchemeConstraints = Nothing}))}) (Packaging.typeDefinitionName v0) (Core.typeSchemeType (Packaging.typeDefinitionType v0)))
-      _ -> Nothing) (Packaging.moduleDefinitions mod)))) (\typeBindings -> Logic.ifElse (Lists.null typeBindings) (Right Nothing) (Eithers.bind (Eithers.mapList (\b -> Eithers.bimap (\ic -> Context.InContext {
-      Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Errors.unDecodingError (Context.inContextObject ic)))),
-      Context.inContextContext = (Context.inContextContext ic)}) (\x -> x) (encodeBinding cx graph b)) typeBindings) (\encodedBindings -> Right (Just (Packaging.Module {
+      _ -> Nothing) (Packaging.moduleDefinitions mod)))) (\typeBindings -> Logic.ifElse (Lists.null typeBindings) (Right Nothing) (Eithers.bind (Eithers.mapList (\b -> Eithers.bimap (\_e -> Errors.ErrorDecoding _e) (\x -> x) (encodeBinding cx graph b)) typeBindings) (\encodedBindings -> Right (Just (Packaging.Module {
       Packaging.moduleNamespace = (encodeNamespace (Packaging.moduleNamespace mod)),
       Packaging.moduleDefinitions = (Lists.map (\b -> Packaging.DefinitionTerm (Packaging.TermDefinition {
         Packaging.termDefinitionName = (Core.bindingName b),
@@ -674,12 +670,12 @@ encoderTypeSchemeNamed ename typ =
         Core.typeSchemeConstraints = constraints}
 
 -- | Filter bindings to only encodable type definitions
-filterTypeBindings :: Context.Context -> Graph.Graph -> [Core.Binding] -> Either (Context.InContext Errors.Error) [Core.Binding]
+filterTypeBindings :: Context.Context -> Graph.Graph -> [Core.Binding] -> Either Errors.Error [Core.Binding]
 filterTypeBindings cx graph bindings =
     Eithers.map Maybes.cat (Eithers.mapList (isEncodableBinding cx graph) (Lists.filter Annotations.isNativeType bindings))
 
 -- | Check if a binding is encodable (serializable type)
-isEncodableBinding :: Context.Context -> Graph.Graph -> Core.Binding -> Either (Context.InContext Errors.Error) (Maybe Core.Binding)
+isEncodableBinding :: Context.Context -> Graph.Graph -> Core.Binding -> Either Errors.Error (Maybe Core.Binding)
 isEncodableBinding cx graph b =
     Eithers.bind (Predicates.isSerializableByName cx graph (Core.bindingName b)) (\serializable -> Right (Logic.ifElse serializable (Just b) Nothing))
 

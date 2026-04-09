@@ -120,7 +120,7 @@ def checking_error(ce: hydra.error.checking.CheckingError) -> str:
             return untyped_let_binding_error(v110)
 
         case _:
-            raise AssertionError("Unreachable: all variants handled")
+            raise TypeError("Unsupported CheckingError")
 
 def decoding_error(de: hydra.errors.DecodingError) -> str:
     r"""Show a decoding error as a string."""
@@ -178,4 +178,4 @@ def error(e: hydra.errors.Error) -> str:
             return unification_error(v111)
 
         case _:
-            raise AssertionError("Unreachable: all variants handled")
+            raise TypeError("Unsupported Error")

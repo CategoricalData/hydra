@@ -98,8 +98,8 @@ module_ = Module ns definitions
      toDefinition termIsClosed,
      toDefinition termIsValue]
 
-formatError :: TTerm (InContext Error -> String)
-formatError = "_fic" ~> ShowError.error_ @@ Ctx.inContextObject (var "_fic")
+formatError :: TTerm (Error -> String)
+formatError = "e" ~> ShowError.error_ @@ var "e"
 
 alphaConvert :: TTermDefinition (Name -> Name -> Term -> Term)
 alphaConvert = define "alphaConvert" $
@@ -109,7 +109,7 @@ alphaConvert = define "alphaConvert" $
 
 -- Note: this is eager beta reduction, in that we always descend into subtypes,
 --       and always reduce the right-hand side of an application prior to substitution
-betaReduceType :: TTermDefinition (Context -> Graph -> Type -> Prelude.Either (InContext Error) Type)
+betaReduceType :: TTermDefinition (Context -> Graph -> Type -> Prelude.Either Error Type)
 betaReduceType = define "betaReduceType" $
   doc "Eagerly beta-reduce a type by substituting type arguments into type lambdas" $
   "cx" ~> "graph" ~> "typ" ~>
@@ -520,7 +520,7 @@ etaExpansionArity = define "etaExpansionArity" $
           ("b" ~> Core.bindingType $ var "b"))]
 
 -- TODO: add lambda domains as part of the rewriting process, so inference does not need to be performed again.
-etaExpandTypedTerm :: TTermDefinition (Context -> Graph -> Term -> Prelude.Either (InContext Error) Term)
+etaExpandTypedTerm :: TTermDefinition (Context -> Graph -> Term -> Prelude.Either Error Term)
 etaExpandTypedTerm = define "etaExpandTypedTerm" $
   doc ("Recursively transform arbitrary terms like 'add 42' into terms like '\\x.add 42 x',"
     <> " eliminating partial application. Variable references are not expanded."
@@ -699,7 +699,7 @@ etaReduceTerm = define "etaReduceTerm" $
         (Just $ var "noChange") [
         _Function_lambda>>: "l" ~> var "reduceLambda" @@ var "l"]]
 
-reduceTerm :: TTermDefinition (Context -> Graph -> Bool -> Term -> Prelude.Either (InContext Error) Term)
+reduceTerm :: TTermDefinition (Context -> Graph -> Bool -> Term -> Prelude.Either Error Term)
 reduceTerm = define "reduceTerm" $
   doc "A term evaluation function which is alternatively lazy or eager" $
   "cx" ~> "graph" ~> "eager" ~> "term" ~>
@@ -724,45 +724,33 @@ reduceTerm = define "reduceTerm" $
       (var "applyToArguments" @@
         (Core.termApplication $ Core.application (var "fun") (Lists.head $ var "args")) @@
         (Lists.tail $ var "args"))) $
-  "mapErrorToString" <~ ("ic" ~>
-    Ctx.inContext
-      (Error.errorOther $ Error.otherError (ShowError.error_ @@ Ctx.inContextObject (var "ic")))
-      (Ctx.inContextContext $ var "ic")) $
+  "mapErrorToString" <~ ("e" ~>
+    Error.errorOther $ Error.otherError (ShowError.error_ @@ var "e")) $
   "applyElimination" <~ ("elm" ~> "reducedArg" ~>
     cases _Elimination (var "elm") Nothing [
       _Elimination_record>>: "proj" ~>
-        "fields" <<~ ExtractCore.record @@ var "cx" @@ (Core.projectionTypeName $ var "proj") @@ var "graph" @@ (Strip.deannotateTerm @@ var "reducedArg") $
+        "fields" <<~ ExtractCore.record @@ (Core.projectionTypeName $ var "proj") @@ var "graph" @@ (Strip.deannotateTerm @@ var "reducedArg") $
         "matchingFields" <~ Lists.filter
           ("f" ~> Equality.equal (Core.fieldName $ var "f") (Core.projectionField $ var "proj"))
           (var "fields") $
         Logic.ifElse
           (Lists.null $ var "matchingFields")
-          (Ctx.failInContext (Error.errorOther $ Error.otherError (Strings.cat $ list [
-            string "no such field: ",
-            unwrap _Name @@ (Core.projectionField $ var "proj"),
-            string " in ",
-            unwrap _Name @@ (Core.projectionTypeName $ var "proj"),
-            string " record"])) (var "cx"))
+          (Ctx.failInContext (Error.errorResolution $ Error.resolutionErrorNoMatchingField $ Error.noMatchingFieldError (Core.projectionField $ var "proj")) (var "cx"))
           (right $ Core.fieldTerm $ Lists.head $ var "matchingFields"),
       _Elimination_union>>: "cs" ~>
-        "field" <<~ ExtractCore.injection @@ var "cx" @@ (Core.caseStatementTypeName $ var "cs") @@ var "graph" @@ var "reducedArg" $
+        "field" <<~ ExtractCore.injection @@ (Core.caseStatementTypeName $ var "cs") @@ var "graph" @@ var "reducedArg" $
         "matchingFields" <~ Lists.filter
           ("f" ~> Equality.equal (Core.fieldName $ var "f") (Core.fieldName $ var "field"))
           (Core.caseStatementCases $ var "cs") $
         Logic.ifElse (Lists.null $ var "matchingFields")
           (Maybes.maybe
-            (Ctx.failInContext (Error.errorOther $ Error.otherError (Strings.cat $ list [
-              string "no such field ",
-              unwrap _Name @@ (Core.fieldName $ var "field"),
-              string " in ",
-              unwrap _Name @@ (Core.caseStatementTypeName $ var "cs"),
-              string " case statement"])) (var "cx"))
+            (Ctx.failInContext (Error.errorResolution $ Error.resolutionErrorNoMatchingField $ Error.noMatchingFieldError (Core.fieldName $ var "field")) (var "cx"))
             (unaryFunction right)
             (Core.caseStatementDefault $ var "cs"))
           (right $ Core.termApplication $ Core.application
             (Core.fieldTerm $ Lists.head $ var "matchingFields")
             (Core.fieldTerm $ var "field")),
-      _Elimination_wrap>>: "name" ~> ExtractCore.wrap @@ var "cx" @@ var "name" @@ var "graph" @@ var "reducedArg"]) $
+      _Elimination_wrap>>: "name" ~> ExtractCore.wrap @@ var "name" @@ var "graph" @@ var "reducedArg"]) $
   "applyIfNullary" <~ ("eager" ~> "original" ~> "args" ~>
     "stripped" <~ Strip.deannotateTerm @@ var "original" $
     "forElimination" <~ ("elm" ~> "args" ~>

@@ -617,10 +617,7 @@
                                                       "application": {
                                                         "argument": {"variable": "v"},
                                                         "function": {"variable": "hydra.pg.graphson.coder.vertexToJson"}}}}},
-                                                "type": {
-                                                  "application": {
-                                                    "argument": {"variable": "hydra.errors.Error"},
-                                                    "function": {"variable": "hydra.context.InContext"}}}}},
+                                                "type": {"variable": "hydra.errors.Error"}}},
                                             "type": {"variable": "hydra.json.model.Value"}}},
                                         "domain": {"variable": "hydra.pg.graphson.syntax.Vertex"},
                                         "parameter": "v"}}},
@@ -641,29 +638,16 @@
                                                 "body": {
                                                   "either": {
                                                     "@left": {
-                                                      "typeApplication": {
-                                                        "body": {
-                                                          "record": {
-                                                            "fields": [
-                                                              {
-                                                                "name": "object",
-                                                                "term": {
-                                                                  "union": {
-                                                                    "field": {
-                                                                      "name": "other",
-                                                                      "term": {
-                                                                        "wrap": {
-                                                                          "body": {
-                                                                            "literal": {"string": "decoding GraphSON JSON is currently unsupported"}},
-                                                                          "typeName": "hydra.errors.OtherError"}}},
-                                                                    "typeName": "hydra.errors.Error"}}},
-                                                              {"name": "context", "term": {"variable": "_cx"}}],
-                                                            "typeName": "hydra.context.InContext"}},
-                                                        "type": {"variable": "hydra.errors.Error"}}}}},
-                                                "type": {
-                                                  "application": {
-                                                    "argument": {"variable": "hydra.errors.Error"},
-                                                    "function": {"variable": "hydra.context.InContext"}}}}},
+                                                      "union": {
+                                                        "field": {
+                                                          "name": "other",
+                                                          "term": {
+                                                            "wrap": {
+                                                              "body": {
+                                                                "literal": {"string": "decoding GraphSON JSON is currently unsupported"}},
+                                                              "typeName": "hydra.errors.OtherError"}}},
+                                                        "typeName": "hydra.errors.Error"}}}},
+                                                "type": {"variable": "hydra.errors.Error"}}},
                                             "type": {"variable": "hydra.pg.graphson.syntax.Vertex"}}},
                                         "domain": {"variable": "hydra.json.model.Value"},
                                         "parameter": "_"}}},

@@ -56,6 +56,7 @@ import qualified Hydra.Dsl.Topology     as Topology
 import qualified Hydra.Dsl.Types             as Types
 import qualified Hydra.Dsl.Typing       as Typing
 import qualified Hydra.Dsl.Util         as Util
+import qualified Hydra.Dsl.Errors       as Error
 import qualified Hydra.Dsl.Meta.Variants     as Variants
 import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++))
@@ -166,7 +167,7 @@ flattenLetTerms = define "flattenLetTerms" $
         Core.termLet $ Core.let_ (var "newBindings") (var "newBody")]) $
   Rewriting.rewriteTerm @@ var "flatten" @@ var "term"
 
-inlineType :: TTermDefinition (M.Map Name Type -> Type -> Prelude.Either String Type)
+inlineType :: TTermDefinition (M.Map Name Type -> Type -> Prelude.Either Error Type)
 inlineType = define "inlineType" $
   doc "Inline all type variables in a type using the provided schema (Either version). Note: this function is only appropriate for nonrecursive type definitions" $
   "schema" ~> "typ" ~>
@@ -175,7 +176,7 @@ inlineType = define "inlineType" $
       (Just $ right $ var "tr") [
       _Type_variable>>: "v" ~>
         Maybes.maybe
-          (left $ Strings.cat2 (string "No such type in schema: ") (unwrap _Name @@ var "v"))
+          (left $ Error.errorOther $ Error.otherError $ Strings.cat2 (string "No such type in schema: ") (unwrap _Name @@ var "v"))
           (inlineType @@ var "schema")
           (Maps.lookup (var "v") (var "schema"))]) $
     "tr" <<~ var "recurse" @@ var "typ" $
@@ -406,7 +407,7 @@ typeNamesInType = define "typeNamesInType" $
   "addNames" <~ ("names" ~> "typ" ~> var "names") $
   Rewriting.foldOverType @@ Coders.traversalOrderPre @@ var "addNames" @@ Sets.empty @@ var "typ0"
 
-definitionsWithDependencies :: TTermDefinition (Context -> Graph -> [Binding] -> Either (InContext Error) [Binding])
+definitionsWithDependencies :: TTermDefinition (Context -> Graph -> [Binding] -> Either Error [Binding])
 definitionsWithDependencies = define "definitionsWithDependencies" $
   doc "Get definitions with their dependencies" $
   "cx" ~> "graph" ~> "original" ~>
@@ -414,7 +415,7 @@ definitionsWithDependencies = define "definitionsWithDependencies" $
   "allDepNames" <~ Lists.nub (Lists.concat2
     (Lists.map (unaryFunction Core.bindingName) (var "original"))
     (Lists.concat (Lists.map (var "depNames") (var "original")))) $
-  Eithers.mapList ("name" ~> Lexical.requireBinding @@ var "cx" @@ var "graph" @@ var "name") (var "allDepNames")
+  Eithers.mapList ("name" ~> Lexical.requireBinding @@ var "graph" @@ var "name") (var "allDepNames")
 
 topologicalSortTypeDefinitions :: TTermDefinition ([TypeDefinition] -> [[TypeDefinition]])
 topologicalSortTypeDefinitions = define "topologicalSortTypeDefinitions" $

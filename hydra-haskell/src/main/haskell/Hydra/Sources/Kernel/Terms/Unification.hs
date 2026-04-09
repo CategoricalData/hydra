@@ -77,7 +77,7 @@ module_ = Module ns definitions
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
-joinTypes :: TTermDefinition (Context -> Type -> Type -> String -> Either (InContext UnificationError) [TypeConstraint])
+joinTypes :: TTermDefinition (Context -> Type -> Type -> String -> Either UnificationError [TypeConstraint])
 joinTypes = define "joinTypes" $
   doc ("Join two types, producing a list of type constraints."
     <> "The comment is used to provide context for the constraints.") $
@@ -148,7 +148,7 @@ joinTypes = define "joinTypes" $
       _Type_wrap>>: "r" ~> right (list [
         var "joinOne" @@ (var "l") @@ (var "r")])]]
 
-unifyTypeConstraints :: TTermDefinition (Context -> M.Map Name TypeScheme -> [TypeConstraint] -> Either (InContext UnificationError) TypeSubst)
+unifyTypeConstraints :: TTermDefinition (Context -> M.Map Name TypeScheme -> [TypeConstraint] -> Either UnificationError TypeSubst)
 unifyTypeConstraints = define "unifyTypeConstraints" $
   doc (""
     <> "Robinson's algorithm, following https://www.cs.cornell.edu/courses/cs6110/2017sp/lectures/lec23.pdf\n"
@@ -199,13 +199,13 @@ unifyTypeConstraints = define "unifyTypeConstraints" $
     (right (asTerm Substitution.idTypeSubst))
     (var "withConstraint" @@ (Lists.head (var "constraints")) @@ (Lists.tail (var "constraints")))
 
-unifyTypeLists :: TTermDefinition (Context -> M.Map Name TypeScheme -> [Type] -> [Type] -> String -> Either (InContext UnificationError) TypeSubst)
+unifyTypeLists :: TTermDefinition (Context -> M.Map Name TypeScheme -> [Type] -> [Type] -> String -> Either UnificationError TypeSubst)
 unifyTypeLists = define "unifyTypeLists" $
   "cx" ~> "schemaTypes" ~> "l" ~> "r" ~> "comment" ~>
   "toConstraint" <~ ("l" ~> "r" ~> Typing.typeConstraint (var "l") (var "r") (var "comment")) $
   unifyTypeConstraints @@ var "cx" @@ var "schemaTypes" @@ (Lists.zipWith (var "toConstraint") (var "l") (var "r"))
 
-unifyTypes :: TTermDefinition (Context -> M.Map Name TypeScheme -> Type -> Type -> String -> Either (InContext UnificationError) TypeSubst)
+unifyTypes :: TTermDefinition (Context -> M.Map Name TypeScheme -> Type -> Type -> String -> Either UnificationError TypeSubst)
 unifyTypes = define "unifyTypes" $
   "cx" ~> "schemaTypes" ~> "l" ~> "r" ~> "comment" ~>
   unifyTypeConstraints @@ var "cx" @@ var "schemaTypes" @@ list [Typing.typeConstraint (var "l") (var "r") (var "comment")]

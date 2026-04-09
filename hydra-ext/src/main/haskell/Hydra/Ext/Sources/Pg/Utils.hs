@@ -151,11 +151,11 @@ examplePgSchema = define "examplePgSchema" $
     PGM._Schema_defaultEdgeId>>: string "defaultEdgeId"]
 
 -- | Extract a string from a term using the empty graph
-expString :: TTermDefinition (Context -> Term -> Either (InContext Error) String)
+expString :: TTermDefinition (Context -> Term -> Either Error String)
 expString = define "expString" $
   doc "Extract a string from a term using the empty graph" $
   "cx" ~> "term" ~>
-    ExtractCore.string @@ var "cx" @@ Graph.emptyGraph @@ var "term"
+    ExtractCore.string @@ Graph.emptyGraph @@ var "term"
 
 -- | Get all elements from a property graph
 propertyGraphElements :: TTermDefinition (PG.Graph v -> [PG.Element v])
@@ -168,7 +168,7 @@ propertyGraphElements = define "propertyGraphElements" $
 
 -- | Convert a type-annotated term to property graph elements
 typeApplicationTermToPropertyGraph :: TTermDefinition (PGM.Schema Graph t v -> Type -> t -> t -> Context -> Graph
-  -> Either (InContext Error) (Term -> Context -> Either (InContext Error) [PG.Element v]))
+  -> Either Error (Term -> Context -> Either Error [PG.Element v]))
 typeApplicationTermToPropertyGraph = define "typeApplicationTermToPropertyGraph" $
   doc "Convert a type-annotated term to property graph elements" $
   "schema" ~> "typ" ~> "vidType" ~> "eidType" ~> "cx" ~> "g" ~>
@@ -194,7 +194,7 @@ lazyGraphToElements = define "lazyGraphToElements" $
       (Lists.map ("x" ~> inject PG._Element PG._Element_edge (var "x")) (project PG._LazyGraph PG._LazyGraph_edges @@ var "lg"))
 
 -- | Convert a property graph element to JSON
-pgElementToJson :: TTermDefinition (PGM.Schema Graph t v -> PG.Element v -> Context -> Either (InContext Error) JM.Value)
+pgElementToJson :: TTermDefinition (PGM.Schema Graph t v -> PG.Element v -> Context -> Either Error JM.Value)
 pgElementToJson = define "pgElementToJson" $
   doc "Convert a property graph element to JSON" $
   "schema" ~> "el" ~> "cx" ~>
@@ -228,14 +228,14 @@ pgElementToJson = define "pgElementToJson" $
     @@ var "el"
 
 -- | Convert a list of property graph elements to JSON
-pgElementsToJson :: TTermDefinition (PGM.Schema Graph t v -> [PG.Element v] -> Context -> Either (InContext Error) JM.Value)
+pgElementsToJson :: TTermDefinition (PGM.Schema Graph t v -> [PG.Element v] -> Context -> Either Error JM.Value)
 pgElementsToJson = define "pgElementsToJson" $
   doc "Convert a list of property graph elements to JSON" $
   "schema" ~> "els" ~> "cx" ~>
     Eithers.map ("els'" ~> Json.valueArray (var "els'")) (Eithers.mapList ("el" ~> pgElementToJson @@ var "schema" @@ var "el" @@ var "cx") (var "els"))
 
 -- Internal helper (not exported as a binding)
-propsToJson :: TTerm (PGM.Schema Graph t v -> Context -> M.Map PG.PropertyKey v -> Either (InContext Error) (Y.Maybe (String, JM.Value)))
+propsToJson :: TTerm (PGM.Schema Graph t v -> Context -> M.Map PG.PropertyKey v -> Either Error (Y.Maybe (String, JM.Value)))
 propsToJson = "schema" ~> "cx" ~> "pairs" ~>
   Logic.ifElse (Maps.null $ var "pairs")
     (right nothing)

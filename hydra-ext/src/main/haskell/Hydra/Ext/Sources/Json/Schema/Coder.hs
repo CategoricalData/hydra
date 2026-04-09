@@ -118,7 +118,7 @@ module_ = Module ns definitions
 
 
 -- | Result type alias
-type Result a = Either (InContext Error) a
+type Result a = Either Error a
 
 
 moduleToJsonSchema :: TTermDefinition (JsonSchemaOptions -> Module -> [Definition] -> Context -> Graph -> Result (M.Map FilePath String))

@@ -28,6 +28,7 @@ import hydra.strip
 T0 = TypeVar("T0")
 T1 = TypeVar("T1")
 T2 = TypeVar("T2")
+T3 = TypeVar("T3")
 
 def application_pattern(name: hydra.ext.haskell.syntax.Name, args: frozenlist[hydra.ext.haskell.syntax.Pattern]) -> hydra.ext.haskell.syntax.Pattern:
     r"""Create an application pattern from a name and argument patterns."""
@@ -94,7 +95,7 @@ def hsvar(s: str) -> hydra.ext.haskell.syntax.Expression:
 
     return cast(hydra.ext.haskell.syntax.Expression, hydra.ext.haskell.syntax.ExpressionVariable(raw_name(s)))
 
-def namespaces_for_module(mod: hydra.packaging.Module, cx: hydra.context.Context, g: hydra.graph.Graph) -> Either[hydra.context.InContext[hydra.errors.Error], hydra.packaging.Namespaces[hydra.ext.haskell.syntax.ModuleName]]:
+def namespaces_for_module(mod: hydra.packaging.Module, cx: T0, g: hydra.graph.Graph) -> Either[hydra.errors.Error, hydra.packaging.Namespaces[hydra.ext.haskell.syntax.ModuleName]]:
     r"""Compute the Haskell module namespaces for a Hydra module."""
 
     return hydra.lib.eithers.bind(hydra.analysis.module_dependency_namespaces(cx, g, True, True, True, True, mod), (lambda nss: (ns := mod.namespace, to_module_name := (lambda namespace: (namespace_str := namespace.value, parts := hydra.lib.strings.split_on(".", namespace_str), last_part := hydra.lib.lists.last(parts), capitalized := hydra.formatting.capitalize(last_part), hydra.ext.haskell.syntax.ModuleName(capitalized))[4]), to_pair := (lambda name: (name, to_module_name(name))), add_pair := (lambda state, name_pair: (current_map := hydra.lib.pairs.first(state), current_set := hydra.lib.pairs.second(state), name := hydra.lib.pairs.first(name_pair), alias := hydra.lib.pairs.second(name_pair), alias_str := alias.value, hydra.lib.logic.if_else(hydra.lib.sets.member(alias, current_set), (lambda : add_pair(state, (name, hydra.ext.haskell.syntax.ModuleName(hydra.lib.strings.cat2(alias_str, "_"))))), (lambda : (hydra.lib.maps.insert(name, alias, current_map), hydra.lib.sets.insert(alias, current_set)))))[5]), focus_pair := to_pair(ns), nss_as_list := hydra.lib.sets.to_list(nss), nss_pairs := hydra.lib.lists.map((lambda x1: to_pair(x1)), nss_as_list), empty_state := (hydra.lib.maps.empty(), hydra.lib.sets.empty()), final_state := hydra.lib.lists.foldl((lambda x1, x2: add_pair(x1, x2)), empty_state, nss_pairs), result_map := hydra.lib.pairs.first(final_state), Right(hydra.packaging.Namespaces(focus_pair, result_map)))[10]))

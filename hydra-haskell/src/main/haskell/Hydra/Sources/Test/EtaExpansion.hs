@@ -414,7 +414,7 @@ allTests = define "allTests" $
 -- Helpers
 
 -- | Reference to hydra.reduction.etaExpandTypedTerm
-etaExpandRef :: TTerm (Context -> Graph -> Term -> Either (InContext Error) Term)
+etaExpandRef :: TTerm (Context -> Graph -> Term -> Either Error Term)
 etaExpandRef = TTerm $ TermVariable $ Name "hydra.reduction.etaExpandTypedTerm"
 
 testCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata

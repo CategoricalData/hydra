@@ -5,7 +5,6 @@
 module Hydra.Ext.Haskell.Utils where
 
 import qualified Hydra.Analysis as Analysis
-import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Ext.Haskell.Language as Language
@@ -77,7 +76,7 @@ hsvar :: String -> Syntax.Expression
 hsvar s = Syntax.ExpressionVariable (rawName s)
 
 -- | Compute the Haskell module namespaces for a Hydra module
-namespacesForModule :: Packaging.Module -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) (Packaging.Namespaces Syntax.ModuleName)
+namespacesForModule :: Packaging.Module -> t0 -> Graph.Graph -> Either Errors.Error (Packaging.Namespaces Syntax.ModuleName)
 namespacesForModule mod cx g =
     Eithers.bind (Analysis.moduleDependencyNamespaces cx g True True True True mod) (\nss ->
       let ns = Packaging.moduleNamespace mod

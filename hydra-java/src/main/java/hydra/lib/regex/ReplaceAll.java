@@ -16,7 +16,6 @@ import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.string;
 import hydra.context.Context;
-import hydra.context.InContext;
 import hydra.errors.Error_;
 import hydra.util.Either;
 
@@ -34,14 +33,14 @@ public class ReplaceAll extends PrimitiveFunction {
     }
 
     @Override
-    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
+    protected Function<List<Term>, Function<Context, Function<Graph, Either<Error_, Term>>>> implementation() {
         return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(
-            hydra.extract.Core.string(cx, graph, args.get(0)),
+            hydra.extract.Core.string(graph, args.get(0)),
             pat -> hydra.lib.eithers.Bind.apply(
-                hydra.extract.Core.string(cx, graph, args.get(1)),
+                hydra.extract.Core.string(graph, args.get(1)),
                 repl -> hydra.lib.eithers.Map.apply(
                     input -> Terms.string(apply(pat, repl, input)),
-                    hydra.extract.Core.string(cx, graph, args.get(2)))));
+                    hydra.extract.Core.string(graph, args.get(2)))));
     }
 
     public static Function<String, Function<String, String>> apply(String pattern) {

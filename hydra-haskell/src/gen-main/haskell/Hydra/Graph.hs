@@ -57,7 +57,7 @@ data Primitive =
     -- | The type signature of the primitive function
     primitiveType :: Core.TypeScheme,
     -- | A concrete implementation of the primitive function. The Context and Graph parameters are needed by higher-order primitives (e.g. lists.map, lists.foldl, eithers.bind) which must evaluate function arguments via term reduction; the Graph provides variable and primitive bindings, while the Context supports tracing and error reporting.
-    primitiveImplementation :: (Context.Context -> Graph -> [Core.Term] -> Either (Context.InContext Errors.Error) Core.Term)}
+    primitiveImplementation :: (Context.Context -> Graph -> [Core.Term] -> Either Errors.Error Core.Term)}
 
 _Primitive = Core.Name "hydra.graph.Primitive"
 
@@ -73,9 +73,9 @@ data TermCoder a =
     -- | The Hydra type of encoded terms
     termCoderType :: Core.Type,
     -- | An encode function from terms to native values
-    termCoderEncode :: (Context.Context -> Graph -> Core.Term -> Either (Context.InContext Errors.Error) a),
+    termCoderEncode :: (Context.Context -> Graph -> Core.Term -> Either Errors.Error a),
     -- | A decode function from native values to terms
-    termCoderDecode :: (Context.Context -> a -> Either (Context.InContext Errors.Error) Core.Term)}
+    termCoderDecode :: (Context.Context -> a -> Either Errors.Error Core.Term)}
 
 _TermCoder = Core.Name "hydra.graph.TermCoder"
 

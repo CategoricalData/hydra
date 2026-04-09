@@ -8,7 +8,6 @@ import qualified Hydra.Core as Core
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Extract.Core as Core_
 import qualified Hydra.Graph as Graph
-import qualified Hydra.Lexical as Lexical
 import qualified Hydra.Lib.Eithers as Eithers
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Maybes as Maybes
@@ -18,7 +17,7 @@ import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pur
 
 caseConvention :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Util.CaseConvention
 caseConvention cx raw =
-    Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+    Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermUnion v0 ->
         let field = Core.injectionField v0
             fname = Core.fieldName field
@@ -33,11 +32,11 @@ caseConvention cx raw =
           "no such field ",
           (Core.unName fname),
           " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
-      _ -> Left (Errors.DecodingError "expected union")) (Lexical.stripAndDereferenceTermEither cx raw)
+      _ -> Left (Errors.DecodingError "expected union")) (Core_.stripWithDecodingError cx raw)
 
 comparison :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Util.Comparison
 comparison cx raw =
-    Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+    Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermUnion v0 ->
         let field = Core.injectionField v0
             fname = Core.fieldName field
@@ -51,11 +50,11 @@ comparison cx raw =
           "no such field ",
           (Core.unName fname),
           " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
-      _ -> Left (Errors.DecodingError "expected union")) (Lexical.stripAndDereferenceTermEither cx raw)
+      _ -> Left (Errors.DecodingError "expected union")) (Core_.stripWithDecodingError cx raw)
 
 precision :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Util.Precision
 precision cx raw =
-    Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+    Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermUnion v0 ->
         let field = Core.injectionField v0
             fname = Core.fieldName field
@@ -63,15 +62,15 @@ precision cx raw =
             variantMap =
                     Maps.fromList [
                       (Core.Name "arbitrary", (\input -> Eithers.map (\t -> Util.PrecisionArbitrary) (Core_.decodeUnit cx input))),
-                      (Core.Name "bits", (\input -> Eithers.map (\t -> Util.PrecisionBits t) (Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped2 -> case stripped2 of
+                      (Core.Name "bits", (\input -> Eithers.map (\t -> Util.PrecisionBits t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
                         Core.TermLiteral v1 -> case v1 of
                           Core.LiteralInteger v2 -> case v2 of
                             Core.IntegerValueInt32 v3 -> Right v3
                             _ -> Left (Errors.DecodingError "expected int32 value")
                           _ -> Left (Errors.DecodingError "expected int32 literal")
-                        _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx input))))]
+                        _ -> Left (Errors.DecodingError "expected literal")) (Core_.stripWithDecodingError cx input))))]
         in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),
           " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
-      _ -> Left (Errors.DecodingError "expected union")) (Lexical.stripAndDereferenceTermEither cx raw)
+      _ -> Left (Errors.DecodingError "expected union")) (Core_.stripWithDecodingError cx raw)

@@ -120,7 +120,7 @@ define = definitionInModule module_
 
 
 -- | Top-level entry point: convert a module to GraphQL schema files.
-moduleToGraphql :: TTermDefinition (Module -> [Definition] -> Context -> Graph -> Either (InContext Error) (M.Map FilePath String))
+moduleToGraphql :: TTermDefinition (Module -> [Definition] -> Context -> Graph -> Either Error (M.Map FilePath String))
 moduleToGraphql = define "moduleToGraphql" $
   lambda "mod" $ lambda "defs" $
     "cx" ~> "g" ~> lets [
@@ -153,7 +153,7 @@ findPrefixes = lambda "modNs" $ lambda "tdefs" $ lets [
     (var "namespaces")
 
 -- | Encode a TypeDefinition to a GraphQL TypeDefinition
-encodeTypeDefinition :: TTermDefinition (Context -> Graph -> M.Map Namespace String -> TypeDefinition -> Either (InContext Error) G.TypeDefinition)
+encodeTypeDefinition :: TTermDefinition (Context -> Graph -> M.Map Namespace String -> TypeDefinition -> Either Error G.TypeDefinition)
 encodeTypeDefinition = define "encodeTypeDefinition" $
   "cx" ~> "g" ~> lambda "prefixes" $ lambda "tdef" $
     encodeNamedType @@ var "cx" @@ var "g" @@ var "prefixes"
@@ -161,7 +161,7 @@ encodeTypeDefinition = define "encodeTypeDefinition" $
       @@ (Core.typeSchemeType $ Packaging.typeDefinitionType $ var "tdef")
 
 -- | Get the description from a type as a GraphQL Description
-descriptionFromType :: TTermDefinition (Context -> Graph -> Type -> Either (InContext Error) (Maybe G.Description))
+descriptionFromType :: TTermDefinition (Context -> Graph -> Type -> Either Error (Maybe G.Description))
 descriptionFromType = define "descriptionFromType" $
   "cx" ~> "g" ~> lambda "typ" $
     Eithers.map
@@ -171,7 +171,7 @@ descriptionFromType = define "descriptionFromType" $
       (Annotations.getTypeDescription @@ var "cx" @@ var "g" @@ var "typ")
 
 -- | Encode an enum field type to a GraphQL EnumValueDefinition
-encodeEnumFieldType :: TTermDefinition (Context -> Graph -> FieldType -> Either (InContext Error) G.EnumValueDefinition)
+encodeEnumFieldType :: TTermDefinition (Context -> Graph -> FieldType -> Either Error G.EnumValueDefinition)
 encodeEnumFieldType = define "encodeEnumFieldType" $
   "cx" ~> "g" ~> lambda "ft" $
     "desc" <<~ (descriptionFromType @@ var "cx" @@ var "g" @@ (Core.fieldTypeType $ var "ft")) $
@@ -191,7 +191,7 @@ encodeFieldName = define "encodeFieldName" $
   lambda "name" $ wrap G._Name (sanitize @@ (Core.unName $ var "name"))
 
 -- | Encode a field type to a GraphQL FieldDefinition
-encodeFieldType :: TTermDefinition (Context -> Graph -> M.Map Namespace String -> FieldType -> Either (InContext Error) G.FieldDefinition)
+encodeFieldType :: TTermDefinition (Context -> Graph -> M.Map Namespace String -> FieldType -> Either Error G.FieldDefinition)
 encodeFieldType = define "encodeFieldType" $
   "cx" ~> "g" ~> lambda "prefixes" $ lambda "ft" $
     "gtype" <<~ (encodeType @@ var "cx" @@ var "g" @@ var "prefixes" @@ (Core.fieldTypeType $ var "ft")) $
@@ -204,7 +204,7 @@ encodeFieldType = define "encodeFieldType" $
       G._FieldDefinition_Directives>>: nothing])
 
 -- | Encode a literal type to a GraphQL NamedType
-encodeLiteralType :: TTermDefinition (Context -> LiteralType -> Either (InContext Error) G.NamedType)
+encodeLiteralType :: TTermDefinition (Context -> LiteralType -> Either Error G.NamedType)
 encodeLiteralType = define "encodeLiteralType" $
   "cx" ~> lambda "lt" $
     cases _LiteralType (var "lt")
@@ -225,7 +225,7 @@ encodeLiteralType = define "encodeLiteralType" $
         right (wrap G._NamedType (wrap G._Name (string "String")))]
 
 -- | Encode a named type to a GraphQL type definition.
-encodeNamedType :: TTermDefinition (Context -> Graph -> M.Map Namespace String -> Name -> Type -> Either (InContext Error) G.TypeDefinition)
+encodeNamedType :: TTermDefinition (Context -> Graph -> M.Map Namespace String -> Name -> Type -> Either Error G.TypeDefinition)
 encodeNamedType = define "encodeNamedType" $
   "cx" ~> "g" ~> lambda "prefixes" $ lambda "name" $ lambda "typ" $
     cases _Type (Strip.deannotateType @@ var "typ")
@@ -299,14 +299,14 @@ encodeNamedType = define "encodeNamedType" $
             Core.fieldType (Core.name $ string "codomain") (Core.functionTypeCodomain (var "ft"))])]
 
 -- | Helper: wrap a type in a record with a single "value" field
-wrapAsRecord :: TTerm Name -> TTerm Context -> TTerm Graph -> TTerm (M.Map Namespace String) -> TTerm Type -> TTerm (Either (InContext Error) G.TypeDefinition)
+wrapAsRecord :: TTerm Name -> TTerm Context -> TTerm Graph -> TTerm (M.Map Namespace String) -> TTerm Type -> TTerm (Either Error G.TypeDefinition)
 wrapAsRecord name cx g prefixes innerTyp =
   encodeNamedType @@ cx @@ g @@ prefixes @@ name @@
     (inject _Type _Type_record $ list [
       Core.fieldType (Core.name $ string "value") innerTyp])
 
 -- | Encode a Hydra type as a GraphQL type reference
-encodeType :: TTermDefinition (Context -> Graph -> M.Map Namespace String -> Type -> Either (InContext Error) G.Type)
+encodeType :: TTermDefinition (Context -> Graph -> M.Map Namespace String -> Type -> Either Error G.Type)
 encodeType = define "encodeType" $
   "cx" ~> "g" ~> lambda "prefixes" $ lambda "typ" $
     cases _Type (Strip.deannotateType @@ var "typ")
@@ -399,7 +399,7 @@ encodeTypeName = define "encodeTypeName" $
 
 -- | Encode a union variant field type to a nullable GraphQL FieldDefinition.
 -- Unit-typed variants become Boolean fields; data-carrying variants use their actual type, made nullable.
-encodeUnionFieldType :: TTermDefinition (Context -> Graph -> M.Map Namespace String -> FieldType -> Either (InContext Error) G.FieldDefinition)
+encodeUnionFieldType :: TTermDefinition (Context -> Graph -> M.Map Namespace String -> FieldType -> Either Error G.FieldDefinition)
 encodeUnionFieldType = define "encodeUnionFieldType" $
   "cx" ~> "g" ~> lambda "prefixes" $ lambda "ft" $ lets [
     "innerType">: Core.fieldTypeType $ var "ft",

@@ -18,7 +18,7 @@ from hydra.codegen import (
     generate_source_files,
     namespace_to_path,
 )
-from hydra.context import Context, InContext
+from hydra.context import Context
 from hydra.core import Binding
 from hydra.dsl.python import FrozenDict, Just, Left, Nothing, Right
 from hydra.graph import Graph
@@ -75,14 +75,11 @@ def unwrap_either(result):
     """Unwrap an Either value, raising on Left."""
     match result:
         case Left(value=err):
-            # err may be an InContext wrapping an Error
-            if hasattr(err, 'object'):
-                try:
-                    from hydra.show.error import error
-                    raise RuntimeError(f"Error: {error(err.object)}")
-                except ImportError:
-                    raise RuntimeError(f"Error: {err.object}")
-            raise RuntimeError(f"Error: {err}")
+            try:
+                from hydra.show.error import error
+                raise RuntimeError(f"Error: {error(err)}")
+            except ImportError:
+                raise RuntimeError(f"Error: {err}")
         case Right(value=v):
             return v
         case _:

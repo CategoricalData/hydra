@@ -74,12 +74,12 @@ module_ = Module ns definitions
 
 -- | Interpreter-friendly set difference.
 -- difference s1 s2: elements in s1 that are not in s2.
-difference_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
+difference_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Either Error Term)
 difference_ = define "difference" $
   doc "Interpreter-friendly set difference." $
   "cx" ~> "g" ~>
   "set1Term" ~> "set2Term" ~>
-  "elements" <<~ (ExtractCore.set @@ var "cx" @@ var "g" @@ var "set1Term") $
+  "elements" <<~ (ExtractCore.set @@ var "g" @@ var "set1Term") $
   -- Build: foldl (\acc el -> ifElse (member el set2) acc (insert el acc)) empty (toList set1)
   right $ Lists.foldl
     ("acc" ~> "el" ~>
@@ -103,12 +103,12 @@ difference_ = define "difference" $
 
 -- | Interpreter-friendly set intersection.
 -- intersection s1 s2: elements in both s1 and s2.
-intersection_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
+intersection_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Either Error Term)
 intersection_ = define "intersection" $
   doc "Interpreter-friendly set intersection." $
   "cx" ~> "g" ~>
   "set1Term" ~> "set2Term" ~>
-  "elements" <<~ (ExtractCore.set @@ var "cx" @@ var "g" @@ var "set1Term") $
+  "elements" <<~ (ExtractCore.set @@ var "g" @@ var "set1Term") $
   -- Build: foldl (\acc el -> ifElse (member el set2) (insert el acc) acc) empty (toList set1)
   right $ Lists.foldl
     ("acc" ~> "el" ~>
@@ -132,12 +132,12 @@ intersection_ = define "intersection" $
 
 -- | Interpreter-friendly map for Set terms.
 -- Applies fun to each element.
-map_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
+map_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Either Error Term)
 map_ = define "map" $
   doc "Interpreter-friendly map for Set terms." $
   "cx" ~> "g" ~>
   "fun" ~> "setTerm" ~>
-  "elements" <<~ (ExtractCore.set @@ var "cx" @@ var "g" @@ var "setTerm") $
+  "elements" <<~ (ExtractCore.set @@ var "g" @@ var "setTerm") $
   -- Build: fromList (map fun (toList elements))
   right $ Core.termApplication $ Core.application
     (Core.termVariable $ encodedName _sets_fromList)
@@ -147,12 +147,12 @@ map_ = define "map" $
 
 -- | Interpreter-friendly set union.
 -- union s1 s2: elements in either s1 or s2.
-union_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
+union_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Either Error Term)
 union_ = define "union" $
   doc "Interpreter-friendly set union." $
   "cx" ~> "g" ~>
   "set1Term" ~> "set2Term" ~>
-  "elements" <<~ (ExtractCore.set @@ var "cx" @@ var "g" @@ var "set1Term") $
+  "elements" <<~ (ExtractCore.set @@ var "g" @@ var "set1Term") $
   -- Build: foldl (\acc el -> insert el acc) set2 (toList set1)
   right $ Lists.foldl
     ("acc" ~> "el" ~>
@@ -166,12 +166,12 @@ union_ = define "union" $
 
 -- | Interpreter-friendly unions for list of Set terms.
 -- unions [s1, s2, ...]: union of all sets.
-unions_ :: TTermDefinition (Context -> Graph -> Term -> Either (InContext Error) Term)
+unions_ :: TTermDefinition (Context -> Graph -> Term -> Either Error Term)
 unions_ = define "unions" $
   doc "Interpreter-friendly unions for list of Set terms." $
   "cx" ~> "g" ~>
   "listTerm" ~>
-  "elements" <<~ (ExtractCore.list @@ var "cx" @@ var "g" @@ var "listTerm") $
+  "elements" <<~ (ExtractCore.list @@ var "g" @@ var "listTerm") $
   -- Build: foldl union empty sets
   right $ Lists.foldl
     ("acc" ~> "s" ~>

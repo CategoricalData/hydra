@@ -14,14 +14,14 @@ object Libraries:
 
   // ===== Infrastructure =====
 
-  private type Impl = hydra.context.Context => hydra.graph.Graph => Seq[Term] => Either[hydra.context.InContext[hydra.errors.Error], Term]
+  private type Impl = hydra.context.Context => hydra.graph.Graph => Seq[Term] => Either[hydra.errors.Error, Term]
 
   private val stubImpl: Impl =
-    _ => _ => _ => Left(hydra.context.InContext(hydra.errors.Error.other("stub primitive"), hydra.context.Context(Seq.empty, Seq.empty, Map.empty)))
+    _ => _ => _ => Left(hydra.errors.Error.other("stub primitive"))
 
-  private def ok(t: Term): Either[hydra.context.InContext[hydra.errors.Error], Term] = Right(t)
+  private def ok(t: Term): Either[hydra.errors.Error, Term] = Right(t)
 
-  private type E = Either[hydra.context.InContext[hydra.errors.Error], Term]
+  private type E = Either[hydra.errors.Error, Term]
 
   // Reduce a term using the full reducer
   private def reduce(cx: hydra.context.Context, g: hydra.graph.Graph, t: Term): E =

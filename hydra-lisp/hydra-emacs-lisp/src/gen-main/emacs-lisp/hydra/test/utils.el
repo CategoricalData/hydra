@@ -1,7 +1,5 @@
 (require 'cl-lib)
 
-(require 'hydra.context)
-
 (require 'hydra.inference)
 
 (require 'hydra.lexical)
@@ -14,7 +12,7 @@
 
 (require 'hydra.typing)
 
-(defvar hydra_test_utils_infer_term (lambda (g) (lambda (term) (funcall (funcall (hydra_lib_eithers_bimap (lambda (ic) (hydra_show_errors_error (funcall (lambda (v) (hydra_context_in_context-object v)) ic)))) (lambda (x) (funcall (lambda (v) (hydra_typing_inference_result-term v)) x))) (funcall (funcall (hydra_inference_infer_in_graph_context hydra_lexical_empty_context) g) term)))))
+(defvar hydra_test_utils_infer_term (lambda (g) (lambda (term) (funcall (funcall (hydra_lib_eithers_bimap (lambda (e) (hydra_show_errors_error e))) (lambda (x) (funcall (lambda (v) (hydra_typing_inference_result-term v)) x))) (funcall (funcall (hydra_inference_infer_in_graph_context hydra_lexical_empty_context) g) term)))))
 
 (defvar hydra_test_utils_infer_test_case (lambda (g) (lambda (tcm) (let* ((desc (funcall (lambda (v) (hydra_testing_test_case_with_metadata-description v)) tcm)) (name_ (funcall (lambda (v) (hydra_testing_test_case_with_metadata-name v)) tcm)) (tags_ (funcall (lambda (v) (hydra_testing_test_case_with_metadata-tags v)) tcm)) (tcase (funcall (lambda (v) (hydra_testing_test_case_with_metadata-case v)) tcm))) (funcall (hydra_lib_eithers_map (lambda (inferred_case) (make-hydra_testing_test_case_with_metadata name_ inferred_case desc tags_))) (list :right tcase))))))
 

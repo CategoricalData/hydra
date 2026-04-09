@@ -7,7 +7,8 @@ import hydra.errors.*
 import hydra.util.*
 
 def caseConvention(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.DecodingError, hydra.util.CaseConvention] =
-  hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError, hydra.util.CaseConvention]]((err: scala.Predef.String) => Left(err))((stripped: hydra.core.Term) =>
+  hydra.lib.eithers.either[hydra.errors.DecodingError, hydra.core.Term, Either[hydra.errors.DecodingError,
+     hydra.util.CaseConvention]]((err: hydra.errors.DecodingError) => Left(err))((stripped: hydra.core.Term) =>
   stripped match
   case hydra.core.Term.union(v_Term_union_inj) => {
     lazy val field: hydra.core.Field = (v_Term_union_inj.field)
@@ -28,10 +29,11 @@ def caseConvention(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.er
        hydra.util.CaseConvention])) => f(fterm))(hydra.lib.maps.lookup[hydra.core.Name, (hydra.core.Term) => Either[hydra.errors.DecodingError,
        hydra.util.CaseConvention]](fname)(variantMap))
   }
-  case _ => Left("expected union"))(hydra.lexical.stripAndDereferenceTermEither(cx)(raw))
+  case _ => Left("expected union"))(hydra.extract.core.stripWithDecodingError(cx)(raw))
 
 def comparison(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.DecodingError, hydra.util.Comparison] =
-  hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError, hydra.util.Comparison]]((err: scala.Predef.String) => Left(err))((stripped: hydra.core.Term) =>
+  hydra.lib.eithers.either[hydra.errors.DecodingError, hydra.core.Term, Either[hydra.errors.DecodingError,
+     hydra.util.Comparison]]((err: hydra.errors.DecodingError) => Left(err))((stripped: hydra.core.Term) =>
   stripped match
   case hydra.core.Term.union(v_Term_union_inj) => {
     lazy val field: hydra.core.Field = (v_Term_union_inj.field)
@@ -50,10 +52,11 @@ def comparison(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors
        hydra.util.Comparison])) => f(fterm))(hydra.lib.maps.lookup[hydra.core.Name, (hydra.core.Term) => Either[hydra.errors.DecodingError,
        hydra.util.Comparison]](fname)(variantMap))
   }
-  case _ => Left("expected union"))(hydra.lexical.stripAndDereferenceTermEither(cx)(raw))
+  case _ => Left("expected union"))(hydra.extract.core.stripWithDecodingError(cx)(raw))
 
 def precision(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.DecodingError, hydra.util.Precision] =
-  hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError, hydra.util.Precision]]((err: scala.Predef.String) => Left(err))((stripped: hydra.core.Term) =>
+  hydra.lib.eithers.either[hydra.errors.DecodingError, hydra.core.Term, Either[hydra.errors.DecodingError,
+     hydra.util.Precision]]((err: hydra.errors.DecodingError) => Left(err))((stripped: hydra.core.Term) =>
   stripped match
   case hydra.core.Term.union(v_Term_union_inj) => {
     lazy val field: hydra.core.Field = (v_Term_union_inj.field)
@@ -64,18 +67,18 @@ def precision(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.
        (input: hydra.core.Term) =>
       hydra.lib.eithers.map[Unit, hydra.util.Precision, hydra.errors.DecodingError]((t: Unit) => hydra.util.Precision.arbitrary)(hydra.extract.core.decodeUnit(cx)(input))),
          Tuple2("bits", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[Int, hydra.util.Precision, hydra.errors.DecodingError]((t: Int) => hydra.util.Precision.bits(t))(hydra.lib.eithers.either[scala.Predef.String,
-         hydra.core.Term, Either[hydra.errors.DecodingError, Int]]((err: scala.Predef.String) => Left(err))((stripped2: hydra.core.Term) =>
+      hydra.lib.eithers.map[Int, hydra.util.Precision, hydra.errors.DecodingError]((t: Int) => hydra.util.Precision.bits(t))(hydra.lib.eithers.either[hydra.errors.DecodingError,
+         hydra.core.Term, Either[hydra.errors.DecodingError, Int]]((err: hydra.errors.DecodingError) => Left(err))((stripped2: hydra.core.Term) =>
       stripped2 match
       case hydra.core.Term.literal(v_Term_literal_v) => v_Term_literal_v match
         case hydra.core.Literal.integer(v_Literal_integer_v1) => v_Literal_integer_v1 match
           case hydra.core.IntegerValue.int32(v_IntegerValue_int32_i) => Right(v_IntegerValue_int32_i)
           case _ => Left("expected int32 value")
         case _ => Left("expected int32 literal")
-      case _ => Left("expected literal"))(hydra.lexical.stripAndDereferenceTermEither(cx)(input))))))
+      case _ => Left("expected literal"))(hydra.extract.core.stripWithDecodingError(cx)(input))))))
     hydra.lib.maybes.maybe[Either[hydra.errors.DecodingError, hydra.util.Precision], (hydra.core.Term) => Either[hydra.errors.DecodingError,
        hydra.util.Precision]](Left(hydra.lib.strings.cat(Seq("no such field ", fname, " in union"))))((f: (hydra.core.Term => Either[hydra.errors.DecodingError,
        hydra.util.Precision])) => f(fterm))(hydra.lib.maps.lookup[hydra.core.Name, (hydra.core.Term) => Either[hydra.errors.DecodingError,
        hydra.util.Precision]](fname)(variantMap))
   }
-  case _ => Left("expected union"))(hydra.lexical.stripAndDereferenceTermEither(cx)(raw))
+  case _ => Left("expected union"))(hydra.extract.core.stripWithDecodingError(cx)(raw))

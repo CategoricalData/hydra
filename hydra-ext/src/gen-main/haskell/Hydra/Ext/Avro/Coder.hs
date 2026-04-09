@@ -5,7 +5,6 @@
 module Hydra.Ext.Avro.Coder where
 
 import qualified Hydra.Coders as Coders
-import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Ext.Avro.Environment as Environment
@@ -42,7 +41,7 @@ annotateAdapter ann ad =
       Coders.adapterCoder = (Coders.adapterCoder ad)}) ann
 
 -- | Create an adapter between Avro schemas and Hydra types/terms
-avroHydraAdapter :: Context.Context -> Schema.Schema -> Environment.AvroEnvironment -> Either (Context.InContext Errors.Error) (Coders.Adapter Schema.Schema Core.Type Model.Value Core.Term, Environment.AvroEnvironment)
+avroHydraAdapter :: t0 -> Schema.Schema -> Environment.AvroEnvironment -> Either Errors.Error (Coders.Adapter Schema.Schema Core.Type Model.Value Core.Term, Environment.AvroEnvironment)
 avroHydraAdapter cx schema env0 =
 
       let simpleAdapter =
@@ -87,7 +86,7 @@ avroHydraAdapter cx schema env0 =
             Coders.adapterCoder = Coders.Coder {
               Coders.coderEncode = (\cx1 -> \v -> case v of
                 Model.ValueObject v1 -> Eithers.map (\pairs -> Core.TermMap (Maps.fromList pairs)) (Eithers.mapList (\e -> pairToHydra cx1 e) (Maps.toList v1))),
-              Coders.coderDecode = (\cx1 -> \m -> Eithers.map (\mp_ -> Model.ValueObject mp_) (Core_.map cx (\t -> Core_.string cx (Graph.Graph {
+              Coders.coderDecode = (\cx1 -> \m -> Eithers.map (\mp_ -> Model.ValueObject mp_) (Core_.map (\t -> Core_.string (Graph.Graph {
                 Graph.graphBoundTerms = Maps.empty,
                 Graph.graphBoundTypes = Maps.empty,
                 Graph.graphClassConstraints = Maps.empty,
@@ -138,7 +137,7 @@ avroHydraAdapter cx schema env0 =
                       fn = Core.fieldName fld
                   in (Right (Model.ValueString (Core.unName fn)))))
             Schema.NamedTypeFixed _ -> simpleAdapter env1 (Core.TypeLiteral Core.LiteralTypeBinary) (\_cx -> \jv -> case jv of
-              Model.ValueString v2 -> Right (Core.TermLiteral (Core.LiteralBinary (Literals.stringToBinary v2)))) (\cx1 -> \t -> Eithers.map (\b -> Model.ValueString (Literals.binaryToString b)) (Core_.binary cx1 (Graph.Graph {
+              Model.ValueString v2 -> Right (Core.TermLiteral (Core.LiteralBinary (Literals.stringToBinary v2)))) (\cx1 -> \t -> Eithers.map (\b -> Model.ValueString (Literals.binaryToString b)) (Core_.binary (Graph.Graph {
               Graph.graphBoundTerms = Maps.empty,
               Graph.graphBoundTypes = Maps.empty,
               Graph.graphClassConstraints = Maps.empty,
@@ -202,7 +201,7 @@ avroHydraAdapter cx schema env0 =
             in (Right (annotateAdapter ann ad, env4)))) (\_ad -> err cx (Strings.cat2 "Avro named type defined more than once: " (showQname qname))) (getAvroHydraAdapter qname env1))
         Schema.SchemaPrimitive v0 -> case v0 of
           Schema.PrimitiveNull -> simpleAdapter env0 Core.TypeUnit (\_cx -> \jv -> case jv of
-            Model.ValueString v2 -> Right (Core.TermLiteral (Core.LiteralString v2))) (\cx1 -> \t -> Eithers.map (\s -> Model.ValueString s) (Core_.string cx1 (Graph.Graph {
+            Model.ValueString v2 -> Right (Core.TermLiteral (Core.LiteralString v2))) (\cx1 -> \t -> Eithers.map (\s -> Model.ValueString s) (Core_.string (Graph.Graph {
             Graph.graphBoundTerms = Maps.empty,
             Graph.graphBoundTypes = Maps.empty,
             Graph.graphClassConstraints = Maps.empty,
@@ -212,7 +211,7 @@ avroHydraAdapter cx schema env0 =
             Graph.graphSchemaTypes = Maps.empty,
             Graph.graphTypeVariables = Sets.empty}) t))
           Schema.PrimitiveBoolean -> simpleAdapter env0 (Core.TypeLiteral Core.LiteralTypeBoolean) (\_cx -> \jv -> case jv of
-            Model.ValueBoolean v2 -> Right (Core.TermLiteral (Core.LiteralBoolean v2))) (\cx1 -> \t -> Eithers.map (\b -> Model.ValueBoolean b) (Core_.boolean cx1 (Graph.Graph {
+            Model.ValueBoolean v2 -> Right (Core.TermLiteral (Core.LiteralBoolean v2))) (\cx1 -> \t -> Eithers.map (\b -> Model.ValueBoolean b) (Core_.boolean (Graph.Graph {
             Graph.graphBoundTerms = Maps.empty,
             Graph.graphBoundTypes = Maps.empty,
             Graph.graphClassConstraints = Maps.empty,
@@ -222,7 +221,7 @@ avroHydraAdapter cx schema env0 =
             Graph.graphSchemaTypes = Maps.empty,
             Graph.graphTypeVariables = Sets.empty}) t))
           Schema.PrimitiveInt -> simpleAdapter env0 (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)) (\_cx -> \jv -> case jv of
-            Model.ValueNumber v2 -> Right (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (doubleToInt v2))))) (\cx1 -> \t -> Eithers.map (\i -> Model.ValueNumber (Literals.bigintToBigfloat (Literals.int32ToBigint i))) (Core_.int32 cx1 (Graph.Graph {
+            Model.ValueNumber v2 -> Right (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (doubleToInt v2))))) (\cx1 -> \t -> Eithers.map (\i -> Model.ValueNumber (Literals.bigintToBigfloat (Literals.int32ToBigint i))) (Core_.int32 (Graph.Graph {
             Graph.graphBoundTerms = Maps.empty,
             Graph.graphBoundTypes = Maps.empty,
             Graph.graphClassConstraints = Maps.empty,
@@ -232,7 +231,7 @@ avroHydraAdapter cx schema env0 =
             Graph.graphSchemaTypes = Maps.empty,
             Graph.graphTypeVariables = Sets.empty}) t))
           Schema.PrimitiveLong -> simpleAdapter env0 (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt64)) (\_cx -> \jv -> case jv of
-            Model.ValueNumber v2 -> Right (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt64 (doubleToLong v2))))) (\cx1 -> \t -> Eithers.map (\i -> Model.ValueNumber (Literals.bigintToBigfloat (Literals.int64ToBigint i))) (Core_.int64 cx1 (Graph.Graph {
+            Model.ValueNumber v2 -> Right (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt64 (doubleToLong v2))))) (\cx1 -> \t -> Eithers.map (\i -> Model.ValueNumber (Literals.bigintToBigfloat (Literals.int64ToBigint i))) (Core_.int64 (Graph.Graph {
             Graph.graphBoundTerms = Maps.empty,
             Graph.graphBoundTypes = Maps.empty,
             Graph.graphClassConstraints = Maps.empty,
@@ -242,7 +241,7 @@ avroHydraAdapter cx schema env0 =
             Graph.graphSchemaTypes = Maps.empty,
             Graph.graphTypeVariables = Sets.empty}) t))
           Schema.PrimitiveFloat -> simpleAdapter env0 (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat32)) (\_cx -> \jv -> case jv of
-            Model.ValueNumber v2 -> Right (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 (Literals.bigfloatToFloat32 v2))))) (\cx1 -> \t -> Eithers.map (\f -> Model.ValueNumber (Literals.float32ToBigfloat f)) (Core_.float32 cx1 (Graph.Graph {
+            Model.ValueNumber v2 -> Right (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 (Literals.bigfloatToFloat32 v2))))) (\cx1 -> \t -> Eithers.map (\f -> Model.ValueNumber (Literals.float32ToBigfloat f)) (Core_.float32 (Graph.Graph {
             Graph.graphBoundTerms = Maps.empty,
             Graph.graphBoundTypes = Maps.empty,
             Graph.graphClassConstraints = Maps.empty,
@@ -252,7 +251,7 @@ avroHydraAdapter cx schema env0 =
             Graph.graphSchemaTypes = Maps.empty,
             Graph.graphTypeVariables = Sets.empty}) t))
           Schema.PrimitiveDouble -> simpleAdapter env0 (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64)) (\_cx -> \jv -> case jv of
-            Model.ValueNumber v2 -> Right (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 (Literals.bigfloatToFloat64 v2))))) (\cx1 -> \t -> Eithers.map (\d -> Model.ValueNumber (Literals.float64ToBigfloat d)) (Core_.float64 cx1 (Graph.Graph {
+            Model.ValueNumber v2 -> Right (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 (Literals.bigfloatToFloat64 v2))))) (\cx1 -> \t -> Eithers.map (\d -> Model.ValueNumber (Literals.float64ToBigfloat d)) (Core_.float64 (Graph.Graph {
             Graph.graphBoundTerms = Maps.empty,
             Graph.graphBoundTypes = Maps.empty,
             Graph.graphClassConstraints = Maps.empty,
@@ -262,7 +261,7 @@ avroHydraAdapter cx schema env0 =
             Graph.graphSchemaTypes = Maps.empty,
             Graph.graphTypeVariables = Sets.empty}) t))
           Schema.PrimitiveBytes -> simpleAdapter env0 (Core.TypeLiteral Core.LiteralTypeBinary) (\_cx -> \jv -> case jv of
-            Model.ValueString v2 -> Right (Core.TermLiteral (Core.LiteralBinary (Literals.stringToBinary v2)))) (\cx1 -> \t -> Eithers.map (\b -> Model.ValueString (Literals.binaryToString b)) (Core_.binary cx1 (Graph.Graph {
+            Model.ValueString v2 -> Right (Core.TermLiteral (Core.LiteralBinary (Literals.stringToBinary v2)))) (\cx1 -> \t -> Eithers.map (\b -> Model.ValueString (Literals.binaryToString b)) (Core_.binary (Graph.Graph {
             Graph.graphBoundTerms = Maps.empty,
             Graph.graphBoundTypes = Maps.empty,
             Graph.graphClassConstraints = Maps.empty,
@@ -272,7 +271,7 @@ avroHydraAdapter cx schema env0 =
             Graph.graphSchemaTypes = Maps.empty,
             Graph.graphTypeVariables = Sets.empty}) t))
           Schema.PrimitiveString -> simpleAdapter env0 (Core.TypeLiteral Core.LiteralTypeString) (\_cx -> \jv -> case jv of
-            Model.ValueString v2 -> Right (Core.TermLiteral (Core.LiteralString v2))) (\cx1 -> \t -> Eithers.map (\s -> Model.ValueString s) (Core_.string cx1 (Graph.Graph {
+            Model.ValueString v2 -> Right (Core.TermLiteral (Core.LiteralString v2))) (\cx1 -> \t -> Eithers.map (\s -> Model.ValueString s) (Core_.string (Graph.Graph {
             Graph.graphBoundTerms = Maps.empty,
             Graph.graphBoundTypes = Maps.empty,
             Graph.graphClassConstraints = Maps.empty,
@@ -356,11 +355,8 @@ encodeAnnotationValue v =
       Model.ValueString v0 -> Core.TermLiteral (Core.LiteralString v0)
 
 -- | Construct an error result with a message in context
-err :: Context.Context -> String -> Either (Context.InContext Errors.Error) t0
-err cx msg =
-    Left (Context.InContext {
-      Context.inContextObject = (Errors.ErrorOther (Errors.OtherError msg)),
-      Context.inContextContext = cx})
+err :: t0 -> String -> Either Errors.Error t1
+err cx msg = Left (Errors.ErrorOther (Errors.OtherError msg))
 
 -- | Extract a JSON array or return an error
 expectArrayE :: t0 -> Model.Value -> Either t1 [Model.Value]
@@ -389,14 +385,14 @@ fieldAnnotationsToCore f =
       in (Core.Name k, (encodeAnnotationValue v))) (Maps.toList (Schema.fieldAnnotations f)))
 
 -- | Find the primary key field among a list of Avro fields
-findAvroPrimaryKeyField :: Context.Context -> Environment.AvroQualifiedName -> [Schema.Field] -> Either (Context.InContext Errors.Error) (Maybe Environment.AvroPrimaryKey)
+findAvroPrimaryKeyField :: t0 -> Environment.AvroQualifiedName -> [Schema.Field] -> Either Errors.Error (Maybe Environment.AvroPrimaryKey)
 findAvroPrimaryKeyField cx qname avroFields =
 
       let keys = Maybes.cat (Lists.map (\f -> primaryKeyE cx f) avroFields)
       in (Logic.ifElse (Lists.null keys) (Right Nothing) (Logic.ifElse (Equality.equal (Lists.length keys) 1) (Right (Just (Lists.head keys))) (err cx (Strings.cat2 "multiple primary key fields for " (showQname qname)))))
 
 -- | Extract a foreign key annotation from a field, if present
-foreignKeyE :: Context.Context -> Schema.Field -> Either (Context.InContext Errors.Error) (Maybe Environment.AvroForeignKey)
+foreignKeyE :: t0 -> Schema.Field -> Either Errors.Error (Maybe Environment.AvroForeignKey)
 foreignKeyE cx f =
     Maybes.maybe (Right Nothing) (\v -> Eithers.bind (expectObjectE cx v) (\m -> Eithers.bind (Eithers.map (\s -> Core.Name s) (requireStringE cx "type" m)) (\tname -> Eithers.bind (optStringE cx "pattern" m) (\pattern_ ->
       let constr = Maybes.maybe (\s -> Core.Name s) (\pat -> patternToNameConstructor pat) pattern_
@@ -409,7 +405,7 @@ getAvroHydraAdapter :: Environment.AvroQualifiedName -> Environment.AvroEnvironm
 getAvroHydraAdapter qname env = Maps.lookup qname (Environment.avroEnvironmentNamedAdapters env)
 
 -- | Convert a JSON value to a string, supporting booleans, strings, and numbers
-jsonToStringE :: Context.Context -> Model.Value -> Either (Context.InContext Errors.Error) String
+jsonToStringE :: t0 -> Model.Value -> Either Errors.Error String
 jsonToStringE cx v =
     case v of
       Model.ValueBoolean v0 -> Right (Logic.ifElse v0 "true" "false")
@@ -447,7 +443,7 @@ patternToNameConstructor :: String -> String -> Core.Name
 patternToNameConstructor pat s = Core.Name (Strings.intercalate s (Strings.splitOn "${}" pat))
 
 -- | Prepare a single field, producing an adapter and updated environment
-prepareField :: Context.Context -> Environment.AvroEnvironment -> Schema.Field -> Either (Context.InContext Errors.Error) ((String, (Schema.Field, (Coders.Adapter Schema.Schema Core.Type Model.Value Core.Term))), Environment.AvroEnvironment)
+prepareField :: t0 -> Environment.AvroEnvironment -> Schema.Field -> Either Errors.Error ((String, (Schema.Field, (Coders.Adapter Schema.Schema Core.Type Model.Value Core.Term))), Environment.AvroEnvironment)
 prepareField cx env f =
 
       let manns = fieldAnnotationsToCore f
@@ -493,7 +489,7 @@ prepareField cx env f =
         in (Right ((Schema.fieldName f, (f, (annotateAdapter ann ad))), env1)))))
 
 -- | Thread AvroEnvironment through preparing multiple fields
-prepareFields :: Context.Context -> Environment.AvroEnvironment -> [Schema.Field] -> Either (Context.InContext Errors.Error) (M.Map String (Schema.Field, (Coders.Adapter Schema.Schema Core.Type Model.Value Core.Term)), Environment.AvroEnvironment)
+prepareFields :: t0 -> Environment.AvroEnvironment -> [Schema.Field] -> Either Errors.Error (M.Map String (Schema.Field, (Coders.Adapter Schema.Schema Core.Type Model.Value Core.Term)), Environment.AvroEnvironment)
 prepareFields cx env fields =
     Lists.foldl (\acc -> \f -> Eithers.bind acc (\accPair ->
       let m = Pairs.first accPair
@@ -521,7 +517,7 @@ putAvroHydraAdapter qname ad env =
       Environment.avroEnvironmentElements = (Environment.avroEnvironmentElements env)}
 
 -- | Look up a required string attribute in a JSON object map
-requireStringE :: Context.Context -> String -> M.Map String Model.Value -> Either (Context.InContext Errors.Error) String
+requireStringE :: t0 -> String -> M.Map String Model.Value -> Either Errors.Error String
 requireStringE cx fname m =
     Maybes.maybe (err cx (Strings.cat [
       "required attribute ",
@@ -569,7 +565,7 @@ showQname qname =
       in (Strings.cat2 (Maybes.maybe "" (\ns -> Strings.cat2 ns ".") mns) local)
 
 -- | Parse a string into a term of the expected type
-stringToTermE :: Context.Context -> Core.Type -> String -> Either (Context.InContext Errors.Error) Core.Term
+stringToTermE :: t0 -> Core.Type -> String -> Either Errors.Error Core.Term
 stringToTermE cx typ s =
 
       let readErr = err cx "failed to read value"
@@ -592,7 +588,7 @@ stringToTermE cx typ s =
         _ -> unexpectedE cx "literal type" "other"
 
 -- | Convert a literal term to its string representation
-termToStringE :: Context.Context -> Core.Term -> Either (Context.InContext Errors.Error) String
+termToStringE :: t0 -> Core.Term -> Either Errors.Error String
 termToStringE cx term =
     case (Strip.deannotateTerm term) of
       Core.TermLiteral v0 -> case v0 of
@@ -613,7 +609,7 @@ termToStringE cx term =
       _ -> unexpectedE cx "literal value" "other"
 
 -- | Construct an error for unexpected values
-unexpectedE :: Context.Context -> String -> String -> Either (Context.InContext Errors.Error) t0
+unexpectedE :: t0 -> String -> String -> Either Errors.Error t1
 unexpectedE cx expected found =
     err cx (Strings.cat [
       "Expected ",

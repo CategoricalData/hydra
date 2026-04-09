@@ -50,7 +50,7 @@ generateGraphSON sourceRoot tableSchemas graphMapping outputPath = do
   log $ "  Edges: " ++ show (L.length edges)
   log $ "Writing GraphSON to " ++ outputPath
   jsonResult <- case pgElementsToGraphson encodeTermValue els of
-    Left ic -> fail (ShowError.error (inContextObject ic))
+    Left ic -> fail (ShowError.error ic)
     Right v -> return v
   writeFile outputPath (jsonValuesToString jsonResult)
   log $ "Done. Output written to " ++ outputPath
@@ -68,7 +68,7 @@ transformTable :: TableType -> FilePath -> [Pg.Vertex Term] -> [Pg.Edge Term] ->
 transformTable tableType@(TableType (RelationName tableName) _) path vspecs especs = do
     (Table _ rows) <- decodeTableIo tableType path
     case Transform.transformTableRows emptyContext hydraCoreGraph vspecs especs tableType rows of
-      Left ic -> fail $ "Error transforming " ++ tableName ++ ": " ++ ShowError.error (inContextObject ic)
+      Left ic -> fail $ "Error transforming " ++ tableName ++ ": " ++ ShowError.error ic
       Right v -> return v
 
 -- | Transform multiple tables according to a graph mapping specification

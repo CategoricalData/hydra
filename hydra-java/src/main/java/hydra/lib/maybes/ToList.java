@@ -18,7 +18,6 @@ import static hydra.dsl.Types.list;
 import static hydra.dsl.Types.optional;
 import static hydra.dsl.Types.scheme;
 import hydra.context.Context;
-import hydra.context.InContext;
 import hydra.errors.Error_;
 import hydra.util.Either;
 
@@ -49,10 +48,10 @@ public class ToList extends PrimitiveFunction {
      * @return a function that converts an optional to a list
      */
     @Override
-    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
+    protected Function<List<Term>, Function<Context, Function<Graph, Either<Error_, Term>>>> implementation() {
         return args -> cx -> graph -> hydra.lib.eithers.Map.apply(
             (Function<Maybe<Term>, Term>) opt -> Terms.list(apply(opt)),
-            hydra.extract.Core.maybeTerm(cx, t -> Either.right(t), graph, args.get(0)));
+            hydra.extract.Core.maybeTerm(t -> Either.right(t), graph, args.get(0)));
     }
 
     /**

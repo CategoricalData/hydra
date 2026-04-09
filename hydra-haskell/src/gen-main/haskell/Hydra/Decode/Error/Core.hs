@@ -12,7 +12,6 @@ import qualified Hydra.Error.Core as Core__
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Extract.Core as Core___
 import qualified Hydra.Graph as Graph
-import qualified Hydra.Lexical as Lexical
 import qualified Hydra.Lib.Eithers as Eithers
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Maybes as Maybes
@@ -21,155 +20,155 @@ import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pur
 
 constantConditionError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core__.ConstantConditionError
 constantConditionError cx raw =
-    Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+    Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Core___.toFieldMap v0
-        in (Eithers.bind (Core___.requireField "location" Paths.subtermPath fieldMap cx) (\field_location -> Eithers.bind (Core___.requireField "value" (\cx2 -> \raw2 -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped2 -> case stripped2 of
+        in (Eithers.bind (Core___.requireField "location" Paths.subtermPath fieldMap cx) (\field_location -> Eithers.bind (Core___.requireField "value" (\cx2 -> \raw2 -> Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
           Core.TermLiteral v1 -> case v1 of
             Core.LiteralBoolean v2 -> Right v2
             _ -> Left (Errors.DecodingError "expected boolean literal")
-          _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx2 raw2)) fieldMap cx) (\field_value -> Right (Core__.ConstantConditionError {
+          _ -> Left (Errors.DecodingError "expected literal")) (Core___.stripWithDecodingError cx2 raw2)) fieldMap cx) (\field_value -> Right (Core__.ConstantConditionError {
           Core__.constantConditionErrorLocation = field_location,
           Core__.constantConditionErrorValue = field_value}))))
-      _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
+      _ -> Left (Errors.DecodingError "expected record")) (Core___.stripWithDecodingError cx raw)
 
 duplicateBindingError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core__.DuplicateBindingError
 duplicateBindingError cx raw =
-    Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+    Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Core___.toFieldMap v0
         in (Eithers.bind (Core___.requireField "location" Paths.subtermPath fieldMap cx) (\field_location -> Eithers.bind (Core___.requireField "name" Core_.name fieldMap cx) (\field_name -> Right (Core__.DuplicateBindingError {
           Core__.duplicateBindingErrorLocation = field_location,
           Core__.duplicateBindingErrorName = field_name}))))
-      _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
+      _ -> Left (Errors.DecodingError "expected record")) (Core___.stripWithDecodingError cx raw)
 
 duplicateFieldError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core__.DuplicateFieldError
 duplicateFieldError cx raw =
-    Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+    Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Core___.toFieldMap v0
         in (Eithers.bind (Core___.requireField "location" Paths.subtermPath fieldMap cx) (\field_location -> Eithers.bind (Core___.requireField "name" Core_.name fieldMap cx) (\field_name -> Right (Core__.DuplicateFieldError {
           Core__.duplicateFieldErrorLocation = field_location,
           Core__.duplicateFieldErrorName = field_name}))))
-      _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
+      _ -> Left (Errors.DecodingError "expected record")) (Core___.stripWithDecodingError cx raw)
 
 duplicateRecordTypeFieldNamesError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core__.DuplicateRecordTypeFieldNamesError
 duplicateRecordTypeFieldNamesError cx raw =
-    Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+    Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Core___.toFieldMap v0
         in (Eithers.bind (Core___.requireField "location" Paths.subtermPath fieldMap cx) (\field_location -> Eithers.bind (Core___.requireField "name" Core_.name fieldMap cx) (\field_name -> Right (Core__.DuplicateRecordTypeFieldNamesError {
           Core__.duplicateRecordTypeFieldNamesErrorLocation = field_location,
           Core__.duplicateRecordTypeFieldNamesErrorName = field_name}))))
-      _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
+      _ -> Left (Errors.DecodingError "expected record")) (Core___.stripWithDecodingError cx raw)
 
 duplicateUnionTypeFieldNamesError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core__.DuplicateUnionTypeFieldNamesError
 duplicateUnionTypeFieldNamesError cx raw =
-    Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+    Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Core___.toFieldMap v0
         in (Eithers.bind (Core___.requireField "location" Paths.subtermPath fieldMap cx) (\field_location -> Eithers.bind (Core___.requireField "name" Core_.name fieldMap cx) (\field_name -> Right (Core__.DuplicateUnionTypeFieldNamesError {
           Core__.duplicateUnionTypeFieldNamesErrorLocation = field_location,
           Core__.duplicateUnionTypeFieldNamesErrorName = field_name}))))
-      _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
+      _ -> Left (Errors.DecodingError "expected record")) (Core___.stripWithDecodingError cx raw)
 
 emptyCaseStatementError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core__.EmptyCaseStatementError
 emptyCaseStatementError cx raw =
-    Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+    Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Core___.toFieldMap v0
         in (Eithers.bind (Core___.requireField "location" Paths.subtermPath fieldMap cx) (\field_location -> Eithers.bind (Core___.requireField "typeName" Core_.name fieldMap cx) (\field_typeName -> Right (Core__.EmptyCaseStatementError {
           Core__.emptyCaseStatementErrorLocation = field_location,
           Core__.emptyCaseStatementErrorTypeName = field_typeName}))))
-      _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
+      _ -> Left (Errors.DecodingError "expected record")) (Core___.stripWithDecodingError cx raw)
 
 emptyLetBindingsError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core__.EmptyLetBindingsError
 emptyLetBindingsError cx raw =
-    Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+    Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Core___.toFieldMap v0
         in (Eithers.bind (Core___.requireField "location" Paths.subtermPath fieldMap cx) (\field_location -> Right (Core__.EmptyLetBindingsError {
           Core__.emptyLetBindingsErrorLocation = field_location})))
-      _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
+      _ -> Left (Errors.DecodingError "expected record")) (Core___.stripWithDecodingError cx raw)
 
 emptyRecordTypeError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core__.EmptyRecordTypeError
 emptyRecordTypeError cx raw =
-    Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+    Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Core___.toFieldMap v0
         in (Eithers.bind (Core___.requireField "location" Paths.subtermPath fieldMap cx) (\field_location -> Right (Core__.EmptyRecordTypeError {
           Core__.emptyRecordTypeErrorLocation = field_location})))
-      _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
+      _ -> Left (Errors.DecodingError "expected record")) (Core___.stripWithDecodingError cx raw)
 
 emptyTermAnnotationError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core__.EmptyTermAnnotationError
 emptyTermAnnotationError cx raw =
-    Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+    Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Core___.toFieldMap v0
         in (Eithers.bind (Core___.requireField "location" Paths.subtermPath fieldMap cx) (\field_location -> Right (Core__.EmptyTermAnnotationError {
           Core__.emptyTermAnnotationErrorLocation = field_location})))
-      _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
+      _ -> Left (Errors.DecodingError "expected record")) (Core___.stripWithDecodingError cx raw)
 
 emptyTypeAnnotationError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core__.EmptyTypeAnnotationError
 emptyTypeAnnotationError cx raw =
-    Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+    Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Core___.toFieldMap v0
         in (Eithers.bind (Core___.requireField "location" Paths.subtermPath fieldMap cx) (\field_location -> Right (Core__.EmptyTypeAnnotationError {
           Core__.emptyTypeAnnotationErrorLocation = field_location})))
-      _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
+      _ -> Left (Errors.DecodingError "expected record")) (Core___.stripWithDecodingError cx raw)
 
 emptyTypeNameInTermError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core__.EmptyTypeNameInTermError
 emptyTypeNameInTermError cx raw =
-    Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+    Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Core___.toFieldMap v0
         in (Eithers.bind (Core___.requireField "location" Paths.subtermPath fieldMap cx) (\field_location -> Right (Core__.EmptyTypeNameInTermError {
           Core__.emptyTypeNameInTermErrorLocation = field_location})))
-      _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
+      _ -> Left (Errors.DecodingError "expected record")) (Core___.stripWithDecodingError cx raw)
 
 emptyUnionTypeError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core__.EmptyUnionTypeError
 emptyUnionTypeError cx raw =
-    Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+    Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Core___.toFieldMap v0
         in (Eithers.bind (Core___.requireField "location" Paths.subtermPath fieldMap cx) (\field_location -> Right (Core__.EmptyUnionTypeError {
           Core__.emptyUnionTypeErrorLocation = field_location})))
-      _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
+      _ -> Left (Errors.DecodingError "expected record")) (Core___.stripWithDecodingError cx raw)
 
 invalidForallParameterNameError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core__.InvalidForallParameterNameError
 invalidForallParameterNameError cx raw =
-    Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+    Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Core___.toFieldMap v0
         in (Eithers.bind (Core___.requireField "location" Paths.subtermPath fieldMap cx) (\field_location -> Eithers.bind (Core___.requireField "name" Core_.name fieldMap cx) (\field_name -> Right (Core__.InvalidForallParameterNameError {
           Core__.invalidForallParameterNameErrorLocation = field_location,
           Core__.invalidForallParameterNameErrorName = field_name}))))
-      _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
+      _ -> Left (Errors.DecodingError "expected record")) (Core___.stripWithDecodingError cx raw)
 
 invalidLambdaParameterNameError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core__.InvalidLambdaParameterNameError
 invalidLambdaParameterNameError cx raw =
-    Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+    Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Core___.toFieldMap v0
         in (Eithers.bind (Core___.requireField "location" Paths.subtermPath fieldMap cx) (\field_location -> Eithers.bind (Core___.requireField "name" Core_.name fieldMap cx) (\field_name -> Right (Core__.InvalidLambdaParameterNameError {
           Core__.invalidLambdaParameterNameErrorLocation = field_location,
           Core__.invalidLambdaParameterNameErrorName = field_name}))))
-      _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
+      _ -> Left (Errors.DecodingError "expected record")) (Core___.stripWithDecodingError cx raw)
 
 invalidLetBindingNameError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core__.InvalidLetBindingNameError
 invalidLetBindingNameError cx raw =
-    Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+    Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Core___.toFieldMap v0
         in (Eithers.bind (Core___.requireField "location" Paths.subtermPath fieldMap cx) (\field_location -> Eithers.bind (Core___.requireField "name" Core_.name fieldMap cx) (\field_name -> Right (Core__.InvalidLetBindingNameError {
           Core__.invalidLetBindingNameErrorLocation = field_location,
           Core__.invalidLetBindingNameErrorName = field_name}))))
-      _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
+      _ -> Left (Errors.DecodingError "expected record")) (Core___.stripWithDecodingError cx raw)
 
 invalidTermError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core__.InvalidTermError
 invalidTermError cx raw =
-    Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+    Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermUnion v0 ->
         let field = Core.injectionField v0
             fname = Core.fieldName field
@@ -202,11 +201,11 @@ invalidTermError cx raw =
           "no such field ",
           (Core.unName fname),
           " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
-      _ -> Left (Errors.DecodingError "expected union")) (Lexical.stripAndDereferenceTermEither cx raw)
+      _ -> Left (Errors.DecodingError "expected union")) (Core___.stripWithDecodingError cx raw)
 
 invalidTypeError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core__.InvalidTypeError
 invalidTypeError cx raw =
-    Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+    Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermUnion v0 ->
         let field = Core.injectionField v0
             fname = Core.fieldName field
@@ -231,240 +230,240 @@ invalidTypeError cx raw =
           "no such field ",
           (Core.unName fname),
           " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
-      _ -> Left (Errors.DecodingError "expected union")) (Lexical.stripAndDereferenceTermEither cx raw)
+      _ -> Left (Errors.DecodingError "expected union")) (Core___.stripWithDecodingError cx raw)
 
 invalidTypeLambdaParameterNameError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core__.InvalidTypeLambdaParameterNameError
 invalidTypeLambdaParameterNameError cx raw =
-    Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+    Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Core___.toFieldMap v0
         in (Eithers.bind (Core___.requireField "location" Paths.subtermPath fieldMap cx) (\field_location -> Eithers.bind (Core___.requireField "name" Core_.name fieldMap cx) (\field_name -> Right (Core__.InvalidTypeLambdaParameterNameError {
           Core__.invalidTypeLambdaParameterNameErrorLocation = field_location,
           Core__.invalidTypeLambdaParameterNameErrorName = field_name}))))
-      _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
+      _ -> Left (Errors.DecodingError "expected record")) (Core___.stripWithDecodingError cx raw)
 
 invalidTypeSchemeVariableNameError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core__.InvalidTypeSchemeVariableNameError
 invalidTypeSchemeVariableNameError cx raw =
-    Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+    Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Core___.toFieldMap v0
         in (Eithers.bind (Core___.requireField "location" Paths.subtermPath fieldMap cx) (\field_location -> Eithers.bind (Core___.requireField "name" Core_.name fieldMap cx) (\field_name -> Right (Core__.InvalidTypeSchemeVariableNameError {
           Core__.invalidTypeSchemeVariableNameErrorLocation = field_location,
           Core__.invalidTypeSchemeVariableNameErrorName = field_name}))))
-      _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
+      _ -> Left (Errors.DecodingError "expected record")) (Core___.stripWithDecodingError cx raw)
 
 nestedTermAnnotationError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core__.NestedTermAnnotationError
 nestedTermAnnotationError cx raw =
-    Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+    Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Core___.toFieldMap v0
         in (Eithers.bind (Core___.requireField "location" Paths.subtermPath fieldMap cx) (\field_location -> Right (Core__.NestedTermAnnotationError {
           Core__.nestedTermAnnotationErrorLocation = field_location})))
-      _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
+      _ -> Left (Errors.DecodingError "expected record")) (Core___.stripWithDecodingError cx raw)
 
 nestedTypeAnnotationError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core__.NestedTypeAnnotationError
 nestedTypeAnnotationError cx raw =
-    Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+    Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Core___.toFieldMap v0
         in (Eithers.bind (Core___.requireField "location" Paths.subtermPath fieldMap cx) (\field_location -> Right (Core__.NestedTypeAnnotationError {
           Core__.nestedTypeAnnotationErrorLocation = field_location})))
-      _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
+      _ -> Left (Errors.DecodingError "expected record")) (Core___.stripWithDecodingError cx raw)
 
 nonComparableMapKeyTypeError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core__.NonComparableMapKeyTypeError
 nonComparableMapKeyTypeError cx raw =
-    Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+    Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Core___.toFieldMap v0
         in (Eithers.bind (Core___.requireField "location" Paths.subtermPath fieldMap cx) (\field_location -> Eithers.bind (Core___.requireField "keyType" Core_.type_ fieldMap cx) (\field_keyType -> Right (Core__.NonComparableMapKeyTypeError {
           Core__.nonComparableMapKeyTypeErrorLocation = field_location,
           Core__.nonComparableMapKeyTypeErrorKeyType = field_keyType}))))
-      _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
+      _ -> Left (Errors.DecodingError "expected record")) (Core___.stripWithDecodingError cx raw)
 
 nonComparableSetElementTypeError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core__.NonComparableSetElementTypeError
 nonComparableSetElementTypeError cx raw =
-    Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+    Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Core___.toFieldMap v0
         in (Eithers.bind (Core___.requireField "location" Paths.subtermPath fieldMap cx) (\field_location -> Eithers.bind (Core___.requireField "elementType" Core_.type_ fieldMap cx) (\field_elementType -> Right (Core__.NonComparableSetElementTypeError {
           Core__.nonComparableSetElementTypeErrorLocation = field_location,
           Core__.nonComparableSetElementTypeErrorElementType = field_elementType}))))
-      _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
+      _ -> Left (Errors.DecodingError "expected record")) (Core___.stripWithDecodingError cx raw)
 
 redundantWrapUnwrapError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core__.RedundantWrapUnwrapError
 redundantWrapUnwrapError cx raw =
-    Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+    Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Core___.toFieldMap v0
         in (Eithers.bind (Core___.requireField "location" Paths.subtermPath fieldMap cx) (\field_location -> Eithers.bind (Core___.requireField "typeName" Core_.name fieldMap cx) (\field_typeName -> Right (Core__.RedundantWrapUnwrapError {
           Core__.redundantWrapUnwrapErrorLocation = field_location,
           Core__.redundantWrapUnwrapErrorTypeName = field_typeName}))))
-      _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
+      _ -> Left (Errors.DecodingError "expected record")) (Core___.stripWithDecodingError cx raw)
 
 selfApplicationError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core__.SelfApplicationError
 selfApplicationError cx raw =
-    Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+    Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Core___.toFieldMap v0
         in (Eithers.bind (Core___.requireField "location" Paths.subtermPath fieldMap cx) (\field_location -> Eithers.bind (Core___.requireField "name" Core_.name fieldMap cx) (\field_name -> Right (Core__.SelfApplicationError {
           Core__.selfApplicationErrorLocation = field_location,
           Core__.selfApplicationErrorName = field_name}))))
-      _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
+      _ -> Left (Errors.DecodingError "expected record")) (Core___.stripWithDecodingError cx raw)
 
 singleVariantUnionError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core__.SingleVariantUnionError
 singleVariantUnionError cx raw =
-    Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+    Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Core___.toFieldMap v0
         in (Eithers.bind (Core___.requireField "location" Paths.subtermPath fieldMap cx) (\field_location -> Eithers.bind (Core___.requireField "fieldName" Core_.name fieldMap cx) (\field_fieldName -> Right (Core__.SingleVariantUnionError {
           Core__.singleVariantUnionErrorLocation = field_location,
           Core__.singleVariantUnionErrorFieldName = field_fieldName}))))
-      _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
+      _ -> Left (Errors.DecodingError "expected record")) (Core___.stripWithDecodingError cx raw)
 
 termVariableShadowingError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core__.TermVariableShadowingError
 termVariableShadowingError cx raw =
-    Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+    Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Core___.toFieldMap v0
         in (Eithers.bind (Core___.requireField "location" Paths.subtermPath fieldMap cx) (\field_location -> Eithers.bind (Core___.requireField "name" Core_.name fieldMap cx) (\field_name -> Right (Core__.TermVariableShadowingError {
           Core__.termVariableShadowingErrorLocation = field_location,
           Core__.termVariableShadowingErrorName = field_name}))))
-      _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
+      _ -> Left (Errors.DecodingError "expected record")) (Core___.stripWithDecodingError cx raw)
 
 typeVariableShadowingInForallError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core__.TypeVariableShadowingInForallError
 typeVariableShadowingInForallError cx raw =
-    Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+    Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Core___.toFieldMap v0
         in (Eithers.bind (Core___.requireField "location" Paths.subtermPath fieldMap cx) (\field_location -> Eithers.bind (Core___.requireField "name" Core_.name fieldMap cx) (\field_name -> Right (Core__.TypeVariableShadowingInForallError {
           Core__.typeVariableShadowingInForallErrorLocation = field_location,
           Core__.typeVariableShadowingInForallErrorName = field_name}))))
-      _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
+      _ -> Left (Errors.DecodingError "expected record")) (Core___.stripWithDecodingError cx raw)
 
 typeVariableShadowingInTypeLambdaError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core__.TypeVariableShadowingInTypeLambdaError
 typeVariableShadowingInTypeLambdaError cx raw =
-    Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+    Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Core___.toFieldMap v0
         in (Eithers.bind (Core___.requireField "location" Paths.subtermPath fieldMap cx) (\field_location -> Eithers.bind (Core___.requireField "name" Core_.name fieldMap cx) (\field_name -> Right (Core__.TypeVariableShadowingInTypeLambdaError {
           Core__.typeVariableShadowingInTypeLambdaErrorLocation = field_location,
           Core__.typeVariableShadowingInTypeLambdaErrorName = field_name}))))
-      _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
+      _ -> Left (Errors.DecodingError "expected record")) (Core___.stripWithDecodingError cx raw)
 
 undefinedFieldError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core__.UndefinedFieldError
 undefinedFieldError cx raw =
-    Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+    Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Core___.toFieldMap v0
         in (Eithers.bind (Core___.requireField "fieldName" Core_.name fieldMap cx) (\field_fieldName -> Eithers.bind (Core___.requireField "typeName" Core_.name fieldMap cx) (\field_typeName -> Right (Core__.UndefinedFieldError {
           Core__.undefinedFieldErrorFieldName = field_fieldName,
           Core__.undefinedFieldErrorTypeName = field_typeName}))))
-      _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
+      _ -> Left (Errors.DecodingError "expected record")) (Core___.stripWithDecodingError cx raw)
 
 undefinedTermVariableError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core__.UndefinedTermVariableError
 undefinedTermVariableError cx raw =
-    Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+    Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Core___.toFieldMap v0
         in (Eithers.bind (Core___.requireField "location" Paths.subtermPath fieldMap cx) (\field_location -> Eithers.bind (Core___.requireField "name" Core_.name fieldMap cx) (\field_name -> Right (Core__.UndefinedTermVariableError {
           Core__.undefinedTermVariableErrorLocation = field_location,
           Core__.undefinedTermVariableErrorName = field_name}))))
-      _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
+      _ -> Left (Errors.DecodingError "expected record")) (Core___.stripWithDecodingError cx raw)
 
 undefinedTypeVariableError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core__.UndefinedTypeVariableError
 undefinedTypeVariableError cx raw =
-    Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+    Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Core___.toFieldMap v0
         in (Eithers.bind (Core___.requireField "location" Paths.subtermPath fieldMap cx) (\field_location -> Eithers.bind (Core___.requireField "name" Core_.name fieldMap cx) (\field_name -> Right (Core__.UndefinedTypeVariableError {
           Core__.undefinedTypeVariableErrorLocation = field_location,
           Core__.undefinedTypeVariableErrorName = field_name}))))
-      _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
+      _ -> Left (Errors.DecodingError "expected record")) (Core___.stripWithDecodingError cx raw)
 
 undefinedTypeVariableInBindingTypeError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core__.UndefinedTypeVariableInBindingTypeError
 undefinedTypeVariableInBindingTypeError cx raw =
-    Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+    Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Core___.toFieldMap v0
         in (Eithers.bind (Core___.requireField "location" Paths.subtermPath fieldMap cx) (\field_location -> Eithers.bind (Core___.requireField "name" Core_.name fieldMap cx) (\field_name -> Right (Core__.UndefinedTypeVariableInBindingTypeError {
           Core__.undefinedTypeVariableInBindingTypeErrorLocation = field_location,
           Core__.undefinedTypeVariableInBindingTypeErrorName = field_name}))))
-      _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
+      _ -> Left (Errors.DecodingError "expected record")) (Core___.stripWithDecodingError cx raw)
 
 undefinedTypeVariableInLambdaDomainError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core__.UndefinedTypeVariableInLambdaDomainError
 undefinedTypeVariableInLambdaDomainError cx raw =
-    Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+    Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Core___.toFieldMap v0
         in (Eithers.bind (Core___.requireField "location" Paths.subtermPath fieldMap cx) (\field_location -> Eithers.bind (Core___.requireField "name" Core_.name fieldMap cx) (\field_name -> Right (Core__.UndefinedTypeVariableInLambdaDomainError {
           Core__.undefinedTypeVariableInLambdaDomainErrorLocation = field_location,
           Core__.undefinedTypeVariableInLambdaDomainErrorName = field_name}))))
-      _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
+      _ -> Left (Errors.DecodingError "expected record")) (Core___.stripWithDecodingError cx raw)
 
 undefinedTypeVariableInTypeApplicationError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core__.UndefinedTypeVariableInTypeApplicationError
 undefinedTypeVariableInTypeApplicationError cx raw =
-    Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+    Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Core___.toFieldMap v0
         in (Eithers.bind (Core___.requireField "location" Paths.subtermPath fieldMap cx) (\field_location -> Eithers.bind (Core___.requireField "name" Core_.name fieldMap cx) (\field_name -> Right (Core__.UndefinedTypeVariableInTypeApplicationError {
           Core__.undefinedTypeVariableInTypeApplicationErrorLocation = field_location,
           Core__.undefinedTypeVariableInTypeApplicationErrorName = field_name}))))
-      _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
+      _ -> Left (Errors.DecodingError "expected record")) (Core___.stripWithDecodingError cx raw)
 
 unexpectedTermVariantError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core__.UnexpectedTermVariantError
 unexpectedTermVariantError cx raw =
-    Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+    Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Core___.toFieldMap v0
         in (Eithers.bind (Core___.requireField "expectedVariant" Variants.termVariant fieldMap cx) (\field_expectedVariant -> Eithers.bind (Core___.requireField "actualTerm" Core_.term fieldMap cx) (\field_actualTerm -> Right (Core__.UnexpectedTermVariantError {
           Core__.unexpectedTermVariantErrorExpectedVariant = field_expectedVariant,
           Core__.unexpectedTermVariantErrorActualTerm = field_actualTerm}))))
-      _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
+      _ -> Left (Errors.DecodingError "expected record")) (Core___.stripWithDecodingError cx raw)
 
 unexpectedTypeVariantError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core__.UnexpectedTypeVariantError
 unexpectedTypeVariantError cx raw =
-    Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+    Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Core___.toFieldMap v0
         in (Eithers.bind (Core___.requireField "expectedVariant" Variants.typeVariant fieldMap cx) (\field_expectedVariant -> Eithers.bind (Core___.requireField "actualType" Core_.type_ fieldMap cx) (\field_actualType -> Right (Core__.UnexpectedTypeVariantError {
           Core__.unexpectedTypeVariantErrorExpectedVariant = field_expectedVariant,
           Core__.unexpectedTypeVariantErrorActualType = field_actualType}))))
-      _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
+      _ -> Left (Errors.DecodingError "expected record")) (Core___.stripWithDecodingError cx raw)
 
 unknownPrimitiveNameError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core__.UnknownPrimitiveNameError
 unknownPrimitiveNameError cx raw =
-    Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+    Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Core___.toFieldMap v0
         in (Eithers.bind (Core___.requireField "location" Paths.subtermPath fieldMap cx) (\field_location -> Eithers.bind (Core___.requireField "name" Core_.name fieldMap cx) (\field_name -> Right (Core__.UnknownPrimitiveNameError {
           Core__.unknownPrimitiveNameErrorLocation = field_location,
           Core__.unknownPrimitiveNameErrorName = field_name}))))
-      _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
+      _ -> Left (Errors.DecodingError "expected record")) (Core___.stripWithDecodingError cx raw)
 
 unnecessaryIdentityApplicationError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core__.UnnecessaryIdentityApplicationError
 unnecessaryIdentityApplicationError cx raw =
-    Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+    Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Core___.toFieldMap v0
         in (Eithers.bind (Core___.requireField "location" Paths.subtermPath fieldMap cx) (\field_location -> Right (Core__.UnnecessaryIdentityApplicationError {
           Core__.unnecessaryIdentityApplicationErrorLocation = field_location})))
-      _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
+      _ -> Left (Errors.DecodingError "expected record")) (Core___.stripWithDecodingError cx raw)
 
 untypedTermVariableError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core__.UntypedTermVariableError
 untypedTermVariableError cx raw =
-    Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+    Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Core___.toFieldMap v0
         in (Eithers.bind (Core___.requireField "location" Paths.subtermPath fieldMap cx) (\field_location -> Eithers.bind (Core___.requireField "name" Core_.name fieldMap cx) (\field_name -> Right (Core__.UntypedTermVariableError {
           Core__.untypedTermVariableErrorLocation = field_location,
           Core__.untypedTermVariableErrorName = field_name}))))
-      _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
+      _ -> Left (Errors.DecodingError "expected record")) (Core___.stripWithDecodingError cx raw)
 
 voidInNonBottomPositionError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core__.VoidInNonBottomPositionError
 voidInNonBottomPositionError cx raw =
-    Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+    Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Core___.toFieldMap v0
         in (Eithers.bind (Core___.requireField "location" Paths.subtermPath fieldMap cx) (\field_location -> Right (Core__.VoidInNonBottomPositionError {
           Core__.voidInNonBottomPositionErrorLocation = field_location})))
-      _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
+      _ -> Left (Errors.DecodingError "expected record")) (Core___.stripWithDecodingError cx raw)

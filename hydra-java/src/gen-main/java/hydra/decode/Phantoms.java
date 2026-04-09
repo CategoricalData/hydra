@@ -8,7 +8,7 @@ package hydra.decode;
 public interface Phantoms {
   static <T0, T1> hydra.util.Either<hydra.errors.DecodingError, hydra.phantoms.TBinding<T1>> tBinding(T0 a, hydra.graph.Graph cx, hydra.core.Term raw) {
     return hydra.lib.eithers.Either.apply(
-      (java.util.function.Function<String, hydra.util.Either<hydra.errors.DecodingError, hydra.phantoms.TBinding<T1>>>) (err -> hydra.util.Either.<hydra.errors.DecodingError, hydra.phantoms.TBinding<T1>>left(new hydra.errors.DecodingError(err))),
+      (java.util.function.Function<hydra.errors.DecodingError, hydra.util.Either<hydra.errors.DecodingError, hydra.phantoms.TBinding<T1>>>) (err -> hydra.util.Either.<hydra.errors.DecodingError, hydra.phantoms.TBinding<T1>>left(err)),
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.phantoms.TBinding<T1>>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.errors.DecodingError, hydra.phantoms.TBinding<T1>> otherwise(hydra.core.Term instance) {
@@ -38,14 +38,14 @@ public interface Phantoms {
               (java.util.function.Function<hydra.phantoms.TTerm<T1>, hydra.util.Either<hydra.errors.DecodingError, hydra.phantoms.TBinding<T1>>>) (field_term -> hydra.util.Either.<hydra.errors.DecodingError, hydra.phantoms.TBinding<T1>>right((hydra.phantoms.TBinding<T1>) (new hydra.phantoms.TBinding<T1>(field_name, field_term)))))));
         }
       })),
-      hydra.Lexical.stripAndDereferenceTermEither(
+      hydra.extract.Core.stripWithDecodingError(
         cx,
         raw));
   }
 
   static <T0, T1> hydra.util.Either<hydra.errors.DecodingError, hydra.phantoms.TTerm<T1>> tTerm(T0 a, hydra.graph.Graph cx, hydra.core.Term raw) {
     return hydra.lib.eithers.Either.apply(
-      (java.util.function.Function<String, hydra.util.Either<hydra.errors.DecodingError, hydra.phantoms.TTerm<T1>>>) (err -> hydra.util.Either.<hydra.errors.DecodingError, hydra.phantoms.TTerm<T1>>left(new hydra.errors.DecodingError(err))),
+      (java.util.function.Function<hydra.errors.DecodingError, hydra.util.Either<hydra.errors.DecodingError, hydra.phantoms.TTerm<T1>>>) (err -> hydra.util.Either.<hydra.errors.DecodingError, hydra.phantoms.TTerm<T1>>left(err)),
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.phantoms.TTerm<T1>>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.errors.DecodingError, hydra.phantoms.TTerm<T1>> otherwise(hydra.core.Term instance) {
@@ -61,14 +61,14 @@ public interface Phantoms {
               (wrappedTerm).value.body));
         }
       })),
-      hydra.Lexical.stripAndDereferenceTermEither(
+      hydra.extract.Core.stripWithDecodingError(
         cx,
         raw));
   }
 
   static <T0, T1> hydra.util.Either<hydra.errors.DecodingError, hydra.phantoms.TTermDefinition<T1>> tTermDefinition(T0 a, hydra.graph.Graph cx, hydra.core.Term raw) {
     return hydra.lib.eithers.Either.apply(
-      (java.util.function.Function<String, hydra.util.Either<hydra.errors.DecodingError, hydra.phantoms.TTermDefinition<T1>>>) (err -> hydra.util.Either.<hydra.errors.DecodingError, hydra.phantoms.TTermDefinition<T1>>left(new hydra.errors.DecodingError(err))),
+      (java.util.function.Function<hydra.errors.DecodingError, hydra.util.Either<hydra.errors.DecodingError, hydra.phantoms.TTermDefinition<T1>>>) (err -> hydra.util.Either.<hydra.errors.DecodingError, hydra.phantoms.TTermDefinition<T1>>left(err)),
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.phantoms.TTermDefinition<T1>>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.errors.DecodingError, hydra.phantoms.TTermDefinition<T1>> otherwise(hydra.core.Term instance) {
@@ -98,7 +98,7 @@ public interface Phantoms {
               (java.util.function.Function<hydra.phantoms.TTerm<T1>, hydra.util.Either<hydra.errors.DecodingError, hydra.phantoms.TTermDefinition<T1>>>) (field_term -> hydra.util.Either.<hydra.errors.DecodingError, hydra.phantoms.TTermDefinition<T1>>right((hydra.phantoms.TTermDefinition<T1>) (new hydra.phantoms.TTermDefinition<T1>(field_name, field_term)))))));
         }
       })),
-      hydra.Lexical.stripAndDereferenceTermEither(
+      hydra.extract.Core.stripWithDecodingError(
         cx,
         raw));
   }

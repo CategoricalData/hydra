@@ -9,6 +9,7 @@ from hydra.dsl.python import Either, FrozenDict, Left, Right, frozenlist
 from typing import TypeVar, cast
 import hydra.coders
 import hydra.core
+import hydra.errors
 import hydra.lexical
 import hydra.lib.eithers
 import hydra.lib.equality
@@ -82,7 +83,7 @@ def term_dependency_names(binds: bool, with_prims: bool, with_noms: bool, term0:
                 return names
     return hydra.rewriting.fold_over_term(hydra.coders.TraversalOrder.PRE, (lambda x1, x2: add_names(x1, x2)), hydra.lib.sets.empty(), term0)
 
-def definitions_with_dependencies(cx: hydra.context.Context, graph: hydra.graph.Graph, original: frozenlist[hydra.core.Binding]) -> Either[hydra.context.InContext[hydra.errors.Error], frozenlist[hydra.core.Binding]]:
+def definitions_with_dependencies(cx: T0, graph: hydra.graph.Graph, original: frozenlist[hydra.core.Binding]) -> Either[hydra.errors.Error, frozenlist[hydra.core.Binding]]:
     r"""Get definitions with their dependencies."""
 
     def dep_names(el: hydra.core.Binding) -> frozenlist[hydra.core.Name]:
@@ -90,7 +91,7 @@ def definitions_with_dependencies(cx: hydra.context.Context, graph: hydra.graph.
     @lru_cache(1)
     def all_dep_names() -> frozenlist[hydra.core.Name]:
         return hydra.lib.lists.nub(hydra.lib.lists.concat2(hydra.lib.lists.map((lambda v1: v1.name), original), hydra.lib.lists.concat(hydra.lib.lists.map((lambda x1: dep_names(x1)), original))))
-    return hydra.lib.eithers.map_list((lambda name: hydra.lexical.require_binding(cx, graph, name)), all_dep_names())
+    return hydra.lib.eithers.map_list((lambda name: hydra.lexical.require_binding(graph, name)), all_dep_names())
 
 def flatten_let_terms(term: hydra.core.Term) -> hydra.core.Term:
     r"""Flatten nested let expressions."""
@@ -177,15 +178,15 @@ def flatten_let_terms(term: hydra.core.Term) -> hydra.core.Term:
         return _hoist_rewritten_body_1(rewritten())
     return hydra.rewriting.rewrite_term((lambda x1, x2: flatten(x1, x2)), term)
 
-def inline_type(schema: FrozenDict[hydra.core.Name, hydra.core.Type], typ: hydra.core.Type) -> Either[str, hydra.core.Type]:
+def inline_type(schema: FrozenDict[hydra.core.Name, hydra.core.Type], typ: hydra.core.Type) -> Either[hydra.errors.Error, hydra.core.Type]:
     r"""Inline all type variables in a type using the provided schema (Either version). Note: this function is only appropriate for nonrecursive type definitions."""
 
-    def f(recurse: Callable[[T0], Either[str, hydra.core.Type]], typ2: T0) -> Either[str, hydra.core.Type]:
+    def f(recurse: Callable[[T0], Either[hydra.errors.Error, hydra.core.Type]], typ2: T0) -> Either[hydra.errors.Error, hydra.core.Type]:
         def after_recurse(tr: hydra.core.Type):
             def _hoist_after_recurse_1(tr, v1):
                 match v1:
                     case hydra.core.TypeVariable(value=v):
-                        return hydra.lib.maybes.maybe((lambda : Left(hydra.lib.strings.cat2("No such type in schema: ", v.value))), (lambda v12: inline_type(schema, v12)), hydra.lib.maps.lookup(v, schema))
+                        return hydra.lib.maybes.maybe((lambda : Left(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError(hydra.lib.strings.cat2("No such type in schema: ", v.value)))))), (lambda v12: inline_type(schema, v12)), hydra.lib.maps.lookup(v, schema))
 
                     case _:
                         return Right(tr)

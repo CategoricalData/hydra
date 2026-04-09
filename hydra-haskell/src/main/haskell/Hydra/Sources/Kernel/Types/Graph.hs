@@ -72,7 +72,7 @@ primitive = define "Primitive" $
         ++ " (e.g. lists.map, lists.foldl, eithers.bind) which must evaluate function arguments"
         ++ " via term reduction; the Graph provides variable and primitive bindings,"
         ++ " while the Context supports tracing and error reporting.") $
-      Context.context ~> graph ~> T.list Core.term ~> T.either_ (Context.inContext @@ Error.error_) Core.term]
+      Context.context ~> graph ~> T.list Core.term ~> T.either_ Error.error_ Core.term]
 
 termCoder :: Binding
 termCoder = define "TermCoder" $
@@ -83,7 +83,7 @@ termCoder = define "TermCoder" $
       Core.type_,
     "encode">:
       doc "An encode function from terms to native values" $
-      Context.context ~> graph ~> Core.term ~> T.either_ (Context.inContext @@ Error.error_) "a",
+      Context.context ~> graph ~> Core.term ~> T.either_ Error.error_ "a",
     "decode">:
       doc "A decode function from native values to terms" $
-      Context.context ~> "a" ~> T.either_ (Context.inContext @@ Error.error_) Core.term]
+      Context.context ~> "a" ~> T.either_ Error.error_ Core.term]

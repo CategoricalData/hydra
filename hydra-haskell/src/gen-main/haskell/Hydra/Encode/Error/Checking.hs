@@ -6,6 +6,7 @@ module Hydra.Encode.Error.Checking where
 
 import qualified Hydra.Core as Core
 import qualified Hydra.Encode.Core as Core_
+import qualified Hydra.Encode.Paths as Paths
 import qualified Hydra.Encode.Typing as Typing
 import qualified Hydra.Encode.Variants as Variants
 import qualified Hydra.Error.Checking as Checking
@@ -31,6 +32,11 @@ checkingError x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "notAFunctionType"),
           Core.fieldTerm = (notAFunctionTypeError v0)}})
+      Checking.CheckingErrorOther v0 -> Core.TermUnion (Core.Injection {
+        Core.injectionTypeName = (Core.Name "hydra.error.checking.CheckingError"),
+        Core.injectionField = Core.Field {
+          Core.fieldName = (Core.Name "other"),
+          Core.fieldTerm = (otherCheckingError v0)}})
       Checking.CheckingErrorTypeArityMismatch v0 -> Core.TermUnion (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.error.checking.CheckingError"),
         Core.injectionField = Core.Field {
@@ -46,6 +52,11 @@ checkingError x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "unboundTypeVariables"),
           Core.fieldTerm = (unboundTypeVariablesError v0)}})
+      Checking.CheckingErrorUndefinedTermVariable v0 -> Core.TermUnion (Core.Injection {
+        Core.injectionTypeName = (Core.Name "hydra.error.checking.CheckingError"),
+        Core.injectionField = Core.Field {
+          Core.fieldName = (Core.Name "undefinedTermVariable"),
+          Core.fieldTerm = (undefinedTermVariableCheckingError v0)}})
       Checking.CheckingErrorUnequalTypes v0 -> Core.TermUnion (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.error.checking.CheckingError"),
         Core.injectionField = Core.Field {
@@ -66,6 +77,11 @@ checkingError x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "untypedLetBinding"),
           Core.fieldTerm = (untypedLetBindingError v0)}})
+      Checking.CheckingErrorUntypedTermVariable v0 -> Core.TermUnion (Core.Injection {
+        Core.injectionTypeName = (Core.Name "hydra.error.checking.CheckingError"),
+        Core.injectionField = Core.Field {
+          Core.fieldName = (Core.Name "untypedTermVariable"),
+          Core.fieldTerm = (untypedTermVariableCheckingError v0)}})
 
 incorrectUnificationError :: Checking.IncorrectUnificationError -> Core.Term
 incorrectUnificationError x =
@@ -96,6 +112,18 @@ notAFunctionTypeError x =
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core_.type_ (Checking.notAFunctionTypeErrorType x))}]})
+
+otherCheckingError :: Checking.OtherCheckingError -> Core.Term
+otherCheckingError x =
+    Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.error.checking.OtherCheckingError"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "path"),
+          Core.fieldTerm = (Paths.subtermPath (Checking.otherCheckingErrorPath x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "message"),
+          Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Checking.otherCheckingErrorMessage x))}]})
 
 typeArityMismatchError :: Checking.TypeArityMismatchError -> Core.Term
 typeArityMismatchError x =
@@ -139,6 +167,18 @@ unboundTypeVariablesError x =
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core_.type_ (Checking.unboundTypeVariablesErrorType x))}]})
 
+undefinedTermVariableCheckingError :: Checking.UndefinedTermVariableCheckingError -> Core.Term
+undefinedTermVariableCheckingError x =
+    Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.error.checking.UndefinedTermVariableCheckingError"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "path"),
+          Core.fieldTerm = (Paths.subtermPath (Checking.undefinedTermVariableCheckingErrorPath x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Core_.name (Checking.undefinedTermVariableCheckingErrorName x))}]})
+
 unequalTypesError :: Checking.UnequalTypesError -> Core.Term
 unequalTypesError x =
     Core.TermRecord (Core.Record {
@@ -174,3 +214,15 @@ untypedLetBindingError x =
         Core.Field {
           Core.fieldName = (Core.Name "binding"),
           Core.fieldTerm = (Core_.binding (Checking.untypedLetBindingErrorBinding x))}]})
+
+untypedTermVariableCheckingError :: Checking.UntypedTermVariableCheckingError -> Core.Term
+untypedTermVariableCheckingError x =
+    Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.error.checking.UntypedTermVariableCheckingError"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "path"),
+          Core.fieldTerm = (Paths.subtermPath (Checking.untypedTermVariableCheckingErrorPath x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Core_.name (Checking.untypedTermVariableCheckingErrorName x))}]})

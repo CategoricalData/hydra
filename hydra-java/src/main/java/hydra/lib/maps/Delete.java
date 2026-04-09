@@ -17,7 +17,6 @@ import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.map;
 import static hydra.dsl.Types.scheme;
 import hydra.context.Context;
-import hydra.context.InContext;
 import hydra.errors.Error_;
 import hydra.util.Either;
 
@@ -48,10 +47,10 @@ public class Delete extends PrimitiveFunction {
      * @return the implementation function
      */
     @Override
-    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
+    protected Function<List<Term>, Function<Context, Function<Graph, Either<Error_, Term>>>> implementation() {
         return args -> cx -> graph -> {
             Term key = args.get(0);
-            return hydra.lib.eithers.Map.apply(before -> Terms.map(apply(key, before)), hydra.extract.Core.map(cx, t -> Either.right(t), t -> Either.right(t), graph, args.get(1)));
+            return hydra.lib.eithers.Map.apply(before -> Terms.map(apply(key, before)), hydra.extract.Core.map(t -> Either.right(t), t -> Either.right(t), graph, args.get(1)));
         };
     }
 

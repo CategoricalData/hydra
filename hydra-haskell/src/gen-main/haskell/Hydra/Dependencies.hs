@@ -5,7 +5,6 @@
 module Hydra.Dependencies where
 
 import qualified Hydra.Coders as Coders
-import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Graph as Graph
@@ -32,12 +31,12 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | Get definitions with their dependencies
-definitionsWithDependencies :: Context.Context -> Graph.Graph -> [Core.Binding] -> Either (Context.InContext Errors.Error) [Core.Binding]
+definitionsWithDependencies :: t0 -> Graph.Graph -> [Core.Binding] -> Either Errors.Error [Core.Binding]
 definitionsWithDependencies cx graph original =
 
       let depNames = \el -> Sets.toList (termDependencyNames True False False (Core.bindingTerm el))
           allDepNames = Lists.nub (Lists.concat2 (Lists.map Core.bindingName original) (Lists.concat (Lists.map depNames original)))
-      in (Eithers.mapList (\name -> Lexical.requireBinding cx graph name) allDepNames)
+      in (Eithers.mapList (\name -> Lexical.requireBinding graph name) allDepNames)
 
 -- | Flatten nested let expressions
 flattenLetTerms :: Core.Term -> Core.Term
@@ -114,14 +113,14 @@ flattenLetTerms term =
       in (Rewriting.rewriteTerm flatten term)
 
 -- | Inline all type variables in a type using the provided schema (Either version). Note: this function is only appropriate for nonrecursive type definitions
-inlineType :: M.Map Core.Name Core.Type -> Core.Type -> Either String Core.Type
+inlineType :: M.Map Core.Name Core.Type -> Core.Type -> Either Errors.Error Core.Type
 inlineType schema typ =
 
       let f =
               \recurse -> \typ2 ->
                 let afterRecurse =
                         \tr -> case tr of
-                          Core.TypeVariable v0 -> Maybes.maybe (Left (Strings.cat2 "No such type in schema: " (Core.unName v0))) (inlineType schema) (Maps.lookup v0 schema)
+                          Core.TypeVariable v0 -> Maybes.maybe (Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "No such type in schema: " (Core.unName v0))))) (inlineType schema) (Maps.lookup v0 schema)
                           _ -> Right tr
                 in (Eithers.bind (recurse typ2) (\tr -> afterRecurse tr))
       in (Rewriting.rewriteTypeM f typ)

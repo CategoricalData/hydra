@@ -361,21 +361,10 @@
                                         "lambda": {
                                           "body": {
                                             "application": {
-                                              "argument": {
-                                                "application": {
-                                                  "argument": {"variable": "ic"},
-                                                  "function": {
-                                                    "typeApplication": {
-                                                      "body": {
-                                                        "function": {
-                                                          "elimination": {"record": {"field": "object", "typeName": "hydra.context.InContext"}}}},
-                                                      "type": {"variable": "hydra.errors.Error"}}}}},
+                                              "argument": {"variable": "e"},
                                               "function": {"variable": "hydra.show.errors.error"}}},
-                                          "domain": {
-                                            "application": {
-                                              "argument": {"variable": "hydra.errors.Error"},
-                                              "function": {"variable": "hydra.context.InContext"}}},
-                                          "parameter": "ic"}}},
+                                          "domain": {"variable": "hydra.errors.Error"},
+                                          "parameter": "e"}}},
                                     "function": {
                                       "typeApplication": {
                                         "body": {
@@ -385,10 +374,7 @@
                                                 "body": {
                                                   "typeApplication": {
                                                     "body": {"variable": "hydra.lib.eithers.bimap"},
-                                                    "type": {
-                                                      "application": {
-                                                        "argument": {"variable": "hydra.errors.Error"},
-                                                        "function": {"variable": "hydra.context.InContext"}}}}},
+                                                    "type": {"variable": "hydra.errors.Error"}}},
                                                 "type": {"variable": "hydra.typing.InferenceResult"}}},
                                             "type": {"literal": {"string": {}}}}},
                                         "type": {"variable": "hydra.core.Term"}}}}}}}}},

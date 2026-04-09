@@ -17,7 +17,6 @@ import static hydra.dsl.Types.list;
 import static hydra.dsl.Types.optional;
 import static hydra.dsl.Types.scheme;
 import hydra.context.Context;
-import hydra.context.InContext;
 import hydra.errors.Error_;
 import hydra.util.Either;
 
@@ -48,8 +47,8 @@ public class Cat extends PrimitiveFunction {
      * @return a function that filters and extracts Just values from a list
      */
     @Override
-    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Map.apply((Function<java.util.List<Maybe<Term>>, Term>) optionals -> Terms.list(apply(optionals)), hydra.extract.Core.listOf(cx, x -> hydra.extract.Core.maybeTerm(cx, t -> Either.right(t), graph, x), graph, args.get(0)));
+    protected Function<List<Term>, Function<Context, Function<Graph, Either<Error_, Term>>>> implementation() {
+        return args -> cx -> graph -> hydra.lib.eithers.Map.apply((Function<java.util.List<Maybe<Term>>, Term>) optionals -> Terms.list(apply(optionals)), hydra.extract.Core.listOf(x -> hydra.extract.Core.maybeTerm(t -> Either.right(t), graph, x), graph, args.get(0)));
     }
 
     /**

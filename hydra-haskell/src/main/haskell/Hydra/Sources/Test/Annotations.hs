@@ -158,7 +158,7 @@ descriptionTests = subgroup "descriptions" [
     (metaref Annotations.setTermDescription @@ (optional $ just $ string "A longer description with spaces") @@ booleanTerm True)
     (annotatedTerm (booleanTerm True) $ Terms.map $ Maps.singleton (nameTerm "description") (stringTerm "A longer description with spaces")),
 
-  -- Get existing description (returns Either (InContext Error) (Maybe String))
+  -- Get existing description (returns Either Error (Maybe String))
   annEvalCase "get existing description #1"
     (metaref Annotations.getTermDescription @@ testContext @@ testState
       @@ (metaref Annotations.setTermDescription @@ (optional $ just $ string "hello") @@ int32Term 42))

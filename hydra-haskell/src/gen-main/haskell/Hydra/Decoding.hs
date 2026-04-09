@@ -80,11 +80,9 @@ collectTypeVariablesFromType typ =
       _ -> []
 
 -- | Transform a type binding into a decoder binding
-decodeBinding :: Context.Context -> Graph.Graph -> Core.Binding -> Either (Context.InContext Errors.DecodingError) Core.Binding
+decodeBinding :: t0 -> Graph.Graph -> Core.Binding -> Either Errors.DecodingError Core.Binding
 decodeBinding cx graph b =
-    Eithers.bind (Eithers.bimap (\_wc_e -> Context.InContext {
-      Context.inContextObject = _wc_e,
-      Context.inContextContext = cx}) (\_wc_a -> _wc_a) (Core_.type_ graph (Core.bindingTerm b))) (\typ -> Right (Core.Binding {
+    Eithers.bind (Core_.type_ graph (Core.bindingTerm b)) (\typ -> Right (Core.Binding {
       Core.bindingName = (decodeBindingName (Core.bindingName b)),
       Core.bindingTerm = (decodeTypeNamed (Core.bindingName b) typ),
       Core.bindingType = (Just (decoderTypeSchemeNamed (Core.bindingName b) typ))}))
@@ -143,9 +141,7 @@ decodeLiteralType lt =
                 Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "err"),
                   Core.lambdaDomain = Nothing,
-                  Core.lambdaBody = (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                    Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
-                    Core.wrappedTermBody = (Core.TermVariable (Core.Name "err"))}))))})))})),
+                  Core.lambdaBody = (Core.TermEither (Left (Core.TermVariable (Core.Name "err"))))})))})),
               Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                 Core.lambdaParameter = (Core.Name "stripped"),
                 Core.lambdaDomain = Nothing,
@@ -178,7 +174,7 @@ decodeLiteralType lt =
                   Core.applicationArgument = (Core.TermVariable (Core.Name "stripped"))}))})))})),
             Core.applicationArgument = (Core.TermApplication (Core.Application {
               Core.applicationFunction = (Core.TermApplication (Core.Application {
-                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lexical.stripAndDereferenceTermEither")),
+                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.stripWithDecodingError")),
                 Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
               Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))})))}))
       Core.LiteralTypeBoolean -> Core.TermFunction (Core.FunctionLambda (Core.Lambda {
@@ -194,9 +190,7 @@ decodeLiteralType lt =
                 Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "err"),
                   Core.lambdaDomain = Nothing,
-                  Core.lambdaBody = (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                    Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
-                    Core.wrappedTermBody = (Core.TermVariable (Core.Name "err"))}))))})))})),
+                  Core.lambdaBody = (Core.TermEither (Left (Core.TermVariable (Core.Name "err"))))})))})),
               Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                 Core.lambdaParameter = (Core.Name "stripped"),
                 Core.lambdaDomain = Nothing,
@@ -229,7 +223,7 @@ decodeLiteralType lt =
                   Core.applicationArgument = (Core.TermVariable (Core.Name "stripped"))}))})))})),
             Core.applicationArgument = (Core.TermApplication (Core.Application {
               Core.applicationFunction = (Core.TermApplication (Core.Application {
-                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lexical.stripAndDereferenceTermEither")),
+                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.stripWithDecodingError")),
                 Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
               Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))})))}))
       Core.LiteralTypeFloat v0 -> case v0 of
@@ -246,9 +240,7 @@ decodeLiteralType lt =
                   Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "err"),
                     Core.lambdaDomain = Nothing,
-                    Core.lambdaBody = (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                      Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
-                      Core.wrappedTermBody = (Core.TermVariable (Core.Name "err"))}))))})))})),
+                    Core.lambdaBody = (Core.TermEither (Left (Core.TermVariable (Core.Name "err"))))})))})),
                 Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "stripped"),
                   Core.lambdaDomain = Nothing,
@@ -295,7 +287,7 @@ decodeLiteralType lt =
                     Core.applicationArgument = (Core.TermVariable (Core.Name "stripped"))}))})))})),
               Core.applicationArgument = (Core.TermApplication (Core.Application {
                 Core.applicationFunction = (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lexical.stripAndDereferenceTermEither")),
+                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.stripWithDecodingError")),
                   Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                 Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))})))}))
         Core.FloatTypeFloat32 -> Core.TermFunction (Core.FunctionLambda (Core.Lambda {
@@ -311,9 +303,7 @@ decodeLiteralType lt =
                   Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "err"),
                     Core.lambdaDomain = Nothing,
-                    Core.lambdaBody = (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                      Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
-                      Core.wrappedTermBody = (Core.TermVariable (Core.Name "err"))}))))})))})),
+                    Core.lambdaBody = (Core.TermEither (Left (Core.TermVariable (Core.Name "err"))))})))})),
                 Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "stripped"),
                   Core.lambdaDomain = Nothing,
@@ -360,7 +350,7 @@ decodeLiteralType lt =
                     Core.applicationArgument = (Core.TermVariable (Core.Name "stripped"))}))})))})),
               Core.applicationArgument = (Core.TermApplication (Core.Application {
                 Core.applicationFunction = (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lexical.stripAndDereferenceTermEither")),
+                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.stripWithDecodingError")),
                   Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                 Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))})))}))
         Core.FloatTypeFloat64 -> Core.TermFunction (Core.FunctionLambda (Core.Lambda {
@@ -376,9 +366,7 @@ decodeLiteralType lt =
                   Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "err"),
                     Core.lambdaDomain = Nothing,
-                    Core.lambdaBody = (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                      Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
-                      Core.wrappedTermBody = (Core.TermVariable (Core.Name "err"))}))))})))})),
+                    Core.lambdaBody = (Core.TermEither (Left (Core.TermVariable (Core.Name "err"))))})))})),
                 Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "stripped"),
                   Core.lambdaDomain = Nothing,
@@ -425,7 +413,7 @@ decodeLiteralType lt =
                     Core.applicationArgument = (Core.TermVariable (Core.Name "stripped"))}))})))})),
               Core.applicationArgument = (Core.TermApplication (Core.Application {
                 Core.applicationFunction = (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lexical.stripAndDereferenceTermEither")),
+                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.stripWithDecodingError")),
                   Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                 Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))})))}))
       Core.LiteralTypeInteger v0 -> case v0 of
@@ -442,9 +430,7 @@ decodeLiteralType lt =
                   Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "err"),
                     Core.lambdaDomain = Nothing,
-                    Core.lambdaBody = (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                      Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
-                      Core.wrappedTermBody = (Core.TermVariable (Core.Name "err"))}))))})))})),
+                    Core.lambdaBody = (Core.TermEither (Left (Core.TermVariable (Core.Name "err"))))})))})),
                 Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "stripped"),
                   Core.lambdaDomain = Nothing,
@@ -491,7 +477,7 @@ decodeLiteralType lt =
                     Core.applicationArgument = (Core.TermVariable (Core.Name "stripped"))}))})))})),
               Core.applicationArgument = (Core.TermApplication (Core.Application {
                 Core.applicationFunction = (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lexical.stripAndDereferenceTermEither")),
+                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.stripWithDecodingError")),
                   Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                 Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))})))}))
         Core.IntegerTypeInt8 -> Core.TermFunction (Core.FunctionLambda (Core.Lambda {
@@ -507,9 +493,7 @@ decodeLiteralType lt =
                   Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "err"),
                     Core.lambdaDomain = Nothing,
-                    Core.lambdaBody = (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                      Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
-                      Core.wrappedTermBody = (Core.TermVariable (Core.Name "err"))}))))})))})),
+                    Core.lambdaBody = (Core.TermEither (Left (Core.TermVariable (Core.Name "err"))))})))})),
                 Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "stripped"),
                   Core.lambdaDomain = Nothing,
@@ -556,7 +540,7 @@ decodeLiteralType lt =
                     Core.applicationArgument = (Core.TermVariable (Core.Name "stripped"))}))})))})),
               Core.applicationArgument = (Core.TermApplication (Core.Application {
                 Core.applicationFunction = (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lexical.stripAndDereferenceTermEither")),
+                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.stripWithDecodingError")),
                   Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                 Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))})))}))
         Core.IntegerTypeInt16 -> Core.TermFunction (Core.FunctionLambda (Core.Lambda {
@@ -572,9 +556,7 @@ decodeLiteralType lt =
                   Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "err"),
                     Core.lambdaDomain = Nothing,
-                    Core.lambdaBody = (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                      Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
-                      Core.wrappedTermBody = (Core.TermVariable (Core.Name "err"))}))))})))})),
+                    Core.lambdaBody = (Core.TermEither (Left (Core.TermVariable (Core.Name "err"))))})))})),
                 Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "stripped"),
                   Core.lambdaDomain = Nothing,
@@ -621,7 +603,7 @@ decodeLiteralType lt =
                     Core.applicationArgument = (Core.TermVariable (Core.Name "stripped"))}))})))})),
               Core.applicationArgument = (Core.TermApplication (Core.Application {
                 Core.applicationFunction = (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lexical.stripAndDereferenceTermEither")),
+                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.stripWithDecodingError")),
                   Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                 Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))})))}))
         Core.IntegerTypeInt32 -> Core.TermFunction (Core.FunctionLambda (Core.Lambda {
@@ -637,9 +619,7 @@ decodeLiteralType lt =
                   Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "err"),
                     Core.lambdaDomain = Nothing,
-                    Core.lambdaBody = (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                      Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
-                      Core.wrappedTermBody = (Core.TermVariable (Core.Name "err"))}))))})))})),
+                    Core.lambdaBody = (Core.TermEither (Left (Core.TermVariable (Core.Name "err"))))})))})),
                 Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "stripped"),
                   Core.lambdaDomain = Nothing,
@@ -686,7 +666,7 @@ decodeLiteralType lt =
                     Core.applicationArgument = (Core.TermVariable (Core.Name "stripped"))}))})))})),
               Core.applicationArgument = (Core.TermApplication (Core.Application {
                 Core.applicationFunction = (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lexical.stripAndDereferenceTermEither")),
+                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.stripWithDecodingError")),
                   Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                 Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))})))}))
         Core.IntegerTypeInt64 -> Core.TermFunction (Core.FunctionLambda (Core.Lambda {
@@ -702,9 +682,7 @@ decodeLiteralType lt =
                   Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "err"),
                     Core.lambdaDomain = Nothing,
-                    Core.lambdaBody = (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                      Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
-                      Core.wrappedTermBody = (Core.TermVariable (Core.Name "err"))}))))})))})),
+                    Core.lambdaBody = (Core.TermEither (Left (Core.TermVariable (Core.Name "err"))))})))})),
                 Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "stripped"),
                   Core.lambdaDomain = Nothing,
@@ -751,7 +729,7 @@ decodeLiteralType lt =
                     Core.applicationArgument = (Core.TermVariable (Core.Name "stripped"))}))})))})),
               Core.applicationArgument = (Core.TermApplication (Core.Application {
                 Core.applicationFunction = (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lexical.stripAndDereferenceTermEither")),
+                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.stripWithDecodingError")),
                   Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                 Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))})))}))
         Core.IntegerTypeUint8 -> Core.TermFunction (Core.FunctionLambda (Core.Lambda {
@@ -767,9 +745,7 @@ decodeLiteralType lt =
                   Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "err"),
                     Core.lambdaDomain = Nothing,
-                    Core.lambdaBody = (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                      Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
-                      Core.wrappedTermBody = (Core.TermVariable (Core.Name "err"))}))))})))})),
+                    Core.lambdaBody = (Core.TermEither (Left (Core.TermVariable (Core.Name "err"))))})))})),
                 Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "stripped"),
                   Core.lambdaDomain = Nothing,
@@ -816,7 +792,7 @@ decodeLiteralType lt =
                     Core.applicationArgument = (Core.TermVariable (Core.Name "stripped"))}))})))})),
               Core.applicationArgument = (Core.TermApplication (Core.Application {
                 Core.applicationFunction = (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lexical.stripAndDereferenceTermEither")),
+                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.stripWithDecodingError")),
                   Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                 Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))})))}))
         Core.IntegerTypeUint16 -> Core.TermFunction (Core.FunctionLambda (Core.Lambda {
@@ -832,9 +808,7 @@ decodeLiteralType lt =
                   Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "err"),
                     Core.lambdaDomain = Nothing,
-                    Core.lambdaBody = (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                      Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
-                      Core.wrappedTermBody = (Core.TermVariable (Core.Name "err"))}))))})))})),
+                    Core.lambdaBody = (Core.TermEither (Left (Core.TermVariable (Core.Name "err"))))})))})),
                 Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "stripped"),
                   Core.lambdaDomain = Nothing,
@@ -881,7 +855,7 @@ decodeLiteralType lt =
                     Core.applicationArgument = (Core.TermVariable (Core.Name "stripped"))}))})))})),
               Core.applicationArgument = (Core.TermApplication (Core.Application {
                 Core.applicationFunction = (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lexical.stripAndDereferenceTermEither")),
+                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.stripWithDecodingError")),
                   Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                 Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))})))}))
         Core.IntegerTypeUint32 -> Core.TermFunction (Core.FunctionLambda (Core.Lambda {
@@ -897,9 +871,7 @@ decodeLiteralType lt =
                   Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "err"),
                     Core.lambdaDomain = Nothing,
-                    Core.lambdaBody = (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                      Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
-                      Core.wrappedTermBody = (Core.TermVariable (Core.Name "err"))}))))})))})),
+                    Core.lambdaBody = (Core.TermEither (Left (Core.TermVariable (Core.Name "err"))))})))})),
                 Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "stripped"),
                   Core.lambdaDomain = Nothing,
@@ -946,7 +918,7 @@ decodeLiteralType lt =
                     Core.applicationArgument = (Core.TermVariable (Core.Name "stripped"))}))})))})),
               Core.applicationArgument = (Core.TermApplication (Core.Application {
                 Core.applicationFunction = (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lexical.stripAndDereferenceTermEither")),
+                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.stripWithDecodingError")),
                   Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                 Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))})))}))
         Core.IntegerTypeUint64 -> Core.TermFunction (Core.FunctionLambda (Core.Lambda {
@@ -962,9 +934,7 @@ decodeLiteralType lt =
                   Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "err"),
                     Core.lambdaDomain = Nothing,
-                    Core.lambdaBody = (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                      Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
-                      Core.wrappedTermBody = (Core.TermVariable (Core.Name "err"))}))))})))})),
+                    Core.lambdaBody = (Core.TermEither (Left (Core.TermVariable (Core.Name "err"))))})))})),
                 Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "stripped"),
                   Core.lambdaDomain = Nothing,
@@ -1011,7 +981,7 @@ decodeLiteralType lt =
                     Core.applicationArgument = (Core.TermVariable (Core.Name "stripped"))}))})))})),
               Core.applicationArgument = (Core.TermApplication (Core.Application {
                 Core.applicationFunction = (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lexical.stripAndDereferenceTermEither")),
+                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.stripWithDecodingError")),
                   Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                 Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))})))}))
       Core.LiteralTypeString -> Core.TermFunction (Core.FunctionLambda (Core.Lambda {
@@ -1027,9 +997,7 @@ decodeLiteralType lt =
                 Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "err"),
                   Core.lambdaDomain = Nothing,
-                  Core.lambdaBody = (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                    Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
-                    Core.wrappedTermBody = (Core.TermVariable (Core.Name "err"))}))))})))})),
+                  Core.lambdaBody = (Core.TermEither (Left (Core.TermVariable (Core.Name "err"))))})))})),
               Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                 Core.lambdaParameter = (Core.Name "stripped"),
                 Core.lambdaDomain = Nothing,
@@ -1062,7 +1030,7 @@ decodeLiteralType lt =
                   Core.applicationArgument = (Core.TermVariable (Core.Name "stripped"))}))})))})),
             Core.applicationArgument = (Core.TermApplication (Core.Application {
               Core.applicationFunction = (Core.TermApplication (Core.Application {
-                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lexical.stripAndDereferenceTermEither")),
+                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.stripWithDecodingError")),
                 Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
               Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))})))}))
 
@@ -1088,7 +1056,7 @@ decodeMaybeType elemType =
         Core.applicationArgument = elemDecoder}))
 
 -- | Transform a type module into a decoder module
-decodeModule :: Context.Context -> Graph.Graph -> Packaging.Module -> Either (Context.InContext Errors.Error) (Maybe Packaging.Module)
+decodeModule :: Context.Context -> Graph.Graph -> Packaging.Module -> Either Errors.Error (Maybe Packaging.Module)
 decodeModule cx graph mod =
     Eithers.bind (filterTypeBindings cx graph (Maybes.cat (Lists.map (\d -> case d of
       Packaging.DefinitionType v0 -> Just ((\name -> \typ ->
@@ -1105,9 +1073,7 @@ decodeModule cx graph mod =
             Core.typeSchemeVariables = [],
             Core.typeSchemeType = (Core.TypeVariable (Core.Name "hydra.core.Type")),
             Core.typeSchemeConstraints = Nothing}))}) (Packaging.typeDefinitionName v0) (Core.typeSchemeType (Packaging.typeDefinitionType v0)))
-      _ -> Nothing) (Packaging.moduleDefinitions mod)))) (\typeBindings -> Logic.ifElse (Lists.null typeBindings) (Right Nothing) (Eithers.bind (Eithers.mapList (\b -> Eithers.bimap (\ic -> Context.InContext {
-      Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Errors.unDecodingError (Context.inContextObject ic)))),
-      Context.inContextContext = (Context.inContextContext ic)}) (\x -> x) (decodeBinding cx graph b)) typeBindings) (\decodedBindings ->
+      _ -> Nothing) (Packaging.moduleDefinitions mod)))) (\typeBindings -> Logic.ifElse (Lists.null typeBindings) (Right Nothing) (Eithers.bind (Eithers.mapList (\b -> Eithers.bimap (\_e -> Errors.ErrorDecoding _e) (\x -> x) (decodeBinding cx graph b)) typeBindings) (\decodedBindings ->
       let decodedTypeDeps = Lists.map decodeNamespace (Packaging.moduleTypeDependencies mod)
           decodedTermDeps = Lists.map decodeNamespace (Packaging.moduleTermDependencies mod)
           allDecodedDeps = Lists.nub (Lists.concat2 decodedTypeDeps decodedTermDeps)
@@ -1197,9 +1163,7 @@ decodeRecordTypeImpl tname rt =
                 Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "err"),
                   Core.lambdaDomain = Nothing,
-                  Core.lambdaBody = (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                    Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
-                    Core.wrappedTermBody = (Core.TermVariable (Core.Name "err"))}))))})))})),
+                  Core.lambdaBody = (Core.TermEither (Left (Core.TermVariable (Core.Name "err"))))})))})),
               Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                 Core.lambdaParameter = (Core.Name "stripped"),
                 Core.lambdaDomain = Nothing,
@@ -1227,7 +1191,7 @@ decodeRecordTypeImpl tname rt =
                   Core.applicationArgument = (Core.TermVariable (Core.Name "stripped"))}))})))})),
             Core.applicationArgument = (Core.TermApplication (Core.Application {
               Core.applicationFunction = (Core.TermApplication (Core.Application {
-                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lexical.stripAndDereferenceTermEither")),
+                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.stripWithDecodingError")),
                 Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
               Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))})))})))
 
@@ -1354,9 +1318,7 @@ decodeUnionTypeNamed ename rt =
                 Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "err"),
                   Core.lambdaDomain = Nothing,
-                  Core.lambdaBody = (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                    Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
-                    Core.wrappedTermBody = (Core.TermVariable (Core.Name "err"))}))))})))})),
+                  Core.lambdaBody = (Core.TermEither (Left (Core.TermVariable (Core.Name "err"))))})))})),
               Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                 Core.lambdaParameter = (Core.Name "stripped"),
                 Core.lambdaDomain = Nothing,
@@ -1432,13 +1394,24 @@ decodeUnionTypeNamed ename rt =
                   Core.applicationArgument = (Core.TermVariable (Core.Name "stripped"))}))})))})),
             Core.applicationArgument = (Core.TermApplication (Core.Application {
               Core.applicationFunction = (Core.TermApplication (Core.Application {
-                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lexical.stripAndDereferenceTermEither")),
+                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.stripWithDecodingError")),
                 Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
               Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))})))})))
 
 -- | Generate a decoder for the unit type
 decodeUnitType :: Core.Term
-decodeUnitType = Core.TermVariable (Core.Name "hydra.extract.core.decodeUnit")
+decodeUnitType =
+    Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+      Core.lambdaParameter = (Core.Name "cx"),
+      Core.lambdaDomain = Nothing,
+      Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+        Core.lambdaParameter = (Core.Name "t"),
+        Core.lambdaDomain = Nothing,
+        Core.lambdaBody = (Core.TermApplication (Core.Application {
+          Core.applicationFunction = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.decodeUnit")),
+            Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
+          Core.applicationArgument = (Core.TermVariable (Core.Name "t"))}))})))}))
 
 -- | Generate a decoder for a wrapped type
 decodeWrappedType :: Core.Type -> Core.Term
@@ -1462,9 +1435,7 @@ decodeWrappedTypeNamed ename wt =
                 Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "err"),
                   Core.lambdaDomain = Nothing,
-                  Core.lambdaBody = (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                    Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
-                    Core.wrappedTermBody = (Core.TermVariable (Core.Name "err"))}))))})))})),
+                  Core.lambdaBody = (Core.TermEither (Left (Core.TermVariable (Core.Name "err"))))})))})),
               Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                 Core.lambdaParameter = (Core.Name "stripped"),
                 Core.lambdaDomain = Nothing,
@@ -1501,7 +1472,7 @@ decodeWrappedTypeNamed ename wt =
                   Core.applicationArgument = (Core.TermVariable (Core.Name "stripped"))}))})))})),
             Core.applicationArgument = (Core.TermApplication (Core.Application {
               Core.applicationFunction = (Core.TermApplication (Core.Application {
-                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lexical.stripAndDereferenceTermEither")),
+                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.stripWithDecodingError")),
                 Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
               Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))})))})))
 
@@ -1643,12 +1614,12 @@ decoderTypeSchemeNamed ename typ =
         Core.typeSchemeConstraints = constraints}
 
 -- | Filter bindings to only decodable type definitions
-filterTypeBindings :: Context.Context -> Graph.Graph -> [Core.Binding] -> Either (Context.InContext Errors.Error) [Core.Binding]
+filterTypeBindings :: Context.Context -> Graph.Graph -> [Core.Binding] -> Either Errors.Error [Core.Binding]
 filterTypeBindings cx graph bindings =
     Eithers.map Maybes.cat (Eithers.mapList (isDecodableBinding cx graph) (Lists.filter Annotations.isNativeType bindings))
 
 -- | Check if a binding is decodable (serializable type)
-isDecodableBinding :: Context.Context -> Graph.Graph -> Core.Binding -> Either (Context.InContext Errors.Error) (Maybe Core.Binding)
+isDecodableBinding :: Context.Context -> Graph.Graph -> Core.Binding -> Either Errors.Error (Maybe Core.Binding)
 isDecodableBinding cx graph b =
     Eithers.bind (Predicates.isSerializableByName cx graph (Core.bindingName b)) (\serializable -> Right (Logic.ifElse serializable (Just b) Nothing))
 

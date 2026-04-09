@@ -141,9 +141,7 @@ typesByName =
                     Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
                       Core.functionTypeDomain = (Core.TypeVariable (Core.Name "v1")),
                       Core.functionTypeCodomain = (Core.TypeEither (Core.EitherType {
-                        Core.eitherTypeLeft = (Core.TypeApplication (Core.ApplicationType {
-                          Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.context.InContext")),
-                          Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "hydra.errors.Error"))})),
+                        Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.errors.Error")),
                         Core.eitherTypeRight = (Core.TypeVariable (Core.Name "v2"))}))}))})),
                   Core.annotatedTypeAnnotation = (M.fromList [
                     (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A function which encodes source values as target values in a given context")))])}))},
@@ -155,9 +153,7 @@ typesByName =
                     Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
                       Core.functionTypeDomain = (Core.TypeVariable (Core.Name "v2")),
                       Core.functionTypeCodomain = (Core.TypeEither (Core.EitherType {
-                        Core.eitherTypeLeft = (Core.TypeApplication (Core.ApplicationType {
-                          Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.context.InContext")),
-                          Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "hydra.errors.Error"))})),
+                        Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.errors.Error")),
                         Core.eitherTypeRight = (Core.TypeVariable (Core.Name "v1"))}))}))})),
                   Core.annotatedTypeAnnotation = (M.fromList [
                     (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A function which decodes target values as source values in a given context")))])}))}])}))})),
@@ -1225,6 +1221,10 @@ typesByName =
         Core.annotatedTypeBody = (Core.TypeWrap (Core.TypeLiteral Core.LiteralTypeString)),
         Core.annotatedTypeAnnotation = (M.fromList [
           (Core.Name "description", (Core.TermLiteral (Core.LiteralString "An error that occurred during decoding of a term")))])}))),
+      (Core.Name "hydra.errors.EmptyListError", (Core.TypeAnnotated (Core.AnnotatedType {
+        Core.annotatedTypeBody = Core.TypeUnit,
+        Core.annotatedTypeAnnotation = (M.fromList [
+          (Core.Name "description", (Core.TermLiteral (Core.LiteralString "An empty list was encountered where a non-empty list was required")))])}))),
       (Core.Name "hydra.errors.Error", (Core.TypeAnnotated (Core.AnnotatedType {
         Core.annotatedTypeBody = (Core.TypeUnion [
           Core.FieldType {
@@ -1252,11 +1252,29 @@ typesByName =
               Core.annotatedTypeAnnotation = (M.fromList [
                 (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A duplicate field name error")))])}))},
           Core.FieldType {
+            Core.fieldTypeName = (Core.Name "extraction"),
+            Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+              Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.errors.ExtractionError")),
+              Core.annotatedTypeAnnotation = (M.fromList [
+                (Core.Name "description", (Core.TermLiteral (Core.LiteralString "An error that occurred while extracting a value from a term")))])}))},
+          Core.FieldType {
+            Core.fieldTypeName = (Core.Name "inference"),
+            Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+              Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.errors.InferenceError")),
+              Core.annotatedTypeAnnotation = (M.fromList [
+                (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A type inference error")))])}))},
+          Core.FieldType {
             Core.fieldTypeName = (Core.Name "other"),
             Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
               Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.errors.OtherError")),
               Core.annotatedTypeAnnotation = (M.fromList [
                 (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Any other error")))])}))},
+          Core.FieldType {
+            Core.fieldTypeName = (Core.Name "resolution"),
+            Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+              Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.errors.ResolutionError")),
+              Core.annotatedTypeAnnotation = (M.fromList [
+                (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A name-resolution error")))])}))},
           Core.FieldType {
             Core.fieldTypeName = (Core.Name "undefinedField"),
             Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
@@ -1295,10 +1313,202 @@ typesByName =
                 (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A type unification error")))])}))}]),
         Core.annotatedTypeAnnotation = (M.fromList [
           (Core.Name "description", (Core.TermLiteral (Core.LiteralString "An error of any kind, with kernel errors particularly differentiated")))])}))),
+      (Core.Name "hydra.errors.ExtractionError", (Core.TypeAnnotated (Core.AnnotatedType {
+        Core.annotatedTypeBody = (Core.TypeUnion [
+          Core.FieldType {
+            Core.fieldTypeName = (Core.Name "emptyList"),
+            Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+              Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.errors.EmptyListError")),
+              Core.annotatedTypeAnnotation = (M.fromList [
+                (Core.Name "description", (Core.TermLiteral (Core.LiteralString "An empty list was encountered where a non-empty list was required")))])}))},
+          Core.FieldType {
+            Core.fieldTypeName = (Core.Name "multipleBindings"),
+            Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+              Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.errors.MultipleBindingsError")),
+              Core.annotatedTypeAnnotation = (M.fromList [
+                (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Multiple let bindings were found with the same name")))])}))},
+          Core.FieldType {
+            Core.fieldTypeName = (Core.Name "multipleFields"),
+            Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+              Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.errors.MultipleFieldsError")),
+              Core.annotatedTypeAnnotation = (M.fromList [
+                (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Multiple record fields were found with the same field name")))])}))},
+          Core.FieldType {
+            Core.fieldTypeName = (Core.Name "noMatchingField"),
+            Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+              Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.errors.NoMatchingFieldError")),
+              Core.annotatedTypeAnnotation = (M.fromList [
+                (Core.Name "description", (Core.TermLiteral (Core.LiteralString "No field with the expected name was found in a record")))])}))},
+          Core.FieldType {
+            Core.fieldTypeName = (Core.Name "noSuchBinding"),
+            Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+              Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.errors.NoSuchBindingError")),
+              Core.annotatedTypeAnnotation = (M.fromList [
+                (Core.Name "description", (Core.TermLiteral (Core.LiteralString "No let binding with the expected name was found")))])}))},
+          Core.FieldType {
+            Core.fieldTypeName = (Core.Name "notEnoughCases"),
+            Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+              Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.errors.NotEnoughCasesError")),
+              Core.annotatedTypeAnnotation = (M.fromList [
+                (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A case statement did not contain enough cases to match the target")))])}))},
+          Core.FieldType {
+            Core.fieldTypeName = (Core.Name "unexpectedShape"),
+            Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+              Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.errors.UnexpectedShapeError")),
+              Core.annotatedTypeAnnotation = (M.fromList [
+                (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A term, type, literal, or other value had an unexpected shape")))])}))}]),
+        Core.annotatedTypeAnnotation = (M.fromList [
+          (Core.Name "description", (Core.TermLiteral (Core.LiteralString "An error that occurred while extracting a typed value from a term")))])}))),
+      (Core.Name "hydra.errors.InferenceError", (Core.TypeAnnotated (Core.AnnotatedType {
+        Core.annotatedTypeBody = (Core.TypeUnion [
+          Core.FieldType {
+            Core.fieldTypeName = (Core.Name "checking"),
+            Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+              Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.error.checking.CheckingError")),
+              Core.annotatedTypeAnnotation = (M.fromList [
+                (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A type checking error encountered during inference")))])}))},
+          Core.FieldType {
+            Core.fieldTypeName = (Core.Name "other"),
+            Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+              Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.errors.OtherInferenceError")),
+              Core.annotatedTypeAnnotation = (M.fromList [
+                (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A generic inference error carrying a message and a subterm path. Placeholder arm; sites should migrate to typed variants.")))])}))},
+          Core.FieldType {
+            Core.fieldTypeName = (Core.Name "unification"),
+            Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+              Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.errors.UnificationInferenceError")),
+              Core.annotatedTypeAnnotation = (M.fromList [
+                (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A unification failure encountered while inferring types")))])}))}]),
+        Core.annotatedTypeAnnotation = (M.fromList [
+          (Core.Name "description", (Core.TermLiteral (Core.LiteralString "An error that occurred during type inference")))])}))),
+      (Core.Name "hydra.errors.MultipleBindingsError", (Core.TypeAnnotated (Core.AnnotatedType {
+        Core.annotatedTypeBody = (Core.TypeRecord [
+          Core.FieldType {
+            Core.fieldTypeName = (Core.Name "name"),
+            Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+              Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.core.Name")),
+              Core.annotatedTypeAnnotation = (M.fromList [
+                (Core.Name "description", (Core.TermLiteral (Core.LiteralString "The binding name which was duplicated")))])}))}]),
+        Core.annotatedTypeAnnotation = (M.fromList [
+          (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Multiple let bindings with the same name were found")))])}))),
+      (Core.Name "hydra.errors.MultipleFieldsError", (Core.TypeAnnotated (Core.AnnotatedType {
+        Core.annotatedTypeBody = (Core.TypeRecord [
+          Core.FieldType {
+            Core.fieldTypeName = (Core.Name "fieldName"),
+            Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+              Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.core.Name")),
+              Core.annotatedTypeAnnotation = (M.fromList [
+                (Core.Name "description", (Core.TermLiteral (Core.LiteralString "The field name which appeared more than once")))])}))}]),
+        Core.annotatedTypeAnnotation = (M.fromList [
+          (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Multiple fields with the same name were found in a record")))])}))),
+      (Core.Name "hydra.errors.NoMatchingFieldError", (Core.TypeAnnotated (Core.AnnotatedType {
+        Core.annotatedTypeBody = (Core.TypeRecord [
+          Core.FieldType {
+            Core.fieldTypeName = (Core.Name "fieldName"),
+            Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+              Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.core.Name")),
+              Core.annotatedTypeAnnotation = (M.fromList [
+                (Core.Name "description", (Core.TermLiteral (Core.LiteralString "The field name which was not found")))])}))}]),
+        Core.annotatedTypeAnnotation = (M.fromList [
+          (Core.Name "description", (Core.TermLiteral (Core.LiteralString "No field with the expected name was present")))])}))),
+      (Core.Name "hydra.errors.NoSuchBindingError", (Core.TypeAnnotated (Core.AnnotatedType {
+        Core.annotatedTypeBody = (Core.TypeRecord [
+          Core.FieldType {
+            Core.fieldTypeName = (Core.Name "name"),
+            Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+              Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.core.Name")),
+              Core.annotatedTypeAnnotation = (M.fromList [
+                (Core.Name "description", (Core.TermLiteral (Core.LiteralString "The binding name which was not found")))])}))}]),
+        Core.annotatedTypeAnnotation = (M.fromList [
+          (Core.Name "description", (Core.TermLiteral (Core.LiteralString "No let binding with the expected name was present")))])}))),
+      (Core.Name "hydra.errors.NoSuchPrimitiveError", (Core.TypeAnnotated (Core.AnnotatedType {
+        Core.annotatedTypeBody = (Core.TypeRecord [
+          Core.FieldType {
+            Core.fieldTypeName = (Core.Name "name"),
+            Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+              Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.core.Name")),
+              Core.annotatedTypeAnnotation = (M.fromList [
+                (Core.Name "description", (Core.TermLiteral (Core.LiteralString "The primitive name which was not found")))])}))}]),
+        Core.annotatedTypeAnnotation = (M.fromList [
+          (Core.Name "description", (Core.TermLiteral (Core.LiteralString "No primitive function with the expected name was registered in the graph")))])}))),
+      (Core.Name "hydra.errors.NotEnoughCasesError", (Core.TypeAnnotated (Core.AnnotatedType {
+        Core.annotatedTypeBody = Core.TypeUnit,
+        Core.annotatedTypeAnnotation = (M.fromList [
+          (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A case statement was missing a case for the requested variant")))])}))),
       (Core.Name "hydra.errors.OtherError", (Core.TypeAnnotated (Core.AnnotatedType {
         Core.annotatedTypeBody = (Core.TypeWrap (Core.TypeLiteral Core.LiteralTypeString)),
         Core.annotatedTypeAnnotation = (M.fromList [
           (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Any other error")))])}))),
+      (Core.Name "hydra.errors.OtherInferenceError", (Core.TypeAnnotated (Core.AnnotatedType {
+        Core.annotatedTypeBody = (Core.TypeRecord [
+          Core.FieldType {
+            Core.fieldTypeName = (Core.Name "path"),
+            Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+              Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.paths.SubtermPath")),
+              Core.annotatedTypeAnnotation = (M.fromList [
+                (Core.Name "description", (Core.TermLiteral (Core.LiteralString "The subterm path at which the error was observed")))])}))},
+          Core.FieldType {
+            Core.fieldTypeName = (Core.Name "message"),
+            Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+              Core.annotatedTypeBody = (Core.TypeLiteral Core.LiteralTypeString),
+              Core.annotatedTypeAnnotation = (M.fromList [
+                (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A human-readable error message")))])}))}]),
+        Core.annotatedTypeAnnotation = (M.fromList [
+          (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A generic inference error: message + subterm path")))])}))),
+      (Core.Name "hydra.errors.OtherResolutionError", (Core.TypeAnnotated (Core.AnnotatedType {
+        Core.annotatedTypeBody = (Core.TypeWrap (Core.TypeLiteral Core.LiteralTypeString)),
+        Core.annotatedTypeAnnotation = (M.fromList [
+          (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A generic resolution error: message")))])}))),
+      (Core.Name "hydra.errors.ResolutionError", (Core.TypeAnnotated (Core.AnnotatedType {
+        Core.annotatedTypeBody = (Core.TypeUnion [
+          Core.FieldType {
+            Core.fieldTypeName = (Core.Name "noSuchBinding"),
+            Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+              Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.errors.NoSuchBindingError")),
+              Core.annotatedTypeAnnotation = (M.fromList [
+                (Core.Name "description", (Core.TermLiteral (Core.LiteralString "No binding with the expected name was found in the graph")))])}))},
+          Core.FieldType {
+            Core.fieldTypeName = (Core.Name "noSuchPrimitive"),
+            Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+              Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.errors.NoSuchPrimitiveError")),
+              Core.annotatedTypeAnnotation = (M.fromList [
+                (Core.Name "description", (Core.TermLiteral (Core.LiteralString "No primitive function with the expected name was found in the graph")))])}))},
+          Core.FieldType {
+            Core.fieldTypeName = (Core.Name "noMatchingField"),
+            Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+              Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.errors.NoMatchingFieldError")),
+              Core.annotatedTypeAnnotation = (M.fromList [
+                (Core.Name "description", (Core.TermLiteral (Core.LiteralString "No field with the expected name was present in a record or case statement")))])}))},
+          Core.FieldType {
+            Core.fieldTypeName = (Core.Name "other"),
+            Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+              Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.errors.OtherResolutionError")),
+              Core.annotatedTypeAnnotation = (M.fromList [
+                (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A generic resolution error carrying a message")))])}))},
+          Core.FieldType {
+            Core.fieldTypeName = (Core.Name "unexpectedShape"),
+            Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+              Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.errors.UnexpectedShapeError")),
+              Core.annotatedTypeAnnotation = (M.fromList [
+                (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A term had a shape other than the one expected (e.g. a record, an injection)")))])}))}]),
+        Core.annotatedTypeAnnotation = (M.fromList [
+          (Core.Name "description", (Core.TermLiteral (Core.LiteralString "An error that occurred while resolving a name, primitive, or record/union shape in a graph")))])}))),
+      (Core.Name "hydra.errors.UnexpectedShapeError", (Core.TypeAnnotated (Core.AnnotatedType {
+        Core.annotatedTypeBody = (Core.TypeRecord [
+          Core.FieldType {
+            Core.fieldTypeName = (Core.Name "expected"),
+            Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+              Core.annotatedTypeBody = (Core.TypeLiteral Core.LiteralTypeString),
+              Core.annotatedTypeAnnotation = (M.fromList [
+                (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A description of the expected shape")))])}))},
+          Core.FieldType {
+            Core.fieldTypeName = (Core.Name "actual"),
+            Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+              Core.annotatedTypeBody = (Core.TypeLiteral Core.LiteralTypeString),
+              Core.annotatedTypeAnnotation = (M.fromList [
+                (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A description of the shape actually encountered")))])}))}]),
+        Core.annotatedTypeAnnotation = (M.fromList [
+          (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A term, type, literal, or related value had a shape other than the one expected")))])}))),
       (Core.Name "hydra.errors.UnificationError", (Core.TypeAnnotated (Core.AnnotatedType {
         Core.annotatedTypeBody = (Core.TypeRecord [
           Core.FieldType {
@@ -1321,6 +1531,22 @@ typesByName =
                 (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A human-readable error message")))])}))}]),
         Core.annotatedTypeAnnotation = (M.fromList [
           (Core.Name "description", (Core.TermLiteral (Core.LiteralString "An error that occurred during type unification")))])}))),
+      (Core.Name "hydra.errors.UnificationInferenceError", (Core.TypeAnnotated (Core.AnnotatedType {
+        Core.annotatedTypeBody = (Core.TypeRecord [
+          Core.FieldType {
+            Core.fieldTypeName = (Core.Name "path"),
+            Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+              Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.paths.SubtermPath")),
+              Core.annotatedTypeAnnotation = (M.fromList [
+                (Core.Name "description", (Core.TermLiteral (Core.LiteralString "The subterm path at which the unification failure was observed")))])}))},
+          Core.FieldType {
+            Core.fieldTypeName = (Core.Name "cause"),
+            Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+              Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.errors.UnificationError")),
+              Core.annotatedTypeAnnotation = (M.fromList [
+                (Core.Name "description", (Core.TermLiteral (Core.LiteralString "The underlying unification error")))])}))}]),
+        Core.annotatedTypeAnnotation = (M.fromList [
+          (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A unification failure at a specific subterm locus during inference")))])}))),
       (Core.Name "hydra.graph.Graph", (Core.TypeAnnotated (Core.AnnotatedType {
         Core.annotatedTypeBody = (Core.TypeRecord [
           Core.FieldType {
@@ -1409,9 +1635,7 @@ typesByName =
                   Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
                     Core.functionTypeDomain = (Core.TypeList (Core.TypeVariable (Core.Name "hydra.core.Term"))),
                     Core.functionTypeCodomain = (Core.TypeEither (Core.EitherType {
-                      Core.eitherTypeLeft = (Core.TypeApplication (Core.ApplicationType {
-                        Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.context.InContext")),
-                        Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "hydra.errors.Error"))})),
+                      Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.errors.Error")),
                       Core.eitherTypeRight = (Core.TypeVariable (Core.Name "hydra.core.Term"))}))}))}))})),
               Core.annotatedTypeAnnotation = (M.fromList [
                 (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A concrete implementation of the primitive function. The Context and Graph parameters are needed by higher-order primitives (e.g. lists.map, lists.foldl, eithers.bind) which must evaluate function arguments via term reduction; the Graph provides variable and primitive bindings, while the Context supports tracing and error reporting.")))])}))}]),
@@ -1437,9 +1661,7 @@ typesByName =
                     Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
                       Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.core.Term")),
                       Core.functionTypeCodomain = (Core.TypeEither (Core.EitherType {
-                        Core.eitherTypeLeft = (Core.TypeApplication (Core.ApplicationType {
-                          Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.context.InContext")),
-                          Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "hydra.errors.Error"))})),
+                        Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.errors.Error")),
                         Core.eitherTypeRight = (Core.TypeVariable (Core.Name "a"))}))}))}))})),
                 Core.annotatedTypeAnnotation = (M.fromList [
                   (Core.Name "description", (Core.TermLiteral (Core.LiteralString "An encode function from terms to native values")))])}))},
@@ -1451,9 +1673,7 @@ typesByName =
                   Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
                     Core.functionTypeDomain = (Core.TypeVariable (Core.Name "a")),
                     Core.functionTypeCodomain = (Core.TypeEither (Core.EitherType {
-                      Core.eitherTypeLeft = (Core.TypeApplication (Core.ApplicationType {
-                        Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.context.InContext")),
-                        Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "hydra.errors.Error"))})),
+                      Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.errors.Error")),
                       Core.eitherTypeRight = (Core.TypeVariable (Core.Name "hydra.core.Term"))}))}))})),
                 Core.annotatedTypeAnnotation = (M.fromList [
                   (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A decode function from native values to terms")))])}))}])})),

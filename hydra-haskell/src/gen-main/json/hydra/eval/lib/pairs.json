@@ -6,60 +6,46 @@
         "term": {
           "typeLambda": {
             "body": {
-              "annotated": {
-                "annotation": [
-                  {
-                    "@key": "description",
-                    "@value": {"literal": {"string": "Interpreter-friendly bimap for Pair terms."}}}],
+              "typeLambda": {
                 "body": {
-                  "function": {
-                    "lambda": {
-                      "body": {
-                        "function": {
-                          "lambda": {
-                            "body": {
-                              "function": {
-                                "lambda": {
-                                  "body": {
-                                    "function": {
-                                      "lambda": {
-                                        "body": {
-                                          "function": {
-                                            "lambda": {
-                                              "body": {
-                                                "application": {
-                                                  "argument": {"variable": "pairTerm"},
-                                                  "function": {
-                                                    "function": {
-                                                      "elimination": {
-                                                        "union": {
-                                                          "cases": [
-                                                            {
-                                                              "name": "pair",
-                                                              "term": {
-                                                                "function": {
-                                                                  "lambda": {
-                                                                    "body": {
-                                                                      "let": {
-                                                                        "bindings": [
-                                                                          {
-                                                                            "name": "fst",
-                                                                            "term": {
-                                                                              "application": {
-                                                                                "argument": {"variable": "p"},
-                                                                                "function": {
-                                                                                  "typeApplication": {
-                                                                                    "body": {
-                                                                                      "typeApplication": {
-                                                                                        "body": {"variable": "hydra.lib.pairs.first"},
-                                                                                        "type": {"variable": "hydra.core.Term"}}},
-                                                                                    "type": {"variable": "hydra.core.Term"}}}}},
-                                                                            "type": {"type": {"variable": "hydra.core.Term"}, "variables": []}}],
+                  "annotated": {
+                    "annotation": [
+                      {
+                        "@key": "description",
+                        "@value": {"literal": {"string": "Interpreter-friendly bimap for Pair terms."}}}],
+                    "body": {
+                      "function": {
+                        "lambda": {
+                          "body": {
+                            "function": {
+                              "lambda": {
+                                "body": {
+                                  "function": {
+                                    "lambda": {
+                                      "body": {
+                                        "function": {
+                                          "lambda": {
+                                            "body": {
+                                              "function": {
+                                                "lambda": {
+                                                  "body": {
+                                                    "application": {
+                                                      "argument": {"variable": "pairTerm"},
+                                                      "function": {
+                                                        "function": {
+                                                          "elimination": {
+                                                            "union": {
+                                                              "cases": [
+                                                                {
+                                                                  "name": "pair",
+                                                                  "term": {
+                                                                    "function": {
+                                                                      "lambda": {
                                                                         "body": {
                                                                           "let": {
                                                                             "bindings": [
                                                                               {
-                                                                                "name": "snd",
+                                                                                "name": "fst",
                                                                                 "term": {
                                                                                   "application": {
                                                                                     "argument": {"variable": "p"},
@@ -67,123 +53,115 @@
                                                                                       "typeApplication": {
                                                                                         "body": {
                                                                                           "typeApplication": {
-                                                                                            "body": {"variable": "hydra.lib.pairs.second"},
+                                                                                            "body": {"variable": "hydra.lib.pairs.first"},
                                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                                         "type": {"variable": "hydra.core.Term"}}}}},
                                                                                 "type": {"type": {"variable": "hydra.core.Term"}, "variables": []}}],
                                                                             "body": {
-                                                                              "typeApplication": {
+                                                                              "let": {
+                                                                                "bindings": [
+                                                                                  {
+                                                                                    "name": "snd",
+                                                                                    "term": {
+                                                                                      "application": {
+                                                                                        "argument": {"variable": "p"},
+                                                                                        "function": {
+                                                                                          "typeApplication": {
+                                                                                            "body": {
+                                                                                              "typeApplication": {
+                                                                                                "body": {"variable": "hydra.lib.pairs.second"},
+                                                                                                "type": {"variable": "hydra.core.Term"}}},
+                                                                                            "type": {"variable": "hydra.core.Term"}}}}},
+                                                                                    "type": {"type": {"variable": "hydra.core.Term"}, "variables": []}}],
                                                                                 "body": {
                                                                                   "typeApplication": {
                                                                                     "body": {
-                                                                                      "either": {
-                                                                                        "@right": {
-                                                                                          "union": {
-                                                                                            "field": {
-                                                                                              "name": "pair",
-                                                                                              "term": {
-                                                                                                "typeApplication": {
-                                                                                                  "body": {
+                                                                                      "typeApplication": {
+                                                                                        "body": {
+                                                                                          "either": {
+                                                                                            "@right": {
+                                                                                              "union": {
+                                                                                                "field": {
+                                                                                                  "name": "pair",
+                                                                                                  "term": {
                                                                                                     "typeApplication": {
                                                                                                       "body": {
-                                                                                                        "pair": {
-                                                                                                          "@first": {
-                                                                                                            "union": {
-                                                                                                              "field": {
-                                                                                                                "name": "application",
-                                                                                                                "term": {
-                                                                                                                  "record": {
-                                                                                                                    "fields": [
-                                                                                                                      {"name": "function", "term": {"variable": "firstFun"}},
-                                                                                                                      {"name": "argument", "term": {"variable": "fst"}}],
-                                                                                                                    "typeName": "hydra.core.Application"}}},
-                                                                                                              "typeName": "hydra.core.Term"}},
-                                                                                                          "@second": {
-                                                                                                            "union": {
-                                                                                                              "field": {
-                                                                                                                "name": "application",
-                                                                                                                "term": {
-                                                                                                                  "record": {
-                                                                                                                    "fields": [
-                                                                                                                      {"name": "function", "term": {"variable": "secondFun"}},
-                                                                                                                      {"name": "argument", "term": {"variable": "snd"}}],
-                                                                                                                    "typeName": "hydra.core.Application"}}},
-                                                                                                              "typeName": "hydra.core.Term"}}}},
-                                                                                                      "type": {"variable": "hydra.core.Term"}}},
-                                                                                                  "type": {"variable": "hydra.core.Term"}}}},
-                                                                                            "typeName": "hydra.core.Term"}}}},
-                                                                                    "type": {
-                                                                                      "application": {
-                                                                                        "argument": {"variable": "hydra.errors.Error"},
-                                                                                        "function": {"variable": "hydra.context.InContext"}}}}},
-                                                                                "type": {"variable": "hydra.core.Term"}}}}}}},
-                                                                    "domain": {
-                                                                      "pair": {
-                                                                        "first": {"variable": "hydra.core.Term"},
-                                                                        "second": {"variable": "hydra.core.Term"}}},
-                                                                    "parameter": "p"}}}}],
-                                                          "default": {
-                                                            "typeApplication": {
-                                                              "body": {
+                                                                                                        "typeApplication": {
+                                                                                                          "body": {
+                                                                                                            "pair": {
+                                                                                                              "@first": {
+                                                                                                                "union": {
+                                                                                                                  "field": {
+                                                                                                                    "name": "application",
+                                                                                                                    "term": {
+                                                                                                                      "record": {
+                                                                                                                        "fields": [
+                                                                                                                          {"name": "function", "term": {"variable": "firstFun"}},
+                                                                                                                          {"name": "argument", "term": {"variable": "fst"}}],
+                                                                                                                        "typeName": "hydra.core.Application"}}},
+                                                                                                                  "typeName": "hydra.core.Term"}},
+                                                                                                              "@second": {
+                                                                                                                "union": {
+                                                                                                                  "field": {
+                                                                                                                    "name": "application",
+                                                                                                                    "term": {
+                                                                                                                      "record": {
+                                                                                                                        "fields": [
+                                                                                                                          {"name": "function", "term": {"variable": "secondFun"}},
+                                                                                                                          {"name": "argument", "term": {"variable": "snd"}}],
+                                                                                                                        "typeName": "hydra.core.Application"}}},
+                                                                                                                  "typeName": "hydra.core.Term"}}}},
+                                                                                                          "type": {"variable": "hydra.core.Term"}}},
+                                                                                                      "type": {"variable": "hydra.core.Term"}}}},
+                                                                                                "typeName": "hydra.core.Term"}}}},
+                                                                                        "type": {"variable": "hydra.errors.Error"}}},
+                                                                                    "type": {"variable": "hydra.core.Term"}}}}}}},
+                                                                        "domain": {
+                                                                          "pair": {
+                                                                            "first": {"variable": "hydra.core.Term"},
+                                                                            "second": {"variable": "hydra.core.Term"}}},
+                                                                        "parameter": "p"}}}}],
+                                                              "default": {
                                                                 "typeApplication": {
                                                                   "body": {
-                                                                    "either": {
-                                                                      "@left": {
-                                                                        "typeApplication": {
-                                                                          "body": {
-                                                                            "record": {
-                                                                              "fields": [
-                                                                                {
-                                                                                  "name": "object",
-                                                                                  "term": {
-                                                                                    "union": {
-                                                                                      "field": {
-                                                                                        "name": "other",
-                                                                                        "term": {
-                                                                                          "wrap": {
-                                                                                            "body": {
-                                                                                              "application": {
-                                                                                                "argument": {
-                                                                                                  "application": {
-                                                                                                    "argument": {"variable": "pairTerm"},
-                                                                                                    "function": {"variable": "hydra.show.core.term"}}},
-                                                                                                "function": {
-                                                                                                  "application": {
-                                                                                                    "argument": {
-                                                                                                      "application": {
-                                                                                                        "argument": {"literal": {"string": " but found "}},
-                                                                                                        "function": {
-                                                                                                          "application": {
-                                                                                                            "argument": {
-                                                                                                              "application": {
-                                                                                                                "argument": {"literal": {"string": "pair value"}},
-                                                                                                                "function": {
-                                                                                                                  "application": {
-                                                                                                                    "argument": {"literal": {"string": "expected "}},
-                                                                                                                    "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                                                                                            "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                                                                                    "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                                                                            "typeName": "hydra.errors.OtherError"}}},
-                                                                                      "typeName": "hydra.errors.Error"}}},
-                                                                                {"name": "context", "term": {"variable": "cx"}}],
-                                                                              "typeName": "hydra.context.InContext"}},
-                                                                          "type": {"variable": "hydra.errors.Error"}}}}},
-                                                                  "type": {
-                                                                    "application": {
-                                                                      "argument": {"variable": "hydra.errors.Error"},
-                                                                      "function": {"variable": "hydra.context.InContext"}}}}},
-                                                              "type": {"variable": "hydra.core.Term"}}},
-                                                          "typeName": "hydra.core.Term"}}}}}},
-                                              "domain": {"variable": "hydra.core.Term"},
-                                              "parameter": "pairTerm"}}},
-                                        "domain": {"variable": "hydra.core.Term"},
-                                        "parameter": "secondFun"}}},
-                                  "domain": {"variable": "hydra.core.Term"},
-                                  "parameter": "firstFun"}}},
-                            "domain": {"variable": "t0"},
-                            "parameter": "g"}}},
-                      "domain": {"variable": "hydra.context.Context"},
-                      "parameter": "cx"}}}}},
+                                                                    "typeApplication": {
+                                                                      "body": {
+                                                                        "either": {
+                                                                          "@left": {
+                                                                            "union": {
+                                                                              "field": {
+                                                                                "name": "extraction",
+                                                                                "term": {
+                                                                                  "union": {
+                                                                                    "field": {
+                                                                                      "name": "unexpectedShape",
+                                                                                      "term": {
+                                                                                        "record": {
+                                                                                          "fields": [
+                                                                                            {"name": "expected", "term": {"literal": {"string": "pair value"}}},
+                                                                                            {
+                                                                                              "name": "actual",
+                                                                                              "term": {
+                                                                                                "application": {
+                                                                                                  "argument": {"variable": "pairTerm"},
+                                                                                                  "function": {"variable": "hydra.show.core.term"}}}}],
+                                                                                          "typeName": "hydra.errors.UnexpectedShapeError"}}},
+                                                                                    "typeName": "hydra.errors.ExtractionError"}}},
+                                                                              "typeName": "hydra.errors.Error"}}}},
+                                                                      "type": {"variable": "hydra.errors.Error"}}},
+                                                                  "type": {"variable": "hydra.core.Term"}}},
+                                                              "typeName": "hydra.core.Term"}}}}}},
+                                                  "domain": {"variable": "hydra.core.Term"},
+                                                  "parameter": "pairTerm"}}},
+                                            "domain": {"variable": "hydra.core.Term"},
+                                            "parameter": "secondFun"}}},
+                                      "domain": {"variable": "hydra.core.Term"},
+                                      "parameter": "firstFun"}}},
+                                "domain": {"variable": "t1"},
+                                "parameter": "g"}}},
+                          "domain": {"variable": "t0"},
+                          "parameter": "cx"}}}}},
+                "parameter": "t1"}},
             "parameter": "t0"}},
         "type": {
           "type": {
@@ -198,134 +176,109 @@
                             "function": {
                               "codomain": {
                                 "either": {
-                                  "left": {
-                                    "application": {
-                                      "argument": {"variable": "hydra.errors.Error"},
-                                      "function": {"variable": "hydra.context.InContext"}}},
+                                  "left": {"variable": "hydra.errors.Error"},
                                   "right": {"variable": "hydra.core.Term"}}},
                               "domain": {"variable": "hydra.core.Term"}}},
                           "domain": {"variable": "hydra.core.Term"}}},
                       "domain": {"variable": "hydra.core.Term"}}},
-                  "domain": {"variable": "t0"}}},
-              "domain": {"variable": "hydra.context.Context"}}},
-          "variables": ["t0"]}}},
+                  "domain": {"variable": "t1"}}},
+              "domain": {"variable": "t0"}}},
+          "variables": ["t0", "t1"]}}},
     {
       "term": {
         "name": "hydra.eval.lib.pairs.first",
         "term": {
           "typeLambda": {
             "body": {
-              "annotated": {
-                "annotation": [
-                  {
-                    "@key": "description",
-                    "@value": {"literal": {"string": "Interpreter-friendly first for Pair terms."}}}],
+              "typeLambda": {
                 "body": {
-                  "function": {
-                    "lambda": {
-                      "body": {
-                        "function": {
-                          "lambda": {
-                            "body": {
-                              "function": {
-                                "lambda": {
-                                  "body": {
-                                    "application": {
-                                      "argument": {"variable": "pairTerm"},
-                                      "function": {
-                                        "function": {
-                                          "elimination": {
-                                            "union": {
-                                              "cases": [
-                                                {
-                                                  "name": "pair",
-                                                  "term": {
-                                                    "function": {
-                                                      "lambda": {
-                                                        "body": {
-                                                          "typeApplication": {
+                  "annotated": {
+                    "annotation": [
+                      {
+                        "@key": "description",
+                        "@value": {"literal": {"string": "Interpreter-friendly first for Pair terms."}}}],
+                    "body": {
+                      "function": {
+                        "lambda": {
+                          "body": {
+                            "function": {
+                              "lambda": {
+                                "body": {
+                                  "function": {
+                                    "lambda": {
+                                      "body": {
+                                        "application": {
+                                          "argument": {"variable": "pairTerm"},
+                                          "function": {
+                                            "function": {
+                                              "elimination": {
+                                                "union": {
+                                                  "cases": [
+                                                    {
+                                                      "name": "pair",
+                                                      "term": {
+                                                        "function": {
+                                                          "lambda": {
                                                             "body": {
                                                               "typeApplication": {
                                                                 "body": {
-                                                                  "either": {
-                                                                    "@right": {
-                                                                      "application": {
-                                                                        "argument": {"variable": "p"},
-                                                                        "function": {
-                                                                          "typeApplication": {
-                                                                            "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "either": {
+                                                                        "@right": {
+                                                                          "application": {
+                                                                            "argument": {"variable": "p"},
+                                                                            "function": {
                                                                               "typeApplication": {
-                                                                                "body": {"variable": "hydra.lib.pairs.first"},
-                                                                                "type": {"variable": "hydra.core.Term"}}},
-                                                                            "type": {"variable": "hydra.core.Term"}}}}}}},
-                                                                "type": {
-                                                                  "application": {
-                                                                    "argument": {"variable": "hydra.errors.Error"},
-                                                                    "function": {"variable": "hydra.context.InContext"}}}}},
-                                                            "type": {"variable": "hydra.core.Term"}}},
-                                                        "domain": {
-                                                          "pair": {
-                                                            "first": {"variable": "hydra.core.Term"},
-                                                            "second": {"variable": "hydra.core.Term"}}},
-                                                        "parameter": "p"}}}}],
-                                              "default": {
-                                                "typeApplication": {
-                                                  "body": {
+                                                                                "body": {
+                                                                                  "typeApplication": {
+                                                                                    "body": {"variable": "hydra.lib.pairs.first"},
+                                                                                    "type": {"variable": "hydra.core.Term"}}},
+                                                                                "type": {"variable": "hydra.core.Term"}}}}}}},
+                                                                    "type": {"variable": "hydra.errors.Error"}}},
+                                                                "type": {"variable": "hydra.core.Term"}}},
+                                                            "domain": {
+                                                              "pair": {
+                                                                "first": {"variable": "hydra.core.Term"},
+                                                                "second": {"variable": "hydra.core.Term"}}},
+                                                            "parameter": "p"}}}}],
+                                                  "default": {
                                                     "typeApplication": {
                                                       "body": {
-                                                        "either": {
-                                                          "@left": {
-                                                            "typeApplication": {
-                                                              "body": {
-                                                                "record": {
-                                                                  "fields": [
-                                                                    {
-                                                                      "name": "object",
-                                                                      "term": {
-                                                                        "union": {
-                                                                          "field": {
-                                                                            "name": "other",
-                                                                            "term": {
-                                                                              "wrap": {
-                                                                                "body": {
-                                                                                  "application": {
-                                                                                    "argument": {
-                                                                                      "application": {
-                                                                                        "argument": {"variable": "pairTerm"},
-                                                                                        "function": {"variable": "hydra.show.core.term"}}},
-                                                                                    "function": {
-                                                                                      "application": {
-                                                                                        "argument": {
-                                                                                          "application": {
-                                                                                            "argument": {"literal": {"string": " but found "}},
-                                                                                            "function": {
-                                                                                              "application": {
-                                                                                                "argument": {
-                                                                                                  "application": {
-                                                                                                    "argument": {"literal": {"string": "pair value"}},
-                                                                                                    "function": {
-                                                                                                      "application": {
-                                                                                                        "argument": {"literal": {"string": "expected "}},
-                                                                                                        "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                                                                                "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                                                                        "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                                                                "typeName": "hydra.errors.OtherError"}}},
-                                                                          "typeName": "hydra.errors.Error"}}},
-                                                                    {"name": "context", "term": {"variable": "cx"}}],
-                                                                  "typeName": "hydra.context.InContext"}},
-                                                              "type": {"variable": "hydra.errors.Error"}}}}},
-                                                      "type": {
-                                                        "application": {
-                                                          "argument": {"variable": "hydra.errors.Error"},
-                                                          "function": {"variable": "hydra.context.InContext"}}}}},
-                                                  "type": {"variable": "hydra.core.Term"}}},
-                                              "typeName": "hydra.core.Term"}}}}}},
-                                  "domain": {"variable": "hydra.core.Term"},
-                                  "parameter": "pairTerm"}}},
-                            "domain": {"variable": "t0"},
-                            "parameter": "g"}}},
-                      "domain": {"variable": "hydra.context.Context"},
-                      "parameter": "cx"}}}}},
+                                                        "typeApplication": {
+                                                          "body": {
+                                                            "either": {
+                                                              "@left": {
+                                                                "union": {
+                                                                  "field": {
+                                                                    "name": "extraction",
+                                                                    "term": {
+                                                                      "union": {
+                                                                        "field": {
+                                                                          "name": "unexpectedShape",
+                                                                          "term": {
+                                                                            "record": {
+                                                                              "fields": [
+                                                                                {"name": "expected", "term": {"literal": {"string": "pair value"}}},
+                                                                                {
+                                                                                  "name": "actual",
+                                                                                  "term": {
+                                                                                    "application": {
+                                                                                      "argument": {"variable": "pairTerm"},
+                                                                                      "function": {"variable": "hydra.show.core.term"}}}}],
+                                                                              "typeName": "hydra.errors.UnexpectedShapeError"}}},
+                                                                        "typeName": "hydra.errors.ExtractionError"}}},
+                                                                  "typeName": "hydra.errors.Error"}}}},
+                                                          "type": {"variable": "hydra.errors.Error"}}},
+                                                      "type": {"variable": "hydra.core.Term"}}},
+                                                  "typeName": "hydra.core.Term"}}}}}},
+                                      "domain": {"variable": "hydra.core.Term"},
+                                      "parameter": "pairTerm"}}},
+                                "domain": {"variable": "t1"},
+                                "parameter": "g"}}},
+                          "domain": {"variable": "t0"},
+                          "parameter": "cx"}}}}},
+                "parameter": "t1"}},
             "parameter": "t0"}},
         "type": {
           "type": {
@@ -336,132 +289,107 @@
                     "function": {
                       "codomain": {
                         "either": {
-                          "left": {
-                            "application": {
-                              "argument": {"variable": "hydra.errors.Error"},
-                              "function": {"variable": "hydra.context.InContext"}}},
+                          "left": {"variable": "hydra.errors.Error"},
                           "right": {"variable": "hydra.core.Term"}}},
                       "domain": {"variable": "hydra.core.Term"}}},
-                  "domain": {"variable": "t0"}}},
-              "domain": {"variable": "hydra.context.Context"}}},
-          "variables": ["t0"]}}},
+                  "domain": {"variable": "t1"}}},
+              "domain": {"variable": "t0"}}},
+          "variables": ["t0", "t1"]}}},
     {
       "term": {
         "name": "hydra.eval.lib.pairs.second",
         "term": {
           "typeLambda": {
             "body": {
-              "annotated": {
-                "annotation": [
-                  {
-                    "@key": "description",
-                    "@value": {"literal": {"string": "Interpreter-friendly second for Pair terms."}}}],
+              "typeLambda": {
                 "body": {
-                  "function": {
-                    "lambda": {
-                      "body": {
-                        "function": {
-                          "lambda": {
-                            "body": {
-                              "function": {
-                                "lambda": {
-                                  "body": {
-                                    "application": {
-                                      "argument": {"variable": "pairTerm"},
-                                      "function": {
-                                        "function": {
-                                          "elimination": {
-                                            "union": {
-                                              "cases": [
-                                                {
-                                                  "name": "pair",
-                                                  "term": {
-                                                    "function": {
-                                                      "lambda": {
-                                                        "body": {
-                                                          "typeApplication": {
+                  "annotated": {
+                    "annotation": [
+                      {
+                        "@key": "description",
+                        "@value": {"literal": {"string": "Interpreter-friendly second for Pair terms."}}}],
+                    "body": {
+                      "function": {
+                        "lambda": {
+                          "body": {
+                            "function": {
+                              "lambda": {
+                                "body": {
+                                  "function": {
+                                    "lambda": {
+                                      "body": {
+                                        "application": {
+                                          "argument": {"variable": "pairTerm"},
+                                          "function": {
+                                            "function": {
+                                              "elimination": {
+                                                "union": {
+                                                  "cases": [
+                                                    {
+                                                      "name": "pair",
+                                                      "term": {
+                                                        "function": {
+                                                          "lambda": {
                                                             "body": {
                                                               "typeApplication": {
                                                                 "body": {
-                                                                  "either": {
-                                                                    "@right": {
-                                                                      "application": {
-                                                                        "argument": {"variable": "p"},
-                                                                        "function": {
-                                                                          "typeApplication": {
-                                                                            "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "either": {
+                                                                        "@right": {
+                                                                          "application": {
+                                                                            "argument": {"variable": "p"},
+                                                                            "function": {
                                                                               "typeApplication": {
-                                                                                "body": {"variable": "hydra.lib.pairs.second"},
-                                                                                "type": {"variable": "hydra.core.Term"}}},
-                                                                            "type": {"variable": "hydra.core.Term"}}}}}}},
-                                                                "type": {
-                                                                  "application": {
-                                                                    "argument": {"variable": "hydra.errors.Error"},
-                                                                    "function": {"variable": "hydra.context.InContext"}}}}},
-                                                            "type": {"variable": "hydra.core.Term"}}},
-                                                        "domain": {
-                                                          "pair": {
-                                                            "first": {"variable": "hydra.core.Term"},
-                                                            "second": {"variable": "hydra.core.Term"}}},
-                                                        "parameter": "p"}}}}],
-                                              "default": {
-                                                "typeApplication": {
-                                                  "body": {
+                                                                                "body": {
+                                                                                  "typeApplication": {
+                                                                                    "body": {"variable": "hydra.lib.pairs.second"},
+                                                                                    "type": {"variable": "hydra.core.Term"}}},
+                                                                                "type": {"variable": "hydra.core.Term"}}}}}}},
+                                                                    "type": {"variable": "hydra.errors.Error"}}},
+                                                                "type": {"variable": "hydra.core.Term"}}},
+                                                            "domain": {
+                                                              "pair": {
+                                                                "first": {"variable": "hydra.core.Term"},
+                                                                "second": {"variable": "hydra.core.Term"}}},
+                                                            "parameter": "p"}}}}],
+                                                  "default": {
                                                     "typeApplication": {
                                                       "body": {
-                                                        "either": {
-                                                          "@left": {
-                                                            "typeApplication": {
-                                                              "body": {
-                                                                "record": {
-                                                                  "fields": [
-                                                                    {
-                                                                      "name": "object",
-                                                                      "term": {
-                                                                        "union": {
-                                                                          "field": {
-                                                                            "name": "other",
-                                                                            "term": {
-                                                                              "wrap": {
-                                                                                "body": {
-                                                                                  "application": {
-                                                                                    "argument": {
-                                                                                      "application": {
-                                                                                        "argument": {"variable": "pairTerm"},
-                                                                                        "function": {"variable": "hydra.show.core.term"}}},
-                                                                                    "function": {
-                                                                                      "application": {
-                                                                                        "argument": {
-                                                                                          "application": {
-                                                                                            "argument": {"literal": {"string": " but found "}},
-                                                                                            "function": {
-                                                                                              "application": {
-                                                                                                "argument": {
-                                                                                                  "application": {
-                                                                                                    "argument": {"literal": {"string": "pair value"}},
-                                                                                                    "function": {
-                                                                                                      "application": {
-                                                                                                        "argument": {"literal": {"string": "expected "}},
-                                                                                                        "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                                                                                "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                                                                        "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                                                                "typeName": "hydra.errors.OtherError"}}},
-                                                                          "typeName": "hydra.errors.Error"}}},
-                                                                    {"name": "context", "term": {"variable": "cx"}}],
-                                                                  "typeName": "hydra.context.InContext"}},
-                                                              "type": {"variable": "hydra.errors.Error"}}}}},
-                                                      "type": {
-                                                        "application": {
-                                                          "argument": {"variable": "hydra.errors.Error"},
-                                                          "function": {"variable": "hydra.context.InContext"}}}}},
-                                                  "type": {"variable": "hydra.core.Term"}}},
-                                              "typeName": "hydra.core.Term"}}}}}},
-                                  "domain": {"variable": "hydra.core.Term"},
-                                  "parameter": "pairTerm"}}},
-                            "domain": {"variable": "t0"},
-                            "parameter": "g"}}},
-                      "domain": {"variable": "hydra.context.Context"},
-                      "parameter": "cx"}}}}},
+                                                        "typeApplication": {
+                                                          "body": {
+                                                            "either": {
+                                                              "@left": {
+                                                                "union": {
+                                                                  "field": {
+                                                                    "name": "extraction",
+                                                                    "term": {
+                                                                      "union": {
+                                                                        "field": {
+                                                                          "name": "unexpectedShape",
+                                                                          "term": {
+                                                                            "record": {
+                                                                              "fields": [
+                                                                                {"name": "expected", "term": {"literal": {"string": "pair value"}}},
+                                                                                {
+                                                                                  "name": "actual",
+                                                                                  "term": {
+                                                                                    "application": {
+                                                                                      "argument": {"variable": "pairTerm"},
+                                                                                      "function": {"variable": "hydra.show.core.term"}}}}],
+                                                                              "typeName": "hydra.errors.UnexpectedShapeError"}}},
+                                                                        "typeName": "hydra.errors.ExtractionError"}}},
+                                                                  "typeName": "hydra.errors.Error"}}}},
+                                                          "type": {"variable": "hydra.errors.Error"}}},
+                                                      "type": {"variable": "hydra.core.Term"}}},
+                                                  "typeName": "hydra.core.Term"}}}}}},
+                                      "domain": {"variable": "hydra.core.Term"},
+                                      "parameter": "pairTerm"}}},
+                                "domain": {"variable": "t1"},
+                                "parameter": "g"}}},
+                          "domain": {"variable": "t0"},
+                          "parameter": "cx"}}}}},
+                "parameter": "t1"}},
             "parameter": "t0"}},
         "type": {
           "type": {
@@ -472,15 +400,12 @@
                     "function": {
                       "codomain": {
                         "either": {
-                          "left": {
-                            "application": {
-                              "argument": {"variable": "hydra.errors.Error"},
-                              "function": {"variable": "hydra.context.InContext"}}},
+                          "left": {"variable": "hydra.errors.Error"},
                           "right": {"variable": "hydra.core.Term"}}},
                       "domain": {"variable": "hydra.core.Term"}}},
-                  "domain": {"variable": "t0"}}},
-              "domain": {"variable": "hydra.context.Context"}}},
-          "variables": ["t0"]}}}],
+                  "domain": {"variable": "t1"}}},
+              "domain": {"variable": "t0"}}},
+          "variables": ["t0", "t1"]}}}],
   "description": "Evaluation-level implementations of Pair functions for the Hydra interpreter.",
   "namespace": "hydra.eval.lib.pairs",
   "termDependencies": ["hydra.extract.core", "hydra.show.core"],

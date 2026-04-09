@@ -283,7 +283,7 @@ public interface Transform {
       vertexPairs);
   }
 
-  static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<hydra.pg.model.Edge<hydra.core.Term>>> evaluateEdge(hydra.context.Context cx, hydra.graph.Graph g, hydra.pg.model.Edge<hydra.core.Term> edgeSpec, hydra.core.Term record) {
+  static hydra.util.Either<hydra.errors.Error_, hydra.util.Maybe<hydra.pg.model.Edge<hydra.core.Term>>> evaluateEdge(hydra.context.Context cx, hydra.graph.Graph g, hydra.pg.model.Edge<hydra.core.Term> edgeSpec, hydra.core.Term record) {
     hydra.util.Lazy<hydra.core.Term> idSpec = new hydra.util.Lazy<>(() -> ((java.util.function.Function<hydra.pg.model.Edge<hydra.core.Term>, hydra.core.Term>) (projected -> projected.id)).apply(edgeSpec));
     hydra.util.Lazy<hydra.core.Term> inSpec = new hydra.util.Lazy<>(() -> ((java.util.function.Function<hydra.pg.model.Edge<hydra.core.Term>, hydra.core.Term>) (projected -> projected.in)).apply(edgeSpec));
     hydra.util.Lazy<hydra.pg.model.EdgeLabel> label = new hydra.util.Lazy<>(() -> ((java.util.function.Function<hydra.pg.model.Edge<hydra.core.Term>, hydra.pg.model.EdgeLabel>) (projected -> projected.label)).apply(edgeSpec));
@@ -295,48 +295,46 @@ public interface Transform {
         g,
         true,
         new hydra.core.Term.Application(new hydra.core.Application(idSpec.get(), record))),
-      (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<hydra.pg.model.Edge<hydra.core.Term>>>>) (id -> hydra.lib.eithers.Bind.apply(
+      (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.Error_, hydra.util.Maybe<hydra.pg.model.Edge<hydra.core.Term>>>>) (id -> hydra.lib.eithers.Bind.apply(
         hydra.lib.eithers.Bind.apply(
           hydra.Reduction.reduceTerm(
             cx,
             g,
             true,
             new hydra.core.Term.Application(new hydra.core.Application(outSpec.get(), record))),
-          (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<hydra.core.Term>>>) (_term -> hydra.extract.Core.maybeTerm(
-            cx,
-            (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term>>) (t -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term>right(t)),
+          (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.Error_, hydra.util.Maybe<hydra.core.Term>>>) (_term -> hydra.extract.Core.maybeTerm(
+            (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.Error_, hydra.core.Term>>) (t -> hydra.util.Either.<hydra.errors.Error_, hydra.core.Term>right(t)),
             g,
             _term))),
-        (java.util.function.Function<hydra.util.Maybe<hydra.core.Term>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<hydra.pg.model.Edge<hydra.core.Term>>>>) (mOutId -> hydra.lib.eithers.Bind.apply(
+        (java.util.function.Function<hydra.util.Maybe<hydra.core.Term>, hydra.util.Either<hydra.errors.Error_, hydra.util.Maybe<hydra.pg.model.Edge<hydra.core.Term>>>>) (mOutId -> hydra.lib.eithers.Bind.apply(
           hydra.lib.eithers.Bind.apply(
             hydra.Reduction.reduceTerm(
               cx,
               g,
               true,
               new hydra.core.Term.Application(new hydra.core.Application(inSpec.get(), record))),
-            (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<hydra.core.Term>>>) (_term -> hydra.extract.Core.maybeTerm(
-              cx,
-              (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term>>) (t -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term>right(t)),
+            (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.Error_, hydra.util.Maybe<hydra.core.Term>>>) (_term -> hydra.extract.Core.maybeTerm(
+              (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.Error_, hydra.core.Term>>) (t -> hydra.util.Either.<hydra.errors.Error_, hydra.core.Term>right(t)),
               g,
               _term))),
-          (java.util.function.Function<hydra.util.Maybe<hydra.core.Term>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<hydra.pg.model.Edge<hydra.core.Term>>>>) (mInId -> hydra.lib.eithers.Bind.apply(
+          (java.util.function.Function<hydra.util.Maybe<hydra.core.Term>, hydra.util.Either<hydra.errors.Error_, hydra.util.Maybe<hydra.pg.model.Edge<hydra.core.Term>>>>) (mInId -> hydra.lib.eithers.Bind.apply(
             hydra.demos.genpg.Transform.evaluateProperties(
               cx,
               g,
               propSpecs.get(),
               record),
-            (java.util.function.Function<java.util.Map<hydra.pg.model.PropertyKey, hydra.core.Term>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<hydra.pg.model.Edge<hydra.core.Term>>>>) (props -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<hydra.pg.model.Edge<hydra.core.Term>>>right(hydra.lib.maybes.Bind.apply(
+            (java.util.function.Function<java.util.Map<hydra.pg.model.PropertyKey, hydra.core.Term>, hydra.util.Either<hydra.errors.Error_, hydra.util.Maybe<hydra.pg.model.Edge<hydra.core.Term>>>>) (props -> hydra.util.Either.<hydra.errors.Error_, hydra.util.Maybe<hydra.pg.model.Edge<hydra.core.Term>>>right(hydra.lib.maybes.Bind.apply(
               mOutId,
               (java.util.function.Function<hydra.core.Term, hydra.util.Maybe<hydra.pg.model.Edge<hydra.core.Term>>>) (outId -> hydra.lib.maybes.Map.apply(
                 (java.util.function.Function<hydra.core.Term, hydra.pg.model.Edge<hydra.core.Term>>) (inId -> (hydra.pg.model.Edge<hydra.core.Term>) (new hydra.pg.model.Edge<hydra.core.Term>(label.get(), id, outId, inId, props))),
                 mInId))))))))))));
   }
 
-  static <T0> hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.Map<T0, hydra.core.Term>> evaluateProperties(hydra.context.Context cx, hydra.graph.Graph g, java.util.Map<T0, hydra.core.Term> specs, hydra.core.Term record) {
+  static <T0> hydra.util.Either<hydra.errors.Error_, java.util.Map<T0, hydra.core.Term>> evaluateProperties(hydra.context.Context cx, hydra.graph.Graph g, java.util.Map<T0, hydra.core.Term> specs, hydra.core.Term record) {
     return hydra.lib.eithers.Map.apply(
       (java.util.function.Function<java.util.List<hydra.util.Maybe<hydra.util.Pair<T0, hydra.core.Term>>>, java.util.Map<T0, hydra.core.Term>>) (pairs -> hydra.lib.maps.FromList.apply(hydra.lib.maybes.Cat.apply(pairs))),
       hydra.lib.eithers.MapList.apply(
-        (java.util.function.Function<hydra.util.Pair<T0, hydra.core.Term>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<hydra.util.Pair<T0, hydra.core.Term>>>>) (pair -> {
+        (java.util.function.Function<hydra.util.Pair<T0, hydra.core.Term>, hydra.util.Either<hydra.errors.Error_, hydra.util.Maybe<hydra.util.Pair<T0, hydra.core.Term>>>>) (pair -> {
           hydra.util.Lazy<hydra.core.Term> spec = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(pair));
           return hydra.lib.eithers.Bind.apply(
             hydra.Reduction.reduceTerm(
@@ -344,7 +342,7 @@ public interface Transform {
               g,
               true,
               new hydra.core.Term.Application(new hydra.core.Application(spec.get(), record))),
-            (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<hydra.util.Pair<T0, hydra.core.Term>>>>) (value -> hydra.demos.genpg.Transform.evaluateProperties_extractMaybe(
+            (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.Error_, hydra.util.Maybe<hydra.util.Pair<T0, hydra.core.Term>>>>) (value -> hydra.demos.genpg.Transform.evaluateProperties_extractMaybe(
               hydra.demos.genpg.Transform.<T0>evaluateProperties_k(pair),
               hydra.Strip.deannotateTerm(value))));
         }),
@@ -366,7 +364,7 @@ public interface Transform {
     return hydra.lib.pairs.First.apply(pair);
   }
 
-  static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<hydra.pg.model.Vertex<hydra.core.Term>>> evaluateVertex(hydra.context.Context cx, hydra.graph.Graph g, hydra.pg.model.Vertex<hydra.core.Term> vertexSpec, hydra.core.Term record) {
+  static hydra.util.Either<hydra.errors.Error_, hydra.util.Maybe<hydra.pg.model.Vertex<hydra.core.Term>>> evaluateVertex(hydra.context.Context cx, hydra.graph.Graph g, hydra.pg.model.Vertex<hydra.core.Term> vertexSpec, hydra.core.Term record) {
     hydra.util.Lazy<hydra.core.Term> idSpec = new hydra.util.Lazy<>(() -> ((java.util.function.Function<hydra.pg.model.Vertex<hydra.core.Term>, hydra.core.Term>) (projected -> projected.id)).apply(vertexSpec));
     hydra.util.Lazy<hydra.pg.model.VertexLabel> label = new hydra.util.Lazy<>(() -> ((java.util.function.Function<hydra.pg.model.Vertex<hydra.core.Term>, hydra.pg.model.VertexLabel>) (projected -> projected.label)).apply(vertexSpec));
     hydra.util.Lazy<java.util.Map<hydra.pg.model.PropertyKey, hydra.core.Term>> propSpecs = new hydra.util.Lazy<>(() -> ((java.util.function.Function<hydra.pg.model.Vertex<hydra.core.Term>, java.util.Map<hydra.pg.model.PropertyKey, hydra.core.Term>>) (projected -> projected.properties)).apply(vertexSpec));
@@ -377,18 +375,17 @@ public interface Transform {
           g,
           true,
           new hydra.core.Term.Application(new hydra.core.Application(idSpec.get(), record))),
-        (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<hydra.core.Term>>>) (_term -> hydra.extract.Core.maybeTerm(
-          cx,
-          (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term>>) (t -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term>right(t)),
+        (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.Error_, hydra.util.Maybe<hydra.core.Term>>>) (_term -> hydra.extract.Core.maybeTerm(
+          (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.Error_, hydra.core.Term>>) (t -> hydra.util.Either.<hydra.errors.Error_, hydra.core.Term>right(t)),
           g,
           _term))),
-      (java.util.function.Function<hydra.util.Maybe<hydra.core.Term>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<hydra.pg.model.Vertex<hydra.core.Term>>>>) (mId -> hydra.lib.eithers.Bind.apply(
+      (java.util.function.Function<hydra.util.Maybe<hydra.core.Term>, hydra.util.Either<hydra.errors.Error_, hydra.util.Maybe<hydra.pg.model.Vertex<hydra.core.Term>>>>) (mId -> hydra.lib.eithers.Bind.apply(
         hydra.demos.genpg.Transform.evaluateProperties(
           cx,
           g,
           propSpecs.get(),
           record),
-        (java.util.function.Function<java.util.Map<hydra.pg.model.PropertyKey, hydra.core.Term>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<hydra.pg.model.Vertex<hydra.core.Term>>>>) (props -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<hydra.pg.model.Vertex<hydra.core.Term>>>right(hydra.lib.maybes.Map.apply(
+        (java.util.function.Function<java.util.Map<hydra.pg.model.PropertyKey, hydra.core.Term>, hydra.util.Either<hydra.errors.Error_, hydra.util.Maybe<hydra.pg.model.Vertex<hydra.core.Term>>>>) (props -> hydra.util.Either.<hydra.errors.Error_, hydra.util.Maybe<hydra.pg.model.Vertex<hydra.core.Term>>>right(hydra.lib.maybes.Map.apply(
           (java.util.function.Function<hydra.core.Term, hydra.pg.model.Vertex<hydra.core.Term>>) (id -> (hydra.pg.model.Vertex<hydra.core.Term>) (new hydra.pg.model.Vertex<hydra.core.Term>(label.get(), id, props))),
           mId))))));
   }
@@ -621,27 +618,27 @@ public interface Transform {
       cells.get())));
   }
 
-  static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<java.util.List<hydra.pg.model.Vertex<hydra.core.Term>>, java.util.List<hydra.pg.model.Edge<hydra.core.Term>>>> transformRecord(hydra.context.Context cx, hydra.graph.Graph g, java.util.List<hydra.pg.model.Vertex<hydra.core.Term>> vspecs, java.util.List<hydra.pg.model.Edge<hydra.core.Term>> especs, hydra.core.Term record) {
+  static hydra.util.Either<hydra.errors.Error_, hydra.util.Pair<java.util.List<hydra.pg.model.Vertex<hydra.core.Term>>, java.util.List<hydra.pg.model.Edge<hydra.core.Term>>>> transformRecord(hydra.context.Context cx, hydra.graph.Graph g, java.util.List<hydra.pg.model.Vertex<hydra.core.Term>> vspecs, java.util.List<hydra.pg.model.Edge<hydra.core.Term>> especs, hydra.core.Term record) {
     return hydra.lib.eithers.Bind.apply(
       hydra.lib.eithers.MapList.apply(
-        (java.util.function.Function<hydra.pg.model.Vertex<hydra.core.Term>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<hydra.pg.model.Vertex<hydra.core.Term>>>>) (spec -> hydra.demos.genpg.Transform.evaluateVertex(
+        (java.util.function.Function<hydra.pg.model.Vertex<hydra.core.Term>, hydra.util.Either<hydra.errors.Error_, hydra.util.Maybe<hydra.pg.model.Vertex<hydra.core.Term>>>>) (spec -> hydra.demos.genpg.Transform.evaluateVertex(
           cx,
           g,
           spec,
           record)),
         vspecs),
-      (java.util.function.Function<java.util.List<hydra.util.Maybe<hydra.pg.model.Vertex<hydra.core.Term>>>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<java.util.List<hydra.pg.model.Vertex<hydra.core.Term>>, java.util.List<hydra.pg.model.Edge<hydra.core.Term>>>>>) (mVertices -> hydra.lib.eithers.Bind.apply(
+      (java.util.function.Function<java.util.List<hydra.util.Maybe<hydra.pg.model.Vertex<hydra.core.Term>>>, hydra.util.Either<hydra.errors.Error_, hydra.util.Pair<java.util.List<hydra.pg.model.Vertex<hydra.core.Term>>, java.util.List<hydra.pg.model.Edge<hydra.core.Term>>>>>) (mVertices -> hydra.lib.eithers.Bind.apply(
         hydra.lib.eithers.MapList.apply(
-          (java.util.function.Function<hydra.pg.model.Edge<hydra.core.Term>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<hydra.pg.model.Edge<hydra.core.Term>>>>) (spec -> hydra.demos.genpg.Transform.evaluateEdge(
+          (java.util.function.Function<hydra.pg.model.Edge<hydra.core.Term>, hydra.util.Either<hydra.errors.Error_, hydra.util.Maybe<hydra.pg.model.Edge<hydra.core.Term>>>>) (spec -> hydra.demos.genpg.Transform.evaluateEdge(
             cx,
             g,
             spec,
             record)),
           especs),
-        (java.util.function.Function<java.util.List<hydra.util.Maybe<hydra.pg.model.Edge<hydra.core.Term>>>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<java.util.List<hydra.pg.model.Vertex<hydra.core.Term>>, java.util.List<hydra.pg.model.Edge<hydra.core.Term>>>>>) (mEdges -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<java.util.List<hydra.pg.model.Vertex<hydra.core.Term>>, java.util.List<hydra.pg.model.Edge<hydra.core.Term>>>>right((hydra.util.Pair<java.util.List<hydra.pg.model.Vertex<hydra.core.Term>>, java.util.List<hydra.pg.model.Edge<hydra.core.Term>>>) ((hydra.util.Pair<java.util.List<hydra.pg.model.Vertex<hydra.core.Term>>, java.util.List<hydra.pg.model.Edge<hydra.core.Term>>>) (new hydra.util.Pair<java.util.List<hydra.pg.model.Vertex<hydra.core.Term>>, java.util.List<hydra.pg.model.Edge<hydra.core.Term>>>(hydra.lib.maybes.Cat.apply(mVertices), hydra.lib.maybes.Cat.apply(mEdges)))))))));
+        (java.util.function.Function<java.util.List<hydra.util.Maybe<hydra.pg.model.Edge<hydra.core.Term>>>, hydra.util.Either<hydra.errors.Error_, hydra.util.Pair<java.util.List<hydra.pg.model.Vertex<hydra.core.Term>>, java.util.List<hydra.pg.model.Edge<hydra.core.Term>>>>>) (mEdges -> hydra.util.Either.<hydra.errors.Error_, hydra.util.Pair<java.util.List<hydra.pg.model.Vertex<hydra.core.Term>>, java.util.List<hydra.pg.model.Edge<hydra.core.Term>>>>right((hydra.util.Pair<java.util.List<hydra.pg.model.Vertex<hydra.core.Term>>, java.util.List<hydra.pg.model.Edge<hydra.core.Term>>>) ((hydra.util.Pair<java.util.List<hydra.pg.model.Vertex<hydra.core.Term>>, java.util.List<hydra.pg.model.Edge<hydra.core.Term>>>) (new hydra.util.Pair<java.util.List<hydra.pg.model.Vertex<hydra.core.Term>>, java.util.List<hydra.pg.model.Edge<hydra.core.Term>>>(hydra.lib.maybes.Cat.apply(mVertices), hydra.lib.maybes.Cat.apply(mEdges)))))))));
   }
 
-  static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<java.util.List<hydra.pg.model.Vertex<hydra.core.Term>>, java.util.List<hydra.pg.model.Edge<hydra.core.Term>>>> transformTableRows(hydra.context.Context cx, hydra.graph.Graph g, java.util.List<hydra.pg.model.Vertex<hydra.core.Term>> vspecs, java.util.List<hydra.pg.model.Edge<hydra.core.Term>> especs, hydra.tabular.TableType tableType, java.util.List<hydra.tabular.DataRow<hydra.core.Term>> rows) {
+  static hydra.util.Either<hydra.errors.Error_, hydra.util.Pair<java.util.List<hydra.pg.model.Vertex<hydra.core.Term>>, java.util.List<hydra.pg.model.Edge<hydra.core.Term>>>> transformTableRows(hydra.context.Context cx, hydra.graph.Graph g, java.util.List<hydra.pg.model.Vertex<hydra.core.Term>> vspecs, java.util.List<hydra.pg.model.Edge<hydra.core.Term>> especs, hydra.tabular.TableType tableType, java.util.List<hydra.tabular.DataRow<hydra.core.Term>> rows) {
     return hydra.lib.eithers.Map.apply(
       (java.util.function.Function<java.util.List<hydra.util.Pair<java.util.List<hydra.pg.model.Vertex<hydra.core.Term>>, java.util.List<hydra.pg.model.Edge<hydra.core.Term>>>>, hydra.util.Pair<java.util.List<hydra.pg.model.Vertex<hydra.core.Term>>, java.util.List<hydra.pg.model.Edge<hydra.core.Term>>>>) (pairs -> hydra.lib.lists.Foldl.apply(
         p0 -> p1 -> hydra.demos.genpg.Transform.<hydra.pg.model.Vertex<hydra.core.Term>, hydra.pg.model.Edge<hydra.core.Term>>concatPairs(
@@ -650,7 +647,7 @@ public interface Transform {
         (hydra.util.Pair<java.util.List<hydra.pg.model.Vertex<hydra.core.Term>>, java.util.List<hydra.pg.model.Edge<hydra.core.Term>>>) ((hydra.util.Pair<java.util.List<hydra.pg.model.Vertex<hydra.core.Term>>, java.util.List<hydra.pg.model.Edge<hydra.core.Term>>>) (new hydra.util.Pair<java.util.List<hydra.pg.model.Vertex<hydra.core.Term>>, java.util.List<hydra.pg.model.Edge<hydra.core.Term>>>((java.util.List<hydra.pg.model.Vertex<hydra.core.Term>>) (java.util.Collections.<hydra.pg.model.Vertex<hydra.core.Term>>emptyList()), (java.util.List<hydra.pg.model.Edge<hydra.core.Term>>) (java.util.Collections.<hydra.pg.model.Edge<hydra.core.Term>>emptyList())))),
         pairs)),
       hydra.lib.eithers.MapList.apply(
-        (java.util.function.Function<hydra.tabular.DataRow<hydra.core.Term>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<java.util.List<hydra.pg.model.Vertex<hydra.core.Term>>, java.util.List<hydra.pg.model.Edge<hydra.core.Term>>>>>) (row -> hydra.demos.genpg.Transform.transformRecord(
+        (java.util.function.Function<hydra.tabular.DataRow<hydra.core.Term>, hydra.util.Either<hydra.errors.Error_, hydra.util.Pair<java.util.List<hydra.pg.model.Vertex<hydra.core.Term>>, java.util.List<hydra.pg.model.Edge<hydra.core.Term>>>>>) (row -> hydra.demos.genpg.Transform.transformRecord(
           cx,
           g,
           vspecs,

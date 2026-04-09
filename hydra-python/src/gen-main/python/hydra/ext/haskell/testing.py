@@ -9,7 +9,6 @@ from hydra.dsl.python import Either, Nothing, Right, frozenlist
 from typing import TypeVar, cast
 import hydra.coders
 import hydra.constants
-import hydra.context
 import hydra.core
 import hydra.decode.core
 import hydra.dependencies
@@ -88,7 +87,7 @@ def build_namespaces_for_test_group(mod: hydra.packaging.Module, tgroup: hydra.t
     @lru_cache(1)
     def temp_module() -> hydra.packaging.Module:
         return hydra.packaging.Module(mod.namespace, hydra.lib.lists.map((lambda b: cast(hydra.packaging.Definition, hydra.packaging.DefinitionTerm(hydra.packaging.TermDefinition(b.name, b.term, b.type)))), test_bindings()), mod.term_dependencies, mod.type_dependencies, mod.description)
-    return hydra.lib.eithers.bind(hydra.lib.eithers.bimap((lambda ic: hydra.show.errors.error(ic.object)), (lambda a: a), hydra.ext.haskell.utils.namespaces_for_module(temp_module(), hydra.lexical.empty_context(), graph_)), (lambda base_namespaces: (encoded_names := hydra.lib.sets.unions(hydra.lib.lists.map((lambda t: extract_encoded_term_variable_names(graph_, t)), test_terms())), Right(add_namespaces_to_namespaces(base_namespaces, encoded_names)))[1]))
+    return hydra.lib.eithers.bind(hydra.lib.eithers.bimap((lambda e: hydra.show.errors.error(e)), (lambda a: a), hydra.ext.haskell.utils.namespaces_for_module(temp_module(), hydra.lexical.empty_context(), graph_)), (lambda base_namespaces: (encoded_names := hydra.lib.sets.unions(hydra.lib.lists.map((lambda t: extract_encoded_term_variable_names(graph_, t)), test_terms())), Right(add_namespaces_to_namespaces(base_namespaces, encoded_names)))[1]))
 
 def find_haskell_imports(namespaces: hydra.packaging.Namespaces[hydra.ext.haskell.syntax.ModuleName], names_: T0) -> frozenlist[str]:
     r"""Find necessary imports for Haskell based on referenced names."""

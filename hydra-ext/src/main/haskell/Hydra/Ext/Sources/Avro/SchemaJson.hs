@@ -85,7 +85,7 @@ import qualified Hydra.Json.Model as JM
 import qualified Hydra.Parsing as Parsing
 import qualified Hydra.Ext.Sources.Avro.Schema as AvroSchema
 -- Result type alias (was previously imported from Staging module)
-type Result a = Either (InContext Error) a
+type Result a = Either Error a
 
 
 define :: String -> TTerm a -> TTermDefinition a

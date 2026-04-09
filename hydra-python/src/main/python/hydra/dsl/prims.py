@@ -7,7 +7,7 @@ from typing import TypeVar, cast
 import hydra.dsl.terms as terms
 import hydra.dsl.types as types
 import hydra.extract.core as extract
-from hydra.context import Context, InContext
+from hydra.context import Context
 from hydra.core import (
     Application,
     FloatType,
@@ -35,9 +35,9 @@ X = TypeVar("X")
 Y = TypeVar("Y")
 
 
-def other_err(cx: Context, msg: str) -> InContext[Error]:
-    """Create an Error (Other) InContext from a string message and context."""
-    return InContext(object=ErrorOther(OtherError(msg)), context=cx)
+def other_err(cx: Context, msg: str) -> Error:
+    """Create an Error (Other) from a string message."""
+    return ErrorOther(OtherError(msg))
 
 
 
@@ -74,7 +74,7 @@ def build_type_scheme(vars: list[TypeVar_], typ: Type):
 def bigfloat() -> TermCoder[Decimal]:
     return TermCoder(
         type=types.bigfloat(),
-        encode=lambda cx, g, t: extract.bigfloat(cx, g, t),
+        encode=lambda cx, g, t: extract.bigfloat(g, t),
         decode=lambda cx, v: Right(terms.bigfloat(float(v)))
     )
 
@@ -82,7 +82,7 @@ def bigfloat() -> TermCoder[Decimal]:
 def bigint() -> TermCoder[int]:
     return TermCoder(
         type=types.bigint(),
-        encode=lambda cx, g, t: extract.bigint(cx, g, t),
+        encode=lambda cx, g, t: extract.bigint(g, t),
         decode=lambda cx, v: Right(terms.bigint(v))
     )
 
@@ -90,7 +90,7 @@ def bigint() -> TermCoder[int]:
 def binary() -> TermCoder[bytes]:
     return TermCoder(
         type=types.binary(),
-        encode=lambda cx, g, t: extract.binary(cx, g, t),
+        encode=lambda cx, g, t: extract.binary(g, t),
         decode=lambda cx, v: Right(terms.binary(v))
     )
 
@@ -98,7 +98,7 @@ def binary() -> TermCoder[bytes]:
 def boolean() -> TermCoder[bool]:
     return TermCoder(
         type=types.boolean(),
-        encode=lambda cx, g, t: extract.boolean(cx, g, t),
+        encode=lambda cx, g, t: extract.boolean(g, t),
         decode=lambda cx, v: Right(terms.boolean(v))
     )
 
@@ -106,7 +106,7 @@ def boolean() -> TermCoder[bool]:
 def float32() -> TermCoder[float]:
     return TermCoder(
         type=types.float32(),
-        encode=lambda cx, g, t: extract.float32(cx, g, t),
+        encode=lambda cx, g, t: extract.float32(g, t),
         decode=lambda cx, v: Right(terms.float32(v))
     )
 
@@ -114,7 +114,7 @@ def float32() -> TermCoder[float]:
 def float64() -> TermCoder[float]:
     return TermCoder(
         type=types.float64(),
-        encode=lambda cx, g, t: extract.float64(cx, g, t),
+        encode=lambda cx, g, t: extract.float64(g, t),
         decode=lambda cx, v: Right(terms.float64(v))
     )
 
@@ -122,7 +122,7 @@ def float64() -> TermCoder[float]:
 def int8() -> TermCoder[int]:
     return TermCoder(
         type=types.int8(),
-        encode=lambda cx, g, t: extract.int8(cx, g, t),
+        encode=lambda cx, g, t: extract.int8(g, t),
         decode=lambda cx, v: Right(terms.int8(v))
     )
 
@@ -130,7 +130,7 @@ def int8() -> TermCoder[int]:
 def int16() -> TermCoder[int]:
     return TermCoder(
         type=types.int16(),
-        encode=lambda cx, g, t: extract.int16(cx, g, t),
+        encode=lambda cx, g, t: extract.int16(g, t),
         decode=lambda cx, v: Right(terms.int16(v))
     )
 
@@ -138,7 +138,7 @@ def int16() -> TermCoder[int]:
 def int32() -> TermCoder[int]:
     return TermCoder(
         type=types.int32(),
-        encode=lambda cx, g, t: extract.int32(cx, g, t),
+        encode=lambda cx, g, t: extract.int32(g, t),
         decode=lambda cx, v: Right(terms.int32(v))
     )
 
@@ -146,7 +146,7 @@ def int32() -> TermCoder[int]:
 def int64() -> TermCoder[int]:
     return TermCoder(
         type=types.int64(),
-        encode=lambda cx, g, t: extract.int64(cx, g, t),
+        encode=lambda cx, g, t: extract.int64(g, t),
         decode=lambda cx, v: Right(terms.int64(v))
     )
 
@@ -154,7 +154,7 @@ def int64() -> TermCoder[int]:
 def uint8() -> TermCoder[int]:
     return TermCoder(
         type=types.uint8(),
-        encode=lambda cx, g, t: extract.uint8(cx, g, t),
+        encode=lambda cx, g, t: extract.uint8(g, t),
         decode=lambda cx, v: Right(terms.uint8(v))
     )
 
@@ -162,7 +162,7 @@ def uint8() -> TermCoder[int]:
 def uint16() -> TermCoder[int]:
     return TermCoder(
         type=types.uint16(),
-        encode=lambda cx, g, t: extract.uint16(cx, g, t),
+        encode=lambda cx, g, t: extract.uint16(g, t),
         decode=lambda cx, v: Right(terms.uint16(v))
     )
 
@@ -170,7 +170,7 @@ def uint16() -> TermCoder[int]:
 def uint32() -> TermCoder[int]:
     return TermCoder(
         type=types.uint32(),
-        encode=lambda cx, g, t: extract.uint32(cx, g, t),
+        encode=lambda cx, g, t: extract.uint32(g, t),
         decode=lambda cx, v: Right(terms.uint32(v))
     )
 
@@ -178,7 +178,7 @@ def uint32() -> TermCoder[int]:
 def uint64() -> TermCoder[int]:
     return TermCoder(
         type=types.uint64(),
-        encode=lambda cx, g, t: extract.uint64(cx, g, t),
+        encode=lambda cx, g, t: extract.uint64(g, t),
         decode=lambda cx, v: Right(terms.uint64(v))
     )
 
@@ -186,7 +186,7 @@ def uint64() -> TermCoder[int]:
 def string() -> TermCoder[str]:
     return TermCoder(
         type=types.string(),
-        encode=lambda cx, g, t: extract.string(cx, g, t),
+        encode=lambda cx, g, t: extract.string(g, t),
         decode=lambda cx, s: Right(terms.string(s))
     )
 
@@ -209,7 +209,7 @@ def float_type() -> TermCoder[FloatType]:
         result = decode_core.float_type(g, t)
         match result:
             case Left(value=err):
-                return Left(InContext(object=ErrorOther(OtherError(err.value)), context=cx))
+                return Left(ErrorOther(OtherError(err.value)))
             case Right(value=v):
                 return Right(v)
     return TermCoder(
@@ -222,7 +222,7 @@ def float_type() -> TermCoder[FloatType]:
 def float_value() -> TermCoder[FloatValue]:
     return TermCoder(
         type=types.var("hydra.core.FloatValue"),
-        encode=lambda cx, g, t: extract.float_value(cx, g, t),
+        encode=lambda cx, g, t: extract.float_value(g, t),
         decode=lambda cx, fv: Right(terms.float_(fv))
     )
 
@@ -234,7 +234,7 @@ def integer_type() -> TermCoder[IntegerType]:
         result = decode_core.integer_type(g, t)
         match result:
             case Left(value=err):
-                return Left(InContext(object=ErrorOther(OtherError(err.value)), context=cx))
+                return Left(ErrorOther(OtherError(err.value)))
             case Right(value=v):
                 return Right(v)
     return TermCoder(
@@ -247,7 +247,7 @@ def integer_type() -> TermCoder[IntegerType]:
 def integer_value() -> TermCoder[IntegerValue]:
     return TermCoder(
         type=types.var("hydra.core.IntegerValue"),
-        encode=lambda cx, g, t: extract.integer_value(cx, g, t),
+        encode=lambda cx, g, t: extract.integer_value(g, t),
         decode=lambda cx, iv: Right(terms.integer(iv))
     )
 
@@ -255,7 +255,7 @@ def integer_value() -> TermCoder[IntegerValue]:
 def literal() -> TermCoder[Literal]:
     return TermCoder(
         type=types.var("hydra.core.Literal"),
-        encode=lambda cx, g, t: extract.literal(cx, g, t),
+        encode=lambda cx, g, t: extract.literal(g, t),
         decode=lambda cx, lit: Right(terms.literal(lit))
     )
 
@@ -267,7 +267,7 @@ def literal_type() -> TermCoder[LiteralType]:
         result = decode_core.literal_type(g, t)
         match result:
             case Left(value=err):
-                return Left(InContext(object=ErrorOther(OtherError(err.value)), context=cx))
+                return Left(ErrorOther(OtherError(err.value)))
             case Right(value=v):
                 return Right(v)
     return TermCoder(
@@ -292,7 +292,7 @@ def type_() -> TermCoder[Type]:
         result = decode_core.type(g, t)
         match result:
             case Left(value=err):
-                return Left(InContext(object=ErrorOther(OtherError(err.value)), context=cx))
+                return Left(ErrorOther(OtherError(err.value)))
             case Right(value=v):
                 return Right(v)
     return TermCoder(
@@ -306,7 +306,7 @@ def type_() -> TermCoder[Type]:
 
 def list_(els: TermCoder[X]) -> TermCoder[frozenlist[X]]:
     def encode(cx, g, t):
-        return extract.list_of(cx, lambda term: els.encode(cx, g, term), g, t)
+        return extract.list_of(lambda term: els.encode(cx, g, term), g, t)
     def decode(cx, lst):
         result_items = []
         for item in lst:
@@ -326,7 +326,7 @@ def list_(els: TermCoder[X]) -> TermCoder[frozenlist[X]]:
 
 def map_(keys: TermCoder[X], values: TermCoder[Y]) -> TermCoder[FrozenDict[X, Y]]:
     def encode(cx, g, t):
-        return extract.map(cx, lambda term: keys.encode(cx, g, term), lambda term: values.encode(cx, g, term), g, t)
+        return extract.map(lambda term: keys.encode(cx, g, term), lambda term: values.encode(cx, g, term), g, t)
     def decode(cx, m):
         pairs = []
         for k, v_ in m.items():
@@ -353,7 +353,7 @@ def map_(keys: TermCoder[X], values: TermCoder[Y]) -> TermCoder[FrozenDict[X, Y]
 
 def optional(mel: TermCoder[X]) -> TermCoder[Maybe[X]]:
     def encode(cx, g, t):
-        return extract.maybe_term(cx, lambda term: mel.encode(cx, g, term), g, t)
+        return extract.maybe_term(lambda term: mel.encode(cx, g, term), g, t)
     def decode(cx, mv):
         match mv:
             case Nothing():
@@ -374,7 +374,7 @@ def optional(mel: TermCoder[X]) -> TermCoder[Maybe[X]]:
 
 def either(left_coder: TermCoder[X], right_coder: TermCoder[Y]) -> TermCoder[Either[X, Y]]:
     def encode(cx, g, t):
-        return extract.either_term(cx, lambda term: left_coder.encode(cx, g, term), lambda term: right_coder.encode(cx, g, term), g, t)
+        return extract.either_term(lambda term: left_coder.encode(cx, g, term), lambda term: right_coder.encode(cx, g, term), g, t)
     def decode(cx, ev):
         match ev:
             case Left(value=x):
@@ -400,7 +400,7 @@ def either(left_coder: TermCoder[X], right_coder: TermCoder[Y]) -> TermCoder[Eit
 
 def pair(first_coder: TermCoder[X], second_coder: TermCoder[Y]) -> TermCoder[tuple[X, Y]]:
     def encode(cx, g, t):
-        return extract.pair(cx, lambda term: first_coder.encode(cx, g, term), lambda term: second_coder.encode(cx, g, term), g, t)
+        return extract.pair(lambda term: first_coder.encode(cx, g, term), lambda term: second_coder.encode(cx, g, term), g, t)
     def decode(cx, p):
         fr = first_coder.decode(cx, p[0])
         match fr:
@@ -424,7 +424,7 @@ def pair(first_coder: TermCoder[X], second_coder: TermCoder[Y]) -> TermCoder[tup
 
 def set_(els: TermCoder[X]) -> TermCoder[frozenset[X]]:
     def encode(cx, g, t):
-        return extract.set_of(cx, lambda term: els.encode(cx, g, term), g, t)
+        return extract.set_of(lambda term: els.encode(cx, g, term), g, t)
     def decode(cx, s):
         result_items = []
         for item in list(s):
@@ -460,7 +460,7 @@ def function_with_reduce(
 ) -> TermCoder[Callable[[X], Y]]:
     """TermCoder for function types, using a reducer to bridge term-level functions to native functions.
 
-    The reduce parameter should be (cx, g, term) -> Either[InContext[Error], Term].
+    The reduce parameter should be (cx, g, term) -> Either[Error, Term].
     """
     def encode(cx, g, fun_term):
         def native_fun(x):
@@ -506,7 +506,7 @@ def prim0(
         name: Name, value: Callable[[], A], variables: list[TypeVar_], output: TermCoder[A]
 ) -> Primitive:
     """Create a 0-argument primitive function."""
-    def impl(cx: Context, g: Graph, args: frozenlist[Term]) -> Either[InContext[Error], Term]:
+    def impl(cx: Context, g: Graph, args: frozenlist[Term]) -> Either[Error, Term]:
         result = output.decode(cx, value())
         return result
 
@@ -523,9 +523,9 @@ def prim1(
         output: TermCoder[B],
 ) -> Primitive:
     """Create a 1-argument primitive function."""
-    def impl(cx: Context, g: Graph, args: frozenlist[Term]) -> Either[InContext[Error], Term]:
+    def impl(cx: Context, g: Graph, args: frozenlist[Term]) -> Either[Error, Term]:
         def go():
-            r = extract.n_args(cx, name, 1, args)
+            r = extract.n_args(name, 1, args)
             match r:
                 case Left(value=ic):
                     return Left(ic)
@@ -556,9 +556,9 @@ def prim2(
         output: TermCoder[C],
 ) -> Primitive:
     """Create a 2-argument primitive function."""
-    def impl(cx: Context, g: Graph, args: frozenlist[Term]) -> Either[InContext[Error], Term]:
+    def impl(cx: Context, g: Graph, args: frozenlist[Term]) -> Either[Error, Term]:
         def go():
-            r = extract.n_args(cx, name, 2, args)
+            r = extract.n_args(name, 2, args)
             match r:
                 case Left(value=ic):
                     return Left(ic)
@@ -599,9 +599,9 @@ def prim3(
         output: TermCoder[D],
 ) -> Primitive:
     """Create a 3-argument primitive function."""
-    def impl(cx: Context, g: Graph, args: frozenlist[Term]) -> Either[InContext[Error], Term]:
+    def impl(cx: Context, g: Graph, args: frozenlist[Term]) -> Either[Error, Term]:
         def go():
-            r = extract.n_args(cx, name, 3, args)
+            r = extract.n_args(name, 3, args)
             match r:
                 case Left(value=ic):
                     return Left(ic)

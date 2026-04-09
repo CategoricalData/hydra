@@ -1850,7 +1850,10 @@
                                                                                   "argument": {"variable": "hydra.lexical.emptyContext"},
                                                                                   "function": {
                                                                                     "typeApplication": {
-                                                                                      "body": {"variable": "hydra.unification.unifyTypes"},
+                                                                                      "body": {
+                                                                                        "typeApplication": {
+                                                                                          "body": {"variable": "hydra.unification.unifyTypes"},
+                                                                                          "type": {"variable": "hydra.context.Context"}}},
                                                                                       "type": {"variable": "hydra.core.TypeScheme"}}}}}}}}}}}}},
                                                               "function": {
                                                                 "application": {
@@ -1945,10 +1948,7 @@
                                                                         "function": {
                                                                           "lambda": {
                                                                             "body": {"literal": {"string": "failure"}},
-                                                                            "domain": {
-                                                                              "application": {
-                                                                                "argument": {"variable": "hydra.errors.UnificationError"},
-                                                                                "function": {"variable": "hydra.context.InContext"}}},
+                                                                            "domain": {"variable": "hydra.errors.UnificationError"},
                                                                             "parameter": "_"}}},
                                                                       "function": {
                                                                         "typeApplication": {
@@ -1957,10 +1957,7 @@
                                                                               "body": {
                                                                                 "typeApplication": {
                                                                                   "body": {"variable": "hydra.lib.eithers.either"},
-                                                                                  "type": {
-                                                                                    "application": {
-                                                                                      "argument": {"variable": "hydra.errors.UnificationError"},
-                                                                                      "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                                  "type": {"variable": "hydra.errors.UnificationError"}}},
                                                                               "type": {"variable": "hydra.typing.TypeSubst"}}},
                                                                           "type": {"literal": {"string": {}}}}}}}}}}}},
                                                         {
@@ -2176,7 +2173,10 @@
                                                                                   "argument": {"variable": "hydra.lexical.emptyContext"},
                                                                                   "function": {
                                                                                     "typeApplication": {
-                                                                                      "body": {"variable": "hydra.unification.unifyTypes"},
+                                                                                      "body": {
+                                                                                        "typeApplication": {
+                                                                                          "body": {"variable": "hydra.unification.unifyTypes"},
+                                                                                          "type": {"variable": "hydra.context.Context"}}},
                                                                                       "type": {"variable": "hydra.core.TypeScheme"}}}}}}}}}}}}},
                                                               "function": {
                                                                 "application": {
@@ -2271,10 +2271,7 @@
                                                                         "function": {
                                                                           "lambda": {
                                                                             "body": {"literal": {"string": "failure"}},
-                                                                            "domain": {
-                                                                              "application": {
-                                                                                "argument": {"variable": "hydra.errors.UnificationError"},
-                                                                                "function": {"variable": "hydra.context.InContext"}}},
+                                                                            "domain": {"variable": "hydra.errors.UnificationError"},
                                                                             "parameter": "_"}}},
                                                                       "function": {
                                                                         "typeApplication": {
@@ -2283,10 +2280,7 @@
                                                                               "body": {
                                                                                 "typeApplication": {
                                                                                   "body": {"variable": "hydra.lib.eithers.either"},
-                                                                                  "type": {
-                                                                                    "application": {
-                                                                                      "argument": {"variable": "hydra.errors.UnificationError"},
-                                                                                      "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                                  "type": {"variable": "hydra.errors.UnificationError"}}},
                                                                               "type": {"variable": "hydra.typing.TypeSubst"}}},
                                                                           "type": {"literal": {"string": {}}}}}}}}}}}},
                                                         {
@@ -2498,7 +2492,10 @@
                                                                                   "argument": {"variable": "hydra.lexical.emptyContext"},
                                                                                   "function": {
                                                                                     "typeApplication": {
-                                                                                      "body": {"variable": "hydra.unification.unifyTypes"},
+                                                                                      "body": {
+                                                                                        "typeApplication": {
+                                                                                          "body": {"variable": "hydra.unification.unifyTypes"},
+                                                                                          "type": {"variable": "hydra.context.Context"}}},
                                                                                       "type": {"variable": "hydra.core.TypeScheme"}}}}}}}}}}}}},
                                                               "function": {
                                                                 "application": {
@@ -2593,10 +2590,7 @@
                                                                         "function": {
                                                                           "lambda": {
                                                                             "body": {"literal": {"string": "failure"}},
-                                                                            "domain": {
-                                                                              "application": {
-                                                                                "argument": {"variable": "hydra.errors.UnificationError"},
-                                                                                "function": {"variable": "hydra.context.InContext"}}},
+                                                                            "domain": {"variable": "hydra.errors.UnificationError"},
                                                                             "parameter": "_"}}},
                                                                       "function": {
                                                                         "typeApplication": {
@@ -2605,10 +2599,7 @@
                                                                               "body": {
                                                                                 "typeApplication": {
                                                                                   "body": {"variable": "hydra.lib.eithers.either"},
-                                                                                  "type": {
-                                                                                    "application": {
-                                                                                      "argument": {"variable": "hydra.errors.UnificationError"},
-                                                                                      "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                                  "type": {"variable": "hydra.errors.UnificationError"}}},
                                                                               "type": {"variable": "hydra.typing.TypeSubst"}}},
                                                                           "type": {"literal": {"string": {}}}}}}}}}}}},
                                                         {
@@ -2827,7 +2818,10 @@
                                                                                   "argument": {"variable": "hydra.lexical.emptyContext"},
                                                                                   "function": {
                                                                                     "typeApplication": {
-                                                                                      "body": {"variable": "hydra.unification.unifyTypes"},
+                                                                                      "body": {
+                                                                                        "typeApplication": {
+                                                                                          "body": {"variable": "hydra.unification.unifyTypes"},
+                                                                                          "type": {"variable": "hydra.context.Context"}}},
                                                                                       "type": {"variable": "hydra.core.TypeScheme"}}}}}}}}}}}}},
                                                               "function": {
                                                                 "application": {
@@ -2922,10 +2916,7 @@
                                                                         "function": {
                                                                           "lambda": {
                                                                             "body": {"literal": {"string": "failure"}},
-                                                                            "domain": {
-                                                                              "application": {
-                                                                                "argument": {"variable": "hydra.errors.UnificationError"},
-                                                                                "function": {"variable": "hydra.context.InContext"}}},
+                                                                            "domain": {"variable": "hydra.errors.UnificationError"},
                                                                             "parameter": "_"}}},
                                                                       "function": {
                                                                         "typeApplication": {
@@ -2934,10 +2925,7 @@
                                                                               "body": {
                                                                                 "typeApplication": {
                                                                                   "body": {"variable": "hydra.lib.eithers.either"},
-                                                                                  "type": {
-                                                                                    "application": {
-                                                                                      "argument": {"variable": "hydra.errors.UnificationError"},
-                                                                                      "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                                  "type": {"variable": "hydra.errors.UnificationError"}}},
                                                                               "type": {"variable": "hydra.typing.TypeSubst"}}},
                                                                           "type": {"literal": {"string": {}}}}}}}}}}}},
                                                         {
@@ -3170,7 +3158,10 @@
                                                                                   "argument": {"variable": "hydra.lexical.emptyContext"},
                                                                                   "function": {
                                                                                     "typeApplication": {
-                                                                                      "body": {"variable": "hydra.unification.unifyTypes"},
+                                                                                      "body": {
+                                                                                        "typeApplication": {
+                                                                                          "body": {"variable": "hydra.unification.unifyTypes"},
+                                                                                          "type": {"variable": "hydra.context.Context"}}},
                                                                                       "type": {"variable": "hydra.core.TypeScheme"}}}}}}}}}}}}},
                                                               "function": {
                                                                 "application": {
@@ -3265,10 +3256,7 @@
                                                                         "function": {
                                                                           "lambda": {
                                                                             "body": {"literal": {"string": "failure"}},
-                                                                            "domain": {
-                                                                              "application": {
-                                                                                "argument": {"variable": "hydra.errors.UnificationError"},
-                                                                                "function": {"variable": "hydra.context.InContext"}}},
+                                                                            "domain": {"variable": "hydra.errors.UnificationError"},
                                                                             "parameter": "_"}}},
                                                                       "function": {
                                                                         "typeApplication": {
@@ -3277,10 +3265,7 @@
                                                                               "body": {
                                                                                 "typeApplication": {
                                                                                   "body": {"variable": "hydra.lib.eithers.either"},
-                                                                                  "type": {
-                                                                                    "application": {
-                                                                                      "argument": {"variable": "hydra.errors.UnificationError"},
-                                                                                      "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                                  "type": {"variable": "hydra.errors.UnificationError"}}},
                                                                               "type": {"variable": "hydra.typing.TypeSubst"}}},
                                                                           "type": {"literal": {"string": {}}}}}}}}}}}},
                                                         {
@@ -3506,7 +3491,10 @@
                                                                                   "argument": {"variable": "hydra.lexical.emptyContext"},
                                                                                   "function": {
                                                                                     "typeApplication": {
-                                                                                      "body": {"variable": "hydra.unification.unifyTypes"},
+                                                                                      "body": {
+                                                                                        "typeApplication": {
+                                                                                          "body": {"variable": "hydra.unification.unifyTypes"},
+                                                                                          "type": {"variable": "hydra.context.Context"}}},
                                                                                       "type": {"variable": "hydra.core.TypeScheme"}}}}}}}}}}}}},
                                                               "function": {
                                                                 "application": {
@@ -3601,10 +3589,7 @@
                                                                         "function": {
                                                                           "lambda": {
                                                                             "body": {"literal": {"string": "failure"}},
-                                                                            "domain": {
-                                                                              "application": {
-                                                                                "argument": {"variable": "hydra.errors.UnificationError"},
-                                                                                "function": {"variable": "hydra.context.InContext"}}},
+                                                                            "domain": {"variable": "hydra.errors.UnificationError"},
                                                                             "parameter": "_"}}},
                                                                       "function": {
                                                                         "typeApplication": {
@@ -3613,10 +3598,7 @@
                                                                               "body": {
                                                                                 "typeApplication": {
                                                                                   "body": {"variable": "hydra.lib.eithers.either"},
-                                                                                  "type": {
-                                                                                    "application": {
-                                                                                      "argument": {"variable": "hydra.errors.UnificationError"},
-                                                                                      "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                                  "type": {"variable": "hydra.errors.UnificationError"}}},
                                                                               "type": {"variable": "hydra.typing.TypeSubst"}}},
                                                                           "type": {"literal": {"string": {}}}}}}}}}}}},
                                                         {
@@ -3852,7 +3834,10 @@
                                                                                   "argument": {"variable": "hydra.lexical.emptyContext"},
                                                                                   "function": {
                                                                                     "typeApplication": {
-                                                                                      "body": {"variable": "hydra.unification.unifyTypes"},
+                                                                                      "body": {
+                                                                                        "typeApplication": {
+                                                                                          "body": {"variable": "hydra.unification.unifyTypes"},
+                                                                                          "type": {"variable": "hydra.context.Context"}}},
                                                                                       "type": {"variable": "hydra.core.TypeScheme"}}}}}}}}}}}}},
                                                               "function": {
                                                                 "application": {
@@ -3947,10 +3932,7 @@
                                                                         "function": {
                                                                           "lambda": {
                                                                             "body": {"literal": {"string": "failure"}},
-                                                                            "domain": {
-                                                                              "application": {
-                                                                                "argument": {"variable": "hydra.errors.UnificationError"},
-                                                                                "function": {"variable": "hydra.context.InContext"}}},
+                                                                            "domain": {"variable": "hydra.errors.UnificationError"},
                                                                             "parameter": "_"}}},
                                                                       "function": {
                                                                         "typeApplication": {
@@ -3959,10 +3941,7 @@
                                                                               "body": {
                                                                                 "typeApplication": {
                                                                                   "body": {"variable": "hydra.lib.eithers.either"},
-                                                                                  "type": {
-                                                                                    "application": {
-                                                                                      "argument": {"variable": "hydra.errors.UnificationError"},
-                                                                                      "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                                  "type": {"variable": "hydra.errors.UnificationError"}}},
                                                                               "type": {"variable": "hydra.typing.TypeSubst"}}},
                                                                           "type": {"literal": {"string": {}}}}}}}}}}}},
                                                         {
@@ -4202,7 +4181,10 @@
                                                                                   "argument": {"variable": "hydra.lexical.emptyContext"},
                                                                                   "function": {
                                                                                     "typeApplication": {
-                                                                                      "body": {"variable": "hydra.unification.unifyTypes"},
+                                                                                      "body": {
+                                                                                        "typeApplication": {
+                                                                                          "body": {"variable": "hydra.unification.unifyTypes"},
+                                                                                          "type": {"variable": "hydra.context.Context"}}},
                                                                                       "type": {"variable": "hydra.core.TypeScheme"}}}}}}}}}}}}},
                                                               "function": {
                                                                 "application": {
@@ -4297,10 +4279,7 @@
                                                                         "function": {
                                                                           "lambda": {
                                                                             "body": {"literal": {"string": "failure"}},
-                                                                            "domain": {
-                                                                              "application": {
-                                                                                "argument": {"variable": "hydra.errors.UnificationError"},
-                                                                                "function": {"variable": "hydra.context.InContext"}}},
+                                                                            "domain": {"variable": "hydra.errors.UnificationError"},
                                                                             "parameter": "_"}}},
                                                                       "function": {
                                                                         "typeApplication": {
@@ -4309,10 +4288,7 @@
                                                                               "body": {
                                                                                 "typeApplication": {
                                                                                   "body": {"variable": "hydra.lib.eithers.either"},
-                                                                                  "type": {
-                                                                                    "application": {
-                                                                                      "argument": {"variable": "hydra.errors.UnificationError"},
-                                                                                      "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                                  "type": {"variable": "hydra.errors.UnificationError"}}},
                                                                               "type": {"variable": "hydra.typing.TypeSubst"}}},
                                                                           "type": {"literal": {"string": {}}}}}}}}}}}},
                                                         {
@@ -4573,7 +4549,10 @@
                                                                                   "argument": {"variable": "hydra.lexical.emptyContext"},
                                                                                   "function": {
                                                                                     "typeApplication": {
-                                                                                      "body": {"variable": "hydra.unification.unifyTypes"},
+                                                                                      "body": {
+                                                                                        "typeApplication": {
+                                                                                          "body": {"variable": "hydra.unification.unifyTypes"},
+                                                                                          "type": {"variable": "hydra.context.Context"}}},
                                                                                       "type": {"variable": "hydra.core.TypeScheme"}}}}}}}}}}}}},
                                                               "function": {
                                                                 "application": {
@@ -4668,10 +4647,7 @@
                                                                         "function": {
                                                                           "lambda": {
                                                                             "body": {"literal": {"string": "failure"}},
-                                                                            "domain": {
-                                                                              "application": {
-                                                                                "argument": {"variable": "hydra.errors.UnificationError"},
-                                                                                "function": {"variable": "hydra.context.InContext"}}},
+                                                                            "domain": {"variable": "hydra.errors.UnificationError"},
                                                                             "parameter": "_"}}},
                                                                       "function": {
                                                                         "typeApplication": {
@@ -4680,10 +4656,7 @@
                                                                               "body": {
                                                                                 "typeApplication": {
                                                                                   "body": {"variable": "hydra.lib.eithers.either"},
-                                                                                  "type": {
-                                                                                    "application": {
-                                                                                      "argument": {"variable": "hydra.errors.UnificationError"},
-                                                                                      "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                                  "type": {"variable": "hydra.errors.UnificationError"}}},
                                                                               "type": {"variable": "hydra.typing.TypeSubst"}}},
                                                                           "type": {"literal": {"string": {}}}}}}}}}}}},
                                                         {
@@ -4979,7 +4952,10 @@
                                                                                   "argument": {"variable": "hydra.lexical.emptyContext"},
                                                                                   "function": {
                                                                                     "typeApplication": {
-                                                                                      "body": {"variable": "hydra.unification.unifyTypes"},
+                                                                                      "body": {
+                                                                                        "typeApplication": {
+                                                                                          "body": {"variable": "hydra.unification.unifyTypes"},
+                                                                                          "type": {"variable": "hydra.context.Context"}}},
                                                                                       "type": {"variable": "hydra.core.TypeScheme"}}}}}}}}}}}}},
                                                               "function": {
                                                                 "application": {
@@ -5074,10 +5050,7 @@
                                                                         "function": {
                                                                           "lambda": {
                                                                             "body": {"literal": {"string": "failure"}},
-                                                                            "domain": {
-                                                                              "application": {
-                                                                                "argument": {"variable": "hydra.errors.UnificationError"},
-                                                                                "function": {"variable": "hydra.context.InContext"}}},
+                                                                            "domain": {"variable": "hydra.errors.UnificationError"},
                                                                             "parameter": "_"}}},
                                                                       "function": {
                                                                         "typeApplication": {
@@ -5086,10 +5059,7 @@
                                                                               "body": {
                                                                                 "typeApplication": {
                                                                                   "body": {"variable": "hydra.lib.eithers.either"},
-                                                                                  "type": {
-                                                                                    "application": {
-                                                                                      "argument": {"variable": "hydra.errors.UnificationError"},
-                                                                                      "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                                  "type": {"variable": "hydra.errors.UnificationError"}}},
                                                                               "type": {"variable": "hydra.typing.TypeSubst"}}},
                                                                           "type": {"literal": {"string": {}}}}}}}}}}}},
                                                         {
@@ -5318,7 +5288,10 @@
                                                                                   "argument": {"variable": "hydra.lexical.emptyContext"},
                                                                                   "function": {
                                                                                     "typeApplication": {
-                                                                                      "body": {"variable": "hydra.unification.unifyTypes"},
+                                                                                      "body": {
+                                                                                        "typeApplication": {
+                                                                                          "body": {"variable": "hydra.unification.unifyTypes"},
+                                                                                          "type": {"variable": "hydra.context.Context"}}},
                                                                                       "type": {"variable": "hydra.core.TypeScheme"}}}}}}}}}}}}},
                                                               "function": {
                                                                 "application": {
@@ -5413,10 +5386,7 @@
                                                                         "function": {
                                                                           "lambda": {
                                                                             "body": {"literal": {"string": "failure"}},
-                                                                            "domain": {
-                                                                              "application": {
-                                                                                "argument": {"variable": "hydra.errors.UnificationError"},
-                                                                                "function": {"variable": "hydra.context.InContext"}}},
+                                                                            "domain": {"variable": "hydra.errors.UnificationError"},
                                                                             "parameter": "_"}}},
                                                                       "function": {
                                                                         "typeApplication": {
@@ -5425,10 +5395,7 @@
                                                                               "body": {
                                                                                 "typeApplication": {
                                                                                   "body": {"variable": "hydra.lib.eithers.either"},
-                                                                                  "type": {
-                                                                                    "application": {
-                                                                                      "argument": {"variable": "hydra.errors.UnificationError"},
-                                                                                      "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                                  "type": {"variable": "hydra.errors.UnificationError"}}},
                                                                               "type": {"variable": "hydra.typing.TypeSubst"}}},
                                                                           "type": {"literal": {"string": {}}}}}}}}}}}},
                                                         {
@@ -5701,7 +5668,10 @@
                                                                                   "argument": {"variable": "hydra.lexical.emptyContext"},
                                                                                   "function": {
                                                                                     "typeApplication": {
-                                                                                      "body": {"variable": "hydra.unification.unifyTypes"},
+                                                                                      "body": {
+                                                                                        "typeApplication": {
+                                                                                          "body": {"variable": "hydra.unification.unifyTypes"},
+                                                                                          "type": {"variable": "hydra.context.Context"}}},
                                                                                       "type": {"variable": "hydra.core.TypeScheme"}}}}}}}}}}}}},
                                                               "function": {
                                                                 "application": {
@@ -5796,10 +5766,7 @@
                                                                         "function": {
                                                                           "lambda": {
                                                                             "body": {"literal": {"string": "failure"}},
-                                                                            "domain": {
-                                                                              "application": {
-                                                                                "argument": {"variable": "hydra.errors.UnificationError"},
-                                                                                "function": {"variable": "hydra.context.InContext"}}},
+                                                                            "domain": {"variable": "hydra.errors.UnificationError"},
                                                                             "parameter": "_"}}},
                                                                       "function": {
                                                                         "typeApplication": {
@@ -5808,10 +5775,7 @@
                                                                               "body": {
                                                                                 "typeApplication": {
                                                                                   "body": {"variable": "hydra.lib.eithers.either"},
-                                                                                  "type": {
-                                                                                    "application": {
-                                                                                      "argument": {"variable": "hydra.errors.UnificationError"},
-                                                                                      "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                                  "type": {"variable": "hydra.errors.UnificationError"}}},
                                                                               "type": {"variable": "hydra.typing.TypeSubst"}}},
                                                                           "type": {"literal": {"string": {}}}}}}}}}}}},
                                                         {
@@ -6098,7 +6062,10 @@
                                                                                   "argument": {"variable": "hydra.lexical.emptyContext"},
                                                                                   "function": {
                                                                                     "typeApplication": {
-                                                                                      "body": {"variable": "hydra.unification.unifyTypes"},
+                                                                                      "body": {
+                                                                                        "typeApplication": {
+                                                                                          "body": {"variable": "hydra.unification.unifyTypes"},
+                                                                                          "type": {"variable": "hydra.context.Context"}}},
                                                                                       "type": {"variable": "hydra.core.TypeScheme"}}}}}}}}}}}}},
                                                               "function": {
                                                                 "application": {
@@ -6193,10 +6160,7 @@
                                                                         "function": {
                                                                           "lambda": {
                                                                             "body": {"literal": {"string": "failure"}},
-                                                                            "domain": {
-                                                                              "application": {
-                                                                                "argument": {"variable": "hydra.errors.UnificationError"},
-                                                                                "function": {"variable": "hydra.context.InContext"}}},
+                                                                            "domain": {"variable": "hydra.errors.UnificationError"},
                                                                             "parameter": "_"}}},
                                                                       "function": {
                                                                         "typeApplication": {
@@ -6205,10 +6169,7 @@
                                                                               "body": {
                                                                                 "typeApplication": {
                                                                                   "body": {"variable": "hydra.lib.eithers.either"},
-                                                                                  "type": {
-                                                                                    "application": {
-                                                                                      "argument": {"variable": "hydra.errors.UnificationError"},
-                                                                                      "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                                  "type": {"variable": "hydra.errors.UnificationError"}}},
                                                                               "type": {"variable": "hydra.typing.TypeSubst"}}},
                                                                           "type": {"literal": {"string": {}}}}}}}}}}}},
                                                         {
@@ -6493,7 +6454,10 @@
                                                                                   "argument": {"variable": "hydra.lexical.emptyContext"},
                                                                                   "function": {
                                                                                     "typeApplication": {
-                                                                                      "body": {"variable": "hydra.unification.unifyTypes"},
+                                                                                      "body": {
+                                                                                        "typeApplication": {
+                                                                                          "body": {"variable": "hydra.unification.unifyTypes"},
+                                                                                          "type": {"variable": "hydra.context.Context"}}},
                                                                                       "type": {"variable": "hydra.core.TypeScheme"}}}}}}}}}}}}},
                                                               "function": {
                                                                 "application": {
@@ -6588,10 +6552,7 @@
                                                                         "function": {
                                                                           "lambda": {
                                                                             "body": {"literal": {"string": "failure"}},
-                                                                            "domain": {
-                                                                              "application": {
-                                                                                "argument": {"variable": "hydra.errors.UnificationError"},
-                                                                                "function": {"variable": "hydra.context.InContext"}}},
+                                                                            "domain": {"variable": "hydra.errors.UnificationError"},
                                                                             "parameter": "_"}}},
                                                                       "function": {
                                                                         "typeApplication": {
@@ -6600,10 +6561,7 @@
                                                                               "body": {
                                                                                 "typeApplication": {
                                                                                   "body": {"variable": "hydra.lib.eithers.either"},
-                                                                                  "type": {
-                                                                                    "application": {
-                                                                                      "argument": {"variable": "hydra.errors.UnificationError"},
-                                                                                      "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                                  "type": {"variable": "hydra.errors.UnificationError"}}},
                                                                               "type": {"variable": "hydra.typing.TypeSubst"}}},
                                                                           "type": {"literal": {"string": {}}}}}}}}}}}},
                                                         {
@@ -6856,7 +6814,10 @@
                                                                                   "argument": {"variable": "hydra.lexical.emptyContext"},
                                                                                   "function": {
                                                                                     "typeApplication": {
-                                                                                      "body": {"variable": "hydra.unification.unifyTypes"},
+                                                                                      "body": {
+                                                                                        "typeApplication": {
+                                                                                          "body": {"variable": "hydra.unification.unifyTypes"},
+                                                                                          "type": {"variable": "hydra.context.Context"}}},
                                                                                       "type": {"variable": "hydra.core.TypeScheme"}}}}}}}}}}}}},
                                                               "function": {
                                                                 "application": {
@@ -6951,10 +6912,7 @@
                                                                         "function": {
                                                                           "lambda": {
                                                                             "body": {"literal": {"string": "failure"}},
-                                                                            "domain": {
-                                                                              "application": {
-                                                                                "argument": {"variable": "hydra.errors.UnificationError"},
-                                                                                "function": {"variable": "hydra.context.InContext"}}},
+                                                                            "domain": {"variable": "hydra.errors.UnificationError"},
                                                                             "parameter": "_"}}},
                                                                       "function": {
                                                                         "typeApplication": {
@@ -6963,10 +6921,7 @@
                                                                               "body": {
                                                                                 "typeApplication": {
                                                                                   "body": {"variable": "hydra.lib.eithers.either"},
-                                                                                  "type": {
-                                                                                    "application": {
-                                                                                      "argument": {"variable": "hydra.errors.UnificationError"},
-                                                                                      "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                                  "type": {"variable": "hydra.errors.UnificationError"}}},
                                                                               "type": {"variable": "hydra.typing.TypeSubst"}}},
                                                                           "type": {"literal": {"string": {}}}}}}}}}}}},
                                                         {
@@ -7184,7 +7139,10 @@
                                                                                   "argument": {"variable": "hydra.lexical.emptyContext"},
                                                                                   "function": {
                                                                                     "typeApplication": {
-                                                                                      "body": {"variable": "hydra.unification.unifyTypes"},
+                                                                                      "body": {
+                                                                                        "typeApplication": {
+                                                                                          "body": {"variable": "hydra.unification.unifyTypes"},
+                                                                                          "type": {"variable": "hydra.context.Context"}}},
                                                                                       "type": {"variable": "hydra.core.TypeScheme"}}}}}}}}}}}}},
                                                               "function": {
                                                                 "application": {
@@ -7279,10 +7237,7 @@
                                                                         "function": {
                                                                           "lambda": {
                                                                             "body": {"literal": {"string": "failure"}},
-                                                                            "domain": {
-                                                                              "application": {
-                                                                                "argument": {"variable": "hydra.errors.UnificationError"},
-                                                                                "function": {"variable": "hydra.context.InContext"}}},
+                                                                            "domain": {"variable": "hydra.errors.UnificationError"},
                                                                             "parameter": "_"}}},
                                                                       "function": {
                                                                         "typeApplication": {
@@ -7291,10 +7246,7 @@
                                                                               "body": {
                                                                                 "typeApplication": {
                                                                                   "body": {"variable": "hydra.lib.eithers.either"},
-                                                                                  "type": {
-                                                                                    "application": {
-                                                                                      "argument": {"variable": "hydra.errors.UnificationError"},
-                                                                                      "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                                  "type": {"variable": "hydra.errors.UnificationError"}}},
                                                                               "type": {"variable": "hydra.typing.TypeSubst"}}},
                                                                           "type": {"literal": {"string": {}}}}}}}}}}}},
                                                         {
@@ -7515,7 +7467,10 @@
                                                                                   "argument": {"variable": "hydra.lexical.emptyContext"},
                                                                                   "function": {
                                                                                     "typeApplication": {
-                                                                                      "body": {"variable": "hydra.unification.unifyTypes"},
+                                                                                      "body": {
+                                                                                        "typeApplication": {
+                                                                                          "body": {"variable": "hydra.unification.unifyTypes"},
+                                                                                          "type": {"variable": "hydra.context.Context"}}},
                                                                                       "type": {"variable": "hydra.core.TypeScheme"}}}}}}}}}}}}},
                                                               "function": {
                                                                 "application": {
@@ -7610,10 +7565,7 @@
                                                                         "function": {
                                                                           "lambda": {
                                                                             "body": {"literal": {"string": "failure"}},
-                                                                            "domain": {
-                                                                              "application": {
-                                                                                "argument": {"variable": "hydra.errors.UnificationError"},
-                                                                                "function": {"variable": "hydra.context.InContext"}}},
+                                                                            "domain": {"variable": "hydra.errors.UnificationError"},
                                                                             "parameter": "_"}}},
                                                                       "function": {
                                                                         "typeApplication": {
@@ -7622,10 +7574,7 @@
                                                                               "body": {
                                                                                 "typeApplication": {
                                                                                   "body": {"variable": "hydra.lib.eithers.either"},
-                                                                                  "type": {
-                                                                                    "application": {
-                                                                                      "argument": {"variable": "hydra.errors.UnificationError"},
-                                                                                      "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                                  "type": {"variable": "hydra.errors.UnificationError"}}},
                                                                               "type": {"variable": "hydra.typing.TypeSubst"}}},
                                                                           "type": {"literal": {"string": {}}}}}}}}}}}},
                                                         {"name": "expected", "term": {"literal": {"string": "failure"}}}],
@@ -7795,7 +7744,10 @@
                                                                                   "argument": {"variable": "hydra.lexical.emptyContext"},
                                                                                   "function": {
                                                                                     "typeApplication": {
-                                                                                      "body": {"variable": "hydra.unification.unifyTypes"},
+                                                                                      "body": {
+                                                                                        "typeApplication": {
+                                                                                          "body": {"variable": "hydra.unification.unifyTypes"},
+                                                                                          "type": {"variable": "hydra.context.Context"}}},
                                                                                       "type": {"variable": "hydra.core.TypeScheme"}}}}}}}}}}}}},
                                                               "function": {
                                                                 "application": {
@@ -7890,10 +7842,7 @@
                                                                         "function": {
                                                                           "lambda": {
                                                                             "body": {"literal": {"string": "failure"}},
-                                                                            "domain": {
-                                                                              "application": {
-                                                                                "argument": {"variable": "hydra.errors.UnificationError"},
-                                                                                "function": {"variable": "hydra.context.InContext"}}},
+                                                                            "domain": {"variable": "hydra.errors.UnificationError"},
                                                                             "parameter": "_"}}},
                                                                       "function": {
                                                                         "typeApplication": {
@@ -7902,10 +7851,7 @@
                                                                               "body": {
                                                                                 "typeApplication": {
                                                                                   "body": {"variable": "hydra.lib.eithers.either"},
-                                                                                  "type": {
-                                                                                    "application": {
-                                                                                      "argument": {"variable": "hydra.errors.UnificationError"},
-                                                                                      "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                                  "type": {"variable": "hydra.errors.UnificationError"}}},
                                                                               "type": {"variable": "hydra.typing.TypeSubst"}}},
                                                                           "type": {"literal": {"string": {}}}}}}}}}}}},
                                                         {"name": "expected", "term": {"literal": {"string": "failure"}}}],
@@ -8035,7 +7981,10 @@
                                                                                   "argument": {"variable": "hydra.lexical.emptyContext"},
                                                                                   "function": {
                                                                                     "typeApplication": {
-                                                                                      "body": {"variable": "hydra.unification.unifyTypes"},
+                                                                                      "body": {
+                                                                                        "typeApplication": {
+                                                                                          "body": {"variable": "hydra.unification.unifyTypes"},
+                                                                                          "type": {"variable": "hydra.context.Context"}}},
                                                                                       "type": {"variable": "hydra.core.TypeScheme"}}}}}}}}}}}}},
                                                               "function": {
                                                                 "application": {
@@ -8130,10 +8079,7 @@
                                                                         "function": {
                                                                           "lambda": {
                                                                             "body": {"literal": {"string": "failure"}},
-                                                                            "domain": {
-                                                                              "application": {
-                                                                                "argument": {"variable": "hydra.errors.UnificationError"},
-                                                                                "function": {"variable": "hydra.context.InContext"}}},
+                                                                            "domain": {"variable": "hydra.errors.UnificationError"},
                                                                             "parameter": "_"}}},
                                                                       "function": {
                                                                         "typeApplication": {
@@ -8142,10 +8088,7 @@
                                                                               "body": {
                                                                                 "typeApplication": {
                                                                                   "body": {"variable": "hydra.lib.eithers.either"},
-                                                                                  "type": {
-                                                                                    "application": {
-                                                                                      "argument": {"variable": "hydra.errors.UnificationError"},
-                                                                                      "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                                  "type": {"variable": "hydra.errors.UnificationError"}}},
                                                                               "type": {"variable": "hydra.typing.TypeSubst"}}},
                                                                           "type": {"literal": {"string": {}}}}}}}}}}}},
                                                         {"name": "expected", "term": {"literal": {"string": "failure"}}}],
@@ -8236,7 +8179,10 @@
                                                                           "function": {
                                                                             "application": {
                                                                               "argument": {"variable": "hydra.lexical.emptyContext"},
-                                                                              "function": {"variable": "hydra.unification.joinTypes"}}}}}}}}},
+                                                                              "function": {
+                                                                                "typeApplication": {
+                                                                                  "body": {"variable": "hydra.unification.joinTypes"},
+                                                                                  "type": {"variable": "hydra.context.Context"}}}}}}}}}}},
                                                               "function": {
                                                                 "application": {
                                                                   "argument": {
@@ -8308,10 +8254,7 @@
                                                                         "function": {
                                                                           "lambda": {
                                                                             "body": {"literal": {"string": "failure"}},
-                                                                            "domain": {
-                                                                              "application": {
-                                                                                "argument": {"variable": "hydra.errors.UnificationError"},
-                                                                                "function": {"variable": "hydra.context.InContext"}}},
+                                                                            "domain": {"variable": "hydra.errors.UnificationError"},
                                                                             "parameter": "_"}}},
                                                                       "function": {
                                                                         "typeApplication": {
@@ -8320,10 +8263,7 @@
                                                                               "body": {
                                                                                 "typeApplication": {
                                                                                   "body": {"variable": "hydra.lib.eithers.either"},
-                                                                                  "type": {
-                                                                                    "application": {
-                                                                                      "argument": {"variable": "hydra.errors.UnificationError"},
-                                                                                      "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                                  "type": {"variable": "hydra.errors.UnificationError"}}},
                                                                               "type": {"list": {"variable": "hydra.typing.TypeConstraint"}}}},
                                                                           "type": {"literal": {"string": {}}}}}}}}}}}},
                                                         {
@@ -8447,7 +8387,10 @@
                                                                           "function": {
                                                                             "application": {
                                                                               "argument": {"variable": "hydra.lexical.emptyContext"},
-                                                                              "function": {"variable": "hydra.unification.joinTypes"}}}}}}}}},
+                                                                              "function": {
+                                                                                "typeApplication": {
+                                                                                  "body": {"variable": "hydra.unification.joinTypes"},
+                                                                                  "type": {"variable": "hydra.context.Context"}}}}}}}}}}},
                                                               "function": {
                                                                 "application": {
                                                                   "argument": {
@@ -8519,10 +8462,7 @@
                                                                         "function": {
                                                                           "lambda": {
                                                                             "body": {"literal": {"string": "failure"}},
-                                                                            "domain": {
-                                                                              "application": {
-                                                                                "argument": {"variable": "hydra.errors.UnificationError"},
-                                                                                "function": {"variable": "hydra.context.InContext"}}},
+                                                                            "domain": {"variable": "hydra.errors.UnificationError"},
                                                                             "parameter": "_"}}},
                                                                       "function": {
                                                                         "typeApplication": {
@@ -8531,10 +8471,7 @@
                                                                               "body": {
                                                                                 "typeApplication": {
                                                                                   "body": {"variable": "hydra.lib.eithers.either"},
-                                                                                  "type": {
-                                                                                    "application": {
-                                                                                      "argument": {"variable": "hydra.errors.UnificationError"},
-                                                                                      "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                                  "type": {"variable": "hydra.errors.UnificationError"}}},
                                                                               "type": {"list": {"variable": "hydra.typing.TypeConstraint"}}}},
                                                                           "type": {"literal": {"string": {}}}}}}}}}}}},
                                                         {
@@ -8669,7 +8606,10 @@
                                                                           "function": {
                                                                             "application": {
                                                                               "argument": {"variable": "hydra.lexical.emptyContext"},
-                                                                              "function": {"variable": "hydra.unification.joinTypes"}}}}}}}}},
+                                                                              "function": {
+                                                                                "typeApplication": {
+                                                                                  "body": {"variable": "hydra.unification.joinTypes"},
+                                                                                  "type": {"variable": "hydra.context.Context"}}}}}}}}}}},
                                                               "function": {
                                                                 "application": {
                                                                   "argument": {
@@ -8741,10 +8681,7 @@
                                                                         "function": {
                                                                           "lambda": {
                                                                             "body": {"literal": {"string": "failure"}},
-                                                                            "domain": {
-                                                                              "application": {
-                                                                                "argument": {"variable": "hydra.errors.UnificationError"},
-                                                                                "function": {"variable": "hydra.context.InContext"}}},
+                                                                            "domain": {"variable": "hydra.errors.UnificationError"},
                                                                             "parameter": "_"}}},
                                                                       "function": {
                                                                         "typeApplication": {
@@ -8753,10 +8690,7 @@
                                                                               "body": {
                                                                                 "typeApplication": {
                                                                                   "body": {"variable": "hydra.lib.eithers.either"},
-                                                                                  "type": {
-                                                                                    "application": {
-                                                                                      "argument": {"variable": "hydra.errors.UnificationError"},
-                                                                                      "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                                  "type": {"variable": "hydra.errors.UnificationError"}}},
                                                                               "type": {"list": {"variable": "hydra.typing.TypeConstraint"}}}},
                                                                           "type": {"literal": {"string": {}}}}}}}}}}}},
                                                         {
@@ -8955,7 +8889,10 @@
                                                                           "function": {
                                                                             "application": {
                                                                               "argument": {"variable": "hydra.lexical.emptyContext"},
-                                                                              "function": {"variable": "hydra.unification.joinTypes"}}}}}}}}},
+                                                                              "function": {
+                                                                                "typeApplication": {
+                                                                                  "body": {"variable": "hydra.unification.joinTypes"},
+                                                                                  "type": {"variable": "hydra.context.Context"}}}}}}}}}}},
                                                               "function": {
                                                                 "application": {
                                                                   "argument": {
@@ -9027,10 +8964,7 @@
                                                                         "function": {
                                                                           "lambda": {
                                                                             "body": {"literal": {"string": "failure"}},
-                                                                            "domain": {
-                                                                              "application": {
-                                                                                "argument": {"variable": "hydra.errors.UnificationError"},
-                                                                                "function": {"variable": "hydra.context.InContext"}}},
+                                                                            "domain": {"variable": "hydra.errors.UnificationError"},
                                                                             "parameter": "_"}}},
                                                                       "function": {
                                                                         "typeApplication": {
@@ -9039,10 +8973,7 @@
                                                                               "body": {
                                                                                 "typeApplication": {
                                                                                   "body": {"variable": "hydra.lib.eithers.either"},
-                                                                                  "type": {
-                                                                                    "application": {
-                                                                                      "argument": {"variable": "hydra.errors.UnificationError"},
-                                                                                      "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                                  "type": {"variable": "hydra.errors.UnificationError"}}},
                                                                               "type": {"list": {"variable": "hydra.typing.TypeConstraint"}}}},
                                                                           "type": {"literal": {"string": {}}}}}}}}}}}},
                                                         {
@@ -9236,7 +9167,10 @@
                                                                           "function": {
                                                                             "application": {
                                                                               "argument": {"variable": "hydra.lexical.emptyContext"},
-                                                                              "function": {"variable": "hydra.unification.joinTypes"}}}}}}}}},
+                                                                              "function": {
+                                                                                "typeApplication": {
+                                                                                  "body": {"variable": "hydra.unification.joinTypes"},
+                                                                                  "type": {"variable": "hydra.context.Context"}}}}}}}}}}},
                                                               "function": {
                                                                 "application": {
                                                                   "argument": {
@@ -9308,10 +9242,7 @@
                                                                         "function": {
                                                                           "lambda": {
                                                                             "body": {"literal": {"string": "failure"}},
-                                                                            "domain": {
-                                                                              "application": {
-                                                                                "argument": {"variable": "hydra.errors.UnificationError"},
-                                                                                "function": {"variable": "hydra.context.InContext"}}},
+                                                                            "domain": {"variable": "hydra.errors.UnificationError"},
                                                                             "parameter": "_"}}},
                                                                       "function": {
                                                                         "typeApplication": {
@@ -9320,10 +9251,7 @@
                                                                               "body": {
                                                                                 "typeApplication": {
                                                                                   "body": {"variable": "hydra.lib.eithers.either"},
-                                                                                  "type": {
-                                                                                    "application": {
-                                                                                      "argument": {"variable": "hydra.errors.UnificationError"},
-                                                                                      "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                                  "type": {"variable": "hydra.errors.UnificationError"}}},
                                                                               "type": {"list": {"variable": "hydra.typing.TypeConstraint"}}}},
                                                                           "type": {"literal": {"string": {}}}}}}}}}}}},
                                                         {
@@ -9520,7 +9448,10 @@
                                                                           "function": {
                                                                             "application": {
                                                                               "argument": {"variable": "hydra.lexical.emptyContext"},
-                                                                              "function": {"variable": "hydra.unification.joinTypes"}}}}}}}}},
+                                                                              "function": {
+                                                                                "typeApplication": {
+                                                                                  "body": {"variable": "hydra.unification.joinTypes"},
+                                                                                  "type": {"variable": "hydra.context.Context"}}}}}}}}}}},
                                                               "function": {
                                                                 "application": {
                                                                   "argument": {
@@ -9592,10 +9523,7 @@
                                                                         "function": {
                                                                           "lambda": {
                                                                             "body": {"literal": {"string": "failure"}},
-                                                                            "domain": {
-                                                                              "application": {
-                                                                                "argument": {"variable": "hydra.errors.UnificationError"},
-                                                                                "function": {"variable": "hydra.context.InContext"}}},
+                                                                            "domain": {"variable": "hydra.errors.UnificationError"},
                                                                             "parameter": "_"}}},
                                                                       "function": {
                                                                         "typeApplication": {
@@ -9604,10 +9532,7 @@
                                                                               "body": {
                                                                                 "typeApplication": {
                                                                                   "body": {"variable": "hydra.lib.eithers.either"},
-                                                                                  "type": {
-                                                                                    "application": {
-                                                                                      "argument": {"variable": "hydra.errors.UnificationError"},
-                                                                                      "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                                  "type": {"variable": "hydra.errors.UnificationError"}}},
                                                                               "type": {"list": {"variable": "hydra.typing.TypeConstraint"}}}},
                                                                           "type": {"literal": {"string": {}}}}}}}}}}}},
                                                         {
@@ -9831,7 +9756,10 @@
                                                                           "function": {
                                                                             "application": {
                                                                               "argument": {"variable": "hydra.lexical.emptyContext"},
-                                                                              "function": {"variable": "hydra.unification.joinTypes"}}}}}}}}},
+                                                                              "function": {
+                                                                                "typeApplication": {
+                                                                                  "body": {"variable": "hydra.unification.joinTypes"},
+                                                                                  "type": {"variable": "hydra.context.Context"}}}}}}}}}}},
                                                               "function": {
                                                                 "application": {
                                                                   "argument": {
@@ -9903,10 +9831,7 @@
                                                                         "function": {
                                                                           "lambda": {
                                                                             "body": {"literal": {"string": "failure"}},
-                                                                            "domain": {
-                                                                              "application": {
-                                                                                "argument": {"variable": "hydra.errors.UnificationError"},
-                                                                                "function": {"variable": "hydra.context.InContext"}}},
+                                                                            "domain": {"variable": "hydra.errors.UnificationError"},
                                                                             "parameter": "_"}}},
                                                                       "function": {
                                                                         "typeApplication": {
@@ -9915,10 +9840,7 @@
                                                                               "body": {
                                                                                 "typeApplication": {
                                                                                   "body": {"variable": "hydra.lib.eithers.either"},
-                                                                                  "type": {
-                                                                                    "application": {
-                                                                                      "argument": {"variable": "hydra.errors.UnificationError"},
-                                                                                      "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                                  "type": {"variable": "hydra.errors.UnificationError"}}},
                                                                               "type": {"list": {"variable": "hydra.typing.TypeConstraint"}}}},
                                                                           "type": {"literal": {"string": {}}}}}}}}}}}},
                                                         {
@@ -10142,7 +10064,10 @@
                                                                           "function": {
                                                                             "application": {
                                                                               "argument": {"variable": "hydra.lexical.emptyContext"},
-                                                                              "function": {"variable": "hydra.unification.joinTypes"}}}}}}}}},
+                                                                              "function": {
+                                                                                "typeApplication": {
+                                                                                  "body": {"variable": "hydra.unification.joinTypes"},
+                                                                                  "type": {"variable": "hydra.context.Context"}}}}}}}}}}},
                                                               "function": {
                                                                 "application": {
                                                                   "argument": {
@@ -10214,10 +10139,7 @@
                                                                         "function": {
                                                                           "lambda": {
                                                                             "body": {"literal": {"string": "failure"}},
-                                                                            "domain": {
-                                                                              "application": {
-                                                                                "argument": {"variable": "hydra.errors.UnificationError"},
-                                                                                "function": {"variable": "hydra.context.InContext"}}},
+                                                                            "domain": {"variable": "hydra.errors.UnificationError"},
                                                                             "parameter": "_"}}},
                                                                       "function": {
                                                                         "typeApplication": {
@@ -10226,10 +10148,7 @@
                                                                               "body": {
                                                                                 "typeApplication": {
                                                                                   "body": {"variable": "hydra.lib.eithers.either"},
-                                                                                  "type": {
-                                                                                    "application": {
-                                                                                      "argument": {"variable": "hydra.errors.UnificationError"},
-                                                                                      "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                                  "type": {"variable": "hydra.errors.UnificationError"}}},
                                                                               "type": {"list": {"variable": "hydra.typing.TypeConstraint"}}}},
                                                                           "type": {"literal": {"string": {}}}}}}}}}}}},
                                                         {
@@ -10421,7 +10340,10 @@
                                                                           "function": {
                                                                             "application": {
                                                                               "argument": {"variable": "hydra.lexical.emptyContext"},
-                                                                              "function": {"variable": "hydra.unification.joinTypes"}}}}}}}}},
+                                                                              "function": {
+                                                                                "typeApplication": {
+                                                                                  "body": {"variable": "hydra.unification.joinTypes"},
+                                                                                  "type": {"variable": "hydra.context.Context"}}}}}}}}}}},
                                                               "function": {
                                                                 "application": {
                                                                   "argument": {
@@ -10493,10 +10415,7 @@
                                                                         "function": {
                                                                           "lambda": {
                                                                             "body": {"literal": {"string": "failure"}},
-                                                                            "domain": {
-                                                                              "application": {
-                                                                                "argument": {"variable": "hydra.errors.UnificationError"},
-                                                                                "function": {"variable": "hydra.context.InContext"}}},
+                                                                            "domain": {"variable": "hydra.errors.UnificationError"},
                                                                             "parameter": "_"}}},
                                                                       "function": {
                                                                         "typeApplication": {
@@ -10505,10 +10424,7 @@
                                                                               "body": {
                                                                                 "typeApplication": {
                                                                                   "body": {"variable": "hydra.lib.eithers.either"},
-                                                                                  "type": {
-                                                                                    "application": {
-                                                                                      "argument": {"variable": "hydra.errors.UnificationError"},
-                                                                                      "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                                  "type": {"variable": "hydra.errors.UnificationError"}}},
                                                                               "type": {"list": {"variable": "hydra.typing.TypeConstraint"}}}},
                                                                           "type": {"literal": {"string": {}}}}}}}}}}}},
                                                         {
@@ -10650,7 +10566,10 @@
                                                                           "function": {
                                                                             "application": {
                                                                               "argument": {"variable": "hydra.lexical.emptyContext"},
-                                                                              "function": {"variable": "hydra.unification.joinTypes"}}}}}}}}},
+                                                                              "function": {
+                                                                                "typeApplication": {
+                                                                                  "body": {"variable": "hydra.unification.joinTypes"},
+                                                                                  "type": {"variable": "hydra.context.Context"}}}}}}}}}}},
                                                               "function": {
                                                                 "application": {
                                                                   "argument": {
@@ -10722,10 +10641,7 @@
                                                                         "function": {
                                                                           "lambda": {
                                                                             "body": {"literal": {"string": "failure"}},
-                                                                            "domain": {
-                                                                              "application": {
-                                                                                "argument": {"variable": "hydra.errors.UnificationError"},
-                                                                                "function": {"variable": "hydra.context.InContext"}}},
+                                                                            "domain": {"variable": "hydra.errors.UnificationError"},
                                                                             "parameter": "_"}}},
                                                                       "function": {
                                                                         "typeApplication": {
@@ -10734,10 +10650,7 @@
                                                                               "body": {
                                                                                 "typeApplication": {
                                                                                   "body": {"variable": "hydra.lib.eithers.either"},
-                                                                                  "type": {
-                                                                                    "application": {
-                                                                                      "argument": {"variable": "hydra.errors.UnificationError"},
-                                                                                      "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                                  "type": {"variable": "hydra.errors.UnificationError"}}},
                                                                               "type": {"list": {"variable": "hydra.typing.TypeConstraint"}}}},
                                                                           "type": {"literal": {"string": {}}}}}}}}}}}},
                                                         {
@@ -10866,7 +10779,10 @@
                                                                           "function": {
                                                                             "application": {
                                                                               "argument": {"variable": "hydra.lexical.emptyContext"},
-                                                                              "function": {"variable": "hydra.unification.joinTypes"}}}}}}}}},
+                                                                              "function": {
+                                                                                "typeApplication": {
+                                                                                  "body": {"variable": "hydra.unification.joinTypes"},
+                                                                                  "type": {"variable": "hydra.context.Context"}}}}}}}}}}},
                                                               "function": {
                                                                 "application": {
                                                                   "argument": {
@@ -10938,10 +10854,7 @@
                                                                         "function": {
                                                                           "lambda": {
                                                                             "body": {"literal": {"string": "failure"}},
-                                                                            "domain": {
-                                                                              "application": {
-                                                                                "argument": {"variable": "hydra.errors.UnificationError"},
-                                                                                "function": {"variable": "hydra.context.InContext"}}},
+                                                                            "domain": {"variable": "hydra.errors.UnificationError"},
                                                                             "parameter": "_"}}},
                                                                       "function": {
                                                                         "typeApplication": {
@@ -10950,10 +10863,7 @@
                                                                               "body": {
                                                                                 "typeApplication": {
                                                                                   "body": {"variable": "hydra.lib.eithers.either"},
-                                                                                  "type": {
-                                                                                    "application": {
-                                                                                      "argument": {"variable": "hydra.errors.UnificationError"},
-                                                                                      "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                                  "type": {"variable": "hydra.errors.UnificationError"}}},
                                                                               "type": {"list": {"variable": "hydra.typing.TypeConstraint"}}}},
                                                                           "type": {"literal": {"string": {}}}}}}}}}}}},
                                                         {"name": "expected", "term": {"literal": {"string": "failure"}}}],
@@ -11057,7 +10967,10 @@
                                                                           "function": {
                                                                             "application": {
                                                                               "argument": {"variable": "hydra.lexical.emptyContext"},
-                                                                              "function": {"variable": "hydra.unification.joinTypes"}}}}}}}}},
+                                                                              "function": {
+                                                                                "typeApplication": {
+                                                                                  "body": {"variable": "hydra.unification.joinTypes"},
+                                                                                  "type": {"variable": "hydra.context.Context"}}}}}}}}}}},
                                                               "function": {
                                                                 "application": {
                                                                   "argument": {
@@ -11129,10 +11042,7 @@
                                                                         "function": {
                                                                           "lambda": {
                                                                             "body": {"literal": {"string": "failure"}},
-                                                                            "domain": {
-                                                                              "application": {
-                                                                                "argument": {"variable": "hydra.errors.UnificationError"},
-                                                                                "function": {"variable": "hydra.context.InContext"}}},
+                                                                            "domain": {"variable": "hydra.errors.UnificationError"},
                                                                             "parameter": "_"}}},
                                                                       "function": {
                                                                         "typeApplication": {
@@ -11141,10 +11051,7 @@
                                                                               "body": {
                                                                                 "typeApplication": {
                                                                                   "body": {"variable": "hydra.lib.eithers.either"},
-                                                                                  "type": {
-                                                                                    "application": {
-                                                                                      "argument": {"variable": "hydra.errors.UnificationError"},
-                                                                                      "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                                  "type": {"variable": "hydra.errors.UnificationError"}}},
                                                                               "type": {"list": {"variable": "hydra.typing.TypeConstraint"}}}},
                                                                           "type": {"literal": {"string": {}}}}}}}}}}}},
                                                         {"name": "expected", "term": {"literal": {"string": "failure"}}}],
@@ -11260,7 +11167,10 @@
                                                                           "function": {
                                                                             "application": {
                                                                               "argument": {"variable": "hydra.lexical.emptyContext"},
-                                                                              "function": {"variable": "hydra.unification.joinTypes"}}}}}}}}},
+                                                                              "function": {
+                                                                                "typeApplication": {
+                                                                                  "body": {"variable": "hydra.unification.joinTypes"},
+                                                                                  "type": {"variable": "hydra.context.Context"}}}}}}}}}}},
                                                               "function": {
                                                                 "application": {
                                                                   "argument": {
@@ -11332,10 +11242,7 @@
                                                                         "function": {
                                                                           "lambda": {
                                                                             "body": {"literal": {"string": "failure"}},
-                                                                            "domain": {
-                                                                              "application": {
-                                                                                "argument": {"variable": "hydra.errors.UnificationError"},
-                                                                                "function": {"variable": "hydra.context.InContext"}}},
+                                                                            "domain": {"variable": "hydra.errors.UnificationError"},
                                                                             "parameter": "_"}}},
                                                                       "function": {
                                                                         "typeApplication": {
@@ -11344,10 +11251,7 @@
                                                                               "body": {
                                                                                 "typeApplication": {
                                                                                   "body": {"variable": "hydra.lib.eithers.either"},
-                                                                                  "type": {
-                                                                                    "application": {
-                                                                                      "argument": {"variable": "hydra.errors.UnificationError"},
-                                                                                      "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                                  "type": {"variable": "hydra.errors.UnificationError"}}},
                                                                               "type": {"list": {"variable": "hydra.typing.TypeConstraint"}}}},
                                                                           "type": {"literal": {"string": {}}}}}}}}}}}},
                                                         {"name": "expected", "term": {"literal": {"string": "failure"}}}],

@@ -126,11 +126,11 @@ module_ = Module ns definitions
       toDefinition termAlternatives,
       toDefinition typeAlternatives]
 
-formatError :: TTerm (InContext Error -> String)
-formatError = "ic" ~> ShowError.error_ @@ Ctx.inContextObject (var "ic")
+formatError :: TTerm (Error -> String)
+formatError = "e" ~> ShowError.error_ @@ var "e"
 
-formatDecodingError :: TTerm (InContext DecodingError -> String)
-formatDecodingError = "ic" ~> unwrap _DecodingError @@ Ctx.inContextObject (var "ic")
+formatDecodingError :: TTerm (DecodingError -> Error)
+formatDecodingError = "e" ~> Error.errorDecoding $ var "e"
 
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
@@ -151,7 +151,7 @@ adaptFloatType = define "adaptFloatType" $
     (just $ var "ft")
     (var "forUnsupported" @@ var "ft")
 
-adaptDataGraph :: TTermDefinition (LanguageConstraints -> Bool -> [Binding] -> Context -> Graph -> Prelude.Either String (Graph, [Binding]))
+adaptDataGraph :: TTermDefinition (LanguageConstraints -> Bool -> [Binding] -> Context -> Graph -> Prelude.Either Error (Graph, [Binding]))
 adaptDataGraph = define "adaptDataGraph" $
   doc ("Adapt a graph and its schema to the given language constraints."
     <> " The doExpand flag controls eta expansion of partial applications."
@@ -182,7 +182,7 @@ adaptDataGraph = define "adaptDataGraph" $
   "schemaBindings" <~ Environment.typesToDefinitions @@ Maps.map ("ts" ~> Scoping.typeSchemeToFType @@ var "ts") (var "schemaTypes0") $
   "schemaResult" <<~ Logic.ifElse (Maps.null (var "schemaTypes0"))
     (right (Maps.empty :: TTerm (M.Map Name TypeScheme)))
-    ("tmap0" <<~ Eithers.bimap formatDecodingError ("x" ~> var "x") (Environment.graphAsTypes @@ var "cx" @@ var "graph0" @@ var "schemaBindings") $
+    ("tmap0" <<~ Eithers.bimap formatDecodingError ("x" ~> var "x") (Environment.graphAsTypes @@ var "graph0" @@ var "schemaBindings") $
       "tmap1" <<~ adaptGraphSchema @@ var "constraints" @@ var "litmap" @@ var "tmap0" $
       right $ Maps.map ("t" ~> Resolution.typeToTypeScheme @@ var "t") (var "tmap1")) $
   "adaptedSchemaTypes" <~ var "schemaResult" $
@@ -228,7 +228,7 @@ adaptDataGraph = define "adaptDataGraph" $
 -- Dispatches on Term variants: for TermFunction, adapts the lambda domain type;
 -- for all other variants, returns the term unchanged.
 -- This is a top-level function (not inline) so the Python code generator can emit match statements.
-adaptLambdaDomains :: TTermDefinition (LanguageConstraints -> M.Map LiteralType LiteralType -> (Term -> Prelude.Either String Term) -> Term -> Prelude.Either String Term)
+adaptLambdaDomains :: TTermDefinition (LanguageConstraints -> M.Map LiteralType LiteralType -> (Term -> Prelude.Either Error Term) -> Term -> Prelude.Either Error Term)
 adaptLambdaDomains = define "adaptLambdaDomains" $
   doc "Rewrite callback for adapting lambda domain types in a term" $
   "constraints" ~> "litmap" ~> "recurse" ~> "term" ~>
@@ -253,7 +253,7 @@ adaptLambdaDomains = define "adaptLambdaDomains" $
 -- Dispatches on Term variants: for TermLet, adapts the binding TypeSchemes;
 -- for all other variants, returns the term unchanged.
 -- This is a top-level function (not inline) so the Python code generator can emit match statements.
-adaptNestedTypes :: TTermDefinition (LanguageConstraints -> M.Map LiteralType LiteralType -> (Term -> Prelude.Either String Term) -> Term -> Prelude.Either String Term)
+adaptNestedTypes :: TTermDefinition (LanguageConstraints -> M.Map LiteralType LiteralType -> (Term -> Prelude.Either Error Term) -> Term -> Prelude.Either Error Term)
 adaptNestedTypes = define "adaptNestedTypes" $
   doc "Rewrite callback for adapting nested let binding TypeSchemes in a term" $
   "constraints" ~> "litmap" ~> "recurse" ~> "term" ~>
@@ -276,7 +276,7 @@ adaptNestedTypes = define "adaptNestedTypes" $
         (var "adaptedBindings")
         (Core.letBody $ var "lt")]
 
-adaptGraphSchema :: TTermDefinition (LanguageConstraints -> M.Map LiteralType LiteralType -> M.Map Name Type -> Prelude.Either String (M.Map Name Type))
+adaptGraphSchema :: TTermDefinition (LanguageConstraints -> M.Map LiteralType LiteralType -> M.Map Name Type -> Prelude.Either Error (M.Map Name Type))
 adaptGraphSchema = define "adaptGraphSchema" $
   doc "Adapt a schema graph to the given language constraints" $
   "constraints" ~> "litmap" ~> "types0" ~>
@@ -364,7 +364,7 @@ adaptLiteralValue = define "adaptLiteralValue" $
     (Core.literalString $ ShowCore.literal @@ var "l")
     ("lt2" ~> adaptLiteral @@ var "lt2" @@ var "l")
 
-adaptPrimitive :: TTermDefinition (LanguageConstraints -> M.Map LiteralType LiteralType -> Primitive -> Prelude.Either String Primitive)
+adaptPrimitive :: TTermDefinition (LanguageConstraints -> M.Map LiteralType LiteralType -> Primitive -> Prelude.Either Error Primitive)
 adaptPrimitive = define "adaptPrimitive" $
   doc "Adapt a primitive to the given language constraints, prior to inference" $
   "constraints" ~> "litmap" ~> "prim0" ~>
@@ -374,7 +374,7 @@ adaptPrimitive = define "adaptPrimitive" $
 
 -- Note: this function could be made more efficient through precomputation of alternatives,
 --       similar to what is done for literals.
-adaptTerm :: TTermDefinition (LanguageConstraints -> M.Map LiteralType LiteralType -> Context -> Graph -> Term -> Prelude.Either String Term)
+adaptTerm :: TTermDefinition (LanguageConstraints -> M.Map LiteralType LiteralType -> Context -> Graph -> Term -> Prelude.Either Error Term)
 adaptTerm = define "adaptTerm" $
   doc "Adapt a term using the given language constraints" $
   "constraints" ~> "litmap" ~> "cx" ~> "graph" ~> "term0" ~>
@@ -412,7 +412,7 @@ adaptTerm = define "adaptTerm" $
       (Just $
         "mterm" <<~ var "tryTerm" @@ var "term1" $
         optCases (var "mterm")
-          (left $ (string "no alternatives for term: ") ++ (ShowCore.term @@ var "term1"))
+          (left $ Error.errorOther $ Error.otherError $ (string "no alternatives for term: ") ++ (ShowCore.term @@ var "term1"))
           ("term2" ~> right $ var "term2"))
       [_Term_typeApplication>>: "ta" ~>
          "atyp" <<~ adaptType @@ var "constraints" @@ var "litmap" @@ (Core.typeApplicationTermType $ var "ta") $
@@ -422,7 +422,7 @@ adaptTerm = define "adaptTerm" $
        _Term_typeLambda>>:      "_" ~> right $ var "term1"]) $
   Rewriting.rewriteTermM @@ var "rewrite" @@ var "term0"
 
-adaptType :: TTermDefinition (LanguageConstraints -> M.Map LiteralType LiteralType -> Type -> Prelude.Either String Type)
+adaptType :: TTermDefinition (LanguageConstraints -> M.Map LiteralType LiteralType -> Type -> Prelude.Either Error Type)
 adaptType = define "adaptType" $
   doc "Adapt a type using the given language constraints" $
   "constraints" ~> "litmap" ~> "type0" ~>
@@ -452,11 +452,11 @@ adaptType = define "adaptType" $
   "rewrite" <~ ("recurse" ~> "typ" ~>
     "type1" <<~ var "recurse" @@ var "typ" $
     optCases (var "tryType" @@ var "type1")
-      (left $ (string "no alternatives for type: ") ++ (ShowCore.type_ @@ var "typ"))
+      (left $ Error.errorOther $ Error.otherError $ (string "no alternatives for type: ") ++ (ShowCore.type_ @@ var "typ"))
       ("type2" ~> right $ var "type2")) $
   Rewriting.rewriteTypeM @@ var "rewrite" @@ var "type0"
 
-adaptTypeScheme :: TTermDefinition (LanguageConstraints -> M.Map LiteralType LiteralType -> TypeScheme -> Prelude.Either String TypeScheme)
+adaptTypeScheme :: TTermDefinition (LanguageConstraints -> M.Map LiteralType LiteralType -> TypeScheme -> Prelude.Either Error TypeScheme)
 adaptTypeScheme = define "adaptTypeScheme" $
   doc "Adapt a type scheme to the given language constraints, prior to inference" $
   "constraints" ~> "litmap" ~> "ts0" ~>
@@ -567,7 +567,7 @@ pushTypeAppsInward = define "pushTypeAppsInward" $
         (var "go" @@ (Core.wrappedTermBody $ var "wt"))])] $
   var "go" @@ var "term"
 
-dataGraphToDefinitions :: TTermDefinition (LanguageConstraints -> Bool -> Bool -> Bool -> Bool -> [Binding] -> Graph -> [Namespace] -> Context -> Prelude.Either String (Graph, [[TermDefinition]]))
+dataGraphToDefinitions :: TTermDefinition (LanguageConstraints -> Bool -> Bool -> Bool -> Bool -> [Binding] -> Graph -> [Namespace] -> Context -> Prelude.Either Error (Graph, [[TermDefinition]]))
 dataGraphToDefinitions = define "dataGraphToDefinitions" $
   doc ("Given a data graph along with language constraints, original ordered bindings, and a designated list of namespaces,"
     <> " adapt the graph to the language constraints,"
@@ -623,7 +623,7 @@ dataGraphToDefinitions = define "dataGraphToDefinitions" $
       (Lists.filter ("b" ~> Logic.not $ Maybes.isJust (Core.bindingType $ var "b")) (var "bindings")) $
     Logic.ifElse (Lists.null $ var "untypedBindings")
       (right $ var "bindings")
-      (left $ Strings.concat [
+      (left $ Error.errorOther $ Error.otherError $ Strings.concat [
         string "Found untyped bindings (", var "debugLabel", string "): ",
         Strings.intercalate (string ", ") (var "untypedBindings")])) $
 
@@ -652,8 +652,7 @@ dataGraphToDefinitions = define "dataGraphToDefinitions" $
   -- inferGraphTypes now takes ordered bindings and returns (Graph, [Binding])
   "bins2" <<~ Logic.ifElse (var "doInfer")
      (Eithers.map ("result" ~> Pairs.second (Pairs.first (var "result")))
-       (Eithers.bimap formatError ("x" ~> var "x")
-         (Inference.inferGraphTypes @@ var "cx" @@ var "bins1" @@ (var "rebuildGraph" @@ var "bins1"))))
+         (Inference.inferGraphTypes @@ var "cx" @@ var "bins1" @@ (var "rebuildGraph" @@ var "bins1")))
      (var "checkBindingsTyped" @@ string "after case hoisting" @@ var "bins1") $
 
   -- Step 3: hoist let bindings if necessary (currently, for the Java target)
@@ -726,14 +725,14 @@ literalTypeSupported = define "literalTypeSupported" $
     (var "forType" @@ var "lt")
     false
 
-schemaGraphToDefinitions :: TTermDefinition (LanguageConstraints -> Graph -> [[Name]] -> Context -> Prelude.Either String (M.Map Name Type, [[TypeDefinition]]))
+schemaGraphToDefinitions :: TTermDefinition (LanguageConstraints -> Graph -> [[Name]] -> Context -> Prelude.Either Error (M.Map Name Type, [[TypeDefinition]]))
 schemaGraphToDefinitions = define "schemaGraphToDefinitions" $
   doc ("Given a schema graph along with language constraints and a designated list of element names,"
     <> " adapt the graph to the language constraints,"
     <> " then return a corresponding type definition for each element name.") $
   "constraints" ~> "graph" ~> "nameLists" ~> "cx" ~>
   "litmap" <~ adaptLiteralTypesMap @@ var "constraints" $
-  "tmap0" <<~ Eithers.bimap formatDecodingError ("x" ~> var "x") (Environment.graphAsTypes @@ var "cx" @@ var "graph" @@ (Lexical.graphToBindings @@ var "graph")) $
+  "tmap0" <<~ Eithers.bimap formatDecodingError ("x" ~> var "x") (Environment.graphAsTypes @@ var "graph" @@ (Lexical.graphToBindings @@ var "graph")) $
   "tmap1" <<~ adaptGraphSchema @@ var "constraints" @@ var "litmap" @@ var "tmap0" $
   "toDef" <~ ("pair" ~> Packaging.typeDefinition (Pairs.first $ var "pair") (Core.typeScheme (list ([] :: [TTerm Name])) (Pairs.second $ var "pair") nothing)) $
   right $ pair
@@ -743,7 +742,7 @@ schemaGraphToDefinitions = define "schemaGraphToDefinitions" $
         Lists.map ("n" ~> pair (var "n") (Maybes.fromJust $ Maps.lookup (var "n") (var "tmap1"))) (var "names"))
       (var "nameLists"))
 
-termAlternatives :: TTermDefinition (Context -> Graph -> Term -> Prelude.Either String [Term])
+termAlternatives :: TTermDefinition (Context -> Graph -> Term -> Prelude.Either Error [Term])
 termAlternatives = define "termAlternatives" $
   doc "Find a list of alternatives for a given term, if any" $
   "cx" ~> "graph" ~> "term" ~> cases _Term (var "term")
@@ -772,7 +771,7 @@ termAlternatives = define "termAlternatives" $
         Core.field (var "fname") $ Core.termMaybe $ Logic.ifElse (Equality.equal (var "ftname") (var "fname"))
           (just $ var "fterm")
           (nothing)) $
-      "rt" <<~ Eithers.bimap formatError ("x" ~> var "x") (Resolution.requireUnionType @@ var "cx" @@ var "graph" @@ var "tname") $
+      "rt" <<~ Resolution.requireUnionType @@ var "cx" @@ var "graph" @@ var "tname" $
       right $ list [
         Core.termRecord $ Core.record (var "tname") (Lists.map (var "forFieldType") (var "rt"))],
     _Term_unit>>: constant $ right $ list [
@@ -802,7 +801,7 @@ typeAlternatives = define "typeAlternatives" $
     _Type_void>>: constant $ list [
       Core.typeUnit]]
 
-adaptTypeForLanguage :: TTermDefinition (Language -> Type -> Prelude.Either String Type)
+adaptTypeForLanguage :: TTermDefinition (Language -> Type -> Prelude.Either Error Type)
 adaptTypeForLanguage = define "adaptTypeForLanguage" $
   doc "Adapt a type using the constraints of a given language" $
   "lang" ~> "typ" ~>
@@ -810,7 +809,7 @@ adaptTypeForLanguage = define "adaptTypeForLanguage" $
   "litmap" <~ adaptLiteralTypesMap @@ var "constraints" $
   adaptType @@ var "constraints" @@ var "litmap" @@ var "typ"
 
-adaptTermForLanguage :: TTermDefinition (Language -> Context -> Graph -> Term -> Prelude.Either String Term)
+adaptTermForLanguage :: TTermDefinition (Language -> Context -> Graph -> Term -> Prelude.Either Error Term)
 adaptTermForLanguage = define "adaptTermForLanguage" $
   doc "Adapt a term using the constraints of a given language" $
   "lang" ~> "cx" ~> "g" ~> "term" ~>
@@ -830,7 +829,7 @@ composeCoders = define "composeCoders" $
       "b2" <<~ Coders.coderDecode (var "c2") @@ var "cx" @@ var "c" $
       Coders.coderDecode (var "c1") @@ var "cx" @@ var "b2")
 
-simpleLanguageAdapter :: TTermDefinition (Language -> Context -> Graph -> Type -> Prelude.Either String (Adapter Type Type Term Term))
+simpleLanguageAdapter :: TTermDefinition (Language -> Context -> Graph -> Type -> Prelude.Either Error (Adapter Type Type Term Term))
 simpleLanguageAdapter = define "simpleLanguageAdapter" $
   doc "Given a target language and a source type, produce an adapter which rewrites the type and its terms according to the language's constraints. The encode direction adapts terms; the decode direction is identity." $
   "lang" ~> "cx" ~> "g" ~> "typ" ~>
@@ -843,8 +842,7 @@ simpleLanguageAdapter = define "simpleLanguageAdapter" $
     (var "adaptedType")
     (Coders.coder
       ("cx" ~> "term" ~>
-        Eithers.bimap ("_s" ~> Ctx.inContext (Error.errorOther $ Error.otherError $ var "_s") (var "cx")) ("_x" ~> var "_x")
-          (adaptTerm @@ var "constraints" @@ var "litmap" @@ var "cx" @@ var "g" @@ var "term"))
+          adaptTerm @@ var "constraints" @@ var "litmap" @@ var "cx" @@ var "g" @@ var "term")
       ("cx" ~> "term" ~> right $ var "term"))
 
 
