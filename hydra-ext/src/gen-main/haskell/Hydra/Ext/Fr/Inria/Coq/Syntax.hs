@@ -2,6 +2,7 @@
 
 -- | A model for Coq core and extensions. Based on the Coq 8.15 grammar:
 -- |   https://coq.github.io/doc/v8.15/refman/language/core/basic.html#essential-vocabulary
+-- |   Extended with Vernacular commands for complete .v file generation.
 
 module Hydra.Ext.Fr.Inria.Coq.Syntax where
 
@@ -1001,3 +1002,347 @@ _UniverseName_qualid = Core.Name "qualid"
 _UniverseName_set = Core.Name "set"
 
 _UniverseName_prop = Core.Name "prop"
+
+-- | A Coq comment (* ... *)
+newtype Comment =
+  Comment {
+    unComment :: String}
+  deriving (Eq, Ord, Read, Show)
+
+_Comment = Core.Name "hydra.ext.fr.inria.coq.syntax.Comment"
+
+-- | A constructor in an Inductive definition
+data Constructor =
+  Constructor {
+    constructorName :: Ident,
+    constructorBinders :: [Binder],
+    constructorType :: (Maybe Type)}
+  deriving (Eq, Ord, Read, Show)
+
+_Constructor = Core.Name "hydra.ext.fr.inria.coq.syntax.Constructor"
+
+_Constructor_name = Core.Name "name"
+
+_Constructor_binders = Core.Name "binders"
+
+_Constructor_type = Core.Name "type"
+
+-- | A Definition or Let command: Definition name binders : type := term.
+data Definition =
+  Definition {
+    definitionLocality :: (Maybe Locality),
+    definitionName :: Ident,
+    definitionBinders :: [Binder],
+    definitionType :: (Maybe Type),
+    definitionBody :: Term}
+  deriving (Eq, Ord, Read, Show)
+
+_Definition = Core.Name "hydra.ext.fr.inria.coq.syntax.Definition"
+
+_Definition_locality = Core.Name "locality"
+
+_Definition_name = Core.Name "name"
+
+_Definition_binders = Core.Name "binders"
+
+_Definition_type = Core.Name "type"
+
+_Definition_body = Core.Name "body"
+
+-- | A complete Coq .v file
+data Document =
+  Document {
+    documentSentences :: [Sentence]}
+  deriving (Eq, Ord, Read, Show)
+
+_Document = Core.Name "hydra.ext.fr.inria.coq.syntax.Document"
+
+_Document_sentences = Core.Name "sentences"
+
+-- | A Fixpoint command for recursive definitions
+data FixpointDefinition =
+  FixpointDefinition {
+    fixpointDefinitionLocality :: (Maybe Locality),
+    fixpointDefinitionName :: Ident,
+    fixpointDefinitionBinders :: [Binder],
+    fixpointDefinitionAnnot :: (Maybe FixAnnot),
+    fixpointDefinitionType :: (Maybe Type),
+    fixpointDefinitionBody :: Term,
+    fixpointDefinitionWith :: [Fix_Decl]}
+  deriving (Eq, Ord, Read, Show)
+
+_FixpointDefinition = Core.Name "hydra.ext.fr.inria.coq.syntax.FixpointDefinition"
+
+_FixpointDefinition_locality = Core.Name "locality"
+
+_FixpointDefinition_name = Core.Name "name"
+
+_FixpointDefinition_binders = Core.Name "binders"
+
+_FixpointDefinition_annot = Core.Name "annot"
+
+_FixpointDefinition_type = Core.Name "type"
+
+_FixpointDefinition_body = Core.Name "body"
+
+_FixpointDefinition_with = Core.Name "with"
+
+-- | Qualification for Require/Import commands
+data ImportQualification =
+  ImportQualificationImport  |
+  ImportQualificationExport
+  deriving (Eq, Ord, Read, Show)
+
+_ImportQualification = Core.Name "hydra.ext.fr.inria.coq.syntax.ImportQualification"
+
+_ImportQualification_import = Core.Name "import"
+
+_ImportQualification_export = Core.Name "export"
+
+-- | A single body in an Inductive definition (supports mutual induction via 'with')
+data InductiveBody =
+  InductiveBody {
+    inductiveBodyName :: Ident,
+    inductiveBodyBinders :: [Binder],
+    inductiveBodyType :: (Maybe Type),
+    inductiveBodyConstructors :: [Constructor]}
+  deriving (Eq, Ord, Read, Show)
+
+_InductiveBody = Core.Name "hydra.ext.fr.inria.coq.syntax.InductiveBody"
+
+_InductiveBody_name = Core.Name "name"
+
+_InductiveBody_binders = Core.Name "binders"
+
+_InductiveBody_type = Core.Name "type"
+
+_InductiveBody_constructors = Core.Name "constructors"
+
+-- | An Inductive or CoInductive definition with one or more mutually inductive bodies
+data InductiveDefinition =
+  InductiveDefinition {
+    inductiveDefinitionLocality :: (Maybe Locality),
+    inductiveDefinitionCoinductive :: Bool,
+    inductiveDefinitionBodies :: [InductiveBody]}
+  deriving (Eq, Ord, Read, Show)
+
+_InductiveDefinition = Core.Name "hydra.ext.fr.inria.coq.syntax.InductiveDefinition"
+
+_InductiveDefinition_locality = Core.Name "locality"
+
+_InductiveDefinition_coinductive = Core.Name "coinductive"
+
+_InductiveDefinition_bodies = Core.Name "bodies"
+
+-- | Local or Global qualifier for commands
+data Locality =
+  LocalityLocal  |
+  LocalityGlobal
+  deriving (Eq, Ord, Read, Show)
+
+_Locality = Core.Name "hydra.ext.fr.inria.coq.syntax.Locality"
+
+_Locality_local = Core.Name "local"
+
+_Locality_global = Core.Name "global"
+
+-- | A Module ... End block
+data ModuleDefinition =
+  ModuleDefinition {
+    moduleDefinitionName :: Ident,
+    moduleDefinitionSentences :: [Sentence]}
+  deriving (Eq, Ord, Read, Show)
+
+_ModuleDefinition = Core.Name "hydra.ext.fr.inria.coq.syntax.ModuleDefinition"
+
+_ModuleDefinition_name = Core.Name "name"
+
+_ModuleDefinition_sentences = Core.Name "sentences"
+
+-- | A Notation declaration
+data NotationDeclaration =
+  NotationDeclaration {
+    notationDeclarationNotation :: String_,
+    notationDeclarationDefinition :: Term,
+    notationDeclarationLevel :: (Maybe Natural),
+    notationDeclarationAssociativity :: (Maybe String)}
+  deriving (Eq, Ord, Read, Show)
+
+_NotationDeclaration = Core.Name "hydra.ext.fr.inria.coq.syntax.NotationDeclaration"
+
+_NotationDeclaration_notation = Core.Name "notation"
+
+_NotationDeclaration_definition = Core.Name "definition"
+
+_NotationDeclaration_level = Core.Name "level"
+
+_NotationDeclaration_associativity = Core.Name "associativity"
+
+-- | The body of a Record definition
+data RecordBody =
+  RecordBody {
+    recordBodyConstructor :: (Maybe Ident),
+    recordBodyFields :: [RecordField]}
+  deriving (Eq, Ord, Read, Show)
+
+_RecordBody = Core.Name "hydra.ext.fr.inria.coq.syntax.RecordBody"
+
+_RecordBody_constructor = Core.Name "constructor"
+
+_RecordBody_fields = Core.Name "fields"
+
+-- | A Record or Structure definition
+data RecordDefinition =
+  RecordDefinition {
+    recordDefinitionLocality :: (Maybe Locality),
+    recordDefinitionName :: Ident,
+    recordDefinitionBinders :: [Binder],
+    recordDefinitionSort :: (Maybe Sort),
+    recordDefinitionBody :: RecordBody}
+  deriving (Eq, Ord, Read, Show)
+
+_RecordDefinition = Core.Name "hydra.ext.fr.inria.coq.syntax.RecordDefinition"
+
+_RecordDefinition_locality = Core.Name "locality"
+
+_RecordDefinition_name = Core.Name "name"
+
+_RecordDefinition_binders = Core.Name "binders"
+
+_RecordDefinition_sort = Core.Name "sort"
+
+_RecordDefinition_body = Core.Name "body"
+
+-- | A field in a Record definition
+data RecordField =
+  RecordField {
+    recordFieldName :: Ident,
+    recordFieldType :: Type}
+  deriving (Eq, Ord, Read, Show)
+
+_RecordField = Core.Name "hydra.ext.fr.inria.coq.syntax.RecordField"
+
+_RecordField_name = Core.Name "name"
+
+_RecordField_type = Core.Name "type"
+
+-- | A Require Import/Export command
+data RequireImport =
+  RequireImport {
+    requireImportFrom :: (Maybe Qualid),
+    requireImportRequire :: Bool,
+    requireImportQualification :: (Maybe ImportQualification),
+    requireImportModules :: [Qualid]}
+  deriving (Eq, Ord, Read, Show)
+
+_RequireImport = Core.Name "hydra.ext.fr.inria.coq.syntax.RequireImport"
+
+_RequireImport_from = Core.Name "from"
+
+_RequireImport_require = Core.Name "require"
+
+_RequireImport_qualification = Core.Name "qualification"
+
+_RequireImport_modules = Core.Name "modules"
+
+-- | A Section ... End block
+data SectionDefinition =
+  SectionDefinition {
+    sectionDefinitionName :: Ident,
+    sectionDefinitionSentences :: [Sentence]}
+  deriving (Eq, Ord, Read, Show)
+
+_SectionDefinition = Core.Name "hydra.ext.fr.inria.coq.syntax.SectionDefinition"
+
+_SectionDefinition_name = Core.Name "name"
+
+_SectionDefinition_sentences = Core.Name "sentences"
+
+-- | A top-level sentence in a Coq document, optionally preceded by a comment
+data Sentence =
+  Sentence {
+    sentenceComment :: (Maybe Comment),
+    sentenceContent :: SentenceContent}
+  deriving (Eq, Ord, Read, Show)
+
+_Sentence = Core.Name "hydra.ext.fr.inria.coq.syntax.Sentence"
+
+_Sentence_comment = Core.Name "comment"
+
+_Sentence_content = Core.Name "content"
+
+-- | The content of a top-level sentence
+data SentenceContent =
+  SentenceContentDefinition Definition |
+  SentenceContentFixpoint FixpointDefinition |
+  SentenceContentInductive InductiveDefinition |
+  SentenceContentModule ModuleDefinition |
+  SentenceContentNotation NotationDeclaration |
+  SentenceContentRecord RecordDefinition |
+  SentenceContentRequireImport RequireImport |
+  SentenceContentSection SectionDefinition |
+  SentenceContentTheorem TheoremBody
+  deriving (Eq, Ord, Read, Show)
+
+_SentenceContent = Core.Name "hydra.ext.fr.inria.coq.syntax.SentenceContent"
+
+_SentenceContent_definition = Core.Name "definition"
+
+_SentenceContent_fixpoint = Core.Name "fixpoint"
+
+_SentenceContent_inductive = Core.Name "inductive"
+
+_SentenceContent_module = Core.Name "module"
+
+_SentenceContent_notation = Core.Name "notation"
+
+_SentenceContent_record = Core.Name "record"
+
+_SentenceContent_requireImport = Core.Name "requireImport"
+
+_SentenceContent_section = Core.Name "section"
+
+_SentenceContent_theorem = Core.Name "theorem"
+
+-- | A Theorem/Lemma/Proposition with a proof term
+data TheoremBody =
+  TheoremBody {
+    theoremBodyKind :: TheoremKind,
+    theoremBodyName :: Ident,
+    theoremBodyBinders :: [Binder],
+    theoremBodyType :: Type,
+    theoremBodyProof :: Term}
+  deriving (Eq, Ord, Read, Show)
+
+_TheoremBody = Core.Name "hydra.ext.fr.inria.coq.syntax.TheoremBody"
+
+_TheoremBody_kind = Core.Name "kind"
+
+_TheoremBody_name = Core.Name "name"
+
+_TheoremBody_binders = Core.Name "binders"
+
+_TheoremBody_type = Core.Name "type"
+
+_TheoremBody_proof = Core.Name "proof"
+
+-- | The kind of theorem command
+data TheoremKind =
+  TheoremKindTheorem  |
+  TheoremKindLemma  |
+  TheoremKindProposition  |
+  TheoremKindCorollary  |
+  TheoremKindExample
+  deriving (Eq, Ord, Read, Show)
+
+_TheoremKind = Core.Name "hydra.ext.fr.inria.coq.syntax.TheoremKind"
+
+_TheoremKind_theorem = Core.Name "theorem"
+
+_TheoremKind_lemma = Core.Name "lemma"
+
+_TheoremKind_proposition = Core.Name "proposition"
+
+_TheoremKind_corollary = Core.Name "corollary"
+
+_TheoremKind_example = Core.Name "example"

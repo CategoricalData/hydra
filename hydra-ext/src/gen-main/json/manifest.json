@@ -151,6 +151,8 @@
     "hydra.ext.org.stacspec.items",
     "hydra.ext.workflow",
     "hydra.demos.genpg.transform",
+    "hydra.ext.coq.language",
+    "hydra.ext.coq.serde",
     "hydra.ext.cpp.coder",
     "hydra.ext.cpp.environment",
     "hydra.ext.cpp.language",
