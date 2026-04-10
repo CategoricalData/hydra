@@ -1,0 +1,537 @@
+(* Namespaces and primitive names for the Hydra standard library *)
+
+(* Standard library imports *)
+Require Import Stdlib.Strings.String Stdlib.Lists.List Stdlib.ZArith.ZArith Stdlib.QArith.QArith hydra.lib.base.
+
+(* Module dependencies *)
+Require Import hydra.core hydra.packaging.
+
+Definition typeclassOrd : Name :=
+  "Ord"%string.
+Definition typeclassEq : Name :=
+  "Eq"%string.
+Definition typeclass : Namespace :=
+  "hydra.typeclass"%string.
+Definition stringsUnlines : Name :=
+  "strings.unlines"%string.
+Definition stringsToUpper : Name :=
+  "strings.toUpper"%string.
+Definition stringsToLower : Name :=
+  "strings.toLower"%string.
+Definition stringsToList : Name :=
+  "strings.toList"%string.
+Definition stringsSplitOn : Name :=
+  "strings.splitOn"%string.
+Definition stringsNull : Name :=
+  "strings.null"%string.
+Definition stringsMaybeCharAt : Name :=
+  "strings.maybeCharAt"%string.
+Definition stringsLines : Name :=
+  "strings.lines"%string.
+Definition stringsLength : Name :=
+  "strings.length"%string.
+Definition stringsIntercalate : Name :=
+  "strings.intercalate"%string.
+Definition stringsFromList : Name :=
+  "strings.fromList"%string.
+Definition stringsCharAt : Name :=
+  "strings.charAt"%string.
+Definition stringsCat2 : Name :=
+  "strings.cat2"%string.
+Definition stringsCat : Name :=
+  "strings.cat"%string.
+Definition strings : Namespace :=
+  "strings"%string.
+Definition setsUnions : Name :=
+  "sets.unions"%string.
+Definition setsUnion : Name :=
+  "sets.union"%string.
+Definition setsToList : Name :=
+  "sets.toList"%string.
+Definition setsSize : Name :=
+  "sets.size"%string.
+Definition setsSingleton : Name :=
+  "sets.singleton"%string.
+Definition setsNull : Name :=
+  "sets.null"%string.
+Definition setsMember : Name :=
+  "sets.member"%string.
+Definition setsMap : Name :=
+  "sets.map"%string.
+Definition setsIntersection : Name :=
+  "sets.intersection"%string.
+Definition setsInsert : Name :=
+  "sets.insert"%string.
+Definition setsFromList : Name :=
+  "sets.fromList"%string.
+Definition setsEmpty : Name :=
+  "sets.empty"%string.
+Definition setsDifference : Name :=
+  "sets.difference"%string.
+Definition setsDelete : Name :=
+  "sets.delete"%string.
+Definition sets : Namespace :=
+  "sets"%string.
+Definition regexSplit : Name :=
+  "regex.split"%string.
+Definition regexReplaceAll : Name :=
+  "regex.replaceAll"%string.
+Definition regexReplace : Name :=
+  "regex.replace"%string.
+Definition regexMatches : Name :=
+  "regex.matches"%string.
+Definition regexFindAll : Name :=
+  "regex.findAll"%string.
+Definition regexFind : Name :=
+  "regex.find"%string.
+Definition regex : Namespace :=
+  "regex"%string.
+Definition pairsSecond : Name :=
+  "pairs.second"%string.
+Definition pairsFirst : Name :=
+  "pairs.first"%string.
+Definition pairsBimap : Name :=
+  "pairs.bimap"%string.
+Definition pairs : Namespace :=
+  "pairs"%string.
+Definition maybesToList : Name :=
+  "maybes.toList"%string.
+Definition maybesPure : Name :=
+  "maybes.pure"%string.
+Definition maybesMaybe : Name :=
+  "maybes.maybe"%string.
+Definition maybesMapMaybe : Name :=
+  "maybes.mapMaybe"%string.
+Definition maybesMap : Name :=
+  "maybes.map"%string.
+Definition maybesIsNothing : Name :=
+  "maybes.isNothing"%string.
+Definition maybesIsJust : Name :=
+  "maybes.isJust"%string.
+Definition maybesFromMaybe : Name :=
+  "maybes.fromMaybe"%string.
+Definition maybesFromJust : Name :=
+  "maybes.fromJust"%string.
+Definition maybesCompose : Name :=
+  "maybes.compose"%string.
+Definition maybesCat : Name :=
+  "maybes.cat"%string.
+Definition maybesCases : Name :=
+  "maybes.cases"%string.
+Definition maybesBind : Name :=
+  "maybes.bind"%string.
+Definition maybesApply : Name :=
+  "maybes.apply"%string.
+Definition maybes : Namespace :=
+  "maybes"%string.
+Definition mathTruncate : Name :=
+  "math.truncate"%string.
+Definition mathTanh : Name :=
+  "math.tanh"%string.
+Definition mathTan : Name :=
+  "math.tan"%string.
+Definition mathSucc : Name :=
+  "math.succ"%string.
+Definition mathSub : Name :=
+  "math.sub"%string.
+Definition mathSqrt : Name :=
+  "math.sqrt"%string.
+Definition mathSinh : Name :=
+  "math.sinh"%string.
+Definition mathSin : Name :=
+  "math.sin"%string.
+Definition mathSignum : Name :=
+  "math.signum"%string.
+Definition mathRoundFloat64 : Name :=
+  "math.roundFloat64"%string.
+Definition mathRoundFloat32 : Name :=
+  "math.roundFloat32"%string.
+Definition mathRoundBigfloat : Name :=
+  "math.roundBigfloat"%string.
+Definition mathRound : Name :=
+  "math.round"%string.
+Definition mathRem : Name :=
+  "math.rem"%string.
+Definition mathRange : Name :=
+  "math.range"%string.
+Definition mathPred : Name :=
+  "math.pred"%string.
+Definition mathPow : Name :=
+  "math.pow"%string.
+Definition mathPi : Name :=
+  "math.pi"%string.
+Definition mathOdd : Name :=
+  "math.odd"%string.
+Definition mathNegate : Name :=
+  "math.negate"%string.
+Definition mathMul : Name :=
+  "math.mul"%string.
+Definition mathMod : Name :=
+  "math.mod_"%string.
+Definition mathMin : Name :=
+  "math.min"%string.
+Definition mathMaybeSucc : Name :=
+  "math.maybeSucc"%string.
+Definition mathMaybeRem : Name :=
+  "math.maybeRem"%string.
+Definition mathMaybePred : Name :=
+  "math.maybePred"%string.
+Definition mathMaybeMod : Name :=
+  "math.maybeMod"%string.
+Definition mathMaybeDiv : Name :=
+  "math.maybeDiv"%string.
+Definition mathMax : Name :=
+  "math.max"%string.
+Definition mathLogBase : Name :=
+  "math.logBase"%string.
+Definition mathLog : Name :=
+  "math.log"%string.
+Definition mathFloor : Name :=
+  "math.floor"%string.
+Definition mathExp : Name :=
+  "math.exp"%string.
+Definition mathEven : Name :=
+  "math.even"%string.
+Definition mathE : Name :=
+  "math.e"%string.
+Definition mathDiv : Name :=
+  "math.div"%string.
+Definition mathCosh : Name :=
+  "math.cosh"%string.
+Definition mathCos : Name :=
+  "math.cos"%string.
+Definition mathCeiling : Name :=
+  "math.ceiling"%string.
+Definition mathAtanh : Name :=
+  "math.atanh"%string.
+Definition mathAtan2 : Name :=
+  "math.atan2"%string.
+Definition mathAtan : Name :=
+  "math.atan"%string.
+Definition mathAsinh : Name :=
+  "math.asinh"%string.
+Definition mathAsin : Name :=
+  "math.asin"%string.
+Definition mathAdd : Name :=
+  "math.add"%string.
+Definition mathAcosh : Name :=
+  "math.acosh"%string.
+Definition mathAcos : Name :=
+  "math.acos"%string.
+Definition mathAbs : Name :=
+  "math.abs"%string.
+Definition math : Namespace :=
+  "math"%string.
+Definition mapsUnion : Name :=
+  "maps.union"%string.
+Definition mapsToList : Name :=
+  "maps.toList"%string.
+Definition mapsSize : Name :=
+  "maps.size"%string.
+Definition mapsSingleton : Name :=
+  "maps.singleton"%string.
+Definition mapsNull : Name :=
+  "maps.null"%string.
+Definition mapsMember : Name :=
+  "maps.member"%string.
+Definition mapsMapKeys : Name :=
+  "maps.mapKeys"%string.
+Definition mapsMap : Name :=
+  "maps.map"%string.
+Definition mapsLookup : Name :=
+  "maps.lookup"%string.
+Definition mapsKeys : Name :=
+  "maps.keys"%string.
+Definition mapsInsert : Name :=
+  "maps.insert"%string.
+Definition mapsFromList : Name :=
+  "maps.fromList"%string.
+Definition mapsFindWithDefault : Name :=
+  "maps.findWithDefault"%string.
+Definition mapsFilterWithKey : Name :=
+  "maps.filterWithKey"%string.
+Definition mapsFilter : Name :=
+  "maps.filter"%string.
+Definition mapsEmpty : Name :=
+  "maps.empty"%string.
+Definition mapsElems : Name :=
+  "maps.elems"%string.
+Definition mapsDelete : Name :=
+  "maps.delete"%string.
+Definition mapsBimap : Name :=
+  "maps.bimap"%string.
+Definition mapsAlter : Name :=
+  "maps.alter"%string.
+Definition maps : Namespace :=
+  "maps"%string.
+Definition logicOr : Name :=
+  "logic.or"%string.
+Definition logicNot : Name :=
+  "logic.not"%string.
+Definition logicIfElse : Name :=
+  "logic.ifElse"%string.
+Definition logicAnd : Name :=
+  "logic.and"%string.
+Definition logic : Namespace :=
+  "logic"%string.
+Definition literalsUint8ToBigint : Name :=
+  "literals.uint8ToBigint"%string.
+Definition literalsUint64ToBigint : Name :=
+  "literals.uint64ToBigint"%string.
+Definition literalsUint32ToBigint : Name :=
+  "literals.uint32ToBigint"%string.
+Definition literalsUint16ToBigint : Name :=
+  "literals.uint16ToBigint"%string.
+Definition literalsStringToBinary : Name :=
+  "literals.stringToBinary"%string.
+Definition literalsShowUint8 : Name :=
+  "literals.showUint8"%string.
+Definition literalsShowUint64 : Name :=
+  "literals.showUint64"%string.
+Definition literalsShowUint32 : Name :=
+  "literals.showUint32"%string.
+Definition literalsShowUint16 : Name :=
+  "literals.showUint16"%string.
+Definition literalsShowString : Name :=
+  "literals.showString"%string.
+Definition literalsShowInt8 : Name :=
+  "literals.showInt8"%string.
+Definition literalsShowInt64 : Name :=
+  "literals.showInt64"%string.
+Definition literalsShowInt32 : Name :=
+  "literals.showInt32"%string.
+Definition literalsShowInt16 : Name :=
+  "literals.showInt16"%string.
+Definition literalsShowFloat64 : Name :=
+  "literals.showFloat64"%string.
+Definition literalsShowFloat32 : Name :=
+  "literals.showFloat32"%string.
+Definition literalsShowBoolean : Name :=
+  "literals.showBoolean"%string.
+Definition literalsShowBigint : Name :=
+  "literals.showBigint"%string.
+Definition literalsShowBigfloat : Name :=
+  "literals.showBigfloat"%string.
+Definition literalsReadUint8 : Name :=
+  "literals.readUint8"%string.
+Definition literalsReadUint64 : Name :=
+  "literals.readUint64"%string.
+Definition literalsReadUint32 : Name :=
+  "literals.readUint32"%string.
+Definition literalsReadUint16 : Name :=
+  "literals.readUint16"%string.
+Definition literalsReadString : Name :=
+  "literals.readString"%string.
+Definition literalsReadInt8 : Name :=
+  "literals.readInt8"%string.
+Definition literalsReadInt64 : Name :=
+  "literals.readInt64"%string.
+Definition literalsReadInt32 : Name :=
+  "literals.readInt32"%string.
+Definition literalsReadInt16 : Name :=
+  "literals.readInt16"%string.
+Definition literalsReadFloat64 : Name :=
+  "literals.readFloat64"%string.
+Definition literalsReadFloat32 : Name :=
+  "literals.readFloat32"%string.
+Definition literalsReadBoolean : Name :=
+  "literals.readBoolean"%string.
+Definition literalsReadBigint : Name :=
+  "literals.readBigint"%string.
+Definition literalsReadBigfloat : Name :=
+  "literals.readBigfloat"%string.
+Definition literalsInt8ToBigint : Name :=
+  "literals.int8ToBigint"%string.
+Definition literalsInt64ToBigint : Name :=
+  "literals.int64ToBigint"%string.
+Definition literalsInt32ToBigint : Name :=
+  "literals.int32ToBigint"%string.
+Definition literalsInt16ToBigint : Name :=
+  "literals.int16ToBigint"%string.
+Definition literalsFloat64ToBigfloat : Name :=
+  "literals.float64ToBigfloat"%string.
+Definition literalsFloat32ToBigfloat : Name :=
+  "literals.float32ToBigfloat"%string.
+Definition literalsBinaryToString : Name :=
+  "literals.binaryToString"%string.
+Definition literalsBinaryToBytes : Name :=
+  "literals.binaryToBytes"%string.
+Definition literalsBigintToUint8 : Name :=
+  "literals.bigintToUint8"%string.
+Definition literalsBigintToUint64 : Name :=
+  "literals.bigintToUint64"%string.
+Definition literalsBigintToUint32 : Name :=
+  "literals.bigintToUint32"%string.
+Definition literalsBigintToUint16 : Name :=
+  "literals.bigintToUint16"%string.
+Definition literalsBigintToInt8 : Name :=
+  "literals.bigintToInt8"%string.
+Definition literalsBigintToInt64 : Name :=
+  "literals.bigintToInt64"%string.
+Definition literalsBigintToInt32 : Name :=
+  "literals.bigintToInt32"%string.
+Definition literalsBigintToInt16 : Name :=
+  "literals.bigintToInt16"%string.
+Definition literalsBigintToBigfloat : Name :=
+  "literals.bigintToBigfloat"%string.
+Definition literalsBigfloatToFloat64 : Name :=
+  "literals.bigfloatToFloat64"%string.
+Definition literalsBigfloatToFloat32 : Name :=
+  "literals.bigfloatToFloat32"%string.
+Definition literalsBigfloatToBigint : Name :=
+  "literals.bigfloatToBigint"%string.
+Definition literals : Namespace :=
+  "literals"%string.
+Definition listsZipWith : Name :=
+  "lists.zipWith"%string.
+Definition listsZip : Name :=
+  "lists.zip"%string.
+Definition listsTranspose : Name :=
+  "lists.transpose"%string.
+Definition listsTake : Name :=
+  "lists.take"%string.
+Definition listsTail : Name :=
+  "lists.tail"%string.
+Definition listsSpan : Name :=
+  "lists.span"%string.
+Definition listsSortOn : Name :=
+  "lists.sortOn"%string.
+Definition listsSort : Name :=
+  "lists.sort"%string.
+Definition listsSingleton : Name :=
+  "lists.singleton"%string.
+Definition listsSafeHead : Name :=
+  "lists.safeHead"%string.
+Definition listsReverse : Name :=
+  "lists.reverse"%string.
+Definition listsReplicate : Name :=
+  "lists.replicate"%string.
+Definition listsPure : Name :=
+  "lists.pure"%string.
+Definition listsPartition : Name :=
+  "lists.partition"%string.
+Definition listsNull : Name :=
+  "lists.null"%string.
+Definition listsNub : Name :=
+  "lists.nub"%string.
+Definition listsMaybeTail : Name :=
+  "lists.maybeTail"%string.
+Definition listsMaybeLast : Name :=
+  "lists.maybeLast"%string.
+Definition listsMaybeInit : Name :=
+  "lists.maybeInit"%string.
+Definition listsMaybeHead : Name :=
+  "lists.maybeHead"%string.
+Definition listsMaybeAt : Name :=
+  "lists.maybeAt"%string.
+Definition listsMap : Name :=
+  "lists.map"%string.
+Definition listsLength : Name :=
+  "lists.length"%string.
+Definition listsLast : Name :=
+  "lists.last"%string.
+Definition listsIntersperse : Name :=
+  "lists.intersperse"%string.
+Definition listsIntercalate : Name :=
+  "lists.intercalate"%string.
+Definition listsInit : Name :=
+  "lists.init"%string.
+Definition listsHead : Name :=
+  "lists.head"%string.
+Definition listsGroup : Name :=
+  "lists.group"%string.
+Definition listsFoldr : Name :=
+  "lists.foldr"%string.
+Definition listsFoldl : Name :=
+  "lists.foldl"%string.
+Definition listsFind : Name :=
+  "lists.find"%string.
+Definition listsFilter : Name :=
+  "lists.filter"%string.
+Definition listsElem : Name :=
+  "lists.elem"%string.
+Definition listsDropWhile : Name :=
+  "lists.dropWhile"%string.
+Definition listsDrop : Name :=
+  "lists.drop"%string.
+Definition listsCons : Name :=
+  "lists.cons"%string.
+Definition listsConcat2 : Name :=
+  "lists.concat2"%string.
+Definition listsConcat : Name :=
+  "lists.concat"%string.
+Definition listsBind : Name :=
+  "lists.bind"%string.
+Definition listsAt : Name :=
+  "lists.at_"%string.
+Definition listsApply : Name :=
+  "lists.apply"%string.
+Definition lists : Namespace :=
+  "lists"%string.
+Definition equalityMin : Name :=
+  "equality.min"%string.
+Definition equalityMax : Name :=
+  "equality.max"%string.
+Definition equalityLte : Name :=
+  "equality.lte"%string.
+Definition equalityLt : Name :=
+  "equality.lt"%string.
+Definition equalityIdentity : Name :=
+  "equality.identity"%string.
+Definition equalityGte : Name :=
+  "equality.gte"%string.
+Definition equalityGt : Name :=
+  "equality.gt"%string.
+Definition equalityEqual : Name :=
+  "equality.equal"%string.
+Definition equalityCompare : Name :=
+  "equality.compare"%string.
+Definition equality : Namespace :=
+  "equality"%string.
+Definition eithersRights : Name :=
+  "eithers.rights"%string.
+Definition eithersPartitionEithers : Name :=
+  "eithers.partitionEithers"%string.
+Definition eithersMapSet : Name :=
+  "eithers.mapSet"%string.
+Definition eithersMapMaybe : Name :=
+  "eithers.mapMaybe"%string.
+Definition eithersMapList : Name :=
+  "eithers.mapList"%string.
+Definition eithersMap : Name :=
+  "eithers.map"%string.
+Definition eithersLefts : Name :=
+  "eithers.lefts"%string.
+Definition eithersIsRight : Name :=
+  "eithers.isRight"%string.
+Definition eithersIsLeft : Name :=
+  "eithers.isLeft"%string.
+Definition eithersFromRight : Name :=
+  "eithers.fromRight"%string.
+Definition eithersFromLeft : Name :=
+  "eithers.fromLeft"%string.
+Definition eithersFoldl : Name :=
+  "eithers.foldl"%string.
+Definition eithersEither : Name :=
+  "eithers.either"%string.
+Definition eithersBind : Name :=
+  "eithers.bind"%string.
+Definition eithersBimap : Name :=
+  "eithers.bimap"%string.
+Definition eithers : Namespace :=
+  "eithers"%string.
+Definition charsToUpper : Name :=
+  "chars.toUpper"%string.
+Definition charsToLower : Name :=
+  "chars.toLower"%string.
+Definition charsIsUpper : Name :=
+  "chars.isUpper"%string.
+Definition charsIsSpace : Name :=
+  "chars.isSpace"%string.
+Definition charsIsLower : Name :=
+  "chars.isLower"%string.
+Definition charsIsAlphaNum : Name :=
+  "chars.isAlphaNum"%string.
+Definition chars : Namespace :=
+  "chars"%string.
+

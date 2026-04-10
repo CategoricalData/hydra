@@ -1,0 +1,121 @@
+(* A module for lexical operations over graphs. *)
+
+(* Standard library imports *)
+Require Import Stdlib.Strings.String Stdlib.Lists.List Stdlib.ZArith.ZArith Stdlib.QArith.QArith hydra.lib.base.
+
+(* Module dependencies *)
+Require Import hydra.graph hydra.core hydra.errors hydra.lib.maybes hydra.lib.maps hydra.strip hydra.lib.lists hydra.show.core hydra.lib.eithers hydra.lib.logic hydra.lib.equality hydra.lib.strings hydra.lib.pairs hydra.lib.sets hydra.context hydra.lib.literals hydra.lib.math.
+
+Definition requirePrimitiveType : hydra.graph.Graph -> Name -> (sum) (Error) (TypeScheme) :=
+  fun (tx : hydra.graph.Graph) => fun (name : Name) => let mts := ((maybes.map) (fun (_p : Primitive) => (fun r_ => (primitive_type) (r_)) (_p))) (((maps.lookup) (name)) ((fun r_ => (graph_primitives) (r_)) (tx))) in (((maybes.maybe) ((inl) ((Error_Resolution) ((ResolutionError_NoSuchPrimitive) ((Build_NoSuchPrimitiveError) (name)))))) (fun (ts : TypeScheme) => (inr) (ts))) (mts).
+Definition matchUnitField (t0 : Type) (t1 : Type) (t2 : Type) (t3 : Type) : t0 -> t1 -> (prod) (t0) (t2 -> (sum) (t3) (t1)) :=
+  fun (fname : t0) => fun (x : t1) => (pair) (fname) (fun (ignored : t2) => (inr) (x)).
+Arguments matchUnitField {t0} {t1} {t2} {t3}.
+Definition matchRecord (t0 : Type) (t1 : Type) : t0 -> ((list) ((prod) (Name) (Term)) -> (sum) (Error) (t1)) -> Term -> (sum) (Error) (t1) :=
+  fun (graph_ : t0) => fun (decode : (list) ((prod) (Name) (Term)) -> (sum) (Error) (t1)) => fun (term_ : Term) => let stripped := (deannotateAndDetypeTerm) (term_) in (fun x_ => match x_ with
+| Term_Record v_ => (fun (record : Record_) => (decode) ((maps.fromList) (((lists.map) (fun (field : Field) => (pair) ((fun r_ => (field_name) (r_)) (field)) ((fun r_ => (field_term) (r_)) (field)))) ((fun r_ => (record__fields) (r_)) (record))))) (v_)
+| _ => (inl) ((Error_Resolution) ((ResolutionError_UnexpectedShape) ((Build_UnexpectedShapeError) ("record"%string) ((hydra.show.core.term) (term_)))))
+end) (stripped).
+Arguments matchRecord {t0} {t1}.
+Definition lookupTerm : hydra.graph.Graph -> Name -> (option) (Term) :=
+  fun (graph_ : hydra.graph.Graph) => fun (name : Name) => ((maps.lookup) (name)) ((fun r_ => (graph_boundTerms) (r_)) (graph_)).
+Definition resolveTerm_bundle :=
+  hydra_fix (fun (bundle_ : hydra.graph.Graph -> Name -> (option) (Term)) =>
+    let resolveTerm := bundle_ in
+    fun (graph_ : hydra.graph.Graph) => fun (name : Name) => let recurse := fun (term_ : Term) => let stripped := (deannotateTerm) (term_) in (fun x_ => match x_ with
+| Term_Variable v_ => (fun (name' : Name) => ((resolveTerm) (graph_)) (name')) (v_)
+| _ => (Some) (term_)
+end) (stripped) in (((maybes.maybe) (None)) (recurse)) (((lookupTerm) (graph_)) (name))).
+
+Definition resolveTerm : hydra.graph.Graph -> Name -> (option) (Term) :=
+  resolveTerm_bundle.
+Definition requireTerm : hydra.graph.Graph -> Name -> (sum) (Error) (Term) :=
+  fun (graph_ : hydra.graph.Graph) => fun (name : Name) => (((maybes.maybe) ((inl) ((Error_Resolution) ((ResolutionError_NoSuchBinding) ((Build_NoSuchBindingError) (name)))))) (fun (x : Term) => (inr) (x))) (((resolveTerm) (graph_)) (name)).
+Definition stripAndDereferenceTerm_bundle :=
+  hydra_fix (fun (bundle_ : hydra.graph.Graph -> Term -> (sum) (Error) (Term)) =>
+    let stripAndDereferenceTerm := bundle_ in
+    fun (graph_ : hydra.graph.Graph) => fun (term_ : Term) => let stripped := (deannotateAndDetypeTerm) (term_) in (fun x_ => match x_ with
+| Term_Variable v_ => (fun (v : Name) => ((eithers.bind) (((requireTerm) (graph_)) (v))) (fun (t : Term) => ((stripAndDereferenceTerm) (graph_)) (t))) (v_)
+| _ => (inr) (stripped)
+end) (stripped)).
+
+Definition stripAndDereferenceTerm : hydra.graph.Graph -> Term -> (sum) (Error) (Term) :=
+  stripAndDereferenceTerm_bundle.
+Definition lookupPrimitive : hydra.graph.Graph -> Name -> (option) (Primitive) :=
+  fun (graph_ : hydra.graph.Graph) => fun (name : Name) => ((maps.lookup) (name)) ((fun r_ => (graph_primitives) (r_)) (graph_)).
+Definition requirePrimitive : hydra.graph.Graph -> Name -> (sum) (Error) (Primitive) :=
+  fun (graph_ : hydra.graph.Graph) => fun (name : Name) => (((maybes.maybe) ((inl) ((Error_Resolution) ((ResolutionError_NoSuchPrimitive) ((Build_NoSuchPrimitiveError) (name)))))) (fun (x : Primitive) => (inr) (x))) (((lookupPrimitive) (graph_)) (name)).
+Definition lookupBinding : hydra.graph.Graph -> Name -> (option) (Binding) :=
+  fun (graph_ : hydra.graph.Graph) => fun (name : Name) => ((maybes.map) (fun (term_ : Term) => (Build_Binding) (name) (term_) (((maps.lookup) (name)) ((fun r_ => (graph_boundTypes) (r_)) (graph_))))) (((maps.lookup) (name)) ((fun r_ => (graph_boundTerms) (r_)) (graph_))).
+Definition requireBinding : hydra.graph.Graph -> Name -> (sum) (Error) (Binding) :=
+  fun (graph_ : hydra.graph.Graph) => fun (name : Name) => let showAll := false in let ellipsis := fun (strings : (list) (string)) => (((logic.ifElse) (((logic.and) (((equality.gt) ((lists.length) (strings))) ((3)%Z))) ((logic.not) (showAll)))) (((lists.concat2) (((lists.take) ((3)%Z)) (strings))) ((cons) ("..."%string) (nil)))) (strings) in let errMsg := ((strings.cat2) (((strings.cat2) (((strings.cat2) (((strings.cat2) ("no such element: "%string)) ((fun w_ => w_) (name)))) (". Available elements: {"%string))) (((strings.intercalate) (", "%string)) ((ellipsis) (((lists.map) (fun w_ => w_)) ((maps.keys) ((fun r_ => (graph_boundTerms) (r_)) (graph_)))))))) ("}"%string) in (((maybes.maybe) ((inl) ((Error_Resolution) ((ResolutionError_Other) (errMsg))))) (fun (x : Binding) => (inr) (x))) (((lookupBinding) (graph_)) (name)).
+Definition matchUnion_bundle (t0 : Type) :=
+  hydra_fix (fun (bundle_ : hydra.graph.Graph -> Name -> (list) ((prod) (Name) (Term -> (sum) (Error) (t0))) -> Term -> (sum) (Error) (t0)) =>
+    let matchUnion := bundle_ in
+    fun (graph_ : hydra.graph.Graph) => fun (tname : Name) => fun (pairs : (list) ((prod) (Name) (Term -> (sum) (Error) (t0)))) => fun (term_ : Term) => let stripped := (deannotateAndDetypeTerm) (term_) in let mapping := (maps.fromList) (pairs) in (fun x_ => match x_ with
+| Term_Variable v_ => (fun (name : Name) => ((eithers.bind) (((requireBinding) (graph_)) (name))) (fun (el : Binding) => ((((matchUnion) (graph_)) (tname)) (pairs)) ((fun r_ => (binding_term) (r_)) (el)))) (v_)
+| Term_Union v_ => (fun (injection : Injection) => let exp := let val := (fun r_ => (field_term) (r_)) ((fun r_ => (injection_field) (r_)) (injection)) in let fname := (fun r_ => (field_name) (r_)) ((fun r_ => (injection_field) (r_)) (injection)) in (((maybes.maybe) ((inl) ((Error_Resolution) ((ResolutionError_NoMatchingField) ((Build_NoMatchingFieldError) (fname)))))) (fun (f : Term -> (sum) (Error) (t0)) => (f) (val))) (((maps.lookup) (fname)) (mapping)) in (((logic.ifElse) (((equality.equal) ((fun w_ => w_) ((fun r_ => (injection_typeName) (r_)) (injection)))) ((fun w_ => w_) (tname)))) (exp)) ((inl) ((Error_Resolution) ((ResolutionError_UnexpectedShape) ((Build_UnexpectedShapeError) (((strings.cat2) ("injection for type "%string)) ((fun w_ => w_) (tname))) ((hydra.show.core.term) (term_))))))) (v_)
+| _ => (inl) ((Error_Resolution) ((ResolutionError_UnexpectedShape) ((Build_UnexpectedShapeError) (((strings.cat2) ("injection for type "%string)) ((fun w_ => w_) (tname))) ((hydra.show.core.term) (stripped)))))
+end) (stripped)).
+Arguments matchUnion_bundle {t0}.
+
+Definition matchUnion (t0 : Type) : hydra.graph.Graph -> Name -> (list) ((prod) (Name) (Term -> (sum) (Error) (t0))) -> Term -> (sum) (Error) (t0) :=
+  matchUnion_bundle.
+Arguments matchUnion {t0}.
+Definition matchEnum (t0 : Type) : hydra.graph.Graph -> Name -> (list) ((prod) (Name) (t0)) -> Term -> (sum) (Error) (t0) :=
+  fun (graph_ : hydra.graph.Graph) => fun (tname : Name) => fun (pairs : (list) ((prod) (Name) (t0))) => (((matchUnion) (graph_)) (tname)) (((lists.map) (fun (pair_ : (prod) (Name) (t0)) => ((matchUnitField) ((pairs.first) (pair_))) ((pairs.second) (pair_)))) (pairs)).
+Arguments matchEnum {t0}.
+Definition graphToBindings : hydra.graph.Graph -> (list) (Binding) :=
+  fun (g : hydra.graph.Graph) => ((lists.map) (fun (p : (prod) (Name) (Term)) => let term_ := (pairs.second) (p) in let name := (pairs.first) (p) in (Build_Binding) (name) (term_) (((maps.lookup) (name)) ((fun r_ => (graph_boundTypes) (r_)) (g))))) ((maps.toList) ((fun r_ => (graph_boundTerms) (r_)) (g))).
+Definition getField (t0 : Type) (t1 : Type) : (list) ((prod) (Name) (t0)) -> Name -> (t0 -> (sum) (Error) (t1)) -> (sum) (Error) (t1) :=
+  fun (m : (list) ((prod) (Name) (t0))) => fun (fname : Name) => fun (decode : t0 -> (sum) (Error) (t1)) => (((maybes.maybe) ((inl) ((Error_Resolution) ((ResolutionError_NoMatchingField) ((Build_NoMatchingFieldError) (fname)))))) (decode)) (((maps.lookup) (fname)) (m)).
+Arguments getField {t0} {t1}.
+Definition fieldsOf_bundle :=
+  hydra_fix (fun (bundle_ : Type_ -> (list) (FieldType)) =>
+    let fieldsOf := bundle_ in
+    fun (t : Type_) => let stripped := (deannotateType) (t) in (fun x_ => match x_ with
+| Type__Forall v_ => (fun (forallType : ForallType) => (fieldsOf) ((fun r_ => (forallType_body) (r_)) (forallType))) (v_)
+| Type__Record v_ => (fun (rt : (list) (FieldType)) => rt) (v_)
+| Type__Union v_ => (fun (rt : (list) (FieldType)) => rt) (v_)
+| _ => nil
+end) (stripped)).
+
+Definition fieldsOf : Type_ -> (list) (FieldType) :=
+  fieldsOf_bundle.
+Definition emptyGraph : hydra.graph.Graph :=
+  (Build_Graph) (maps.empty) (maps.empty) (maps.empty) (sets.empty) (maps.empty) (maps.empty) (maps.empty) (sets.empty).
+Definition emptyContext : Context_ :=
+  (Build_Context_) (nil) (nil) (maps.empty).
+Definition dereferenceVariable : hydra.graph.Graph -> Name -> (sum) (Error) (Binding) :=
+  fun (graph_ : hydra.graph.Graph) => fun (name : Name) => (((maybes.maybe) ((inl) ((Error_Resolution) ((ResolutionError_NoSuchBinding) ((Build_NoSuchBindingError) (name)))))) (fun (right_ : Binding) => (inr) (right_))) (((lookupBinding) (graph_)) (name)).
+Definition stripAndDereferenceTermEither_bundle :=
+  hydra_fix (fun (bundle_ : hydra.graph.Graph -> Term -> (sum) (Error) (Term)) =>
+    let stripAndDereferenceTermEither := bundle_ in
+    fun (graph_ : hydra.graph.Graph) => fun (term_ : Term) => let stripped := (deannotateAndDetypeTerm) (term_) in (fun x_ => match x_ with
+| Term_Variable v_ => (fun (v : Name) => (((eithers.either) (fun (left_ : Error) => (inl) (left_))) (fun (binding : Binding) => ((stripAndDereferenceTermEither) (graph_)) ((fun r_ => (binding_term) (r_)) (binding)))) (((dereferenceVariable) (graph_)) (v))) (v_)
+| _ => (inr) (stripped)
+end) (stripped)).
+
+Definition stripAndDereferenceTermEither : hydra.graph.Graph -> Term -> (sum) (Error) (Term) :=
+  stripAndDereferenceTermEither_bundle.
+Definition dereferenceSchemaType_bundle :=
+  hydra_fix (fun (bundle_ : Name -> (list) ((prod) (Name) (TypeScheme)) -> (option) (TypeScheme)) =>
+    let dereferenceSchemaType := bundle_ in
+    fun (name : Name) => fun (types : (list) ((prod) (Name) (TypeScheme))) => let forType := (hydra_fix) (fun forType => fun (t : Type_) => (fun x_ => match x_ with
+| Type__Annotated v_ => (fun (at_ : AnnotatedType) => (forType) ((fun r_ => (annotatedType_body) (r_)) (at_))) (v_)
+| Type__Forall v_ => (fun (ft : ForallType) => ((maybes.map) (fun (ts : TypeScheme) => (Build_TypeScheme) (((lists.cons) ((fun r_ => (forallType_parameter) (r_)) (ft))) ((fun r_ => (typeScheme_variables) (r_)) (ts))) ((fun r_ => (typeScheme_type) (r_)) (ts)) ((fun r_ => (typeScheme_constraints) (r_)) (ts)))) ((forType) ((fun r_ => (forallType_body) (r_)) (ft)))) (v_)
+| Type__Variable v_ => (fun (v : Name) => ((dereferenceSchemaType) (v)) (types)) (v_)
+| _ => (Some) ((Build_TypeScheme) (nil) (t) (None))
+end) (t)) in ((maybes.bind) (((maps.lookup) (name)) (types))) (fun (ts : TypeScheme) => ((maybes.map) (fun (ts2 : TypeScheme) => (Build_TypeScheme) (((lists.concat2) ((fun r_ => (typeScheme_variables) (r_)) (ts))) ((fun r_ => (typeScheme_variables) (r_)) (ts2))) ((fun r_ => (typeScheme_type) (r_)) (ts2)) ((fun r_ => (typeScheme_constraints) (r_)) (ts2)))) ((forType) ((fun r_ => (typeScheme_type) (r_)) (ts))))).
+
+Definition dereferenceSchemaType : Name -> (list) ((prod) (Name) (TypeScheme)) -> (option) (TypeScheme) :=
+  dereferenceSchemaType_bundle.
+Definition chooseUniqueName : (list) (Name) -> Name -> Name :=
+  fun (reserved : (list) (Name)) => fun (name : Name) => let tryName := (hydra_fix) (fun tryName => fun (index : Z) => let candidate := (((logic.ifElse) (((equality.equal) (index)) ((1)%Z))) (name)) (((strings.cat2) ((fun w_ => w_) (name))) ((literals.showInt32) (index))) in (((logic.ifElse) (((sets.member) (candidate)) (reserved))) ((tryName) (((math.add) (index)) ((1)%Z)))) (candidate)) in (tryName) ((1)%Z).
+Definition buildGraph : (list) (Binding) -> (list) ((prod) (Name) ((option) (Term))) -> (list) ((prod) (Name) (Primitive)) -> hydra.graph.Graph :=
+  fun (elements : (list) (Binding)) => fun (environment : (list) ((prod) (Name) ((option) (Term)))) => fun (primitives : (list) ((prod) (Name) (Primitive))) => let letTerms := ((maps.map) (fun (mt : (option) (Term)) => (maybes.fromJust) (mt))) (((maps.filter) (fun (mt : (option) (Term)) => (maybes.isJust) (mt))) (environment)) in let elementTypes := (maps.fromList) ((maybes.cat) (((lists.map) (fun (b : Binding) => ((maybes.map) (fun (ts : TypeScheme) => (pair) ((fun r_ => (binding_name) (r_)) (b)) (ts))) ((fun r_ => (binding_type) (r_)) (b)))) (elements))) in let filteredTypes := ((maps.filterWithKey) (fun (k : Name) => fun (_v : TypeScheme) => (logic.not) (((maps.member) (k)) (primitives)))) (elementTypes) in let elementTerms := (maps.fromList) (((lists.map) (fun (b : Binding) => (pair) ((fun r_ => (binding_name) (r_)) (b)) ((fun r_ => (binding_term) (r_)) (b)))) (elements)) in let mergedTerms := ((maps.union) (elementTerms)) (letTerms) in let filteredTerms := ((maps.filterWithKey) (fun (k : Name) => fun (_v : Term) => (logic.not) (((maps.member) (k)) (primitives)))) (mergedTerms) in (Build_Graph) (filteredTerms) (filteredTypes) (maps.empty) ((sets.fromList) ((maps.keys) (((maps.filter) (fun (mt : (option) (Term)) => (maybes.isNothing) (mt))) (environment)))) (maps.empty) (primitives) (maps.empty) (sets.empty).
+Definition elementsToGraph : hydra.graph.Graph -> (list) ((prod) (Name) (TypeScheme)) -> (list) (Binding) -> hydra.graph.Graph :=
+  fun (parent : hydra.graph.Graph) => fun (schemaTypes : (list) ((prod) (Name) (TypeScheme))) => fun (elements : (list) (Binding)) => let prims := (fun r_ => (graph_primitives) (r_)) (parent) in let g := (((buildGraph) (elements)) (maps.empty)) (prims) in (Build_Graph) ((fun r_ => (graph_boundTerms) (r_)) (g)) ((fun r_ => (graph_boundTypes) (r_)) (g)) ((fun r_ => (graph_classConstraints) (r_)) (g)) ((fun r_ => (graph_lambdaVariables) (r_)) (g)) ((fun r_ => (graph_metadata) (r_)) (g)) ((fun r_ => (graph_primitives) (r_)) (g)) (schemaTypes) ((fun r_ => (graph_typeVariables) (r_)) (g)).
+Definition graphWithPrimitives : (list) (Primitive) -> (list) (Primitive) -> hydra.graph.Graph :=
+  fun (builtIn : (list) (Primitive)) => fun (userProvided : (list) (Primitive)) => let toMap := fun (ps : (list) (Primitive)) => (maps.fromList) (((lists.map) (fun (p : Primitive) => (pair) ((fun r_ => (primitive_name) (r_)) (p)) (p))) (ps)) in let prims := ((maps.union) ((toMap) (userProvided))) ((toMap) (builtIn)) in (((buildGraph) (nil)) (maps.empty)) (prims).
+
