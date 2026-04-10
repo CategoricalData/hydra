@@ -279,6 +279,47 @@ roundedPrimCase2 cname primName x y result = evalCase cname input output
     input = Terms.primitive _math_roundFloat64 @@ int32 roundDigits @@ (Terms.primitive primName @@ float64 x @@ float64 y)
     output = float64 (Math.roundFloat64 roundDigits result)
 
+mathAddFloat64 :: TTerm TestGroup
+mathAddFloat64 = subgroup "addFloat64" [
+  test "positive numbers" 3.0 5.0 8.0,
+  test "negative numbers" (-3.0) (-5.0) (-8.0),
+  test "mixed sign" 10.0 (-3.0) 7.0,
+  test "with zero" 42.0 0.0 42.0,
+  test "fractional" 1.5 2.5 4.0]
+  where
+    test name x y result = primCase name _math_addFloat64 [float64 x, float64 y] (float64 result)
+
+mathMulFloat64 :: TTerm TestGroup
+mathMulFloat64 = subgroup "mulFloat64" [
+  test "positive numbers" 3.0 5.0 15.0,
+  test "negative numbers" (-3.0) (-5.0) 15.0,
+  test "mixed sign" 10.0 (-3.0) (-30.0),
+  test "with zero" 42.0 0.0 0.0,
+  test "with one" 42.0 1.0 42.0,
+  test "fractional" 1.5 2.0 3.0]
+  where
+    test name x y result = primCase name _math_mulFloat64 [float64 x, float64 y] (float64 result)
+
+mathNegateFloat64 :: TTerm TestGroup
+mathNegateFloat64 = subgroup "negateFloat64" [
+  test "positive" 5.0 (-5.0),
+  test "negative" (-5.0) 5.0,
+  test "zero" 0.0 (-0.0),
+  test "fractional" 1.5 (-1.5)]
+  where
+    test name x result = primCase name _math_negateFloat64 [float64 x] (float64 result)
+
+mathSubFloat64 :: TTerm TestGroup
+mathSubFloat64 = subgroup "subFloat64" [
+  test "positive numbers" 5.0 3.0 2.0,
+  test "negative result" 3.0 5.0 (-2.0),
+  test "negative numbers" (-3.0) (-5.0) 2.0,
+  test "with zero" 42.0 0.0 42.0,
+  test "same value" 42.0 42.0 0.0,
+  test "fractional" 2.5 1.5 1.0]
+  where
+    test name x y result = primCase name _math_subFloat64 [float64 x, float64 y] (float64 result)
+
 mathE :: TTerm TestGroup
 mathE = subgroup "e" [
   evalCase "Euler's number"
@@ -693,6 +734,10 @@ allTests = definitionInModule module_ "allTests" $
       mathMaybeSucc,
       mathSucc,
       -- Float64 primitives
+      mathAddFloat64,
+      mathMulFloat64,
+      mathNegateFloat64,
+      mathSubFloat64,
       mathE,
       mathPi,
       mathSin,
