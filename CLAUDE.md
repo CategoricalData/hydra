@@ -274,6 +274,16 @@ These are hard-won lessons. Read the linked docs for full context.
 10. **Memory for generation**: Use `stack ghci --ghci-options='+RTS -K256M -A32M -RTS'`
    or let the sync scripts handle it.
 
+11. **Never kill processes you do not own**: Other Claude sessions (or the user) may be
+   running long builds, syncs, or tests at the same time. Never use broad `pgrep -f`
+   patterns like `sync-all`, `sync-haskell`, `stack`, etc. to find and kill processes —
+   you may terminate work belonging to another session. Each Claude process owns a
+   distinct copy of the Hydra repository (no two Claude sessions share a working
+   directory), so if you must match by pattern, scope it to the current working directory
+   (e.g., grep the process's CWD, or match on the full absolute path). Prefer killing
+   only background tasks you spawned in this session, tracked by their task ID. When in
+   doubt, ask the user before killing anything.
+
 ---
 
 ## Scope of user documentation
