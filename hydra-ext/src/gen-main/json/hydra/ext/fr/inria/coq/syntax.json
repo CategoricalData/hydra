@@ -1160,8 +1160,463 @@
                 "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Qualid"}},
               {"name": "set", "type": {"unit": {}}},
               {"name": "prop", "type": {"unit": {}}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.ext.fr.inria.coq.syntax.Comment",
+        "type": {
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {"literal": {"string": "A Coq comment (* ... *)"}}}],
+              "body": {"wrap": {"literal": {"string": {}}}}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.ext.fr.inria.coq.syntax.Constructor",
+        "type": {
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {"literal": {"string": "A constructor in an Inductive definition"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "name",
+                    "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Ident"}},
+                  {
+                    "name": "binders",
+                    "type": {"list": {"variable": "hydra.ext.fr.inria.coq.syntax.Binder"}}},
+                  {
+                    "name": "type",
+                    "type": {"maybe": {"variable": "hydra.ext.fr.inria.coq.syntax.Type"}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.ext.fr.inria.coq.syntax.Definition",
+        "type": {
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {
+                    "literal": {
+                      "string": "A Definition or Let command: Definition name binders : type := term."}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "locality",
+                    "type": {"maybe": {"variable": "hydra.ext.fr.inria.coq.syntax.Locality"}}},
+                  {
+                    "name": "name",
+                    "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Ident"}},
+                  {
+                    "name": "binders",
+                    "type": {"list": {"variable": "hydra.ext.fr.inria.coq.syntax.Binder"}}},
+                  {
+                    "name": "type",
+                    "type": {"maybe": {"variable": "hydra.ext.fr.inria.coq.syntax.Type"}}},
+                  {
+                    "name": "body",
+                    "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Term"}}]}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.ext.fr.inria.coq.syntax.Document",
+        "type": {
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {"literal": {"string": "A complete Coq .v file"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "sentences",
+                    "type": {"list": {"variable": "hydra.ext.fr.inria.coq.syntax.Sentence"}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.ext.fr.inria.coq.syntax.FixpointDefinition",
+        "type": {
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {
+                    "literal": {"string": "A Fixpoint command for recursive definitions"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "locality",
+                    "type": {"maybe": {"variable": "hydra.ext.fr.inria.coq.syntax.Locality"}}},
+                  {
+                    "name": "name",
+                    "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Ident"}},
+                  {
+                    "name": "binders",
+                    "type": {"list": {"variable": "hydra.ext.fr.inria.coq.syntax.Binder"}}},
+                  {
+                    "name": "annot",
+                    "type": {"maybe": {"variable": "hydra.ext.fr.inria.coq.syntax.FixAnnot"}}},
+                  {
+                    "name": "type",
+                    "type": {"maybe": {"variable": "hydra.ext.fr.inria.coq.syntax.Type"}}},
+                  {
+                    "name": "body",
+                    "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Term"}},
+                  {
+                    "name": "with",
+                    "type": {"list": {"variable": "hydra.ext.fr.inria.coq.syntax.Fix_Decl"}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.ext.fr.inria.coq.syntax.ImportQualification",
+        "type": {
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {"literal": {"string": "Qualification for Require/Import commands"}}}],
+              "body": {
+                "union": [
+                  {"name": "import", "type": {"unit": {}}},
+                  {"name": "export", "type": {"unit": {}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.ext.fr.inria.coq.syntax.InductiveBody",
+        "type": {
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {
+                    "literal": {
+                      "string": "A single body in an Inductive definition (supports mutual induction via 'with')"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "name",
+                    "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Ident"}},
+                  {
+                    "name": "binders",
+                    "type": {"list": {"variable": "hydra.ext.fr.inria.coq.syntax.Binder"}}},
+                  {
+                    "name": "type",
+                    "type": {"maybe": {"variable": "hydra.ext.fr.inria.coq.syntax.Type"}}},
+                  {
+                    "name": "constructors",
+                    "type": {"list": {"variable": "hydra.ext.fr.inria.coq.syntax.Constructor"}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.ext.fr.inria.coq.syntax.InductiveDefinition",
+        "type": {
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {
+                    "literal": {
+                      "string": "An Inductive or CoInductive definition with one or more mutually inductive bodies"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "locality",
+                    "type": {"maybe": {"variable": "hydra.ext.fr.inria.coq.syntax.Locality"}}},
+                  {"name": "coinductive", "type": {"literal": {"boolean": {}}}},
+                  {
+                    "name": "bodies",
+                    "type": {"list": {"variable": "hydra.ext.fr.inria.coq.syntax.InductiveBody"}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.ext.fr.inria.coq.syntax.Locality",
+        "type": {
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {"literal": {"string": "Local or Global qualifier for commands"}}}],
+              "body": {
+                "union": [
+                  {"name": "local", "type": {"unit": {}}},
+                  {"name": "global", "type": {"unit": {}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.ext.fr.inria.coq.syntax.ModuleDefinition",
+        "type": {
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {"literal": {"string": "A Module ... End block"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "name",
+                    "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Ident"}},
+                  {
+                    "name": "sentences",
+                    "type": {"list": {"variable": "hydra.ext.fr.inria.coq.syntax.Sentence"}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.ext.fr.inria.coq.syntax.NotationDeclaration",
+        "type": {
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {"literal": {"string": "A Notation declaration"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "notation",
+                    "type": {"variable": "hydra.ext.fr.inria.coq.syntax.String"}},
+                  {
+                    "name": "definition",
+                    "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Term"}},
+                  {
+                    "name": "level",
+                    "type": {"maybe": {"variable": "hydra.ext.fr.inria.coq.syntax.Natural"}}},
+                  {
+                    "name": "associativity",
+                    "type": {"maybe": {"literal": {"string": {}}}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.ext.fr.inria.coq.syntax.RecordBody",
+        "type": {
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {"literal": {"string": "The body of a Record definition"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "constructor",
+                    "type": {"maybe": {"variable": "hydra.ext.fr.inria.coq.syntax.Ident"}}},
+                  {
+                    "name": "fields",
+                    "type": {"list": {"variable": "hydra.ext.fr.inria.coq.syntax.RecordField"}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.ext.fr.inria.coq.syntax.RecordDefinition",
+        "type": {
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {"literal": {"string": "A Record or Structure definition"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "locality",
+                    "type": {"maybe": {"variable": "hydra.ext.fr.inria.coq.syntax.Locality"}}},
+                  {
+                    "name": "name",
+                    "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Ident"}},
+                  {
+                    "name": "binders",
+                    "type": {"list": {"variable": "hydra.ext.fr.inria.coq.syntax.Binder"}}},
+                  {
+                    "name": "sort",
+                    "type": {"maybe": {"variable": "hydra.ext.fr.inria.coq.syntax.Sort"}}},
+                  {
+                    "name": "body",
+                    "type": {"variable": "hydra.ext.fr.inria.coq.syntax.RecordBody"}}]}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.ext.fr.inria.coq.syntax.RecordField",
+        "type": {
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {"literal": {"string": "A field in a Record definition"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "name",
+                    "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Ident"}},
+                  {
+                    "name": "type",
+                    "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Type"}}]}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.ext.fr.inria.coq.syntax.RequireImport",
+        "type": {
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {"literal": {"string": "A Require Import/Export command"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "from",
+                    "type": {"maybe": {"variable": "hydra.ext.fr.inria.coq.syntax.Qualid"}}},
+                  {"name": "require", "type": {"literal": {"boolean": {}}}},
+                  {
+                    "name": "qualification",
+                    "type": {
+                      "maybe": {"variable": "hydra.ext.fr.inria.coq.syntax.ImportQualification"}}},
+                  {
+                    "name": "modules",
+                    "type": {"list": {"variable": "hydra.ext.fr.inria.coq.syntax.Qualid"}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.ext.fr.inria.coq.syntax.SectionDefinition",
+        "type": {
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {"literal": {"string": "A Section ... End block"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "name",
+                    "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Ident"}},
+                  {
+                    "name": "sentences",
+                    "type": {"list": {"variable": "hydra.ext.fr.inria.coq.syntax.Sentence"}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.ext.fr.inria.coq.syntax.Sentence",
+        "type": {
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {
+                    "literal": {
+                      "string": "A top-level sentence in a Coq document, optionally preceded by a comment"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "comment",
+                    "type": {"maybe": {"variable": "hydra.ext.fr.inria.coq.syntax.Comment"}}},
+                  {
+                    "name": "content",
+                    "type": {"variable": "hydra.ext.fr.inria.coq.syntax.SentenceContent"}}]}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.ext.fr.inria.coq.syntax.SentenceContent",
+        "type": {
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {"literal": {"string": "The content of a top-level sentence"}}}],
+              "body": {
+                "union": [
+                  {
+                    "name": "definition",
+                    "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Definition"}},
+                  {
+                    "name": "fixpoint",
+                    "type": {"variable": "hydra.ext.fr.inria.coq.syntax.FixpointDefinition"}},
+                  {
+                    "name": "inductive",
+                    "type": {"variable": "hydra.ext.fr.inria.coq.syntax.InductiveDefinition"}},
+                  {
+                    "name": "module",
+                    "type": {"variable": "hydra.ext.fr.inria.coq.syntax.ModuleDefinition"}},
+                  {
+                    "name": "notation",
+                    "type": {"variable": "hydra.ext.fr.inria.coq.syntax.NotationDeclaration"}},
+                  {
+                    "name": "record",
+                    "type": {"variable": "hydra.ext.fr.inria.coq.syntax.RecordDefinition"}},
+                  {
+                    "name": "requireImport",
+                    "type": {"variable": "hydra.ext.fr.inria.coq.syntax.RequireImport"}},
+                  {
+                    "name": "section",
+                    "type": {"variable": "hydra.ext.fr.inria.coq.syntax.SectionDefinition"}},
+                  {
+                    "name": "theorem",
+                    "type": {"variable": "hydra.ext.fr.inria.coq.syntax.TheoremBody"}}]}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.ext.fr.inria.coq.syntax.TheoremBody",
+        "type": {
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {
+                    "literal": {"string": "A Theorem/Lemma/Proposition with a proof term"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "kind",
+                    "type": {"variable": "hydra.ext.fr.inria.coq.syntax.TheoremKind"}},
+                  {
+                    "name": "name",
+                    "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Ident"}},
+                  {
+                    "name": "binders",
+                    "type": {"list": {"variable": "hydra.ext.fr.inria.coq.syntax.Binder"}}},
+                  {
+                    "name": "type",
+                    "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Type"}},
+                  {
+                    "name": "proof",
+                    "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Term"}}]}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.ext.fr.inria.coq.syntax.TheoremKind",
+        "type": {
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {"literal": {"string": "The kind of theorem command"}}}],
+              "body": {
+                "union": [
+                  {"name": "theorem", "type": {"unit": {}}},
+                  {"name": "lemma", "type": {"unit": {}}},
+                  {"name": "proposition", "type": {"unit": {}}},
+                  {"name": "corollary", "type": {"unit": {}}},
+                  {"name": "example", "type": {"unit": {}}}]}}},
           "variables": []}}}],
-  "description": "A model for Coq core and extensions. Based on the Coq 8.15 grammar:\n  https://coq.github.io/doc/v8.15/refman/language/core/basic.html#essential-vocabulary",
+  "description": "A model for Coq core and extensions. Based on the Coq 8.15 grammar:\n  https://coq.github.io/doc/v8.15/refman/language/core/basic.html#essential-vocabulary\n  Extended with Vernacular commands for complete .v file generation.",
   "namespace": "hydra.ext.fr.inria.coq.syntax",
   "termDependencies": [],
   "typeDependencies": []}
