@@ -326,6 +326,8 @@
 
 (defvar hydra_lib_names_math_add "hydra.lib.math.add")
 
+(defvar hydra_lib_names_math_add_float64 "hydra.lib.math.addFloat64")
+
 (defvar hydra_lib_names_math_asin "hydra.lib.math.asin")
 
 (defvar hydra_lib_names_math_asinh "hydra.lib.math.asinh")
@@ -374,7 +376,11 @@
 
 (defvar hydra_lib_names_math_mul "hydra.lib.math.mul")
 
+(defvar hydra_lib_names_math_mul_float64 "hydra.lib.math.mulFloat64")
+
 (defvar hydra_lib_names_math_negate "hydra.lib.math.negate")
+
+(defvar hydra_lib_names_math_negate_float64 "hydra.lib.math.negateFloat64")
 
 (defvar hydra_lib_names_math_odd "hydra.lib.math.odd")
 
@@ -405,6 +411,8 @@
 (defvar hydra_lib_names_math_sqrt "hydra.lib.math.sqrt")
 
 (defvar hydra_lib_names_math_sub "hydra.lib.math.sub")
+
+(defvar hydra_lib_names_math_sub_float64 "hydra.lib.math.subFloat64")
 
 (defvar hydra_lib_names_math_succ "hydra.lib.math.succ")
 

@@ -468,16 +468,18 @@ public interface Serde {
 
       @Override
       public String visit(hydra.ext.haskell.syntax.Literal.Double_ d) {
-        return (parensIfNeg).apply(hydra.lib.equality.Lt.apply(
-          (d).value,
-          0.0)).apply(hydra.lib.literals.ShowFloat64.apply((d).value));
+        return hydra.ext.haskell.Serde.literalToExpr_showFloat(
+          parensIfNeg,
+          (java.util.function.Function<Double, String>) (v -> hydra.lib.literals.ShowFloat64.apply(v)),
+          (d).value);
       }
 
       @Override
       public String visit(hydra.ext.haskell.syntax.Literal.Float_ f) {
-        return (parensIfNeg).apply(hydra.lib.equality.Lt.apply(
-          (f).value,
-          (float) (0.0))).apply(hydra.lib.literals.ShowFloat32.apply((f).value));
+        return hydra.ext.haskell.Serde.literalToExpr_showFloat(
+          parensIfNeg,
+          (java.util.function.Function<Float, String>) (v -> hydra.lib.literals.ShowFloat32.apply(v)),
+          (f).value);
       }
 
       @Override
@@ -499,6 +501,30 @@ public interface Serde {
         return hydra.lib.literals.ShowString.apply((s).value);
       }
     }));
+  }
+
+  static <T0> String literalToExpr_showFloat(java.util.function.Function<Boolean, java.util.function.Function<String, String>> parensIfNeg, java.util.function.Function<T0, String> showFn, T0 v) {
+    String raw = (showFn).apply(v);
+    return hydra.lib.logic.IfElse.lazy(
+      hydra.lib.equality.Equal.apply(
+        raw,
+        "NaN"),
+      () -> "(0/0)",
+      () -> hydra.lib.logic.IfElse.lazy(
+        hydra.lib.equality.Equal.apply(
+          raw,
+          "Infinity"),
+        () -> "(1/0)",
+        () -> hydra.lib.logic.IfElse.lazy(
+          hydra.lib.equality.Equal.apply(
+            raw,
+            "-Infinity"),
+          () -> "(-(1/0))",
+          () -> (parensIfNeg).apply(hydra.lib.equality.Equal.apply(
+            hydra.lib.strings.CharAt.apply(
+              0,
+              raw),
+            45)).apply(raw))));
   }
 
   static hydra.ast.Expr localBindingToExpr(hydra.ext.haskell.syntax.LocalBinding binding) {

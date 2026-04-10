@@ -6,6 +6,7 @@
           hydra_lib_math_acos
           hydra_lib_math_acosh
           hydra_lib_math_add
+          hydra_lib_math_add_float64
           hydra_lib_math_asin
           hydra_lib_math_asinh
           hydra_lib_math_atan
@@ -31,7 +32,9 @@
           hydra_lib_math_min
           hydra_lib_math_mod
           hydra_lib_math_mul
+          hydra_lib_math_mul_float64
           hydra_lib_math_negate
+          hydra_lib_math_negate_float64
           hydra_lib_math_odd
           hydra_lib_math_pi
           hydra_lib_math_pow
@@ -47,6 +50,7 @@
           hydra_lib_math_sinh
           hydra_lib_math_sqrt
           hydra_lib_math_sub
+          hydra_lib_math_sub_float64
           hydra_lib_math_succ
           hydra_lib_math_tan
           hydra_lib_math_tanh
@@ -90,6 +94,12 @@
       (lambda (a)
         (lambda (b)
           (+ a b))))
+
+    ;; addFloat64 :: Double -> Double -> Double
+    (define hydra_lib_math_add_float64
+      (lambda (a)
+        (lambda (b)
+          (+ (* 1.0 a) (* 1.0 b)))))
 
     ;; asin :: Double -> Double  (domain [-1, 1]; out-of-domain -> NaN)
     (define hydra_lib_math_asin
@@ -252,10 +262,21 @@
         (lambda (b)
           (* a b))))
 
+    ;; mulFloat64 :: Double -> Double -> Double
+    (define hydra_lib_math_mul_float64
+      (lambda (a)
+        (lambda (b)
+          (* (* 1.0 a) (* 1.0 b)))))
+
     ;; negate :: Int -> Int
     (define hydra_lib_math_negate
       (lambda (a)
         (- a)))
+
+    ;; negateFloat64 :: Double -> Double
+    (define hydra_lib_math_negate_float64
+      (lambda (a)
+        (- (* 1.0 a))))
 
     ;; odd :: Int -> Bool
     (define hydra_lib_math_odd
@@ -355,6 +376,12 @@
       (lambda (a)
         (lambda (b)
           (- a b))))
+
+    ;; subFloat64 :: Double -> Double -> Double
+    (define hydra_lib_math_sub_float64
+      (lambda (a)
+        (lambda (b)
+          (- (* 1.0 a) (* 1.0 b)))))
 
     ;; succ :: Int -> Int
     (define hydra_lib_math_succ

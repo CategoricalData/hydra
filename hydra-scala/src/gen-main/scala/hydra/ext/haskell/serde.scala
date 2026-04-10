@@ -222,10 +222,15 @@ def literalToExpr(lit: hydra.ext.haskell.syntax.Literal): hydra.ast.Expr =
   {
   def parensIfNeg(b: Boolean)(e: scala.Predef.String): scala.Predef.String =
     hydra.lib.logic.ifElse[scala.Predef.String](b)(hydra.lib.strings.cat(Seq("(", e, ")")))(e)
+  def showFloat[T0](showFn: (T0 => scala.Predef.String))(v: T0): scala.Predef.String =
+    {
+    lazy val raw: scala.Predef.String = showFn(v)
+    hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.equality.equal[scala.Predef.String](raw)("NaN"))("(0/0)")(hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.equality.equal[scala.Predef.String](raw)("Infinity"))("(1/0)")(hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.equality.equal[scala.Predef.String](raw)("-Infinity"))("(-(1/0))")(parensIfNeg(hydra.lib.equality.equal[Int](hydra.lib.strings.charAt(0)(raw))(45))(raw))))
+  }
   hydra.serialization.cst(lit match
     case hydra.ext.haskell.syntax.Literal.char(v_Literal_char_c) => hydra.lib.literals.showString(hydra.lib.literals.showUint16(v_Literal_char_c))
-    case hydra.ext.haskell.syntax.Literal.double(v_Literal_double_d) => parensIfNeg(hydra.lib.equality.lt[Double](v_Literal_double_d)(0.0))(hydra.lib.literals.showFloat64(v_Literal_double_d))
-    case hydra.ext.haskell.syntax.Literal.float(v_Literal_float_f) => parensIfNeg(hydra.lib.equality.lt[Float](v_Literal_float_f)(0.0f))(hydra.lib.literals.showFloat32(v_Literal_float_f))
+    case hydra.ext.haskell.syntax.Literal.double(v_Literal_double_d) => showFloat((v: Double) => hydra.lib.literals.showFloat64(v))(v_Literal_double_d)
+    case hydra.ext.haskell.syntax.Literal.float(v_Literal_float_f) => showFloat((v: Float) => hydra.lib.literals.showFloat32(v))(v_Literal_float_f)
     case hydra.ext.haskell.syntax.Literal.int(v_Literal_int_i) => parensIfNeg(hydra.lib.equality.lt[Int](v_Literal_int_i)(0))(hydra.lib.literals.showInt32(v_Literal_int_i))
     case hydra.ext.haskell.syntax.Literal.integer(v_Literal_integer_i) => parensIfNeg(hydra.lib.equality.lt[BigInt](v_Literal_integer_i)(BigInt("0")))(hydra.lib.literals.showBigint(v_Literal_integer_i))
     case hydra.ext.haskell.syntax.Literal.string(v_Literal_string_s) => hydra.lib.literals.showString(v_Literal_string_s))

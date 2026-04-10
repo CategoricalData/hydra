@@ -326,6 +326,8 @@ lazy val mathAcosh: hydra.core.Name = "hydra.lib.math.acosh"
 
 lazy val mathAdd: hydra.core.Name = "hydra.lib.math.add"
 
+lazy val mathAddFloat64: hydra.core.Name = "hydra.lib.math.addFloat64"
+
 lazy val mathAsin: hydra.core.Name = "hydra.lib.math.asin"
 
 lazy val mathAsinh: hydra.core.Name = "hydra.lib.math.asinh"
@@ -374,7 +376,11 @@ lazy val mathMod: hydra.core.Name = "hydra.lib.math.mod"
 
 lazy val mathMul: hydra.core.Name = "hydra.lib.math.mul"
 
+lazy val mathMulFloat64: hydra.core.Name = "hydra.lib.math.mulFloat64"
+
 lazy val mathNegate: hydra.core.Name = "hydra.lib.math.negate"
+
+lazy val mathNegateFloat64: hydra.core.Name = "hydra.lib.math.negateFloat64"
 
 lazy val mathOdd: hydra.core.Name = "hydra.lib.math.odd"
 
@@ -405,6 +411,8 @@ lazy val mathSinh: hydra.core.Name = "hydra.lib.math.sinh"
 lazy val mathSqrt: hydra.core.Name = "hydra.lib.math.sqrt"
 
 lazy val mathSub: hydra.core.Name = "hydra.lib.math.sub"
+
+lazy val mathSubFloat64: hydra.core.Name = "hydra.lib.math.subFloat64"
 
 lazy val mathSucc: hydra.core.Name = "hydra.lib.math.succ"
 
