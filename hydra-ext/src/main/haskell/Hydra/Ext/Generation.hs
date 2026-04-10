@@ -37,6 +37,8 @@ import qualified Hydra.Serialization as Serialization
 import qualified Hydra.Names as Names
 import qualified Hydra.Util as Util
 import Hydra.Ext.Scala.Coder (moduleToScala)
+import Hydra.Ext.Coq.Generate (moduleToCoq, globalFieldMapping, globalConstructorCounts, globalAmbiguousNames, globalSanitizedAccessors)
+import Hydra.Ext.Coq.Language (coqLanguage)
 
 import qualified Hydra.Json.Model as Json
 import qualified Hydra.Json.Writer as JsonWriter
@@ -130,6 +132,19 @@ writePython = generateSources moduleToPython pythonLanguage True True True False
 -- Third argument: modules to transform and generate
 writeRust :: FP.FilePath -> [Module] -> [Module] -> IO Int
 writeRust = generateSources moduleToRust rustLanguage True False False False
+
+-- | Generate Coq (.v) source files from modules.
+-- First argument: output directory
+-- Second argument: universe modules (all modules for type/term resolution)
+-- Third argument: modules to transform and generate
+writeCoq :: FP.FilePath -> [Module] -> [Module] -> IO Int
+writeCoq basePath universeModules modulesToGenerate =
+  let allMods = universeModules ++ modulesToGenerate
+      fm = globalFieldMapping allMods
+      cc = globalConstructorCounts allMods
+      an = globalAmbiguousNames allMods
+      sa = globalSanitizedAccessors allMods
+  in generateSources (moduleToCoq fm cc an sa) coqLanguage True False False False basePath universeModules modulesToGenerate
 
 -- | Wrap moduleToLisp for a specific dialect
 moduleToLispDialect

@@ -94,6 +94,14 @@ executables:
       - hydra-ext
       - hspec                      >= 2.11.0 && < 2.12
 
+  generate-coq:
+    main: Main.hs
+    source-dirs:
+      - src/exec/generate-coq
+    ghc-options: [-rtsopts]
+    dependencies:
+      - hydra-ext
+
   bootstrap-from-json:
     main: Main.hs
     source-dirs:
