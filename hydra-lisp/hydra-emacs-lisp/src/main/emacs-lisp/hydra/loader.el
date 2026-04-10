@@ -473,6 +473,7 @@ If PRE-TRANSFORMED is non-nil, skip the Lisp-1→Lisp-2 transformation
                   "test/checking/nominal_types.el"
                   "test/checking/all.el"
                   "test/dependencies.el"
+                  "test/differentiation.el"
                   "test/eta_expansion.el"
                   "test/formatting.el"
                   "test/hoisting/cases.el"

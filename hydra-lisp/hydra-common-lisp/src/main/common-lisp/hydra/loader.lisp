@@ -468,6 +468,7 @@
            "test/checking/fundamentals.lisp"
            "test/checking/nominal_types.lisp"
            "test/checking/all.lisp"
+           "test/differentiation.lisp"
            "test/eta_expansion.lisp"
            "test/formatting.lisp"
            "test/hoisting/cases.lisp"

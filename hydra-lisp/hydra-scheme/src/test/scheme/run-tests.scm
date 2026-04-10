@@ -177,6 +177,7 @@
   (hydra test checking advanced)
   (hydra test checking failures)
   (hydra test checking all)
+  (hydra test differentiation)
   (hydra test eta_expansion)
   (hydra test formatting)
   (hydra test hoisting cases)
