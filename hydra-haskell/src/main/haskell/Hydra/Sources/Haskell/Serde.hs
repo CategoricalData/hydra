@@ -456,15 +456,26 @@ literalToExpr = haskellSerdeDefinition "literalToExpr" $
   "parensIfNeg" <~ ("b" ~> "e" ~> Logic.ifElse (var "b")
     (Strings.cat $ list [string "(", var "e", string ")"])
     (var "e")) $
+  "showFloat" <~ ("showFn" ~> "v" ~>
+    "raw" <~ (var "showFn" @@ var "v") $
+    Logic.ifElse (Equality.equal (var "raw") (string "NaN"))
+      (string "(0/0)") $
+    Logic.ifElse (Equality.equal (var "raw") (string "Infinity"))
+      (string "(1/0)") $
+    Logic.ifElse (Equality.equal (var "raw") (string "-Infinity"))
+      (string "(-(1/0))") $
+    var "parensIfNeg"
+      @@ Equality.equal (Strings.charAt (int32 0) (var "raw")) (int32 45)
+      @@ var "raw") $
   Serialization.cst @@
     cases H._Literal (var "lit") Nothing [
-      H._Literal_char>>: "c" ~> Literals.showString $ Literals.showUint16 $ var "c", -- Simplified char handling
-      H._Literal_double>>: "d" ~> var "parensIfNeg"
-        @@ (Equality.lt (var "d") (float64 0.0))
-        @@ (Literals.showFloat64 $ var "d"),
-      H._Literal_float>>: "f" ~> var "parensIfNeg"
-        @@ (Equality.lt (var "f") (float32 0.0))
-        @@ (Literals.showFloat32 $ var "f"),
+      H._Literal_char>>: "c" ~> Literals.showString $ Literals.showUint16 $ var "c",
+      H._Literal_double>>: "d" ~> var "showFloat"
+        @@ (lambda "v" $ Literals.showFloat64 $ var "v")
+        @@ var "d",
+      H._Literal_float>>: "f" ~> var "showFloat"
+        @@ (lambda "v" $ Literals.showFloat32 $ var "v")
+        @@ var "f",
       H._Literal_int>>: "i" ~> var "parensIfNeg"
         @@ (Equality.lt (var "i") (int32 0))
         @@ (Literals.showInt32 $ var "i"),
