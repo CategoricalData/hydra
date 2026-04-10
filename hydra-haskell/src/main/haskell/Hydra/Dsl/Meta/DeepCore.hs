@@ -54,6 +54,10 @@ field fname body = Core.field (Core.nameLift fname) body
 lambda :: String -> TTerm Term -> TTerm Term
 lambda v body = Core.termFunction $ Core.functionLambda $ Core.lambda (Core.name (P.string v)) P.nothing $ body
 
+-- | Create a lambda term with a dynamic parameter name, optional domain, and body
+lambdaTyped :: TTerm Name -> TTerm (Maybe Type) -> TTerm Term -> TTerm Term
+lambdaTyped name domain body = Core.termFunction $ Core.functionLambda $ Core.lambda name domain body
+
 constant :: TTerm Term -> TTerm Term
 constant = lambda ignoredVariable
 

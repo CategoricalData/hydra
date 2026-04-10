@@ -50,6 +50,10 @@ import qualified Data.Map                    as M
 import qualified Data.Set                    as S
 import qualified Data.Maybe                  as Y
 
+-- Deep (program-constructing) DSLs
+import qualified Hydra.Dsl.Deep.Lib.Math     as DeepMath
+import qualified Hydra.Dsl.Meta.DeepCore     as DeepCore
+
 import qualified Hydra.Sources.Kernel.Terms.Strip as Strip
 import qualified Hydra.Sources.Kernel.Terms.Variables as Variables
 
@@ -77,15 +81,6 @@ module_ = Module ns definitions
 f64 :: Double -> TTerm Term
 f64 = MetaTerms.float64
 
--- Helper: construct a primitive application term (unary)
-primApp1 :: Name -> TTerm Term -> TTerm Term
-primApp1 name arg = Core.termApplication $ Core.application (Core.termVariable $ encodedName name) arg
-
--- Helper: construct a primitive application term (binary)
-primApp2 :: Name -> TTerm Term -> TTerm Term -> TTerm Term
-primApp2 name a b = Core.termApplication $ Core.application
-  (Core.termApplication $ Core.application (Core.termVariable $ encodedName name) a)
-  b
 
 -- | Differentiate a function term (Float64 -> Float64) with respect to its parameter.
 --   Given a lambda \x -> body, returns a lambda \x -> d(body)/dx.
@@ -102,7 +97,7 @@ differentiateFunction = define "differentiateFunction" $
         _Function_lambda>>: "l" ~>
           "paramName" <~ Core.lambdaParameter (var "l") $
           "body" <~ Core.lambdaBody (var "l") $
-          Core.termFunction $ Core.functionLambda $ Core.lambda
+          DeepCore.lambdaTyped
             (var "paramName")
             (Core.lambdaDomain $ var "l")
             (differentiateTerm @@ var "paramName" @@ var "body"),
@@ -132,7 +127,7 @@ differentiateTerm = define "differentiateTerm" $
       -- Check if the function is a variable (potentially a primitive)
       cases _Term (var "func") (Just $
         -- General case: f(g) => f'(g) * g'
-        primApp2 _math_mulFloat64
+        DeepMath.mulFloat64
           (differentiateTerm @@ var "dx" @@ Core.termApplication (Core.application (var "func") (var "arg")))
           (differentiateTerm @@ var "dx" @@ var "arg")) [
         _Term_variable>>: "fname" ~>
@@ -142,7 +137,7 @@ differentiateTerm = define "differentiateTerm" $
             (differentiateTerm @@ var "dx" @@ Core.termApplication (Core.application (var "func") (var "arg")))
             -- Known unary primitive: chain rule f(g(x))' = f'(g(x)) * g'(x)
             ("derivTerm" ~>
-              primApp2 _math_mulFloat64
+              DeepMath.mulFloat64
                 (Core.termApplication $ Core.application (var "derivTerm") (var "arg"))
                 (differentiateTerm @@ var "dx" @@ var "arg")),
         -- Partially applied binary primitive: f a b => handle add, mul, sub, pow, etc.
@@ -152,7 +147,7 @@ differentiateTerm = define "differentiateTerm" $
           cases _Term (var "innerFunc")
             (Just $
               -- Not a variable: fall back to general differentiation
-              primApp2 _math_mulFloat64
+              DeepMath.mulFloat64
                 (differentiateTerm @@ var "dx" @@ Core.termApplication (Core.application (var "func") (var "arg")))
                 (differentiateTerm @@ var "dx" @@ var "arg")) [
             _Term_variable>>: "bfname" ~>
@@ -170,12 +165,12 @@ differentiateTerm = define "differentiateTerm" $
         _Function_lambda>>: "l" ~>
           Logic.ifElse (Equality.equal (Core.lambdaParameter $ var "l") (var "dx"))
             -- Lambda binds the differentiation variable: derivative is zero function
-            (Core.termFunction $ Core.functionLambda $ Core.lambda
+            (DeepCore.lambdaTyped
               (Core.lambdaParameter $ var "l")
               (Core.lambdaDomain $ var "l")
               (f64 0.0))
             -- Lambda binds a different variable: differentiate the body
-            (Core.termFunction $ Core.functionLambda $ Core.lambda
+            (DeepCore.lambdaTyped
               (Core.lambdaParameter $ var "l")
               (Core.lambdaDomain $ var "l")
               (differentiateTerm @@ var "dx" @@ Core.lambdaBody (var "l"))),
@@ -244,51 +239,51 @@ differentiateBinary = define "differentiateBinary" $
     -- d/dx(a + b) = da + db (both Int32 and Float64 names)
     Logic.ifElse (Logic.or (Equality.equal (var "bfname") (encodedName _math_add))
                            (Equality.equal (var "bfname") (encodedName _math_addFloat64)))
-        (primApp2 _math_addFloat64 (var "da") (var "db")) $
+        (DeepMath.addFloat64 (var "da") (var "db")) $
       -- d/dx(a - b) = da - db
       Logic.ifElse (Logic.or (Equality.equal (var "bfname") (encodedName _math_sub))
                              (Equality.equal (var "bfname") (encodedName _math_subFloat64)))
-        (primApp2 _math_subFloat64 (var "da") (var "db")) $
+        (DeepMath.subFloat64 (var "da") (var "db")) $
       -- d/dx(a * b) = a*db + b*da  (product rule)
       Logic.ifElse (Logic.or (Equality.equal (var "bfname") (encodedName _math_mul))
                              (Equality.equal (var "bfname") (encodedName _math_mulFloat64)))
-        (primApp2 _math_addFloat64
-          (primApp2 _math_mulFloat64 (var "a") (var "db"))
-          (primApp2 _math_mulFloat64 (var "b") (var "da"))) $
+        (DeepMath.addFloat64
+          (DeepMath.mulFloat64 (var "a") (var "db"))
+          (DeepMath.mulFloat64 (var "b") (var "da"))) $
       -- d/dx(a ^ b) = a^b * (b*da/a + db*ln(a))  (general power rule)
       Logic.ifElse (Equality.equal (var "bfname") (encodedName _math_pow))
-        (primApp2 _math_mulFloat64
-          (primApp2 _math_pow (var "a") (var "b"))
-          (primApp2 _math_addFloat64
-            (primApp2 _math_mulFloat64 (var "db") (primApp1 _math_log (var "a")))
-            (primApp2 _math_mulFloat64
-              (primApp2 _math_mulFloat64 (var "b") (var "da"))
-              (primApp2 _math_pow (var "a") (f64 (-1.0)))))) $
+        (DeepMath.mulFloat64
+          (DeepMath.pow (var "a") (var "b"))
+          (DeepMath.addFloat64
+            (DeepMath.mulFloat64 (var "db") (DeepMath.log (var "a")))
+            (DeepMath.mulFloat64
+              (DeepMath.mulFloat64 (var "b") (var "da"))
+              (DeepMath.pow (var "a") (f64 (-1.0)))))) $
       -- d/dx(atan2(a, b)) = (b*da - a*db) / (a^2 + b^2)
       Logic.ifElse (Equality.equal (var "bfname") (encodedName _math_atan2))
-        (primApp2 _math_mulFloat64
-          (primApp2 _math_subFloat64
-            (primApp2 _math_mulFloat64 (var "b") (var "da"))
-            (primApp2 _math_mulFloat64 (var "a") (var "db")))
-          (primApp2 _math_pow
-            (primApp2 _math_addFloat64
-              (primApp2 _math_mulFloat64 (var "a") (var "a"))
-              (primApp2 _math_mulFloat64 (var "b") (var "b")))
+        (DeepMath.mulFloat64
+          (DeepMath.subFloat64
+            (DeepMath.mulFloat64 (var "b") (var "da"))
+            (DeepMath.mulFloat64 (var "a") (var "db")))
+          (DeepMath.pow
+            (DeepMath.addFloat64
+              (DeepMath.mulFloat64 (var "a") (var "a"))
+              (DeepMath.mulFloat64 (var "b") (var "b")))
             (f64 (-1.0)))) $
       -- d/dx(logBase(a, b)) = d/dx(ln(b)/ln(a))
       -- = (da*ln(b) is wrong)... use: logBase(a,b) = ln(b)/ln(a)
       -- d/dx = (ln(a)*db/b - ln(b)*da/a) / (ln(a))^2
       Logic.ifElse (Equality.equal (var "bfname") (encodedName _math_logBase))
-        (primApp2 _math_mulFloat64
-          (primApp2 _math_subFloat64
-            (primApp2 _math_mulFloat64
-              (primApp1 _math_log (var "a"))
-              (primApp2 _math_mulFloat64 (var "db") (primApp2 _math_pow (var "b") (f64 (-1.0)))))
-            (primApp2 _math_mulFloat64
-              (primApp1 _math_log (var "b"))
-              (primApp2 _math_mulFloat64 (var "da") (primApp2 _math_pow (var "a") (f64 (-1.0))))))
-          (primApp2 _math_pow
-            (primApp2 _math_mulFloat64 (primApp1 _math_log (var "a")) (primApp1 _math_log (var "a")))
+        (DeepMath.mulFloat64
+          (DeepMath.subFloat64
+            (DeepMath.mulFloat64
+              (DeepMath.log (var "a"))
+              (DeepMath.mulFloat64 (var "db") (DeepMath.pow (var "b") (f64 (-1.0)))))
+            (DeepMath.mulFloat64
+              (DeepMath.log (var "b"))
+              (DeepMath.mulFloat64 (var "da") (DeepMath.pow (var "a") (f64 (-1.0))))))
+          (DeepMath.pow
+            (DeepMath.mulFloat64 (DeepMath.log (var "a")) (DeepMath.log (var "a")))
             (f64 (-1.0)))) $
       -- Unknown binary primitive: return 0
       f64 0.0
@@ -317,134 +312,105 @@ primitiveDerivative = define "primitiveDerivative" $
   "name" ~>
   -- d/dx(sin(x)) = cos(x)
   Logic.ifElse (Equality.equal (var "name") (encodedName _math_sin))
-    (just $ Core.termVariable $ encodedName _math_cos) $
+    (just $ DeepMath.ref _math_cos) $
   -- d/dx(cos(x)) = -sin(x)
   Logic.ifElse (Equality.equal (var "name") (encodedName _math_cos))
-    (just $ Core.termFunction $ Core.functionLambda $ Core.lambda
-      (Core.name $ string "_x") nothing
-      (primApp1 _math_negateFloat64 (primApp1 _math_sin (Core.termVariable $ Core.name $ string "_x")))) $
+    (just $ DeepCore.lambda "_x" (DeepMath.negateFloat64 (DeepMath.sin (DeepCore.var "_x")))) $
   -- d/dx(tan(x)) = 1/cos(x)^2
   Logic.ifElse (Equality.equal (var "name") (encodedName _math_tan))
-    (just $ Core.termFunction $ Core.functionLambda $ Core.lambda
-      (Core.name $ string "_x") nothing
-      (primApp2 _math_pow (primApp1 _math_cos (Core.termVariable $ Core.name $ string "_x")) (f64 (-2.0)))) $
+    (just $ DeepCore.lambda "_x" (DeepMath.pow (DeepMath.cos (DeepCore.var "_x")) (f64 (-2.0)))) $
   -- d/dx(exp(x)) = exp(x)
   Logic.ifElse (Equality.equal (var "name") (encodedName _math_exp))
-    (just $ Core.termVariable $ encodedName _math_exp) $
+    (just $ DeepMath.ref _math_exp) $
   -- d/dx(log(x)) = 1/x
   Logic.ifElse (Equality.equal (var "name") (encodedName _math_log))
-    (just $ Core.termFunction $ Core.functionLambda $ Core.lambda
-      (Core.name $ string "_x") nothing
-      (primApp2 _math_pow (Core.termVariable $ Core.name $ string "_x") (f64 (-1.0)))) $
+    (just $ DeepCore.lambda "_x" (DeepMath.pow (DeepCore.var "_x") (f64 (-1.0)))) $
   -- d/dx(sqrt(x)) = 1/(2*sqrt(x))
   Logic.ifElse (Equality.equal (var "name") (encodedName _math_sqrt))
-    (just $ Core.termFunction $ Core.functionLambda $ Core.lambda
-      (Core.name $ string "_x") nothing
-      (primApp2 _math_mulFloat64 (f64 0.5)
-        (primApp2 _math_pow (primApp1 _math_sqrt (Core.termVariable $ Core.name $ string "_x")) (f64 (-1.0))))) $
+    (just $ DeepCore.lambda "_x" (DeepMath.mulFloat64 (f64 0.5)
+        (DeepMath.pow (DeepMath.sqrt (DeepCore.var "_x")) (f64 (-1.0))))) $
   -- d/dx(asin(x)) = 1/sqrt(1 - x^2)
   Logic.ifElse (Equality.equal (var "name") (encodedName _math_asin))
-    (just $ Core.termFunction $ Core.functionLambda $ Core.lambda
-      (Core.name $ string "_x") nothing
-      (primApp2 _math_pow
-        (primApp1 _math_sqrt
-          (primApp2 _math_subFloat64 (f64 1.0) (primApp2 _math_mulFloat64
-            (Core.termVariable $ Core.name $ string "_x")
-            (Core.termVariable $ Core.name $ string "_x"))))
+    (just $ DeepCore.lambda "_x" (DeepMath.pow
+        (DeepMath.sqrt
+          (DeepMath.subFloat64 (f64 1.0) (DeepMath.mulFloat64
+            (DeepCore.var "_x")
+            (DeepCore.var "_x"))))
         (f64 (-1.0)))) $
   -- d/dx(acos(x)) = -1/sqrt(1 - x^2)
   Logic.ifElse (Equality.equal (var "name") (encodedName _math_acos))
-    (just $ Core.termFunction $ Core.functionLambda $ Core.lambda
-      (Core.name $ string "_x") nothing
-      (primApp1 _math_negateFloat64 $ primApp2 _math_pow
-        (primApp1 _math_sqrt
-          (primApp2 _math_subFloat64 (f64 1.0) (primApp2 _math_mulFloat64
-            (Core.termVariable $ Core.name $ string "_x")
-            (Core.termVariable $ Core.name $ string "_x"))))
+    (just $ DeepCore.lambda "_x" (DeepMath.negateFloat64 $ DeepMath.pow
+        (DeepMath.sqrt
+          (DeepMath.subFloat64 (f64 1.0) (DeepMath.mulFloat64
+            (DeepCore.var "_x")
+            (DeepCore.var "_x"))))
         (f64 (-1.0)))) $
   -- d/dx(atan(x)) = 1/(1 + x^2)
   Logic.ifElse (Equality.equal (var "name") (encodedName _math_atan))
-    (just $ Core.termFunction $ Core.functionLambda $ Core.lambda
-      (Core.name $ string "_x") nothing
-      (primApp2 _math_pow
-        (primApp2 _math_addFloat64 (f64 1.0) (primApp2 _math_mulFloat64
-          (Core.termVariable $ Core.name $ string "_x")
-          (Core.termVariable $ Core.name $ string "_x")))
+    (just $ DeepCore.lambda "_x" (DeepMath.pow
+        (DeepMath.addFloat64 (f64 1.0) (DeepMath.mulFloat64
+          (DeepCore.var "_x")
+          (DeepCore.var "_x")))
         (f64 (-1.0)))) $
   -- d/dx(sinh(x)) = cosh(x)
   Logic.ifElse (Equality.equal (var "name") (encodedName _math_sinh))
-    (just $ Core.termVariable $ encodedName _math_cosh) $
+    (just $ DeepMath.ref _math_cosh) $
   -- d/dx(cosh(x)) = sinh(x)
   Logic.ifElse (Equality.equal (var "name") (encodedName _math_cosh))
-    (just $ Core.termVariable $ encodedName _math_sinh) $
+    (just $ DeepMath.ref _math_sinh) $
   -- d/dx(tanh(x)) = 1 - tanh(x)^2
   Logic.ifElse (Equality.equal (var "name") (encodedName _math_tanh))
-    (just $ Core.termFunction $ Core.functionLambda $ Core.lambda
-      (Core.name $ string "_x") nothing
-      (primApp2 _math_subFloat64 (f64 1.0)
-        (primApp2 _math_mulFloat64
-          (primApp1 _math_tanh (Core.termVariable $ Core.name $ string "_x"))
-          (primApp1 _math_tanh (Core.termVariable $ Core.name $ string "_x"))))) $
+    (just $ DeepCore.lambda "_x" (DeepMath.subFloat64 (f64 1.0)
+        (DeepMath.mulFloat64
+          (DeepMath.tanh (DeepCore.var "_x"))
+          (DeepMath.tanh (DeepCore.var "_x"))))) $
   -- d/dx(asinh(x)) = 1/sqrt(x^2 + 1)
   Logic.ifElse (Equality.equal (var "name") (encodedName _math_asinh))
-    (just $ Core.termFunction $ Core.functionLambda $ Core.lambda
-      (Core.name $ string "_x") nothing
-      (primApp2 _math_pow
-        (primApp1 _math_sqrt
-          (primApp2 _math_addFloat64
-            (primApp2 _math_mulFloat64
-              (Core.termVariable $ Core.name $ string "_x")
-              (Core.termVariable $ Core.name $ string "_x"))
+    (just $ DeepCore.lambda "_x" (DeepMath.pow
+        (DeepMath.sqrt
+          (DeepMath.addFloat64
+            (DeepMath.mulFloat64
+              (DeepCore.var "_x")
+              (DeepCore.var "_x"))
             (f64 1.0)))
         (f64 (-1.0)))) $
   -- d/dx(acosh(x)) = 1/sqrt(x^2 - 1)
   Logic.ifElse (Equality.equal (var "name") (encodedName _math_acosh))
-    (just $ Core.termFunction $ Core.functionLambda $ Core.lambda
-      (Core.name $ string "_x") nothing
-      (primApp2 _math_pow
-        (primApp1 _math_sqrt
-          (primApp2 _math_subFloat64
-            (primApp2 _math_mulFloat64
-              (Core.termVariable $ Core.name $ string "_x")
-              (Core.termVariable $ Core.name $ string "_x"))
+    (just $ DeepCore.lambda "_x" (DeepMath.pow
+        (DeepMath.sqrt
+          (DeepMath.subFloat64
+            (DeepMath.mulFloat64
+              (DeepCore.var "_x")
+              (DeepCore.var "_x"))
             (f64 1.0)))
         (f64 (-1.0)))) $
   -- d/dx(atanh(x)) = 1/(1 - x^2)
   Logic.ifElse (Equality.equal (var "name") (encodedName _math_atanh))
-    (just $ Core.termFunction $ Core.functionLambda $ Core.lambda
-      (Core.name $ string "_x") nothing
-      (primApp2 _math_pow
-        (primApp2 _math_subFloat64 (f64 1.0) (primApp2 _math_mulFloat64
-          (Core.termVariable $ Core.name $ string "_x")
-          (Core.termVariable $ Core.name $ string "_x")))
+    (just $ DeepCore.lambda "_x" (DeepMath.pow
+        (DeepMath.subFloat64 (f64 1.0) (DeepMath.mulFloat64
+          (DeepCore.var "_x")
+          (DeepCore.var "_x")))
         (f64 (-1.0)))) $
   -- d/dx(negate(x)) = -1
   Logic.ifElse (Equality.equal (var "name") (encodedName _math_negate))
-    (just $ Core.termFunction $ Core.functionLambda $ Core.lambda
-      (Core.name $ string "_x") nothing
-      (f64 (-1.0))) $
+    (just $ DeepCore.lambda "_x" (f64 (-1.0))) $
   -- d/dx(abs(x)) = signum(x)
   Logic.ifElse (Equality.equal (var "name") (encodedName _math_abs))
-    (just $ Core.termVariable $ encodedName _math_signum) $
+    (just $ DeepMath.ref _math_signum) $
   -- d/dx(ceiling(x)) = 0  (piecewise constant)
   Logic.ifElse (Equality.equal (var "name") (encodedName _math_ceiling))
-    (just $ Core.termFunction $ Core.functionLambda $ Core.lambda
-      (Core.name $ string "_x") nothing (f64 0.0)) $
+    (just $ DeepCore.lambda "_x" (f64 0.0)) $
   -- d/dx(floor(x)) = 0
   Logic.ifElse (Equality.equal (var "name") (encodedName _math_floor))
-    (just $ Core.termFunction $ Core.functionLambda $ Core.lambda
-      (Core.name $ string "_x") nothing (f64 0.0)) $
+    (just $ DeepCore.lambda "_x" (f64 0.0)) $
   -- d/dx(round(x)) = 0
   Logic.ifElse (Equality.equal (var "name") (encodedName _math_round))
-    (just $ Core.termFunction $ Core.functionLambda $ Core.lambda
-      (Core.name $ string "_x") nothing (f64 0.0)) $
+    (just $ DeepCore.lambda "_x" (f64 0.0)) $
   -- d/dx(truncate(x)) = 0
   Logic.ifElse (Equality.equal (var "name") (encodedName _math_truncate))
-    (just $ Core.termFunction $ Core.functionLambda $ Core.lambda
-      (Core.name $ string "_x") nothing (f64 0.0)) $
+    (just $ DeepCore.lambda "_x" (f64 0.0)) $
   -- d/dx(signum(x)) = 0  (piecewise constant)
   Logic.ifElse (Equality.equal (var "name") (encodedName _math_signum))
-    (just $ Core.termFunction $ Core.functionLambda $ Core.lambda
-      (Core.name $ string "_x") nothing (f64 0.0)) $
+    (just $ DeepCore.lambda "_x" (f64 0.0)) $
   -- Unknown primitive
   nothing
