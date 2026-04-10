@@ -1,0 +1,53 @@
+(* Utilities for extracting values from JSON objects *)
+
+(* Standard library imports *)
+Require Import Stdlib.Strings.String Stdlib.Lists.List Stdlib.ZArith.ZArith Stdlib.QArith.QArith hydra.lib.base.
+
+(* Module dependencies *)
+Require Import hydra.lib.maybes hydra.lib.strings hydra.lib.maps hydra.json.model hydra.lib.eithers.
+
+Definition showValue (t0 : Type) : t0 -> string :=
+  fun (value : t0) => "TODO: implement showValue"%string.
+Arguments showValue {t0}.
+Definition require (t0 : Type) (t1 : Type) : t0 -> (list) ((prod) (t0) (t1)) -> (sum) (string) (t1) :=
+  fun (fname : t0) => fun (m : (list) ((prod) (t0) (t1))) => (((maybes.maybe) ((inl) ((strings.cat) ((cons) ("required attribute "%string) ((cons) ((showValue) (fname)) ((cons) (" not found"%string) (nil))))))) (fun (value : t1) => (inr) (value))) (((maps.lookup) (fname)) (m)).
+Arguments require {t0} {t1}.
+Definition opt (t0 : Type) (t1 : Type) : t0 -> (list) ((prod) (t0) (t1)) -> (option) (t1) :=
+  fun (fname : t0) => fun (m : (list) ((prod) (t0) (t1))) => ((maps.lookup) (fname)) (m).
+Arguments opt {t0} {t1}.
+Definition expectString : Value -> (sum) (string) (string) :=
+  fun (value : Value) => (fun x_ => match x_ with
+| Value_String v_ => (fun (s : string) => (inr) (s)) (v_)
+| _ => (inl) (((strings.cat2) (((strings.cat2) ("expected "%string)) ("JSON string"%string))) (((strings.cat2) (" but found "%string)) ((showValue) (value))))
+end) (value).
+Definition optString (t0 : Type) : t0 -> (list) ((prod) (t0) (Value)) -> (sum) (string) ((option) (string)) :=
+  fun (fname : t0) => fun (m : (list) ((prod) (t0) (Value))) => (((maybes.maybe) ((inr) (None))) (fun (s : Value) => ((eithers.map) (fun (x : string) => (Some) (x))) ((expectString) (s)))) (((opt) (fname)) (m)).
+Arguments optString {t0}.
+Definition requireString (t0 : Type) : t0 -> (list) ((prod) (t0) (Value)) -> (sum) (string) (string) :=
+  fun (fname : t0) => fun (m : (list) ((prod) (t0) (Value))) => ((eithers.bind) (((require) (fname)) (m))) (expectString).
+Arguments requireString {t0}.
+Definition expectObject : Value -> (sum) (string) ((list) ((prod) (string) (Value))) :=
+  fun (value : Value) => (fun x_ => match x_ with
+| Value_Object v_ => (fun (m : (list) ((prod) (string) (Value))) => (inr) (m)) (v_)
+| _ => (inl) (((strings.cat2) (((strings.cat2) ("expected "%string)) ("JSON object"%string))) (((strings.cat2) (" but found "%string)) ((showValue) (value))))
+end) (value).
+Definition expectNumber : Value -> (sum) (string) (Q) :=
+  fun (value : Value) => (fun x_ => match x_ with
+| Value_Number v_ => (fun (d : Q) => (inr) (d)) (v_)
+| _ => (inl) (((strings.cat2) (((strings.cat2) ("expected "%string)) ("JSON number"%string))) (((strings.cat2) (" but found "%string)) ((showValue) (value))))
+end) (value).
+Definition requireNumber (t0 : Type) : t0 -> (list) ((prod) (t0) (Value)) -> (sum) (string) (Q) :=
+  fun (fname : t0) => fun (m : (list) ((prod) (t0) (Value))) => ((eithers.bind) (((require) (fname)) (m))) (expectNumber).
+Arguments requireNumber {t0}.
+Definition expectArray : Value -> (sum) (string) ((list) (Value)) :=
+  fun (value : Value) => (fun x_ => match x_ with
+| Value_Array v_ => (fun (els : (list) (Value)) => (inr) (els)) (v_)
+| _ => (inl) (((strings.cat2) (((strings.cat2) ("expected "%string)) ("JSON array"%string))) (((strings.cat2) (" but found "%string)) ((showValue) (value))))
+end) (value).
+Definition optArray (t0 : Type) : t0 -> (list) ((prod) (t0) (Value)) -> (sum) (string) ((option) ((list) (Value))) :=
+  fun (fname : t0) => fun (m : (list) ((prod) (t0) (Value))) => (((maybes.maybe) ((inr) (None))) (fun (a : Value) => ((eithers.map) (fun (x : (list) (Value)) => (Some) (x))) ((expectArray) (a)))) (((opt) (fname)) (m)).
+Arguments optArray {t0}.
+Definition requireArray (t0 : Type) : t0 -> (list) ((prod) (t0) (Value)) -> (sum) (string) ((list) (Value)) :=
+  fun (fname : t0) => fun (m : (list) ((prod) (t0) (Value))) => ((eithers.bind) (((require) (fname)) (m))) (expectArray).
+Arguments requireArray {t0}.
+
