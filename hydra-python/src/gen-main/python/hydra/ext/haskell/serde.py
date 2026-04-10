@@ -10,7 +10,7 @@ from __future__ import annotations
 from collections.abc import Callable
 from functools import lru_cache
 from hydra.dsl.python import Just, Nothing, frozenlist
-from typing import cast
+from typing import TypeVar, cast
 import hydra.ast
 import hydra.constants
 import hydra.core
@@ -23,6 +23,8 @@ import hydra.lib.logic
 import hydra.lib.maybes
 import hydra.lib.strings
 import hydra.serialization
+
+T0 = TypeVar("T0")
 
 def write_qualified_name(qname: hydra.ext.haskell.syntax.QualifiedName) -> str:
     r"""Write a qualified name as a string."""
@@ -57,16 +59,21 @@ def literal_to_expr(lit: hydra.ext.haskell.syntax.Literal):
 
     def parens_if_neg(b: bool, e: str) -> str:
         return hydra.lib.logic.if_else(b, (lambda : hydra.lib.strings.cat(("(", e, ")"))), (lambda : e))
-    def _hoist_parens_if_neg_body_1(v1):
+    def show_float(show_fn: Callable[[T0], str], v: T0) -> str:
+        @lru_cache(1)
+        def raw() -> str:
+            return show_fn(v)
+        return hydra.lib.logic.if_else(hydra.lib.equality.equal(raw(), "NaN"), (lambda : "(0/0)"), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(raw(), "Infinity"), (lambda : "(1/0)"), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(raw(), "-Infinity"), (lambda : "(-(1/0))"), (lambda : parens_if_neg(hydra.lib.equality.equal(hydra.lib.strings.char_at(0, raw()), 45), raw())))))))
+    def _hoist_show_float_body_1(v1):
         match v1:
             case hydra.ext.haskell.syntax.LiteralChar(value=c):
                 return hydra.lib.literals.show_string(hydra.lib.literals.show_uint16(c))
 
             case hydra.ext.haskell.syntax.LiteralDouble(value=d):
-                return parens_if_neg(hydra.lib.equality.lt(d, 0.0), hydra.lib.literals.show_float64(d))
+                return show_float((lambda v: hydra.lib.literals.show_float64(v)), d)
 
             case hydra.ext.haskell.syntax.LiteralFloat(value=f):
-                return parens_if_neg(hydra.lib.equality.lt(f, 0.0), hydra.lib.literals.show_float32(f))
+                return show_float((lambda v: hydra.lib.literals.show_float32(v)), f)
 
             case hydra.ext.haskell.syntax.LiteralInt(value=i):
                 return parens_if_neg(hydra.lib.equality.lt(i, 0), hydra.lib.literals.show_int32(i))
@@ -79,7 +86,7 @@ def literal_to_expr(lit: hydra.ext.haskell.syntax.Literal):
 
             case _:
                 raise AssertionError("Unreachable: all variants handled")
-    return hydra.serialization.cst(_hoist_parens_if_neg_body_1(lit))
+    return hydra.serialization.cst(_hoist_show_float_body_1(lit))
 
 def application_pattern_to_expr(app_pat: hydra.ext.haskell.syntax.ApplicationPattern) -> hydra.ast.Expr:
     r"""Convert an application pattern to an AST expression."""
