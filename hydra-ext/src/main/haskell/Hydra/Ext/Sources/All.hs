@@ -67,6 +67,9 @@ import qualified Hydra.Ext.Sources.Kusto.Kql                   as Kql
 import qualified Hydra.Ext.Sources.Other.Atlas                 as Atlas
 import qualified Hydra.Ext.Sources.Other.AzureDtld             as AzureDtld
 import qualified Hydra.Ext.Sources.Other.Coq                   as Coq
+-- import qualified Hydra.Ext.Sources.Coq.Coder                   as CoqCoder  -- excluded (see coqModules)
+import qualified Hydra.Ext.Sources.Coq.Language                as CoqLanguage
+import qualified Hydra.Ext.Sources.Coq.Serde                   as CoqSerde
 import qualified Hydra.Ext.Sources.Other.GeoJson               as GeoJson
 import qualified Hydra.Ext.Sources.Other.IanaRelations         as IanaRelations
 import qualified Hydra.Ext.Sources.Other.Osv                   as Osv
@@ -155,6 +158,7 @@ hydraExtEssentialModules = javaModules ++ pythonModules
 
 hydraExtModules :: [Module]
 hydraExtModules = otherExtModules
+  ++ coqModules
   ++ cppModules
   ++ csharpModules
   ++ goModules
@@ -224,6 +228,16 @@ otherExtModules = [
   StacItems.module_,
   Workflow.module_,
   GenPGTransform.module_]
+
+coqModules :: [Module]
+coqModules = [
+  -- Note: CoqCoder is excluded from hydraExtModules because the actual Coq term encoder
+  -- (hydra-ext/src/main/haskell/Hydra/Ext/Coq/Coder.hs) is hand-written and more capable
+  -- than what the DSL source can express. The DSL version would overwrite it with a
+  -- simpler (broken) version if included in regeneration.
+  -- CoqCoder.module_,
+  CoqLanguage.module_,
+  CoqSerde.module_]
 
 cppModules :: [Module]
 cppModules = [
