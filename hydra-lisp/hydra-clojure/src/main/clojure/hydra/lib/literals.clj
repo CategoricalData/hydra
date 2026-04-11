@@ -98,7 +98,7 @@
     (cond
       (Double/isNaN d) "NaN"
       (Double/isInfinite d) (if (pos? d) "Infinity" "-Infinity")
-      (zero? d) "0.0"
+      (zero? d) (if (neg? (Double/doubleToRawLongBits d)) "-0.0" "0.0")
       :else
       (let [abs-d (Math/abs d)
             neg? (neg? d)]

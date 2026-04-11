@@ -310,7 +310,7 @@
         ((not (real? x)) "NaN")  ;; complex results from out-of-domain trig
         ((not (= x x)) "NaN")
         ((or (= x +inf.0) (= x -inf.0)) (if (> x 0) "Infinity" "-Infinity"))
-        ((= x 0.0) "0.0")
+        ((= x 0.0) (if (eqv? x -0.0) "-0.0" "0.0"))
         ((or (< (safe-abs x) 0.1) (>= (safe-abs x) 1.0e7))
          ;; Scientific notation needed. Use number->string and convert if needed.
          (let* ((s (number->string x))

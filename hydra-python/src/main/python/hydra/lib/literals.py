@@ -17,7 +17,7 @@ def _format_float_like_haskell(x: float) -> str:
     if math.isinf(x):
         return "-Infinity" if x < 0 else "Infinity"
     if x == 0.0:
-        return "0.0"
+        return "-0.0" if math.copysign(1.0, x) < 0 else "0.0"
 
     abs_x = abs(x)
 

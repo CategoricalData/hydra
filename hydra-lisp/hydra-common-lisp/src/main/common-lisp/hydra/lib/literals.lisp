@@ -362,7 +362,7 @@
   (cond
     ((hydra--float-nan-p x) "NaN")
     ((hydra--float-inf-p x) (if (> x 0) "Infinity" "-Infinity"))
-    ((= x 0.0d0) "0.0")
+    ((= x 0.0d0) (if (minusp (float-sign x)) "-0.0" "0.0"))
     ((and (/= x 0.0d0)
           (or (< (abs x) 0.1d0) (>= (abs x) 1.0d7)))
      ;; Scientific notation: Haskell uses e.g. "5.0e-2"
