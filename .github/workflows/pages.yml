@@ -41,8 +41,8 @@ jobs:
         run: |
           mkdir -p _site/hydra-java/javadoc _site/hydra-ext/javadoc
           cp docs/index.html _site/
-          cp -r hydra-java/build/docs/javadoc/* _site/hydra-java/javadoc/
-          cp -r hydra-ext/build/docs/javadoc/* _site/hydra-ext/javadoc/
+          cp -r packages/hydra-java/build/docs/javadoc/* _site/hydra-java/javadoc/
+          cp -r packages/hydra-ext/build/docs/javadoc/* _site/hydra-ext/javadoc/
 
       - uses: actions/upload-pages-artifact@v3
 

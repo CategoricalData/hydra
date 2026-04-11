@@ -135,14 +135,14 @@ run_lang() {
     case "$lang" in
         haskell)
             echo "=== Running Haskell benchmark tests (run $i/$REPEAT) ==="
-            cd "$REPO_ROOT/hydra-haskell"
+            cd "$REPO_ROOT/packages/hydra-haskell"
             HYDRA_BENCHMARK_OUTPUT="$outfile" \
                 stack test
             ;;
         python)
             echo "=== Running Python benchmark tests (run $i/$REPEAT) ==="
-            cd "$REPO_ROOT/hydra-python"
-            local py="${REPO_ROOT}/hydra-python/.venv/bin/python"
+            cd "$REPO_ROOT/packages/hydra-python"
+            local py="${REPO_ROOT}/packages/hydra-python/.venv/bin/python"
             if [ ! -x "$py" ]; then
                 py="python3"
             fi
@@ -157,25 +157,25 @@ run_lang() {
             ;;
         clojure)
             echo "=== Running Clojure benchmark tests (run $i/$REPEAT) ==="
-            cd "$REPO_ROOT/hydra-lisp/hydra-clojure"
+            cd "$REPO_ROOT/packages/hydra-lisp/hydra-clojure"
             HYDRA_BENCHMARK_OUTPUT="$outfile" \
                 bash run-tests.sh
             ;;
         common-lisp)
             echo "=== Running Common Lisp benchmark tests (run $i/$REPEAT) ==="
-            cd "$REPO_ROOT/hydra-lisp/hydra-common-lisp"
+            cd "$REPO_ROOT/packages/hydra-lisp/hydra-common-lisp"
             HYDRA_BENCHMARK_OUTPUT="$outfile" \
                 bash run-tests.sh
             ;;
         emacs-lisp)
             echo "=== Running Emacs Lisp benchmark tests (run $i/$REPEAT) ==="
-            cd "$REPO_ROOT/hydra-lisp/hydra-emacs-lisp"
+            cd "$REPO_ROOT/packages/hydra-lisp/hydra-emacs-lisp"
             HYDRA_BENCHMARK_OUTPUT="$outfile" \
                 bash run-tests.sh
             ;;
         scheme)
             echo "=== Running Scheme benchmark tests (run $i/$REPEAT) ==="
-            cd "$REPO_ROOT/hydra-lisp/hydra-scheme"
+            cd "$REPO_ROOT/packages/hydra-lisp/hydra-scheme"
             HYDRA_BENCHMARK_OUTPUT="$outfile" \
                 bash run-tests.sh
             ;;

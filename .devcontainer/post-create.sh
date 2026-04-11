@@ -6,7 +6,7 @@ sudo apt-get update
 
 
 # Create venv
-cd hydra-python
+cd packages/hydra-python
 uv venv
 source .venv/bin/activate
 

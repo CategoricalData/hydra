@@ -72,24 +72,24 @@ step 1 $TOTAL_STEPS "Checking version synchronization"
 echo ""
 
 CANONICAL_VERSION=$(tr -d '[:space:]' < VERSION 2>/dev/null || echo "")
-HASKELL_VERSION=$(grep '^version:' hydra-haskell/package.yaml | awk '{print $2}')
-EXT_VERSION=$(grep '^version:' hydra-ext/package.yaml | awk '{print $2}')
-BOOT_HASKELL_VERSION=$(grep '^version:' hydra-ext/demos/bootstrapping/resources/haskell/package.yaml | awk '{print $2}')
+HASKELL_VERSION=$(grep '^version:' packages/hydra-haskell/package.yaml | awk '{print $2}')
+EXT_VERSION=$(grep '^version:' packages/hydra-ext/package.yaml | awk '{print $2}')
+BOOT_HASKELL_VERSION=$(grep '^version:' packages/hydra-ext/demos/bootstrapping/resources/haskell/package.yaml | awk '{print $2}')
 JAVA_VERSION=$(grep "version = " build.gradle | head -1 | sed "s/.*version = '\\(.*\\)'/\\1/")
-BOOT_JAVA_VERSION=$(grep "version = " hydra-ext/demos/bootstrapping/resources/java/build.gradle | head -1 | sed "s/.*version = '\\(.*\\)'/\\1/")
-PYTHON_VERSION=$(grep '^version' hydra-python/pyproject.toml | sed 's/.*"\(.*\)"/\1/')
-BOOT_PYTHON_VERSION=$(grep '^version' hydra-ext/demos/bootstrapping/resources/python/pyproject.toml | sed 's/.*"\(.*\)"/\1/')
-SCALA_VERSION=$(grep 'version :=' hydra-scala/build.sbt | sed 's/.*"\(.*\)".*/\1/' 2>/dev/null || echo "")
+BOOT_JAVA_VERSION=$(grep "version = " packages/hydra-ext/demos/bootstrapping/resources/java/build.gradle | head -1 | sed "s/.*version = '\\(.*\\)'/\\1/")
+PYTHON_VERSION=$(grep '^version' packages/hydra-python/pyproject.toml | sed 's/.*"\(.*\)"/\1/')
+BOOT_PYTHON_VERSION=$(grep '^version' packages/hydra-ext/demos/bootstrapping/resources/python/pyproject.toml | sed 's/.*"\(.*\)"/\1/')
+SCALA_VERSION=$(grep 'version :=' packages/hydra-scala/build.sbt | sed 's/.*"\(.*\)".*/\1/' 2>/dev/null || echo "")
 
 echo "  VERSION:                     $CANONICAL_VERSION"
-echo "  hydra-haskell/package.yaml:  $HASKELL_VERSION"
-echo "  hydra-ext/package.yaml:      $EXT_VERSION"
+echo "  packages/hydra-haskell/package.yaml:  $HASKELL_VERSION"
+echo "  packages/hydra-ext/package.yaml:      $EXT_VERSION"
 echo "  bootstrapping/haskell:       $BOOT_HASKELL_VERSION"
 echo "  build.gradle:                $JAVA_VERSION"
 echo "  bootstrapping/java:          $BOOT_JAVA_VERSION"
-echo "  hydra-python/pyproject.toml: $PYTHON_VERSION"
+echo "  packages/hydra-python/pyproject.toml: $PYTHON_VERSION"
 echo "  bootstrapping/python:        $BOOT_PYTHON_VERSION"
-echo "  hydra-scala/build.sbt:       $SCALA_VERSION"
+echo "  packages/hydra-scala/build.sbt:       $SCALA_VERSION"
 echo ""
 
 EXPECTED="$CANONICAL_VERSION"
@@ -100,14 +100,14 @@ fi
 
 VERSION_MISMATCH=false
 for pair in \
-    "hydra-haskell/package.yaml:$HASKELL_VERSION" \
-    "hydra-ext/package.yaml:$EXT_VERSION" \
+    "packages/hydra-haskell/package.yaml:$HASKELL_VERSION" \
+    "packages/hydra-ext/package.yaml:$EXT_VERSION" \
     "bootstrapping/haskell:$BOOT_HASKELL_VERSION" \
     "build.gradle:$JAVA_VERSION" \
     "bootstrapping/java:$BOOT_JAVA_VERSION" \
-    "hydra-python/pyproject.toml:$PYTHON_VERSION" \
+    "packages/hydra-python/pyproject.toml:$PYTHON_VERSION" \
     "bootstrapping/python:$BOOT_PYTHON_VERSION" \
-    "hydra-scala/build.sbt:$SCALA_VERSION"; do
+    "packages/hydra-scala/build.sbt:$SCALA_VERSION"; do
     file="${pair%%:*}"
     ver="${pair##*:}"
     if [ "$ver" != "$EXPECTED" ]; then
@@ -127,7 +127,7 @@ fi
 step 2 $TOTAL_STEPS "Running Haskell tests (hydra-haskell)"
 echo ""
 
-cd "$HYDRA_ROOT/hydra-haskell"
+cd "$HYDRA_ROOT/packages/hydra-haskell"
 if stack test 2>&1 | tee "$LOG_DIR/haskell.log"; then
     echo ""
     echo "  OK: hydra-haskell tests passed"
@@ -141,7 +141,7 @@ fi
 step 3 $TOTAL_STEPS "Running Haskell tests (hydra-ext)"
 echo ""
 
-cd "$HYDRA_ROOT/hydra-ext"
+cd "$HYDRA_ROOT/packages/hydra-ext"
 if stack test 2>&1 | tee "$LOG_DIR/ext.log"; then
     echo ""
     echo "  OK: hydra-ext tests passed"
@@ -169,7 +169,7 @@ fi
 step 5 $TOTAL_STEPS "Running Python tests and code quality checks"
 echo ""
 
-cd "$HYDRA_ROOT/hydra-python"
+cd "$HYDRA_ROOT/packages/hydra-python"
 
 if uv run pytest 2>&1 | tee "$LOG_DIR/python.log"; then
     echo ""
@@ -198,7 +198,7 @@ fi
 step 6 $TOTAL_STEPS "Running Scala build and tests"
 echo ""
 
-cd "$HYDRA_ROOT/hydra-scala"
+cd "$HYDRA_ROOT/packages/hydra-scala"
 if sbt test 2>&1 | tee "$LOG_DIR/scala.log"; then
     echo ""
     echo "  OK: Scala tests passed"
@@ -212,7 +212,7 @@ fi
 step 7 $TOTAL_STEPS "Running Lisp tests"
 echo ""
 
-LISP_DIR="$HYDRA_ROOT/hydra-lisp"
+LISP_DIR="$HYDRA_ROOT/packages/hydra-lisp"
 
 for dialect_dir in hydra-clojure hydra-common-lisp hydra-emacs-lisp hydra-scheme; do
     dialect_name="${dialect_dir#hydra-}"
@@ -236,7 +236,7 @@ done
 step 8 $TOTAL_STEPS "Verifying JSON kernel"
 echo ""
 
-cd "$HYDRA_ROOT/hydra-haskell"
+cd "$HYDRA_ROOT/packages/hydra-haskell"
 if stack exec verify-json-kernel -- +RTS -K256M -A32M -RTS 2>&1; then
     echo ""
     echo "  OK: JSON kernel verification passed"
