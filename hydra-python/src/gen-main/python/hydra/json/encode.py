@@ -26,9 +26,9 @@ import hydra.strip
 T0 = TypeVar("T0")
 
 def is_special_float_string(s: str) -> bool:
-    r"""Check whether a string is one of the special float sentinels: NaN, Infinity, -Infinity."""
+    r"""Check whether a string is one of the special float sentinels: NaN, Infinity, -Infinity, -0.0."""
 
-    return hydra.lib.logic.or_(hydra.lib.equality.equal(s, "NaN"), hydra.lib.logic.or_(hydra.lib.equality.equal(s, "Infinity"), hydra.lib.equality.equal(s, "-Infinity")))
+    return hydra.lib.logic.or_(hydra.lib.equality.equal(s, "NaN"), hydra.lib.logic.or_(hydra.lib.equality.equal(s, "Infinity"), hydra.lib.logic.or_(hydra.lib.equality.equal(s, "-Infinity"), hydra.lib.equality.equal(s, "-0.0"))))
 
 def encode_float(fv: hydra.core.FloatValue) -> Either[T0, hydra.json.model.Value]:
     r"""Encode a float value to JSON. Float64/Bigfloat use native numbers; Float32 uses string. NaN/Inf always encoded as strings."""

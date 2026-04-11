@@ -1518,7 +1518,7 @@ def encodeLiteral_encodeFloat32(v: Float): hydra.ext.java.syntax.Expression =
 def encodeLiteral_encodeFloat64(v: Double): hydra.ext.java.syntax.Expression =
   {
   lazy val s: scala.Predef.String = hydra.lib.literals.showFloat64(v)
-  hydra.lib.logic.ifElse[hydra.ext.java.syntax.Expression](hydra.lib.equality.equal[scala.Predef.String](s)("NaN"))(hydra.ext.java.coder.encodeLiteral_javaSpecialFloatExpr("Double")("NaN"))(hydra.lib.logic.ifElse[hydra.ext.java.syntax.Expression](hydra.lib.equality.equal[scala.Predef.String](s)("Infinity"))(hydra.ext.java.coder.encodeLiteral_javaSpecialFloatExpr("Double")("POSITIVE_INFINITY"))(hydra.lib.logic.ifElse[hydra.ext.java.syntax.Expression](hydra.lib.equality.equal[scala.Predef.String](s)("-Infinity"))(hydra.ext.java.coder.encodeLiteral_javaSpecialFloatExpr("Double")("NEGATIVE_INFINITY"))(hydra.ext.java.coder.encodeLiteral_litExp(hydra.ext.java.syntax.Literal.floatingPoint(hydra.lib.literals.float64ToBigfloat(v))))))
+  hydra.lib.logic.ifElse[hydra.ext.java.syntax.Expression](hydra.lib.equality.equal[scala.Predef.String](s)("NaN"))(hydra.ext.java.coder.encodeLiteral_javaSpecialFloatExpr("Double")("NaN"))(hydra.lib.logic.ifElse[hydra.ext.java.syntax.Expression](hydra.lib.equality.equal[scala.Predef.String](s)("Infinity"))(hydra.ext.java.coder.encodeLiteral_javaSpecialFloatExpr("Double")("POSITIVE_INFINITY"))(hydra.lib.logic.ifElse[hydra.ext.java.syntax.Expression](hydra.lib.equality.equal[scala.Predef.String](s)("-Infinity"))(hydra.ext.java.coder.encodeLiteral_javaSpecialFloatExpr("Double")("NEGATIVE_INFINITY"))(hydra.lib.logic.ifElse[hydra.ext.java.syntax.Expression](hydra.lib.equality.equal[scala.Predef.String](s)("-0.0"))(hydra.ext.java.coder.encodeLiteral_javaParseDouble("-0.0"))(hydra.ext.java.coder.encodeLiteral_litExp(hydra.ext.java.syntax.Literal.floatingPoint(hydra.lib.literals.float64ToBigfloat(v)))))))
 }
 
 def encodeLiteral_encodeInteger(i: hydra.core.IntegerValue): hydra.ext.java.syntax.Expression =
@@ -1532,6 +1532,9 @@ def encodeLiteral_encodeInteger(i: hydra.core.IntegerValue): hydra.ext.java.synt
   case hydra.core.IntegerValue.uint16(v_IntegerValue_uint16_v) => hydra.ext.java.coder.encodeLiteral_litExp(hydra.ext.java.syntax.Literal.character(v_IntegerValue_uint16_v))
   case hydra.core.IntegerValue.uint32(v_IntegerValue_uint32_v) => hydra.ext.java.coder.encodeLiteral_primCast(hydra.ext.java.syntax.PrimitiveType.numeric(hydra.ext.java.syntax.NumericType.integral(hydra.ext.java.syntax.IntegralType.long)))(hydra.ext.java.coder.encodeLiteral_litExp(hydra.ext.java.syntax.Literal.integer(hydra.lib.literals.uint32ToBigint(v_IntegerValue_uint32_v))))
   case hydra.core.IntegerValue.uint64(v_IntegerValue_uint64_v) => hydra.ext.java.utils.javaConstructorCall(hydra.ext.java.utils.javaConstructorName("java.math.BigInteger")(None))(Seq(hydra.ext.java.coder.encodeLiteral(hydra.core.Literal.string(hydra.lib.literals.showBigint(hydra.lib.literals.uint64ToBigint(v_IntegerValue_uint64_v))))))(None)
+
+def encodeLiteral_javaParseDouble(value: scala.Predef.String): hydra.ext.java.syntax.Expression =
+  hydra.ext.java.utils.javaMethodInvocationToJavaExpression(hydra.ext.java.utils.methodInvocationStatic("Double")("parseDouble")(Seq(hydra.ext.java.coder.encodeLiteral(hydra.core.Literal.string(value)))))
 
 def encodeLiteral_javaSpecialFloatExpr(className: scala.Predef.String)(fieldName: scala.Predef.String): hydra.ext.java.syntax.Expression =
   hydra.ext.java.utils.javaExpressionNameToJavaExpression(hydra.ext.java.syntax.ExpressionName(Some(Seq(className)), fieldName))

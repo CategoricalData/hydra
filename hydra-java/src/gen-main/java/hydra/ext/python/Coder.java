@@ -1278,7 +1278,12 @@ public interface Coder {
             s,
             "-Infinity"),
           () -> hydra.util.Either.<T0, hydra.ext.python.syntax.Expression>right(hydra.ext.python.Coder.encodeFloatValue_pySpecialFloat("-inf")),
-          () -> hydra.util.Either.<T0, hydra.ext.python.syntax.Expression>right(hydra.ext.python.Utils.pyAtomToPyExpression(new hydra.ext.python.syntax.Atom.Number_(new hydra.ext.python.syntax.Number_.Float_(hydra.lib.literals.Float64ToBigfloat.apply(v))))))));
+          () -> hydra.lib.logic.IfElse.lazy(
+            hydra.lib.equality.Equal.apply(
+              s,
+              "-0.0"),
+            () -> hydra.util.Either.<T0, hydra.ext.python.syntax.Expression>right(hydra.ext.python.Coder.encodeFloatValue_pySpecialFloat("-0.0")),
+            () -> hydra.util.Either.<T0, hydra.ext.python.syntax.Expression>right(hydra.ext.python.Utils.pyAtomToPyExpression(new hydra.ext.python.syntax.Atom.Number_(new hydra.ext.python.syntax.Number_.Float_(hydra.lib.literals.Float64ToBigfloat.apply(v)))))))));
   }
 
   static hydra.ext.python.syntax.Expression encodeFloatValue_pySpecialFloat(String value) {

@@ -37,7 +37,7 @@ def encodeLiteral[T0](lit: hydra.core.Literal): Either[T0, hydra.json.model.Valu
   case hydra.core.Literal.string(v_Literal_string_s) => Right(hydra.json.model.Value.string(v_Literal_string_s))
 
 def isSpecialFloatString(s: scala.Predef.String): Boolean =
-  hydra.lib.logic.or(hydra.lib.equality.equal[scala.Predef.String](s)("NaN"))(hydra.lib.logic.or(hydra.lib.equality.equal[scala.Predef.String](s)("Infinity"))(hydra.lib.equality.equal[scala.Predef.String](s)("-Infinity")))
+  hydra.lib.logic.or(hydra.lib.equality.equal[scala.Predef.String](s)("NaN"))(hydra.lib.logic.or(hydra.lib.equality.equal[scala.Predef.String](s)("Infinity"))(hydra.lib.logic.or(hydra.lib.equality.equal[scala.Predef.String](s)("-Infinity"))(hydra.lib.equality.equal[scala.Predef.String](s)("-0.0"))))
 
 def toJson(types: Map[hydra.core.Name, hydra.core.Type])(tname: hydra.core.Name)(typ: hydra.core.Type)(term: hydra.core.Term): Either[scala.Predef.String,
    hydra.json.model.Value] =

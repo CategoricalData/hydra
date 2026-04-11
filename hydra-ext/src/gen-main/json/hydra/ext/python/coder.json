@@ -9048,30 +9048,65 @@
                               "argument": {
                                 "application": {
                                   "argument": {
-                                    "typeApplication": {
-                                      "body": {
+                                    "application": {
+                                      "argument": {
                                         "typeApplication": {
                                           "body": {
-                                            "either": {
-                                              "@right": {
+                                            "typeApplication": {
+                                              "body": {
+                                                "either": {
+                                                  "@right": {
+                                                    "application": {
+                                                      "argument": {
+                                                        "union": {
+                                                          "field": {
+                                                            "name": "number",
+                                                            "term": {
+                                                              "union": {
+                                                                "field": {
+                                                                  "name": "float",
+                                                                  "term": {
+                                                                    "application": {
+                                                                      "argument": {"variable": "v"},
+                                                                      "function": {"variable": "hydra.lib.literals.float64ToBigfloat"}}}},
+                                                                "typeName": "hydra.ext.python.syntax.Number"}}},
+                                                          "typeName": "hydra.ext.python.syntax.Atom"}},
+                                                      "function": {"variable": "hydra.ext.python.utils.pyAtomToPyExpression"}}}}},
+                                              "type": {"variable": "t0"}}},
+                                          "type": {"variable": "hydra.ext.python.syntax.Expression"}}},
+                                      "function": {
+                                        "application": {
+                                          "argument": {
+                                            "typeApplication": {
+                                              "body": {
+                                                "typeApplication": {
+                                                  "body": {
+                                                    "either": {
+                                                      "@right": {
+                                                        "application": {
+                                                          "argument": {"literal": {"string": "-0.0"}},
+                                                          "function": {"variable": "hydra.ext.python.coder.encodeFloatValue_pySpecialFloat"}}}}},
+                                                  "type": {"variable": "t0"}}},
+                                              "type": {"variable": "hydra.ext.python.syntax.Expression"}}},
+                                          "function": {
+                                            "application": {
+                                              "argument": {
                                                 "application": {
-                                                  "argument": {
-                                                    "union": {
-                                                      "field": {
-                                                        "name": "number",
-                                                        "term": {
-                                                          "union": {
-                                                            "field": {
-                                                              "name": "float",
-                                                              "term": {
-                                                                "application": {
-                                                                  "argument": {"variable": "v"},
-                                                                  "function": {"variable": "hydra.lib.literals.float64ToBigfloat"}}}},
-                                                            "typeName": "hydra.ext.python.syntax.Number"}}},
-                                                      "typeName": "hydra.ext.python.syntax.Atom"}},
-                                                  "function": {"variable": "hydra.ext.python.utils.pyAtomToPyExpression"}}}}},
-                                          "type": {"variable": "t0"}}},
-                                      "type": {"variable": "hydra.ext.python.syntax.Expression"}}},
+                                                  "argument": {"literal": {"string": "-0.0"}},
+                                                  "function": {
+                                                    "application": {
+                                                      "argument": {"variable": "s"},
+                                                      "function": {
+                                                        "typeApplication": {
+                                                          "body": {"variable": "hydra.lib.equality.equal"},
+                                                          "type": {"literal": {"string": {}}}}}}}}},
+                                              "function": {
+                                                "typeApplication": {
+                                                  "body": {"variable": "hydra.lib.logic.ifElse"},
+                                                  "type": {
+                                                    "either": {
+                                                      "left": {"variable": "t0"},
+                                                      "right": {"variable": "hydra.ext.python.syntax.Expression"}}}}}}}}}}},
                                   "function": {
                                     "application": {
                                       "argument": {

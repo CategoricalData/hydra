@@ -269,4 +269,4 @@ fromJson types tname typ value =
 -- | Parse a special float sentinel string to a float64. Returns Nothing for unrecognized strings.
 parseSpecialFloat :: String -> Maybe Double
 parseSpecialFloat s =
-    Logic.ifElse (Logic.or (Equality.equal s "NaN") (Logic.or (Equality.equal s "Infinity") (Equality.equal s "-Infinity"))) (Literals.readFloat64 s) Nothing
+    Logic.ifElse (Logic.or (Equality.equal s "NaN") (Logic.or (Equality.equal s "Infinity") (Logic.or (Equality.equal s "-Infinity") (Equality.equal s "-0.0")))) (Literals.readFloat64 s) Nothing

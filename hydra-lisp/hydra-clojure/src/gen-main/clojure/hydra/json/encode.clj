@@ -4,7 +4,7 @@
 
 (declare hydra_json_encode_is_special_float_string hydra_json_encode_encode_float hydra_json_encode_encode_integer hydra_json_encode_encode_literal hydra_json_encode_to_json_untyped hydra_json_encode_to_json)
 
-(def hydra_json_encode_is_special_float_string (fn [s] ((hydra_lib_logic_or ((hydra_lib_equality_equal s) "NaN")) ((hydra_lib_logic_or ((hydra_lib_equality_equal s) "Infinity")) ((hydra_lib_equality_equal s) "-Infinity")))))
+(def hydra_json_encode_is_special_float_string (fn [s] ((hydra_lib_logic_or ((hydra_lib_equality_equal s) "NaN")) ((hydra_lib_logic_or ((hydra_lib_equality_equal s) "Infinity")) ((hydra_lib_logic_or ((hydra_lib_equality_equal s) "-Infinity")) ((hydra_lib_equality_equal s) "-0.0"))))))
 
 (def hydra_json_encode_encode_float (fn [fv] ((fn [match_target] ((fn [match_value] (cond (= (first match_target) :bigfloat) ((fn [bf] (let [s (hydra_lib_literals_show_bigfloat bf)] (if (hydra_json_encode_is_special_float_string s) (list :right (list :string s)) (list :right (list :number bf))))) match_value) (= (first match_target) :float32) ((fn [f] (list :right (list :string (hydra_lib_literals_show_float32 f)))) match_value) (= (first match_target) :float64) ((fn [f] (let [s (hydra_lib_literals_show_float64 f)] (if (hydra_json_encode_is_special_float_string s) (list :right (list :string s)) (list :right (list :number (hydra_lib_literals_float64_to_bigfloat f)))))) match_value))) (second match_target))) fv)))
 

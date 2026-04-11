@@ -35,7 +35,7 @@ def expect_string(value: hydra.json.model.Value) -> Either[str, str]:
 def parse_special_float(s: str) -> Maybe[float]:
     r"""Parse a special float sentinel string to a float64. Returns Nothing for unrecognized strings."""
 
-    return hydra.lib.logic.if_else(hydra.lib.logic.or_(hydra.lib.equality.equal(s, "NaN"), hydra.lib.logic.or_(hydra.lib.equality.equal(s, "Infinity"), hydra.lib.equality.equal(s, "-Infinity"))), (lambda : hydra.lib.literals.read_float64(s)), (lambda : Nothing()))
+    return hydra.lib.logic.if_else(hydra.lib.logic.or_(hydra.lib.equality.equal(s, "NaN"), hydra.lib.logic.or_(hydra.lib.equality.equal(s, "Infinity"), hydra.lib.logic.or_(hydra.lib.equality.equal(s, "-Infinity"), hydra.lib.equality.equal(s, "-0.0")))), (lambda : hydra.lib.literals.read_float64(s)), (lambda : Nothing()))
 
 def decode_float(ft: hydra.core.FloatType, value: hydra.json.model.Value):
     def _hoist_hydra_json_decode_decode_float_1(v1):

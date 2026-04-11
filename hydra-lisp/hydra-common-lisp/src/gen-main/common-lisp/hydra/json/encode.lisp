@@ -4,7 +4,7 @@
 
 (in-package :hydra.json.encode)
 
-(cl:defvar hydra_json_encode_is_special_float_string (cl:lambda (s) ((hydra_lib_logic_or ((hydra_lib_equality_equal s) "NaN")) ((hydra_lib_logic_or ((hydra_lib_equality_equal s) "Infinity")) ((hydra_lib_equality_equal s) "-Infinity")))))
+(cl:defvar hydra_json_encode_is_special_float_string (cl:lambda (s) ((hydra_lib_logic_or ((hydra_lib_equality_equal s) "NaN")) ((hydra_lib_logic_or ((hydra_lib_equality_equal s) "Infinity")) ((hydra_lib_logic_or ((hydra_lib_equality_equal s) "-Infinity")) ((hydra_lib_equality_equal s) "-0.0"))))))
 
 (cl:defvar hydra_json_encode_encode_float (cl:lambda (fv) ((cl:lambda (match_target) ((cl:lambda (match_value) (cond ((equal (car match_target) :bigfloat) ((cl:lambda (bf) (let ((s (hydra_lib_literals_show_bigfloat bf))) (if (hydra_json_encode_is_special_float_string s) (list :right (list :string s)) (list :right (list :number bf))))) match_value)) ((equal (car match_target) :float32) ((cl:lambda (f) (list :right (list :string (hydra_lib_literals_show_float32 f)))) match_value)) ((equal (car match_target) :float64) ((cl:lambda (f) (let ((s (hydra_lib_literals_show_float64 f))) (if (hydra_json_encode_is_special_float_string s) (list :right (list :string s)) (list :right (list :number (hydra_lib_literals_float64_to_bigfloat f)))))) match_value)))) (cadr match_target))) fv)))
 

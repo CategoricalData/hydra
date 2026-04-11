@@ -691,9 +691,13 @@ public interface Decode {
           hydra.lib.equality.Equal.apply(
             s,
             "Infinity"),
-          hydra.lib.equality.Equal.apply(
-            s,
-            "-Infinity"))),
+          hydra.lib.logic.Or.apply(
+            hydra.lib.equality.Equal.apply(
+              s,
+              "-Infinity"),
+            hydra.lib.equality.Equal.apply(
+              s,
+              "-0.0")))),
       () -> hydra.lib.literals.ReadFloat64.apply(s),
       () -> (hydra.util.Maybe<Double>) (hydra.util.Maybe.<Double>nothing()));
   }

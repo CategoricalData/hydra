@@ -57,10 +57,10 @@ encodeLiteral lit =
       Core.LiteralInteger v0 -> encodeInteger v0
       Core.LiteralString v0 -> Right (Model.ValueString v0)
 
--- | Check whether a string is one of the special float sentinels: NaN, Infinity, -Infinity.
+-- | Check whether a string is one of the special float sentinels: NaN, Infinity, -Infinity, -0.0.
 isSpecialFloatString :: String -> Bool
 isSpecialFloatString s =
-    Logic.or (Equality.equal s "NaN") (Logic.or (Equality.equal s "Infinity") (Equality.equal s "-Infinity"))
+    Logic.or (Equality.equal s "NaN") (Logic.or (Equality.equal s "Infinity") (Logic.or (Equality.equal s "-Infinity") (Equality.equal s "-0.0")))
 
 -- | Encode a Hydra term to a JSON value given a type and type name. Returns Left for unsupported constructs.
 toJson :: M.Map Core.Name Core.Type -> Core.Name -> Core.Type -> Core.Term -> Either String Model.Value

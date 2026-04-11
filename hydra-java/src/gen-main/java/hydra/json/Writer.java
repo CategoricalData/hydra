@@ -117,12 +117,17 @@ public interface Writer {
       @Override
       public hydra.ast.Expr visit(hydra.json.model.Value.Number_ n) {
         java.math.BigInteger rounded = hydra.lib.literals.BigfloatToBigint.apply((n).value);
+        String shown = hydra.lib.literals.ShowBigfloat.apply((n).value);
         return hydra.Serialization.cst(hydra.lib.logic.IfElse.lazy(
-          hydra.lib.equality.Equal.apply(
-            (n).value,
-            hydra.lib.literals.BigintToBigfloat.apply(rounded)),
+          hydra.lib.logic.And.apply(
+            hydra.lib.equality.Equal.apply(
+              (n).value,
+              hydra.lib.literals.BigintToBigfloat.apply(rounded)),
+            hydra.lib.logic.Not.apply(hydra.lib.equality.Equal.apply(
+              shown,
+              "-0.0"))),
           () -> hydra.lib.literals.ShowBigint.apply(rounded),
-          () -> hydra.lib.literals.ShowBigfloat.apply((n).value)));
+          () -> shown));
       }
 
       @Override
