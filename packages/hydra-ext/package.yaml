@@ -31,6 +31,8 @@ library:
     - src/gen-main/haskell
     - ../hydra-haskell/src/main/haskell
     - ../hydra-haskell/src/gen-main/haskell
+    - ../hydra-java/src/main/haskell
+    - ../hydra-python/src/main/haskell
     - ../hydra-kernel/src/main/haskell
     - ../hydra-kernel/src/gen-main/haskell
   ghc-options: [-rtsopts]
