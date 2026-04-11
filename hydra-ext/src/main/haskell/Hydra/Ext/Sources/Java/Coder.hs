@@ -168,6 +168,7 @@ module_ = Module ns definitions
       toDefinition encodeLiteral_encodeFloat32,
       toDefinition encodeLiteral_encodeFloat64,
       toDefinition encodeLiteral_encodeInteger,
+      toDefinition encodeLiteral_javaParseDouble,
       toDefinition encodeLiteral_javaSpecialFloatExpr,
       toDefinition encodeLiteral_litExp,
       toDefinition encodeLiteral_primCast,
@@ -2288,7 +2289,8 @@ encodeLiteral_encodeFloat32 = def "encodeLiteral_encodeFloat32" $
         (JavaDsl.literalFloatingPoint $ JavaDsl.floatingPointLiteral $
           Literals.float32ToBigfloat (var "v")))
 
--- | Encode a float64 value, handling NaN and Infinity specially since BigDecimal cannot represent them.
+-- | Encode a float64 value, handling NaN, Infinity, and negative zero specially.
+-- BigDecimal (Java's bigfloat) cannot represent NaN, Infinity, or signed zero.
 encodeLiteral_encodeFloat64 :: TTermDefinition (Double -> Java.Expression)
 encodeLiteral_encodeFloat64 = def "encodeLiteral_encodeFloat64" $
   lambda "v" $ lets [
@@ -2299,6 +2301,10 @@ encodeLiteral_encodeFloat64 = def "encodeLiteral_encodeFloat64" $
       (encodeLiteral_javaSpecialFloatExpr @@ string "Double" @@ string "POSITIVE_INFINITY") $
     Logic.ifElse (Equality.equal (var "s") (string "-Infinity"))
       (encodeLiteral_javaSpecialFloatExpr @@ string "Double" @@ string "NEGATIVE_INFINITY") $
+    -- Negative zero must be emitted via Double.parseDouble("-0.0") because routing it
+    -- through Bigfloat (which on the Java host is BigDecimal) would strip the sign.
+    Logic.ifElse (Equality.equal (var "s") (string "-0.0"))
+      (encodeLiteral_javaParseDouble @@ string "-0.0") $
     encodeLiteral_litExp @@
       (JavaDsl.literalFloatingPoint $ JavaDsl.floatingPointLiteral $
         Literals.float64ToBigfloat (var "v"))
@@ -2311,6 +2317,17 @@ encodeLiteral_javaSpecialFloatExpr = def "encodeLiteral_javaSpecialFloatExpr" $
       (JavaDsl.expressionName
         (just (JavaDsl.ambiguousName (list [JavaDsl.identifier $ var "className"])))
         (JavaDsl.identifier $ var "fieldName"))
+
+-- | Emit a Java method call expression Double.parseDouble("<value>"). Used for
+-- float64 values that cannot round-trip through Bigfloat (e.g., negative zero).
+encodeLiteral_javaParseDouble :: TTermDefinition (String -> Java.Expression)
+encodeLiteral_javaParseDouble = def "encodeLiteral_javaParseDouble" $
+  lambda "value" $
+    JavaUtilsSource.javaMethodInvocationToJavaExpression @@
+      (JavaUtilsSource.methodInvocationStatic
+        @@ JavaDsl.identifier (string "Double")
+        @@ JavaDsl.identifier (string "parseDouble")
+        @@ list [encodeLiteral @@ inject _Literal _Literal_string (var "value")])
 
 -- | Encode an integer value to a Java expression
 encodeLiteral_encodeInteger :: TTermDefinition (IntegerValue -> Java.Expression)
