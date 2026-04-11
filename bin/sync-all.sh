@@ -34,8 +34,8 @@ set -euo pipefail
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 HYDRA_ROOT="$( cd "$SCRIPT_DIR/.." && pwd )"
-HYDRA_HASKELL_DIR="$HYDRA_ROOT/hydra-haskell"
-HYDRA_EXT_DIR="$HYDRA_ROOT/hydra-ext"
+HYDRA_HASKELL_DIR="$HYDRA_ROOT/packages/hydra-haskell"
+HYDRA_EXT_DIR="$HYDRA_ROOT/packages/hydra-ext"
 
 source "$HYDRA_ROOT/bin/lib/common.sh"
 
@@ -221,7 +221,7 @@ if $TARGET_HYDRA; then
     stack exec update-kernel-tests -- $RTS_FLAGS
 
     # Patch TestGraph.hs to use TestEnv (real graph with primitives) instead of emptyGraph
-    TESTGRAPH="src/gen-test/haskell/Hydra/Test/TestGraph.hs"
+    TESTGRAPH="../hydra-kernel/src/gen-test/haskell/Hydra/Test/TestGraph.hs"
     if [ -f "$TESTGRAPH" ]; then
         echo "  Post-processing: patching TestGraph.hs..."
         sed_inplace 's/import qualified Hydra.Lexical as Lexical$/import qualified Hydra.Lexical as Lexical\nimport qualified Hydra.Test.TestEnv as TestEnv/' "$TESTGRAPH"

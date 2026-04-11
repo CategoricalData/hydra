@@ -1,0 +1,113 @@
+name:         hydra
+version:      0.15.0
+author:       Joshua Shinavier <josh@fortytwo.net>
+license:      Apache-2.0
+license-file: LICENSE
+category:     Data
+synopsis:     Haskell support for the Hydra programming language
+description:  >
+  Hydra is an implementation of the LambdaGraph data model, which takes advantage of an isomorphism
+  between labeled hypergraphs and typed lambda calculus: in Hydra, "graphs are programs, and programs are graphs".
+  The language is designed to be embedded in other programming languages -- currently Haskell, Java, and Python.
+  This package provides the Haskell-support components: the Haskell syntax model, the Haskell coder,
+  and utilities for driving Hydra's Haskell code generation. It depends on the language-independent
+  hydra-kernel package.
+github:       CategoricalData/hydra
+
+extra-source-files:
+  - LICENSE
+  - README.md
+  - stack.yaml
+
+dependencies:
+  - aeson                         >= 2.1.0 && < 2.3
+  - base                          >= 4.19.0 && < 4.22
+  - base64-bytestring             >= 1.2.1 && < 1.3
+  - bytestring                    >= 0.11.5 && < 0.13
+  - containers                    >= 0.6.7 && < 0.8
+  - directory                     >= 1.3.6 && < 1.4
+  - filepath                      >= 1.4.200 && < 1.6
+  - hydra-kernel
+  - regex-tdfa                    >= 1.3.2 && < 1.4
+  - scientific                    >= 0.3.7 && < 0.4
+  - split                         >= 0.2.3 && < 0.3
+  - text                          >= 2.0.2 && < 2.2
+  - vector                        >= 0.12.0 && < 0.14
+
+library:
+  source-dirs:
+    - src/main/haskell
+    - src/gen-main/haskell
+
+executables:
+  update-kernel-tests:
+    main: Main.hs
+    source-dirs:
+      - src/exec/update-kernel-tests
+    ghc-options: [-rtsopts]
+    dependencies:
+      - hydra
+
+  update-json-kernel:
+    main: Main.hs
+    source-dirs:
+      - src/exec/update-json-kernel
+    ghc-options: [-rtsopts]
+    dependencies:
+      - hydra
+
+  update-json-main:
+    main: Main.hs
+    source-dirs:
+      - src/exec/update-json-main
+    ghc-options: [-rtsopts]
+    dependencies:
+      - hydra
+
+  update-json-test:
+    main: Main.hs
+    source-dirs:
+      - src/exec/update-json-test
+    ghc-options: [-rtsopts]
+    dependencies:
+      - hydra
+
+  update-json-manifest:
+    main: Main.hs
+    source-dirs:
+      - src/exec/update-json-manifest
+    ghc-options: [-rtsopts]
+    dependencies:
+      - hydra
+
+  update-haskell-kernel:
+    main: Main.hs
+    source-dirs:
+      - src/exec/update-haskell-kernel
+    ghc-options: [-rtsopts]
+    dependencies:
+      - hydra
+
+  update-haskell-eval-lib:
+    main: Main.hs
+    source-dirs:
+      - src/exec/update-haskell-eval-lib
+    ghc-options: [-rtsopts]
+    dependencies:
+      - hydra
+
+  update-haskell-sources:
+    main: Main.hs
+    source-dirs:
+      - src/exec/update-haskell-sources
+    ghc-options: [-rtsopts]
+    dependencies:
+      - hydra
+
+  verify-json-kernel:
+    main: Main.hs
+    source-dirs:
+      - src/exec/verify-json-kernel
+    ghc-options: [-rtsopts]
+    dependencies:
+      - hydra

@@ -1,0 +1,10 @@
+{
+  "version": "0.15.0",
+  "group": "net.fortytwo.hydra",
+  "author": "Joshua Shinavier and collaborators",
+  "url": "https://github.com/CategoricalData/hydra",
+  "license": "Apache-2.0",
+  "packages": [
+    "hydra-kernel"
+  ]
+}

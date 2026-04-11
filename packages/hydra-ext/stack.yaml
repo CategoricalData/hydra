@@ -1,0 +1,11 @@
+resolver: lts-24.7
+
+system-ghc: true
+install-ghc: false
+
+packages:
+  - .
+  - ../hydra-haskell
+  - ../hydra-kernel
+
+extra-deps:

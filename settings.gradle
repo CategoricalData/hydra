@@ -3,3 +3,5 @@ rootProject.name = 'hydra'
 include 'hydra-java'
 include 'hydra-ext'
 
+project(':hydra-java').projectDir = file('packages/hydra-java')
+project(':hydra-ext').projectDir = file('packages/hydra-ext')
