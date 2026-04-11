@@ -373,4 +373,4 @@ def fromJson(types: Map[hydra.core.Name, hydra.core.Type])(tname: hydra.core.Nam
 }
 
 def parseSpecialFloat(s: scala.Predef.String): Option[Double] =
-  hydra.lib.logic.ifElse[Option[Double]](hydra.lib.logic.or(hydra.lib.equality.equal[scala.Predef.String](s)("NaN"))(hydra.lib.logic.or(hydra.lib.equality.equal[scala.Predef.String](s)("Infinity"))(hydra.lib.equality.equal[scala.Predef.String](s)("-Infinity"))))(hydra.lib.literals.readFloat64(s))(None)
+  hydra.lib.logic.ifElse[Option[Double]](hydra.lib.logic.or(hydra.lib.equality.equal[scala.Predef.String](s)("NaN"))(hydra.lib.logic.or(hydra.lib.equality.equal[scala.Predef.String](s)("Infinity"))(hydra.lib.logic.or(hydra.lib.equality.equal[scala.Predef.String](s)("-Infinity"))(hydra.lib.equality.equal[scala.Predef.String](s)("-0.0")))))(hydra.lib.literals.readFloat64(s))(None)

@@ -120,9 +120,13 @@ public interface Encode {
         hydra.lib.equality.Equal.apply(
           s,
           "Infinity"),
-        hydra.lib.equality.Equal.apply(
-          s,
-          "-Infinity")));
+        hydra.lib.logic.Or.apply(
+          hydra.lib.equality.Equal.apply(
+            s,
+            "-Infinity"),
+          hydra.lib.equality.Equal.apply(
+            s,
+            "-0.0"))));
   }
 
   static hydra.util.Either<String, hydra.json.model.Value> toJson(java.util.Map<hydra.core.Name, hydra.core.Type> types, hydra.core.Name tname, hydra.core.Type typ, hydra.core.Term term) {

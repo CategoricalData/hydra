@@ -1236,7 +1236,7 @@ encodeLiteral_encodeFloat64 :: Double -> Syntax.Expression
 encodeLiteral_encodeFloat64 v =
 
       let s = Literals.showFloat64 v
-      in (Logic.ifElse (Equality.equal s "NaN") (encodeLiteral_javaSpecialFloatExpr "Double" "NaN") (Logic.ifElse (Equality.equal s "Infinity") (encodeLiteral_javaSpecialFloatExpr "Double" "POSITIVE_INFINITY") (Logic.ifElse (Equality.equal s "-Infinity") (encodeLiteral_javaSpecialFloatExpr "Double" "NEGATIVE_INFINITY") (encodeLiteral_litExp (Syntax.LiteralFloatingPoint (Syntax.FloatingPointLiteral (Literals.float64ToBigfloat v)))))))
+      in (Logic.ifElse (Equality.equal s "NaN") (encodeLiteral_javaSpecialFloatExpr "Double" "NaN") (Logic.ifElse (Equality.equal s "Infinity") (encodeLiteral_javaSpecialFloatExpr "Double" "POSITIVE_INFINITY") (Logic.ifElse (Equality.equal s "-Infinity") (encodeLiteral_javaSpecialFloatExpr "Double" "NEGATIVE_INFINITY") (Logic.ifElse (Equality.equal s "-0.0") (encodeLiteral_javaParseDouble "-0.0") (encodeLiteral_litExp (Syntax.LiteralFloatingPoint (Syntax.FloatingPointLiteral (Literals.float64ToBigfloat v))))))))
 
 encodeLiteral_encodeInteger :: Core.IntegerValue -> Syntax.Expression
 encodeLiteral_encodeInteger i =
@@ -1252,6 +1252,11 @@ encodeLiteral_encodeInteger i =
       Core.IntegerValueUint32 v0 -> encodeLiteral_primCast (Syntax.PrimitiveTypeNumeric (Syntax.NumericTypeIntegral Syntax.IntegralTypeLong)) (encodeLiteral_litExp (Syntax.LiteralInteger (Syntax.IntegerLiteral (Literals.uint32ToBigint v0))))
       Core.IntegerValueUint64 v0 -> Utils.javaConstructorCall (Utils.javaConstructorName (Syntax.Identifier "java.math.BigInteger") Nothing) [
         encodeLiteral (Core.LiteralString (Literals.showBigint (Literals.uint64ToBigint v0)))] Nothing
+
+encodeLiteral_javaParseDouble :: String -> Syntax.Expression
+encodeLiteral_javaParseDouble value =
+    Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocationStatic (Syntax.Identifier "Double") (Syntax.Identifier "parseDouble") [
+      encodeLiteral (Core.LiteralString value)])
 
 encodeLiteral_javaSpecialFloatExpr :: String -> String -> Syntax.Expression
 encodeLiteral_javaSpecialFloatExpr className fieldName =

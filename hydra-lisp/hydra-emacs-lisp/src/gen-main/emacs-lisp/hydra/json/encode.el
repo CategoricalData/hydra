@@ -28,7 +28,7 @@
 
 (require 'hydra.strip)
 
-(defvar hydra_json_encode_is_special_float_string (lambda (s) (funcall (hydra_lib_logic_or (funcall (hydra_lib_equality_equal s) "NaN")) (funcall (hydra_lib_logic_or (funcall (hydra_lib_equality_equal s) "Infinity")) (funcall (hydra_lib_equality_equal s) "-Infinity")))))
+(defvar hydra_json_encode_is_special_float_string (lambda (s) (funcall (hydra_lib_logic_or (funcall (hydra_lib_equality_equal s) "NaN")) (funcall (hydra_lib_logic_or (funcall (hydra_lib_equality_equal s) "Infinity")) (funcall (hydra_lib_logic_or (funcall (hydra_lib_equality_equal s) "-Infinity")) (funcall (hydra_lib_equality_equal s) "-0.0"))))))
 
 (defvar hydra_json_encode_encode_float (lambda (fv) (funcall (lambda (match_target) (funcall (lambda (match_value) (cond ((equal (car match_target) :bigfloat) (funcall (lambda (bf) (let ((s (hydra_lib_literals_show_bigfloat bf))) (if (hydra_json_encode_is_special_float_string s) (list :right (list :string s)) (list :right (list :number bf))))) match_value)) ((equal (car match_target) :float32) (funcall (lambda (f) (list :right (list :string (hydra_lib_literals_show_float32 f)))) match_value)) ((equal (car match_target) :float64) (funcall (lambda (f) (let ((s (hydra_lib_literals_show_float64 f))) (if (hydra_json_encode_is_special_float_string s) (list :right (list :string s)) (list :right (list :number (hydra_lib_literals_float64_to_bigfloat f)))))) match_value)))) (cadr match_target))) fv)))
 

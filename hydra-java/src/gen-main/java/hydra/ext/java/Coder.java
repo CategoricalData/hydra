@@ -3741,7 +3741,12 @@ public interface Coder {
           () -> hydra.ext.java.Coder.encodeLiteral_javaSpecialFloatExpr(
             "Double",
             "NEGATIVE_INFINITY"),
-          () -> hydra.ext.java.Coder.encodeLiteral_litExp(new hydra.ext.java.syntax.Literal.FloatingPoint(new hydra.ext.java.syntax.FloatingPointLiteral(hydra.lib.literals.Float64ToBigfloat.apply(v)))))));
+          () -> hydra.lib.logic.IfElse.lazy(
+            hydra.lib.equality.Equal.apply(
+              s,
+              "-0.0"),
+            () -> hydra.ext.java.Coder.encodeLiteral_javaParseDouble("-0.0"),
+            () -> hydra.ext.java.Coder.encodeLiteral_litExp(new hydra.ext.java.syntax.Literal.FloatingPoint(new hydra.ext.java.syntax.FloatingPointLiteral(hydra.lib.literals.Float64ToBigfloat.apply(v))))))));
   }
 
   static hydra.ext.java.syntax.Expression encodeLiteral_encodeInteger(hydra.core.IntegerValue i) {
@@ -3811,6 +3816,13 @@ public interface Coder {
           (hydra.util.Maybe<hydra.ext.java.syntax.ClassBody>) (hydra.util.Maybe.<hydra.ext.java.syntax.ClassBody>nothing()));
       }
     });
+  }
+
+  static hydra.ext.java.syntax.Expression encodeLiteral_javaParseDouble(String value) {
+    return hydra.ext.java.Utils.javaMethodInvocationToJavaExpression(hydra.ext.java.Utils.methodInvocationStatic(
+      new hydra.ext.java.syntax.Identifier("Double"),
+      new hydra.ext.java.syntax.Identifier("parseDouble"),
+      java.util.Arrays.asList(hydra.ext.java.Coder.encodeLiteral(new hydra.core.Literal.String_(value)))));
   }
 
   static hydra.ext.java.syntax.Expression encodeLiteral_javaSpecialFloatExpr(String className, String fieldName) {

@@ -37,7 +37,10 @@ def valueToExpr(value: hydra.json.model.Value): hydra.ast.Expr =
   case hydra.json.model.Value.`null` => hydra.serialization.cst("null")
   case hydra.json.model.Value.number(v_Value_number_n) => {
     lazy val rounded: BigInt = hydra.lib.literals.bigfloatToBigint(v_Value_number_n)
-    hydra.serialization.cst(hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.equality.equal[BigDecimal](v_Value_number_n)(hydra.lib.literals.bigintToBigfloat(rounded)))(hydra.lib.literals.showBigint(rounded))(hydra.lib.literals.showBigfloat(v_Value_number_n)))
+    {
+      lazy val shown: scala.Predef.String = hydra.lib.literals.showBigfloat(v_Value_number_n)
+      hydra.serialization.cst(hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.logic.and(hydra.lib.equality.equal[BigDecimal](v_Value_number_n)(hydra.lib.literals.bigintToBigfloat(rounded)))(hydra.lib.logic.not(hydra.lib.equality.equal[scala.Predef.String](shown)("-0.0"))))(hydra.lib.literals.showBigint(rounded))(shown))
+    }
   }
   case hydra.json.model.Value.`object`(v_Value_object_obj) => hydra.serialization.bracesListAdaptive(hydra.lib.lists.map[Tuple2[scala.Predef.String,
      hydra.json.model.Value], hydra.ast.Expr](hydra.json.writer.keyValueToExpr)(hydra.lib.maps.toList[scala.Predef.String,

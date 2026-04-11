@@ -1219,12 +1219,6 @@ def encode_literal_encode_float32(v: float) -> hydra.ext.java.syntax.Expression:
         return hydra.lib.literals.show_float32(v)
     return hydra.lib.logic.if_else(hydra.lib.equality.equal(s(), "NaN"), (lambda : encode_literal_java_special_float_expr("Float", "NaN")), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(s(), "Infinity"), (lambda : encode_literal_java_special_float_expr("Float", "POSITIVE_INFINITY")), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(s(), "-Infinity"), (lambda : encode_literal_java_special_float_expr("Float", "NEGATIVE_INFINITY")), (lambda : encode_literal_prim_cast(cast(hydra.ext.java.syntax.PrimitiveType, hydra.ext.java.syntax.PrimitiveTypeNumeric(cast(hydra.ext.java.syntax.NumericType, hydra.ext.java.syntax.NumericTypeFloatingPoint(hydra.ext.java.syntax.FloatingPointType.FLOAT)))), encode_literal_lit_exp(cast(hydra.ext.java.syntax.Literal, hydra.ext.java.syntax.LiteralFloatingPoint(hydra.ext.java.syntax.FloatingPointLiteral(hydra.lib.literals.float32_to_bigfloat(v))))))))))))
 
-def encode_literal_encode_float64(v: float) -> hydra.ext.java.syntax.Expression:
-    @lru_cache(1)
-    def s() -> str:
-        return hydra.lib.literals.show_float64(v)
-    return hydra.lib.logic.if_else(hydra.lib.equality.equal(s(), "NaN"), (lambda : encode_literal_java_special_float_expr("Double", "NaN")), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(s(), "Infinity"), (lambda : encode_literal_java_special_float_expr("Double", "POSITIVE_INFINITY")), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(s(), "-Infinity"), (lambda : encode_literal_java_special_float_expr("Double", "NEGATIVE_INFINITY")), (lambda : encode_literal_lit_exp(cast(hydra.ext.java.syntax.Literal, hydra.ext.java.syntax.LiteralFloatingPoint(hydra.ext.java.syntax.FloatingPointLiteral(hydra.lib.literals.float64_to_bigfloat(v)))))))))))
-
 def encode_literal(lit: hydra.core.Literal) -> hydra.ext.java.syntax.Expression:
     match lit:
         case hydra.core.LiteralBinary(value=bs):
@@ -1262,6 +1256,12 @@ def encode_literal_encode_float(f: hydra.core.FloatValue) -> hydra.ext.java.synt
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
+def encode_literal_encode_float64(v: float) -> hydra.ext.java.syntax.Expression:
+    @lru_cache(1)
+    def s() -> str:
+        return hydra.lib.literals.show_float64(v)
+    return hydra.lib.logic.if_else(hydra.lib.equality.equal(s(), "NaN"), (lambda : encode_literal_java_special_float_expr("Double", "NaN")), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(s(), "Infinity"), (lambda : encode_literal_java_special_float_expr("Double", "POSITIVE_INFINITY")), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(s(), "-Infinity"), (lambda : encode_literal_java_special_float_expr("Double", "NEGATIVE_INFINITY")), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(s(), "-0.0"), (lambda : encode_literal_java_parse_double("-0.0")), (lambda : encode_literal_lit_exp(cast(hydra.ext.java.syntax.Literal, hydra.ext.java.syntax.LiteralFloatingPoint(hydra.ext.java.syntax.FloatingPointLiteral(hydra.lib.literals.float64_to_bigfloat(v)))))))))))))
+
 def encode_literal_encode_integer(i: hydra.core.IntegerValue) -> hydra.ext.java.syntax.Expression:
     match i:
         case hydra.core.IntegerValueBigint(value=v):
@@ -1293,6 +1293,9 @@ def encode_literal_encode_integer(i: hydra.core.IntegerValue) -> hydra.ext.java.
 
         case _:
             raise AssertionError("Unreachable: all variants handled")
+
+def encode_literal_java_parse_double(value: str) -> hydra.ext.java.syntax.Expression:
+    return hydra.ext.java.utils.java_method_invocation_to_java_expression(hydra.ext.java.utils.method_invocation_static(hydra.ext.java.syntax.Identifier("Double"), hydra.ext.java.syntax.Identifier("parseDouble"), (encode_literal(cast(hydra.core.Literal, hydra.core.LiteralString(value))),)))
 
 def build_curried_lambda(params: frozenlist[hydra.core.Name], inner: hydra.ext.java.syntax.Expression) -> hydra.ext.java.syntax.Expression:
     return hydra.lib.lists.foldl((lambda acc, p: hydra.ext.java.utils.java_lambda(p, acc)), inner, hydra.lib.lists.reverse(params))

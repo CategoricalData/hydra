@@ -666,7 +666,7 @@ encodeFloatValue_encodeFloat64 :: Double -> Either t0 Syntax.Expression
 encodeFloatValue_encodeFloat64 v =
 
       let s = Literals.showFloat64 v
-      in (Logic.ifElse (Equality.equal s "NaN") (Right (encodeFloatValue_pySpecialFloat "nan")) (Logic.ifElse (Equality.equal s "Infinity") (Right (encodeFloatValue_pySpecialFloat "inf")) (Logic.ifElse (Equality.equal s "-Infinity") (Right (encodeFloatValue_pySpecialFloat "-inf")) (Right (Utils.pyAtomToPyExpression (Syntax.AtomNumber (Syntax.NumberFloat (Literals.float64ToBigfloat v))))))))
+      in (Logic.ifElse (Equality.equal s "NaN") (Right (encodeFloatValue_pySpecialFloat "nan")) (Logic.ifElse (Equality.equal s "Infinity") (Right (encodeFloatValue_pySpecialFloat "inf")) (Logic.ifElse (Equality.equal s "-Infinity") (Right (encodeFloatValue_pySpecialFloat "-inf")) (Logic.ifElse (Equality.equal s "-0.0") (Right (encodeFloatValue_pySpecialFloat "-0.0")) (Right (Utils.pyAtomToPyExpression (Syntax.AtomNumber (Syntax.NumberFloat (Literals.float64ToBigfloat v)))))))))
 
 encodeFloatValue_pySpecialFloat :: String -> Syntax.Expression
 encodeFloatValue_pySpecialFloat value =
