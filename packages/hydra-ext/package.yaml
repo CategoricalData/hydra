@@ -29,12 +29,16 @@ library:
   source-dirs:
     - src/main/haskell
     - src/gen-main/haskell
+    - ../hydra-coq/src/main/haskell
     - ../hydra-haskell/src/main/haskell
     - ../hydra-haskell/src/gen-main/haskell
     - ../hydra-java/src/main/haskell
-    - ../hydra-python/src/main/haskell
+    - ../hydra-javascript/src/main/haskell
     - ../hydra-kernel/src/main/haskell
     - ../hydra-kernel/src/gen-main/haskell
+    - ../hydra-lisp/src/main/haskell
+    - ../hydra-python/src/main/haskell
+    - ../hydra-scala/src/main/haskell
   ghc-options: [-rtsopts]
 
 executables:
