@@ -448,13 +448,16 @@ encodeFloat = define "encodeFloat" $
         (right $ Json.valueString $ var "s")
         (right $ Json.valueNumber $ Literals.float64ToBigfloat $ var "f")]
 
--- | Check whether a string is one of the special float sentinels: "NaN", "Infinity", "-Infinity"
+-- | Check whether a string is one of the special float sentinels: "NaN", "Infinity", "-Infinity", "-0.0"
+-- Negative zero is treated as a special value because JSON arbitrary-precision decimal
+-- representations (Scientific, BigDecimal, Decimal) cannot distinguish it from +0.0.
 isSpecialFloatString :: TTermDefinition (String -> Bool)
 isSpecialFloatString = define "isSpecialFloatString" $
-  doc "Check whether a string is one of the special float sentinels: NaN, Infinity, -Infinity." $
+  doc "Check whether a string is one of the special float sentinels: NaN, Infinity, -Infinity, -0.0." $
   "s" ~> Logic.or (Equality.equal (var "s") (string "NaN")) $
-         Logic.or (Equality.equal (var "s") (string "Infinity"))
-                  (Equality.equal (var "s") (string "-Infinity"))
+         Logic.or (Equality.equal (var "s") (string "Infinity")) $
+         Logic.or (Equality.equal (var "s") (string "-Infinity"))
+                  (Equality.equal (var "s") (string "-0.0"))
 
 -- | Encode an integer value to JSON
 -- Small integers (int8, int16, int32, uint8, uint16) use native JSON numbers

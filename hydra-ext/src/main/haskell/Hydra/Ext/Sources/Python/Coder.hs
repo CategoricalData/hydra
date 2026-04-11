@@ -1082,6 +1082,10 @@ encodeFloatValue_encodeFloat64 = def "encodeFloatValue_encodeFloat64" $
       (right $ encodeFloatValue_pySpecialFloat @@ string "inf") $
     Logic.ifElse (Equality.equal (var "s") (string "-Infinity"))
       (right $ encodeFloatValue_pySpecialFloat @@ string "-inf") $
+    -- Negative zero must be emitted via float('-0.0') because routing it through
+    -- Bigfloat (which on the Java host is BigDecimal) would strip the sign.
+    Logic.ifElse (Equality.equal (var "s") (string "-0.0"))
+      (right $ encodeFloatValue_pySpecialFloat @@ string "-0.0") $
     right $ PyUtils.pyAtomToPyExpression @@
       (PyDsl.atomNumber $ PyDsl.numberFloat $ Literals.float64ToBigfloat $ var "v")
 

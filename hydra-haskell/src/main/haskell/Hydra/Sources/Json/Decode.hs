@@ -400,16 +400,19 @@ decodeFloat = define "decodeFloat" $
             ("v" ~> right $ Core.termLiteral $ Core.literalFloat $ Core.floatValueFloat64 $ var "v")
             (parseSpecialFloat @@ var "s")]]
 
--- | Parse a string as a special float sentinel ("NaN", "Infinity", "-Infinity") to a float64.
+-- | Parse a string as a special float sentinel ("NaN", "Infinity", "-Infinity", "-0.0") to a float64.
 -- Returns Nothing if the string is not a recognized sentinel.
+-- Negative zero is treated as a special value because JSON arbitrary-precision decimal
+-- representations (Scientific, BigDecimal, Decimal) cannot distinguish it from +0.0.
 parseSpecialFloat :: TTermDefinition (String -> Maybe Double)
 parseSpecialFloat = define "parseSpecialFloat" $
   doc "Parse a special float sentinel string to a float64. Returns Nothing for unrecognized strings." $
   "s" ~>
     Logic.ifElse
       (Logic.or (Equality.equal (var "s") (string "NaN")) $
-       Logic.or (Equality.equal (var "s") (string "Infinity"))
-                (Equality.equal (var "s") (string "-Infinity")))
+       Logic.or (Equality.equal (var "s") (string "Infinity")) $
+       Logic.or (Equality.equal (var "s") (string "-Infinity"))
+                (Equality.equal (var "s") (string "-0.0")))
       (Literals.readFloat64 $ var "s")
       Phantoms.nothing
 
