@@ -241,7 +241,7 @@
   (cond
     ((isnan x) "NaN")
     ((hydra--literals-infinitep x) (if (> x 0) "Infinity" "-Infinity"))
-    ((= x 0.0) "0.0")
+    ((= x 0.0) (if (< (copysign 1.0 x) 0) "-0.0" "0.0"))
     ((and (/= x 0.0)
           (or (< (abs x) 0.1) (>= (abs x) 1.0e7)))
      ;; Scientific notation
