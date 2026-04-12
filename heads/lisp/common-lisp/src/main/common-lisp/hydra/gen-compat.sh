@@ -7,7 +7,7 @@
 # This script generates a compatibility file that defines those accessors
 # to work on alists.
 
-GENDIR="$(dirname "$0")/../../gen-main/common-lisp/hydra"
+GENDIR="$(cd "$(dirname "$0")/../../../../../../.." && pwd)/dist/common-lisp/hydra-kernel/src/main/common-lisp/hydra"
 OUTFILE="$(dirname "$0")/struct-compat.lisp"
 
 echo ";;; Auto-generated alist-compatible struct accessors" > "$OUTFILE"

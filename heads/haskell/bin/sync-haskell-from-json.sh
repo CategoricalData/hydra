@@ -68,7 +68,7 @@ stack build hydra:exe:bootstrap-from-json
 
 step 2 $TOTAL_STEPS "Generating Haskell modules and tests from JSON"
 echo ""
-stack exec bootstrap-from-json -- --target haskell --output ../hydra-haskell --include-tests --include-gentests $RTS_FLAGS
+stack exec bootstrap-from-json -- --target haskell --output ../../dist/haskell/hydra-kernel --include-tests --include-gentests $RTS_FLAGS
 
 if [ "$QUICK_MODE" = false ]; then
     step 3 $TOTAL_STEPS "Building and testing Haskell"
@@ -87,15 +87,16 @@ fi
 step 4 $TOTAL_STEPS "Checking for new files"
 echo ""
 
-cd "$HYDRA_HASKELL_DIR"
+DIST_HASKELL="$HYDRA_ROOT_DIR/dist/haskell/hydra-kernel"
+cd "$DIST_HASKELL"
 
-NEW_FILES=$(git status --porcelain src/gen-main/haskell src/gen-test/haskell 2>/dev/null | grep "^??" | awk '{print $2}' || true)
+NEW_FILES=$(git status --porcelain src/main/haskell src/test/haskell 2>/dev/null | grep "^??" | awk '{print $2}' || true)
 
 if [ -n "$NEW_FILES" ]; then
     echo "New files were created. You may want to run:"
     echo ""
-    echo "  cd $HYDRA_HASKELL_DIR"
-    echo "  git add src/gen-main/haskell src/gen-test/haskell"
+    echo "  cd $DIST_HASKELL"
+    echo "  git add src/main/haskell src/test/haskell"
     echo ""
     echo "New files:"
     echo "$NEW_FILES" | head -20

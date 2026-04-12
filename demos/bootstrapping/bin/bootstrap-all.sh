@@ -428,7 +428,7 @@ compare_output() {
         fi
     done < <(find "$demo_dir" -name "*${ext}" 2>/dev/null | sort)
 
-    echo "  Comparison against baseline ($baseline_proj/src/gen-main):"
+    echo "  Comparison against baseline ($baseline_proj/src/main):"
     echo "    Matched to baseline:  $total"
     echo "    Identical:            $identical"
     if [ "$different" -gt 0 ]; then
@@ -554,11 +554,7 @@ run_tests_for_path() {
                 ;;
             python)
                 cd "$demo_dir"
-                if [ -d "src/gen-test" ]; then
-                    HYDRA_BENCHMARK_OUTPUT="$bench_file" pytest src/test/ src/test/ 2>&1
-                else
-                    HYDRA_BENCHMARK_OUTPUT="$bench_file" pytest src/test/ 2>&1
-                fi
+                HYDRA_BENCHMARK_OUTPUT="$bench_file" pytest src/test/ 2>&1
                 test_exit=$?
                 ;;
             clojure)
@@ -747,11 +743,7 @@ ENDJSON
                                 ;;
                             python)
                                 cd "$demo_dir"
-                                if [ -d "src/gen-test" ]; then
-                                    HYDRA_BENCHMARK_OUTPUT="$extra_bench" pytest src/test/ src/test/ 2>&1
-                                else
-                                    HYDRA_BENCHMARK_OUTPUT="$extra_bench" pytest src/test/ 2>&1
-                                fi
+                                HYDRA_BENCHMARK_OUTPUT="$extra_bench" pytest src/test/ 2>&1
                                 test_exit=$?
                                 ;;
                             clojure)

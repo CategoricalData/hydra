@@ -51,7 +51,7 @@ echo ""
 
 # Step 1: Ensure coder modules are available in the Clojure project.
 # The Clojure implementation needs the target language's coder modules
-# generated into its gen-main directory. If they don't exist, generate them
+# generated into its dist directory. If they don't exist, generate them
 # from ext JSON using the Haskell bootstrap-from-json.
 CODER_CHECK=""
 case "$TARGET" in

@@ -25,14 +25,14 @@ import System.IO (hFlush, stdout)
 
 -- | Generate all Python modules for the GenPG demo.
 --
--- This generates to hydra-ext/src/gen-main/python:
+-- This generates to demos/src/main/python:
 --   - hydra.pg.* modules
 --   - hydra.demos.genpg.transform
 --   - hydra.demos.genpg.sales
 --   - hydra.demos.genpg.health
 generatePythonModules :: IO ()
 generatePythonModules = do
-  let outputDir = "src/gen-main/python"
+  let outputDir = "../../demos/src/main/python"
   createDirectoryIfMissing True outputDir
 
   putStrLn "=== Generate Python GenPG Modules ==="

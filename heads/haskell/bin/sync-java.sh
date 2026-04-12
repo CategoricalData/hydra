@@ -132,7 +132,7 @@ for CHECK_DIR in "$HYDRA_ROOT_DIR/dist/java/hydra-kernel" "$HYDRA_ROOT_DIR/dist/
         echo "New files in $LABEL. You may want to run:"
         echo ""
         echo "  cd $CHECK_DIR"
-        echo "  git add src/gen-main/java src/gen-test/java"
+        echo "  git add src/main/java src/test/java"
         echo ""
         echo "New files:"
         echo "$NEW_FILES" | head -20
