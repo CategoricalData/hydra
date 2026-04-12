@@ -139,8 +139,10 @@ if [ -f "$SCHEME_TESTGRAPH" ]; then
     cat >> "$SCHEME_TESTGRAPH" << 'SCMEOF'
 ;; Include annotation term-level bindings (shared with test runner).
 SCMEOF
-    # Insert include with absolute path (Guile's include in define-library doesn't search load path)
-    ANN_BINDINGS_PATH="$HYDRA_ROOT_DIR/heads/lisp/scheme/src/test/scheme/hydra/annotation_bindings.scm"
+    # Insert include with relative path from test_graph.scm to annotation_bindings.scm
+    # test_graph.scm is at dist/scheme/hydra-kernel/src/test/scheme/hydra/test/
+    # annotation_bindings.scm is at heads/lisp/scheme/src/test/scheme/hydra/
+    ANN_BINDINGS_PATH="../../../../../../../../heads/lisp/scheme/src/test/scheme/hydra/annotation_bindings.scm"
     echo "(include \"$ANN_BINDINGS_PATH\")" >> "$SCHEME_TESTGRAPH"
     cat >> "$SCHEME_TESTGRAPH" << 'SCMEOF'
 
