@@ -465,12 +465,12 @@ Type consolidation affects not only Sources and gen-main, but also hand-written 
 - **Executables**: `verify-json-kernel/Main.hs` and `Generation.hs` use kernel types directly.
 - **DSL bootstrap**: `Dsl/Bootstrap.hs` constructs initial graphs using Haskell record syntax on kernel types.
 - **Language coders**: Coders in `packages/hydra-pg`, `packages/hydra-rdf`, and
-  `packages/hydra-misc` reference kernel types in their state management.
+  `packages/hydra-ext` reference kernel types in their state management.
 
 Search broadly for the old type name:
 ```bash
 # Search across all subprojects, not just Sources
-grep -rn 'OldTypeName' packages/hydra-haskell/ packages/hydra-java/ packages/hydra-python/ packages/hydra-pg/ packages/hydra-rdf/ packages/hydra-misc/
+grep -rn 'OldTypeName' packages/hydra-haskell/ packages/hydra-java/ packages/hydra-python/ packages/hydra-pg/ packages/hydra-rdf/ packages/hydra-ext/
 ```
 
 ### Pitfalls Specific to Type Consolidation
@@ -594,7 +594,7 @@ Similarly, if Haskell tests fail, investigate before regenerating Java/Python â€
 - [ ] packages/hydra-haskell builds (`stack build`)
 - [ ] packages/hydra-haskell tests pass (`stack test`)
 - [ ] JSON kernel regenerated and verified
-- [ ] Extension packages build (`stack build` in packages/hydra-pg, hydra-rdf, hydra-misc)
+- [ ] Extension packages build (`stack build` in packages/hydra-pg, hydra-rdf, hydra-ext)
 - [ ] Python kernel regenerated
 - [ ] Python tests pass
 - [ ] Java compilation succeeds (`gradle compileTestJava`)
@@ -838,7 +838,7 @@ Lists.find ("b" ~> (Core.bindingName (var "b")) `eq` (var "name")) elements
 - `Hydra/Sources/Kernel/Terms/Show/Graph.hs` + `Hydra/Show/Graph.hs`
 - `Hydra/Sources/Kernel/Terms/Haskell/Coder.hs` + `Hydra/Haskell/Coder.hs`
 
-**Extension packages (packages/hydra-misc, etc.):**
+**Extension packages (packages/hydra-ext, etc.):**
 - `Hydra/Ext/Python/Coder.hs`
 - `Hydra/Ext/Python/TestCodec.hs`
 - `Hydra/Ext/Tools/Analysis/Dependencies.hs`

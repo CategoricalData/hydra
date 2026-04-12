@@ -7,7 +7,7 @@ and evaluated numerically — all within Hydra's cross-platform term representat
 ## Quick start
 
 ```bash
-cd hydra-ext/demos/grad
+cd demos/grad
 ./bin/run.sh
 ```
 

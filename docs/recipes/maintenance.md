@@ -228,7 +228,7 @@ definition bodies appear in **alphabetical order** within each module.
 
 This applies to:
 - Haskell Source modules (`packages/hydra-haskell/src/main/haskell/Hydra/Sources/`)
-- Extension Source modules (in `packages/hydra-pg/`, `packages/hydra-rdf/`, `packages/hydra-misc/`, and `packages/hydra-java/` etc.)
+- Extension Source modules (in `packages/hydra-pg/`, `packages/hydra-rdf/`, `packages/hydra-ext/`, and `packages/hydra-java/` etc.)
 - Hand-written kernel modules (`heads/haskell/src/main/haskell/Hydra/`)
 
 Generated files inherit their ordering from Source modules,
@@ -248,7 +248,7 @@ grep 'toDefinition\|toBinding' packages/hydra-haskell/src/main/haskell/Hydra/Sou
 for f in $(find packages/hydra-haskell/src/main/haskell/Hydra/Sources \
                 packages/hydra-pg/src/main/haskell \
                 packages/hydra-rdf/src/main/haskell \
-                packages/hydra-misc/src/main/haskell \
+                packages/hydra-ext/src/main/haskell \
                 -name '*.hs' 2>/dev/null); do
   out=$(grep 'toDefinition\|toBinding' "$f" \
     | sed 's/.*toDefinition //; s/.*toBinding //; s/[,\]]//g' \

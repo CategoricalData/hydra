@@ -183,7 +183,7 @@ hydraExtModules = [
 
 Translate functions one at a time into the DSL, adding each to the module's `definitions` list. After each function:
 
-1. Build: `stack build` in the relevant package (e.g., `packages/hydra-misc`)
+1. Build: `stack build` in the relevant package (e.g., `packages/hydra-ext`)
 2. Regenerate the target code (see "Regenerating target code" below)
 3. Comment out the original staging function, keeping it as a reference
 4. Import and use the generated version in the staging module:

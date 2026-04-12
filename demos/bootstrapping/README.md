@@ -45,8 +45,8 @@ All output goes to `/tmp/hydra-bootstrapping-demo/` (override with `--output`):
 ## Directory structure
 
 ```
-hydra-ext/
-├── demos/bootstrapping/
+demos/
+├── bootstrapping/
 │   ├── README.md                    # This file
 │   ├── bin/
 │   │   ├── bootstrap-all.sh         # Run all bootstrapping paths
@@ -54,6 +54,7 @@ hydra-ext/
 │   │   ├── haskell-to-java.sh       # Haskell -> JSON -> Java
 │   │   ├── haskell-to-python.sh     # Haskell -> JSON -> Python
 │   │   └── ...                      # Other host-to-target scripts
+heads/haskell/
 ├── src/exec/bootstrap-from-json/
 │   └── Main.hs                      # Haskell bootstrap executable
 hydra-java/
@@ -91,8 +92,7 @@ brew install haskell-stack
 Verify that both Haskell packages build:
 
 ```bash
-cd hydra-haskell && stack build
-cd hydra-ext && stack build
+cd heads/haskell && stack build
 ```
 
 See the [Hydra-Haskell README](https://github.com/CategoricalData/hydra/blob/main/hydra-haskell/README.md)
@@ -152,7 +152,6 @@ for more details.
 ### Run all 9 bootstrapping paths
 
 ```bash
-cd hydra-ext
 ./demos/bootstrapping/bin/bootstrap-all.sh
 ```
 
@@ -163,8 +162,6 @@ file counts.
 ### Run a single path
 
 ```bash
-cd hydra-ext
-
 # Haskell host
 ./demos/bootstrapping/bin/haskell-to-java.sh
 
@@ -179,11 +176,10 @@ cd hydra-ext
 
 ```bash
 # Haskell
-cd hydra-ext
+cd heads/haskell
 stack exec bootstrap-from-json -- --target java +RTS -K256M -A32M -RTS
 
 # Java
-cd hydra-ext
 ./demos/bootstrapping/bin/java-bootstrap.sh --target haskell
 
 # Python
@@ -218,7 +214,7 @@ generated `hydra.codeGeneration` module:
 
 | Language | I/O Wrapper | Bootstrap CLI |
 |----------|-------------|---------------|
-| Haskell  | `Hydra.Generation` (hydra-haskell) | `bootstrap-from-json` (hydra-ext) |
+| Haskell  | `Hydra.Generation` (hydra-haskell) | `bootstrap-from-json` (heads/haskell) |
 | Java     | `hydra.Generation` (hydra-java) | `hydra.Bootstrap` (hydra-java) |
 | Python   | `hydra.generation` (hydra-python) | `hydra.bootstrap` (hydra-python) |
 
@@ -247,7 +243,7 @@ repository. Three executables produce the JSON exports (run by the sync scripts)
 
 - `hydra-haskell:update-json-main` — exports main + eval lib modules
 - `hydra-haskell:update-json-test` — exports test modules
-- `hydra-ext:update-json-ext` — exports extension modules
+- `hydra-haskell:update-json-ext` — exports extension modules
 
 The JSON includes System F type annotations.
 

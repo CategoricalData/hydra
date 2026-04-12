@@ -5,7 +5,7 @@ and Hydra types/terms in both directions, including transformation to property g
 
 ## Quick start
 
-From the `hydra-ext` directory:
+From the repo root:
 
 ```bash
 demos/avro/bin/run.sh
@@ -97,4 +97,4 @@ runPropertyGraphDemo -- just the property graph output
 ## Prerequisites
 
 - Stack (Haskell build tool)
-- hydra-ext must be buildable (`stack build` in the repo root)
+- Hydra-Haskell must be buildable (`stack build` in `heads/haskell`)

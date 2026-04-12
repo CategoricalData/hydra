@@ -1,6 +1,0 @@
-{
-  "name": "hydra-misc",
-  "description": "Miscellaneous format coders for Hydra: Avro, Protobuf, GraphQL, Pegasus, C++, Rust, Go, etc.",
-  "sourceLanguage": "haskell",
-  "dependencies": ["hydra-kernel"]
-}
