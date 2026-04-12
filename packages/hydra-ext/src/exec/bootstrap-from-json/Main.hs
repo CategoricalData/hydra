@@ -8,8 +8,8 @@
 --   - haskell-to-*.sh (bootstrapping demo, writes to /tmp)
 --
 -- JSON sources:
---   hydra-kernel/src/gen-main/json/  — kernel, eval lib, and other modules
---   hydra-kernel/src/gen-test/json/  — test modules
+--   dist/json/hydra-kernel/src/main/json/  — kernel, eval lib, and other modules
+--   dist/json/hydra-kernel/src/test/json/  — test modules
 --   hydra-ext/src/gen-main/json/      — ext coder modules (Java/Python coders)
 --
 -- Usage:
@@ -184,8 +184,8 @@ main = do
   let outTest = outBase FP.</> ("src/gen-test/" ++ target)
 
   -- JSON directories (relative to hydra-ext working directory)
-  let kernelJsonDir = maybe "../hydra-kernel/src/gen-main/json" id (optJsonDir opts)
-  let testJsonDir   = "../hydra-kernel/src/gen-test/json"
+  let kernelJsonDir = maybe "../../dist/json/hydra-kernel/src/main/json" id (optJsonDir opts)
+  let testJsonDir   = "../../dist/json/hydra-kernel/src/test/json"
   let extJsonDir    = maybe "src/gen-main/json" id (optExtJsonDir opts)
 
   let targetCap = case target of

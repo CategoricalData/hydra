@@ -38,7 +38,7 @@ if [ -z "$TARGET" ]; then
 fi
 
 if [ -z "$JSON_DIR" ]; then
-    JSON_DIR="$HYDRA_ROOT/packages/hydra-kernel/src/gen-main/json"
+    JSON_DIR="$HYDRA_ROOT/dist/json/hydra-kernel/src/main/json"
     EXTRA_ARGS="$EXTRA_ARGS --json-dir $JSON_DIR"
 fi
 

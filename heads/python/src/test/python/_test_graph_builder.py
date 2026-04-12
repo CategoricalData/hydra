@@ -17,7 +17,7 @@ def _load_kernel_term_bindings() -> dict[hydra.core.Name, hydra.core.Binding]:
     old_limit = sys.getrecursionlimit()
     sys.setrecursionlimit(10000)
 
-    json_dir = "../hydra-kernel/src/gen-main/json"
+    json_dir = "../../dist/json/hydra-kernel/src/main/json"
 
     evaluator_term_namespaces = [
         hydra.core.Name("hydra.annotations"),
