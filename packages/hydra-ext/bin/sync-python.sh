@@ -112,13 +112,6 @@ if [ "$QUICK_MODE" = false ]; then
     step 5 $TOTAL_STEPS "Running Python tests"
     echo ""
 
-    cd "$HYDRA_PYTHON_DIR"
-
-    # Activate virtual environment if it exists
-    if [ -f ".venv/bin/activate" ]; then
-        source .venv/bin/activate
-    fi
-
     # Run pytest from heads/python where pyproject.toml lives
     cd "$HYDRA_ROOT_DIR/heads/python"
     uv run pytest -q
