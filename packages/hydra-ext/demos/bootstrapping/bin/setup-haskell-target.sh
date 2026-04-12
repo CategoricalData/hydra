@@ -59,8 +59,8 @@ fi
 # gen-main. Copying the full baseline gen-main ext tree ensures these are available.
 echo "  Copying ext modules from baseline..."
 HS_GEN="$OUTPUT_DIR/src/gen-main/haskell"
-HS_KERNEL_BASELINE="$HYDRA_KERNEL_DIR/src/gen-main/haskell"
-HS_HASKELL_BASELINE="$HYDRA_HASKELL_DIR/src/gen-main/haskell"
+HS_KERNEL_BASELINE="$HYDRA_ROOT/dist/haskell/hydra-kernel/src/main/haskell"
+HS_HASKELL_BASELINE="$HYDRA_ROOT/dist/haskell/hydra-haskell/src/main/haskell"
 # Ext/Org modules live in hydra-kernel's gen-main; Ext/Haskell lives in hydra-haskell's.
 if [ -d "$HS_KERNEL_BASELINE/Hydra/Ext" ]; then
     mkdir -p "$HS_GEN/Hydra/Ext"
@@ -118,7 +118,7 @@ cp "$HYDRA_HASKELL_HEAD_DIR/src/test/haskell/Hydra/EvalPrimitives.hs" "$OUTPUT_D
 # TestEnv: provides the real test graph with primitives and kernel term bindings.
 # Must be copied to gen-test (where the generated TestGraph.hs imports it).
 mkdir -p "$OUTPUT_DIR/src/gen-test/haskell/Hydra/Test"
-cp "$HYDRA_KERNEL_DIR/src/gen-test/haskell/Hydra/Test/TestEnv.hs" "$OUTPUT_DIR/src/gen-test/haskell/Hydra/Test/"
+cp "$HYDRA_ROOT/dist/haskell/hydra-kernel/src/test/haskell/Hydra/Test/TestEnv.hs" "$OUTPUT_DIR/src/gen-test/haskell/Hydra/Test/"
 
 # License (needed by cabal)
 touch "$OUTPUT_DIR/LICENSE"
