@@ -201,24 +201,27 @@ public class Demo {
     }
 
     /**
-     * Resolve the hydra-ext root directory from the location of this class.
+     * Resolve the repository root directory.
      */
-    private static Path findHydraExtRoot() {
-        // Try the standard project layout: running from the repo root or hydra-ext
+    private static Path findRepoRoot() {
         Path cwd = Paths.get("").toAbsolutePath();
         if (Files.exists(cwd.resolve("demos/genpg"))) {
             return cwd;
         }
-        Path hydraExtChild = cwd.resolve("hydra-ext");
-        if (Files.exists(hydraExtChild.resolve("demos/genpg"))) {
-            return hydraExtChild;
+        // Check parent dirs (in case running from a subdirectory)
+        Path p = cwd;
+        while (p != null) {
+            if (Files.exists(p.resolve("demos/genpg"))) {
+                return p;
+            }
+            p = p.getParent();
         }
         throw new RuntimeException(
-            "Cannot find hydra-ext root. Run from the repository root or hydra-ext directory.");
+            "Cannot find repository root (expected demos/genpg to exist). Run from the repository root.");
     }
 
     public void generateSalesGraphson() throws IOException {
-        Path root = findHydraExtRoot();
+        Path root = findRepoRoot();
         List<TableType> tableSchemas = Sales.salesDatabaseSchema();
         LazyGraph<Term> graph = Sales.salesMapping();
 
@@ -230,7 +233,7 @@ public class Demo {
     }
 
     public void generateHealthGraphson() throws IOException {
-        Path root = findHydraExtRoot();
+        Path root = findRepoRoot();
         List<TableType> tableSchemas = Health.healthDatabaseSchema();
         LazyGraph<Term> graph = Health.healthMapping();
 
