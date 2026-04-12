@@ -12,7 +12,7 @@ For task-specific troubleshooting, see also:
 
 When something breaks, follow this order:
 
-1. **Check Haskell first.** Run `stack test` in `hydra-haskell/`. If Haskell doesn't pass,
+1. **Check Haskell first.** Run `stack test` in `packages/hydra-haskell/`. If Haskell doesn't pass,
    nothing downstream will work correctly.
 2. **Check whether the file is generated.** If the problem is in `src/gen-main/` or
    `src/gen-test/`, the fix belongs in the Haskell source or code generator, not in the
@@ -35,11 +35,11 @@ file.
 
 | Language | Registration file |
 |----------|-------------------|
-| Haskell | `hydra-haskell/src/main/haskell/Hydra/Sources/Libraries.hs` |
-| Java | `hydra-java/src/main/java/hydra/lib/Libraries.java` |
-| Python | `hydra-python/src/main/python/hydra/lib/libraries.py` |
-| Scala | `hydra-scala/src/main/scala/hydra/lib/Libraries.scala` |
-| Lisp (Clojure) | `hydra-lisp/hydra-clojure/src/main/clojure/hydra/lib/libraries.clj` |
+| Haskell | `packages/hydra-haskell/src/main/haskell/Hydra/Sources/Libraries.hs` |
+| Java | `heads/java/src/main/java/hydra/lib/Libraries.java` |
+| Python | `heads/python/src/main/python/hydra/lib/libraries.py` |
+| Scala | `heads/scala/src/main/scala/hydra/lib/Libraries.scala` |
+| Lisp (Clojure) | `heads/lisp/clojure/src/main/clojure/hydra/lib/libraries.clj` |
 
 **Fix**: Add the primitive to the appropriate `*Primitives()` method (Java) or equivalent
 in the registration file. See [adding primitives](recipes/adding-primitives.md) for the
@@ -51,13 +51,13 @@ full checklist.
 
 ```bash
 # From the repo root
-./gradlew :hydra-java:test
+./gradlew :packages:hydra-java:test
 
 # With detailed failure output
-./gradlew :hydra-java:test --tests "*TestSuiteRunner*" --info 2>&1 | grep -A 20 "FAILED"
+./gradlew :packages:hydra-java:test --tests "*TestSuiteRunner*" --info 2>&1 | grep -A 20 "FAILED"
 ```
 
-The test runner is at `hydra-java/src/test/java/hydra/TestSuiteRunner.java`. It dispatches
+The test runner is at `heads/java/src/test/java/hydra/TestSuiteRunner.java`. It dispatches
 test cases by type (Evaluation, Inference, Checking, etc.) using the visitor pattern.
 Evaluation tests call `Reduction.reduceTerm` and assert the result matches expected output.
 
@@ -77,7 +77,7 @@ When a primitive test fails in Java, the call chain is:
 **If step 4 fails**: check the `implementation()` method of the primitive class.
 The `implementation()` method must construct a term-level result, not execute native code.
 A stub that throws `UnsupportedOperationException` will cause runtime failures.
-See `hydra-java/src/main/java/hydra/lib/flows/Map.java` for a good example using
+See `heads/java/src/main/java/hydra/lib/flows/Map.java` for a good example using
 `hydra.dsl.Terms` helpers (`wrap`, `unwrap`, `lambda`, `app`, `flowState`, `project`,
 `variable`, `just`, `nothing`, etc.).
 
@@ -85,8 +85,8 @@ See `hydra-java/src/main/java/hydra/lib/flows/Map.java` for a good example using
 
 In `Libraries.hs`, primitives are registered with either `prim1`/`prim2`/`prim3` (simple)
 or `prim1Eval`/`prim2Eval`/`prim3Eval` (higher-order). The `Eval` variants have an
-additional "eval element" in `hydra-haskell/src/main/haskell/Hydra/Sources/Eval/Lib/`,
-generated into `hydra-java/src/gen-main/java/hydra/eval/lib/`.
+additional "eval element" in `packages/hydra-haskell/src/main/haskell/Hydra/Sources/Eval/Lib/`,
+generated into `dist/java/hydra-kernel/src/main/java/hydra/eval/lib/`.
 
 **Both paths matter**: The reducer calls `implementation()` for all primitives, so even
 `prim2Eval` primitives need a working `implementation()` in their Java
@@ -96,13 +96,13 @@ generated into `hydra-java/src/gen-main/java/hydra/eval/lib/`.
 
 | Purpose | Path |
 |---------|------|
-| Primitive registration | `hydra-java/src/main/java/hydra/lib/Libraries.java` |
-| Primitive classes | `hydra-java/src/main/java/hydra/lib/<library>/` |
-| Generated eval elements | `hydra-java/src/gen-main/java/hydra/eval/lib/` |
-| DSL term builders | `hydra-java/src/main/java/hydra/dsl/Terms.java` |
-| Either utilities | `hydra-java/src/main/java/hydra/util/Either.java` |
-| Test runner | `hydra-java/src/test/java/hydra/TestSuiteRunner.java` |
-| Reducer | `hydra-java/src/gen-main/java/hydra/reduction/Reduction.java` |
+| Primitive registration | `heads/java/src/main/java/hydra/lib/Libraries.java` |
+| Primitive classes | `heads/java/src/main/java/hydra/lib/<library>/` |
+| Generated eval elements | `dist/java/hydra-kernel/src/main/java/hydra/eval/lib/` |
+| DSL term builders | `heads/java/src/main/java/hydra/dsl/Terms.java` |
+| Either utilities | `heads/java/src/main/java/hydra/util/Either.java` |
+| Test runner | `heads/java/src/test/java/hydra/TestSuiteRunner.java` |
+| Reducer | `dist/java/hydra-kernel/src/main/java/hydra/reduction/Reduction.java` |
 
 ## Haskell build issues
 
