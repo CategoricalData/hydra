@@ -23,7 +23,7 @@ source "$SCRIPT_DIR/../../bin/common.sh"
 HOSTS="haskell"
 TAG=""
 SKIP_VALIDATE=false
-JSON_DIR="$REPO_ROOT/packages/hydra-kernel/src/gen-main/json"
+JSON_DIR="$REPO_ROOT/dist/json/hydra-kernel/src/main/json"
 
 while [ $# -gt 0 ]; do
   case "$1" in

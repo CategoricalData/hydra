@@ -81,4 +81,4 @@ if [ -n "$OUTPUT_BASE" ]; then
 fi
 
 # Run the Haskell bootstrap (its output includes detailed timing and file counts)
-stack exec bootstrap-from-json -- --target "$TARGET" "${OUTPUT_ARGS[@]}" "${PASSTHROUGH_ARGS[@]}" --json-dir "$HYDRA_ROOT/packages/hydra-kernel/src/gen-main/json" $RTS_FLAGS
+stack exec bootstrap-from-json -- --target "$TARGET" "${OUTPUT_ARGS[@]}" "${PASSTHROUGH_ARGS[@]}" --json-dir "$HYDRA_ROOT/dist/json/hydra-kernel/src/main/json" $RTS_FLAGS

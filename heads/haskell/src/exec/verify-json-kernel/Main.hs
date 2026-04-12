@@ -68,7 +68,7 @@ main = do
   flushPut "=== Verify JSON Kernel ==="
   flushPut ""
 
-  let basePath = "../../packages/hydra-kernel/src/gen-main/json"
+  let basePath = "../../dist/json/hydra-kernel/src/main/json"
 
   flushPut "Building graph from kernel modules..."
   -- Build the graph from all kernel modules - this provides the type info

@@ -99,7 +99,7 @@ demoGraphqlJson :: IO ()
 demoGraphqlJson = do
   let demoDir = "demos/graphql-json"
   let outputDir = FP.combine demoDir "output"
-  let jsonDir = "../hydra-kernel/src/gen-main/json"
+  let jsonDir = "../../dist/json/hydra-kernel/src/main/json"
 
   putStrLn "=== GraphQL JSON Demo ==="
   putStrLn ""

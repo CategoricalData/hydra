@@ -170,13 +170,13 @@ echo ""
 echo "Checking for new files..."
 echo ""
 
-NEW_FILES=$(git status --porcelain ../../packages/hydra-kernel/src/gen-main/haskell ../../packages/hydra-kernel/src/gen-test/haskell ../../packages/hydra-kernel/src/gen-main/json ../../packages/hydra-haskell/src/gen-main/haskell 2>/dev/null | grep "^??" | awk '{print $2}' || true)
+NEW_FILES=$(git status --porcelain ../../packages/hydra-kernel/src/gen-main/haskell ../../packages/hydra-kernel/src/gen-test/haskell ../../dist/json/hydra-kernel/src/main/json ../../packages/hydra-haskell/src/gen-main/haskell 2>/dev/null | grep "^??" | awk '{print $2}' || true)
 
 if [ -n "$NEW_FILES" ]; then
     echo "New files were created. You may want to run:"
     echo ""
     echo "  cd $HYDRA_HASKELL_DIR"
-    echo "  git add ../../packages/hydra-kernel/src/gen-main/haskell ../../packages/hydra-kernel/src/gen-test/haskell ../../packages/hydra-kernel/src/gen-main/json ../../packages/hydra-haskell/src/gen-main/haskell"
+    echo "  git add ../../packages/hydra-kernel/src/gen-main/haskell ../../packages/hydra-kernel/src/gen-test/haskell ../../dist/json/hydra-kernel/src/main/json ../../packages/hydra-haskell/src/gen-main/haskell"
     echo ""
     echo "New files:"
     echo "$NEW_FILES" | head -20
