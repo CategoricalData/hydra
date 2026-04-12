@@ -44,6 +44,7 @@ import qualified Hydra.Sources.Test.TestSuite as TestSuite
 import Control.Exception (catch, IOException)
 import Control.Monad (when)
 import Data.List (isPrefixOf, partition)
+import Data.Maybe (isNothing)
 import Data.Time.Clock (getCurrentTime, diffUTCTime, UTCTime)
 import System.Directory (listDirectory, doesFileExist)
 import System.Environment (getArgs)
@@ -172,16 +173,19 @@ main = do
   -- Determine output directories
   let defaultOutput = case target of
         "haskell"     -> "/tmp/hydra-bootstrapping-demo/haskell-to-haskell"
-        "java"        -> "../hydra-java"
-        "python"      -> "../hydra-python"
-        "clojure"     -> "../hydra-lisp/hydra-clojure"
-        "scheme"      -> "../hydra-lisp/hydra-scheme"
-        "common-lisp" -> "../hydra-lisp/hydra-common-lisp"
-        "emacs-lisp"  -> "../hydra-lisp/hydra-emacs-lisp"
+        "java"        -> "../../dist/java/hydra-kernel"
+        "python"      -> "../../dist/python/hydra-kernel"
+        "clojure"     -> "../../dist/clojure/hydra-kernel"
+        "scheme"      -> "../../dist/scheme/hydra-kernel"
+        "common-lisp" -> "../../dist/common-lisp/hydra-kernel"
+        "emacs-lisp"  -> "../../dist/emacs-lisp/hydra-kernel"
         _             -> "/tmp/hydra-bootstrapping-demo/haskell-to-" ++ target
   let outBase = maybe defaultOutput id (optOutput opts)
-  let outMain = outBase FP.</> ("src/gen-main/" ++ target)
-  let outTest = outBase FP.</> ("src/gen-test/" ++ target)
+  let usingDefault = isNothing (optOutput opts)
+  let genMainDir = if usingDefault then "src/main/" else "src/gen-main/"
+  let genTestDir = if usingDefault then "src/test/" else "src/gen-test/"
+  let outMain = outBase FP.</> (genMainDir ++ target)
+  let outTest = outBase FP.</> (genTestDir ++ target)
 
   -- JSON directories (relative to hydra-ext working directory)
   let kernelJsonDir = maybe "../../dist/json/hydra-kernel/src/main/json" id (optJsonDir opts)

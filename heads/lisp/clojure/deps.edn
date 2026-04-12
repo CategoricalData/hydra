@@ -1,5 +1,5 @@
-{:paths ["../../../packages/hydra-lisp/hydra-clojure/src/gen-main/clojure"
+{:paths ["../../../dist/clojure/hydra-kernel/src/main/clojure"
          "src/main/clojure"
-         "../../../packages/hydra-lisp/hydra-clojure/src/gen-test/clojure"
+         "../../../dist/clojure/hydra-kernel/src/test/clojure"
          "src/test/clojure"]
  :deps {org.clojure/data.json {:mvn/version "2.5.1"}}}

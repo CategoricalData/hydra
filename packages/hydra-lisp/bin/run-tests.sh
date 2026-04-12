@@ -56,8 +56,8 @@ case "$DIALECT" in
         ;;
     scheme)
         cd "$HEAD_DIR"
-        GEN_MAIN="$PKG_DIR/src/gen-main/scheme"
-        GEN_TEST="$PKG_DIR/src/gen-test/scheme"
+        GEN_MAIN="$HYDRA_ROOT/dist/scheme/hydra-kernel/src/main/scheme"
+        GEN_TEST="$HYDRA_ROOT/dist/scheme/hydra-kernel/src/test/scheme"
         if command -v guile > /dev/null 2>&1; then
             guile --no-auto-compile -L "$GEN_MAIN" -L "$GEN_TEST" -L src/main/scheme -s run-tests.scm 2>/dev/null
         elif command -v chibi-scheme > /dev/null 2>&1; then

@@ -83,7 +83,7 @@ stack exec bootstrap-from-json -- --target java --include-coders --include-dsls 
     warn "Java test generation had errors (some polymorphic types not supported). Continuing..."
 
 # Patch TestGraph.java to use TestEnv (real graph with primitives) instead of emptyGraph
-TESTGRAPH="../hydra-java/src/gen-test/java/hydra/test/TestGraph.java"
+TESTGRAPH="../../dist/java/hydra-kernel/src/test/java/hydra/test/TestGraph.java"
 if [ -f "$TESTGRAPH" ]; then
     echo "  Post-processing: patching TestGraph.java..."
     sed_inplace 's/return hydra.Lexical.emptyGraph();/return hydra.test.TestEnv.testGraph();/' "$TESTGRAPH"
@@ -99,7 +99,7 @@ echo ""
 stack exec bootstrap-from-json -- --target java --output "$HYDRA_JAVA_DIR" --include-coders --ext-only $RTS_FLAGS
 
 # Patch Lisp Coder.java for PartialVisitor type inference issue in encodeTermDefinition
-LISPCODER="../hydra-java/src/gen-main/java/hydra/ext/lisp/Coder.java"
+LISPCODER="../../dist/java/hydra-kernel/src/main/java/hydra/ext/lisp/Coder.java"
 if [ -f "$LISPCODER" ]; then
     echo "  Post-processing: patching Lisp Coder.java..."
     sed_inplace 's/Either<hydra.ext.lisp.syntax.TopLevelFormWithComments, hydra.ext.lisp.syntax.TopLevelFormWithComments> otherwise/Either<T2, hydra.ext.lisp.syntax.TopLevelFormWithComments> otherwise/' "$LISPCODER"

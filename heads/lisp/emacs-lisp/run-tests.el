@@ -9,13 +9,11 @@
                                       (file-name-directory load-file-name))))
   (load loader-path nil t))
 
-;; Override gen-main and gen-test dirs to point at the package's generated content.
-;; The loader computed them relative to its own path in heads/, but the generated
-;; content lives in packages/hydra-lisp/hydra-emacs-lisp/.
-(let ((pkg-base (expand-file-name "../../../packages/hydra-lisp/hydra-emacs-lisp/"
-                                   (file-name-directory load-file-name))))
-  (setq hydra-gen-main-dir (expand-file-name "src/gen-main/emacs-lisp/hydra/" pkg-base))
-  (setq hydra-gen-test-dir (expand-file-name "src/gen-test/emacs-lisp/hydra/" pkg-base)))
+;; Override gen-main and gen-test dirs to point at the dist/ generated content.
+(let ((dist-base (expand-file-name "../../../dist/emacs-lisp/hydra-kernel/"
+                                    (file-name-directory load-file-name))))
+  (setq hydra-gen-main-dir (expand-file-name "src/main/emacs-lisp/hydra/" dist-base))
+  (setq hydra-gen-test-dir (expand-file-name "src/test/emacs-lisp/hydra/" dist-base)))
 
 ;; Load gen-main
 (hydra-load-gen-main)

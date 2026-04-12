@@ -71,10 +71,11 @@
 (format t "Loading generated main modules...~%")
 (load (hydra-head-path "src/main/common-lisp/hydra/loader.lisp"))
 
-;; Override *hydra-gen-main-dir* to point at the package's generated content,
-;; since loader.lisp computed it relative to its own path in heads/.
+;; Override *hydra-gen-main-dir* to point at the dist/ generated content.
+;; *hydra-cl-head* = heads/lisp/common-lisp/, so ../../../dist = repo-root/dist
 (setf *hydra-gen-main-dir*
-      (merge-pathnames "src/gen-main/common-lisp/hydra/" *hydra-cl-pkg*))
+      (merge-pathnames "../../../dist/common-lisp/hydra-kernel/src/main/common-lisp/hydra/"
+                       *hydra-cl-head*))
 
 ;; Set function bindings for native library defvars (e.g. hydra_lib_maps_singleton)
 ;; so they can be called in function position in generated code.
@@ -100,7 +101,9 @@
 ;; ============================================================================
 (format t "Loading generated test data...~%")
 
-(defvar *test-data-base* (hydra-path "src/gen-test/common-lisp/hydra/test/"))
+(defvar *test-data-base*
+  (merge-pathnames "../../../dist/common-lisp/hydra-kernel/src/test/common-lisp/hydra/test/"
+                   *hydra-cl-head*))
 
 (defun load-test-file (relative)
   (let ((path (merge-pathnames relative *test-data-base*)))
@@ -108,7 +111,8 @@
       (hydra-load-file path))))
 
 ;; Load test dependency modules (needed by serialization, sorting tests)
-(let ((ext-path (hydra-path "src/gen-main/common-lisp/hydra/ext/haskell/operators.lisp")))
+(let ((ext-path (merge-pathnames "../../../dist/common-lisp/hydra-kernel/src/main/common-lisp/hydra/ext/haskell/operators.lisp"
+                                 *hydra-cl-head*)))
   (when (probe-file ext-path)
     (hydra-load-file ext-path)))
 

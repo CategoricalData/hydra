@@ -98,12 +98,12 @@ stack exec generate-lisp -- $RTS_FLAGS
 # Restore Scheme gen-main native libs to their committed (portable alist) versions.
 # The generate-lisp tool overwrites these with the src/main vhash versions, but
 # gen-main must use portable alists since standalone targets lack (ice-9 vlist).
-SCHEME_GEN_LIB="$HYDRA_ROOT_DIR/packages/hydra-lisp/hydra-scheme/src/gen-main/scheme/hydra/lib"
+SCHEME_GEN_LIB="$HYDRA_ROOT_DIR/dist/scheme/hydra-kernel/src/main/scheme/hydra/lib"
 if [ -d "$SCHEME_GEN_LIB" ]; then
     echo "  Restoring portable gen-main lib files for Scheme..."
     git -C "$HYDRA_ROOT_DIR" checkout -- \
-        packages/hydra-lisp/hydra-scheme/src/gen-main/scheme/hydra/lib/maps.scm \
-        packages/hydra-lisp/hydra-scheme/src/gen-main/scheme/hydra/lib/sets.scm \
+        dist/scheme/hydra-kernel/src/main/scheme/hydra/lib/maps.scm \
+        dist/scheme/hydra-kernel/src/main/scheme/hydra/lib/sets.scm \
         2>/dev/null || true
 fi
 
@@ -120,10 +120,10 @@ dialect_dir() {
 # The graph must be defined AFTER test_terms and test_types (forward reference issue).
 # Copy annotation bindings alongside the generated test graph (for include)
 cp "$HYDRA_ROOT_DIR/heads/lisp/scheme/src/test/scheme/hydra/annotation_bindings.scm" \
-   "$HYDRA_ROOT_DIR/packages/hydra-lisp/hydra-scheme/src/gen-test/scheme/hydra/test/annotation_bindings.scm" 2>/dev/null
+   "$HYDRA_ROOT_DIR/dist/scheme/hydra-kernel/src/test/scheme/hydra/test/annotation_bindings.scm" 2>/dev/null
 
 echo "Patching Scheme test_graph.scm..."
-SCHEME_TESTGRAPH="$HYDRA_ROOT_DIR/packages/hydra-lisp/hydra-scheme/src/gen-test/scheme/hydra/test/test_graph.scm"
+SCHEME_TESTGRAPH="$HYDRA_ROOT_DIR/dist/scheme/hydra-kernel/src/test/scheme/hydra/test/test_graph.scm"
 if [ -f "$SCHEME_TESTGRAPH" ]; then
     # Add required imports for building graph with primitives
     sed -i '' 's|(import (scheme base) (hydra core) (hydra lexical) (hydra lib maps) (hydra packaging) (hydra test test_terms) (hydra test test_types))|(import (scheme base) (hydra core) (hydra context) (hydra graph) (hydra lexical) (hydra lib libraries) (hydra lib maps) (hydra packaging) (hydra rewriting) (hydra scoping) (hydra json bootstrap) (hydra test test_terms) (hydra test test_types))|' "$SCHEME_TESTGRAPH"
@@ -166,7 +166,7 @@ fi
 # Patch Clojure testGraph.clj to build a full graph with primitives and schema types.
 # The graph must be defined AFTER test_terms and test_types (forward reference issue).
 echo "Patching Clojure testGraph.clj..."
-CLJ_TESTGRAPH="$HYDRA_ROOT_DIR/packages/hydra-lisp/hydra-clojure/src/gen-test/clojure/hydra/test/testGraph.clj"
+CLJ_TESTGRAPH="$HYDRA_ROOT_DIR/dist/clojure/hydra-kernel/src/test/clojure/hydra/test/testGraph.clj"
 if [ -f "$CLJ_TESTGRAPH" ]; then
     # Add required imports
     sed -i '' 's|\[hydra.lexical :refer :all\]|[hydra.lexical :refer :all] [hydra.lib.libraries :refer :all] [hydra.rewriting :refer :all] [hydra.scoping :refer :all] [hydra.json.bootstrap :refer :all] [hydra.graph :refer :all] [hydra.context :refer :all] [hydra.annotation-bindings :refer [annotation-bindings]]|' "$CLJ_TESTGRAPH"
@@ -203,7 +203,7 @@ fi
 
 # Patch Common Lisp test_graph.lisp — same approach as Clojure (append at end)
 echo "Patching Common Lisp test_graph.lisp..."
-CL_TESTGRAPH="$HYDRA_ROOT_DIR/packages/hydra-lisp/hydra-common-lisp/src/gen-test/common-lisp/hydra/test/test_graph.lisp"
+CL_TESTGRAPH="$HYDRA_ROOT_DIR/dist/common-lisp/hydra-kernel/src/test/common-lisp/hydra/test/test_graph.lisp"
 if [ -f "$CL_TESTGRAPH" ]; then
     sed -i '' '/^(cl:defvar hydra_test_test_graph_test_context hydra_lexical_empty_context)/d' "$CL_TESTGRAPH"
     sed -i '' '/^(cl:defvar hydra_test_test_graph_test_graph hydra_lexical_empty_graph)/d' "$CL_TESTGRAPH"
@@ -226,7 +226,7 @@ fi
 
 # Patch Emacs Lisp test_graph.el — same approach (append at end)
 echo "Patching Emacs Lisp test_graph.el..."
-EL_TESTGRAPH="$HYDRA_ROOT_DIR/packages/hydra-lisp/hydra-emacs-lisp/src/gen-test/emacs-lisp/hydra/test/test_graph.el"
+EL_TESTGRAPH="$HYDRA_ROOT_DIR/dist/emacs-lisp/hydra-kernel/src/test/emacs-lisp/hydra/test/test_graph.el"
 if [ -f "$EL_TESTGRAPH" ]; then
     sed -i '' '/^(setq hydra_test_test_graph_test_context hydra_lexical_empty_context)/d' "$EL_TESTGRAPH"
     sed -i '' '/^(setq hydra_test_test_graph_test_graph hydra_lexical_empty_graph)/d' "$EL_TESTGRAPH"
