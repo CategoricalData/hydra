@@ -470,7 +470,7 @@ charsIsAlphaNum = subgroup "isAlphaNum" [
 # From hydra-haskell - regenerate test files (universal test cases)
 stack exec update-kernel-tests
 
-# From hydra-ext - regenerate Java and Python (including tests)
+# From heads/haskell - regenerate Java and Python (including tests)
 ./bin/sync-java.sh --quick
 ./bin/sync-python.sh --quick
 ```

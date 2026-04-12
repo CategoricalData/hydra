@@ -13,7 +13,7 @@ support the full [Hydra standard library](https://github.com/CategoricalData/hyd
 and pass the [common test suite](https://github.com/CategoricalData/hydra/wiki/Testing).
 The five implementations are mutually self-hosting: each can load Hydra modules from a
 language-independent JSON representation and regenerate code for any of the target languages
-(see the [bootstrapping demo](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-ext/demos/bootstrapping)).
+(see the [bootstrapping demo](https://github.com/CategoricalData/hydra/tree/main/demos/bootstrapping)).
 Hydra-Haskell serves as the source of truth for the kernel, but the generated code in all five
 languages is semantically equivalent.
 
@@ -44,10 +44,10 @@ Look at other syntax models for inspiration:
   Based on Haskell language specification
 - [JSON syntax](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Types/Json.hs) - Simple data format
 
-**Extended languages** (in packages/hydra-ext):
-- [Java syntax](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-ext/src/main/haskell/Hydra/Ext/Sources/Java/Syntax.hs) - Based on standardized grammar
-- [Python syntax](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-ext/src/main/haskell/Hydra/Ext/Sources/Python/Syntax.hs) - Python 3 grammar
-- [Scala syntax](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-ext/src/main/haskell/Hydra/Ext/Sources/Scala/Meta.hs) - Scala meta model
+**Extended languages** (in per-language packages):
+- [Java syntax](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-java/src/main/haskell/Hydra/Ext/Sources/Java/Syntax.hs) - Based on standardized grammar
+- [Python syntax](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-python/src/main/haskell/Hydra/Ext/Sources/Python/Syntax.hs) - Python 3 grammar
+- [Scala syntax](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-scala/src/main/haskell/Hydra/Ext/Sources/Scala/Meta.hs) - Scala meta model
 
 Note that the Java and Python syntax models follow the best practice of using specific versions of standardized
 grammars as the source of truth.
@@ -65,7 +65,7 @@ decisions which only you can make.
 ### Where to place your syntax model
 
 - **For kernel integration**: Place in `packages/hydra-haskell/src/main/haskell/Hydra/Sources/NewLang/Syntax.hs`
-- **For extended features**: Place in `packages/hydra-ext/src/main/haskell/Hydra/Ext/Sources/NewLang/Syntax.hs`
+- **For extended features**: Place in `packages/hydra-newlang/src/main/haskell/Hydra/Ext/Sources/NewLang/Syntax.hs`
 
 The distinction: kernel languages are essential to Hydra's core functionality (like Haskell itself),
 while extended languages are additional targets for code generation.
@@ -107,8 +107,8 @@ set of language constraints, then refining them as you get to know the target la
 - [JSON constraints](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-haskell/src/main/haskell/Hydra/Sources/Json/Language.hs) - Very constrained (no functions)
 
 **Extended languages**:
-- [Java constraints](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-ext/src/main/haskell/Hydra/Ext/Sources/Java/Language.hs) - OOP language
-- [Python constraints](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-ext/src/main/haskell/Hydra/Ext/Sources/Python/Language.hs) - Dynamic language
+- [Java constraints](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-java/src/main/haskell/Hydra/Ext/Sources/Java/Language.hs) - OOP language
+- [Python constraints](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-python/src/main/haskell/Hydra/Ext/Sources/Python/Language.hs) - Dynamic language
 
 It is preferable to use the DSL, as that allows the language constraints to be propagated into each Hydra
 implementation through code generation.
@@ -116,7 +116,7 @@ implementation through code generation.
 **Note**: It is conventional in Hydra to define a list of reserved words for the target language in the same module as
 the language constraints.
 See for example the `reservedWordsDef` element in the [Java
-constraints](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-ext/src/main/haskell/Hydra/Ext/Sources/Java/Language.hs),
+constraints](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-java/src/main/haskell/Hydra/Ext/Sources/Java/Language.hs),
 or `reservedWords` in the
 [Haskell constraints](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-haskell/src/main/haskell/Hydra/Sources/Haskell/Language.hs).
 
@@ -149,13 +149,13 @@ writeHaskell "src/gen-main/haskell" mainModules [newLangSyntaxModule, newLangLan
 ### For extended languages
 
 Create sources in:
-- `packages/hydra-ext/src/main/haskell/Hydra/Ext/Sources/NewLang/Syntax.hs`
-- `packages/hydra-ext/src/main/haskell/Hydra/Ext/Sources/NewLang/Language.hs`
+- `packages/hydra-newlang/src/main/haskell/Hydra/Ext/Sources/NewLang/Syntax.hs`
+- `packages/hydra-newlang/src/main/haskell/Hydra/Ext/Sources/NewLang/Language.hs`
 
-Add them to the appropriate registry in packages/hydra-ext, then generate:
+Add them to the appropriate registry in heads/haskell, then generate:
 
 ```haskell
--- In packages/hydra-ext REPL or script
+-- In heads/haskell REPL or script
 import Hydra.Ext.Generation
 let universeModules = kernelModules ++ hydraExtModules
 writeHaskell "src/gen-main/haskell" universeModules [newLangSyntaxModule, newLangLanguageModule]
@@ -184,12 +184,12 @@ Currently, the Hydra kernel and also the language coders are written in Haskell.
 - [Haskell coder](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-haskell/src/main/haskell/Hydra/Sources/Haskell/Coder.hs) - ~600 lines, very close to Hydra Core
 - [JSON coder](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-haskell/src/main/haskell/Hydra/Sources/Json/Coder.hs) - Data format coder
 
-**Extended language coders** (in packages/hydra-ext/src/main/haskell/Hydra/Ext):
-- [Java coder](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-ext/src/main/haskell/Hydra/Ext/Java/Coder.hs) - ~1500 lines, OOP patterns
-- [Python coder](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-ext/src/main/haskell/Hydra/Ext/Python/Coder.hs) - Dynamic typing
+**Extended language coders** (generated in dist/haskell/hydra-misc/):
+- [Java coder](https://github.com/CategoricalData/hydra/blob/main/dist/haskell/hydra-misc/src/main/haskell/Hydra/Ext/Java/Coder.hs) - ~1500 lines, OOP patterns
+- [Python coder](https://github.com/CategoricalData/hydra/blob/main/dist/haskell/hydra-misc/src/main/haskell/Hydra/Ext/Python/Coder.hs) - Dynamic typing
 
 Note that there are also many coders for [other
-languages](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-ext/src/main/haskell/Hydra/Ext)
+languages](https://github.com/CategoricalData/hydra/tree/main/dist/haskell/hydra-misc/src/main/haskell/Hydra/Ext)
 in which we do not have full Hydra implementations (Avro, Protobuf, GraphQL, etc.).
 
 ### Purpose
@@ -210,7 +210,7 @@ Writing such a coder is one of the most challenging development tasks in Hydra,
 and this simple guide will not attempt to break it down into a step-by-step recipe. However, some notes:
 
 * The top-level structure of these coders conforms to a standard API; see how coders are registered in
-  [Hydra/Ext/Generation.hs](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-ext/src/main/haskell/Hydra/Ext/Generation.hs).
+  [Hydra/Ext/Generation.hs](https://github.com/CategoricalData/hydra/blob/main/heads/haskell/src/main/haskell/Hydra/Ext/Generation.hs).
 * The coder only needs to be unidirectional; for programming language coders,
   we are usually not interested in mapping native programs in the target language back into Hydra Core.
 * There will usually be a helper object, e.g. called "namespaces" or "aliases",
@@ -232,7 +232,7 @@ and this simple guide will not attempt to break it down into a step-by-step reci
 
 - **For kernel languages**: `packages/hydra-haskell/src/main/haskell/Hydra/Sources/NewLang/Coder.hs` (written in DSL,
   will be code-generated)
-- **For extended languages**: `packages/hydra-ext/src/main/haskell/Hydra/Ext/NewLang/Coder.hs` (written in native
+- **For extended languages**: `dist/haskell/hydra-misc/src/main/haskell/Hydra/Ext/NewLang/Coder.hs` (generated from DSL sources in
   Haskell)
 
 ## Step 5: Create the serializer
@@ -251,9 +251,9 @@ module here.
 - [Haskell SerDe](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-haskell/src/main/haskell/Hydra/Sources/Haskell/Serde.hs) - Written in DSL
 - [JSON SerDe](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-haskell/src/main/haskell/Hydra/Sources/Json/Serde.hs) - Simple format
 
-**Extended languages** (in packages/hydra-ext/src/main/haskell/Hydra/Ext):
-- [Java SerDe](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-ext/src/main/haskell/Hydra/Ext/Java/Serde.hs) - Handles complex syntax
-- [Python SerDe](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-ext/src/main/haskell/Hydra/Ext/Python/Serde.hs) - Indentation-based syntax
+**Extended languages** (generated in dist/haskell/hydra-misc/):
+- [Java SerDe](https://github.com/CategoricalData/hydra/blob/main/dist/haskell/hydra-misc/src/main/haskell/Hydra/Ext/Java/Serde.hs) - Handles complex syntax
+- [Python SerDe](https://github.com/CategoricalData/hydra/blob/main/dist/haskell/hydra-misc/src/main/haskell/Hydra/Ext/Python/Serde.hs) - Indentation-based syntax
 
 Note that while "SerDe" stands for "serializer and deserializer",
 you will only need the former; we have no need to map *from* expressions in the target language, as noted above.
@@ -277,7 +277,7 @@ writeNewLang = generateSources moduleToNewLang newLangLanguage doExpand doHoistC
 ```
 
 **For extended languages**, add to
-[Hydra/Ext/Generation.hs](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-ext/src/main/haskell/Hydra/Ext/Generation.hs):
+[Hydra/Ext/Generation.hs](https://github.com/CategoricalData/hydra/blob/main/heads/haskell/src/main/haskell/Hydra/Ext/Generation.hs):
 
 ```haskell
 writeNewLang :: FilePath -> [Module] -> [Module] -> IO ()
@@ -290,7 +290,7 @@ typical settings.
 
 See existing examples:
 - `writeHaskell` in [Hydra/Generation.hs](https://github.com/CategoricalData/hydra/blob/main/heads/haskell/src/main/haskell/Hydra/Generation.hs)
-- `writeJava` and `writePython` in [Hydra/Ext/Generation.hs](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-ext/src/main/haskell/Hydra/Ext/Generation.hs)
+- `writeJava` and `writePython` in [Hydra/Ext/Generation.hs](https://github.com/CategoricalData/hydra/blob/main/heads/haskell/src/main/haskell/Hydra/Ext/Generation.hs)
 
 ### Generate native sources
 
@@ -299,7 +299,7 @@ Start by creating a new top-level directory for your implementation: `packages/h
 Using the `writeNewLang` function you just registered:
 
 ```haskell
--- In packages/hydra-ext REPL (or packages/hydra-haskell for kernel languages)
+-- In heads/haskell REPL
 import Hydra.Ext.Generation
 let universeModules = kernelModules ++ hydraExtModules
 writeNewLang "../dist/newlang/hydra-kernel/src/main/newlang" universeModules mainModules

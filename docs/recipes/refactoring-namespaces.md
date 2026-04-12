@@ -230,11 +230,11 @@ Renaming a namespace requires updating all of these, plus any code that imports 
     stack test
     ```
 
-### Phase 3: Update packages/hydra-ext References
+### Phase 3: Update extension package references
 
 1. **Update source module imports**
    ```bash
-   grep -rln 'import.*Hydra\.Json[^.]' packages/hydra-ext/src/main/haskell/
+   grep -rln 'import.*Hydra\.Json[^.]' packages/hydra-pg/src/main/haskell/ packages/hydra-rdf/src/main/haskell/ packages/hydra-misc/src/main/haskell/
    ```
 
    Update each file to use the new namespace.
@@ -252,9 +252,9 @@ Renaming a namespace requires updating all of these, plus any code that imports 
 ### Phase 4: Regenerate Python Implementation
 
 1. **Run the Python sync script**
-   From the packages/hydra-ext directory:
+   From the heads/haskell directory:
    ```bash
-   cd packages/hydra-ext
+   cd heads/haskell
    ./bin/sync-python.sh --quick
    ```
 
@@ -366,11 +366,11 @@ When renaming, these become `hydra.decode.json.model.value`. Look for these patt
 - [ ] packages/hydra-haskell tests pass (`stack test`)
 - [ ] JSON kernel regenerated (`./bin/update-json-kernel.sh`)
 - [ ] JSON kernel verified (`./bin/verify-json-kernel.sh`)
-- [ ] packages/hydra-ext builds (`stack build` in packages/hydra-ext)
-- [ ] Python regenerated (`./bin/sync-python.sh` in packages/hydra-ext)
+- [ ] Extension packages build (`stack build` in packages/hydra-pg, hydra-rdf, hydra-misc)
+- [ ] Python regenerated (`./bin/sync-python.sh` in heads/haskell)
 - [ ] Orphan Python files cleaned up (old `.py` files)
 - [ ] Python tests pass (or at least don't regress)
-- [ ] Java regenerated (`./bin/sync-java.sh` in packages/hydra-ext)
+- [ ] Java regenerated (`./bin/sync-java.sh` in heads/haskell)
 
 ## Files Typically Affected
 
@@ -393,9 +393,9 @@ In a namespace rename from `hydra.foo` to `hydra.foo.bar`:
 - `dist/haskell/hydra-kernel/src/main/haskell/Hydra/Testing.hs` (type imports)
 - `dist/haskell/hydra-kernel/src/test/haskell/Hydra/Test/Foo/*.hs` (generated test files)
 
-**packages/hydra-ext:**
-- `packages/hydra-ext/src/main/haskell/Hydra/Ext/*/Coder.hs` (various coders)
-- `src/gen-main/haskell/Hydra/Ext/*/*.hs` (generated files)
+**Extension packages (packages/hydra-pg, hydra-rdf, hydra-misc):**
+- `packages/hydra-*/src/main/haskell/Hydra/Ext/*/Coder.hs` (various coders)
+- `dist/haskell/hydra-*/src/main/haskell/Hydra/Ext/*/*.hs` (generated files)
 
 **heads/python:**
 - `heads/python/src/main/python/hydra/foo.py` → `heads/python/src/main/python/hydra/foo/bar.py`

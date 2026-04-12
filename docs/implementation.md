@@ -73,7 +73,7 @@ The implementation follows a layered architecture:
 ┌──────────────────────────────────────────────────────────────┐
 │         Coders (Cross-Language Transformations)              │
 │  Transform Hydra modules between language implementations    │
-│  Location: packages/hydra-ext/src/main/haskell/Hydra/Ext/│
+│  Location: heads/haskell/src/main/haskell/Hydra/Ext/     │
 │  Enable: Write in Java, compile to Python (or vice versa)    │
 └──────────────────────────────────────────────────────────────┘
 ```
@@ -301,8 +301,8 @@ heads/haskell/src/main/haskell/Hydra/Dsl/         # Hand-written base DSLs
 heads/haskell/src/main/haskell/Hydra/Dsl/Meta/     # Hand-written meta DSL wrappers
 heads/haskell/src/main/haskell/Hydra/Dsl/Meta/Lib/ # Library DSLs (13 files)
 dist/haskell/hydra-kernel/src/main/haskell/Hydra/Dsl/      # Generated DSLs (from hydra.dsls)
-packages/hydra-ext/src/main/haskell/Hydra/Ext/Dsl/          # Extension DSLs (hand-written helpers)
-packages/hydra-ext/src/gen-main/haskell/Hydra/Dsl/Ext/      # Generated extension DSLs
+heads/haskell/src/main/haskell/Hydra/Ext/                    # Extension generation and sources
+dist/haskell/hydra-misc/src/main/haskell/Hydra/Ext/          # Generated extension modules
 ```
 
 **See also:** [DSL guide](dsl-guide.md) - Comprehensive guide with examples and operator reference
@@ -838,7 +838,7 @@ to write Hydra code in their preferred language and compile it to any other supp
 ### Coder locations
 
 ```
-packages/hydra-ext/src/main/haskell/Hydra/Ext/
+dist/haskell/hydra-misc/src/main/haskell/Hydra/Ext/
 ├── Java/           # Full OOP with generics
 ├── Python/         # Dynamic with dataclasses
 ├── Cpp/            # Systems language with templates
@@ -1254,7 +1254,7 @@ stack build
 #### Step 5: Regenerate
 
 ```bash
-stack run hydra-ext:exe:hydra-ext-debug
+stack run hydra:exe:hydra-ext-debug
 # Cleanly generates all files including new Either support
 ```
 
@@ -1306,7 +1306,7 @@ See the
 [Extending Hydra Core recipe](https://github.com/CategoricalData/hydra/blob/main/docs/recipes/extending-hydra-core.md).
 
 **Target languages**: Add support for new programming languages by implementing a coder (term/type encoding),
-serializer (AST to text), and language constraint definitions in `packages/hydra-ext/src/main/haskell/Hydra/Ext/`.
+serializer (AST to text), and language constraint definitions in the appropriate package under `packages/`.
 
 **Standard libraries**: Create new library modules by defining types in `Sources/Kernel/Types/`,
 implementing native functions in `Lib/`, registering primitives, and creating DSL wrappers.
@@ -1355,7 +1355,7 @@ implementing native functions in `Lib/`, registering primitives, and creating DS
 
 ### Code generators
 
-[`packages/hydra-ext/src/main/haskell/Hydra/Ext/`](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-ext/src/main/haskell/Hydra/Ext)
+[`dist/haskell/hydra-misc/src/main/haskell/Hydra/Ext/`](https://github.com/CategoricalData/hydra/tree/main/dist/haskell/hydra-misc/src/main/haskell/Hydra/Ext)
 ```
 ├── Java/               # Java coder
 ├── Python/             # Python coder
@@ -1408,7 +1408,7 @@ see [Hydra release process](https://github.com/CategoricalData/hydra/wiki/Releas
 |--------|---------|
 | `sync-all.sh` | **Full sync.** Run all sync scripts in order (Haskell -> Ext -> Java -> Python). Supports `--quick`. |
 | `verify-release.sh` | Cross-implementation pre-release verification |
-| `update-javadoc.sh` | Regenerate JavaDoc HTML for `hydra-java` and `hydra-ext` |
+| `update-javadoc.sh` | Regenerate JavaDoc HTML for `hydra-java` |
 
 ### Haskell (`heads/haskell/`)
 
@@ -1426,9 +1426,9 @@ Shell script wrappers live in `heads/haskell/bin/`. Executables without shell wr
 | `update-haskell-eval-lib` | Regenerate Haskell eval lib modules (executable only, called by `sync-haskell.sh`) |
 | `update-haskell-sources` | Regenerate Haskell encoder/decoder source modules (executable only, called by `sync-haskell.sh`) |
 
-### Ext, Java, and Python (`packages/hydra-ext/`)
+### Ext, Java, and Python (`heads/haskell/`)
 
-Shell script wrappers live in `packages/hydra-ext/bin/`. Executables without shell wrappers are run via `stack exec <name>`.
+Shell script wrappers live in `heads/haskell/bin/`. Executables without shell wrappers are run via `stack exec <name>`.
 
 | Script / Executable | Purpose |
 |---------------------|---------|

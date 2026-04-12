@@ -6,7 +6,7 @@ Hydra validation logic in Haskell, Java, and Python.
 ## Quick start
 
 ```bash
-cd hydra-ext/demos/validatepg
+cd demos/validatepg
 ./bin/run.sh
 ```
 
@@ -58,8 +58,8 @@ See the generated files in `/tmp/hydra-validatepg-*` for the expected JSON forma
 ## Directory structure
 
 ```
-hydra-ext/
-  demos/validatepg/
+demos/
+  validatepg/
     README.md                                   # This file
     bin/run.sh                                  # Orchestrator script
   src/main/
@@ -82,8 +82,8 @@ worksAt and founded edges) along with the graphs listed above.
 To generate data separately:
 
 ```bash
-./gradlew :hydra-ext:jar :hydra-java:jar
-java -cp "hydra-java/build/libs/*.jar:hydra-ext/build/libs/*.jar" \
+./gradlew :hydra-java:jar
+java -cp "hydra-java/build/libs/*.jar" \
   hydra.demos.validatepg.GenerateData /path/to/output
 ```
 
@@ -92,4 +92,4 @@ java -cp "hydra-java/build/libs/*.jar:hydra-ext/build/libs/*.jar" \
 - Java 11+
 - Stack (for the Haskell driver)
 - Python 3.12+
-- Generated ext demo modules (run `hydra-ext/bin/sync-python.sh` if needed)
+- Generated ext demo modules (run `heads/haskell/bin/sync-python.sh` if needed)

@@ -35,7 +35,7 @@ set -euo pipefail
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 HYDRA_ROOT="$( cd "$SCRIPT_DIR/.." && pwd )"
 HYDRA_HASKELL_DIR="$HYDRA_ROOT/heads/haskell"
-HYDRA_EXT_DIR="$HYDRA_ROOT/packages/hydra-ext"
+HYDRA_EXT_DIR="$HYDRA_ROOT/heads/haskell"
 
 source "$HYDRA_ROOT/bin/lib/common.sh"
 

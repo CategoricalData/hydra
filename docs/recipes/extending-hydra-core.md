@@ -623,7 +623,7 @@ update their language definitions and regenerate code.
 
 #### 11.5.1: Update Python Language Definition
 
-**File:** `packages/hydra-ext/src/main/haskell/Hydra/Ext/Sources/Python/Language.hs`
+**File:** `packages/hydra-python/src/main/haskell/Hydra/Ext/Sources/Python/Language.hs`
 
 Add the new term variant to the supported features:
 
@@ -653,11 +653,11 @@ Add the type variant if you added a new type constructor:
 
 #### 11.5.2: Regenerate Python Code
 
-From `packages/hydra-ext`:
+From `heads/haskell`:
 
 ```bash
-cd packages/hydra-ext
-stack runghc debug/WritePython.hs
+cd heads/haskell
+./bin/sync-python.sh
 ```
 
 Or use the REPL:
@@ -913,12 +913,12 @@ stack test
 
 ### Language Support Files (Optional)
 
-- [ ] `packages/hydra-ext/src/main/haskell/Hydra/Ext/Sources/Python/Language.hs`
+- [ ] `packages/hydra-python/src/main/haskell/Hydra/Ext/Sources/Python/Language.hs`
   - [ ] Add to `termVariants` list
   - [ ] Add to `typeVariants` list (if applicable)
 
 - [ ] Regenerate Python code
-  - [ ] Run `writePython` from packages/hydra-ext
+  - [ ] Run `./bin/sync-python.sh` from heads/haskell
   - [ ] Verify `dist/python/hydra-kernel/src/main/python/hydra/core.py`
   - [ ] Verify `dist/python/hydra-kernel/src/main/python/hydra/meta.py`
   - [ ] Verify `dist/python/hydra-kernel/src/main/python/hydra/util.py`

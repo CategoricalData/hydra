@@ -8,7 +8,7 @@ Non-conforming data is also generated to demonstrate that the shapes catch const
 ## Quick start
 
 ```bash
-cd hydra-ext/demos/shacl
+cd demos/shacl
 ./bin/run.sh
 ```
 
@@ -129,18 +129,20 @@ so Java and Python drivers are feasible. To make the demo fully translingual:
 ## Directory structure
 
 ```
-hydra-ext/
-  demos/shacl/
+demos/
+  shacl/
     README.md                                   # This file
     bin/run.sh                                  # Orchestrator script
   src/main/
     haskell/Hydra/Ext/Demos/Shacl/
       Demo.hs                                   # Haskell driver
       ShaclRdf.hs                               # ShapesGraph -> RDF triples serializer
+packages/hydra-rdf/
   src/main/
     haskell/Hydra/Ext/Sources/Shacl/
       Coder.hs                                  # SHACL coder (DSL source)
-  src/gen-main/
+dist/haskell/hydra-rdf/
+  src/main/
     haskell/Hydra/Ext/Shacl/
       Coder.hs                                  # SHACL coder (generated)
 ```

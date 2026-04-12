@@ -46,7 +46,7 @@ The simplest way to synchronize everything (Haskell, Ext, Java, Python, Scala, a
 To synchronize only Python:
 
 ```bash
-cd packages/hydra-ext
+cd heads/haskell
 ./bin/sync-python.sh           # or --quick to skip tests
 ```
 
@@ -68,8 +68,8 @@ If you prefer to run steps individually, or need to regenerate only specific par
 ### Step 1: Build the bootstrap executable
 
 ```bash
-cd packages/hydra-ext
-stack build hydra-ext:exe:bootstrap-from-json
+cd heads/haskell
+stack build hydra-haskell:exe:bootstrap-from-json
 ```
 
 ### Step 2: Generate all Python artifacts
@@ -105,11 +105,11 @@ git add heads/python/src/main/python dist/python/hydra-kernel/src/main/python di
 For interactive generation, use:
 
 ```bash
-cd packages/hydra-ext
-stack ghci hydra-ext:lib hydra:hydra-test
+cd heads/haskell
+stack ghci hydra-haskell:lib hydra:hydra-test
 ```
 
-This loads both hydra-ext (for `writePython`) and hydra-test (for `testModules`).
+This loads both hydra-haskell (for `writePython`) and hydra-test (for `testModules`).
 
 Key module lists available:
 - `kernelModules` - Core Hydra kernel

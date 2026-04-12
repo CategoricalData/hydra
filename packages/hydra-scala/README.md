@@ -32,7 +32,8 @@ sbt console
 To regenerate the Scala code from the Haskell source of truth:
 
 ```bash
-# From the hydra-ext directory
+# From the heads/haskell directory
+cd ../../heads/haskell
 ./bin/sync-scala.sh          # Full sync (build, generate, post-process, compile)
 ./bin/sync-scala.sh --quick  # Skip Scala compilation
 ```

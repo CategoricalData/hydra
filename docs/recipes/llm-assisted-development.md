@@ -96,17 +96,17 @@ which shows how to:
 
 **Source code:**
 
-- **[GenPG Demo directory](https://github.com/CategoricalData/hydra/tree/main/hydra-ext/src/main/haskell/Hydra/Ext/Demos/GenPG)** -
+- **[GenPG Demo directory](https://github.com/CategoricalData/hydra/tree/main/demos/src/main/haskell/Hydra/Ext/Demos/GenPG)** -
   Complete implementation of the property graph generation demo
-  - [Demo.hs](https://github.com/CategoricalData/hydra/blob/main/hydra-ext/src/main/haskell/Hydra/Ext/Demos/GenPG/Demo.hs) -
+  - [Demo.hs](https://github.com/CategoricalData/hydra/blob/main/demos/src/main/haskell/Hydra/Ext/Demos/GenPG/Demo.hs) -
     Main entry point for running the demo
-  - [ExampleGraphSchema.hs](https://github.com/CategoricalData/hydra/blob/main/hydra-ext/src/main/haskell/Hydra/Ext/Demos/GenPG/ExampleGraphSchema.hs) -
+  - [ExampleGraphSchema.hs](https://github.com/CategoricalData/hydra/blob/main/demos/src/main/haskell/Hydra/Ext/Demos/GenPG/ExampleGraphSchema.hs) -
     Property graph schema definition
-  - [ExampleDatabaseSchema.hs](https://github.com/CategoricalData/hydra/blob/main/hydra-ext/src/main/haskell/Hydra/Ext/Demos/GenPG/ExampleDatabaseSchema.hs) -
+  - [ExampleDatabaseSchema.hs](https://github.com/CategoricalData/hydra/blob/main/demos/src/main/haskell/Hydra/Ext/Demos/GenPG/ExampleDatabaseSchema.hs) -
     Tabular source schema
-  - [ExampleMapping.hs](https://github.com/CategoricalData/hydra/blob/main/hydra-ext/src/main/haskell/Hydra/Ext/Demos/GenPG/ExampleMapping.hs) -
+  - [ExampleMapping.hs](https://github.com/CategoricalData/hydra/blob/main/demos/src/main/haskell/Hydra/Ext/Demos/GenPG/ExampleMapping.hs) -
     Mappings from tables to graph
-  - [Transform.hs](https://github.com/CategoricalData/hydra/blob/main/hydra-ext/src/main/haskell/Hydra/Ext/Demos/GenPG/Transform.hs) -
+  - [Transform.hs](https://github.com/CategoricalData/hydra/blob/main/demos/src/main/haskell/Hydra/Ext/Demos/GenPG/Transform.hs) -
     Data transformation logic
 
 ### See also

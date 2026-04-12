@@ -122,7 +122,7 @@ Hydra-Python uses the **src/main vs src/gen-main** separation pattern
   - `hydra/coders.py`, `hydra/compute.py` - Type adapters and computational abstractions
   - `hydra/reduction.py`, `hydra/rewriting.py`, `hydra/hoisting.py` - Term transformations
   - `hydra/inference.py`, `hydra/checking.py` - Type inference and checking
-  - Generated from Haskell DSL sources using the Python coder in hydra-ext
+  - Generated from Haskell DSL sources using the Python coder in packages/hydra-python
 
 - **`src/gen-test/python/`** - Generated test suite
   - `hydra/test/` - Common tests ensuring parity with Haskell, Java, Scala, and Lisp
@@ -138,7 +138,7 @@ for more information on how this works.
 The recommended way to regenerate all Python code is to use the sync script:
 
 ```bash
-cd ../hydra-ext
+cd ../../heads/haskell
 ./bin/sync-python.sh
 ```
 
@@ -148,10 +148,10 @@ This will:
 3. Generate the generation tests
 4. Run all tests
 
-For manual generation, enter GHCi from hydra-ext:
+For manual generation, enter GHCi from heads/haskell:
 
 ```bash
-cd ../hydra-ext && stack ghci
+cd ../../heads/haskell && stack ghci
 ```
 
 And run the following commands in the GHC REPL:

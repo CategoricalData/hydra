@@ -382,7 +382,7 @@ dist/haskell/hydra-kernel/src/test/haskell/
 The same test modules can be generated for other languages:
 
 ```haskell
--- From hydra-ext package
+-- From packages/hydra-haskell
 import Hydra.Sources.All
 import Hydra.Ext.Generation
 
