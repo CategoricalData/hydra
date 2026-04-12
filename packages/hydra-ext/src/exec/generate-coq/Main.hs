@@ -6,7 +6,7 @@ import Hydra.Ext.Coq.Generate (writeCoqProject)
 
 main :: IO ()
 main = do
-  let outputDir = "../hydra-coq/src/gen-main/coq"
+  let outputDir = "../../dist/coq/hydra-kernel/src/main/coq"
   putStrLn "Generating Coq (.v) files from Hydra kernel modules..."
   writeCoqProject outputDir
   n <- writeCoq outputDir kernelModules kernelModules

@@ -13,6 +13,7 @@ sourceSets {
         java {
             srcDirs += file("$projectDir/../../heads/java/src/main/java")
             srcDirs += file("$projectDir/../../dist/java/hydra-kernel/src/main/java")
+            srcDirs += file("$projectDir/../../dist/java/hydra-ext/src/main/java")
         }
     }
     test {

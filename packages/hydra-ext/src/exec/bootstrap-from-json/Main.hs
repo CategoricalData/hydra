@@ -10,7 +10,7 @@
 -- JSON sources:
 --   dist/json/hydra-kernel/src/main/json/  — kernel, eval lib, and other modules
 --   dist/json/hydra-kernel/src/test/json/  — test modules
---   hydra-ext/src/gen-main/json/      — ext coder modules (Java/Python coders)
+--   hydra-ext/../../dist/json/hydra-ext/src/main/json/      — ext coder modules (Java/Python coders)
 --
 -- Usage:
 --   bootstrap-from-json --target <haskell|java|python|clojure|scheme|common-lisp|emacs-lisp> [OPTIONS]
@@ -44,7 +44,6 @@ import qualified Hydra.Sources.Test.TestSuite as TestSuite
 import Control.Exception (catch, IOException)
 import Control.Monad (when)
 import Data.List (isPrefixOf, partition)
-import Data.Maybe (isNothing)
 import Data.Time.Clock (getCurrentTime, diffUTCTime, UTCTime)
 import System.Directory (listDirectory, doesFileExist)
 import System.Environment (getArgs)
@@ -181,16 +180,13 @@ main = do
         "emacs-lisp"  -> "../../dist/emacs-lisp/hydra-kernel"
         _             -> "/tmp/hydra-bootstrapping-demo/haskell-to-" ++ target
   let outBase = maybe defaultOutput id (optOutput opts)
-  let usingDefault = isNothing (optOutput opts)
-  let genMainDir = if usingDefault then "src/main/" else "src/gen-main/"
-  let genTestDir = if usingDefault then "src/test/" else "src/gen-test/"
-  let outMain = outBase FP.</> (genMainDir ++ target)
-  let outTest = outBase FP.</> (genTestDir ++ target)
+  let outMain = outBase FP.</> ("src/main/" ++ target)
+  let outTest = outBase FP.</> ("src/test/" ++ target)
 
   -- JSON directories (relative to hydra-ext working directory)
   let kernelJsonDir = maybe "../../dist/json/hydra-kernel/src/main/json" id (optJsonDir opts)
   let testJsonDir   = "../../dist/json/hydra-kernel/src/test/json"
-  let extJsonDir    = maybe "src/gen-main/json" id (optExtJsonDir opts)
+  let extJsonDir    = maybe "../../dist/json/hydra-ext/src/main/json" id (optExtJsonDir opts)
 
   let targetCap = case target of
         "haskell"     -> "Haskell"

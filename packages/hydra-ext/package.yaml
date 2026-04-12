@@ -28,7 +28,7 @@ dependencies: # copied from ../hydra-haskell/package.yaml
 library:
   source-dirs:
     - src/main/haskell
-    - src/gen-main/haskell
+    - ../../dist/haskell/hydra-ext/src/main/haskell
     - ../../heads/haskell/src/main/haskell
     - ../hydra-coq/src/main/haskell
     - ../hydra-haskell/src/main/haskell
