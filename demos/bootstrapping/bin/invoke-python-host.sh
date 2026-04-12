@@ -32,7 +32,7 @@ fi
 echo "Python: $($PYTHON --version 2>&1)"
 echo ""
 
-PYTHONPATH="$HYDRA_PYTHON_DIR/src/main/python:$HYDRA_PYTHON_DIR/src/gen-main/python"
+PYTHONPATH="$HYDRA_PYTHON_DIR/src/main/python:$HYDRA_PYTHON_DIR/src/main/python"
 export PYTHONPATH
 
 # Run the Python bootstrap (its output includes detailed timing and file counts)

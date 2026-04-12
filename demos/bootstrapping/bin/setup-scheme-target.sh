@@ -13,7 +13,7 @@ fi
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 HYDRA_ROOT="$( cd "$SCRIPT_DIR/../../.." && pwd )"
-HYDRA_SCHEME_DIR="$HYDRA_ROOT/packages/hydra-lisp/hydra-scheme"
+HYDRA_SCHEME_DIR="$HYDRA_ROOT/heads/lisp/scheme"
 
 # Clean and create output directory
 echo "Preparing output directory: $OUTPUT_DIR"
@@ -30,8 +30,8 @@ cp -r "$HYDRA_SCHEME_DIR/src/main/scheme/hydra" "$OUTPUT_DIR/src/main/scheme/"
 # The src/main maps.scm and sets.scm use Guile-specific vhash which requires
 # (ice-9 vlist). For standalone targets, replace with the portable gen-main versions.
 echo "  Replacing vhash-based maps/sets with portable alist versions..."
-cp "$HYDRA_SCHEME_DIR/src/gen-main/scheme/hydra/lib/maps.scm" "$OUTPUT_DIR/src/main/scheme/hydra/lib/maps.scm"
-cp "$HYDRA_SCHEME_DIR/src/gen-main/scheme/hydra/lib/sets.scm" "$OUTPUT_DIR/src/main/scheme/hydra/lib/sets.scm"
+cp "$HYDRA_SCHEME_DIR/src/main/scheme/hydra/lib/maps.scm" "$OUTPUT_DIR/src/main/scheme/hydra/lib/maps.scm"
+cp "$HYDRA_SCHEME_DIR/src/main/scheme/hydra/lib/sets.scm" "$OUTPUT_DIR/src/main/scheme/hydra/lib/sets.scm"
 # Copy bundled SRFI implementations (e.g., SRFI-151 for bitwise ops)
 if [ -d "$HYDRA_SCHEME_DIR/src/main/scheme/srfi" ]; then
     cp -r "$HYDRA_SCHEME_DIR/src/main/scheme/srfi" "$OUTPUT_DIR/src/main/scheme/"

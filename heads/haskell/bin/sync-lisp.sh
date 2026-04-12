@@ -87,7 +87,7 @@ TOTAL_STEPS=3
 
 step 1 $TOTAL_STEPS "Building generate-lisp executable"
 echo ""
-stack build hydra-ext:exe:generate-lisp
+stack build hydra:exe:generate-lisp
 
 step 2 $TOTAL_STEPS "Generating Lisp code"
 echo ""

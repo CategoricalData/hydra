@@ -66,8 +66,8 @@ done
 # Generation.java imports hydra.ext.{java,python,haskell}.{coder,language} which
 # are generated ext modules. Copy all ext from baseline to ensure they're available.
 echo "  Copying ext modules from baseline..."
-JAVA_GEN="$OUTPUT_DIR/src/gen-main/java"
-JAVA_BASELINE="$HYDRA_JAVA_DIR/src/gen-main/java"
+JAVA_GEN="$OUTPUT_DIR/src/main/java"
+JAVA_BASELINE="$HYDRA_ROOT/dist/java/hydra-kernel/src/main/java"
 if [ -d "$JAVA_BASELINE/hydra/ext" ]; then
     mkdir -p "$JAVA_GEN/hydra"
     rm -rf "$JAVA_GEN/hydra/ext"

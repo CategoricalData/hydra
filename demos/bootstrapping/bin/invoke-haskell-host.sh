@@ -14,7 +14,7 @@ set -eo pipefail
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 HYDRA_ROOT="$( cd "$SCRIPT_DIR/../../.." && pwd )"
-HYDRA_EXT_DIR="$HYDRA_ROOT/packages/hydra-ext"
+HYDRA_EXT_DIR="$HYDRA_ROOT/heads/haskell"
 
 # Parse --target and --output so we can compute the haskell-to-{target} subdirectory.
 # All other flags are passed through unchanged.

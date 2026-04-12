@@ -13,7 +13,7 @@ fi
 
 # Create namespace package __init__.py files in generated directories.
 echo "Creating namespace package __init__.py files..."
-for gen_dir in "$OUTPUT_DIR/src/gen-main/python" "$OUTPUT_DIR/src/gen-test/python"; do
+for gen_dir in "$OUTPUT_DIR/src/main/python" "$OUTPUT_DIR/src/test/python"; do
     if [ -d "$gen_dir" ]; then
         find "$gen_dir" -type d -not -name "__pycache__" -not -path "*/__pycache__/*" | while read dir; do
             if [ "$dir" = "$gen_dir" ]; then continue; fi
@@ -28,7 +28,7 @@ done
 # Patch test_graph.py to use test_env (real graph with primitives) instead of emptyGraph.
 # TODO: Replace this with hydra.test.environment module.
 echo "Patching test_graph.py..."
-TESTGRAPH="$OUTPUT_DIR/src/gen-test/python/hydra/test/test_graph.py"
+TESTGRAPH="$OUTPUT_DIR/src/test/python/hydra/test/test_graph.py"
 if [ -f "$TESTGRAPH" ]; then
     sed -i '' '/^test_graph = /d' "$TESTGRAPH"
     sed -i '' '/^test_context = /d' "$TESTGRAPH"

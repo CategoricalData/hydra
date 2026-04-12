@@ -64,7 +64,7 @@ TOTAL_STEPS=4
 
 step 1 $TOTAL_STEPS "Building executable"
 echo ""
-stack build hydra-ext:exe:bootstrap-from-json
+stack build hydra:exe:bootstrap-from-json
 
 step 2 $TOTAL_STEPS "Generating Haskell modules and tests from JSON"
 echo ""

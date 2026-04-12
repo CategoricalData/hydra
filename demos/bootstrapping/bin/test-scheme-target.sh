@@ -17,11 +17,11 @@ HYDRA_ROOT="$( cd "$SCRIPT_DIR/../../.." && pwd )"
 # Patch test_graph.scm to build a full graph with primitives and schema types
 # instead of using the empty graph. Same patching that sync-lisp.sh applies.
 echo "Patching test_graph.scm..."
-SCHEME_TESTGRAPH="$OUTPUT_DIR/src/gen-test/scheme/hydra/test/test_graph.scm"
+SCHEME_TESTGRAPH="$OUTPUT_DIR/src/test/scheme/hydra/test/test_graph.scm"
 if [ -f "$SCHEME_TESTGRAPH" ]; then
     # Copy annotation bindings alongside the generated test graph
     cp "$OUTPUT_DIR/src/test/scheme/hydra/annotation_bindings.scm" \
-       "$OUTPUT_DIR/src/gen-test/scheme/hydra/test/annotation_bindings.scm" 2>/dev/null || true
+       "$OUTPUT_DIR/src/test/scheme/hydra/test/annotation_bindings.scm" 2>/dev/null || true
 
     # Add required imports for building graph with primitives
     sed -i '' 's|(import (scheme base) (hydra core) (hydra lexical) (hydra lib maps) (hydra module) (hydra test test_terms) (hydra test test_types))|(import (scheme base) (hydra core) (hydra context) (hydra graph) (hydra lexical) (hydra lib libraries) (hydra lib maps) (hydra module) (hydra rewriting) (hydra json bootstrap) (hydra test test_terms) (hydra test test_types))|' "$SCHEME_TESTGRAPH"
@@ -66,9 +66,9 @@ cd "$OUTPUT_DIR"
 
 # Detect Scheme implementation
 if command -v guile > /dev/null 2>&1; then
-    SCHEME_CMD="guile -L src/gen-main/scheme -L src/gen-test/scheme -L src/main/scheme -s run-tests.scm"
+    SCHEME_CMD="guile -L src/main/scheme -L src/test/scheme -L src/main/scheme -s run-tests.scm"
 elif command -v chibi-scheme > /dev/null 2>&1; then
-    SCHEME_CMD="chibi-scheme -I src/gen-main/scheme -I src/gen-test/scheme -I src/main/scheme run-tests.scm"
+    SCHEME_CMD="chibi-scheme -I src/main/scheme -I src/test/scheme -I src/main/scheme run-tests.scm"
 else
     echo "Error: No Scheme implementation found. Install guile or chibi-scheme."
     exit 1
