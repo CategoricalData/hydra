@@ -90,12 +90,12 @@ if [ -f "$TESTGRAPH" ]; then
     sed_inplace 's/return hydra.Lexical.emptyContext();/return hydra.test.TestEnv.testContext();/' "$TESTGRAPH"
 fi
 
-step 3 $TOTAL_STEPS "Generating ext Java modules into dist/java/hydra-misc from JSON"
+step 3 $TOTAL_STEPS "Generating ext Java modules into dist/java/hydra-ext from JSON"
 echo ""
-stack exec bootstrap-from-json -- --target java --output "../../dist/java/hydra-misc" --include-coders --ext-only $RTS_FLAGS
+stack exec bootstrap-from-json -- --target java --output "../../dist/java/hydra-ext" --include-coders --ext-only $RTS_FLAGS
 
 # Patch Lisp Coder.java for PartialVisitor type inference issue in encodeTermDefinition
-LISPCODER="../../dist/java/hydra-misc/src/main/java/hydra/ext/lisp/Coder.java"
+LISPCODER="../../dist/java/hydra-ext/src/main/java/hydra/ext/lisp/Coder.java"
 if [ -f "$LISPCODER" ]; then
     echo "  Post-processing: patching Lisp Coder.java..."
     sed_inplace 's/Either<hydra.ext.lisp.syntax.TopLevelFormWithComments, hydra.ext.lisp.syntax.TopLevelFormWithComments> otherwise/Either<T2, hydra.ext.lisp.syntax.TopLevelFormWithComments> otherwise/' "$LISPCODER"

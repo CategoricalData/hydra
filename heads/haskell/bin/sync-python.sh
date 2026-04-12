@@ -100,9 +100,9 @@ def __getattr__(name):
 PYEOF
 fi
 
-step 3 $TOTAL_STEPS "Generating ext Python modules into dist/python/hydra-misc from JSON"
+step 3 $TOTAL_STEPS "Generating ext Python modules into dist/python/hydra-ext from JSON"
 echo ""
-stack exec bootstrap-from-json -- --target python --output "../../dist/python/hydra-misc" --include-coders --ext-only $RTS_FLAGS
+stack exec bootstrap-from-json -- --target python --output "../../dist/python/hydra-ext" --include-coders --ext-only $RTS_FLAGS
 
 if [ "$QUICK_MODE" = false ]; then
     step 4 $TOTAL_STEPS "Running Python tests"

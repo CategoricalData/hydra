@@ -26,8 +26,8 @@ The GenPG demo:
 ## Directory structure
 
 ```
-hydra-ext/
-├── demos/genpg/
+demos/
+├── genpg/
 │   ├── README.md                 # This file
 │   ├── bin/run.sh                   # Run GraphSON demo (all hosts)
 │   ├── bin/run-rdf.sh               # Run RDF/SHACL demo (all hosts)
@@ -37,7 +37,7 @@ hydra-ext/
 │   │   ├── sources/sales/        # CSV input files (sales example)
 │   │   └── sources/health/       # CSV input files (health example)
 │   └── output/                   # GraphSON output (shared by all modes)
-├── src/
+├── src/                          # Demo sources (demos/src/)
 │   ├── main/
 │   │   ├── haskell/Hydra/Ext/Demos/GenPG/
 │   │   │   ├── Demo.hs           # Haskell GraphSON driver
@@ -89,7 +89,7 @@ hydra-ext/
 ### Haskell mode
 
 ```bash
-cd hydra-ext
+cd heads/haskell
 stack ghci
 ```
 
@@ -110,12 +110,12 @@ uv venv --python 3.12
 source .venv/bin/activate
 ```
 
-Then run the demo from `hydra-ext`:
+Then run the demo from the repo root:
 
 ```bash
-cd ../hydra-ext
-.venv/bin/python src/main/python/hydra/demos/genpg/demo.py sales   # processes sales data
-.venv/bin/python src/main/python/hydra/demos/genpg/demo.py health  # processes health data
+cd ../..
+.venv/bin/python demos/src/main/python/hydra/demos/genpg/demo.py sales   # processes sales data
+.venv/bin/python demos/src/main/python/hydra/demos/genpg/demo.py health  # processes health data
 ```
 
 The `sales` argument is the default, so it can be omitted.
@@ -125,14 +125,13 @@ The `sales` argument is the default, so it can be omitted.
 Java 11+ is required. From the repository root:
 
 ```bash
-./gradlew :hydra-ext:compileJava
+./gradlew compileJava
 ```
 
 Then run the demo:
 
 ```bash
-cd hydra-ext
-java -cp $(../gradlew :hydra-ext:printClasspath -q 2>/dev/null || echo "build/classes/java/main") \
+java -cp $(./gradlew printClasspath -q 2>/dev/null || echo "build/classes/java/main") \
   hydra.demos.genpg.Demo sales    # processes sales data
   hydra.demos.genpg.Demo health   # processes health data
 ```
@@ -146,7 +145,6 @@ All three modes read from `demos/genpg/data/sources/` and write to `demos/genpg/
 Run all three hosts and compare outputs:
 
 ```bash
-cd hydra-ext
 demos/genpg/bin/run.sh sales
 ```
 
@@ -164,7 +162,6 @@ The RDF output path converts the same property graph to:
 #### All hosts via run script
 
 ```bash
-cd hydra-ext
 demos/genpg/bin/run-rdf.sh sales
 ```
 
@@ -184,7 +181,7 @@ Python:
 python3 src/main/python/hydra/demos/genpg/rdf.py sales
 ```
 
-Java (after `./gradlew :hydra-ext:compileJava`):
+Java (after `./gradlew compileJava`):
 ```bash
 java -cp <classpath> hydra.demos.genpg.RdfDemo sales
 ```
@@ -226,10 +223,10 @@ Feel free to start with the provided `health` dataset, or insert your own from t
 
 ### Step 1: Generate the LLM prompt
 
-While in the hydra-ext directory, generate a prompt based on the reference and target datasets:
+From the repo root, generate a prompt based on the reference and target datasets:
 
 ```bash
-python3 src/main/python/hydra/demos/genpg/generate_prompt.py demos/genpg/data/sources/health > demos/genpg/data/prompt.txt
+python3 demos/src/main/python/hydra/demos/genpg/generate_prompt.py demos/genpg/data/sources/health > demos/genpg/data/prompt.txt
 ```
 
 ### Step 2: Use the LLM to generate schemas
@@ -238,7 +235,7 @@ Take the generated prompt and:
 1. Copy it into your favorite LLM chat interface
    ([ChatGPT](https://chatgpt.com), [Claude](https://claude.ai), etc.; Claude was used in the video)
 2. Copy the LLM-generated files to their expected locations under
-   `src/main/haskell/Hydra/Ext/Demos/GenPG/Examples/Health`
+   `demos/src/main/haskell/Hydra/Ext/Demos/GenPG/Examples/Health`
 
 Just overwrite the files which are already checked in at that location.
 Feel free to use any file system integration available in your tool to avoid manual copy-and-paste.
@@ -277,7 +274,7 @@ Results are written to `demos/genpg/output/`.
 If modifying the PG model definitions, regenerate the Haskell encoder sources:
 
 ```bash
-cd hydra-ext
+cd heads/haskell
 stack ghci
 ```
 
@@ -294,7 +291,7 @@ writeEncoderSourceHaskell "src/gen-main/haskell" (kernelModules <> hydraExtModul
 If Hydra kernel code has changed (e.g., `hydra.json.writer`, `hydra.lib.*`), regenerate the Python kernel modules:
 
 ```bash
-cd hydra-ext
+cd heads/haskell
 bin/sync-python.sh
 ```
 
@@ -303,8 +300,8 @@ bin/sync-python.sh
 Generate all Python modules for the GenPG demo:
 
 ```bash
-cd hydra-ext
-stack ghci < demos/genpg/bin/generate-python.ghci
+cd heads/haskell
+stack ghci < ../../demos/genpg/bin/generate-python.ghci
 ```
 
 Or interactively in GHCI:
@@ -313,7 +310,7 @@ import Hydra.Ext.Demos.GenPG.GeneratePython
 generatePythonModules
 ```
 
-This generates to `hydra-ext/src/gen-main/python`:
+This generates to `dist/python/hydra-pg/src/main/python` (and related directories):
 - `hydra.pg.model` - Property graph data model
 - `hydra.pg.mapping` - Mapping definitions
 - `hydra.pg.graphson.*` - GraphSON coder, syntax, utilities
@@ -327,8 +324,8 @@ This generates to `hydra-ext/src/gen-main/python`:
 Generate all Java modules for the GenPG demo:
 
 ```bash
-cd hydra-ext
-stack ghci --ghci-options='+RTS -K256M -A32M -RTS' < demos/genpg/bin/generate-java.ghci
+cd heads/haskell
+stack ghci --ghci-options='+RTS -K256M -A32M -RTS' < ../../demos/genpg/bin/generate-java.ghci
 ```
 
 Or interactively in GHCI:
@@ -337,7 +334,7 @@ import Hydra.Ext.Demos.GenPG.GenerateJava
 generateJavaModules
 ```
 
-This generates to `hydra-ext/src/gen-main/java`:
+This generates to `dist/java/hydra-pg/src/main/java` (and related directories):
 - `hydra.pg.mapping` - Mapping definitions
 - `hydra.pg.graphson.*` - GraphSON coder, syntax, utilities
 - `hydra.encode.pg.*`, `hydra.decode.pg.*` - Encoders/decoders
@@ -363,8 +360,8 @@ Steps 1-4 are shared between GraphSON and RDF output. Only the encoding and seri
 ### Python path resolution
 
 The Python demo combines modules from two locations:
-1. **hydra-ext** (`src/gen-main/python`): PG models, transform logic, example schemas
-2. **hydra-python** (`src/gen-main/python`, `src/main/python`): Hydra kernel types and DSL
+1. **dist/python/hydra-pg** (`src/main/python`): PG models, transform logic, example schemas
+2. **packages/hydra-python** (`src/main/python`), **dist/python/hydra-kernel** (`src/main/python`): Hydra kernel types and DSL
 
 Both use namespace packages (`pkgutil.extend_path`) to allow `hydra.*` to span directories.
 
@@ -399,8 +396,8 @@ open the desktop interface and load the GraphSON files when you create a new gra
 You can re-load them with Gremlin commands like:
 
 ```gremlin
-g.io("/path/to/hydra/hydra-ext/demos/genpg/output/sales.jsonl").read().iterate()
-g.io("/path/to/hydra/hydra-ext/demos/genpg/output/health.jsonl").read().iterate()
+g.io("/path/to/hydra/demos/genpg/output/sales.jsonl").read().iterate()
+g.io("/path/to/hydra/demos/genpg/output/health.jsonl").read().iterate()
 ```
 
 Run a Gremlin query like `g.E()`, and off you go.

@@ -19,7 +19,7 @@ For Java and Python DSL usage, see:
 
 **This guide is for:**
 - Writing Hydra kernel code (extending the type system or adding primitives)
-- Creating language coders (e.g., in packages/hydra-pg, packages/hydra-rdf, packages/hydra-misc)
+- Creating language coders (e.g., in packages/hydra-pg, packages/hydra-rdf, packages/hydra-ext)
 - Defining custom data models
 
 ## Table of contents

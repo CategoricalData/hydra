@@ -56,7 +56,7 @@ let allMods = mainModules ++ testModules
 writeJava "../../dist/java/hydra-kernel/src/test/java" allMods testModules
 
 -- Generate only ext modules, using main + ext as universe
-writeJava "../../dist/java/hydra-misc/src/main/java" (mainModules ++ extModules) extModules
+writeJava "../../dist/java/hydra-ext/src/main/java" (mainModules ++ extModules) extModules
 ```
 
 If the universe is missing a transitive dependency, generation may fail with
@@ -167,7 +167,7 @@ JSON module files are exported to two locations:
 |-----------|----------|
 | `dist/json/hydra-kernel/src/main/json/` | Kernel and main modules |
 | `dist/json/hydra-kernel/src/test/json/` | Test modules |
-| `dist/json/hydra-misc/src/main/json/` | Ext modules (coders, demos, domain models) |
+| `dist/json/hydra-ext/src/main/json/` | Ext modules (coders, demos, domain models) |
 
 Each directory contains a `manifest.json` that lists available module groups:
 
@@ -181,7 +181,7 @@ Each directory contains a `manifest.json` that lists available module groups:
 | `dslModules` | DSL generator output modules |
 | `testModules` | Test suite modules |
 
-**Ext manifest** (`dist/json/hydra-misc/src/main/json/manifest.json`):
+**Ext manifest** (`dist/json/hydra-ext/src/main/json/manifest.json`):
 
 | Field | Contents |
 |-------|----------|
@@ -205,7 +205,7 @@ python -m hydra.bootstrap \
 python -m hydra.bootstrap \
   --target python \
   --json-dir ../dist/json/hydra-kernel/src/main/json \
-  --ext-json-dir ../dist/json/hydra-misc/src/main/json \
+  --ext-json-dir ../dist/json/hydra-ext/src/main/json \
   --include-coders \
   --output /tmp/hydra-gen
 

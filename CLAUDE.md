@@ -89,7 +89,7 @@ hydra/
     hydra-lisp/       # Lisp coder DSL sources + per-dialect generated output
     hydra-pg/         # Property graph model DSL sources
     hydra-rdf/        # RDF/SHACL model DSL sources
-    hydra-misc/       # Miscellaneous extension DSL sources
+    hydra-ext/       # Miscellaneous extension DSL sources
     hydra-coq/        # Coq output
     hydra-javascript/  # JavaScript coder DSL sources
   heads/              # Per-host build infrastructure: primitives, DSL runtime, generation

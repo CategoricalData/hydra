@@ -234,7 +234,7 @@ Renaming a namespace requires updating all of these, plus any code that imports 
 
 1. **Update source module imports**
    ```bash
-   grep -rln 'import.*Hydra\.Json[^.]' packages/hydra-pg/src/main/haskell/ packages/hydra-rdf/src/main/haskell/ packages/hydra-misc/src/main/haskell/
+   grep -rln 'import.*Hydra\.Json[^.]' packages/hydra-pg/src/main/haskell/ packages/hydra-rdf/src/main/haskell/ packages/hydra-ext/src/main/haskell/
    ```
 
    Update each file to use the new namespace.
@@ -366,7 +366,7 @@ When renaming, these become `hydra.decode.json.model.value`. Look for these patt
 - [ ] packages/hydra-haskell tests pass (`stack test`)
 - [ ] JSON kernel regenerated (`./bin/update-json-kernel.sh`)
 - [ ] JSON kernel verified (`./bin/verify-json-kernel.sh`)
-- [ ] Extension packages build (`stack build` in packages/hydra-pg, hydra-rdf, hydra-misc)
+- [ ] Extension packages build (`stack build` in packages/hydra-pg, hydra-rdf, hydra-ext)
 - [ ] Python regenerated (`./bin/sync-python.sh` in heads/haskell)
 - [ ] Orphan Python files cleaned up (old `.py` files)
 - [ ] Python tests pass (or at least don't regress)
@@ -393,7 +393,7 @@ In a namespace rename from `hydra.foo` to `hydra.foo.bar`:
 - `dist/haskell/hydra-kernel/src/main/haskell/Hydra/Testing.hs` (type imports)
 - `dist/haskell/hydra-kernel/src/test/haskell/Hydra/Test/Foo/*.hs` (generated test files)
 
-**Extension packages (packages/hydra-pg, hydra-rdf, hydra-misc):**
+**Extension packages (packages/hydra-pg, hydra-rdf, hydra-ext):**
 - `packages/hydra-*/src/main/haskell/Hydra/Ext/*/Coder.hs` (various coders)
 - `dist/haskell/hydra-*/src/main/haskell/Hydra/Ext/*/*.hs` (generated files)
 

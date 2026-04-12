@@ -13,8 +13,8 @@ standard GraphQL engine can resolve queries against the JSON directly.
 ## Directory structure
 
 ```
-hydra-ext/
-├── demos/graphql-json/
+demos/
+├── graphql-json/
 │   ├── README.md                          # This file
 │   ├── query.py                           # Python script that runs GraphQL queries
 │   ├── queries/                           # GraphQL query files
@@ -36,7 +36,7 @@ The JSON data lives in the existing kernel at
 
 ## Prerequisites
 
-- GHCi with hydra-ext loaded (for schema generation)
+- GHCi with hydra-haskell loaded (for schema generation)
 - Python 3.12+ with `graphql-core` installed
 
 ```bash
@@ -47,10 +47,10 @@ pip install graphql-core
 
 ### Step 1: Generate the GraphQL schema
 
-From the `hydra-ext/` directory, start GHCi and run the demo:
+From the `heads/haskell/` directory, start GHCi and run the demo:
 
 ```bash
-stack ghci hydra-ext:lib --ghci-options='+RTS -K256M -A32M -RTS'
+stack ghci hydra-haskell:lib --ghci-options='+RTS -K256M -A32M -RTS'
 ```
 
 ```haskell
@@ -62,7 +62,7 @@ This writes the schema files to `demos/graphql-json/output/hydra/`.
 
 ### Step 2: Run GraphQL queries
 
-From the `hydra-ext/` directory:
+From the repo root:
 
 ```bash
 python3 demos/graphql-json/query.py

@@ -184,12 +184,12 @@ Currently, the Hydra kernel and also the language coders are written in Haskell.
 - [Haskell coder](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-haskell/src/main/haskell/Hydra/Sources/Haskell/Coder.hs) - ~600 lines, very close to Hydra Core
 - [JSON coder](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-haskell/src/main/haskell/Hydra/Sources/Json/Coder.hs) - Data format coder
 
-**Extended language coders** (generated in dist/haskell/hydra-misc/):
-- [Java coder](https://github.com/CategoricalData/hydra/blob/main/dist/haskell/hydra-misc/src/main/haskell/Hydra/Ext/Java/Coder.hs) - ~1500 lines, OOP patterns
-- [Python coder](https://github.com/CategoricalData/hydra/blob/main/dist/haskell/hydra-misc/src/main/haskell/Hydra/Ext/Python/Coder.hs) - Dynamic typing
+**Extended language coders** (generated in dist/haskell/hydra-ext/):
+- [Java coder](https://github.com/CategoricalData/hydra/blob/main/dist/haskell/hydra-ext/src/main/haskell/Hydra/Ext/Java/Coder.hs) - ~1500 lines, OOP patterns
+- [Python coder](https://github.com/CategoricalData/hydra/blob/main/dist/haskell/hydra-ext/src/main/haskell/Hydra/Ext/Python/Coder.hs) - Dynamic typing
 
 Note that there are also many coders for [other
-languages](https://github.com/CategoricalData/hydra/tree/main/dist/haskell/hydra-misc/src/main/haskell/Hydra/Ext)
+languages](https://github.com/CategoricalData/hydra/tree/main/dist/haskell/hydra-ext/src/main/haskell/Hydra/Ext)
 in which we do not have full Hydra implementations (Avro, Protobuf, GraphQL, etc.).
 
 ### Purpose
@@ -232,7 +232,7 @@ and this simple guide will not attempt to break it down into a step-by-step reci
 
 - **For kernel languages**: `packages/hydra-haskell/src/main/haskell/Hydra/Sources/NewLang/Coder.hs` (written in DSL,
   will be code-generated)
-- **For extended languages**: `dist/haskell/hydra-misc/src/main/haskell/Hydra/Ext/NewLang/Coder.hs` (generated from DSL sources in
+- **For extended languages**: `dist/haskell/hydra-ext/src/main/haskell/Hydra/Ext/NewLang/Coder.hs` (generated from DSL sources in
   Haskell)
 
 ## Step 5: Create the serializer
@@ -251,9 +251,9 @@ module here.
 - [Haskell SerDe](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-haskell/src/main/haskell/Hydra/Sources/Haskell/Serde.hs) - Written in DSL
 - [JSON SerDe](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-haskell/src/main/haskell/Hydra/Sources/Json/Serde.hs) - Simple format
 
-**Extended languages** (generated in dist/haskell/hydra-misc/):
-- [Java SerDe](https://github.com/CategoricalData/hydra/blob/main/dist/haskell/hydra-misc/src/main/haskell/Hydra/Ext/Java/Serde.hs) - Handles complex syntax
-- [Python SerDe](https://github.com/CategoricalData/hydra/blob/main/dist/haskell/hydra-misc/src/main/haskell/Hydra/Ext/Python/Serde.hs) - Indentation-based syntax
+**Extended languages** (generated in dist/haskell/hydra-ext/):
+- [Java SerDe](https://github.com/CategoricalData/hydra/blob/main/dist/haskell/hydra-ext/src/main/haskell/Hydra/Ext/Java/Serde.hs) - Handles complex syntax
+- [Python SerDe](https://github.com/CategoricalData/hydra/blob/main/dist/haskell/hydra-ext/src/main/haskell/Hydra/Ext/Python/Serde.hs) - Indentation-based syntax
 
 Note that while "SerDe" stands for "serializer and deserializer",
 you will only need the former; we have no need to map *from* expressions in the target language, as noted above.
