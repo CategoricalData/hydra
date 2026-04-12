@@ -15,8 +15,8 @@ set -euo pipefail
 #   --help               Show this help message
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-HYDRA_EXT_ROOT="$(cd "$SCRIPT_DIR/../../.." && pwd)"
-REPO_ROOT="$(cd "$HYDRA_EXT_ROOT/.." && pwd)"
+REPO_ROOT="$(cd "$SCRIPT_DIR/../../.." && pwd)"
+HYDRA_EXT_ROOT="$REPO_ROOT/packages/hydra-ext"
 
 source "$SCRIPT_DIR/../../bin/common.sh"
 
@@ -49,7 +49,7 @@ DATASET_CAP="$(echo "$DATASET" | awk '{print toupper(substr($0,1,1)) substr($0,2
 IFS=',' read -ra ENABLED_HOSTS <<< "$HOSTS"
 
 # Output paths
-OUTPUT_DIR="$HYDRA_EXT_ROOT/demos/genpg/output/$DATASET"
+OUTPUT_DIR="$REPO_ROOT/demos/genpg/output/$DATASET"
 
 # Create run directory
 RUN_DIR=$(create_run_dir /tmp/hydra-genpg-rdf "$TAG")
@@ -65,7 +65,7 @@ cd "$REPO_ROOT"
 JAVA_CP="$(build_java_classpath commons-text commons-csv commons-lang3)"
 
 echo "Dataset: $DATASET"
-echo "Input:   $HYDRA_EXT_ROOT/demos/genpg/data/sources/$DATASET/"
+echo "Input:   $REPO_ROOT/demos/genpg/data/sources/$DATASET/"
 echo "Output:  ${DATASET}-shapes.nt, ${DATASET}-data.nt, ${DATASET}-invalid.nt"
 
 # ============================================================================
@@ -89,7 +89,7 @@ run_host() {
 import qualified System.CPUTime as T
 import qualified System.IO as IO
 t0 <- T.getCPUTime
-generateRdf \"$HYDRA_EXT_ROOT/demos/genpg/data/sources/$DATASET\" ${DATASET}TableSchemas ${DATASET}Graph ${DATASET}GraphSchema \"$out_prefix\"
+generateRdf \"$REPO_ROOT/demos/genpg/data/sources/$DATASET\" ${DATASET}TableSchemas ${DATASET}Graph ${DATASET}GraphSchema \"$out_prefix\"
 t1 <- T.getCPUTime
 IO.hPutStrLn IO.stderr (\"HYDRA_TIME_MS=\" Prelude.++ show (fromIntegral (t1 - t0) / 1e9 :: Double))
 :quit"

@@ -13,8 +13,8 @@ set -euo pipefail
 #   --help               Show this help message
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-HYDRA_EXT_ROOT="$(cd "$SCRIPT_DIR/../../.." && pwd)"
-REPO_ROOT="$(cd "$HYDRA_EXT_ROOT/.." && pwd)"
+REPO_ROOT="$(cd "$SCRIPT_DIR/../../.." && pwd)"
+HYDRA_EXT_ROOT="$REPO_ROOT/packages/hydra-ext"
 
 source "$SCRIPT_DIR/../../bin/common.sh"
 
@@ -47,7 +47,7 @@ DATASET_CAP="$(echo "$DATASET" | awk '{print toupper(substr($0,1,1)) substr($0,2
 IFS=',' read -ra ENABLED_HOSTS <<< "$HOSTS"
 
 # All three drivers write to the same output path
-OUTPUT_JSONL="$HYDRA_EXT_ROOT/demos/genpg/output/$DATASET.jsonl"
+OUTPUT_JSONL="$REPO_ROOT/demos/genpg/output/$DATASET.jsonl"
 
 # Create run directory
 RUN_DIR=$(create_run_dir /tmp/hydra-genpg "$TAG")
@@ -63,7 +63,7 @@ cd "$REPO_ROOT"
 JAVA_CP="$(build_java_classpath commons-text commons-csv commons-lang3)"
 
 echo "Dataset: $DATASET"
-echo "Input:   $HYDRA_EXT_ROOT/demos/genpg/data/sources/$DATASET/"
+echo "Input:   $REPO_ROOT/demos/genpg/data/sources/$DATASET/"
 
 # ============================================================================
 # Run hosts
