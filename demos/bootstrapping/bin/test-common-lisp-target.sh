@@ -14,7 +14,7 @@ fi
 # Patch test_graph.lisp to build a full graph with primitives and schema types
 # instead of using the empty graph. Same patching that sync-lisp.sh applies.
 echo "Patching test_graph.lisp..."
-CL_TESTGRAPH="$OUTPUT_DIR/src/gen-test/common-lisp/hydra/test/test_graph.lisp"
+CL_TESTGRAPH="$OUTPUT_DIR/src/test/common-lisp/hydra/test/test_graph.lisp"
 if [ -f "$CL_TESTGRAPH" ]; then
     sed -i '' '/^(cl:defvar hydra_test_test_graph_test_context hydra_lexical_empty_context)/d' "$CL_TESTGRAPH"
     sed -i '' '/^(cl:defvar hydra_test_test_graph_test_graph hydra_lexical_empty_graph)/d' "$CL_TESTGRAPH"

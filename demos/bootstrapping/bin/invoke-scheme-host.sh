@@ -44,15 +44,15 @@ echo ""
 # Ensure coder modules are available
 CODER_CHECK=""
 case "$TARGET" in
-    haskell)                               CODER_CHECK="$HYDRA_SCHEME_DIR/src/gen-main/scheme/hydra/ext/haskell/coder.scm" ;;
-    java)                                  CODER_CHECK="$HYDRA_SCHEME_DIR/src/gen-main/scheme/hydra/ext/java/coder.scm" ;;
-    python)                                CODER_CHECK="$HYDRA_SCHEME_DIR/src/gen-main/scheme/hydra/ext/python/coder.scm" ;;
-    clojure|scheme|common-lisp|emacs-lisp) CODER_CHECK="$HYDRA_SCHEME_DIR/src/gen-main/scheme/hydra/ext/lisp/coder.scm" ;;
+    haskell)                               CODER_CHECK="$HYDRA_ROOT/dist/scheme/hydra-kernel/src/main/scheme/hydra/ext/haskell/coder.scm" ;;
+    java)                                  CODER_CHECK="$HYDRA_ROOT/dist/scheme/hydra-kernel/src/main/scheme/hydra/ext/java/coder.scm" ;;
+    python)                                CODER_CHECK="$HYDRA_ROOT/dist/scheme/hydra-kernel/src/main/scheme/hydra/ext/python/coder.scm" ;;
+    clojure|scheme|common-lisp|emacs-lisp) CODER_CHECK="$HYDRA_ROOT/dist/scheme/hydra-kernel/src/main/scheme/hydra/ext/lisp/coder.scm" ;;
 esac
 
 if [ -n "$CODER_CHECK" ] && [ ! -f "$CODER_CHECK" ]; then
     echo "  Coder modules not found. Generating from ext JSON..."
-    cd "$HYDRA_ROOT/packages/hydra-ext"
+    cd "$HYDRA_ROOT/heads/haskell"
     stack build bootstrap-from-json 2>&1 | grep -v "^$"
     EXT_JSON_DIR="$HYDRA_ROOT/dist/json/hydra-ext/src/main/json"
     stack exec bootstrap-from-json -- \

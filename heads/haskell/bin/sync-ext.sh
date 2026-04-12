@@ -56,10 +56,10 @@ TOTAL_STEPS=5
 step 1 $TOTAL_STEPS "Building executables"
 echo ""
 stack build \
-    hydra-ext:exe:update-ext-sources \
-    hydra-ext:exe:update-haskell-ext-main \
-    hydra-ext:exe:update-json-ext \
-    hydra-ext:exe:bootstrap-from-json
+    hydra:exe:update-ext-sources \
+    hydra:exe:update-haskell-ext-main \
+    hydra:exe:update-json-ext \
+    hydra:exe:bootstrap-from-json
 
 step 2 $TOTAL_STEPS "Generating ext encoder/decoder source modules"
 echo ""

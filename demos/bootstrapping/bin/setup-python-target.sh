@@ -52,8 +52,8 @@ done
 # Test infrastructure (e.g. test_suite_runner.py) imports ext modules.
 # Copy all ext from baseline to ensure they're available.
 echo "  Copying ext modules from baseline..."
-PY_GEN="$OUTPUT_DIR/src/gen-main/python"
-PY_BASELINE="$HYDRA_PYTHON_DIR/src/gen-main/python"
+PY_GEN="$OUTPUT_DIR/src/main/python"
+PY_BASELINE="$HYDRA_PYTHON_DIR/src/main/python"
 if [ -d "$PY_BASELINE/hydra/ext" ]; then
     mkdir -p "$PY_GEN/hydra"
     rm -rf "$PY_GEN/hydra/ext"
@@ -88,8 +88,8 @@ fi
 
 # Copy test_env.py (provides real test graph with primitives)
 echo "  Copying test_env.py..."
-PY_TEST_ENV="$HYDRA_PYTHON_DIR/src/gen-test/python/hydra/test/test_env.py"
-PY_TEST_DST="$OUTPUT_DIR/src/gen-test/python/hydra/test"
+PY_TEST_ENV="$HYDRA_PYTHON_DIR/src/test/python/hydra/test/test_env.py"
+PY_TEST_DST="$OUTPUT_DIR/src/test/python/hydra/test"
 if [ -f "$PY_TEST_ENV" ]; then
     mkdir -p "$PY_TEST_DST"
     cp "$PY_TEST_ENV" "$PY_TEST_DST/"

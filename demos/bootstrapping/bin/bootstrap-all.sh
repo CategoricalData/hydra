@@ -275,15 +275,7 @@ fi
 # ============================================================
 
 baseline_dir_for_target() {
-    case "$1" in
-        haskell)     echo "packages/hydra-haskell" ;;
-        java)        echo "packages/hydra-java" ;;
-        python)      echo "packages/hydra-python" ;;
-        clojure)     echo "packages/hydra-lisp/hydra-clojure" ;;
-        scheme)      echo "packages/hydra-lisp/hydra-scheme" ;;
-        common-lisp) echo "packages/hydra-lisp/hydra-common-lisp" ;;
-        emacs-lisp)  echo "packages/hydra-lisp/hydra-emacs-lisp" ;;
-    esac
+    echo "dist/$1/hydra-kernel"
 }
 
 ext_for_target() {
@@ -403,7 +395,7 @@ compare_output() {
     ext=$(ext_for_target "$target")
     local baseline_proj
     baseline_proj=$(baseline_dir_for_target "$target")
-    local baseline_dir="$HYDRA_ROOT/$baseline_proj/src/gen-main"
+    local baseline_dir="$HYDRA_ROOT/$baseline_proj/src/main"
 
     local total=0 identical=0 different=0 missing_in_baseline=0
     local diff_files=()
@@ -420,7 +412,7 @@ compare_output() {
             common-lisp) lang_dir="common-lisp" ;;
             emacs-lisp)  lang_dir="emacs-lisp" ;;
         esac
-        local mod_path="${rel#src/gen-main/${lang_dir}/}"
+        local mod_path="${rel#src/main/${lang_dir}/}"
         local ref="$baseline_dir/${lang_dir}/$mod_path"
 
         if [ -f "$ref" ]; then
@@ -563,7 +555,7 @@ run_tests_for_path() {
             python)
                 cd "$demo_dir"
                 if [ -d "src/gen-test" ]; then
-                    HYDRA_BENCHMARK_OUTPUT="$bench_file" pytest src/test/ src/gen-test/ 2>&1
+                    HYDRA_BENCHMARK_OUTPUT="$bench_file" pytest src/test/ src/test/ 2>&1
                 else
                     HYDRA_BENCHMARK_OUTPUT="$bench_file" pytest src/test/ 2>&1
                 fi
@@ -577,9 +569,9 @@ run_tests_for_path() {
             scheme)
                 cd "$demo_dir"
                 if command -v guile > /dev/null 2>&1; then
-                    HYDRA_BENCHMARK_OUTPUT="$bench_file" guile -L src/gen-main/scheme -L src/gen-test/scheme -L src/main/scheme -s run-tests.scm 2>&1
+                    HYDRA_BENCHMARK_OUTPUT="$bench_file" guile -L src/main/scheme -L src/test/scheme -L src/main/scheme -s run-tests.scm 2>&1
                 else
-                    HYDRA_BENCHMARK_OUTPUT="$bench_file" chibi-scheme -I src/gen-main/scheme -I src/gen-test/scheme -I src/main/scheme run-tests.scm 2>&1
+                    HYDRA_BENCHMARK_OUTPUT="$bench_file" chibi-scheme -I src/main/scheme -I src/test/scheme -I src/main/scheme run-tests.scm 2>&1
                 fi
                 test_exit=$?
                 ;;
@@ -756,7 +748,7 @@ ENDJSON
                             python)
                                 cd "$demo_dir"
                                 if [ -d "src/gen-test" ]; then
-                                    HYDRA_BENCHMARK_OUTPUT="$extra_bench" pytest src/test/ src/gen-test/ 2>&1
+                                    HYDRA_BENCHMARK_OUTPUT="$extra_bench" pytest src/test/ src/test/ 2>&1
                                 else
                                     HYDRA_BENCHMARK_OUTPUT="$extra_bench" pytest src/test/ 2>&1
                                 fi
@@ -770,9 +762,9 @@ ENDJSON
                             scheme)
                                 cd "$demo_dir"
                                 if command -v guile > /dev/null 2>&1; then
-                                    HYDRA_BENCHMARK_OUTPUT="$extra_bench" guile -L src/gen-main/scheme -L src/gen-test/scheme -L src/main/scheme -s run-tests.scm 2>&1
+                                    HYDRA_BENCHMARK_OUTPUT="$extra_bench" guile -L src/main/scheme -L src/test/scheme -L src/main/scheme -s run-tests.scm 2>&1
                                 else
-                                    HYDRA_BENCHMARK_OUTPUT="$extra_bench" chibi-scheme -I src/gen-main/scheme -I src/gen-test/scheme -I src/main/scheme run-tests.scm 2>&1
+                                    HYDRA_BENCHMARK_OUTPUT="$extra_bench" chibi-scheme -I src/main/scheme -I src/test/scheme -I src/main/scheme run-tests.scm 2>&1
                                 fi
                                 test_exit=$?
                                 ;;

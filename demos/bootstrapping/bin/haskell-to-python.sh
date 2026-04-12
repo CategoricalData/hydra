@@ -39,7 +39,7 @@ TOTAL_START=$(date +%s)
 
 # Step 1: Verify JSON modules exist
 echo "Step 1: Verifying JSON modules..."
-JSON_DIR="$HYDRA_HASKELL_DIR/src/gen-main/json"
+JSON_DIR="$HYDRA_ROOT/dist/json/hydra-kernel/src/main/json"
 JSON_COUNT=$(find "$JSON_DIR" -name "*.json" 2>/dev/null | wc -l | tr -d ' ')
 if [ "$JSON_COUNT" -eq 0 ]; then
     echo "  ERROR: No JSON files found in $JSON_DIR"

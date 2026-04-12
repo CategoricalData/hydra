@@ -14,7 +14,7 @@ fi
 # Patch testGraph.clj to build a full graph with primitives and schema types
 # instead of using the empty graph. Same patching that sync-lisp.sh applies.
 echo "Patching testGraph.clj..."
-CLJ_TESTGRAPH="$OUTPUT_DIR/src/gen-test/clojure/hydra/test/testGraph.clj"
+CLJ_TESTGRAPH="$OUTPUT_DIR/src/test/clojure/hydra/test/testGraph.clj"
 if [ -f "$CLJ_TESTGRAPH" ]; then
     # Add required imports
     sed -i '' 's|\[hydra.lexical :refer :all\]|[hydra.lexical :refer :all] [hydra.lib.libraries :refer :all] [hydra.rewriting :refer :all] [hydra.json.bootstrap :refer :all] [hydra.graph :refer :all] [hydra.context :refer :all] [hydra.annotation-bindings :refer [annotation-bindings]]|' "$CLJ_TESTGRAPH"
