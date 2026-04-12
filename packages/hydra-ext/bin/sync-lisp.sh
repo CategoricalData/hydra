@@ -116,6 +116,10 @@ dialect_dir() {
     esac
 }
 
+dialect_head_dir() {
+    echo "$HYDRA_ROOT_DIR/heads/lisp/$1"
+}
+
 # Patch Scheme test_graph.scm to build a full graph with primitives and schema types.
 # The graph must be defined AFTER test_terms and test_types (forward reference issue).
 # Copy annotation bindings alongside the generated test graph (for include)
@@ -252,14 +256,14 @@ if [ "$QUICK_MODE" = false ]; then
     echo ""
 
     for dialect in "${DIALECT_LIST[@]}"; do
-        DIR=$(dialect_dir "$dialect")
+        HEAD_DIR=$(dialect_head_dir "$dialect")
         echo "  Testing ${dialect}..."
-        if [ -f "$DIR/run-tests.sh" ]; then
-            cd "$DIR"
+        if [ -f "$HEAD_DIR/run-tests.sh" ]; then
+            cd "$HEAD_DIR"
             bash run-tests.sh
             cd "$HYDRA_EXT_DIR"
         else
-            echo "    Skipped (no run-tests.sh found in $DIR)"
+            echo "    Skipped (no run-tests.sh found in $HEAD_DIR)"
         fi
         echo ""
     done
