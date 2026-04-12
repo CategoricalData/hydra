@@ -2,7 +2,7 @@
 name = "hydra"
 version = "0.15.0"
 description = ""
-readme = "README.md"
+readme = "../../packages/hydra-python/README.md"
 authors = []
 requires-python = ">=3.12"
 dependencies = []
@@ -89,7 +89,7 @@ ignore-names = [
 "__init__.py" = ["E402", "D104"]
 
 "{src/test/python,docs,scripts,examples}/*" = ["D", "E402", "N"]
-"src/gen-main/python/*" = ["D", "E402", "N"]
+"../../packages/hydra-python/src/gen-main/python/*" = ["D", "E402", "N"]
 
 [tool.ruff.lint.pydocstyle]
 convention = "numpy"
@@ -98,15 +98,15 @@ convention = "numpy"
 typeCheckingMode = "strict"
 extraPaths = [
     "src/main/python",
-    "src/gen-main/python",
-    "src/gen-test/python"
+    "../../packages/hydra-python/src/gen-main/python",
+    "../../packages/hydra-python/src/gen-test/python"
 ]
 
 [tool.pytest.ini_options]
 pythonpath = [
     "src/main/python",
-    "src/gen-main/python",
-    "src/gen-test/python",
+    "../../packages/hydra-python/src/gen-main/python",
+    "../../packages/hydra-python/src/gen-test/python",
     "src/test/python"
 ]
 testpaths = [
@@ -124,6 +124,5 @@ build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
 packages = [
-    "src/main/python/hydra",
-    "src/gen-main/python/hydra"
+    "src/main/python/hydra"
 ]

@@ -23,19 +23,28 @@
   (error (e) (format t "Warning: Could not load cl-ppcre: ~A~%" e)))
 
 ;; Determine the base directory (hydra-common-lisp/)
-(defvar *hydra-cl-base*
+;; *hydra-cl-head* = heads/lisp/common-lisp/ (hand-written sources)
+(defvar *hydra-cl-head*
   (make-pathname :directory (butlast (pathname-directory *load-truename*) 3)
                  :defaults *load-truename*))
 
+;; *hydra-cl-pkg* = packages/hydra-lisp/hydra-common-lisp/ (generated content)
+;; This is the cwd when invoked from the shared run-tests.sh runner.
+(defvar *hydra-cl-pkg* *default-pathname-defaults*)
+
 (defun hydra-path (relative)
-  "Resolve a path relative to the hydra-common-lisp/ directory."
-  (merge-pathnames relative *hydra-cl-base*))
+  "Resolve a path relative to the package directory (generated content)."
+  (merge-pathnames relative *hydra-cl-pkg*))
+
+(defun hydra-head-path (relative)
+  "Resolve a path relative to the head directory (hand-written content)."
+  (merge-pathnames relative *hydra-cl-head*))
 
 ;; ============================================================================
 ;; 1. Load prelude (alist-based struct system)
 ;; ============================================================================
 (format t "~%Loading prelude...~%")
-(load (hydra-path "src/main/common-lisp/hydra/prelude.lisp"))
+(load (hydra-head-path "src/main/common-lisp/hydra/prelude.lisp"))
 
 ;; ============================================================================
 ;; 2. Load native primitive libraries
@@ -54,13 +63,18 @@
              "lib/maybes.lisp"
              "lib/pairs.lisp"
              "lib/regex.lisp"))
-  (load (hydra-path (concatenate 'string "src/main/common-lisp/hydra/" f))))
+  (load (hydra-head-path (concatenate 'string "src/main/common-lisp/hydra/" f))))
 
 ;; ============================================================================
 ;; 3. Load the loader + generated main modules
 ;; ============================================================================
 (format t "Loading generated main modules...~%")
-(load (hydra-path "src/main/common-lisp/hydra/loader.lisp"))
+(load (hydra-head-path "src/main/common-lisp/hydra/loader.lisp"))
+
+;; Override *hydra-gen-main-dir* to point at the package's generated content,
+;; since loader.lisp computed it relative to its own path in heads/.
+(setf *hydra-gen-main-dir*
+      (merge-pathnames "src/gen-main/common-lisp/hydra/" *hydra-cl-pkg*))
 
 ;; Set function bindings for native library defvars (e.g. hydra_lib_maps_singleton)
 ;; so they can be called in function position in generated code.
@@ -75,11 +89,11 @@
 ;; 4. Load primitive infrastructure and test runner
 ;; ============================================================================
 (format t "Loading primitive infrastructure...~%")
-(load (hydra-path "src/main/common-lisp/hydra/prims.lisp"))
-(load (hydra-path "src/main/common-lisp/hydra/lib/libraries.lisp"))
+(load (hydra-head-path "src/main/common-lisp/hydra/prims.lisp"))
+(load (hydra-head-path "src/main/common-lisp/hydra/lib/libraries.lisp"))
 
 (format t "Loading test runner...~%")
-(load (hydra-path "src/test/common-lisp/hydra/test_runner.lisp"))
+(load (hydra-head-path "src/test/common-lisp/hydra/test_runner.lisp"))
 
 ;; ============================================================================
 ;; 5. Load generated test data files in dependency order
@@ -101,7 +115,7 @@
 ;; Base test types/terms (dependencies first)
 (load-test-file "test_types.lisp")
 (load-test-file "test_terms.lisp")
-(load (hydra-path "src/test/common-lisp/hydra/annotation_bindings.lisp"))
+(load (hydra-head-path "src/test/common-lisp/hydra/annotation_bindings.lisp"))
 (load-test-file "test_graph.lisp")
 
 ;; Note: test_graph.lisp is patched by sync-lisp.sh to build a full graph
