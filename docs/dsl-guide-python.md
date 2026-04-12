@@ -13,7 +13,7 @@ For the Java DSLs, see [DSL Guide (Java)](dsl-guide-java.md).
 - Understand Hydra's core concepts: [Concepts](https://github.com/CategoricalData/hydra/wiki/Concepts)
 - Know basic Python syntax
 - Have set up Hydra-Python locally
-  (see [Hydra-Python README](https://github.com/CategoricalData/hydra/tree/main/hydra-python))
+  (see [Hydra-Python README](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-python))
 - Python 3.12+ required (for `match` statement support in generated code)
 
 ## Table of Contents
@@ -45,7 +45,7 @@ Hydra-Python provides a layered DSL system for working with Hydra types and term
 
 The Direct DSLs are suitable for casual use: constructing test fixtures, prototyping, or building types.
 The Phantom-typed and Domain-specific DSLs are designed for writing Hydra kernel source code in Python,
-mirroring the Haskell DSLs used in `hydra-haskell/src/main/haskell/Hydra/Sources/`.
+mirroring the Haskell DSLs used in `packages/hydra-haskell/src/main/haskell/Hydra/Sources/`.
 
 ## The DSL variants
 
@@ -548,7 +548,7 @@ address: Binding = define("Address",
 
 ### Complete example: hydra.core
 
-See `hydra-python/src/main/python/hydra/dsl/meta/examples/core_types.py` for a complete
+See `heads/python/src/main/python/hydra/dsl/meta/examples/core_types.py` for a complete
 implementation of all 33 `hydra.core` types using this pattern.
 
 ## Term definitions
@@ -609,7 +609,7 @@ deannotate_term = define("deannotateTerm",
 
 ### Complete example: hydra.rewriting
 
-See `hydra-python/src/main/python/hydra/dsl/meta/examples/rewriting.py` for a partial
+See `heads/python/src/main/python/hydra/dsl/meta/examples/rewriting.py` for a partial
 implementation of `hydra.rewriting` demonstrating:
 
 - Simple pattern matching (`deannotate_term`)
@@ -763,16 +763,16 @@ d2 = FrozenDict({**d, "key3": "value3"})
 
 | File | Description |
 |------|-------------|
-| `hydra-python/src/main/python/hydra/dsl/meta/phantoms.py` | Phantom-typed DSL (all operations) |
-| `hydra-python/src/main/python/hydra/dsl/meta/core.py` | Core domain DSL (field accessors) |
-| `hydra-python/src/main/python/hydra/dsl/meta/graph.py` | Graph domain DSL |
-| `hydra-python/src/main/python/hydra/dsl/meta/compute.py` | Compute domain DSL |
-| `hydra-python/src/main/python/hydra/dsl/meta/lib/sets.py` | Sets library wrapper |
-| `hydra-python/src/main/python/hydra/dsl/meta/lib/lists.py` | Lists library wrapper |
-| `hydra-python/src/main/python/hydra/dsl/meta/examples/core_types.py` | Complete hydra.core type definitions |
-| `hydra-python/src/main/python/hydra/dsl/meta/examples/rewriting.py` | Partial hydra.rewriting term definitions |
-| `hydra-python/src/main/python/hydra/dsl/types.py` | Direct Types DSL |
-| `hydra-python/src/main/python/hydra/dsl/terms.py` | Direct Terms DSL |
+| `heads/python/src/main/python/hydra/dsl/meta/phantoms.py` | Phantom-typed DSL (all operations) |
+| `heads/python/src/main/python/hydra/dsl/meta/core.py` | Core domain DSL (field accessors) |
+| `heads/python/src/main/python/hydra/dsl/meta/graph.py` | Graph domain DSL |
+| `heads/python/src/main/python/hydra/dsl/meta/compute.py` | Compute domain DSL |
+| `heads/python/src/main/python/hydra/dsl/meta/lib/sets.py` | Sets library wrapper |
+| `heads/python/src/main/python/hydra/dsl/meta/lib/lists.py` | Lists library wrapper |
+| `heads/python/src/main/python/hydra/dsl/meta/examples/core_types.py` | Complete hydra.core type definitions |
+| `heads/python/src/main/python/hydra/dsl/meta/examples/rewriting.py` | Partial hydra.rewriting term definitions |
+| `heads/python/src/main/python/hydra/dsl/types.py` | Direct Types DSL |
+| `heads/python/src/main/python/hydra/dsl/terms.py` | Direct Terms DSL |
 
 ## Related Documentation
 
@@ -780,4 +780,4 @@ d2 = FrozenDict({**d, "key3": "value3"})
 - [DSL Guide (Java)](dsl-guide-java.md) - Java DSL guide
 - [Concepts](https://github.com/CategoricalData/hydra/wiki/Concepts) - Core Hydra concepts
 - [Implementation](implementation.md) - Implementation details and architecture
-- [Hydra-Python README](https://github.com/CategoricalData/hydra/tree/main/hydra-python) - Getting started
+- [Hydra-Python README](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-python) - Getting started

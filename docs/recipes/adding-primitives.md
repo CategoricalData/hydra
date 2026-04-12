@@ -61,7 +61,7 @@ Python also requires DSL wrappers for type-safe term construction.
 
 ### 1. Implement the function
 
-Add the implementation in `/hydra-haskell/src/main/haskell/Hydra/Lib/<Library>.hs`:
+Add the implementation in `/heads/haskell/src/main/haskell/Hydra/Lib/<Library>.hs`:
 
 ```haskell
 -- In Hydra/Lib/Chars.hs
@@ -81,7 +81,7 @@ toLower = C.ord . C.toLower . C.chr
 
 ### 2. Add the name constant
 
-Add the name constant in `/hydra-haskell/src/main/haskell/Hydra/Staging/Lib/Names.hs`,
+Add the name constant in `/heads/haskell/src/main/haskell/Hydra/Staging/Lib/Names.hs`,
 in the appropriate section (alphabetically):
 
 ```haskell
@@ -94,7 +94,7 @@ in `Libraries.hs`, in DSL wrappers, and in test files.
 
 ### 3. Register the primitive
 
-Update `/hydra-haskell/src/main/haskell/Hydra/Sources/Libraries.hs`:
+Update `/heads/haskell/src/main/haskell/Hydra/Sources/Libraries.hs`:
 
 ```haskell
 -- Add import at the top
@@ -132,7 +132,7 @@ without needing a native implementation of the primitive.
 
 **Adding an eval element:**
 
-1. Create or update the Sources module in `/hydra-haskell/src/main/haskell/Hydra/Sources/Eval/Lib/<Library>.hs`:
+1. Create or update the Sources module in `/heads/haskell/src/main/haskell/Hydra/Sources/Eval/Lib/<Library>.hs`:
 
 ```haskell
 module Hydra.Sources.Eval.Lib.Eithers where
@@ -171,7 +171,7 @@ bimap_ = define "bimap" $
         (var "e")]
 ```
 
-2. Add the module to `/hydra-haskell/src/main/haskell/Hydra/Sources/Eval/Lib/All.hs`:
+2. Add the module to `/heads/haskell/src/main/haskell/Hydra/Sources/Eval/Lib/All.hs`:
 
 ```haskell
 import qualified Hydra.Sources.Eval.Lib.Eithers as EvalEithers
@@ -184,7 +184,7 @@ evalLibModules = [
 ```
 
 3. Generate the Haskell runtime code.
-   The generated module goes in `/hydra-haskell/src/gen-main/haskell/Hydra/Eval/Lib/<Library>.hs`.
+   The generated module goes in `/dist/haskell/hydra-kernel/src/main/haskell/Hydra/Eval/Lib/<Library>.hs`.
 
    **Note:** The generated eval module is a bootstrap file. If you add a new eval element,
    you may need to manually add the function to the generated file initially, then regenerate.
@@ -216,7 +216,7 @@ Follow the pattern of similar existing primitives when deciding which to use.
 
 ### 4. Create DSL wrapper
 
-Add typed wrapper in `/hydra-haskell/src/main/haskell/Hydra/Dsl/Lib/<Library>.hs`:
+Add typed wrapper in `/heads/haskell/src/main/haskell/Hydra/Dsl/Lib/<Library>.hs`:
 
 ```haskell
 -- In Hydra/Dsl/Lib/Chars.hs
@@ -243,7 +243,7 @@ toLower = primitive1 _chars_toLower
 
 ### 1. Implement the PrimitiveFunction class
 
-Create `/hydra-java/src/main/java/hydra/lib/<library>/<FunctionName>.java`:
+Create `/heads/java/src/main/java/hydra/lib/<library>/<FunctionName>.java`:
 
 ```java
 package hydra.lib.chars;
@@ -305,7 +305,7 @@ and calls `reduceTerm` on each application.
 
 ### 2. Register in Libraries
 
-Update `/hydra-java/src/main/java/hydra/lib/Libraries.java`:
+Update `/heads/java/src/main/java/hydra/lib/Libraries.java`:
 
 ```java
 // Add import
@@ -339,7 +339,7 @@ If the library's primitives method doesn't exist, you'll need to create it and a
 
 ### 1. Implement the function
 
-Add to `/hydra-python/src/main/python/hydra/lib/<library>.py`:
+Add to `/heads/python/src/main/python/hydra/lib/<library>.py`:
 
 ```python
 """Python implementations of hydra.lib.chars primitives."""
@@ -359,7 +359,7 @@ def to_lower(value: int) -> int:
 
 ### 2. Register the primitive
 
-Update `/hydra-python/src/main/python/hydra/sources/libraries.py`:
+Update `/heads/python/src/main/python/hydra/sources/libraries.py`:
 
 ```python
 def register_chars_primitives() -> dict[Name, Primitive]:
@@ -426,7 +426,7 @@ After adding primitives to all three languages:
 
 ### Haskell
 ```bash
-cd hydra-haskell
+cd heads/haskell
 stack test
 ```
 
@@ -437,7 +437,7 @@ stack test
 
 ### Python
 ```bash
-cd hydra-python
+cd packages/hydra-python
 pytest
 ```
 
@@ -445,7 +445,7 @@ pytest
 
 **All primitives must have test cases in the common test suite.**
 This ensures consistent behavior across all language implementations and prevents regressions.
-Tests are defined in `/hydra-haskell/src/main/haskell/Hydra/Sources/Test/Lib/<Library>.hs`.
+Tests are defined in `/heads/haskell/src/main/haskell/Hydra/Sources/Test/Lib/<Library>.hs`.
 
 **Adding test cases:**
 
@@ -484,14 +484,14 @@ in all implementations. Do not assume that a passing build means your tests ran 
 
 ```bash
 # Haskell: check that your test group appears in the output
-cd hydra-haskell
+cd heads/haskell
 stack test 2>&1 | grep -i '<your-primitive-name>'
 
 # Java: run tests and confirm your cases are included
 ./gradlew :hydra-java:test --tests "*TestSuiteRunner*" --info 2>&1 | grep -i '<your-primitive-name>'
 
 # Python: run tests and confirm your cases are included
-cd hydra-python
+cd packages/hydra-python
 pytest -v 2>&1 | grep -i '<your_primitive_name>'
 ```
 
@@ -564,9 +564,9 @@ When adding a new primitive function:
 ## Example: Adding a complete primitive
 
 See the `hydra.lib.chars` library (added in version 0.13.0) for a complete example spanning all three languages:
-- Haskell: [Hydra/Lib/Chars.hs](https://github.com/CategoricalData/hydra/blob/main/hydra-haskell/src/main/haskell/Hydra/Lib/Chars.hs)
-- Java: [hydra/lib/chars/](https://github.com/CategoricalData/hydra/tree/main/hydra-java/src/main/java/hydra/lib/chars)
-- Python: [hydra/lib/chars.py](https://github.com/CategoricalData/hydra/blob/main/hydra-python/src/main/python/hydra/lib/chars.py)
+- Haskell: [Hydra/Lib/Chars.hs](https://github.com/CategoricalData/hydra/blob/main/heads/haskell/src/main/haskell/Hydra/Lib/Chars.hs)
+- Java: [hydra/lib/chars/](https://github.com/CategoricalData/hydra/tree/main/heads/java/src/main/java/hydra/lib/chars)
+- Python: [hydra/lib/chars.py](https://github.com/CategoricalData/hydra/blob/main/heads/python/src/main/python/hydra/lib/chars.py)
 
 ## Further reading
 

@@ -39,7 +39,7 @@ organization rather than abstract foundations.
 Hydra is a **strongly-typed functional programming language that executes in multiple language environments**.
 By design, developers can write Hydra source code in any of the supported host languages
 (Haskell, Java, Python, Scala, Lisp) and cross-compile it to any other supported language.
-[Hydra-Haskell](https://github.com/CategoricalData/hydra/tree/main/hydra-haskell) serves as the source of truth
+[Hydra-Haskell](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-haskell) serves as the source of truth
 for the **Hydra kernel** (the core type system and transformation infrastructure), but Hydra programs themselves
 can be written and executed in Java, Python, Scala, Lisp, or any other supported implementation.
 
@@ -49,7 +49,7 @@ The implementation follows a layered architecture:
 ┌──────────────────────────────────────────────────────────────┐
 │                   Hydra Kernel (Source of Truth)             │
 │  Type system: Term, Type, Module, Graph, primitives, etc.    │
-│  Location: hydra-haskell/src/main/haskell/Hydra/Sources/     │
+│  Location: packages/hydra-haskell/src/main/haskell/Hydra/Sources/│
 │  Written using: Haskell DSLs                                 │
 └────────────────────────┬─────────────────────────────────────┘
                          │ Defines
@@ -73,7 +73,7 @@ The implementation follows a layered architecture:
 ┌──────────────────────────────────────────────────────────────┐
 │         Coders (Cross-Language Transformations)              │
 │  Transform Hydra modules between language implementations    │
-│  Location: hydra-ext/src/main/haskell/Hydra/Ext/     │
+│  Location: packages/hydra-ext/src/main/haskell/Hydra/Ext/│
 │  Enable: Write in Java, compile to Python (or vice versa)    │
 └──────────────────────────────────────────────────────────────┘
 ```
@@ -93,7 +93,7 @@ The implementation follows a layered architecture:
 
 Type modules define Hydra's core type system. They are located in:
 ```
-hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Types/
+packages/hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Types/
 ```
 
 ### Module organization
@@ -297,12 +297,12 @@ The DSL system provides multiple levels of abstraction for different use cases.
 ### DSL module locations
 
 ```
-hydra-haskell/src/main/haskell/Hydra/Dsl/         # Hand-written base DSLs
-hydra-haskell/src/main/haskell/Hydra/Dsl/Meta/     # Hand-written meta DSL wrappers
-hydra-haskell/src/main/haskell/Hydra/Dsl/Meta/Lib/ # Library DSLs (13 files)
-hydra-haskell/src/gen-main/haskell/Hydra/Dsl/      # Generated DSLs (from hydra.dsls)
-hydra-ext/src/main/haskell/Hydra/Ext/Dsl/          # Extension DSLs (hand-written helpers)
-hydra-ext/src/gen-main/haskell/Hydra/Dsl/Ext/      # Generated extension DSLs
+heads/haskell/src/main/haskell/Hydra/Dsl/         # Hand-written base DSLs
+heads/haskell/src/main/haskell/Hydra/Dsl/Meta/     # Hand-written meta DSL wrappers
+heads/haskell/src/main/haskell/Hydra/Dsl/Meta/Lib/ # Library DSLs (13 files)
+dist/haskell/hydra-kernel/src/main/haskell/Hydra/Dsl/      # Generated DSLs (from hydra.dsls)
+packages/hydra-ext/src/main/haskell/Hydra/Ext/Dsl/          # Extension DSLs (hand-written helpers)
+packages/hydra-ext/src/gen-main/haskell/Hydra/Dsl/Ext/      # Generated extension DSLs
 ```
 
 **See also:** [DSL guide](dsl-guide.md) - Comprehensive guide with examples and operator reference
@@ -371,7 +371,7 @@ produces:
 - **Union injectors** — one function per variant (unit variants produce nullary values)
 - **Wrap/unwrap** — for newtype wrappers
 
-Generated modules live in `src/gen-main/haskell/Hydra/Dsl/` (e.g., `Hydra.Dsl.Core`,
+Generated modules live in `dist/haskell/hydra-kernel/src/main/haskell/Hydra/Dsl/` (e.g., `Hydra.Dsl.Core`,
 `Hydra.Dsl.Coders`, `Hydra.Dsl.Ast`). They are also generated into Java and Python
 as part of the sync pipeline.
 
@@ -507,7 +507,7 @@ Generated Source Code (Haskell, Python, Java)
 **Self-Hosting Loop:**
 1. Write inference logic in Phantom DSL → `Sources/Kernel/Terms/Inference.hs`
 2. DSL produces Term/Type values representing functions
-3. Code generator converts to executable Haskell → `gen-main/haskell/Hydra/Inference.hs`
+3. Code generator converts to executable Haskell → `dist/haskell/hydra-kernel/src/main/haskell/Hydra/Inference.hs`
 4. Generated code can now infer types for new Hydra code (including DSL code itself!)
 
 ---
@@ -559,7 +559,7 @@ def "Primitive" $
 
 #### Level 2: Haskell Implementation
 
-Native Haskell implementations in `hydra-haskell/src/main/haskell/Hydra/Lib/`:
+Native Haskell implementations in `heads/haskell/src/main/haskell/Hydra/Lib/`:
 
 ```haskell
 -- Math.hs
@@ -655,7 +655,7 @@ Primitives defined once in Haskell generate implementations in multiple language
 
 #### Java Generation
 
-Location: `hydra-java/src/main/java/hydra/lib/`
+Location: `heads/java/src/main/java/hydra/lib/`
 
 Each primitive becomes a class extending `PrimitiveFunction`:
 
@@ -686,7 +686,7 @@ public class Add extends PrimitiveFunction {
 
 #### Python Generation
 
-Location: `hydra-python/src/main/python/hydra/lib/`
+Location: `heads/python/src/main/python/hydra/lib/`
 
 Pure Python implementations:
 
@@ -838,7 +838,7 @@ to write Hydra code in their preferred language and compile it to any other supp
 ### Coder locations
 
 ```
-hydra-ext/src/main/haskell/Hydra/Ext/
+packages/hydra-ext/src/main/haskell/Hydra/Ext/
 ├── Java/           # Full OOP with generics
 ├── Python/         # Dynamic with dataclasses
 ├── Cpp/            # Systems language with templates
@@ -887,7 +887,7 @@ moduleToCpp :: Module -> Flow Graph (M.Map FilePath String)
 
 ### Coder framework
 
-Located in `hydra-haskell/src/gen-main/haskell/Hydra/Coders.hs`:
+Located in `dist/haskell/hydra-kernel/src/main/haskell/Hydra/Coders.hs`:
 
 ```haskell
 -- Bidirectional transformation
@@ -1230,7 +1230,7 @@ stack build
 Hand-translate DSL definitions to Haskell in generated files:
 
 ```haskell
--- Manually edit: src/gen-main/haskell/Hydra/Inference.hs
+-- Manually edit: dist/haskell/hydra-kernel/src/main/haskell/Hydra/Inference.hs
 inferTypeOfEither :: InferenceContext -> Either Term Term -> Context -> Graph -> Either (InContext OtherError) InferenceResult
 inferTypeOfEither cx (Left left) context graph = do
   leftResult <- inferType cx left context graph
@@ -1268,19 +1268,21 @@ stack build
 ### Generated code structure
 
 ```
-hydra-haskell/
-├── src/main/haskell/Hydra/
-│   ├── Dsl/                    # DSL definitions (manual)
-│   ├── Sources/                # DSL-based specifications (manual)
-│   └── Lib/                    # Native implementations (manual)
-│
-└── src/gen-main/haskell/       # Generated code
-    ├── Hydra/
-    │   ├── Core.hs             # Generated Core types
-    │   ├── Variants.hs         # Generated Variants types
-    │   ├── Inference.hs        # Generated type inference
-    │   ├── Checking.hs         # Generated type checking
-    │   └── ...                 # All kernel modules
+heads/haskell/src/main/haskell/Hydra/
+├── Dsl/                    # DSL definitions (manual)
+├── Lib/                    # Native implementations (manual)
+└── ...
+
+packages/hydra-haskell/src/main/haskell/Hydra/
+└── Sources/                # DSL-based specifications (manual)
+
+dist/haskell/hydra-kernel/src/main/haskell/   # Generated code
+├── Hydra/
+│   ├── Core.hs             # Generated Core types
+│   ├── Variants.hs         # Generated Variants types
+│   ├── Inference.hs        # Generated type inference
+│   ├── Checking.hs         # Generated type checking
+│   └── ...                 # All kernel modules
 ```
 
 ---
@@ -1304,7 +1306,7 @@ See the
 [Extending Hydra Core recipe](https://github.com/CategoricalData/hydra/blob/main/docs/recipes/extending-hydra-core.md).
 
 **Target languages**: Add support for new programming languages by implementing a coder (term/type encoding),
-serializer (AST to text), and language constraint definitions in `hydra-ext/src/main/haskell/Hydra/Ext/`.
+serializer (AST to text), and language constraint definitions in `packages/hydra-ext/src/main/haskell/Hydra/Ext/`.
 
 **Standard libraries**: Create new library modules by defining types in `Sources/Kernel/Types/`,
 implementing native functions in `Lib/`, registering primitives, and creating DSL wrappers.
@@ -1315,7 +1317,7 @@ implementing native functions in `Lib/`, registering primitives, and creating DS
 
 ### Type modules
 
-[`hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Types/`](https://github.com/CategoricalData/hydra/tree/main/hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Types)
+[`packages/hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Types/`](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Types)
 ```
 ├── Core.hs              # hydra.core - foundation
 ├── Variants.hs          # hydra.variants - metadata
@@ -1327,7 +1329,7 @@ implementing native functions in `Lib/`, registering primitives, and creating DS
 
 ### DSL system
 
-[`hydra-haskell/src/main/haskell/Hydra/Dsl/`](https://github.com/CategoricalData/hydra/tree/main/hydra-haskell/src/main/haskell/Hydra/Dsl)
+[`heads/haskell/src/main/haskell/Hydra/Dsl/`](https://github.com/CategoricalData/hydra/tree/main/heads/haskell/src/main/haskell/Hydra/Dsl)
 ```
 ├── Terms.hs             # Untyped term DSL
 ├── Types.hs             # Untyped type DSL
@@ -1343,8 +1345,8 @@ implementing native functions in `Lib/`, registering primitives, and creating DS
 
 ### Primitive functions
 
-[`hydra-haskell/src/main/haskell/Hydra/Lib/`](https://github.com/CategoricalData/hydra/tree/main/hydra-haskell/src/main/haskell/Hydra/Lib) — Native implementations
-[`hydra-haskell/src/main/haskell/Hydra/Sources/Libraries.hs`](https://github.com/CategoricalData/hydra/blob/main/hydra-haskell/src/main/haskell/Hydra/Sources/Libraries.hs) — Primitive registration
+[`heads/haskell/src/main/haskell/Hydra/Lib/`](https://github.com/CategoricalData/hydra/tree/main/heads/haskell/src/main/haskell/Hydra/Lib) — Native implementations
+[`packages/hydra-haskell/src/main/haskell/Hydra/Sources/Libraries.hs`](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-haskell/src/main/haskell/Hydra/Sources/Libraries.hs) — Primitive registration
 ```
 ├── Math.hs
 ├── Lists.hs
@@ -1353,7 +1355,7 @@ implementing native functions in `Lib/`, registering primitives, and creating DS
 
 ### Code generators
 
-[`hydra-ext/src/main/haskell/Hydra/Ext/`](https://github.com/CategoricalData/hydra/tree/main/hydra-ext/src/main/haskell/Hydra/Ext)
+[`packages/hydra-ext/src/main/haskell/Hydra/Ext/`](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-ext/src/main/haskell/Hydra/Ext)
 ```
 ├── Java/               # Java coder
 ├── Python/             # Python coder
@@ -1362,9 +1364,9 @@ implementing native functions in `Lib/`, registering primitives, and creating DS
 
 ### Generated code
 
-[`hydra-haskell/src/gen-main/haskell/`](https://github.com/CategoricalData/hydra/tree/main/hydra-haskell/src/gen-main/haskell) — Generated Haskell
-[`hydra-java/src/gen-main/java/`](https://github.com/CategoricalData/hydra/tree/main/hydra-java/src/gen-main/java) — Generated Java
-[`hydra-python/src/gen-main/python/`](https://github.com/CategoricalData/hydra/tree/main/hydra-python/src/gen-main/python) — Generated Python
+[`dist/haskell/hydra-kernel/src/main/haskell/`](https://github.com/CategoricalData/hydra/tree/main/dist/haskell/hydra-kernel/src/main/haskell) — Generated Haskell
+[`dist/java/hydra-kernel/src/main/java/`](https://github.com/CategoricalData/hydra/tree/main/dist/java/hydra-kernel/src/main/java) — Generated Java
+[`dist/python/hydra-kernel/src/main/python/`](https://github.com/CategoricalData/hydra/tree/main/dist/python/hydra-kernel/src/main/python) — Generated Python
 
 ---
 
@@ -1408,9 +1410,9 @@ see [Hydra release process](https://github.com/CategoricalData/hydra/wiki/Releas
 | `verify-release.sh` | Cross-implementation pre-release verification |
 | `update-javadoc.sh` | Regenerate JavaDoc HTML for `hydra-java` and `hydra-ext` |
 
-### Haskell (`hydra-haskell/`)
+### Haskell (`heads/haskell/`)
 
-Shell script wrappers live in `hydra-haskell/bin/`. Executables without shell wrappers are run via `stack exec <name>`.
+Shell script wrappers live in `heads/haskell/bin/`. Executables without shell wrappers are run via `stack exec <name>`.
 
 | Script / Executable | Purpose |
 |---------------------|---------|
@@ -1424,9 +1426,9 @@ Shell script wrappers live in `hydra-haskell/bin/`. Executables without shell wr
 | `update-haskell-eval-lib` | Regenerate Haskell eval lib modules (executable only, called by `sync-haskell.sh`) |
 | `update-haskell-sources` | Regenerate Haskell encoder/decoder source modules (executable only, called by `sync-haskell.sh`) |
 
-### Ext, Java, and Python (`hydra-ext/`)
+### Ext, Java, and Python (`packages/hydra-ext/`)
 
-Shell script wrappers live in `hydra-ext/bin/`. Executables without shell wrappers are run via `stack exec <name>`.
+Shell script wrappers live in `packages/hydra-ext/bin/`. Executables without shell wrappers are run via `stack exec <name>`.
 
 | Script / Executable | Purpose |
 |---------------------|---------|

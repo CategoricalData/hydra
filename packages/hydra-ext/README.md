@@ -88,42 +88,42 @@ These coders serve specific purposes beyond general-purpose code generation:
 - **For semantic web**: Use RDF or SHACL
 
 Code generation is similar to Haskell generation
-(see the [Hydra-Haskell README](https://github.com/CategoricalData/hydra/blob/main/hydra-haskell/README.md)).
+(see the [Hydra-Haskell README](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-haskell/README.md)).
 
 ### Java
 
-[Hydra-Java](https://github.com/CategoricalData/hydra/tree/main/hydra-java) is a complete Hydra implementation.
+[Hydra-Java](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-java) is a complete Hydra implementation.
 You can update the Java image of the Hydra kernel with:
 
 ```haskell
 -- Universe provides all modules for dependency resolution
 -- modulesToGenerate specifies which modules to actually generate
-writeJava "../hydra-java/src/gen-main/java" kernelModules kernelModules
+writeJava "../../dist/java/hydra-kernel/src/main/java" kernelModules kernelModules
 ```
 
 For Java tests, use:
 
 ```haskell
 let allModules = mainModules ++ testModules
-writeJava "../hydra-java/src/gen-test/java" allModules baseTestModules
+writeJava "../../dist/java/hydra-kernel/src/test/java" allModules baseTestModules
 ```
 
 ### Python
 
-[Hydra-Python](https://github.com/CategoricalData/hydra/tree/main/hydra-python),
+[Hydra-Python](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-python),
 like Hydra-Java and Hydra-Haskell, is a complete Hydra implementation.
 You can update the Python image of the Hydra kernel with:
 
 ```haskell
 -- Universe provides all modules for dependency resolution
 -- modulesToGenerate specifies which modules to actually generate
-writePython "../hydra-python/src/gen-main/python" kernelModules kernelModules
+writePython "../../dist/python/hydra-kernel/src/main/python" kernelModules kernelModules
 ```
 
 For Python tests, use:
 
 ```haskell
-writePython "../hydra-python/src/gen-test/python" mainModules testModules
+writePython "../../dist/python/hydra-kernel/src/test/python" mainModules testModules
 ```
 
 Note: Python generation currently requires extra memory when generating the entire kernel
@@ -352,42 +352,42 @@ type parameter inference, and lazy evaluation patterns via Scala's by-name param
 Hydra-Ext includes syntax models for various programming languages and data formats.
 These can be used to generate or parse code in the target language:
 
-* [Avro Schema](https://github.com/CategoricalData/hydra/blob/main/hydra-ext/src/main/haskell/Hydra/Ext/Sources/Avro/Schema.hs)
-* [C++](https://github.com/CategoricalData/hydra/blob/main/hydra-ext/src/main/haskell/Hydra/Ext/Sources/Cpp/Syntax.hs)
-* [C#](https://github.com/CategoricalData/hydra/blob/main/hydra-ext/src/main/haskell/Hydra/Ext/Sources/Csharp/Syntax.hs)
-* [Cypher (OpenCypher)](https://github.com/CategoricalData/hydra/blob/main/hydra-ext/src/main/haskell/Hydra/Ext/Sources/Cypher/OpenCypher.hs)
-* [GraphQL](https://github.com/CategoricalData/hydra/blob/main/hydra-ext/src/main/haskell/Hydra/Ext/Sources/Graphql/Syntax.hs)
-* [Java](https://github.com/CategoricalData/hydra/blob/main/hydra-ext/src/main/haskell/Hydra/Ext/Sources/Java/Syntax.hs)
-* [JSON Schema](https://github.com/CategoricalData/hydra/blob/main/hydra-ext/src/main/haskell/Hydra/Ext/Sources/Json/Schema.hs)
-* [OWL](https://github.com/CategoricalData/hydra/blob/main/hydra-ext/src/main/haskell/Hydra/Ext/Sources/Owl/Syntax.hs)
-* [Parquet](https://github.com/CategoricalData/hydra/blob/main/hydra-ext/src/main/haskell/Hydra/Ext/Sources/Parquet/Format.hs)
-* [Pegasus (PDL)](https://github.com/CategoricalData/hydra/blob/main/hydra-ext/src/main/haskell/Hydra/Ext/Sources/Pegasus/Pdl.hs)
-* [Protobuf (Proto3)](https://github.com/CategoricalData/hydra/blob/main/hydra-ext/src/main/haskell/Hydra/Ext/Sources/Protobuf/Proto3.hs)
-* [Python](https://github.com/CategoricalData/hydra/blob/main/hydra-ext/src/main/haskell/Hydra/Ext/Sources/Python/Syntax.hs)
-* [RDF](https://github.com/CategoricalData/hydra/blob/main/hydra-ext/src/main/haskell/Hydra/Ext/Sources/Rdf/Syntax.hs)
-* [Scala](https://github.com/CategoricalData/hydra/blob/main/hydra-ext/src/main/haskell/Hydra/Ext/Sources/Scala/Meta.hs)
-* [SHACL](https://github.com/CategoricalData/hydra/blob/main/hydra-ext/src/main/haskell/Hydra/Ext/Sources/Shacl/Model.hs)
-* [SQL (ANSI)](https://github.com/CategoricalData/hydra/blob/main/hydra-ext/src/main/haskell/Hydra/Ext/Sources/Sql/Ansi.hs)
-* [TypeScript](https://github.com/CategoricalData/hydra/blob/main/hydra-ext/src/main/haskell/Hydra/Ext/Sources/TypeScript/Model.hs)
-* [XML Schema](https://github.com/CategoricalData/hydra/blob/main/hydra-ext/src/main/haskell/Hydra/Ext/Sources/Xml/Schema.hs)
+* [Avro Schema](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-ext/src/main/haskell/Hydra/Ext/Sources/Avro/Schema.hs)
+* [C++](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-ext/src/main/haskell/Hydra/Ext/Sources/Cpp/Syntax.hs)
+* [C#](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-ext/src/main/haskell/Hydra/Ext/Sources/Csharp/Syntax.hs)
+* [Cypher (OpenCypher)](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-ext/src/main/haskell/Hydra/Ext/Sources/Cypher/OpenCypher.hs)
+* [GraphQL](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-ext/src/main/haskell/Hydra/Ext/Sources/Graphql/Syntax.hs)
+* [Java](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-ext/src/main/haskell/Hydra/Ext/Sources/Java/Syntax.hs)
+* [JSON Schema](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-ext/src/main/haskell/Hydra/Ext/Sources/Json/Schema.hs)
+* [OWL](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-ext/src/main/haskell/Hydra/Ext/Sources/Owl/Syntax.hs)
+* [Parquet](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-ext/src/main/haskell/Hydra/Ext/Sources/Parquet/Format.hs)
+* [Pegasus (PDL)](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-ext/src/main/haskell/Hydra/Ext/Sources/Pegasus/Pdl.hs)
+* [Protobuf (Proto3)](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-ext/src/main/haskell/Hydra/Ext/Sources/Protobuf/Proto3.hs)
+* [Python](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-ext/src/main/haskell/Hydra/Ext/Sources/Python/Syntax.hs)
+* [RDF](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-ext/src/main/haskell/Hydra/Ext/Sources/Rdf/Syntax.hs)
+* [Scala](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-ext/src/main/haskell/Hydra/Ext/Sources/Scala/Meta.hs)
+* [SHACL](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-ext/src/main/haskell/Hydra/Ext/Sources/Shacl/Model.hs)
+* [SQL (ANSI)](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-ext/src/main/haskell/Hydra/Ext/Sources/Sql/Ansi.hs)
+* [TypeScript](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-ext/src/main/haskell/Hydra/Ext/Sources/TypeScript/Model.hs)
+* [XML Schema](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-ext/src/main/haskell/Hydra/Ext/Sources/Xml/Schema.hs)
 
 ### Domain models
 
 The following domain-specific models are also included:
 
-* [Apache Atlas](https://github.com/CategoricalData/hydra/blob/main/hydra-ext/src/main/haskell/Hydra/Ext/Sources/Other/Atlas.hs)
-* [Azure DTLD](https://github.com/CategoricalData/hydra/blob/main/hydra-ext/src/main/haskell/Hydra/Ext/Sources/Other/AzureDtld.hs)
-* [Coq](https://github.com/CategoricalData/hydra/blob/main/hydra-ext/src/main/haskell/Hydra/Ext/Sources/Other/Coq.hs)
-* [Datalog](https://github.com/CategoricalData/hydra/blob/main/hydra-ext/src/main/haskell/Hydra/Ext/Sources/Other/Datalog.hs)
-* [GeoJSON](https://github.com/CategoricalData/hydra/blob/main/hydra-ext/src/main/haskell/Hydra/Ext/Sources/Other/GeoJson.hs)
-* [IANA Relations](https://github.com/CategoricalData/hydra/blob/main/hydra-ext/src/main/haskell/Hydra/Ext/Sources/Other/IanaRelations.hs)
-* [OSV](https://github.com/CategoricalData/hydra/blob/main/hydra-ext/src/main/haskell/Hydra/Ext/Sources/Other/Osv.hs)
-* [STAC Items](https://github.com/CategoricalData/hydra/blob/main/hydra-ext/src/main/haskell/Hydra/Ext/Sources/Other/StacItems.hs)
+* [Apache Atlas](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-ext/src/main/haskell/Hydra/Ext/Sources/Other/Atlas.hs)
+* [Azure DTLD](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-ext/src/main/haskell/Hydra/Ext/Sources/Other/AzureDtld.hs)
+* [Coq](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-ext/src/main/haskell/Hydra/Ext/Sources/Other/Coq.hs)
+* [Datalog](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-ext/src/main/haskell/Hydra/Ext/Sources/Other/Datalog.hs)
+* [GeoJSON](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-ext/src/main/haskell/Hydra/Ext/Sources/Other/GeoJson.hs)
+* [IANA Relations](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-ext/src/main/haskell/Hydra/Ext/Sources/Other/IanaRelations.hs)
+* [OSV](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-ext/src/main/haskell/Hydra/Ext/Sources/Other/Osv.hs)
+* [STAC Items](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-ext/src/main/haskell/Hydra/Ext/Sources/Other/StacItems.hs)
 
 All extensions are listed
-[here](https://github.com/CategoricalData/hydra/blob/main/hydra-ext/src/main/haskell/Hydra/Ext/Sources/All.hs),
+[here](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-ext/src/main/haskell/Hydra/Ext/Sources/All.hs),
 and the generated Haskell APIs for all of these models can be found
-[here](https://github.com/CategoricalData/hydra/tree/main/hydra-ext/src/gen-main/haskell).
+[here](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-ext/src/gen-main/haskell).
 For the sake of space, only generated Haskell is checked in to the repository,
 but Java APIs can be generated from GHCi (use `stack ghci`) as follows:
 
@@ -447,7 +447,7 @@ The scripts include RTS flags (`-K256M -A32M`) to avoid stack overflow during ge
 
 ### Hydra-Haskell Scripts
 
-The following scripts in `hydra-haskell/bin/` are used for the bootstrapping implementation:
+The following scripts in `heads/haskell/bin/` are used for the bootstrapping implementation:
 
 | Script | Purpose |
 |--------|---------|
