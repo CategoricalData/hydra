@@ -16,8 +16,8 @@ set -euo pipefail
 #   --help       Show this help message
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-HYDRA_EXT_ROOT="$(cd "$SCRIPT_DIR/../../.." && pwd)"
-REPO_ROOT="$(cd "$HYDRA_EXT_ROOT/.." && pwd)"
+REPO_ROOT="$(cd "$SCRIPT_DIR/../../.." && pwd)"
+HYDRA_EXT_ROOT="$REPO_ROOT/packages/hydra-ext"
 
 source "$SCRIPT_DIR/../../bin/common.sh"
 
