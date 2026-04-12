@@ -25,8 +25,8 @@ graphs with deep support for polymorphism.
 - **`packages/` and `heads/`** contain hand-written code. Edit freely.
 - **`dist/`** contains generated code. **Never manually edit**
   (unless doing a bootstrap patch, which must be overwritten by regeneration afterward).
-- Legacy: some packages still have `src/gen-main/` and `src/gen-test/` directories
-  (e.g. `packages/hydra-ext/`). These are also generated. They will move to `dist/` later.
+- Legacy: some packages still have `src/gen-main/` and `src/gen-test/` directories.
+  These are also generated. They will move to `dist/` later.
 
 Generated files have a header: "Note: this is an automatically generated file. Do not edit."
 
@@ -87,7 +87,9 @@ hydra/
     hydra-python/     # Python coder DSL sources (Haskell-based)
     hydra-scala/      # Scala coder DSL sources
     hydra-lisp/       # Lisp coder DSL sources + per-dialect generated output
-    hydra-ext/        # Extension coders, demos, tools (Haskell)
+    hydra-pg/         # Property graph model DSL sources
+    hydra-rdf/        # RDF/SHACL model DSL sources
+    hydra-misc/       # Miscellaneous extension DSL sources
     hydra-coq/        # Coq output
     hydra-javascript/  # JavaScript coder DSL sources
   heads/              # Per-host build infrastructure: primitives, DSL runtime, generation
@@ -120,7 +122,7 @@ and [docs/implementation.md](docs/implementation.md).
 
 After modifying Haskell sources, regenerate downstream implementations in order:
 **Haskell -> Ext -> Java, Python, Scala**. Use `./bin/sync-all.sh` (or `--quick`
-to skip tests), or run individual `sync-*.sh` scripts from `packages/hydra-ext/bin/`.
+to skip tests), or run individual `sync-*.sh` scripts from `heads/haskell/bin/`.
 See [code-generation.md](docs/recipes/code-generation.md) for details.
 
 ---
@@ -166,7 +168,6 @@ Each has build/test commands and code organization details:
 | [packages/hydra-haskell/README.md](packages/hydra-haskell/README.md) | Haskell coder, DSL overview, self-hosting demo |
 | [packages/hydra-java/README.md](packages/hydra-java/README.md) | Gradle build, visitor pattern, benchmark runner |
 | [packages/hydra-python/README.md](packages/hydra-python/README.md) | uv setup, pytest, ruff, pyright |
-| [packages/hydra-ext/README.md](packages/hydra-ext/README.md) | All coders with type mapping tables, sync scripts, demos |
 | [packages/hydra-scala/README.md](packages/hydra-scala/README.md) | sbt build, bootstrapping host |
 | [packages/hydra-lisp/README.md](packages/hydra-lisp/README.md) | Four Lisp dialects, shared coder, per-dialect test runners |
 
@@ -234,12 +235,12 @@ give the user a brief status update approximately every 10 minutes.
 | `/save()` | Save status to the plan document. Session may terminate. |
 | `/squash()` | Squash WIP commits, per "Commit workflow" section. |
 | `/sync-all()` | Run `bin/sync-all.sh --targets all`, propagating changes into all generated artifacts. |
-| `/sync-ext()` | Run `packages/hydra-ext/bin/sync-ext.sh`. |
+| `/sync-ext()` | Run `heads/haskell/bin/sync-ext.sh`. |
 | `/sync-haskell()` | Run `heads/haskell/bin/sync-haskell.sh`. |
-| `/sync-java()` | Run `packages/hydra-ext/bin/sync-java.sh`. |
-| `/sync-lisp()` | Run `packages/hydra-ext/bin/sync-lisp.sh`. Pass `--dialects <list>` to limit dialects. |
-| `/sync-python()` | Run `packages/hydra-ext/bin/sync-python.sh`. |
-| `/sync-scala()` | Run `packages/hydra-ext/bin/sync-scala.sh`. |
+| `/sync-java()` | Run `heads/haskell/bin/sync-java.sh`. |
+| `/sync-lisp()` | Run `heads/haskell/bin/sync-lisp.sh`. Pass `--dialects <list>` to limit dialects. |
+| `/sync-python()` | Run `heads/haskell/bin/sync-python.sh`. |
+| `/sync-scala()` | Run `heads/haskell/bin/sync-scala.sh`. |
 
 ## Coding style (read the full guide!)
 

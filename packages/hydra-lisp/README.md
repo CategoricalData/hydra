@@ -33,12 +33,11 @@ Set `HYDRA_BENCHMARK_OUTPUT` to a file path to produce benchmark JSON output.
 
 ## Code generation
 
-Lisp code is generated from Hydra-Haskell via
-[hydra-ext](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-ext).
+Lisp code is generated from Hydra-Haskell.
 To regenerate:
 
 ```bash
-cd ../hydra-ext
+cd ../../heads/haskell
 ./bin/sync-lisp.sh
 ```
 

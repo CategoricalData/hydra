@@ -97,7 +97,6 @@ The current release is **0.15.0**; see the [CHANGELOG](CHANGELOG.md) for details
 |----------------|---------|---------|
 | Haskell | [hydra on Hackage](https://hackage.haskell.org/package/hydra) | `cabal install hydra` or add to `package.yaml` |
 | Java | [hydra-java on Maven Central](https://central.sonatype.com/artifact/net.fortytwo.hydra/hydra-java) | `net.fortytwo.hydra:hydra-java:0.15.0` |
-| Java (extensions) | [hydra-ext on Maven Central](https://central.sonatype.com/artifact/net.fortytwo.hydra/hydra-ext) | `net.fortytwo.hydra:hydra-ext:0.15.0` |
 | Python | [conda-forge](https://github.com/conda-forge/staged-recipes/pull/30887) (in progress) | Coming soon |
 | Scala | Not yet published | Build locally with `sbt compile` in `packages/hydra-scala/` |
 | Lisp | Not yet published | See dialect-specific instructions in `packages/hydra-lisp/` |

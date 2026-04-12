@@ -180,12 +180,12 @@ Note `src/gen-test` as opposed to `src/gen-main`.
 
 ### Generate code for other languages
 
-Java, Python, Scala, and Lisp code generation is handled by the
-[Hydra-Ext](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-ext) package.
-From the `hydra-ext` directory:
+Java, Python, Scala, and Lisp code generation is handled by sync scripts in
+`heads/haskell/bin/`.
+From the `heads/haskell` directory:
 
 ```bash
-cd ../hydra-ext && stack ghci
+stack ghci
 ```
 
 Then in GHCi:

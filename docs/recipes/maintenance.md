@@ -132,7 +132,7 @@ For each implementation, list the generated files and verify each has a correspo
 # For each file in gen-main, check if its module is imported
 for f in $(find dist/haskell/hydra-kernel/src/main/haskell/Hydra -name '*.hs'); do
   mod=$(echo "$f" | sed 's|.*/haskell/||;s|/|.|g;s|\.hs$||')
-  if ! grep -rq "import.*$mod" packages/hydra-haskell/src/ packages/hydra-ext/src/; then
+  if ! grep -rq "import.*$mod" packages/hydra-haskell/src/ heads/haskell/src/; then
     echo "POSSIBLY STALE: $f ($mod)"
   fi
 done
@@ -228,7 +228,7 @@ definition bodies appear in **alphabetical order** within each module.
 
 This applies to:
 - Haskell Source modules (`packages/hydra-haskell/src/main/haskell/Hydra/Sources/`)
-- hydra-ext Source modules (`packages/hydra-ext/src/main/haskell/Hydra/Ext/`)
+- Extension Source modules (in `packages/hydra-pg/`, `packages/hydra-rdf/`, `packages/hydra-misc/`, and `packages/hydra-java/` etc.)
 - Hand-written kernel modules (`heads/haskell/src/main/haskell/Hydra/`)
 
 Generated files inherit their ordering from Source modules,
@@ -246,7 +246,9 @@ grep 'toDefinition\|toBinding' packages/hydra-haskell/src/main/haskell/Hydra/Sou
 #!/bin/bash
 # check-definition-order.sh — run from the repo root
 for f in $(find packages/hydra-haskell/src/main/haskell/Hydra/Sources \
-                packages/hydra-ext/src/main/haskell/Hydra/Ext \
+                packages/hydra-pg/src/main/haskell \
+                packages/hydra-rdf/src/main/haskell \
+                packages/hydra-misc/src/main/haskell \
                 -name '*.hs' 2>/dev/null); do
   out=$(grep 'toDefinition\|toBinding' "$f" \
     | sed 's/.*toDefinition //; s/.*toBinding //; s/[,\]]//g' \

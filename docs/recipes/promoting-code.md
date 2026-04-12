@@ -183,7 +183,7 @@ hydraExtModules = [
 
 Translate functions one at a time into the DSL, adding each to the module's `definitions` list. After each function:
 
-1. Build: `stack build` in `packages/hydra-ext`
+1. Build: `stack build` in the relevant package (e.g., `packages/hydra-misc`)
 2. Regenerate the target code (see "Regenerating target code" below)
 3. Comment out the original staging function, keeping it as a reference
 4. Import and use the generated version in the staging module:
@@ -751,10 +751,10 @@ remove them and replace `var "callback" @@ args` with direct calls like `otherFu
     This is verbose but works reliably. Consider promoting all update functions for a record type together,
     since they share the same boilerplate pattern.
 
-20. **GHCi regeneration in hydra-ext**: Use stdin redirect to run GHCi scripts in `packages/hydra-ext`:
+20. **GHCi regeneration**: Use stdin redirect to run GHCi scripts from `heads/haskell`:
 
     ```bash
-    cd packages/hydra-ext && stack ghci hydra-ext:lib < my_regen_script.ghci
+    cd heads/haskell && stack ghci hydra-haskell:lib < my_regen_script.ghci
     ```
 
     The script should contain the imports and `writeHaskell` call.

@@ -132,7 +132,7 @@ Hydra-Java uses the **src/main vs src/gen-main** separation pattern
   - `hydra/coders/`, `hydra/compute/` - Type adapters and computational abstractions
   - `hydra/reduction/`, `hydra/rewriting/`, `hydra/hoisting/` - Term transformations
   - `hydra/inference/`, `hydra/checking/` - Type inference and checking
-  - Generated from Haskell DSL sources using the Java coder in hydra-ext
+  - Generated from Haskell DSL sources using the Java coder
 
 - **`src/gen-test/java/`** - Generated test suite
   - `hydra/test/` - Common tests ensuring parity with Haskell and Python
@@ -147,7 +147,7 @@ for more information on how this works.
 The recommended way to regenerate all Java code is to use the sync script:
 
 ```bash
-cd ../hydra-ext
+cd ../../heads/haskell
 ./bin/sync-java.sh
 ```
 
@@ -158,10 +158,10 @@ This will:
 4. Generate the generation tests
 5. Build and run all tests
 
-For manual generation, enter GHCi from hydra-ext:
+For manual generation, enter GHCi from heads/haskell:
 
 ```bash
-cd ../hydra-ext && stack ghci
+cd ../../heads/haskell && stack ghci
 ```
 
 And run the following commands in the GHC REPL:
@@ -180,7 +180,7 @@ writeJava "../../dist/java/hydra-kernel/src/test/java" allModules baseTestModule
 ### Algebraic Data Types
 
 The Hydra coder which generates everything in `src/gen-main` and `src/gen-test` can be found
-[here](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-ext/src/main/haskell/Hydra/Ext/Java).
+[here](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-java/src/main/haskell/Hydra/Ext/Sources/Java).
 A variety of techniques are used in order to materialize Hydra's core language in Java,
 including a [pattern](https://garciat.com/posts/java-adt) for representing algebraic data types
 which was originally proposed by Gabriel Garcia,
@@ -224,10 +224,10 @@ public class Vertex<V> {
 See
 [Vertex.java](https://github.com/CategoricalData/hydra/blob/main/dist/java/hydra-kernel/src/main/java/hydra/pg/model/Vertex.java)
 for the complete class, as well as the `Vertex` type in
-[Pg/Model.hs](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-ext/src/gen-main/haskell/Hydra/Pg/Model.hs)
+[Pg/Model.hs](https://github.com/CategoricalData/hydra/blob/main/dist/haskell/hydra-pg/src/main/haskell/Hydra/Pg/Model.hs)
 for comparison.
 Both files were generated from the property graph model defined
-[here](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-ext/src/main/haskell/Hydra/Ext/Sources/Pg/Model.hs).
+[here](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-pg/src/main/haskell/Hydra/Ext/Sources/Pg/Model.hs).
 
 ### Union Types and Visitors
 

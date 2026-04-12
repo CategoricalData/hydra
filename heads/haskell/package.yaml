@@ -37,10 +37,23 @@ dependencies:
 library:
   source-dirs:
     - src/main/haskell
-    - ../../packages/hydra-kernel/src/main/haskell
+    - ../../demos/src/main/haskell
     - ../../dist/haskell/hydra-kernel/src/main/haskell
+    - ../../dist/haskell/hydra-misc/src/main/haskell
+    - ../../dist/haskell/hydra-pg/src/main/haskell
+    - ../../dist/haskell/hydra-rdf/src/main/haskell
+    - ../../packages/hydra-coq/src/main/haskell
     - ../../packages/hydra-haskell/src/main/haskell
     - ../../dist/haskell/hydra-haskell/src/main/haskell
+    - ../../packages/hydra-java/src/main/haskell
+    - ../../packages/hydra-javascript/src/main/haskell
+    - ../../packages/hydra-kernel/src/main/haskell
+    - ../../packages/hydra-lisp/src/main/haskell
+    - ../../packages/hydra-misc/src/main/haskell
+    - ../../packages/hydra-pg/src/main/haskell
+    - ../../packages/hydra-python/src/main/haskell
+    - ../../packages/hydra-rdf/src/main/haskell
+    - ../../packages/hydra-scala/src/main/haskell
 
 executables:
   update-kernel-tests:
@@ -114,6 +127,85 @@ executables:
     ghc-options: [-rtsopts]
     dependencies:
       - hydra
+
+  update-haskell-ext-main:
+    main: Main.hs
+    source-dirs:
+      - src/exec/update-haskell-ext-main
+    ghc-options: [-rtsopts]
+    dependencies:
+      - hydra
+
+  update-scala:
+    main: Main.hs
+    source-dirs:
+      - src/exec/update-scala
+    ghc-options: [-rtsopts]
+    dependencies:
+      - hydra
+
+  update-scala-tests:
+    main: Main.hs
+    source-dirs:
+      - src/exec/update-scala-tests
+      - ../../dist/haskell/hydra-kernel/src/test/haskell
+    ghc-options: [-rtsopts]
+    dependencies:
+      - hydra
+      - hspec                      >= 2.11.0 && < 2.12
+
+  update-ext-sources:
+    main: Main.hs
+    source-dirs:
+      - src/exec/update-ext-sources
+    ghc-options: [-rtsopts]
+    dependencies:
+      - hydra
+
+  update-json-ext:
+    main: Main.hs
+    source-dirs:
+      - src/exec/update-json-ext
+    ghc-options: [-rtsopts]
+    dependencies:
+      - hydra
+
+  diag-module:
+    main: Main.hs
+    source-dirs:
+      - src/exec/diag-module
+    ghc-options: [-rtsopts]
+    dependencies:
+      - hydra
+
+  generate-lisp:
+    main: Main.hs
+    source-dirs:
+      - src/exec/generate-lisp
+      - ../../dist/haskell/hydra-kernel/src/test/haskell
+    ghc-options: [-rtsopts]
+    dependencies:
+      - hydra
+      - hspec                      >= 2.11.0 && < 2.12
+
+  generate-coq:
+    main: Main.hs
+    source-dirs:
+      - src/exec/generate-coq
+    ghc-options: [-rtsopts]
+    dependencies:
+      - hydra
+
+  bootstrap-from-json:
+    main: Main.hs
+    source-dirs:
+      - src/exec/bootstrap-from-json
+      - ../../dist/haskell/hydra-kernel/src/test/haskell
+    ghc-options: [-rtsopts]
+    dependencies:
+      - hydra
+      - hspec                      >= 2.11.0 && < 2.12
+      - time
 
 tests:
   hydra-test:
