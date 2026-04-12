@@ -90,13 +90,13 @@ if [ -f "$TESTGRAPH" ]; then
     sed_inplace 's/return hydra.Lexical.emptyContext();/return hydra.test.TestEnv.testContext();/' "$TESTGRAPH"
 fi
 
-step 3 $TOTAL_STEPS "Generating ext Java modules into hydra-ext from JSON"
+step 3 $TOTAL_STEPS "Generating ext Java modules into dist/java/hydra-ext from JSON"
 echo ""
-stack exec bootstrap-from-json -- --target java --output . --include-coders --ext-only $RTS_FLAGS
+stack exec bootstrap-from-json -- --target java --output "../../dist/java/hydra-ext" --include-coders --ext-only $RTS_FLAGS
 
-step 4 $TOTAL_STEPS "Generating ext Java modules into hydra-java from JSON"
+step 4 $TOTAL_STEPS "Generating ext Java modules into dist/java/hydra-kernel from JSON"
 echo ""
-stack exec bootstrap-from-json -- --target java --output "$HYDRA_JAVA_DIR" --include-coders --ext-only $RTS_FLAGS
+stack exec bootstrap-from-json -- --target java --output "../../dist/java/hydra-kernel" --include-coders --ext-only $RTS_FLAGS
 
 # Patch Lisp Coder.java for PartialVisitor type inference issue in encodeTermDefinition
 LISPCODER="../../dist/java/hydra-kernel/src/main/java/hydra/ext/lisp/Coder.java"
@@ -126,11 +126,11 @@ fi
 step 6 $TOTAL_STEPS "Checking for new files"
 echo ""
 
-for CHECK_DIR in "$HYDRA_JAVA_DIR" "$HYDRA_EXT_DIR"; do
-    cd "$CHECK_DIR"
+for CHECK_DIR in "$HYDRA_ROOT_DIR/dist/java/hydra-kernel" "$HYDRA_ROOT_DIR/dist/java/hydra-ext"; do
+    cd "$CHECK_DIR" 2>/dev/null || continue
     LABEL=$(basename "$CHECK_DIR")
 
-    NEW_FILES=$(git status --porcelain src/gen-main/java src/gen-test/java 2>/dev/null | grep "^??" | awk '{print $2}' || true)
+    NEW_FILES=$(git status --porcelain src/main/java src/test/java 2>/dev/null | grep "^??" | awk '{print $2}' || true)
 
     if [ -n "$NEW_FILES" ]; then
         echo "New files in $LABEL. You may want to run:"

@@ -14,7 +14,7 @@ main = do
   putStrLn ""
 
   let universeModules = mainModules ++ hydraExtJsonModules
-  result <- catch (writeModulesJson True "src/gen-main/json" universeModules hydraExtJsonModules >> return True)
+  result <- catch (writeModulesJson True "../../dist/json/hydra-ext/src/main/json" universeModules hydraExtJsonModules >> return True)
                   (\e -> do
                     putStrLn $ "Error: " ++ show (e :: SomeException)
                     return False)
@@ -22,11 +22,11 @@ main = do
   if result
     then do
       putStrLn ""
-      writeExtManifestJson "src/gen-main/json"
+      writeExtManifestJson "../../dist/json/hydra-ext/src/main/json"
       putStrLn ""
       putStrLn "=== Done! ==="
       putStrLn ""
-      putStrLn "Generated files are in: src/gen-main/json/"
+      putStrLn "Generated files are in: ../../dist/json/hydra-ext/src/main/json/"
     else do
       putStrLn ""
       putStrLn "=== FAILED ==="

@@ -75,7 +75,7 @@ echo ""
 stack exec update-haskell-ext-main -- $RTS_FLAGS
 
 # Clean up empty generated files (produced for modules with no DSL output)
-find src/gen-main/haskell -name "*.hs" -empty -delete 2>/dev/null || true
+find ../../dist/haskell/hydra-ext/src/main/haskell -name "*.hs" -empty -delete 2>/dev/null || true
 
 step 4 $TOTAL_STEPS "Rebuilding"
 echo ""
