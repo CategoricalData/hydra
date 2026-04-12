@@ -21,8 +21,8 @@ main = do
       putStrLn $ "  Hint: cd to hydra-haskell/ and re-run, or use: (cd ../hydra-haskell && stack exec update-haskell-sources)"
       exitFailure
     else do
-      let kernelOut = "../hydra-kernel/src/gen-main/haskell"
-      let haskellOut = "src/gen-main/haskell"
+      let kernelOut = "../../packages/hydra-kernel/src/gen-main/haskell"
+      let haskellOut = "../../packages/hydra-haskell/src/gen-main/haskell"
       -- kernelSideMain = kernelModules ++ jsonModules ++ otherModules
       -- (same as mainModules without haskellModules)
       let kernelSideMain = kernelModules ++ jsonModules ++ otherModules

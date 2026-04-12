@@ -29,6 +29,7 @@ library:
   source-dirs:
     - src/main/haskell
     - src/gen-main/haskell
+    - ../../heads/haskell/src/main/haskell
     - ../hydra-coq/src/main/haskell
     - ../hydra-haskell/src/main/haskell
     - ../hydra-haskell/src/gen-main/haskell

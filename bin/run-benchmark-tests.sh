@@ -135,7 +135,7 @@ run_lang() {
     case "$lang" in
         haskell)
             echo "=== Running Haskell benchmark tests (run $i/$REPEAT) ==="
-            cd "$REPO_ROOT/packages/hydra-haskell"
+            cd "$REPO_ROOT/heads/haskell"
             HYDRA_BENCHMARK_OUTPUT="$outfile" \
                 stack test
             ;;

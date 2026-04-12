@@ -173,7 +173,7 @@ cwd = "."
 # Module and code exploration tasks
 [feature.haskell.tasks.haskell-modules]
 cmd = "find src -name '*.hs' | head -n 20"
-cwd = "packages/hydra-haskell"
+cwd = "heads/haskell"
 
 [feature.haskell.tasks.haskell-functions]
 cmd = "nu ../pixi-scripts/haskell-functions.nu"
@@ -211,7 +211,7 @@ cwd = "packages/hydra-ext"
 # Stack cache management
 [feature.haskell.tasks.clear-stack-cache-haskell]
 cmd = "stack clean --full && rm -rf .stack-work"
-cwd = "packages/hydra-haskell"
+cwd = "heads/haskell"
 
 [feature.haskell.tasks.clear-stack-cache-ext]
 cmd = "stack clean --full && rm -rf .stack-work"
@@ -259,7 +259,7 @@ cmd = "bash -c 'bash bin/sync-all.sh 2>&1 | tee sync-all.log'"
 cwd = "."
 
 [feature.haskell.tasks.sync-haskell]
-cmd = "bash packages/hydra-haskell/bin/sync-haskell.sh"
+cmd = "bash heads/haskell/bin/sync-haskell.sh"
 cwd = "."
 
 [feature.haskell.tasks.sync-java]

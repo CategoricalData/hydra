@@ -8,6 +8,6 @@ main :: IO ()
 main = do
   putStrLn "=== Generate JSON manifest ==="
   putStrLn ""
-  writeManifestJson "../hydra-kernel/src/gen-main/json" kernelModules kernelTypesModules mainModules testModules
+  writeManifestJson "../../packages/hydra-kernel/src/gen-main/json" kernelModules kernelTypesModules mainModules testModules
   putStrLn ""
   putStrLn "=== Done! ==="

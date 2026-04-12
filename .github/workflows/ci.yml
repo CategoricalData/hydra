@@ -19,10 +19,10 @@ jobs:
       - uses: actions/cache@v4
         with:
           path: ~/.stack
-          key: stack-${{ hashFiles('packages/hydra-haskell/stack.yaml', 'packages/hydra-haskell/package.yaml') }}
+          key: stack-${{ hashFiles('heads/haskell/stack.yaml', 'heads/haskell/package.yaml') }}
           restore-keys: stack-
       - run: stack test --install-ghc
-        working-directory: packages/hydra-haskell
+        working-directory: heads/haskell
 
   java:
     name: Java tests

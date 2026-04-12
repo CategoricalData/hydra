@@ -5,7 +5,6 @@ install-ghc: false
 
 packages:
   - .
-  - ../hydra-haskell
-  - ../hydra-kernel
+  - ../../heads/haskell
 
 extra-deps:
