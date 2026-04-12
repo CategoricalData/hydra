@@ -56,12 +56,12 @@ fi
 # Hand-written Sources modules (e.g. Templates.hs, Annotations.hs) import generated
 # modules like Hydra.Sources.Decode.Core and Hydra.Sources.Encode.Core, and
 # Staging/Yaml/Coder.hs imports Hydra.Ext.Org.Yaml.Model — all of which live in
-# gen-main. Copying the full baseline gen-main ext tree ensures these are available.
+# dist. Copying the full baseline dist ext tree ensures these are available.
 echo "  Copying ext modules from baseline..."
 HS_GEN="$OUTPUT_DIR/src/main/haskell"
 HS_KERNEL_BASELINE="$HYDRA_ROOT/dist/haskell/hydra-kernel/src/main/haskell"
 HS_HASKELL_BASELINE="$HYDRA_ROOT/dist/haskell/hydra-haskell/src/main/haskell"
-# Ext/Org modules live in hydra-kernel's gen-main; Ext/Haskell lives in hydra-haskell's.
+# Ext/Org modules live in hydra-kernel's dist; Ext/Haskell lives in hydra-haskell's.
 if [ -d "$HS_KERNEL_BASELINE/Hydra/Ext" ]; then
     mkdir -p "$HS_GEN/Hydra/Ext"
     rm -rf "$HS_GEN/Hydra/Ext"
@@ -116,7 +116,7 @@ cp "$HYDRA_HASKELL_HEAD_DIR/src/test/haskell/Hydra/ArbitraryCore.hs" "$OUTPUT_DI
 cp "$HYDRA_HASKELL_HEAD_DIR/src/test/haskell/Hydra/EvalPrimitives.hs" "$OUTPUT_DIR/src/test/haskell/Hydra/"
 
 # TestEnv: provides the real test graph with primitives and kernel term bindings.
-# Must be copied to gen-test (where the generated TestGraph.hs imports it).
+# Must be copied to src/test (where the generated TestGraph.hs imports it).
 mkdir -p "$OUTPUT_DIR/src/test/haskell/Hydra/Test"
 cp "$HYDRA_ROOT/dist/haskell/hydra-kernel/src/test/haskell/Hydra/Test/TestEnv.hs" "$OUTPUT_DIR/src/test/haskell/Hydra/Test/"
 

@@ -1,5 +1,5 @@
 -- | Coq code generator: transforms Hydra kernel modules into .v files.
--- Produces hydra-coq/src/gen-main/coq/hydra/*.v
+-- Produces dist/coq/hydra-kernel/src/main/coq/hydra/*.v
 
 module Hydra.Ext.Coq.Generate where
 

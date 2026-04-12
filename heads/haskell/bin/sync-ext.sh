@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Script to regenerate hydra-ext's Haskell gen-main, JSON exports, and ext Java from Hydra sources.
+# Script to regenerate hydra-ext's Haskell modules, JSON exports, and ext Java from Hydra sources.
 #
 # This regenerates:
-#   1. Haskell gen-main for hydraExtModules (Java/Python coders, language syntaxes, etc.)
+#   1. Haskell modules for hydraExtModules (Java/Python coders, language syntaxes, etc.)
 #   2. JSON exports for hydraExtModules
-#   3. Java gen-main for ext modules needed by hydra-ext (PG, GraphSON, domain models, etc.)
+#   3. Java modules for ext modules needed by hydra-ext (PG, GraphSON, domain models, etc.)
 #
 # This must be run AFTER sync-haskell.sh and BEFORE sync-java.sh or sync-python.sh,
 # since those scripts depend on hydra-ext's generated Haskell code being up to date.
@@ -30,7 +30,7 @@ for arg in "$@"; do
         --help|-h)
             echo "Usage: $0 [OPTIONS]"
             echo ""
-            echo "Regenerate hydra-ext Haskell gen-main, JSON exports, and ext Java."
+            echo "Regenerate hydra-ext Haskell modules, JSON exports, and ext Java."
             echo ""
             echo "Steps performed:"
             echo "  1. Build executables"

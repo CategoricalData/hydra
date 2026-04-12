@@ -23,7 +23,7 @@ HEADS_LISP="$HYDRA_ROOT/heads/lisp"
 PKG_LISP="$LISP_ROOT"
 
 # HEAD_DIR has hand-written content (src/main, src/test, runner scripts, deps.edn etc.)
-# PKG_DIR has generated content (src/gen-main, src/gen-test)
+# Generated content is in dist/<dialect>/hydra-kernel/src/{main,test}
 # Export HYDRA_HEAD_DIR so dialect-specific runners can find hand-written sources.
 dialect_pkg_name() {
     case "$1" in

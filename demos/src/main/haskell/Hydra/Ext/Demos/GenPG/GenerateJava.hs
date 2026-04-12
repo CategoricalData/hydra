@@ -25,14 +25,14 @@ import System.IO (hFlush, stdout)
 
 -- | Generate all Java modules for the GenPG demo.
 --
--- This generates to hydra-ext/src/gen-main/java:
+-- This generates to demos/src/main/java:
 --   - hydra.pg.* modules
 --   - hydra.demos.genpg.transform
 --   - hydra.demos.genpg.sales
 --   - hydra.demos.genpg.health
 generateJavaModules :: IO ()
 generateJavaModules = do
-  let outputDir = "src/gen-main/java"
+  let outputDir = "../../demos/src/main/java"
   createDirectoryIfMissing True outputDir
 
   putStrLn "=== Generate Java GenPG Modules ==="

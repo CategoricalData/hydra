@@ -95,12 +95,12 @@ echo ""
 # and let the user's --dialects flag control which tests to run
 stack exec generate-lisp -- $RTS_FLAGS
 
-# Restore Scheme gen-main native libs to their committed (portable alist) versions.
+# Restore Scheme dist native libs to their committed (portable alist) versions.
 # The generate-lisp tool overwrites these with the src/main vhash versions, but
-# gen-main must use portable alists since standalone targets lack (ice-9 vlist).
+# dist must use portable alists since standalone targets lack (ice-9 vlist).
 SCHEME_GEN_LIB="$HYDRA_ROOT_DIR/dist/scheme/hydra-kernel/src/main/scheme/hydra/lib"
 if [ -d "$SCHEME_GEN_LIB" ]; then
-    echo "  Restoring portable gen-main lib files for Scheme..."
+    echo "  Restoring portable dist lib files for Scheme..."
     git -C "$HYDRA_ROOT_DIR" checkout -- \
         dist/scheme/hydra-kernel/src/main/scheme/hydra/lib/maps.scm \
         dist/scheme/hydra-kernel/src/main/scheme/hydra/lib/sets.scm \
@@ -275,14 +275,14 @@ fi
 
 # Report new files
 for dialect in "${DIALECT_LIST[@]}"; do
-    CHECK_DIR=$(dialect_dir "$dialect")
-    LABEL=$(basename "$CHECK_DIR")
+    CHECK_DIR="$HYDRA_ROOT_DIR/dist/$dialect/hydra-kernel"
+    LABEL="dist/$dialect/hydra-kernel"
     if [ -d "$CHECK_DIR" ]; then
-        NEW_FILES=$(cd "$CHECK_DIR" && git status --porcelain src/gen-main src/gen-test 2>/dev/null | grep "^??" | awk '{print $2}' || true)
+        NEW_FILES=$(cd "$CHECK_DIR" && git status --porcelain src/main src/test 2>/dev/null | grep "^??" | awk '{print $2}' || true)
         if [ -n "$NEW_FILES" ]; then
             NEW_COUNT=$(echo "$NEW_FILES" | wc -l | tr -d ' ')
             echo "New files in $LABEL ($NEW_COUNT). You may want to run:"
-            echo "  cd $CHECK_DIR && git add src/gen-main src/gen-test"
+            echo "  cd $CHECK_DIR && git add src/main src/test"
             echo ""
         fi
     fi

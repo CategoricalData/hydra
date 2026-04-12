@@ -389,10 +389,10 @@ yamlModules = [
 
 {-
   :set +m
-  writeDecoderSourceHaskell "src/gen-main/haskell" (kernelModules <> hydraExtModules) [
+  writeDecoderSourceHaskell "../../dist/haskell/hydra-ext/src/main/haskell" (kernelModules <> hydraExtModules) [
     Hydra.Ext.Sources.Pg.Mapping.module_,
     Hydra.Ext.Sources.Pg.Model.module_]
-  writeEncoderSourceHaskell "src/gen-main/haskell" (kernelModules <> hydraExtModules) [
+  writeEncoderSourceHaskell "../../dist/haskell/hydra-ext/src/main/haskell" (kernelModules <> hydraExtModules) [
     Hydra.Ext.Sources.Pg.Mapping.module_,
     Hydra.Ext.Sources.Pg.Model.module_]
 -}
