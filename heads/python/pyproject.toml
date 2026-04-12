@@ -89,7 +89,7 @@ ignore-names = [
 "__init__.py" = ["E402", "D104"]
 
 "{src/test/python,docs,scripts,examples}/*" = ["D", "E402", "N"]
-"../../packages/hydra-python/src/gen-main/python/*" = ["D", "E402", "N"]
+"../../dist/python/hydra-kernel/src/main/python/*" = ["D", "E402", "N"]
 
 [tool.ruff.lint.pydocstyle]
 convention = "numpy"
@@ -98,15 +98,15 @@ convention = "numpy"
 typeCheckingMode = "strict"
 extraPaths = [
     "src/main/python",
-    "../../packages/hydra-python/src/gen-main/python",
-    "../../packages/hydra-python/src/gen-test/python"
+    "../../dist/python/hydra-kernel/src/main/python",
+    "../../dist/python/hydra-kernel/src/test/python"
 ]
 
 [tool.pytest.ini_options]
 pythonpath = [
     "src/main/python",
-    "../../packages/hydra-python/src/gen-main/python",
-    "../../packages/hydra-python/src/gen-test/python",
+    "../../dist/python/hydra-kernel/src/main/python",
+    "../../dist/python/hydra-kernel/src/test/python",
     "src/test/python"
 ]
 testpaths = [

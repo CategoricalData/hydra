@@ -21,6 +21,7 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 HYDRA_EXT_DIR="$( cd "$SCRIPT_DIR/.." && pwd )"
 HYDRA_ROOT_DIR="$( cd "$HYDRA_EXT_DIR/../.." && pwd )"
 HYDRA_SCALA_DIR="$HYDRA_ROOT_DIR/packages/hydra-scala"
+DIST_SCALA="$HYDRA_ROOT_DIR/dist/scala/hydra-kernel"
 
 source "$HYDRA_ROOT_DIR/bin/lib/common.sh"
 
@@ -71,10 +72,10 @@ stack exec update-scala -- $RTS_FLAGS
 python3 "$HYDRA_SCALA_DIR/bin/break-long-lines.py"
 
 # Fix Scala 3 reserved word 'macro' in generated enum cases and pattern matches
-if [ -d "$HYDRA_SCALA_DIR/src/gen-main/scala" ]; then
+if [ -d "$DIST_SCALA/src/main/scala" ]; then
     echo "  Post-processing: escaping 'macro' keyword..."
-    sed_inplace_find "$HYDRA_SCALA_DIR/src/gen-main/scala" -name '*.scala' -- 's/case macro(/case `macro`(/g'
-    sed_inplace_find "$HYDRA_SCALA_DIR/src/gen-main/scala" -name '*.scala' -- 's/\.macro(/.`macro`(/g'
+    sed_inplace_find "$DIST_SCALA/src/main/scala" -name '*.scala' -- 's/case macro(/case `macro`(/g'
+    sed_inplace_find "$DIST_SCALA/src/main/scala" -name '*.scala' -- 's/\.macro(/.`macro`(/g'
 fi
 
 step 3 $TOTAL_STEPS "Generating Scala test modules"
@@ -82,20 +83,20 @@ echo ""
 stack exec update-scala-tests -- $RTS_FLAGS
 
 # Post-process generated test files (break long lines, fix escapes)
-if [ -d "$HYDRA_SCALA_DIR/src/gen-test/scala" ]; then
+if [ -d "$DIST_SCALA/src/test/scala" ]; then
     echo "  Post-processing: escaping 'macro' keyword in tests..."
-    sed_inplace_find "$HYDRA_SCALA_DIR/src/gen-test/scala" -name '*.scala' -- 's/case macro(/case `macro`(/g'
-    sed_inplace_find "$HYDRA_SCALA_DIR/src/gen-test/scala" -name '*.scala' -- 's/\.macro(/.`macro`(/g'
+    sed_inplace_find "$DIST_SCALA/src/test/scala" -name '*.scala' -- 's/case macro(/case `macro`(/g'
+    sed_inplace_find "$DIST_SCALA/src/test/scala" -name '*.scala' -- 's/\.macro(/.`macro`(/g'
     # Replace unresolved inference type variables (T0-T99) with Any.
     # These appear in type parameter positions like [T0], [Int, T1], [T2, String].
     echo "  Post-processing: replacing inference type variables with Any..."
-    find "$HYDRA_SCALA_DIR/src/gen-test/scala" -name "*.scala" -exec \
+    find "$DIST_SCALA/src/test/scala" -name "*.scala" -exec \
         perl -pi -e 's/\bT(\d+)\b/Any/g' {} +
 fi
 
 # Patch testGraph.scala to use a graph populated with primitives instead of emptyGraph.
 # Without this, evaluation tests produce "<<eval error>>" because no primitives are registered.
-TESTGRAPH_FILE="$HYDRA_SCALA_DIR/src/gen-test/scala/hydra/test/testGraph.scala"
+TESTGRAPH_FILE="$DIST_SCALA/src/test/scala/hydra/test/testGraph.scala"
 if [ -f "$TESTGRAPH_FILE" ]; then
     echo "  Post-processing: patching testGraph.scala to use buildTestGraph..."
     sed_inplace 's/hydra\.lexical\.emptyGraph/hydra.TestSuiteRunner.buildTestGraph()/g' "$TESTGRAPH_FILE"

@@ -73,7 +73,7 @@ stack exec bootstrap-from-json -- --target python --include-coders --include-dsl
     warn "Python test generation had errors (some polymorphic types not supported). Continuing..."
 
 # Patch test_graph.py to replace empty test_graph/test_context with lazy versions via test_env
-TESTGRAPH="../hydra-python/src/gen-test/python/hydra/test/test_graph.py"
+TESTGRAPH="../../dist/python/hydra-kernel/src/test/python/hydra/test/test_graph.py"
 if [ -f "$TESTGRAPH" ]; then
     echo "  Post-processing: patching test_graph.py..."
     # Remove the module-level test_context and test_graph assignments so __getattr__ can intercept
@@ -119,8 +119,9 @@ if [ "$QUICK_MODE" = false ]; then
         source .venv/bin/activate
     fi
 
-    # Run pytest with PYTHONPATH set
-    PYTHONPATH=src/main/python:src/gen-main/python:src/gen-test/python pytest src/test/python/test_suite_runner.py -q
+    # Run pytest from heads/python where pyproject.toml lives
+    cd "$HYDRA_ROOT_DIR/heads/python"
+    uv run pytest -q
 
     cd "$HYDRA_EXT_DIR"
 else
@@ -130,15 +131,16 @@ fi
 step 6 $TOTAL_STEPS "Checking for new files"
 echo ""
 
-cd "$HYDRA_PYTHON_DIR"
+DIST_PYTHON_DIR="$HYDRA_ROOT_DIR/dist/python/hydra-kernel"
+cd "$DIST_PYTHON_DIR"
 
-NEW_FILES=$(git status --porcelain src/main/python src/gen-main/python src/gen-test/python 2>/dev/null | grep "^??" | awk '{print $2}' || true)
+NEW_FILES=$(git status --porcelain src/main/python src/test/python 2>/dev/null | grep "^??" | awk '{print $2}' || true)
 
 if [ -n "$NEW_FILES" ]; then
     echo "New files were created. You may want to run:"
     echo ""
-    echo "  cd $HYDRA_PYTHON_DIR"
-    echo "  git add src/main/python src/gen-main/python src/gen-test/python"
+    echo "  cd $DIST_PYTHON_DIR"
+    echo "  git add src/main/python src/test/python"
     echo ""
     echo "New files:"
     echo "$NEW_FILES" | head -20
