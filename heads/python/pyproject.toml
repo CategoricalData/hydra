@@ -1,0 +1,128 @@
+[project]
+name = "hydra"
+version = "0.15.0"
+description = ""
+readme = "../../packages/hydra-python/README.md"
+authors = []
+requires-python = ">=3.12"
+dependencies = []
+
+[dependency-groups]
+test = ["pytest>=8.3.4"]
+lint = ["ruff>=0.8.4"]
+check = ["pyright>=1.1.391"]
+
+[tool.uv]
+default-groups = ["test", "lint", "check"]
+
+[tool.ruff]
+line-length = 88
+indent-width = 4
+
+[tool.ruff.lint]
+extend-select = ["RUF", "D", "N", "UP", "PD"]
+ignore = ["N818"]
+fixable = ["ALL"]
+unfixable = []
+dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+
+[tool.ruff.lint.mccabe]
+max-complexity = 8
+
+[tool.ruff.lint.pep8-naming]
+ignore-names = [
+    "A",
+    "A_*",
+    "B",
+    "B_*",
+    "C",
+    "C_*",
+    "D",
+    "D_*",
+    "E",
+    "E_*",
+    "F",
+    "F_*",
+    "G",
+    "G_*",
+    "H",
+    "H_*",
+    "I",
+    "I_*",
+    "J",
+    "J_*",
+    "K",
+    "K_*",
+    "L",
+    "L_*",
+    "M",
+    "M_*",
+    "N",
+    "N_*",
+    "O",
+    "O_*",
+    "P",
+    "P_*",
+    "Q",
+    "Q_*",
+    "R",
+    "R_*",
+    "S",
+    "S_*",
+    "T",
+    "T_*",
+    "U",
+    "U_*",
+    "V",
+    "V_*",
+    "W",
+    "W_*",
+    "X",
+    "X_*",
+    "Y",
+    "Y_*",
+    "Z",
+    "Z_*",
+]
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["E402", "D104"]
+
+"{src/test/python,docs,scripts,examples}/*" = ["D", "E402", "N"]
+"../../dist/python/hydra-kernel/src/main/python/*" = ["D", "E402", "N"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "numpy"
+
+[tool.pyright]
+typeCheckingMode = "strict"
+extraPaths = [
+    "src/main/python",
+    "../../dist/python/hydra-kernel/src/main/python",
+    "../../dist/python/hydra-kernel/src/test/python"
+]
+
+[tool.pytest.ini_options]
+pythonpath = [
+    "src/main/python",
+    "../../dist/python/hydra-kernel/src/main/python",
+    "../../dist/python/hydra-kernel/src/test/python",
+    "src/test/python"
+]
+testpaths = [
+    "src/test/python"
+]
+# Suppress warnings about TestCase* and TestGroup classes in hydra.testing
+# (these are data classes, not pytest test classes)
+filterwarnings = [
+    "ignore::pytest.PytestCollectionWarning"
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = [
+    "src/main/python/hydra"
+]

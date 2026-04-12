@@ -132,8 +132,8 @@ def process_file(filepath):
 
 
 def main():
-    scala_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
-                              "src", "gen-main", "scala")
+    scala_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))),
+                              "dist", "scala", "hydra-kernel", "src", "main", "scala")
 
     count = 0
     for filepath in glob.glob(os.path.join(scala_dir, "**", "*.scala"), recursive=True):

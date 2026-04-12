@@ -5,6 +5,14 @@ plugins {
 
 apply plugin: 'antlr'
 
+sourceSets {
+    main {
+        java {
+            srcDirs += file("$projectDir/../../dist/java/hydra-ext/src/main/java")
+        }
+    }
+}
+
 dependencies {
     api project(':hydra-java')
 

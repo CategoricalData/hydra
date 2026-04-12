@@ -8,9 +8,9 @@
 --   - haskell-to-*.sh (bootstrapping demo, writes to /tmp)
 --
 -- JSON sources:
---   hydra-kernel/src/gen-main/json/  — kernel, eval lib, and other modules
---   hydra-kernel/src/gen-test/json/  — test modules
---   hydra-ext/src/gen-main/json/      — ext coder modules (Java/Python coders)
+--   dist/json/hydra-kernel/src/main/json/  — kernel, eval lib, and other modules
+--   dist/json/hydra-kernel/src/test/json/  — test modules
+--   hydra-ext/../../dist/json/hydra-ext/src/main/json/      — ext coder modules (Java/Python coders)
 --
 -- Usage:
 --   bootstrap-from-json --target <haskell|java|python|clojure|scheme|common-lisp|emacs-lisp> [OPTIONS]
@@ -172,21 +172,21 @@ main = do
   -- Determine output directories
   let defaultOutput = case target of
         "haskell"     -> "/tmp/hydra-bootstrapping-demo/haskell-to-haskell"
-        "java"        -> "../hydra-java"
-        "python"      -> "../hydra-python"
-        "clojure"     -> "../hydra-lisp/hydra-clojure"
-        "scheme"      -> "../hydra-lisp/hydra-scheme"
-        "common-lisp" -> "../hydra-lisp/hydra-common-lisp"
-        "emacs-lisp"  -> "../hydra-lisp/hydra-emacs-lisp"
+        "java"        -> "../../dist/java/hydra-kernel"
+        "python"      -> "../../dist/python/hydra-kernel"
+        "clojure"     -> "../../dist/clojure/hydra-kernel"
+        "scheme"      -> "../../dist/scheme/hydra-kernel"
+        "common-lisp" -> "../../dist/common-lisp/hydra-kernel"
+        "emacs-lisp"  -> "../../dist/emacs-lisp/hydra-kernel"
         _             -> "/tmp/hydra-bootstrapping-demo/haskell-to-" ++ target
   let outBase = maybe defaultOutput id (optOutput opts)
-  let outMain = outBase FP.</> ("src/gen-main/" ++ target)
-  let outTest = outBase FP.</> ("src/gen-test/" ++ target)
+  let outMain = outBase FP.</> ("src/main/" ++ target)
+  let outTest = outBase FP.</> ("src/test/" ++ target)
 
   -- JSON directories (relative to hydra-ext working directory)
-  let kernelJsonDir = maybe "../hydra-kernel/src/gen-main/json" id (optJsonDir opts)
-  let testJsonDir   = "../hydra-kernel/src/gen-test/json"
-  let extJsonDir    = maybe "src/gen-main/json" id (optExtJsonDir opts)
+  let kernelJsonDir = maybe "../../dist/json/hydra-kernel/src/main/json" id (optJsonDir opts)
+  let testJsonDir   = "../../dist/json/hydra-kernel/src/test/json"
+  let extJsonDir    = maybe "../../dist/json/hydra-ext/src/main/json" id (optExtJsonDir opts)
 
   let targetCap = case target of
         "haskell"     -> "Haskell"

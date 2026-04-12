@@ -92,7 +92,7 @@ stack build hydra:exe:update-kernel-tests
 stack exec update-kernel-tests -- $RTS_FLAGS
 
 # Patch TestGraph.hs to use TestEnv (real graph with primitives) instead of emptyGraph
-TESTGRAPH="../../packages/hydra-kernel/src/gen-test/haskell/Hydra/Test/TestGraph.hs"
+TESTGRAPH="../../dist/haskell/hydra-kernel/src/test/haskell/Hydra/Test/TestGraph.hs"
 if [ -f "$TESTGRAPH" ]; then
     echo "  Post-processing: patching TestGraph.hs..."
     sed_inplace 's/import qualified Hydra.Lexical as Lexical$/import qualified Hydra.Lexical as Lexical\nimport qualified Hydra.Test.TestEnv as TestEnv/' "$TESTGRAPH"
@@ -170,13 +170,13 @@ echo ""
 echo "Checking for new files..."
 echo ""
 
-NEW_FILES=$(git status --porcelain ../../packages/hydra-kernel/src/gen-main/haskell ../../packages/hydra-kernel/src/gen-test/haskell ../../packages/hydra-kernel/src/gen-main/json ../../packages/hydra-haskell/src/gen-main/haskell 2>/dev/null | grep "^??" | awk '{print $2}' || true)
+NEW_FILES=$(git status --porcelain ../../dist/haskell/hydra-kernel/src/main/haskell ../../dist/haskell/hydra-kernel/src/test/haskell ../../dist/json/hydra-kernel/src/main/json ../../dist/haskell/hydra-haskell/src/main/haskell 2>/dev/null | grep "^??" | awk '{print $2}' || true)
 
 if [ -n "$NEW_FILES" ]; then
     echo "New files were created. You may want to run:"
     echo ""
     echo "  cd $HYDRA_HASKELL_DIR"
-    echo "  git add ../../packages/hydra-kernel/src/gen-main/haskell ../../packages/hydra-kernel/src/gen-test/haskell ../../packages/hydra-kernel/src/gen-main/json ../../packages/hydra-haskell/src/gen-main/haskell"
+    echo "  git add ../../dist/haskell/hydra-kernel/src/main/haskell ../../dist/haskell/hydra-kernel/src/test/haskell ../../dist/json/hydra-kernel/src/main/json ../../dist/haskell/hydra-haskell/src/main/haskell"
     echo ""
     echo "New files:"
     echo "$NEW_FILES" | head -20

@@ -7,7 +7,7 @@
 -- Usage: runhaskell Demo.hs <json-dir> <output-dir>
 --
 -- Where:
---   <json-dir>    is the path to hydra-kernel/src/gen-main/json/
+--   <json-dir>    is the path to dist/json/hydra-kernel/src/main/json/
 --   <output-dir>  is the directory for output N-Triples files
 
 module Hydra.Ext.Demos.Shacl.Demo where

@@ -8,10 +8,12 @@ lazy val root = project
 
     scalaVersion := scala3Version,
 
-    Compile / unmanagedSourceDirectories += baseDirectory.value / "src" / "gen-main" / "scala",
+    Compile / unmanagedSourceDirectories += baseDirectory.value / ".." / ".." / "dist" / "scala" / "hydra-kernel" / "src" / "main" / "scala",
+    Compile / unmanagedSourceDirectories += baseDirectory.value / ".." / ".." / "heads" / "scala" / "src" / "main" / "scala",
 
     // Test sources include generated tests
-    Test / unmanagedSourceDirectories += baseDirectory.value / "src" / "gen-test" / "scala",
+    Test / unmanagedSourceDirectories += baseDirectory.value / ".." / ".." / "dist" / "scala" / "hydra-kernel" / "src" / "test" / "scala",
+    Test / unmanagedSourceDirectories += baseDirectory.value / ".." / ".." / "heads" / "scala" / "src" / "test" / "scala",
 
     // Exclude generation tests (Scala coder output tests) which require Array[Byte] binary support
     Test / unmanagedSources / excludeFilter := HiddenFileFilter || new SimpleFileFilter(

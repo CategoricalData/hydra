@@ -12,7 +12,7 @@ main = do
   let allMainModules = mainModules ++ hydraBootstrapCoderModules
   let universeModules = allMainModules ++ testModules
 
-  let testOutputDir = "../hydra-scala/src/gen-test/scala"
+  let testOutputDir = "../../dist/scala/hydra-kernel/src/test/scala"
   putStrLn "Generating test suite modules..."
   n <- writeScala testOutputDir universeModules testModules
   putStrLn $ "  Generated " ++ show n ++ " test suite files"
