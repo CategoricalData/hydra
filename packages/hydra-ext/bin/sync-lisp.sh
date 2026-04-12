@@ -119,7 +119,7 @@ dialect_dir() {
 # Patch Scheme test_graph.scm to build a full graph with primitives and schema types.
 # The graph must be defined AFTER test_terms and test_types (forward reference issue).
 # Copy annotation bindings alongside the generated test graph (for include)
-cp "$HYDRA_ROOT_DIR/packages/hydra-lisp/hydra-scheme/src/test/scheme/hydra/annotation_bindings.scm" \
+cp "$HYDRA_ROOT_DIR/heads/lisp/scheme/src/test/scheme/hydra/annotation_bindings.scm" \
    "$HYDRA_ROOT_DIR/packages/hydra-lisp/hydra-scheme/src/gen-test/scheme/hydra/test/annotation_bindings.scm" 2>/dev/null
 
 echo "Patching Scheme test_graph.scm..."
@@ -136,7 +136,7 @@ if [ -f "$SCHEME_TESTGRAPH" ]; then
 ;; Include annotation term-level bindings (shared with test runner).
 SCMEOF
     # Insert include with absolute path (Guile's include in define-library doesn't search load path)
-    ANN_BINDINGS_PATH="$HYDRA_ROOT_DIR/packages/hydra-lisp/hydra-scheme/src/test/scheme/hydra/annotation_bindings.scm"
+    ANN_BINDINGS_PATH="$HYDRA_ROOT_DIR/heads/lisp/scheme/src/test/scheme/hydra/annotation_bindings.scm"
     echo "(include \"$ANN_BINDINGS_PATH\")" >> "$SCHEME_TESTGRAPH"
     cat >> "$SCHEME_TESTGRAPH" << 'SCMEOF'
 
