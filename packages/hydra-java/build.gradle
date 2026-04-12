@@ -24,7 +24,6 @@ sourceSets {
     }
 }
 
-
 dependencies {
     // Note: these are currently "main" dependencies rather than "test" dependencies due to reusable test utilities.
     //       These will likely be broken out into a separate module in the future.
