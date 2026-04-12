@@ -54,7 +54,7 @@ if [ -n "$CODER_CHECK" ] && [ ! -f "$CODER_CHECK" ]; then
     echo "  Coder modules not found. Generating from ext JSON..."
     cd "$HYDRA_ROOT/packages/hydra-ext"
     stack build bootstrap-from-json 2>&1 | grep -v "^$"
-    EXT_JSON_DIR="$HYDRA_ROOT/packages/hydra-ext/src/gen-main/json"
+    EXT_JSON_DIR="$HYDRA_ROOT/dist/json/hydra-ext/src/main/json"
     stack exec bootstrap-from-json -- \
         --target scheme \
         --output "$HYDRA_SCHEME_DIR" \

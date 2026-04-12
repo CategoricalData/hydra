@@ -16,7 +16,7 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/../../.." && pwd)"
-HYDRA_EXT_ROOT="$REPO_ROOT/packages/hydra-ext"
+HYDRA_HASKELL_HEAD="$REPO_ROOT/heads/haskell"
 
 source "$SCRIPT_DIR/../../bin/common.sh"
 
@@ -64,15 +64,15 @@ run_host() {
 
   case "$host" in
     haskell)
-      local driver="$HYDRA_EXT_ROOT/src/main/haskell/Hydra/Ext/Demos/Shacl/Demo.hs"
+      local driver="$REPO_ROOT/demos/src/main/haskell/Hydra/Ext/Demos/Shacl/Demo.hs"
       if [ ! -f "$driver" ]; then
         echo -e "  ${YELLOW}SKIPPED${NC} (driver not found)"; return
       fi
-      cd "$HYDRA_EXT_ROOT"
+      cd "$HYDRA_HASKELL_HEAD"
       if echo ":load $driver
 :set args $JSON_DIR $out_dir
 main
-:quit" | stack ghci hydra-ext:lib --no-load --ghci-options='-v0 +RTS -K256M -A32M -RTS' 2> "$RUN_DIR/$host/stderr.txt" \
+:quit" | stack ghci hydra:lib --no-load --ghci-options='-v0 +RTS -K256M -A32M -RTS' 2> "$RUN_DIR/$host/stderr.txt" \
         | grep -v '^Ok' | grep -v '^Loaded' | grep -v '^\*' | grep -v '^$' \
         > "$RUN_DIR/$host/results.txt"; then
         echo "ok" > "$RUN_DIR/$host/_status"

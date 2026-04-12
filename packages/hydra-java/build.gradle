@@ -16,6 +16,7 @@ sourceSets {
             srcDirs += file("$projectDir/../../dist/java/hydra-pg/src/main/java")
             srcDirs += file("$projectDir/../../dist/java/hydra-rdf/src/main/java")
             srcDirs += file("$projectDir/../../dist/java/hydra-ext/src/main/java")
+            srcDirs += file("$projectDir/../../demos/src/main/java")
         }
     }
     test {
@@ -32,16 +33,29 @@ dependencies {
     api(platform(group: 'org.junit', name: 'junit-bom', version: junitVersion))
     api('org.junit.jupiter:junit-jupiter')
     api group: 'org.junit.jupiter', name: 'junit-jupiter-params', version: junitVersion
+
+    // Ext dependencies (formerly in hydra-ext build.gradle)
+    api group: 'org.apache.commons', name: 'commons-text', version: '1.10.0'
+    api group: 'com.cedarsoftware', name: 'json-io', version: '4.14.1'
+    api group: 'org.eclipse.rdf4j', name: 'rdf4j-rio-ntriples', version: rdf4jVersion
+    api 'org.antlr:antlr4-runtime:4.13.2'
+
+    testImplementation 'org.apache.commons:commons-csv:1.10.0'
 }
 
 tasks.named('sourcesJar') {
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
 }
 
-// Exclude generated ext files with class-name/filename mismatches or stale patterns
+// Exclude generated ext files with class-name/filename mismatches or stale patterns,
+// and ANTLR-dependent readers (require grammar generation plugin not available here)
 compileJava {
     exclude '**/hydra/ext/lisp/Coder.java'
     exclude '**/hydra/ext/scala/**'
+    exclude '**/hydra/ext/gql/GQLReader.java'
+    exclude '**/hydra/ext/cypher/CypherReader.java'
+    exclude '**/hydra/ext/cypher/FromCypher.java'
+    exclude '**/hydra/tools/AntlrReaderBase.java'
     exclude '**/hydra/ext/io/shex/syntax/**'
     exclude '**/hydra/ext/org/w3/owl/**'
     exclude '**/hydra/ext/org/w3/xml/schema/Integer.java'

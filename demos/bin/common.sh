@@ -66,7 +66,7 @@ extract_time() {
 #   -> echoes the classpath string
 # ---------------------------------------------------------------------------
 build_java_classpath() {
-    local cp="$_DEMO_REPO_ROOT/packages/hydra-ext/build/classes/java/main:$_DEMO_REPO_ROOT/packages/hydra-java/build/classes/java/main"
+    local cp="$_DEMO_REPO_ROOT/packages/hydra-java/build/classes/java/main:$_DEMO_REPO_ROOT/packages/hydra-java/build/classes/java/main"
     local name
     for name in "$@"; do
         local jar

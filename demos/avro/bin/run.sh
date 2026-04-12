@@ -17,7 +17,7 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/../../.." && pwd)"
-HYDRA_EXT_ROOT="$REPO_ROOT/packages/hydra-ext"
+HYDRA_HASKELL_HEAD="$REPO_ROOT/heads/haskell"
 
 source "$SCRIPT_DIR/../../bin/common.sh"
 
@@ -45,7 +45,7 @@ RUN_DIR=$(create_run_dir /tmp/hydra-avro-demo "$TAG")
 demo_demo_header "Avro Bidirectional Coder Demo"
 echo "Run directory: $RUN_DIR"
 
-cd "$HYDRA_EXT_ROOT"
+cd "$HYDRA_HASKELL_HEAD"
 
 case "$DEMO" in
   1) GHCI_FN="runForwardDemo" ;;
@@ -70,7 +70,7 @@ putStrLn (\"\\nElapsed: \" ++ show (round ms :: Int) ++ \" ms\")
 
 demo_header "Running demo: $DEMO"
 
-if echo "$GHCI_CMD" | stack ghci hydra-ext:lib --ghci-options='-v0' \
+if echo "$GHCI_CMD" | stack ghci hydra:lib --ghci-options='-v0' \
   > "$RUN_DIR/stdout.txt" 2> "$RUN_DIR/stderr.txt"; then
   cat "$RUN_DIR/stdout.txt"
   echo -e "\n${GREEN}Demo completed successfully.${NC}"
