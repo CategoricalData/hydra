@@ -21,6 +21,7 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 HYDRA_EXT_DIR="$( cd "$SCRIPT_DIR/.." && pwd )"
 HYDRA_ROOT_DIR="$( cd "$HYDRA_EXT_DIR/../.." && pwd )"
 HYDRA_HASKELL_DIR="$HYDRA_ROOT_DIR/packages/hydra-haskell"
+HYDRA_HASKELL_HEAD_DIR="$HYDRA_ROOT_DIR/heads/haskell"
 
 source "$HYDRA_ROOT_DIR/bin/lib/common.sh"
 
@@ -73,7 +74,7 @@ if [ "$QUICK_MODE" = false ]; then
     step 3 $TOTAL_STEPS "Building and testing Haskell"
     echo ""
 
-    cd "$HYDRA_HASKELL_DIR"
+    cd "$HYDRA_HASKELL_HEAD_DIR"
 
     stack build 2>&1
     stack test 2>&1

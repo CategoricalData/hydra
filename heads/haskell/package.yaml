@@ -4,20 +4,21 @@ author:       Joshua Shinavier <josh@fortytwo.net>
 license:      Apache-2.0
 license-file: LICENSE
 category:     Data
-synopsis:     Haskell support for the Hydra programming language
+synopsis:     "The Hydra Haskell head: primitives, DSL infrastructure, generation driver"
 description:  >
   Hydra is an implementation of the LambdaGraph data model, which takes advantage of an isomorphism
   between labeled hypergraphs and typed lambda calculus: in Hydra, "graphs are programs, and programs are graphs".
-  The language is designed to be embedded in other programming languages -- currently Haskell, Java, and Python.
-  This package provides the Haskell-support components: the Haskell syntax model, the Haskell coder,
-  and utilities for driving Hydra's Haskell code generation. It depends on the language-independent
-  hydra-kernel package.
+  The Haskell head provides the hand-written Haskell runtime Hydra needs in order to build and
+  regenerate itself: primitive libraries (Hydra.Lib.*), the embedded DSL infrastructure
+  (Hydra.Dsl.*), the generation driver (Hydra.Generation), the kernel entry point (Hydra.Kernel),
+  module support utilities, and the exec binaries that drive Hydra's Haskell code generation.
+  It consumes the language-independent kernel DSL sources and generated kernel runtime from
+  packages/hydra-kernel/, plus the Haskell coder DSL sources and generated output from
+  packages/hydra-haskell/, and produces all Haskell-host build artifacts.
 github:       CategoricalData/hydra
 
 extra-source-files:
   - LICENSE
-  - README.md
-  - stack.yaml
 
 dependencies:
   - aeson                         >= 2.1.0 && < 2.3
@@ -27,7 +28,6 @@ dependencies:
   - containers                    >= 0.6.7 && < 0.8
   - directory                     >= 1.3.6 && < 1.4
   - filepath                      >= 1.4.200 && < 1.6
-  - hydra-kernel
   - regex-tdfa                    >= 1.3.2 && < 1.4
   - scientific                    >= 0.3.7 && < 0.4
   - split                         >= 0.2.3 && < 0.3
@@ -37,7 +37,10 @@ dependencies:
 library:
   source-dirs:
     - src/main/haskell
-    - src/gen-main/haskell
+    - ../../packages/hydra-kernel/src/main/haskell
+    - ../../packages/hydra-kernel/src/gen-main/haskell
+    - ../../packages/hydra-haskell/src/main/haskell
+    - ../../packages/hydra-haskell/src/gen-main/haskell
 
 executables:
   update-kernel-tests:
@@ -111,3 +114,19 @@ executables:
     ghc-options: [-rtsopts]
     dependencies:
       - hydra
+
+tests:
+  hydra-test:
+    main: Spec.hs
+    source-dirs:
+      - src/test/haskell
+      - ../../packages/hydra-kernel/src/gen-test/haskell
+    dependencies:
+      - hydra
+      - hspec                      >= 2.11.0 && < 2.12
+      - hspec-discover              >= 2.11.0 && < 2.12
+      - HUnit
+      - QuickCheck
+      - mtl
+      - process
+      - time

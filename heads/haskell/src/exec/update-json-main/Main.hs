@@ -10,7 +10,7 @@ import Control.Exception (catch, SomeException)
 
 main :: IO ()
 main = do
-  outputDir <- parseOutputDir "../hydra-kernel/src/gen-main/json"
+  outputDir <- parseOutputDir "../../packages/hydra-kernel/src/gen-main/json"
   let allMods = mainModules ++ evalLibModules
   putStrLn "=== Generate Hydra main modules JSON ==="
   putStrLn ""
