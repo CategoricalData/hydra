@@ -14,7 +14,7 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/../../.." && pwd)"
-HYDRA_EXT_ROOT="$REPO_ROOT/packages/hydra-ext"
+HYDRA_HASKELL_HEAD="$REPO_ROOT/heads/haskell"
 
 source "$SCRIPT_DIR/../../bin/common.sh"
 
@@ -58,7 +58,7 @@ RUN_DIR=$(create_run_dir /tmp/hydra-genpg "$TAG")
 
 demo_header "Building"
 cd "$REPO_ROOT"
-./gradlew :hydra-ext:compileJava --quiet 2>&1
+./gradlew :hydra-java:compileJava --quiet 2>&1
 
 JAVA_CP="$(build_java_classpath commons-text commons-csv commons-lang3)"
 
@@ -75,7 +75,7 @@ run_host() {
   echo "skipped" > "$RUN_DIR/$host/_status"
 
   demo_header "Running $host driver"
-  cd "$HYDRA_EXT_ROOT"
+  cd "$HYDRA_HASKELL_HEAD"
   rm -f "$OUTPUT_JSONL"
 
   case "$host" in
@@ -89,7 +89,7 @@ t1 <- T.getCPUTime
 let ms = fromIntegral (t1 - t0) / 1e9 :: Double
 IO.hPutStrLn IO.stderr (Prelude.concat [\"HYDRA_TIME_MS=\", show ms])
 :quit"
-      if echo "$ghci_cmd" | stack ghci hydra-ext:lib --ghci-options='-v0' \
+      if echo "$ghci_cmd" | stack ghci hydra:lib --ghci-options='-v0' \
         > "$RUN_DIR/$host/stdout.txt" 2> "$RUN_DIR/$host/stderr.txt"; then
         echo "ok" > "$RUN_DIR/$host/_status"
       else
@@ -105,7 +105,7 @@ IO.hPutStrLn IO.stderr (Prelude.concat [\"HYDRA_TIME_MS=\", show ms])
       fi
       ;;
     python)
-      local driver="$HYDRA_EXT_ROOT/src/main/python/hydra/demos/genpg/demo.py"
+      local driver="$REPO_ROOT/demos/src/main/python/python/hydra/demos/genpg/demo.py"
       if [ ! -f "$driver" ]; then
         echo -e "  ${YELLOW}SKIPPED${NC} (driver not found)"; return
       fi

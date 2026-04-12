@@ -16,7 +16,7 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/../../.." && pwd)"
-HYDRA_EXT_ROOT="$REPO_ROOT/packages/hydra-ext"
+HYDRA_HASKELL_HEAD="$REPO_ROOT/heads/haskell"
 
 source "$SCRIPT_DIR/../../bin/common.sh"
 
@@ -52,9 +52,9 @@ RUN_DIR=$(create_run_dir /tmp/hydra-validatepg "$TAG")
 
 demo_header "Building Java"
 cd "$REPO_ROOT"
-./gradlew :hydra-ext:compileJava :hydra-java:compileJava --quiet 2>&1
+./gradlew :hydra-java:compileJava :hydra-java:compileJava --quiet 2>&1
 
-JAVA_CP="$REPO_ROOT/packages/hydra-ext/build/classes/java/main:$REPO_ROOT/packages/hydra-java/build/classes/java/main"
+JAVA_CP="$REPO_ROOT/packages/hydra-java/build/classes/java/main:$REPO_ROOT/packages/hydra-java/build/classes/java/main"
 
 # ============================================================================
 # Generate data
@@ -95,15 +95,15 @@ run_host() {
       fi
       ;;
     haskell)
-      local driver="$HYDRA_EXT_ROOT/src/main/haskell/Hydra/Ext/Demos/ValidatePg/Demo.hs"
+      local driver="$REPO_ROOT/demos/src/main/haskell/Hydra/Ext/Demos/ValidatePg/Demo.hs"
       if [ ! -f "$driver" ]; then
         echo -e "  ${YELLOW}SKIPPED${NC} (driver not found)"; return
       fi
-      cd "$HYDRA_EXT_ROOT"
+      cd "$HYDRA_HASKELL_HEAD"
       if echo ":load $driver
 :set args $DATA_DIR
 main
-:quit" | stack ghci hydra-ext:lib --no-load --ghci-options='-v0' 2> "$RUN_DIR/$host/stderr.txt" \
+:quit" | stack ghci hydra:lib --no-load --ghci-options='-v0' 2> "$RUN_DIR/$host/stderr.txt" \
         | grep -v '^Ok' | grep -v '^Loaded' | grep -v '^\*' | grep -v '^$' \
         > "$RUN_DIR/$host/results.txt"; then
         echo "ok" > "$RUN_DIR/$host/_status"
@@ -112,11 +112,11 @@ main
       fi
       ;;
     python)
-      local driver="$HYDRA_EXT_ROOT/src/main/python/hydra/demos/validatepg/demo.py"
+      local driver="$REPO_ROOT/demos/src/main/python/python/hydra/demos/validatepg/demo.py"
       if [ ! -f "$driver" ]; then
         echo -e "  ${YELLOW}SKIPPED${NC} (driver not found)"; return
       fi
-      cd "$HYDRA_EXT_ROOT"
+      cd "$HYDRA_HASKELL_HEAD"
       if python3 "$driver" "$DATA_DIR" \
         > "$RUN_DIR/$host/results.txt" 2> "$RUN_DIR/$host/stderr.txt"; then
         echo "ok" > "$RUN_DIR/$host/_status"

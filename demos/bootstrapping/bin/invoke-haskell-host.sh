@@ -67,7 +67,7 @@ RTS_FLAGS="+RTS -K256M -A32M -RTS"
 echo "Building bootstrap-from-json..."
 BUILD_START=$(date +%s)
 cd "$HYDRA_EXT_DIR"
-stack build hydra-ext:exe:bootstrap-from-json
+stack build hydra:exe:bootstrap-from-json
 BUILD_END=$(date +%s)
 echo "  Build time: $((BUILD_END - BUILD_START))s"
 echo ""

@@ -13,7 +13,7 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/../../.." && pwd)"
-HYDRA_EXT_ROOT="$REPO_ROOT/packages/hydra-ext"
+HYDRA_HASKELL_HEAD="$REPO_ROOT/heads/haskell"
 
 source "$SCRIPT_DIR/../../bin/common.sh"
 
@@ -41,18 +41,18 @@ demo_header "Automatic Differentiation Demo"
 OUT_DIR="$RUN_DIR/output"
 mkdir -p "$OUT_DIR"
 
-DRIVER="$HYDRA_EXT_ROOT/src/main/haskell/Hydra/Ext/Demos/Grad/Demo.hs"
+DRIVER="$REPO_ROOT/demos/src/main/haskell/Hydra/Ext/Demos/Grad/Demo.hs"
 
 if [ ! -f "$DRIVER" ]; then
   echo -e "  ${RED}ERROR${NC}: Driver not found at $DRIVER"
   exit 1
 fi
 
-cd "$HYDRA_EXT_ROOT"
+cd "$HYDRA_HASKELL_HEAD"
 echo ":load $DRIVER
 :set args $OUT_DIR
 main
-:quit" | stack ghci hydra-ext:lib --no-load --ghci-options='-v0 +RTS -K256M -A32M -RTS' 2> "$RUN_DIR/stderr.txt" \
+:quit" | stack ghci hydra:lib --no-load --ghci-options='-v0 +RTS -K256M -A32M -RTS' 2> "$RUN_DIR/stderr.txt" \
   | grep -v '^Ok' | grep -v '^Loaded' | grep -v '^\*' | grep -v '^$' \
   | tee "$RUN_DIR/results.txt"
 
