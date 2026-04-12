@@ -36,4 +36,4 @@ PYTHONPATH="$HYDRA_PYTHON_DIR/src/main/python:$HYDRA_PYTHON_DIR/src/gen-main/pyt
 export PYTHONPATH
 
 # Run the Python bootstrap (its output includes detailed timing and file counts)
-"$PYTHON" -m hydra.bootstrap "$@" --json-dir "$HYDRA_ROOT/packages/hydra-kernel/src/gen-main/json"
+"$PYTHON" -m hydra.bootstrap "$@" --json-dir "$HYDRA_ROOT/dist/json/hydra-kernel/src/main/json"

@@ -210,7 +210,7 @@ def main():
 
     if not os.path.exists(JSON_DIR):
         print(f"Error: {JSON_DIR} not found.")
-        print("The kernel JSON files should already exist in hydra-kernel/src/gen-main/json/hydra/")
+        print("The kernel JSON files should already exist in dist/json/hydra-kernel/src/main/json/hydra/")
         sys.exit(1)
 
     modules = load_modules()

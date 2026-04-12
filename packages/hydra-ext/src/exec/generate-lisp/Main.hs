@@ -19,9 +19,9 @@ main = do
   let coderOnlyModules = filter (\m -> moduleNamespace m `notElem` kernelNamespaces) hydraBootstrapCoderModules
 
   -- Scheme
-  let schemeMainDir = "../hydra-lisp/hydra-scheme/src/gen-main/scheme"
-  let schemeTestDir = "../hydra-lisp/hydra-scheme/src/gen-test/scheme"
-  let libSrcDir = "../hydra-lisp/hydra-scheme/src/main/scheme/hydra/lib"
+  let schemeMainDir = "../../dist/scheme/hydra-kernel/src/main/scheme"
+  let schemeTestDir = "../../dist/scheme/hydra-kernel/src/test/scheme"
+  let libSrcDir = "../../heads/lisp/scheme/src/main/scheme/hydra/lib"
   let libDstDir = schemeMainDir </> "hydra" </> "lib"
 
   putStrLn "Generating Scheme..."
@@ -52,8 +52,8 @@ main = do
   putStrLn $ "  " ++ show nSchemeStubs ++ " stub files"
 
   -- Clojure
-  let clojureMainDir = "../hydra-lisp/hydra-clojure/src/gen-main/clojure"
-  let clojureTestDir = "../hydra-lisp/hydra-clojure/src/gen-test/clojure"
+  let clojureMainDir = "../../dist/clojure/hydra-kernel/src/main/clojure"
+  let clojureTestDir = "../../dist/clojure/hydra-kernel/src/test/clojure"
   putStrLn "Generating Clojure..."
   n2 <- writeClojure clojureMainDir mainModules mainModules
   putStrLn $ "  " ++ show n2 ++ " kernel modules"
@@ -65,8 +65,8 @@ main = do
   putStrLn $ "  " ++ show t2 ++ " test modules"
 
   -- Common Lisp
-  let commonLispMainDir = "../hydra-lisp/hydra-common-lisp/src/gen-main/common-lisp"
-  let commonLispTestDir = "../hydra-lisp/hydra-common-lisp/src/gen-test/common-lisp"
+  let commonLispMainDir = "../../dist/common-lisp/hydra-kernel/src/main/common-lisp"
+  let commonLispTestDir = "../../dist/common-lisp/hydra-kernel/src/test/common-lisp"
   putStrLn "Generating Common Lisp..."
   n3 <- writeCommonLisp commonLispMainDir mainModules mainModules
   putStrLn $ "  " ++ show n3 ++ " kernel modules"
@@ -78,8 +78,8 @@ main = do
   putStrLn $ "  " ++ show t3 ++ " test modules"
 
   -- Emacs Lisp
-  let emacsLispMainDir = "../hydra-lisp/hydra-emacs-lisp/src/gen-main/emacs-lisp"
-  let emacsLispTestDir = "../hydra-lisp/hydra-emacs-lisp/src/gen-test/emacs-lisp"
+  let emacsLispMainDir = "../../dist/emacs-lisp/hydra-kernel/src/main/emacs-lisp"
+  let emacsLispTestDir = "../../dist/emacs-lisp/hydra-kernel/src/test/emacs-lisp"
   putStrLn "Generating Emacs Lisp..."
   n4 <- writeEmacsLisp emacsLispMainDir mainModules mainModules
   putStrLn $ "  " ++ show n4 ++ " kernel modules"

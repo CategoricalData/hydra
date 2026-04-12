@@ -38,9 +38,9 @@ library:
   source-dirs:
     - src/main/haskell
     - ../../packages/hydra-kernel/src/main/haskell
-    - ../../packages/hydra-kernel/src/gen-main/haskell
+    - ../../dist/haskell/hydra-kernel/src/main/haskell
     - ../../packages/hydra-haskell/src/main/haskell
-    - ../../packages/hydra-haskell/src/gen-main/haskell
+    - ../../dist/haskell/hydra-haskell/src/main/haskell
 
 executables:
   update-kernel-tests:
@@ -120,7 +120,7 @@ tests:
     main: Spec.hs
     source-dirs:
       - src/test/haskell
-      - ../../packages/hydra-kernel/src/gen-test/haskell
+      - ../../dist/haskell/hydra-kernel/src/test/haskell
     dependencies:
       - hydra
       - hspec                      >= 2.11.0 && < 2.12
