@@ -6,11 +6,11 @@ It explores an isomorphism between labeled [hypergraphs](https://en.wikipedia.or
 and [typed lambda calculus](https://en.wikipedia.org/wiki/Typed_lambda_calculus):
 in Hydra, programs are graphs, and graphs are programs.
 Hydra has the ability to translate its own kernel into several other languages, including
-Haskell ([Hydra-Haskell](https://github.com/CategoricalData/hydra/tree/main/hydra-haskell)),
-Java ([Hydra-Java](https://github.com/CategoricalData/hydra/tree/main/hydra-java)),
-Python ([Hydra-Python](https://github.com/CategoricalData/hydra/tree/main/hydra-python)),
-Scala ([Hydra-Scala](https://github.com/CategoricalData/hydra/tree/main/hydra-scala)),
-and Lisp ([Hydra-Lisp](https://github.com/CategoricalData/hydra/tree/main/hydra-lisp),
+Haskell ([Hydra-Haskell](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-haskell)),
+Java ([Hydra-Java](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-java)),
+Python ([Hydra-Python](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-python)),
+Scala ([Hydra-Scala](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-scala)),
+and Lisp ([Hydra-Lisp](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-lisp),
 with four dialects: Clojure, Scheme, Common Lisp, and Emacs Lisp).
 All five implementations are complete and pass the
 [common test suite](https://github.com/CategoricalData/hydra/wiki/Testing).
@@ -99,8 +99,8 @@ The current release is **0.15.0**; see the [CHANGELOG](CHANGELOG.md) for details
 | Java | [hydra-java on Maven Central](https://central.sonatype.com/artifact/net.fortytwo.hydra/hydra-java) | `net.fortytwo.hydra:hydra-java:0.15.0` |
 | Java (extensions) | [hydra-ext on Maven Central](https://central.sonatype.com/artifact/net.fortytwo.hydra/hydra-ext) | `net.fortytwo.hydra:hydra-ext:0.15.0` |
 | Python | [conda-forge](https://github.com/conda-forge/staged-recipes/pull/30887) (in progress) | Coming soon |
-| Scala | Not yet published | Build locally with `sbt compile` in `hydra-scala/` |
-| Lisp | Not yet published | See dialect-specific instructions in `hydra-lisp/` |
+| Scala | Not yet published | Build locally with `sbt compile` in `packages/hydra-scala/` |
+| Lisp | Not yet published | See dialect-specific instructions in `packages/hydra-lisp/` |
 
 See the [release process](https://github.com/CategoricalData/hydra/wiki/Release-process)
 for how releases are built and published.

@@ -141,7 +141,7 @@ Hydra-Java uses the **src/main vs src/gen-main** separation pattern
 
 The Java code in `src/gen-main/java` and `src/gen-test/java` is generated from sources
 in Hydra's bootstrapping implementation, Hydra-Haskell.
-See the [Hydra-Haskell README](https://github.com/CategoricalData/hydra/tree/main/hydra-haskell)
+See the [Hydra-Haskell README](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-haskell)
 for more information on how this works.
 
 The recommended way to regenerate all Java code is to use the sync script:
@@ -168,11 +168,11 @@ And run the following commands in the GHC REPL:
 
 ```haskell
 -- Generate the kernel
-writeJava "../hydra-java/src/gen-main/java" kernelModules kernelModules
+writeJava "../../dist/java/hydra-kernel/src/main/java" kernelModules kernelModules
 
 -- Generate the test suite
 let allModules = mainModules ++ testModules
-writeJava "../hydra-java/src/gen-test/java" allModules baseTestModules
+writeJava "../../dist/java/hydra-kernel/src/test/java" allModules baseTestModules
 ```
 
 ## Design Notes
@@ -180,7 +180,7 @@ writeJava "../hydra-java/src/gen-test/java" allModules baseTestModules
 ### Algebraic Data Types
 
 The Hydra coder which generates everything in `src/gen-main` and `src/gen-test` can be found
-[here](https://github.com/CategoricalData/hydra/tree/main/hydra-ext/src/main/haskell/Hydra/Ext/Java).
+[here](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-ext/src/main/haskell/Hydra/Ext/Java).
 A variety of techniques are used in order to materialize Hydra's core language in Java,
 including a [pattern](https://garciat.com/posts/java-adt) for representing algebraic data types
 which was originally proposed by Gabriel Garcia,
@@ -222,12 +222,12 @@ public class Vertex<V> {
 ```
 
 See
-[Vertex.java](https://github.com/CategoricalData/hydra/blob/main/hydra-java/src/gen-main/java/hydra/pg/model/Vertex.java)
+[Vertex.java](https://github.com/CategoricalData/hydra/blob/main/dist/java/hydra-kernel/src/main/java/hydra/pg/model/Vertex.java)
 for the complete class, as well as the `Vertex` type in
-[Pg/Model.hs](https://github.com/CategoricalData/hydra/blob/main/hydra-ext/src/gen-main/haskell/Hydra/Pg/Model.hs)
+[Pg/Model.hs](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-ext/src/gen-main/haskell/Hydra/Pg/Model.hs)
 for comparison.
 Both files were generated from the property graph model defined
-[here](https://github.com/CategoricalData/hydra/blob/main/hydra-ext/src/main/haskell/Hydra/Ext/Sources/Pg/Model.hs).
+[here](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-ext/src/main/haskell/Hydra/Ext/Sources/Pg/Model.hs).
 
 ### Union Types and Visitors
 
@@ -266,15 +266,15 @@ public abstract class Element<V> {
 ```
 
 See
-[Element.java](https://github.com/CategoricalData/hydra/blob/main/hydra-java/src/gen-main/java/hydra/pg/model/Element.java)
+[Element.java](https://github.com/CategoricalData/hydra/blob/main/dist/java/hydra-kernel/src/main/java/hydra/pg/model/Element.java)
 for the complete class.
 The `Visitor` class is for pattern matching over the alternatives,
 and `PartialVisitor` is a convenient extension which allows supplying a default value
 for alternatives not matched explicitly.
 
 The
-[Rewriting](https://github.com/CategoricalData/hydra/blob/main/hydra-java/src/gen-main/java/hydra/rewriting/Rewriting.java)
+[Rewriting](https://github.com/CategoricalData/hydra/blob/main/dist/java/hydra-kernel/src/main/java/hydra/rewriting/Rewriting.java)
 and
-[Reduction](https://github.com/CategoricalData/hydra/blob/main/hydra-java/src/gen-main/java/hydra/reduction/Reduction.java)
+[Reduction](https://github.com/CategoricalData/hydra/blob/main/dist/java/hydra-kernel/src/main/java/hydra/reduction/Reduction.java)
 classes are good examples of pattern matching in action, and there are simpler examples in
-[VisitorTest.java](https://github.com/CategoricalData/hydra/blob/main/hydra-java/src/test/java/hydra/VisitorTest.java).
+[VisitorTest.java](https://github.com/CategoricalData/hydra/blob/main/heads/java/src/test/java/hydra/VisitorTest.java).

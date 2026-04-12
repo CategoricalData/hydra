@@ -132,7 +132,7 @@ Hydra-Python uses the **src/main vs src/gen-main** separation pattern
 
 The Python code in `src/gen-main/python` and `src/gen-test/python` is generated from sources
 in Hydra's bootstrapping implementation, Hydra-Haskell.
-See the [Hydra-Haskell README](https://github.com/CategoricalData/hydra/tree/main/hydra-haskell)
+See the [Hydra-Haskell README](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-haskell)
 for more information on how this works.
 
 The recommended way to regenerate all Python code is to use the sync script:
@@ -158,11 +158,11 @@ And run the following commands in the GHC REPL:
 
 ```haskell
 -- Generate the kernel
-writePython "../hydra-python/src/gen-main/python" kernelModules kernelModules
+writePython "../../dist/python/hydra-kernel/src/main/python" kernelModules kernelModules
 
 -- Generate the test suite
 let allModules = mainModules ++ testModules
-writePython "../hydra-python/src/gen-test/python" allModules baseTestModules
+writePython "../../dist/python/hydra-kernel/src/test/python" allModules baseTestModules
 ```
 
 ### Validate generated code
