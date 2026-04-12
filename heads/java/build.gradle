@@ -1,0 +1,7 @@
+// heads/java is currently built as part of the hydra-java package via source-set
+// crossover (see ../../packages/hydra-java/build.gradle). This file is a placeholder
+// for the future state where heads/java builds standalone and its output is copied
+// into dist/java/hydra-kernel during sync.
+//
+// Until then, no gradle subproject is defined here; root settings.gradle does not
+// include 'heads-java'.
