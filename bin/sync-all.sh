@@ -221,7 +221,7 @@ if $TARGET_HYDRA; then
     stack exec update-kernel-tests -- $RTS_FLAGS
 
     # Patch TestGraph.hs to use TestEnv (real graph with primitives) instead of emptyGraph
-    TESTGRAPH="../../packages/hydra-kernel/src/gen-test/haskell/Hydra/Test/TestGraph.hs"
+    TESTGRAPH="../../dist/haskell/hydra-kernel/src/test/haskell/Hydra/Test/TestGraph.hs"
     if [ -f "$TESTGRAPH" ]; then
         echo "  Post-processing: patching TestGraph.hs..."
         sed_inplace 's/import qualified Hydra.Lexical as Lexical$/import qualified Hydra.Lexical as Lexical\nimport qualified Hydra.Test.TestEnv as TestEnv/' "$TESTGRAPH"
