@@ -1,8 +1,8 @@
 # Demos
 
 Hydra includes several demos that illustrate different capabilities of the system.
-Haskell source code for all demos lives in `hydra-ext/src/main/haskell/Hydra/Ext/Demos/`.
-Runnable scripts, input data, and output files live in `hydra-ext/demos/`.
+Haskell source code for all demos lives in `packages/hydra-ext/src/main/haskell/Hydra/Ext/Demos/`.
+Runnable scripts, input data, and output files live in `packages/hydra-ext/demos/`.
 
 ## GenPG (CSV to property graph)
 
@@ -26,7 +26,7 @@ Demo videos:
 [Part 2](https://www.linkedin.com/posts/joshuashinavier_here-is-part-2-of-the-hydra-property-graph-activity-7358601988755910657-HnCh)
 walk through the LLM-assisted workflow.
 
-See the [GenPG README](../hydra-ext/demos/genpg/README.md) for setup, usage, and code generation instructions.
+See the [GenPG README](../packages/hydra-ext/demos/genpg/README.md) for setup, usage, and code generation instructions.
 
 ## Bootstrapping (everything-to-everything code generation)
 
@@ -50,7 +50,7 @@ The pipeline works in four steps:
 The `bin/bootstrap-all.sh` script runs all paths and diffs the output against the canonical baselines
 in the repository, reporting pass/diff/fail per path.
 
-See the [Bootstrapping README](../hydra-ext/demos/bootstrapping/README.md) for prerequisites,
+See the [Bootstrapping README](../packages/hydra-ext/demos/bootstrapping/README.md) for prerequisites,
 usage, architecture details, and known limitations.
 
 ## ValidatePG (property graph validation)
@@ -64,7 +64,7 @@ as JSON via `hydra.encode.pg.model`) is consumed by drivers in Haskell, Java, an
 Each driver decodes the JSON, runs `hydra.pg.validation.validateGraph`, and prints the results.
 An orchestrator script runs all three, compares their output, and displays a timing summary.
 
-See the [ValidatePG README](../hydra-ext/demos/validatepg/README.md) for setup and usage.
+See the [ValidatePG README](../packages/hydra-ext/demos/validatepg/README.md) for setup and usage.
 
 ## SHACL (RDF data generation and validation)
 
@@ -76,13 +76,13 @@ shapes catch constraint violations (missing required properties, wrong datatypes
 
 The demo uses Hydra's own type system as the subject: all kernel type elements that the SHACL
 language can represent (records, unions, literals, newtypes, named type references, collections)
-become SHACL shapes. The kernel modules serialized as JSON in `hydra-haskell/src/gen-main/json/`
+become SHACL shapes. The kernel modules serialized as JSON in `dist/json/hydra-kernel/src/main/json/`
 are decoded back into `Module` terms and encoded as RDF data conforming to those shapes.
 
 The demo currently runs in Haskell. The SHACL coder and RDF serde are generated into Java and
 Python as well, so translingual support is feasible.
 
-See the [SHACL README](../hydra-ext/demos/shacl/README.md) for setup and usage.
+See the [SHACL README](../packages/hydra-ext/demos/shacl/README.md) for setup and usage.
 
 ## Avro bidirectional coder
 
@@ -110,7 +110,7 @@ It runs five sub-demos:
 The underlying workflow engine is `Hydra.Ext.Tools.AvroWorkflows`, which parses Avro schemas,
 decodes JSON data into typed Hydra terms, and applies the chosen last-mile transformation.
 
-See the [Avro README](../hydra-ext/demos/avro/README.md) for setup and usage.
+See the [Avro README](../packages/hydra-ext/demos/avro/README.md) for setup and usage.
 
 ## GraphQL JSON (querying Hydra modules with GraphQL)
 
@@ -127,7 +127,7 @@ inspecting module details, searching by description, and ranking modules by elem
 The architecture is naturally translingual -- the GraphQL coder is a generated function that
 could run in any Hydra target language.
 
-See the [GraphQL JSON README](../hydra-ext/demos/graphql-json/README.md) for setup, usage,
+See the [GraphQL JSON README](../packages/hydra-ext/demos/graphql-json/README.md) for setup, usage,
 and example queries.
 
 ## Metered evaluation
@@ -139,4 +139,4 @@ reduces the terms, and prints how many times each primitive function was called 
 This demonstrates how the `Flow` monad's trace threading can be repurposed for instrumentation
 beyond error reporting -- for example, counting API calls that consume time or resources.
 
-Entry point: `hydra-ext/src/main/haskell/Hydra/Ext/Demos/MeteredEvaluation.hs`.
+Entry point: `packages/hydra-ext/src/main/haskell/Hydra/Ext/Demos/MeteredEvaluation.hs`.

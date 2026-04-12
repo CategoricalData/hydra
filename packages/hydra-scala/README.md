@@ -21,7 +21,7 @@ Requires **Scala 3.3.7** (LTS) and **sbt 1.10.x**.
 sbt compile
 
 # Run the bootstrapping entry point (generates code for a target language from JSON)
-sbt "runMain hydra.bootstrap --target java --json-dir ../hydra-haskell/src/gen-main/json"
+sbt "runMain hydra.bootstrap --target java --json-dir ../../dist/json/hydra-kernel/src/main/json"
 
 # Start a Scala 3 REPL
 sbt console

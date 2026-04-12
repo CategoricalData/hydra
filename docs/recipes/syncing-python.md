@@ -12,21 +12,21 @@ The synchronization process generates four categories of Python code:
 
 | Category | Source | Target | Description |
 |----------|--------|--------|-------------|
-| Kernel modules | `Hydra.Sources.All.kernelModules` | `hydra-python/src/gen-main/python/hydra/` | Core Hydra types and functions |
-| Eval lib modules | `Hydra.Sources.Eval.Lib.All.evalLibModules` | `hydra-python/src/gen-main/python/hydra/eval/` | Interpreter-level primitives |
-| Kernel tests | `Hydra.Sources.Test.All.testModules` | `hydra-python/src/gen-test/python/hydra/test/` | Test data structures |
-| Generation tests | TestSuite + TestGroups | `hydra-python/src/gen-test/python/generation/` | Executable pytest tests |
+| Kernel modules | `Hydra.Sources.All.kernelModules` | `dist/python/hydra-kernel/src/main/python/hydra/` | Core Hydra types and functions |
+| Eval lib modules | `Hydra.Sources.Eval.Lib.All.evalLibModules` | `dist/python/hydra-kernel/src/main/python/hydra/eval/` | Interpreter-level primitives |
+| Kernel tests | `Hydra.Sources.Test.All.testModules` | `dist/python/hydra-kernel/src/test/python/hydra/test/` | Test data structures |
+| Generation tests | TestSuite + TestGroups | `dist/python/hydra-kernel/src/test/python/generation/` | Executable pytest tests |
 
 ## Prerequisites
 
 Before synchronizing Python, ensure Hydra-Haskell is consistent:
 
 ```bash
-cd hydra-haskell
+cd heads/haskell
 
 # Regenerate all Haskell artifacts
 stack ghci
-> writeHaskell "src/gen-main/haskell" kernelModules kernelModules
+> writeHaskell "../../dist/haskell/hydra-kernel/src/main/haskell" kernelModules kernelModules
 > :quit
 
 # Run all Haskell tests
@@ -46,7 +46,7 @@ The simplest way to synchronize everything (Haskell, Ext, Java, Python, Scala, a
 To synchronize only Python:
 
 ```bash
-cd hydra-ext
+cd packages/hydra-ext
 ./bin/sync-python.sh           # or --quick to skip tests
 ```
 
@@ -68,7 +68,7 @@ If you prefer to run steps individually, or need to regenerate only specific par
 ### Step 1: Build the bootstrap executable
 
 ```bash
-cd hydra-ext
+cd packages/hydra-ext
 stack build hydra-ext:exe:bootstrap-from-json
 ```
 
@@ -89,15 +89,15 @@ You can omit flags to generate only a subset:
 ### Step 3: Run Python tests
 
 ```bash
-cd ../hydra-python
+cd ../../packages/hydra-python
 source .venv/bin/activate
-PYTHONPATH=src/main/python:src/gen-main/python:src/gen-test/python pytest src/test/python/test_suite_runner.py src/gen-test/python/generation -q
+PYTHONPATH=../../heads/python/src/main/python:../../dist/python/hydra-kernel/src/main/python:../../dist/python/hydra-kernel/src/test/python pytest ../../heads/python/src/test/python/test_suite_runner.py ../../dist/python/hydra-kernel/src/test/python/generation -q
 ```
 
 ### Step 4: Add new files to git
 
 ```bash
-git add src/main/python src/gen-main/python src/gen-test/python
+git add heads/python/src/main/python dist/python/hydra-kernel/src/main/python dist/python/hydra-kernel/src/test/python
 ```
 
 ## GHCi Environment
@@ -105,7 +105,7 @@ git add src/main/python src/gen-main/python src/gen-test/python
 For interactive generation, use:
 
 ```bash
-cd hydra-ext
+cd packages/hydra-ext
 stack ghci hydra-ext:lib hydra:hydra-test
 ```
 
@@ -140,7 +140,7 @@ Check the output for "Skipping" messages to identify problematic modules.
 ### Test failures after sync
 
 1. Ensure Haskell tests pass first
-2. Check for missing primitive implementations in `hydra-python/src/main/python/hydra/lib/`
+2. Check for missing primitive implementations in `heads/python/src/main/python/hydra/lib/`
 3. Review `docs/work/python-test-failures-analysis.md` for known issues
 
 ## Related Documentation

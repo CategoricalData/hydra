@@ -90,17 +90,17 @@ Generated files live in `src/gen-main/` and `src/gen-test/` within each implemen
 
 | Implementation | Path | Granularity |
 |---------------|------|-------------|
-| Haskell | `hydra-haskell/src/gen-main/haskell/` | One `.hs` per module |
-| Haskell (decode/encode) | `hydra-haskell/src/gen-main/haskell/Hydra/Decode/`, `Hydra/Encode/` | One `.hs` per type module |
-| Haskell (DSL) | `hydra-haskell/src/gen-main/haskell/Hydra/Dsl/` | One `.hs` per type module |
-| JSON | `hydra-haskell/src/gen-main/json/` | One `.json` per module |
-| Java | `hydra-java/src/gen-main/java/` | **One `.java` per type** |
-| Python | `hydra-python/src/gen-main/python/` | One `.py` per module |
-| Scala | `hydra-scala/src/gen-main/scala/` | One `.scala` per module |
-| Clojure | `hydra-lisp/hydra-clojure/src/gen-main/clojure/` | One `.clj` per module |
-| Scheme | `hydra-lisp/hydra-scheme/src/gen-main/scheme/` | One `.scm` per module |
-| Common Lisp | `hydra-lisp/hydra-common-lisp/src/gen-main/common-lisp/` | One `.lisp` per module |
-| Emacs Lisp | `hydra-lisp/hydra-emacs-lisp/src/gen-main/emacs-lisp/` | One `.el` per module |
+| Haskell | `dist/haskell/hydra-kernel/src/main/haskell/` | One `.hs` per module |
+| Haskell (decode/encode) | `dist/haskell/hydra-kernel/src/main/haskell/Hydra/Decode/`, `Hydra/Encode/` | One `.hs` per type module |
+| Haskell (DSL) | `dist/haskell/hydra-kernel/src/main/haskell/Hydra/Dsl/` | One `.hs` per type module |
+| JSON | `dist/json/hydra-kernel/src/main/json/` | One `.json` per module |
+| Java | `dist/java/hydra-kernel/src/main/java/` | **One `.java` per type** |
+| Python | `dist/python/hydra-kernel/src/main/python/` | One `.py` per module |
+| Scala | `dist/scala/hydra-kernel/src/main/scala/` | One `.scala` per module |
+| Clojure | `dist/clojure/hydra-kernel/src/main/clojure/` | One `.clj` per module |
+| Scheme | `dist/scheme/hydra-kernel/src/main/scheme/` | One `.scm` per module |
+| Common Lisp | `dist/common-lisp/hydra-kernel/src/main/common-lisp/` | One `.lisp` per module |
+| Emacs Lisp | `dist/emacs-lisp/hydra-kernel/src/main/emacs-lisp/` | One `.el` per module |
 
 Test files follow the same pattern under `src/gen-test/`.
 
@@ -111,11 +111,11 @@ The general approach is to cross-reference generated files against their Source 
 #### Step 1: identify current Source modules
 
 Source modules define what *should* be generated.
-They live in `hydra-haskell/src/main/haskell/Hydra/Sources/`.
+They live in `packages/hydra-haskell/src/main/haskell/Hydra/Sources/`.
 
 ```bash
 # List all Source modules (these define the expected generated output)
-find hydra-haskell/src/main/haskell/Hydra/Sources -name '*.hs' | sort
+find packages/hydra-haskell/src/main/haskell/Hydra/Sources -name '*.hs' | sort
 ```
 
 Also check the module registries that control what gets generated:
@@ -130,15 +130,15 @@ For each implementation, list the generated files and verify each has a correspo
 **Haskell** — check for modules not imported anywhere:
 ```bash
 # For each file in gen-main, check if its module is imported
-for f in $(find hydra-haskell/src/gen-main/haskell/Hydra -name '*.hs'); do
+for f in $(find dist/haskell/hydra-kernel/src/main/haskell/Hydra -name '*.hs'); do
   mod=$(echo "$f" | sed 's|.*/haskell/||;s|/|.|g;s|\.hs$||')
-  if ! grep -rq "import.*$mod" hydra-haskell/src/ hydra-ext/src/; then
+  if ! grep -rq "import.*$mod" packages/hydra-haskell/src/ packages/hydra-ext/src/; then
     echo "POSSIBLY STALE: $f ($mod)"
   fi
 done
 ```
 
-Note: many generated modules are legitimately not imported within hydra-haskell
+Note: many generated modules are legitimately not imported within packages/hydra-haskell
 but serve downstream consumers.
 Cross-reference against the module registries (Step 1) before deleting.
 
@@ -146,8 +146,8 @@ Cross-reference against the module registries (Step 1) before deleting.
 ```bash
 # For a specific package (e.g., hydra/testing/), compare Java files
 # against the types defined in the corresponding Haskell gen-main module
-diff <(ls hydra-java/src/gen-main/java/hydra/testing/ | sed 's/.java//' | sort) \
-     <(grep '^data ' hydra-haskell/src/gen-main/haskell/Hydra/Testing.hs | awk '{print $2}' | sort)
+diff <(ls dist/java/hydra-kernel/src/main/java/hydra/testing/ | sed 's/.java//' | sort) \
+     <(grep '^data ' dist/haskell/hydra-kernel/src/main/haskell/Hydra/Testing.hs | awk '{print $2}' | sort)
 ```
 
 For Java, also check `Decode/`, `Encode/`, and `Dsl/` subdirectories —
@@ -156,7 +156,7 @@ these generate per-type-module files that can go stale when type modules change.
 **Python, Scala, Lisp dialects** — check for files without a corresponding Source:
 ```bash
 # Example for Python
-for f in $(find hydra-python/src/gen-main/python/hydra -name '*.py' ! -name '__init__.py'); do
+for f in $(find dist/python/hydra-kernel/src/main/python/hydra -name '*.py' ! -name '__init__.py'); do
   # Derive the expected Source module path and check it exists
   mod=$(echo "$f" | sed 's|.*/python/hydra/|Hydra/Sources/|;s|\.py$|.hs|;s|/|/|g')
   # ... check against known Source paths
@@ -179,9 +179,9 @@ Before deleting a file, confirm it's truly stale:
 rm <stale-files>
 
 # Verify each implementation still builds
-cd hydra-haskell && stack build && stack test
-cd hydra-java && ./gradlew compileTestJava
-cd hydra-python && uv run pytest
+cd packages/hydra-haskell && stack build && stack test
+cd packages/hydra-java && ./gradlew compileTestJava
+cd packages/hydra-python && uv run pytest
 # etc.
 ```
 
@@ -227,16 +227,16 @@ section requires that both the `definitions` list and the corresponding
 definition bodies appear in **alphabetical order** within each module.
 
 This applies to:
-- Haskell Source modules (`hydra-haskell/src/main/haskell/Hydra/Sources/`)
-- hydra-ext Source modules (`hydra-ext/src/main/haskell/Hydra/Ext/`)
-- Hand-written kernel modules (`hydra-haskell/src/main/haskell/Hydra/`)
+- Haskell Source modules (`packages/hydra-haskell/src/main/haskell/Hydra/Sources/`)
+- hydra-ext Source modules (`packages/hydra-ext/src/main/haskell/Hydra/Ext/`)
+- Hand-written kernel modules (`heads/haskell/src/main/haskell/Hydra/`)
 
 Generated files inherit their ordering from Source modules,
 so fixing the Source fixes all implementations.
 
 **Check a single module:**
 ```bash
-grep 'toDefinition\|toBinding' hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Terms/Lexical.hs \
+grep 'toDefinition\|toBinding' packages/hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Terms/Lexical.hs \
   | sed 's/.*toDefinition //; s/.*toBinding //; s/[,\]]//g' \
   | awk '{name=$1} NR>1 && name<prev {print prev " before " name " (out of order)"} {prev=name}'
 ```
@@ -245,8 +245,8 @@ grep 'toDefinition\|toBinding' hydra-haskell/src/main/haskell/Hydra/Sources/Kern
 ```bash
 #!/bin/bash
 # check-definition-order.sh — run from the repo root
-for f in $(find hydra-haskell/src/main/haskell/Hydra/Sources \
-                hydra-ext/src/main/haskell/Hydra/Ext \
+for f in $(find packages/hydra-haskell/src/main/haskell/Hydra/Sources \
+                packages/hydra-ext/src/main/haskell/Hydra/Ext \
                 -name '*.hs' 2>/dev/null); do
   out=$(grep 'toDefinition\|toBinding' "$f" \
     | sed 's/.*toDefinition //; s/.*toBinding //; s/[,\]]//g' \
@@ -297,11 +297,11 @@ Each implementation has a registration file that maps primitive names to impleme
 
 | Implementation | Registration file |
 |---------------|-------------------|
-| Haskell | `hydra-haskell/src/main/haskell/Hydra/Sources/Libraries.hs` |
-| Java | `hydra-java/src/main/java/hydra/lib/Libraries.java` |
-| Python | `hydra-python/src/main/python/hydra/sources/libraries.py` |
-| Scala | `hydra-scala/src/main/scala/hydra/lib/Libraries.scala` |
-| Clojure | `hydra-lisp/hydra-clojure/src/main/clojure/hydra/lib/libraries.clj` |
+| Haskell | `packages/hydra-haskell/src/main/haskell/Hydra/Sources/Libraries.hs` |
+| Java | `heads/java/src/main/java/hydra/lib/Libraries.java` |
+| Python | `heads/python/src/main/python/hydra/sources/libraries.py` |
+| Scala | `heads/scala/src/main/scala/hydra/lib/Libraries.scala` |
+| Clojure | `heads/lisp/clojure/src/main/clojure/hydra/lib/libraries.clj` |
 
 ### Checking primitive coverage
 
@@ -314,11 +314,11 @@ Each implementation has a registration file that maps primitive names to impleme
    but the set of fully qualified primitive names should match.
    ```bash
    # Extract Haskell primitive names
-   grep -E 'prim[0-3]' hydra-haskell/src/main/haskell/Hydra/Sources/Libraries.hs \
+   grep -E 'prim[0-3]' packages/hydra-haskell/src/main/haskell/Hydra/Sources/Libraries.hs \
      | grep -oE '_[a-z]+_[a-zA-Z]+' | sort -u
 
    # Compare against Java class files
-   find hydra-java/src/main/java/hydra/lib -name '*.java' \
+   find heads/java/src/main/java/hydra/lib -name '*.java' \
      ! -name 'Libraries.java' | sort
    ```
 
@@ -349,7 +349,7 @@ To check:
 
 Primitive documentation comments should be the same across all languages.
 The canonical descriptions are in `Libraries.hs` (as `doc` strings on the Source definitions)
-or in the Haskell implementation files (`hydra-haskell/src/main/haskell/Hydra/Lib/*.hs`).
+or in the Haskell implementation files (`heads/haskell/src/main/haskell/Hydra/Lib/*.hs`).
 Check that the Javadoc, Python docstrings, and Clojure docstrings match.
 
 ### See also
@@ -370,19 +370,19 @@ All implementations should have the same number of passing tests
 1. **Run tests in each implementation** and capture the summary line:
    ```bash
    # Haskell
-   cd hydra-haskell && stack test 2>&1 | tail -5
+   cd packages/hydra-haskell && stack test 2>&1 | tail -5
 
    # Java
-   cd hydra-java && ./gradlew test 2>&1 | grep -E 'tests.*passed'
+   cd packages/hydra-java && ./gradlew test 2>&1 | grep -E 'tests.*passed'
 
    # Python
-   cd hydra-python && uv run pytest --tb=no -q 2>&1 | tail -3
+   cd packages/hydra-python && uv run pytest --tb=no -q 2>&1 | tail -3
 
    # Scala
-   cd hydra-scala && sbt test 2>&1 | tail -5
+   cd packages/hydra-scala && sbt test 2>&1 | tail -5
 
    # Clojure
-   cd hydra-lisp/hydra-clojure && clojure -M:test 2>&1 | tail -5
+   cd packages/hydra-lisp/hydra-clojure && clojure -M:test 2>&1 | tail -5
    ```
 
 2. **Compare pass/skip/fail counts.**
@@ -401,19 +401,19 @@ All implementations should have the same number of passing tests
 ## Checking `.cabal` exposed-modules
 
 When generated Haskell modules are deleted, their entries in the `exposed-modules`
-list of `hydra-haskell/hydra.cabal` (or `package.yaml`) may linger.
+list of `heads/haskell/hydra.cabal` (or `package.yaml`) may linger.
 This causes build errors on clean builds or warnings about missing modules.
 
 ### Procedure
 
 ```bash
 # Extract exposed-modules from package.yaml and check each exists
-grep '^ *- Hydra\.' hydra-haskell/package.yaml \
+grep '^ *- Hydra\.' heads/haskell/package.yaml \
   | sed 's/^ *- //' \
   | while read mod; do
-      path="hydra-haskell/src/gen-main/haskell/$(echo $mod | tr '.' '/').hs"
+      path="dist/haskell/hydra-kernel/src/main/haskell/$(echo $mod | tr '.' '/').hs"
       if [ ! -f "$path" ]; then
-        alt="hydra-haskell/src/main/haskell/$(echo $mod | tr '.' '/').hs"
+        alt="heads/haskell/src/main/haskell/$(echo $mod | tr '.' '/').hs"
         if [ ! -f "$alt" ]; then
           echo "MISSING: $mod"
         fi
@@ -425,12 +425,12 @@ grep '^ *- Hydra\.' hydra-haskell/package.yaml \
 
 ## Verifying JSON kernel freshness
 
-The JSON kernel files (`hydra-haskell/src/gen-main/json/`) are generated from Haskell sources.
+The JSON kernel files (`dist/json/hydra-kernel/src/main/json/`) are generated from Haskell sources.
 They can go stale if someone rebuilds Haskell but forgets to re-export.
 The `verify-json-kernel.sh` script checks that JSON files match the current Haskell modules.
 
 ```bash
-cd hydra-haskell && bin/verify-json-kernel.sh
+cd packages/hydra-haskell && bin/verify-json-kernel.sh
 ```
 
 This loads each kernel module from Haskell, decodes the corresponding JSON file,
@@ -447,13 +447,13 @@ these files can go stale (missing imports for new modules, or imports of deleted
 
 ### Procedure
 
-For each `__init__.py` under `hydra-python/src/gen-main/python/hydra/`,
+For each `__init__.py` under `dist/python/hydra-kernel/src/main/python/hydra/`,
 check that every `.py` sibling and subdirectory with an `__init__.py` is imported,
 and that no import references a missing file.
 
 ```bash
 # Check for imports of nonexistent modules in __init__.py files
-find hydra-python/src/gen-main/python/hydra -name '__init__.py' -exec \
+find dist/python/hydra-kernel/src/main/python/hydra -name '__init__.py' -exec \
   grep -l 'from \. import' {} \;
 ```
 
@@ -535,7 +535,7 @@ To run all checks in sequence (invoked via `/maintenance()` in CLAUDE.md):
 3. Check coding style (definition ordering) across all Source modules; fix violations.
 4. Verify primitive consistency (coverage, `forall` variable ordering, documentation).
 5. Check `.cabal`/`package.yaml` exposed-modules for stale entries.
-6. Verify JSON kernel freshness via `hydra-haskell/bin/verify-json-kernel.sh`.
+6. Verify JSON kernel freshness via `heads/haskell/bin/verify-json-kernel.sh`.
 7. Check Python `__init__.py` freshness.
 8. Review user documentation for accuracy, broken links, and small improvements.
 
