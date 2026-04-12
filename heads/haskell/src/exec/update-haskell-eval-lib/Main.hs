@@ -8,7 +8,7 @@ main :: IO ()
 main = do
   putStrLn "=== Generate Hydra eval lib (Haskell) ==="
   putStrLn ""
-  let outDir = "../../packages/hydra-kernel/src/gen-main/haskell"
+  let outDir = "../../dist/haskell/hydra-kernel/src/main/haskell"
   putStrLn $ "Generating eval lib modules to " ++ outDir ++ "..."
   putStrLn ""
 

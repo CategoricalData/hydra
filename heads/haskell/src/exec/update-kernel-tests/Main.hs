@@ -11,7 +11,7 @@ import Hydra.Sources.All
 
 main :: IO ()
 main = do
-  let outDir = "../../packages/hydra-kernel/src/gen-test/haskell"
+  let outDir = "../../dist/haskell/hydra-kernel/src/test/haskell"
   putStrLn "=== Generate Hydra kernel tests ==="
   putStrLn ""
   putStrLn $ "Generating kernel test modules to " ++ outDir ++ "..."

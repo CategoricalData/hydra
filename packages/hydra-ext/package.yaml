@@ -32,11 +32,11 @@ library:
     - ../../heads/haskell/src/main/haskell
     - ../hydra-coq/src/main/haskell
     - ../hydra-haskell/src/main/haskell
-    - ../hydra-haskell/src/gen-main/haskell
+    - ../../dist/haskell/hydra-haskell/src/main/haskell
     - ../hydra-java/src/main/haskell
     - ../hydra-javascript/src/main/haskell
     - ../hydra-kernel/src/main/haskell
-    - ../hydra-kernel/src/gen-main/haskell
+    - ../../dist/haskell/hydra-kernel/src/main/haskell
     - ../hydra-lisp/src/main/haskell
     - ../hydra-python/src/main/haskell
     - ../hydra-scala/src/main/haskell
@@ -63,7 +63,7 @@ executables:
     main: Main.hs
     source-dirs:
       - src/exec/update-scala-tests
-      - ../hydra-kernel/src/gen-test/haskell
+      - ../../dist/haskell/hydra-kernel/src/test/haskell
     ghc-options: [-rtsopts]
     dependencies:
       - hydra-ext
@@ -97,7 +97,7 @@ executables:
     main: Main.hs
     source-dirs:
       - src/exec/generate-lisp
-      - ../hydra-kernel/src/gen-test/haskell
+      - ../../dist/haskell/hydra-kernel/src/test/haskell
     ghc-options: [-rtsopts]
     dependencies:
       - hydra-ext
@@ -115,7 +115,7 @@ executables:
     main: Main.hs
     source-dirs:
       - src/exec/bootstrap-from-json
-      - ../hydra-kernel/src/gen-test/haskell
+      - ../../dist/haskell/hydra-kernel/src/test/haskell
     ghc-options: [-rtsopts]
     dependencies:
       - hydra-ext
@@ -127,7 +127,7 @@ tests:
     main: Spec.hs
     source-dirs:
       - src/test/haskell
-      - ../hydra-kernel/src/gen-test/haskell
+      - ../../dist/haskell/hydra-kernel/src/test/haskell
     dependencies:
       - hydra-ext
       - hspec                      >= 2.11.0 && < 2.12
