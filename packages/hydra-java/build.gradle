@@ -3,6 +3,24 @@ plugins {
     id 'signing'
 }
 
+// Include the Haskell head sources alongside the package sources.
+// Long-term, head content will be copied into dist/java/ during generation
+// and this source-set crossover will go away. For now, the published
+// hydra-java artifact bundles the head's primitives and runtime drivers
+// directly from heads/java/.
+sourceSets {
+    main {
+        java {
+            srcDirs += file("$projectDir/../../heads/java/src/main/java")
+        }
+    }
+    test {
+        java {
+            srcDirs += file("$projectDir/../../heads/java/src/test/java")
+        }
+    }
+}
+
 dependencies {
     // Note: these are currently "main" dependencies rather than "test" dependencies due to reusable test utilities.
     //       These will likely be broken out into a separate module in the future.
