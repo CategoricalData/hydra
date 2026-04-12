@@ -17,6 +17,7 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 HYDRA_ROOT="$( cd "$SCRIPT_DIR/../../../../.." && pwd )"
 HYDRA_HASKELL_DIR="$HYDRA_ROOT/packages/hydra-haskell"
 HYDRA_KERNEL_DIR="$HYDRA_ROOT/packages/hydra-kernel"
+HYDRA_HASKELL_HEAD_DIR="$HYDRA_ROOT/heads/haskell"
 HASKELL_RESOURCES="$SCRIPT_DIR/../resources/haskell"
 
 # Clean and create output directory
@@ -34,10 +35,19 @@ cp "$HASKELL_RESOURCES/package.yaml" "$OUTPUT_DIR/"
 cp "$HASKELL_RESOURCES/README.md" "$OUTPUT_DIR/"
 
 # Hand-written source files (primitive libraries, DSL, sources, etc.)
+# Hand-written Haskell runtime now lives in heads/haskell. Kernel and Haskell-coder
+# DSL source modules live under packages/hydra-kernel and packages/hydra-haskell,
+# but everything must land in a single src/main/haskell tree in the bootstrap output.
 echo "  Copying hand-written source files..."
 mkdir -p "$OUTPUT_DIR/src/main/haskell"
-cp -r "$HYDRA_KERNEL_DIR/src/main/haskell/Hydra" "$OUTPUT_DIR/src/main/haskell/"
-# Overlay Haskell-specific hand-written sources (Hydra.Haskell.Generation etc.)
+# Base: the Haskell head's hand-written runtime (Hydra.Generation, Hydra.Kernel,
+# Hydra.Lib.*, Hydra.Dsl.*, Hydra.Haskell.Generation, Hydra.Module.*, Hydra.Tools.*, ...)
+cp -r "$HYDRA_HASKELL_HEAD_DIR/src/main/haskell/Hydra" "$OUTPUT_DIR/src/main/haskell/"
+# Overlay kernel DSL sources (Hydra.Sources.Kernel.*, Hydra.Sources.Decode.*, Hydra.Sources.Encode.*, ...)
+if [ -d "$HYDRA_KERNEL_DIR/src/main/haskell/Hydra" ]; then
+    cp -r "$HYDRA_KERNEL_DIR/src/main/haskell/Hydra/." "$OUTPUT_DIR/src/main/haskell/Hydra/"
+fi
+# Overlay Haskell-coder DSL sources (Hydra.Sources.Haskell.*, Hydra.Sources.All)
 if [ -d "$HYDRA_HASKELL_DIR/src/main/haskell/Hydra" ]; then
     cp -r "$HYDRA_HASKELL_DIR/src/main/haskell/Hydra/." "$OUTPUT_DIR/src/main/haskell/Hydra/"
 fi
@@ -95,15 +105,15 @@ if [ -f "$HS_KERNEL_BASELINE/Hydra/Dsls.hs" ]; then
     echo "    Copied Hydra/Dsls.hs from hydra-kernel baseline"
 fi
 
-# Kernel test suite runner and its dependencies (now in hydra-kernel)
+# Kernel test suite runner and its dependencies (now in heads/haskell)
 echo "  Copying kernel test suite runner..."
 mkdir -p "$OUTPUT_DIR/src/test/haskell"
-cp "$HYDRA_KERNEL_DIR/src/test/haskell/Spec.hs" "$OUTPUT_DIR/src/test/haskell/"
+cp "$HYDRA_HASKELL_HEAD_DIR/src/test/haskell/Spec.hs" "$OUTPUT_DIR/src/test/haskell/"
 mkdir -p "$OUTPUT_DIR/src/test/haskell/Hydra"
-cp "$HYDRA_KERNEL_DIR/src/test/haskell/Hydra/TestSuiteSpec.hs" "$OUTPUT_DIR/src/test/haskell/Hydra/"
-cp "$HYDRA_KERNEL_DIR/src/test/haskell/Hydra/TestUtils.hs" "$OUTPUT_DIR/src/test/haskell/Hydra/"
-cp "$HYDRA_KERNEL_DIR/src/test/haskell/Hydra/ArbitraryCore.hs" "$OUTPUT_DIR/src/test/haskell/Hydra/"
-cp "$HYDRA_KERNEL_DIR/src/test/haskell/Hydra/EvalPrimitives.hs" "$OUTPUT_DIR/src/test/haskell/Hydra/"
+cp "$HYDRA_HASKELL_HEAD_DIR/src/test/haskell/Hydra/TestSuiteSpec.hs" "$OUTPUT_DIR/src/test/haskell/Hydra/"
+cp "$HYDRA_HASKELL_HEAD_DIR/src/test/haskell/Hydra/TestUtils.hs" "$OUTPUT_DIR/src/test/haskell/Hydra/"
+cp "$HYDRA_HASKELL_HEAD_DIR/src/test/haskell/Hydra/ArbitraryCore.hs" "$OUTPUT_DIR/src/test/haskell/Hydra/"
+cp "$HYDRA_HASKELL_HEAD_DIR/src/test/haskell/Hydra/EvalPrimitives.hs" "$OUTPUT_DIR/src/test/haskell/Hydra/"
 
 # TestEnv: provides the real test graph with primitives and kernel term bindings.
 # Must be copied to gen-test (where the generated TestGraph.hs imports it).
