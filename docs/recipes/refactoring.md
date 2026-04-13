@@ -6,11 +6,11 @@ and propagate the changes across all implementations.
 ## Overview
 
 Hydra kernel code lives in multiple places:
-- **Source modules** (`hydra-haskell/src/main/haskell/Hydra/Sources/...`) - DSL definitions
-- **Generated Haskell** (`hydra-haskell/src/gen-main/haskell/Hydra/...`) - Generated implementations
-- **Generated Python** (`hydra-python/src/gen-main/python/hydra/...`)
-- **Generated Java** (`hydra-java/src/gen-main/java/hydra/...`)
-- **JSON kernel** (`hydra-haskell/src/gen-main/json/...`)
+- **Source modules** (`packages/hydra-haskell/src/main/haskell/Hydra/Sources/...`) - DSL definitions
+- **Generated Haskell** (`dist/haskell/hydra-kernel/src/main/haskell/Hydra/...`) - Generated implementations
+- **Generated Python** (`dist/python/hydra-kernel/src/main/python/hydra/...`)
+- **Generated Java** (`dist/java/hydra-kernel/src/main/java/hydra/...`)
+- **JSON kernel** (`dist/json/hydra-kernel/src/main/json/...`)
 
 Changes to kernel code must be propagated to all of these locations.
 
@@ -29,10 +29,10 @@ Changes to kernel code must be propagated to all of these locations.
 
 ## Prerequisites
 
-- Working Haskell build environment (`stack build` succeeds in hydra-haskell)
+- Working Haskell build environment (`stack build` succeeds in packages/hydra-haskell)
 - Understanding of Hydra's module system and DSL
-- For Python: virtual environment set up in hydra-python
-- For Java: Gradle configured in hydra-java
+- For Python: virtual environment set up in packages/hydra-python
+- For Java: Gradle configured in packages/hydra-java
 
 ---
 
@@ -40,7 +40,7 @@ Changes to kernel code must be propagated to all of these locations.
 
 ### Step 1: Create the Source File
 
-Create a new file in the appropriate location under `hydra-haskell/src/main/haskell/Hydra/Sources/`.
+Create a new file in the appropriate location under `packages/hydra-haskell/src/main/haskell/Hydra/Sources/`.
 
 **For a types-only module** (no term definitions):
 ```
@@ -119,7 +119,7 @@ The simplest approach is to run `bin/sync-all.sh` from the repo root,
 which handles all regeneration steps in the correct order. For incremental work, you can run the steps individually:
 
 ```bash
-cd hydra-haskell
+cd packages/hydra-haskell
 
 # Build to verify the source compiles
 stack build
@@ -128,7 +128,7 @@ stack build
 stack ghci
 > import Hydra.Generation
 > import Hydra.Sources.All
-> writeHaskell "src/gen-main/haskell" mainModules kernelModules
+> writeHaskell "../dist/haskell/hydra-kernel/src/main/haskell" mainModules kernelModules
 > :quit
 
 # Rebuild with generated code
@@ -144,8 +144,8 @@ stack test
 ### Step 5: Regenerate Other Implementations
 
 ```bash
-# From hydra-ext
-cd ../hydra-ext
+# From heads/haskell
+cd ../heads/haskell
 ./bin/sync-python.sh --quick
 ./bin/sync-java.sh --quick
 ```
@@ -189,8 +189,8 @@ In the source module, remove the element from the `definitions` list.
 
 Search for references to the deleted element:
 ```bash
-grep -rn 'myDeletedFunction' src/main/haskell/
-grep -rn 'hydra.mymodule.myDeletedFunction' src/
+grep -rn 'myDeletedFunction' packages/hydra-haskell/src/main/haskell/
+grep -rn 'hydra.mymodule.myDeletedFunction' packages/hydra-haskell/src/
 ```
 
 Update or remove all references.
@@ -215,22 +215,22 @@ Remove the import and module reference from `All.hs`.
 
 Search for imports and references:
 ```bash
-grep -rn 'MyModule' src/main/haskell/
-grep -rn 'hydra.mymodule' src/
+grep -rn 'MyModule' packages/hydra-haskell/src/main/haskell/
+grep -rn 'hydra.mymodule' packages/hydra-haskell/src/
 ```
 
 ### Step 3: Delete the Source File
 
 ```bash
-rm src/main/haskell/Hydra/Sources/Kernel/Terms/MyModule.hs
+rm packages/hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Terms/MyModule.hs
 ```
 
 ### Step 4: Delete Generated Files
 
 ```bash
-rm src/gen-main/haskell/Hydra/MyModule.hs
-rm -rf ../hydra-python/src/gen-main/python/hydra/mymodule/
-rm -rf ../hydra-java/src/gen-main/java/hydra/mymodule/
+rm ../../dist/haskell/hydra-kernel/src/main/haskell/Hydra/MyModule.hs
+rm -rf ../dist/python/hydra-kernel/src/main/python/hydra/mymodule/
+rm -rf ../dist/java/hydra-kernel/src/main/java/hydra/mymodule/
 ```
 
 ### Step 5: Build and Regenerate
@@ -249,8 +249,8 @@ The element's fully-qualified name changes (e.g., `hydra.oldmodule.foo` → `hyd
 
 Search and update:
 ```bash
-grep -rn 'hydra.oldmodule.foo' src/
-grep -rn 'OldModule.foo' src/
+grep -rn 'hydra.oldmodule.foo' packages/hydra-haskell/src/
+grep -rn 'OldModule.foo' packages/hydra-haskell/src/
 ```
 
 ### Step 3: Update Dependencies
@@ -292,8 +292,8 @@ definitions = [
 ### Step 3: Update All References
 
 ```bash
-grep -rn 'myOldName' src/
-grep -rn 'hydra.mymodule.myOldName' src/
+grep -rn 'myOldName' packages/hydra-haskell/src/
+grep -rn 'hydra.mymodule.myOldName' packages/hydra-haskell/src/
 ```
 
 ### Step 4: Build and Regenerate
@@ -326,9 +326,9 @@ This is the most complex refactoring operation. A Hydra namespace like `hydra.fo
 1. **Move/rename the source file**
    ```bash
    # Example: moving Foo.hs to Foo/Bar.hs
-   mkdir -p hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Terms/Foo
-   mv hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Terms/Foo.hs \
-      hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Terms/Foo/Bar.hs
+   mkdir -p packages/hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Terms/Foo
+   mv packages/hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Terms/Foo.hs \
+      packages/hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Terms/Foo/Bar.hs
    ```
 
 2. **Update the namespace declaration**
@@ -359,8 +359,8 @@ This is the most complex refactoring operation. A Hydra namespace like `hydra.fo
 
 2. **Find and update all references**
    ```bash
-   grep -rn 'Hydra\.Foo[^.]' src/main/haskell/
-   grep -rn 'hydra\.foo[^.]' src/main/haskell/
+   grep -rn 'Hydra\.Foo[^.]' packages/hydra-haskell/src/main/haskell/
+   grep -rn 'hydra\.foo[^.]' packages/hydra-haskell/src/main/haskell/
    ```
 
 3. **Bootstrap generated module if needed**
@@ -375,25 +375,25 @@ This is the most complex refactoring operation. A Hydra namespace like `hydra.fo
 
 1. **Move generated Haskell files**
    ```bash
-   mkdir -p src/gen-main/haskell/Hydra/Foo
-   mv src/gen-main/haskell/Hydra/Foo.hs src/gen-main/haskell/Hydra/Foo/Bar.hs
+   mkdir -p dist/haskell/hydra-kernel/src/main/haskell/Hydra/Foo
+   mv dist/haskell/hydra-kernel/src/main/haskell/Hydra/Foo.hs dist/haskell/hydra-kernel/src/main/haskell/Hydra/Foo/Bar.hs
    ```
 
 2. **Update module declarations in generated files**
    ```bash
    perl -i -pe 's/module Hydra\.Foo where/module Hydra.Foo.Bar where/g' \
-     src/gen-main/haskell/Hydra/Foo/Bar.hs
+     dist/haskell/hydra-kernel/src/main/haskell/Hydra/Foo/Bar.hs
    ```
 
 3. **Update namespace strings in generated files**
    ```bash
    perl -i -pe 's/hydra\.foo\.Element/hydra.foo.bar.Element/g' \
-     src/gen-main/haskell/Hydra/Foo/Bar.hs
+     dist/haskell/hydra-kernel/src/main/haskell/Hydra/Foo/Bar.hs
    ```
 
 4. **Clean up orphan files**
    ```bash
-   rm -f src/gen-main/haskell/Hydra/Foo.hs  # old location
+   rm -f dist/haskell/hydra-kernel/src/main/haskell/Hydra/Foo.hs  # old location
    ```
 
 ### Phase 4: Regenerate All Implementations
@@ -409,13 +409,13 @@ stack build
 # Run tests
 stack test
 
-# Regenerate Python and Java (from hydra-ext)
-cd ../hydra-ext
+# Regenerate Python and Java (from heads/haskell)
+cd ../heads/haskell
 ./bin/sync-python.sh --quick
 ./bin/sync-java.sh --quick
 
 # Clean up orphan Python files
-rm -f ../hydra-python/src/gen-main/python/hydra/foo.py
+rm -f ../dist/python/hydra-kernel/src/main/python/hydra/foo.py
 ```
 
 ---
@@ -464,13 +464,13 @@ Type consolidation affects not only Sources and gen-main, but also hand-written 
   These need manual updates to use new constructors and field names.
 - **Executables**: `verify-json-kernel/Main.hs` and `Generation.hs` use kernel types directly.
 - **DSL bootstrap**: `Dsl/Bootstrap.hs` constructs initial graphs using Haskell record syntax on kernel types.
-- **hydra-ext coders**: Language coders in `hydra-ext` (Java, Python,
-  Haskell coders) reference kernel types in their state management.
+- **Language coders**: Coders in `packages/hydra-pg`, `packages/hydra-rdf`, and
+  `packages/hydra-ext` reference kernel types in their state management.
 
 Search broadly for the old type name:
 ```bash
 # Search across all subprojects, not just Sources
-grep -rn 'OldTypeName' hydra-haskell/ hydra-java/ hydra-python/ hydra-ext/
+grep -rn 'OldTypeName' packages/hydra-haskell/ packages/hydra-java/ packages/hydra-python/ packages/hydra-pg/ packages/hydra-rdf/ packages/hydra-ext/
 ```
 
 ### Pitfalls Specific to Type Consolidation
@@ -560,10 +560,10 @@ However, it's useful to understand the individual stages, especially when debugg
 `bin/sync-all.sh` executes four phases:
 
 ```
-Phase 1: stack build + update-haskell-kernel + update-kernel-tests + ... (hydra-haskell)
+Phase 1: stack build + update-haskell-kernel + update-kernel-tests + ... (packages/hydra-haskell)
     → Export and verify JSON
     → stack test (unless --quick)
-Phase 2: sync-ext.sh (hydra-ext Haskell generation)
+Phase 2: sync-ext.sh (extension Haskell generation)
 Phase 3: sync-java.sh (Java from JSON)
     → gradle test (unless --quick)
 Phase 4: sync-python.sh (Python from JSON)
@@ -574,9 +574,9 @@ Phase 4: sync-python.sh (Python from JSON)
 
 | Stage | Typical Failures | What To Check |
 |-------|-----------------|---------------|
-| `stack build` (hydra-haskell) | Missing fields, wrong types in Sources | Source files, DSL helpers, gen-main bootstrap |
+| `stack build` (packages/hydra-haskell) | Missing fields, wrong types in Sources | Source files, DSL helpers, gen-main bootstrap |
 | `sync-haskell.sh` | Haskell test failures | Generated code correctness, `verify-json-kernel` |
-| `stack build` (hydra-ext) | Coders using old type names/fields | `hydra-ext` source files referencing old types |
+| `stack build` (extension packages) | Coders using old type names/fields | Extension package source files referencing old types |
 | `sync-java.sh` | Java compilation errors | Hand-written Java code (test runners, utilities) |
 | `gradle test` | Test failures (wrong results, not just compilation) | Test graph construction, method signatures, type representations |
 | `sync-python.sh` | Python import errors, test failures | Hand-written Python code, `__init__.py` structure |
@@ -584,17 +584,17 @@ Phase 4: sync-python.sh (Python from JSON)
 ### Key Principle
 
 Fix errors at the earliest stage before moving to the next.
-A Haskell compilation error in hydra-ext will cascade into meaningless sync-java failures.
+A Haskell compilation error in an extension package will cascade into meaningless sync-java failures.
 Similarly, if Haskell tests fail, investigate before regenerating Java/Python — the generated code may be wrong.
 
 ---
 
 ## Verification Checklist
 
-- [ ] hydra-haskell builds (`stack build`)
-- [ ] hydra-haskell tests pass (`stack test`)
+- [ ] packages/hydra-haskell builds (`stack build`)
+- [ ] packages/hydra-haskell tests pass (`stack test`)
 - [ ] JSON kernel regenerated and verified
-- [ ] hydra-ext builds (`stack build` in hydra-ext)
+- [ ] Extension packages build (`stack build` in packages/hydra-pg, hydra-rdf, hydra-ext)
 - [ ] Python kernel regenerated
 - [ ] Python tests pass
 - [ ] Java compilation succeeds (`gradle compileTestJava`)
@@ -651,7 +651,7 @@ We created `hydra.hoisting` to separate these concerns.
      - Added import for `Hoisting`
      - Added `Hoisting.ns` to module dependencies
      - Changed `Reduction.hoistCaseStatementsInGraph` to `Hoisting.hoistCaseStatementsInGraph`
-   - `src/test/haskell/Hydra/TestSuiteSpec.hs`:
+   - `heads/haskell/src/test/haskell/Hydra/TestSuiteSpec.hs`:
      - Added import for `Hydra.Hoisting`
      - Changed test references to use `Hoisting.*` functions
 
@@ -663,7 +663,7 @@ We created `hydra.hoisting` to separate these concerns.
    # Regenerate Haskell
    stack ghci hydra:lib -e 'import Hydra.Generation' \
      -e 'import Hydra.Sources.All' \
-     -e 'writeHaskell "src/gen-main/haskell" mainModules kernelModules'
+     -e 'writeHaskell "../dist/haskell/hydra-kernel/src/main/haskell" mainModules kernelModules'
 
    # Rebuild with generated code
    stack build
@@ -679,17 +679,17 @@ We created `hydra.hoisting` to separate these concerns.
 ### Files Changed
 
 **Created:**
-- `src/main/haskell/Hydra/Sources/Kernel/Terms/Hoisting.hs` (source module)
+- `packages/hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Terms/Hoisting.hs` (source module)
 
 **Modified:**
-- `src/main/haskell/Hydra/Sources/Kernel/Terms/Reduction.hs` (removed hoisting functions)
-- `src/main/haskell/Hydra/Sources/Kernel/Terms/All.hs` (registered new module)
-- `src/main/haskell/Hydra/Sources/Kernel/Terms/Adapt/Simple.hs` (updated imports)
-- `src/test/haskell/Hydra/TestSuiteSpec.hs` (updated test imports)
+- `packages/hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Terms/Reduction.hs` (removed hoisting functions)
+- `packages/hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Terms/All.hs` (registered new module)
+- `packages/hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Terms/Adapt/Simple.hs` (updated imports)
+- `heads/haskell/src/test/haskell/Hydra/TestSuiteSpec.hs` (updated test imports)
 
 **Generated:**
-- `src/gen-main/haskell/Hydra/Hoisting.hs` (generated implementation)
-- `src/gen-main/json/hydra/hoisting.json` (JSON kernel)
+- `dist/haskell/hydra-kernel/src/main/haskell/Hydra/Hoisting.hs` (generated implementation)
+- `dist/json/hydra-kernel/src/main/json/hydra/hoisting.json` (JSON kernel)
 
 ---
 
@@ -796,7 +796,7 @@ Adding a primitive requires updates to **six files**:
    - `Adapt/Simple.hs`: Element manipulation uses list operations
    - Many files: Removed `Maps.elems` wrapper around `graphElements`
 
-6. **Updated hydra-ext files**:
+6. **Updated extension package files**:
    - `Python/Coder.hs`: Changed element lookup pattern
    - `Analysis/Dependencies.hs`, `Summaries.hs`, `AvroWorkflows.hs`: Removed `M.elems` wrappers
 
@@ -838,7 +838,7 @@ Lists.find ("b" ~> (Core.bindingName (var "b")) `eq` (var "name")) elements
 - `Hydra/Sources/Kernel/Terms/Show/Graph.hs` + `Hydra/Show/Graph.hs`
 - `Hydra/Sources/Kernel/Terms/Haskell/Coder.hs` + `Hydra/Haskell/Coder.hs`
 
-**hydra-ext:**
+**Extension packages (packages/hydra-ext, etc.):**
 - `Hydra/Ext/Python/Coder.hs`
 - `Hydra/Ext/Python/TestCodec.hs`
 - `Hydra/Ext/Tools/Analysis/Dependencies.hs`
@@ -846,7 +846,7 @@ Lists.find ("b" ~> (Core.bindingName (var "b")) `eq` (var "name")) elements
 - `Hydra/Ext/Tools/AvroWorkflows.hs`
 
 **Other:**
-- `hydra-haskell/src/exec/verify-json-kernel/Main.hs`
+- `heads/haskell/src/exec/verify-json-kernel/Main.hs`
 - `Hydra/Generation.hs`
 
 ### Key Lessons

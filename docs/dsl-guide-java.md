@@ -12,7 +12,7 @@ For the Python DSLs, see [DSL Guide (Python)](dsl-guide-python.md).
 **Before using the DSL utilities**, you should:
 - Understand Hydra's core concepts: [Concepts](https://github.com/CategoricalData/hydra/wiki/Concepts)
 - Know basic Java syntax
-- Have built Hydra-Java locally (see [Hydra-Java README](https://github.com/CategoricalData/hydra/tree/main/hydra-java))
+- Have built Hydra-Java locally (see [Hydra-Java README](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-java))
 
 ## Table of Contents
 
@@ -43,7 +43,7 @@ Hydra-Java provides a layered DSL system for working with Hydra types and terms:
 
 The Direct DSLs are suitable for casual use: constructing test fixtures, prototyping, or building types.
 The Phantom-typed and Domain-specific DSLs are designed for writing Hydra kernel source code in Java,
-mirroring the Haskell DSLs used in `hydra-haskell/src/main/haskell/Hydra/Sources/`.
+mirroring the Haskell DSLs used in `packages/hydra-haskell/src/main/haskell/Hydra/Sources/`.
 
 ## The DSL variants
 
@@ -530,7 +530,7 @@ Binding lambda = define("Lambda",
 
 ### Complete example: hydra.core
 
-See `hydra-java/src/main/java/hydra/dsl/meta/examples/CoreTypes.java` for a complete
+See `heads/java/src/main/java/hydra/dsl/meta/examples/CoreTypes.java` for a complete
 implementation of all `hydra.core` types using this pattern.
 
 ## Term definitions
@@ -579,7 +579,7 @@ apply(var("my.namespace.deannotateTerm"), annotatedTermBody(var("at")))
 
 ### Complete example: hydra.rewriting
 
-See `hydra-java/src/main/java/hydra/dsl/meta/examples/Rewriting.java` for a partial
+See `heads/java/src/main/java/hydra/dsl/meta/examples/Rewriting.java` for a partial
 implementation of `hydra.rewriting` demonstrating:
 
 - Simple pattern matching (`deannotateTerm`)
@@ -728,14 +728,14 @@ if (result.isRight()) {
 
 | File | Description |
 |------|-------------|
-| `hydra-java/src/main/java/hydra/dsl/meta/Phantoms.java` | Phantom-typed DSL (all operations) |
-| `hydra-java/src/main/java/hydra/dsl/meta/Core.java` | Core domain DSL (field accessors) |
-| `hydra-java/src/main/java/hydra/dsl/meta/Graph.java` | Graph domain DSL |
-| `hydra-java/src/main/java/hydra/dsl/meta/Compute.java` | Compute domain DSL |
-| `hydra-java/src/main/java/hydra/dsl/meta/examples/CoreTypes.java` | Complete hydra.core type definitions |
-| `hydra-java/src/main/java/hydra/dsl/meta/examples/Rewriting.java` | Partial hydra.rewriting term definitions |
-| `hydra-java/src/main/java/hydra/dsl/Types.java` | Direct Types DSL |
-| `hydra-java/src/main/java/hydra/dsl/Terms.java` | Direct Terms DSL |
+| `heads/java/src/main/java/hydra/dsl/meta/Phantoms.java` | Phantom-typed DSL (all operations) |
+| `heads/java/src/main/java/hydra/dsl/meta/Core.java` | Core domain DSL (field accessors) |
+| `heads/java/src/main/java/hydra/dsl/meta/Graph.java` | Graph domain DSL |
+| `heads/java/src/main/java/hydra/dsl/meta/Compute.java` | Compute domain DSL |
+| `heads/java/src/main/java/hydra/dsl/meta/examples/CoreTypes.java` | Complete hydra.core type definitions |
+| `heads/java/src/main/java/hydra/dsl/meta/examples/Rewriting.java` | Partial hydra.rewriting term definitions |
+| `heads/java/src/main/java/hydra/dsl/Types.java` | Direct Types DSL |
+| `heads/java/src/main/java/hydra/dsl/Terms.java` | Direct Terms DSL |
 
 ## Related Documentation
 
@@ -743,4 +743,4 @@ if (result.isRight()) {
 - [DSL Guide (Python)](dsl-guide-python.md) - Python DSL guide
 - [Concepts](https://github.com/CategoricalData/hydra/wiki/Concepts) - Core Hydra concepts
 - [Implementation](implementation.md) - Implementation details and architecture
-- [Hydra-Java README](https://github.com/CategoricalData/hydra/tree/main/hydra-java) - Getting started
+- [Hydra-Java README](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-java) - Getting started

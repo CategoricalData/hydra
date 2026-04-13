@@ -56,7 +56,7 @@ Tests are organized as proper Hydra modules with:
 3. **Module Dependencies** - References to other test modules
 4. **Schema Dependencies** - Type schemas needed for test construction
 
-When you run `writeHaskell "src/gen-test/haskell" allModules baseTestModules`
+When you run `writeHaskell "../../dist/haskell/hydra-kernel/src/test/haskell" allModules baseTestModules`
 (where `allModules = mainModules ++ testModules`),
 each module generates a separate file based on its namespace:
 - `hydra.test.checking.fundamentals` → `Hydra/Test/Checking/Fundamentals.hs`
@@ -353,13 +353,13 @@ import Hydra.Generation
 -- Second arg: universe modules (for dependency resolution)
 -- Third arg: modules to generate
 let allModules = mainModules ++ testModules
-writeHaskell "src/gen-test/haskell" allModules baseTestModules
+writeHaskell "../../dist/haskell/hydra-kernel/src/test/haskell" allModules baseTestModules
 ```
 
 This generates separate files for each test module based on their namespaces:
 
 ```
-src/gen-test/haskell/
+dist/haskell/hydra-kernel/src/test/haskell/
 └── Hydra/
     └── Test/
         ├── TestSuite.hs
@@ -382,7 +382,7 @@ src/gen-test/haskell/
 The same test modules can be generated for other languages:
 
 ```haskell
--- From hydra-ext package
+-- From packages/hydra-haskell
 import Hydra.Sources.All
 import Hydra.Ext.Generation
 
@@ -390,10 +390,10 @@ import Hydra.Ext.Generation
 let allModules = mainModules ++ testModules
 
 -- Generate Python tests
-writePython "../hydra-python/src/gen-test/python" allModules baseTestModules
+writePython "../../dist/python/hydra-kernel/src/test/python" allModules baseTestModules
 
 -- Generate Java tests
-writeJava "../hydra-java/src/gen-test/java" allModules baseTestModules
+writeJava "../../dist/java/hydra-kernel/src/test/java" allModules baseTestModules
 ```
 
 ## Best Practices
@@ -458,7 +458,7 @@ Group tests by the functionality they validate, not by implementation details:
 
 To add a new test module:
 
-1. **Create the test module** in `src/main/haskell/Hydra/Sources/Test/YourTest.hs`
+1. **Create the test module** in `packages/hydra-haskell/src/main/haskell/Hydra/Sources/Test/YourTest.hs`
 
 2. **Define the module structure**:
    ```haskell
@@ -491,7 +491,7 @@ To add a new test module:
    import Hydra.Sources.All
    import Hydra.Generation
    let allModules = mainModules ++ testModules
-   writeHaskell "src/gen-test/haskell" allModules baseTestModules
+   writeHaskell "../../dist/haskell/hydra-kernel/src/test/haskell" allModules baseTestModules
    :q
    stack test
    ```
@@ -501,4 +501,4 @@ To add a new test module:
 - [Testing Wiki](https://github.com/CategoricalData/hydra/wiki/Testing) - Overview of Hydra's testing approach
 - [Implementation Wiki](https://github.com/CategoricalData/hydra/blob/main/docs/implementation.md) -
   Details on the DSL system
-- [Test Suite Source](https://github.com/CategoricalData/hydra/tree/main/hydra-haskell/src/main/haskell/Hydra/Sources/Test)
+- [Test Suite Source](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-haskell/src/main/haskell/Hydra/Sources/Test)

@@ -1,0 +1,114 @@
+plugins {
+    id 'maven-publish'
+    id 'signing'
+}
+
+// Include the Haskell head sources alongside the package sources.
+// Long-term, head content will be copied into dist/java/ during generation
+// and this source-set crossover will go away. For now, the published
+// hydra-java artifact bundles the head's primitives and runtime drivers
+// directly from heads/java/.
+sourceSets {
+    main {
+        java {
+            srcDirs += file("$projectDir/../../heads/java/src/main/java")
+            srcDirs += file("$projectDir/../../dist/java/hydra-kernel/src/main/java")
+            srcDirs += file("$projectDir/../../dist/java/hydra-pg/src/main/java")
+            srcDirs += file("$projectDir/../../dist/java/hydra-rdf/src/main/java")
+            srcDirs += file("$projectDir/../../dist/java/hydra-ext/src/main/java")
+            srcDirs += file("$projectDir/../../demos/src/main/java")
+        }
+    }
+    test {
+        java {
+            srcDirs += file("$projectDir/../../heads/java/src/test/java")
+            srcDirs += file("$projectDir/../../dist/java/hydra-kernel/src/test/java")
+        }
+    }
+}
+
+dependencies {
+    // Note: these are currently "main" dependencies rather than "test" dependencies due to reusable test utilities.
+    //       These will likely be broken out into a separate module in the future.
+    api(platform(group: 'org.junit', name: 'junit-bom', version: junitVersion))
+    api('org.junit.jupiter:junit-jupiter')
+    api group: 'org.junit.jupiter', name: 'junit-jupiter-params', version: junitVersion
+
+    // Ext dependencies (formerly in hydra-ext build.gradle)
+    api group: 'org.apache.commons', name: 'commons-text', version: '1.10.0'
+    api group: 'com.cedarsoftware', name: 'json-io', version: '4.14.1'
+    api group: 'org.eclipse.rdf4j', name: 'rdf4j-rio-ntriples', version: rdf4jVersion
+    api 'org.antlr:antlr4-runtime:4.13.2'
+
+    testImplementation 'org.apache.commons:commons-csv:1.10.0'
+}
+
+tasks.named('sourcesJar') {
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+}
+
+// Exclude generated ext files with class-name/filename mismatches or stale patterns,
+// and ANTLR-dependent readers (require grammar generation plugin not available here)
+compileJava {
+    exclude '**/hydra/ext/lisp/Coder.java'
+    exclude '**/hydra/ext/scala/**'
+    exclude '**/hydra/ext/gql/GQLReader.java'
+    exclude '**/hydra/ext/cypher/CypherReader.java'
+    exclude '**/hydra/ext/cypher/FromCypher.java'
+    exclude '**/hydra/tools/AntlrReaderBase.java'
+    exclude '**/hydra/ext/io/shex/syntax/**'
+    exclude '**/hydra/ext/org/w3/owl/**'
+    exclude '**/hydra/ext/org/w3/xml/schema/Integer.java'
+    exclude '**/hydra/ext/org/w3/xml/schema/Boolean.java'
+    exclude '**/hydra/ext/org/w3/xml/schema/Byte.java'
+    exclude '**/hydra/ext/org/w3/xml/schema/Double.java'
+    exclude '**/hydra/ext/org/w3/xml/schema/Float.java'
+    exclude '**/hydra/ext/org/w3/xml/schema/Long.java'
+    exclude '**/hydra/ext/org/w3/xml/schema/Short.java'
+    exclude '**/hydra/ext/org/w3/xml/schema/String.java'
+}
+
+test {
+    useJUnitPlatform()
+    testLogging {
+        events "failed"
+        exceptionFormat "short"
+    }
+    jvmArgs '-Xmx512m'
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from(components.java)
+
+            pom {
+                name = 'hydra-java'
+                description = 'Java implementation of the Hydra language'
+                url = 'https://github.com/CategoricalData/hydra'
+                licenses {
+                    license {
+                        name = 'The Apache License, Version 2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'joshsh'
+                        name = 'Joshua Shinavier'
+                        email = 'josh@fortytwo.net'
+                    }
+                }
+                scm {
+                    url = 'https://github.com/CategoricalData/hydra'
+                    connection = 'scm:git://github.com/CategoricalData/hydra.git'
+                    developerConnection = 'scm:git://github.com/CategoricalData/hydra.git'
+                }
+            }
+        }
+    }
+}
+
+signing {
+    sign publishing.publications.mavenJava
+}
