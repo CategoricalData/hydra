@@ -124,13 +124,14 @@ import _root_.java.io.File
   var modsToGenerate = allMainMods
   if kernelOnly then
     val before = modsToGenerate.size
-    modsToGenerate = Generation.filterKernelModules(modsToGenerate)
-    allMainMods = Generation.filterKernelModules(allMainMods)
+    val kernelNsStrings = allKernelNamespaces.map(_.value).toSet
+    modsToGenerate = modsToGenerate.filter(m => kernelNsStrings.contains(m.namespace.value))
+    allMainMods = allMainMods.filter(m => kernelNsStrings.contains(m.namespace.value))
     println(s"Filtering to kernel modules... $before -> ${modsToGenerate.size}")
     println()
 
   // Generate main modules
-  val outMain = outDir + File.separator + "src/gen-main"
+  val outMain = outDir + File.separator + "src/main"
   println(s"Mapping ${modsToGenerate.size} modules to $targetCap...")
   println(s"  Universe: ${allMainMods.size} modules")
   println(s"  Output: $outMain")
@@ -169,7 +170,7 @@ import _root_.java.io.File
     println()
 
     val allUniverse = allMainMods ++ testMods
-    val outTest = outDir + File.separator + "src/gen-test"
+    val outTest = outDir + File.separator + "src/test"
 
     println(s"Mapping test modules to $targetCap...")
     println(s"  Universe: ${allUniverse.size} modules")

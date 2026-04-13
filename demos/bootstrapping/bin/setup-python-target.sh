@@ -93,9 +93,9 @@ if [ ! -e "$OUTPUT_DIR/../hydra-kernel" ]; then
     echo "    Symlinked ../hydra-kernel -> $HYDRA_ROOT/packages/hydra-kernel"
 fi
 
-# Copy test_env.py (provides real test graph with primitives)
+# Copy test_env.py (provides real test graph with primitives) from dist baseline
 echo "  Copying test_env.py..."
-PY_TEST_ENV="$HYDRA_PYTHON_DIR/src/test/python/hydra/test/test_env.py"
+PY_TEST_ENV="$HYDRA_ROOT/dist/python/hydra-kernel/src/test/python/hydra/test/test_env.py"
 PY_TEST_DST="$OUTPUT_DIR/src/test/python/hydra/test"
 if [ -f "$PY_TEST_ENV" ]; then
     mkdir -p "$PY_TEST_DST"

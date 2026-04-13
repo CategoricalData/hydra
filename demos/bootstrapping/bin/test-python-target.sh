@@ -55,5 +55,9 @@ PYEOF
 fi
 
 echo "Running Python tests..."
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+HYDRA_ROOT="$( cd "$SCRIPT_DIR/../../.." && pwd )"
 cd "$OUTPUT_DIR"
-HYDRA_BENCHMARK_OUTPUT="${HYDRA_BENCHMARK_OUTPUT:-}" pytest src/test/python 2>&1
+HYDRA_BENCHMARK_OUTPUT="${HYDRA_BENCHMARK_OUTPUT:-}" \
+    HYDRA_JSON_DIR="${HYDRA_JSON_DIR:-$HYDRA_ROOT/dist/json/hydra-kernel/src/main/json}" \
+    pytest src/test/python 2>&1
