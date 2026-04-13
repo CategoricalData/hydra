@@ -10,7 +10,6 @@ import hydra.lib.maps.FilterWithKey;
 import hydra.lib.maps.FindWithDefault;
 import hydra.lib.maps.FromList;
 import hydra.lib.maps.Insert;
-import hydra.lib.maps.IsEmpty;
 import hydra.lib.maps.Keys;
 import hydra.lib.maps.Lookup;
 import hydra.lib.maps.Map;
@@ -114,15 +113,6 @@ public interface Maps {
      */
     static Term insert() {
         return new Insert().term();
-    }
-
-    /**
-     * Returns a term representing the isEmpty primitive operation for maps.
-     *
-     * @return a term for testing if a map is empty
-     */
-    static Term isEmpty() {
-        return new IsEmpty().term();
     }
 
     /**
