@@ -161,6 +161,7 @@ public class Libraries {
                 new hydra.lib.literals.BigintToUint32(),
                 new hydra.lib.literals.BigintToUint64(),
                 new hydra.lib.literals.BigintToUint8(),
+                new hydra.lib.literals.BinaryToBytes(),
                 new hydra.lib.literals.BinaryToString(),
                 new hydra.lib.literals.Float32ToBigfloat(),
                 new hydra.lib.literals.Float64ToBigfloat(),
