@@ -184,6 +184,7 @@
 
 ;; Remaining test categories
 (load-test-file "dependencies.lisp")
+(load-test-file "differentiation.lisp")
 (load-test-file "reduction.lisp")
 (load-test-file "rewriting.lisp")
 (load-test-file "serialization.lisp")
@@ -207,49 +208,6 @@
 ;; 6. Run tests
 ;; ============================================================================
 (format t "~%Running tests...~%~%")
-
-;; If the full test suite isn't bound, build it dynamically from whatever loaded
-(unless (boundp 'hydra_test_test_suite_all_tests)
-  (format t "Building test suite dynamically from loaded test modules...~%")
-  (let ((subgroups nil))
-    (dolist (name '(hydra_test_lib_chars_all_tests
-                    hydra_test_lib_eithers_all_tests
-                    hydra_test_lib_equality_all_tests
-                    hydra_test_lib_lists_all_tests
-                    hydra_test_lib_literals_all_tests
-                    hydra_test_lib_logic_all_tests
-                    hydra_test_lib_maps_all_tests
-                    hydra_test_lib_math_all_tests
-                    hydra_test_lib_maybes_all_tests
-                    hydra_test_lib_pairs_all_tests
-                    hydra_test_lib_regex_all_tests
-                    hydra_test_lib_sets_all_tests
-                    hydra_test_lib_strings_all_tests
-                    hydra_test_annotations_all_tests
-                    hydra_test_checking_all_all_tests
-                    hydra_test_dependencies_all_tests
-                    hydra_test_eta_expansion_all_tests
-                    hydra_test_formatting_all_tests
-                    hydra_test_hoisting_all_all_tests
-                    hydra_test_inference_all_all_tests
-                    hydra_test_json_roundtrip_all_tests
-                    hydra_test_json_writer_all_tests
-                    hydra_test_reduction_all_tests
-                    hydra_test_rewriting_all_tests
-                    hydra_test_serialization_all_tests
-                    hydra_test_sorting_all_tests
-                    hydra_test_strip_all_tests
-                    hydra_test_substitution_all_tests
-                    hydra_test_unification_all_tests
-                    hydra_test_validate_all_all_tests
-                    hydra_test_variables_all_tests))
-      (if (boundp name)
-        (push (symbol-value name) subgroups)
-        (format t "  WARNING: ~A is not bound~%" name)))
-    (setf subgroups (nreverse subgroups))
-    (format t "  ~A of 31 test groups loaded~%" (length subgroups))
-    (defvar hydra_test_test_suite_all_tests
-      (make-test_group "common" nil subgroups nil))))
 
 (defvar *test-t0* (get-internal-real-time))
 (defvar *results* (run-test-group "" hydra_test_test_suite_all_tests))

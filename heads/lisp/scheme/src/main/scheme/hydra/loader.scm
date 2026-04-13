@@ -919,9 +919,9 @@
                 (eval f (interaction-environment))))
             remaining)
           (retry (+ pass 1) (reverse still-failed)))
-        ;; Report remaining failures
+        ;; Report remaining failures and raise.
         (when (pair? remaining)
-          (display (string-append "  WARNING: " (number->string (length remaining)) " form(s) failed after retries\n"))
+          (display (string-append "  FAIL: " (number->string (length remaining)) " form(s) failed after retries\n"))
           (force-output)
           (for-each
             (lambda (f)
@@ -941,7 +941,8 @@
                   (newline)
                   (force-output)))
                 (eval f (interaction-environment)))))
-            remaining))))))
+            remaining)
+          (error "hydra-eval-with-retry: unresolved forms after 10 retries"))))))
 
 (define (hydra-load-native-lib path)
   "Load a native library file, stripping define-library wrapper but NOT renaming definitions.
