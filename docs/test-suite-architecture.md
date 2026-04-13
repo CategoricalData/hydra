@@ -382,7 +382,7 @@ dist/haskell/hydra-kernel/src/test/haskell/
 The same test modules can be generated for other languages:
 
 ```haskell
--- From packages/hydra-haskell
+-- From heads/haskell
 import Hydra.Sources.All
 import Hydra.Generation
 
@@ -458,7 +458,7 @@ Group tests by the functionality they validate, not by implementation details:
 
 To add a new test module:
 
-1. **Create the test module** in `packages/hydra-haskell/src/main/haskell/Hydra/Sources/Test/YourTest.hs`
+1. **Create the test module** in `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Test/YourTest.hs`
 
 2. **Define the module structure**:
    ```haskell
@@ -501,4 +501,4 @@ To add a new test module:
 - [Testing Wiki](https://github.com/CategoricalData/hydra/wiki/Testing) - Overview of Hydra's testing approach
 - [Implementation Wiki](https://github.com/CategoricalData/hydra/blob/main/docs/implementation.md) -
   Details on the DSL system
-- [Test Suite Source](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-haskell/src/main/haskell/Hydra/Sources/Test)
+- [Test Suite Source](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-kernel/src/main/haskell/Hydra/Sources/Test)

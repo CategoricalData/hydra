@@ -672,13 +672,13 @@ Use the meta DSLs when writing programs that construct Hydra terms or types:
 The entire Hydra kernel is defined using the meta DSLs.
 
 **Type modules**
-(see [Sources/Kernel/Types](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Types)):
+(see [Sources/Kernel/Types](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Types)):
 - `Hydra/Sources/Kernel/Types/Core.hs` - Core type definitions (Type, Term, etc.)
 - `Hydra/Sources/Kernel/Types/Graph.hs` - Graph and module types
 - These modules import `qualified Hydra.Dsl.Types as T` along with unqualified operators `(>:)`, `(@@)`, `(~>)`
 
 **Term modules**
-(see [Sources/Kernel/Terms](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Terms)):
+(see [Sources/Kernel/Terms](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Terms)):
 - `Hydra/Sources/Kernel/Terms/Inference.hs` - Type inference algorithm
 - `Hydra/Sources/Kernel/Terms/Reduction.hs` - Term reduction logic
 - `Hydra/Sources/Libraries.hs` - Primitive function signatures
@@ -981,8 +981,9 @@ match _Result Nothing [
 
 ## Error handling with Either
 
-Hydra uses `Either` for computations that can fail. Error information is carried as `InContext OtherError`,
-which pairs an error message with a `Context` containing debug traces and metadata.
+Hydra uses `Either Error a` for computations that can fail. `Error` is a structured union
+type from `hydra.errors`; a `Context` value carrying trace messages and metadata is threaded
+alongside the graph as an explicit parameter.
 
 ### Basic Either operations
 
@@ -1294,7 +1295,7 @@ module_ = Module {
 -- First argument: output directory
 -- Second argument: universe modules (for dependency resolution)
 -- Third argument: modules to generate
-writeHaskell "src/gen-main/haskell" [module_] [module_]
+writeHaskell "../../dist/haskell/hydra-kernel/src/main/haskell" [module_] [module_]
 ```
 
 ### Working with the generated code

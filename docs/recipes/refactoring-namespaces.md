@@ -27,7 +27,7 @@ Renaming a namespace requires updating all of these, plus any code that imports 
 
 ## Prerequisites
 
-- Working Haskell build environment (`stack build` succeeds in packages/hydra-haskell)
+- Working Haskell build environment (`stack build` succeeds in `heads/haskell`)
 - Understanding of Hydra's module system and DSL
 
 ## Step-by-Step Process
@@ -37,9 +37,9 @@ Renaming a namespace requires updating all of these, plus any code that imports 
 1. **Move/rename the source file**
    ```bash
    # Example: moving Json.hs to Sources/Json/Model.hs
-   mkdir -p packages/hydra-haskell/src/main/haskell/Hydra/Sources/Json
-   mv packages/hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Types/Json.hs \
-      packages/hydra-haskell/src/main/haskell/Hydra/Sources/Json/Model.hs
+   mkdir -p packages/hydra-kernel/src/main/haskell/Hydra/Sources/Json
+   mv packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Types/Json.hs \
+      packages/hydra-kernel/src/main/haskell/Hydra/Sources/Json/Model.hs
    ```
 
 2. **Update the namespace declaration in the source**
@@ -196,8 +196,8 @@ Renaming a namespace requires updating all of these, plus any code that imports 
     ```haskell
     import Hydra.Sources.All
     import Hydra.Generation
-    writeDecoderSourceHaskell "src/gen-main/haskell" mainModules kernelTypesModules
-    writeEncoderSourceHaskell "src/gen-main/haskell" mainModules kernelTypesModules
+    writeDecoderSourceHaskell "../../dist/haskell/hydra-kernel/src/main/haskell" mainModules kernelTypesModules
+    writeEncoderSourceHaskell "../../dist/haskell/hydra-kernel/src/main/haskell" mainModules kernelTypesModules
     :quit
     ```
     This regenerates the `Hydra.Sources.Decode.*` and `Hydra.Sources.Encode.*` modules with correct namespace
@@ -318,8 +318,8 @@ To properly regenerate them, use GHCI:
 ```haskell
 import Hydra.Sources.All
 import Hydra.Generation
-writeDecoderSourceHaskell "src/gen-main/haskell" mainModules kernelTypesModules
-writeEncoderSourceHaskell "src/gen-main/haskell" mainModules kernelTypesModules
+writeDecoderSourceHaskell "../../dist/haskell/hydra-kernel/src/main/haskell" mainModules kernelTypesModules
+writeEncoderSourceHaskell "../../dist/haskell/hydra-kernel/src/main/haskell" mainModules kernelTypesModules
 ```
 
 ### Orphan Files
@@ -376,10 +376,10 @@ When renaming, these become `hydra.decode.json.model.value`. Look for these patt
 
 In a namespace rename from `hydra.foo` to `hydra.foo.bar`:
 
-**packages/hydra-haskell source:**
-- `packages/hydra-haskell/src/main/haskell/Hydra/Sources/.../Foo.hs` → `.../Foo/Bar.hs` (DSL source module)
-- `packages/hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Types/All.hs` (types registry)
-- `packages/hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Terms/All.hs` (terms registry, decoder/encoder imports)
+**Kernel DSL source:**
+- `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Types/Foo.hs` → `.../Foo/Bar.hs` (DSL source module)
+- `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Types/All.hs` (types registry)
+- `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Terms/All.hs` (terms registry, decoder/encoder imports)
 - `heads/haskell/src/test/haskell/Hydra/Foo/*.hs` (test files)
 
 **Generated (dist/haskell):**

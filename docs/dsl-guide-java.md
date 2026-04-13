@@ -2,6 +2,15 @@
 
 This guide explains Hydra's domain-specific language (DSL) utilities for constructing types and terms in Java.
 
+> **Status note (0.15):** the **direct DSLs** (`hydra.dsl.Types`, `hydra.dsl.Terms`,
+> `hydra.dsl.Literals`, `hydra.dsl.LiteralTypes`, and the `hydra.dsl.prims.*` wrappers)
+> are current and in wide use. The **phantom-typed Java DSL**
+> (`hydra.dsl.meta.*` — `Phantoms`, `Core`, `Graph`, `Compute`, library wrappers) is
+> described throughout this guide but **does not currently exist in the codebase**;
+> writing Hydra kernel source code in Java is not a supported path, and the
+> meta-DSL sections below are aspirational. Use the Haskell DSL
+> ([DSL Guide (Haskell)](dsl-guide.md)) for kernel-source development.
+
 **Note**: Hydra provides DSLs in all five implementation languages (Haskell, Java, Python, Scala, and Lisp).
 This guide focuses on the Java DSLs.
 For the comprehensive Haskell DSL guide (including kernel development context), see [DSL Guide (Haskell)](dsl-guide.md).
@@ -551,7 +560,7 @@ public interface MyFunctions {
 
     static <A> TBinding<A> define(String lname, TTerm<A> term) {
         return Phantoms.definitionInNamespace(
-            new hydra.module.Namespace(NS), lname, term);
+            new hydra.packaging.Namespace(NS), lname, term);
     }
 
     // Simple function: pattern match + extract body
@@ -690,37 +699,36 @@ public abstract class Term implements Serializable, Comparable<Term> {
 
 ## Error handling
 
-Hydra computations use `Either<InContext<OtherError>, A>` for error handling.
-`InContext` carries execution state such as a trace stack, messages, and metadata via a `Context` object.
+Hydra computations use `Either<Error, A>` for error handling (the former Flow monad
+was removed in #245). A `Context` value is threaded alongside the graph and carries a
+trace stack and diagnostic messages.
 
 ```java
 import hydra.util.Either;
-import hydra.compute.Context;
-import hydra.compute.InContext;
-import hydra.compute.OtherError;
+import hydra.context.Context;
+import hydra.errors.Error;
 import hydra.graph.Graph;
 
 // Create a successful result
-Either<InContext<OtherError>, String> ok = Either.right("result");
+Either<Error, String> ok = Either.right("result");
 
 // Map over a result
-Either<InContext<OtherError>, Integer> mapped =
+Either<Error, Integer> mapped =
     hydra.lib.eithers.Map.apply(s -> s.length(), ok);
 
 // Chain computations (bind / flatMap)
-Either<InContext<OtherError>, String> bound =
+Either<Error, String> bound =
     hydra.lib.eithers.Bind.apply(result1, value ->
         Either.right(value + " processed"));
 
-// Create a failure
-Either<InContext<OtherError>, String> err =
-    Either.left(new InContext<>(new OtherError("something went wrong"), cx));
+// Create a failure (Error is a tagged-union type; construct a variant from hydra.errors)
+Either<Error, String> err = Either.left(Error.other("something went wrong"));
 
 // Inspect a result
 if (result.isRight()) {
     String value = result.get();
 } else {
-    InContext<OtherError> failure = result.getLeft();
+    Error failure = result.getLeft();
 }
 ```
 

@@ -222,7 +222,7 @@ grep -rn 'hydra.mymodule' packages/hydra-haskell/src/
 ### Step 3: Delete the Source File
 
 ```bash
-rm packages/hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Terms/MyModule.hs
+rm packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Terms/MyModule.hs
 ```
 
 ### Step 4: Delete Generated Files
@@ -326,9 +326,9 @@ This is the most complex refactoring operation. A Hydra namespace like `hydra.fo
 1. **Move/rename the source file**
    ```bash
    # Example: moving Foo.hs to Foo/Bar.hs
-   mkdir -p packages/hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Terms/Foo
-   mv packages/hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Terms/Foo.hs \
-      packages/hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Terms/Foo/Bar.hs
+   mkdir -p packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Terms/Foo
+   mv packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Terms/Foo.hs \
+      packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Terms/Foo/Bar.hs
    ```
 
 2. **Update the namespace declaration**
@@ -679,12 +679,12 @@ We created `hydra.hoisting` to separate these concerns.
 ### Files Changed
 
 **Created:**
-- `packages/hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Terms/Hoisting.hs` (source module)
+- `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Terms/Hoisting.hs` (source module)
 
 **Modified:**
-- `packages/hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Terms/Reduction.hs` (removed hoisting functions)
-- `packages/hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Terms/All.hs` (registered new module)
-- `packages/hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Terms/Adapt/Simple.hs` (updated imports)
+- `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Terms/Reduction.hs` (removed hoisting functions)
+- `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Terms/All.hs` (registered new module)
+- `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Terms/Adapt/Simple.hs` (updated imports)
 - `heads/haskell/src/test/haskell/Hydra/TestSuiteSpec.hs` (updated test imports)
 
 **Generated:**

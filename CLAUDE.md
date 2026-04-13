@@ -25,8 +25,6 @@ graphs with deep support for polymorphism.
 - **`packages/` and `heads/`** contain hand-written code. Edit freely.
 - **`dist/`** contains generated code. **Never manually edit**
   (unless doing a bootstrap patch, which must be overwritten by regeneration afterward).
-- Legacy: some packages still have `src/gen-main/` and `src/gen-test/` directories.
-  These are also generated. They will move to `dist/` later.
 
 Generated files have a header: "Note: this is an automatically generated file. Do not edit."
 
@@ -89,9 +87,9 @@ hydra/
     hydra-lisp/       # Lisp coder DSL sources + per-dialect generated output
     hydra-pg/         # Property graph model DSL sources
     hydra-rdf/        # RDF/SHACL model DSL sources
-    hydra-ext/       # Miscellaneous extension DSL sources
-    hydra-coq/        # Coq output
-    hydra-javascript/  # JavaScript coder DSL sources
+    hydra-ext/        # Miscellaneous extension DSL sources (Avro, Protobuf, GraphQL, ...)
+    hydra-coq/        # Coq coder DSL sources
+    hydra-javascript/ # JavaScript coder DSL sources
   heads/              # Per-host build infrastructure: primitives, DSL runtime, generation
     haskell/          # Stack package ("hydra"), exec binaries, Hydra.Dsl/Lib/Generation
     java/             # Hand-written Java primitives, DSL, utils; gradle source-set crossover
@@ -136,7 +134,7 @@ See [code-generation.md](docs/recipes/code-generation.md) for details.
 | [docs/hydra-lexicon.txt](docs/hydra-lexicon.txt) | **Most important LLM reference.** All kernel types and ~180+ primitive signatures |
 | [docs/implementation.md](docs/implementation.md) | Architecture deep-dive: kernel modules, DSL system, primitives, coders, bootstrap |
 | [docs/dsl-guide.md](docs/dsl-guide.md) | Comprehensive Haskell DSL reference: 4 variants, operators, imports, patterns |
-| [docs/dsl-guide-java.md](docs/dsl-guide-java.md) | Java DSL: `hydra.dsl.Types`, `hydra.dsl.Terms`, visitor pattern, Flow monad |
+| [docs/dsl-guide-java.md](docs/dsl-guide-java.md) | Java DSL: `hydra.dsl.Types`, `hydra.dsl.Terms`, visitor pattern, `Either` error handling |
 | [docs/dsl-guide-python.md](docs/dsl-guide-python.md) | Python DSL: `hydra.dsl.types`, `hydra.dsl.terms`, `FrozenDict`, reserved words |
 | [docs/test-suite-architecture.md](docs/test-suite-architecture.md) | Common test suite structure, test case types, TestGraph, module organization |
 | [docs/troubleshooting.md](docs/troubleshooting.md) | Debugging strategies, primitive dispatch tracing, common errors across languages |
@@ -264,9 +262,8 @@ These are hard-won lessons. Read the linked docs for full context.
    workarounds. The answer is always: fix the errors first. This applies to every step —
    build errors, test failures, sync failures, demo failures.
 
-2. **Never edit generated files** (anything under `dist/`, or legacy `src/gen-main/`,
-   `src/gen-test/` in packages that haven't been migrated yet) except for bootstrap
-   patches that will be overwritten by regeneration.
+2. **Never edit generated files** (anything under `dist/`) except for bootstrap patches
+   that will be overwritten by regeneration.
 
 3. **The bootstrap problem**: Extending core types creates a circular dependency.
    You must manually patch generated files, rebuild, then regenerate to overwrite patches.

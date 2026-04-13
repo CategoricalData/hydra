@@ -83,7 +83,7 @@ To generate data separately:
 
 ```bash
 ./gradlew :hydra-java:jar
-java -cp "hydra-java/build/libs/*.jar" \
+java -cp "packages/hydra-java/build/libs/*.jar" \
   hydra.demos.validatepg.GenerateData /path/to/output
 ```
 

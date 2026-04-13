@@ -14,22 +14,22 @@ and releases can be found on Maven Central [here](https://central.sonatype.com/a
 
 ## Getting Started
 
-Hydra-Java requires Java 11 or later. Build the project with Gradle:
+Hydra-Java requires Java 11 or later. Build the project with Gradle (from the repo root):
 
 ```bash
-./gradlew build
+./gradlew :hydra-java:build
 ```
 
 To publish the resulting JAR to your local Maven repository:
 
 ```bash
-./gradlew publishToMavenLocal
+./gradlew :hydra-java:publishToMavenLocal
 ```
 
 You may need to set the `JAVA_HOME` environment variable:
 
 ```bash
-JAVA_HOME=/path/to/java11/installation ./gradlew build
+JAVA_HOME=/path/to/java11/installation ./gradlew :hydra-java:build
 ```
 
 ### Performance note: native JDK on Apple Silicon
@@ -71,7 +71,7 @@ For comprehensive documentation about Hydra's architecture and usage, see:
 - **[Concepts](https://github.com/CategoricalData/hydra/wiki/Concepts)** - Core concepts and type system
 - **[Implementation](https://github.com/CategoricalData/hydra/blob/main/docs/implementation.md)** - Implementation guide
 - **[Code Organization](https://github.com/CategoricalData/hydra/wiki/Code-organization)** -
-  The src/main vs src/gen-main pattern
+  The `packages/`, `heads/`, `dist/` layout
 - **[Testing](https://github.com/CategoricalData/hydra/wiki/Testing)** -
   Common test suite documentation
 - **[Developer Recipes](https://github.com/CategoricalData/hydra/blob/main/docs/recipes/index.md)** -
@@ -91,7 +91,7 @@ The common test suite (`hydra.test.testSuite`) ensures parity across all Hydra i
 To run all tests:
 
 ```bash
-./gradlew test
+./gradlew :hydra-java:test
 ```
 
 The test suite is generated from Hydra DSL sources and includes:
@@ -111,62 +111,67 @@ These are located in `src/test/java/` alongside the common test suite runner.
 To run a specific test class:
 
 ```bash
-./gradlew test --tests "hydra.VisitorTest"
+./gradlew :hydra-java:test --tests "hydra.VisitorTest"
+
+# (Note: run all gradle commands from the repo root; this package does not have
+# its own gradle wrapper.)
 ```
 
-## Code Organization
+## Code organization
 
-Hydra-Java uses the **src/main vs src/gen-main** separation pattern
-(see [Code organization wiki page](https://github.com/CategoricalData/hydra/wiki/Code-organization) for details).
+In 0.15, Hydra's Java code is split across three locations
+(see [Code organization wiki page](https://github.com/CategoricalData/hydra/wiki/Code-organization) for the full picture):
 
-- **`src/main/java/`** - Hand-written Java code
-  - `hydra/lib/` - Primitive function implementations
-  - `hydra/util/` - Core utilities (Either, Maybe, Pair, Lazy, etc.)
-    and internal collection classes (ConsList, PersistentMap, PersistentSet).
-  - `hydra/tools/` - Framework classes (PrimitiveFunction, MapperBase, etc.)
-  - Language-specific parsers and extensions
+- **This package** (`packages/hydra-java/src/main/haskell/`) — the Java coder DSL sources
+  (written in Haskell): `Hydra/Sources/Java/` contains `Syntax`, `Language`, `Coder`, `Serde`,
+  `Names`, `Utils`, `Environment`, and `Testing` modules.
 
-- **`src/gen-main/java/`** - Generated Java code
-  - `hydra/core/` - Core types (Term, Type, Literal, etc.)
-  - `hydra/graph/`, `hydra/module/` - Graph and module structures
-  - `hydra/coders/`, `hydra/compute/` - Type adapters and computational abstractions
-  - `hydra/reduction/`, `hydra/rewriting/`, `hydra/hoisting/` - Term transformations
-  - `hydra/inference/`, `hydra/checking/` - Type inference and checking
-  - Generated from Haskell DSL sources using the Java coder
+- **Java head** ([`heads/java/src/main/java/`](https://github.com/CategoricalData/hydra/tree/main/heads/java/src/main/java))
+  — hand-written Java runtime
+  - `hydra/lib/` — primitive function implementations
+  - `hydra/dsl/` — Java DSL (Terms, Types, Expect, ...)
+  - `hydra/util/` — core utilities (Either, Maybe, Pair, Lazy) and internal collection classes
+  - `hydra/tools/` — framework classes (PrimitiveFunction, MapperBase, ...)
 
-- **`src/gen-test/java/`** - Generated test suite
-  - `hydra/test/` - Common tests ensuring parity with Haskell and Python
+- **Generated Java kernel** ([`dist/java/hydra-kernel/src/main/java/`](https://github.com/CategoricalData/hydra/tree/main/dist/java/hydra-kernel/src/main/java))
+  — code-generated from the kernel DSL sources
+  - `hydra/core/`, `hydra/graph/`, `hydra/packaging/`, `hydra/coders/`, `hydra/typing/`, ...
+  - `hydra/reduction/`, `hydra/rewriting/`, `hydra/hoisting/`
+  - `hydra/inference/`, `hydra/checking/`
 
-## Generate Java Code
+- **Generated Java test suite** (`dist/java/hydra-kernel/src/test/java/`) —
+  the common test suite compiled into Java.
 
-The Java code in `src/gen-main/java` and `src/gen-test/java` is generated from sources
-in Hydra's bootstrapping implementation, Hydra-Haskell.
+## Generate Java code
+
+Java code is generated from the Haskell head, using the Java coder DSL sources in this package.
 See the [Hydra-Haskell README](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-haskell)
-for more information on how this works.
+for more information on how code generation works.
 
-The recommended way to regenerate all Java code is to use the sync script:
+The recommended way to regenerate all Java code is the sync script (from the repo root):
 
 ```bash
-cd ../../heads/haskell
-./bin/sync-java.sh
+heads/haskell/bin/sync-java.sh
 ```
 
 This will:
-1. Generate the kernel modules
+1. Generate the kernel modules into `dist/java/hydra-kernel/src/main/java`
 2. Generate the eval lib modules
-3. Generate the kernel tests
-4. Generate the generation tests
-5. Build and run all tests
+3. Generate the kernel tests into `dist/java/hydra-kernel/src/test/java`
+4. Build and run all tests
 
-For manual generation, enter GHCi from heads/haskell:
+For manual generation, enter GHCi from `heads/haskell/`:
 
 ```bash
-cd ../../heads/haskell && stack ghci
+cd heads/haskell && stack ghci
 ```
 
-And run the following commands in the GHC REPL:
+And run the following in the REPL:
 
 ```haskell
+import Hydra.Generation
+import Hydra.Sources.All
+
 -- Generate the kernel
 writeJava "../../dist/java/hydra-kernel/src/main/java" kernelModules kernelModules
 
@@ -175,11 +180,11 @@ let allModules = mainModules ++ testModules
 writeJava "../../dist/java/hydra-kernel/src/test/java" allModules baseTestModules
 ```
 
-## Design Notes
+## Design notes
 
-### Algebraic Data Types
+### Algebraic data types
 
-The Hydra coder which generates everything in `src/gen-main` and `src/gen-test` can be found
+The Java coder DSL sources that drive Java code generation live
 [here](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-java/src/main/haskell/Hydra/Sources/Java).
 A variety of techniques are used in order to materialize Hydra's core language in Java,
 including a [pattern](https://garciat.com/posts/java-adt) for representing algebraic data types

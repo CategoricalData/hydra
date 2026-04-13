@@ -49,7 +49,7 @@ The implementation follows a layered architecture:
 ┌──────────────────────────────────────────────────────────────┐
 │                   Hydra Kernel (Source of Truth)             │
 │  Type system: Term, Type, Module, Graph, primitives, etc.    │
-│  Location: packages/hydra-haskell/src/main/haskell/Hydra/Sources/│
+│  Location: packages/hydra-kernel/src/main/haskell/Hydra/Sources/│
 │  Written using: Haskell DSLs                                 │
 └────────────────────────┬─────────────────────────────────────┘
                          │ Defines
@@ -73,7 +73,8 @@ The implementation follows a layered architecture:
 ┌──────────────────────────────────────────────────────────────┐
 │         Coders (Cross-Language Transformations)              │
 │  Transform Hydra modules between language implementations    │
-│  Location: heads/haskell/src/main/haskell/Hydra/     │
+│  DSL sources: packages/hydra-<lang>/src/main/haskell/Hydra/Sources/<Lang>/ │
+│  Runtime driver: heads/haskell/src/main/haskell/Hydra/ExtGeneration.hs │
 │  Enable: Write in Java, compile to Python (or vice versa)    │
 └──────────────────────────────────────────────────────────────┘
 ```
@@ -93,16 +94,18 @@ The implementation follows a layered architecture:
 
 Type modules define Hydra's core type system. They are located in:
 ```
-packages/hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Types/
+packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Types/
 ```
 
 ### Module organization
 
-Hydra's kernel consists of **21 type modules** organized into logical categories:
+Hydra's kernel consists of **~20 type modules** organized into logical categories.
+The canonical list is `Hydra.Sources.Kernel.Types.All.kernelTypesModules`;
+the descriptions below cover the main ones:
 
-#### Core Foundation (3 modules)
+#### Core foundation
 
-**Core.hs** - `hydra.core` namespace (13,531 bytes, largest module)
+**Core.hs** - `hydra.core` namespace (largest type module)
 - Central hub defining fundamental types: `Term`, `Type`, `Literal`, `Function`, `Application`, `Lambda`, `Let`,
   `Record`, `Union`, etc.
 - All other modules depend on Core directly or transitively
@@ -113,26 +116,17 @@ Hydra's kernel consists of **21 type modules** organized into logical categories
 - Defines variant enums: `TermVariant`, `TypeVariant`, `LiteralVariant`, etc.
 - Provides introspection capabilities: `Precision`, `Comparison`
 
-**Module.hs** - `hydra.module` namespace
-- Defines module structure: `Module`, `Definition`, `Namespace`, `QualifiedName`
+**Packaging.hs** - `hydra.packaging` namespace
+- Defines module structure: `Module`, `Definition`, `Namespace`, `QualifiedName`, `Package`
 - Enables organized code with namespaces and dependencies
 
-#### Transformation and Computation (3 modules)
-
-**Compute.hs** - `hydra.compute` namespace
-- Core abstractions: `Flow` monad, `Coder`, `Adapter`, `Bicoder`
-- Generic over state and value types
-- Foundation for all transformations
+#### Transformation framework
 
 **Coders.hs** - `hydra.coders` namespace
-- Language-specific transformation framework
-- Defines: `Language`, `LanguageConstraints`, `AdapterContext`, `TraversalOrder`
+- Defines `Coder`, `Adapter`, `Bicoder`, `Language`, `LanguageConstraints`, `AdapterContext`, `TraversalOrder`
+- The framework is Either-based; the former `Flow` monad was removed in #245
 
-**Workflow.hs** - `hydra.workflow` namespace
-- High-level transformation workflows
-- Schema specifications and transformations
-
-#### Graph and Query (2 modules)
+#### Graph and query
 
 **Graph.hs** - `hydra.graph` namespace
 - Extends core with graph operations
@@ -142,26 +136,40 @@ Hydra's kernel consists of **21 type modules** organized into logical categories
 - Language-agnostic graph pattern queries
 - Triple patterns and path expressions
 
-#### Type System Support (2 modules)
+#### Type system support
 
 **Typing.hs** - `hydra.typing` namespace
 - Type inference and reconstruction
 - Type constraints and substitutions
 
-#### Data Format Models (4 modules)
+**Classes.hs** - `hydra.classes` namespace
+- Minimal typeclass metadata (`Ord`, `Eq`) used during inference
 
-**Ast.hs** - `hydra.ast` - Common syntax tree for serializers
-**Json.hs** - `hydra.json` - JSON data model
-**Tabular.hs** - `hydra.tabular` - CSV/TSV data model (generic)
-**Grammar.hs** - `hydra.grammar` - BNF grammar model
+**Context.hs** - `hydra.context` namespace
+- Execution context: trace, messages, error attribution
 
-#### Utility and Specialized (6 modules)
+#### Error model
 
-**Accessors.hs** - `hydra.accessors` - Term access patterns
-**Testing.hs** - `hydra.testing` - Unit testing framework
-**Phantoms.hs** - `hydra.phantoms` - Phantom types for DSL use
-**Relational.hs** - `hydra.relational` - Codd's Relational Model
-**Topology.hs** - `hydra.topology` - Graph algorithms (Tarjan SCC)
+**Errors.hs** - `hydra.errors` namespace and the `Error/` subdirectory
+- Structured error types used by inference, checking, and coders
+
+#### Parsing and path resolution
+
+**Parsing.hs** - `hydra.parsing` namespace
+**Paths.hs** - `hydra.paths` namespace
+
+#### Data model helpers
+
+**Ast.hs** - `hydra.ast` — common syntax tree for serializers
+**Tabular.hs** - `hydra.tabular` — CSV/TSV data model (generic)
+
+#### Utility and specialized
+
+**Testing.hs** - `hydra.testing` — unit testing framework
+**Phantoms.hs** - `hydra.phantoms` — phantom types for DSL use
+**Relational.hs** - `hydra.relational` — Codd's Relational Model
+**Topology.hs** - `hydra.topology` — graph algorithms (Tarjan SCC)
+**Util.hs** - `hydra.util` — misc utilities
 
 ### Type definition patterns
 
@@ -216,16 +224,16 @@ def "Term" $
   ]
 ```
 
-#### Example: Record Type (from Module.hs)
+#### Example: Record Type (from Packaging.hs)
 
 ```haskell
 def "Module" $
-  doc "A logical collection of elements in a namespace" $
+  doc "A logical collection of definitions in the same namespace" $
   record [
-    "namespace">: mod "Namespace",
-    "elements">: list $ core "Binding",
-    "termDependencies">: list $ mod "Namespace",
-    "typeDependencies">: list $ mod "Namespace",
+    "namespace">: packaging "Namespace",
+    "definitions">: list $ packaging "Definition",
+    "termDependencies">: list $ packaging "Namespace",
+    "typeDependencies">: list $ packaging "Namespace",
     "description">: optional string
   ]
 ```
@@ -258,31 +266,26 @@ def "TermVariant" $
 
 ```
 Core (hydra.core) - Foundation
-  ├─ Variants - Supplements with variants
-  ├─ Compute - Transformation abstractions
-  ├─ Typing - Type system support
-  ├─ Accessors - Term access patterns
-  ├─ Phantoms - DSL phantom types
-  ├─ Json - JSON model
-  ├─ Tabular - Tabular data
-  ├─ Query - Graph queries
-  ├─ Testing - Test framework
-  ├─ Grammar - BNF grammars
-  └─ Topology - Graph algorithms
+  ├─ Variants   - Supplements with variants and introspection types
+  ├─ Classes    - Typeclass metadata (Ord, Eq)
+  ├─ Typing     - Type system support (inference results, schemes)
+  ├─ Phantoms   - DSL phantom types
+  ├─ Tabular    - Tabular data
+  ├─ Query      - Graph queries
+  ├─ Testing    - Test framework
+  └─ Topology   - Graph algorithms
 
-Compute
-  ├─ Graph - Graph extension
-  └─ Coders - Language transformations
+Core + supporting types
+  ├─ Graph      - Extends core with graph operations
+  ├─ Coders     - Language-transformation framework (Coder, Adapter, Language, ...)
+  └─ Packaging  - Module, Definition, Namespace, QualifiedName, Package
 
-Graph
-  ├─ Workflow - Transformation workflows
-  └─ Module - Namespace models
-
-Query
-  └─ Constraints - Graph constraints
+Error model
+  ├─ Errors     - Structured error types
+  └─ Error/*    - Per-subsystem error types
 ```
 
-**Key Properties:**
+**Key properties:**
 - No circular dependencies at type level
 - Clear separation: foundation (Core/Variants) vs. extensions
 - Layered architecture: Atomic → Composite → Integrative → Specialized
@@ -419,7 +422,7 @@ Hydra/Dsl/Meta/Lib/
 ├── Eithers.hs     # either, isLeft, rights, etc.
 ├── Equality.hs    # equal, compare, gt, lt, etc.
 ├── Pairs.hs       # fst, snd, curry, uncurry
-├── Flows.hs       # bind, map, pure, sequence, etc.
+├── Regex.hs       # matches, find, replace, split
 └── Literals.hs    # Type conversions and parsing
 ```
 
@@ -457,7 +460,7 @@ Here's a complete example showing DSL usage in type inference:
 
 ```haskell
 -- From Hydra.Sources.Kernel.Terms.Inference
-inferTypeOfEither :: TTermDefinition (Context -> Graph -> Either Term Term -> Either (InContext Error) InferenceResult)
+inferTypeOfEither :: TTermDefinition (Context -> Graph -> Either Term Term -> Either Error InferenceResult)
 inferTypeOfEitherDef = define "inferTypeOfEither" $
   doc "Infer the type of an Either term" $
   "cx" ~> "e" ~>
@@ -487,7 +490,7 @@ inferTypeOfEitherDef = define "inferTypeOfEither" $
 - `define` - Define a named function
 - `~>` - Lambda abstraction
 - `<~` - Let binding
-- `<<~` - Flow monad binding
+- `<<~` - `Either`-bind (bind into the error-handling monad-like combinator)
 - `@@` - Function application
 - `ref` - Reference to another definition
 - Type-safe operations on `InferenceResult` and `Either`
@@ -553,9 +556,12 @@ def "Primitive" $
     "type">: doc "Type signature" $
       core "TypeScheme",
     "implementation">: doc "Concrete implementation" $
-      function (list $ core "Term") (compute "Flow" @@ graph "Graph" @@ core "Term")
+      context "Context" ~> graph "Graph" ~> list (core "Term") ~>
+        Types.either_ (errors "Error") (core "Term")
   ]
 ```
+
+(The Either-based implementation replaces the former `Flow` monad, removed in #245.)
 
 #### Level 2: Haskell Implementation
 
@@ -610,7 +616,7 @@ prim2Interp _lists_map (Just mapInterp) ["x", "y"]
     x = variable "x"
     y = variable "y"
 
-    mapInterp :: Term -> Term -> Context -> Graph -> Either (InContext OtherError) Term
+    mapInterp :: Term -> Term -> Context -> Graph -> Either Error Term
     mapInterp fun args' cx g = do
       args <- ExtractCore.list cx args' g
       return $ Terms.list (Terms.apply fun <$> args)
@@ -639,8 +645,7 @@ tuple2 :: TermCoder a -> TermCoder b -> TermCoder (a, b)
 -- Function types
 function :: TermCoder a -> TermCoder b -> TermCoder (a -> b)
 
--- Special types
-either_ :: TermCoder a -> TermCoder b -> TermCoder (Either a b)
+-- Sum types
 either_ :: TermCoder a -> TermCoder b -> TermCoder (Either a b)
 ```
 
@@ -670,7 +675,7 @@ public class Add extends PrimitiveFunction {
         return scheme(function(int32(), int32(), int32()));
     }
 
-    protected Function<List<Term>, Flow<Graph, Term>> implementation() {
+    protected Function<List<Term>, Either<Error, Term>> implementation() {
         return args -> map2(
             Expect.int32(args.get(0)),
             Expect.int32(args.get(1)),
@@ -732,16 +737,17 @@ prim1 _strings_toUpper Strings.toUpper [] string string
 
 #### Pattern 3: Either for Error Handling
 
-All primitives operate within `Either (InContext OtherError) a`:
+All primitives operate within `Either Error a`, where `Error` is the structured union
+type from `hydra.errors`:
 
 ```haskell
-type Result a = Either (InContext OtherError) a
+type Result a = Either Error a
 ```
 
-Where `InContext` pairs an error with a `Context` carrying debug traces and metadata.
-This provides:
+A `Context` value is threaded alongside the `Graph` as an explicit parameter, carrying
+debug traces and diagnostic messages. This provides:
 - Explicit error handling with short-circuit semantics
-- Debug traces via `Context` parameter
+- Debug traces via the threaded `Context` parameter
 - No hidden state — all context is passed explicitly
 
 ---
@@ -872,36 +878,34 @@ Language/
 
 ### Entry point pattern
 
-All coders follow the same signature:
-
-```haskell
-moduleToLanguage :: Module -> Flow Graph (M.Map FilePath String)
-```
+All coders follow the same shape: a `Module` plus context goes in, a map of generated
+file paths to contents comes out, and errors are reported via `Either Error`.
 
 Examples:
 ```haskell
-moduleToJava :: Module -> Flow Graph (M.Map FilePath String)
-moduleToPython :: Module -> [Definition] -> Flow Graph (M.Map FilePath String)
-moduleToCpp :: Module -> Flow Graph (M.Map FilePath String)
+moduleToJava   :: Context -> Graph -> Module -> Either Error (M.Map FilePath String)
+moduleToPython :: Context -> Graph -> Module -> Either Error (M.Map FilePath String)
+moduleToCpp    :: Context -> Graph -> Module -> Either Error (M.Map FilePath String)
 ```
 
 ### Coder framework
 
-Located in `dist/haskell/hydra-kernel/src/main/haskell/Hydra/Coders.hs`:
+Located in `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Types/Coders.hs`
+(generated output: `dist/haskell/hydra-kernel/src/main/haskell/Hydra/Coders.hs`):
 
 ```haskell
 -- Bidirectional transformation
-data Coder s t v = Coder {
-  coderEncode :: v -> Flow s t,
-  coderDecode :: v -> Flow s t
+data Coder v1 v2 = Coder {
+  coderEncode :: Context -> v1 -> Either Error v2,
+  coderDecode :: Context -> v2 -> Either Error v1
 }
 
 -- Adapter for language-specific transformations
-data Adapter s t u w v x = Adapter {
+data Adapter t1 t2 v1 v2 = Adapter {
   adapterIsLossy :: Bool,              -- Track lossy conversions
-  adapterSource :: u,                  -- Source language/type
-  adapterTarget :: w,                  -- Target language/type
-  adapterCoder :: Coder s t v          -- Transformation logic
+  adapterSource :: t1,                 -- Source type schema
+  adapterTarget :: t2,                 -- Target type schema
+  adapterCoder  :: Coder v1 v2         -- Value-level transformation
 }
 ```
 
@@ -913,7 +917,7 @@ Terms are recursively converted to target language expressions:
 
 ```haskell
 -- Java example
-encodeTerm :: Aliases -> Term -> Flow Graph Java.Expression
+encodeTerm :: Context -> Graph -> Aliases -> Term -> Either Error Java.Expression
 
 -- Handles:
 -- - Literals (int, string, boolean, etc.)
@@ -932,7 +936,7 @@ Hydra types map to language types:
 
 ```haskell
 -- Java example
-encodeType :: Aliases -> Type -> Flow Graph Java.Type
+encodeType :: Context -> Graph -> Aliases -> Type -> Either Error Java.Type
 
 -- Maps:
 -- TypeRecord → Java Class
@@ -950,20 +954,20 @@ encodeType :: Aliases -> Type -> Flow Graph Java.Type
 Complete module transformation:
 
 ```haskell
--- Java example from Java/Coder.hs
-moduleToJava :: Module -> Flow Graph (M.Map FilePath String)
-moduleToJava mod = do
+-- Java example from hydra-java's Coder.hs
+moduleToJava :: Context -> Graph -> Module -> Either Error (M.Map FilePath String)
+moduleToJava cx g mod = do
   -- Extract types from module
-  types <- getTypes mod
+  types <- getTypes cx g mod
 
   -- Generate class for each type
-  classes <- mapM (typeToJavaClass mod) types
+  classes <- traverse (typeToJavaClass cx g mod) types
 
   -- Generate package structure
   let packagePath = namespaceToPath (moduleNamespace mod)
 
   -- Map file paths to source code
-  return $ M.fromList $ map (\cls ->
+  pure $ M.fromList $ map (\cls ->
     (packagePath </> className cls <.> "java",
      renderJavaClass cls)) classes
 ```
@@ -974,40 +978,30 @@ Adapters handle type compatibility between languages:
 
 ```haskell
 -- Core adapter functions
-languageAdapter :: Language -> Type
-                -> Flow Graph (Adapter... Type Type Term Term)
+languageAdapter    :: Context -> AdapterContext -> Language -> Type
+                   -> Either Error (Adapter Type Type Term Term)
 
-adaptTypeToLanguage :: Language -> Type -> Flow Graph Type
+adaptTypeForLanguage :: Context -> AdapterContext -> Language -> Type
+                    -> Either Error Type
 
-termAdapter :: Type
-           -> Flow AdapterContext (Adapter... FieldType FieldType Field Field)
+termAdapter        :: Context -> AdapterContext -> Type
+                   -> Either Error (Adapter FieldType FieldType Field Field)
 ```
 
-**Adapter Composition:**
+**Adapter composition:**
 ```haskell
-composeCoders :: Coder t0 t1 t2 t3 -> Coder t0 t1 t3 t4
-              -> Coder t0 t1 t2 t4
+composeCoders  :: Coder v1 v2 -> Coder v2 v3 -> Coder v1 v3
 
-constructCoder :: Language -> (Term -> Flow t0 t1) -> Type
-              -> Flow Graph (Coder t0 t2 Term t1)
+constructCoder :: Context -> AdapterContext -> Language -> Type
+               -> Either Error (Coder Term Term)
 ```
 
-**Module Transformation Pipeline:**
-```haskell
-transformModule :: Language
-               -> (Term -> Flow t0 t1)              -- encoder
-               -> (Module -> M.Map Type (Coder...) -> [(Binding, TypeApplicationTerm)]
-                   -> Flow Graph t3)                -- constructor
-               -> Module
-               -> Flow Graph t3
-
--- Process:
--- 1. Extract all elements as TypeApplicationTerms
--- 2. Gather unique types
--- 3. Construct coders for each type (via adapters)
--- 4. Pass coders to module constructor
--- 5. Generate output files
-```
+**Module transformation pipeline:**
+1. Extract all elements as `TypeApplicationTerm`s
+2. Gather unique types
+3. Construct coders for each type (via adapters)
+4. Pass coders to the module constructor
+5. Generate output files
 
 ### Language constraints
 
@@ -1106,12 +1100,13 @@ Type modules define data models — the types that make up Hydra's internal repr
 Term modules provide the logic and procedural aspect — the functions that operate on those types.
 This distinction applies throughout, not just to the kernel.
 
-The modules compiled in hydra-haskell are aggregated in `Hydra.Sources.All`:
+The modules compiled in the Haskell head are aggregated in `Hydra.Sources.All`
+(kernel + Haskell coder + JSON) and `Hydra.Sources.Ext` (all extension coders):
 
 - **Kernel type modules** (`kernelTypesModules`) — Hydra's internal data model:
-  the core type system (`hydra.core`), the computation model (`hydra.compute`),
-  graph and module structures (`hydra.graph`, `hydra.module`), and supporting types
-  like `hydra.typing`, `hydra.query`, `hydra.tabular`, etc.
+  the core type system (`hydra.core`), graph and package structures (`hydra.graph`,
+  `hydra.packaging`), and supporting types like `hydra.typing`, `hydra.coders`,
+  `hydra.query`, `hydra.tabular`, etc.
   Hand-written DSL definitions in `Hydra.Sources.Kernel.Types.*`.
 
 - **Kernel term modules** (`kernelTermsModules`) — The logic of Hydra:
@@ -1231,7 +1226,7 @@ Hand-translate DSL definitions to Haskell in generated files:
 
 ```haskell
 -- Manually edit: dist/haskell/hydra-kernel/src/main/haskell/Hydra/Inference.hs
-inferTypeOfEither :: InferenceContext -> Either Term Term -> Context -> Graph -> Either (InContext OtherError) InferenceResult
+inferTypeOfEither :: InferenceContext -> Either Term Term -> Context -> Graph -> Either Error InferenceResult
 inferTypeOfEither cx (Left left) context graph = do
   leftResult <- inferType cx left context graph
   let leftType = inferenceResultType leftResult
@@ -1271,18 +1266,32 @@ stack build
 heads/haskell/src/main/haskell/Hydra/
 ├── Dsl/                    # DSL definitions (manual)
 ├── Lib/                    # Native implementations (manual)
-└── ...
+├── Generation.hs           # Code-gen driver (manual)
+├── ExtGeneration.hs        # Driver for ext-language coders (manual)
+└── Haskell/Generation.hs   # Haskell-specific coder driver (manual)
 
-packages/hydra-haskell/src/main/haskell/Hydra/
-└── Sources/                # DSL-based specifications (manual)
+packages/hydra-kernel/src/main/haskell/Hydra/
+└── Sources/                # Kernel DSL-based specifications (manual)
+    ├── Kernel/Types/       # Type modules
+    ├── Kernel/Terms/       # Term modules
+    ├── Eval/Lib/           # Primitive library specs
+    └── Test/               # Common test suite
 
-dist/haskell/hydra-kernel/src/main/haskell/   # Generated code
+packages/hydra-<lang>/src/main/haskell/Hydra/
+└── Sources/<Lang>/         # Per-language coder DSL sources (manual)
+
+dist/haskell/hydra-kernel/src/main/haskell/   # Generated kernel code
 ├── Hydra/
 │   ├── Core.hs             # Generated Core types
 │   ├── Variants.hs         # Generated Variants types
 │   ├── Inference.hs        # Generated type inference
 │   ├── Checking.hs         # Generated type checking
 │   └── ...                 # All kernel modules
+
+dist/haskell/hydra-ext/src/main/haskell/Hydra/ # Generated ext-coder code
+├── Java/Coder.hs           # Generated Java coder
+├── Python/Coder.hs         # Generated Python coder
+└── ...                     # All other ext coders
 ```
 
 ---
@@ -1317,14 +1326,15 @@ implementing native functions in `Lib/`, registering primitives, and creating DS
 
 ### Type modules
 
-[`packages/hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Types/`](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Types)
+[`packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Types/`](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Types)
 ```
 ├── Core.hs              # hydra.core - foundation
 ├── Variants.hs          # hydra.variants - metadata
-├── Compute.hs           # hydra.compute - Coder, Adapter
+├── Coders.hs            # hydra.coders - Coder, Adapter, Language
 ├── Graph.hs             # hydra.graph - primitives
-├── Module.hs            # hydra.module - namespaces
-└── ...                  # 16 more modules
+├── Packaging.hs         # hydra.packaging - modules, namespaces, packages
+├── Typing.hs            # hydra.typing - inference results
+└── ...                  # see Hydra.Sources.Kernel.Types.All for the full list
 ```
 
 ### DSL system
@@ -1346,21 +1356,25 @@ implementing native functions in `Lib/`, registering primitives, and creating DS
 ### Primitive functions
 
 [`heads/haskell/src/main/haskell/Hydra/Lib/`](https://github.com/CategoricalData/hydra/tree/main/heads/haskell/src/main/haskell/Hydra/Lib) — Native implementations
-[`packages/hydra-haskell/src/main/haskell/Hydra/Sources/Libraries.hs`](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-haskell/src/main/haskell/Hydra/Sources/Libraries.hs) — Primitive registration
+[`packages/hydra-kernel/src/main/haskell/Hydra/Sources/Libraries.hs`](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-kernel/src/main/haskell/Hydra/Sources/Libraries.hs) — Primitive registration
 ```
 ├── Math.hs
 ├── Lists.hs
 └── ...
 ```
 
-### Code generators
+### Code generators (DSL sources)
 
-[`dist/haskell/hydra-ext/src/main/haskell/Hydra/`](https://github.com/CategoricalData/hydra/tree/main/dist/haskell/hydra-ext/src/main/haskell/Hydra/Ext)
-```
-├── Java/               # Java coder
-├── Python/             # Python coder
-└── ...                 # 11+ more languages
-```
+Per-language DSL sources live in `packages/hydra-<lang>/src/main/haskell/Hydra/Sources/<Lang>/`:
+
+- [`packages/hydra-haskell/src/main/haskell/Hydra/Sources/Haskell/`](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-haskell/src/main/haskell/Hydra/Sources/Haskell)
+- [`packages/hydra-java/src/main/haskell/Hydra/Sources/Java/`](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-java/src/main/haskell/Hydra/Sources/Java)
+- [`packages/hydra-python/src/main/haskell/Hydra/Sources/Python/`](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-python/src/main/haskell/Hydra/Sources/Python)
+- [`packages/hydra-scala/src/main/haskell/Hydra/Sources/Scala/`](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-scala/src/main/haskell/Hydra/Sources/Scala)
+- [`packages/hydra-lisp/src/main/haskell/Hydra/Sources/Lisp/`](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-lisp/src/main/haskell/Hydra/Sources/Lisp)
+- [`packages/hydra-ext/src/main/haskell/Hydra/Sources/`](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-ext/src/main/haskell/Hydra/Sources) — Avro, Cpp, Csharp, Go, GraphQL, Pegasus, Protobuf, Rust, TypeScript, Yaml, ...
+
+Generated coder output lands under [`dist/haskell/hydra-ext/src/main/haskell/Hydra/`](https://github.com/CategoricalData/hydra/tree/main/dist/haskell/hydra-ext/src/main/haskell/Hydra).
 
 ### Generated code
 
