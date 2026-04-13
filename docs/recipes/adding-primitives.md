@@ -158,7 +158,7 @@ module_ = Module ns definitions
     definitions = [toDefinition bimap_]
 
 -- | Interpreter-friendly bimap for Either terms.
-bimap_ :: TTermDefinition (Term -> Term -> Term -> Flow s Term)
+bimap_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Term -> Either Error Term)
 bimap_ = define "bimap" $
   doc "Interpreter-friendly bimap for Either terms." $
   "leftFun" ~> "rightFun" ~> "eitherTerm" ~>
@@ -248,13 +248,12 @@ Create `/heads/java/src/main/java/hydra/lib/<library>/<FunctionName>.java`:
 ```java
 package hydra.lib.chars;
 
-import hydra.compute.Context;
-import hydra.compute.InContext;
-import hydra.compute.OtherError;
+import hydra.context.Context;
 import hydra.core.Name;
 import hydra.core.Term;
 import hydra.core.TypeScheme;
 import hydra.dsl.Terms;
+import hydra.errors.Error;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 import hydra.util.Either;
@@ -278,7 +277,7 @@ public class IsAlphaNum extends PrimitiveFunction {
     }
 
     @Override
-    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<OtherError>, Term>>>> implementation() {
+    protected Function<List<Term>, Function<Context, Function<Graph, Either<Error, Term>>>> implementation() {
         return args -> cx -> graph -> hydra.lib.eithers.Map.apply(
                 c -> Terms.boolean_(apply(c)),
                 hydra.extract.Core.int32(cx, graph, args.get(0)));

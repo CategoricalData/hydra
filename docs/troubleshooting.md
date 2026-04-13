@@ -12,11 +12,11 @@ For task-specific troubleshooting, see also:
 
 When something breaks, follow this order:
 
-1. **Check Haskell first.** Run `stack test` in `packages/hydra-haskell/`. If Haskell doesn't pass,
-   nothing downstream will work correctly.
-2. **Check whether the file is generated.** If the problem is in `src/gen-main/` or
-   `src/gen-test/`, the fix belongs in the Haskell source or code generator, not in the
-   generated file.
+1. **Check Haskell first.** Run `stack test` in `heads/haskell/`. If the Haskell head
+   doesn't pass, nothing downstream will work correctly.
+2. **Check whether the file is generated.** If the problem is in anything under `dist/`,
+   the fix belongs in the Haskell source or code generator (under `packages/` or `heads/`),
+   not in the generated file.
 3. **Check primitive registration.** Many "unknown primitive" or test failures trace back to
    a primitive that exists as a class/function but isn't registered. See
    [primitive registration](#primitive-registration-errors) below.
@@ -35,9 +35,9 @@ file.
 
 | Language | Registration file |
 |----------|-------------------|
-| Haskell | `packages/hydra-haskell/src/main/haskell/Hydra/Sources/Libraries.hs` |
+| Haskell | `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Libraries.hs` |
 | Java | `heads/java/src/main/java/hydra/lib/Libraries.java` |
-| Python | `heads/python/src/main/python/hydra/lib/libraries.py` |
+| Python | `heads/python/src/main/python/hydra/sources/libraries.py` |
 | Scala | `heads/scala/src/main/scala/hydra/lib/Libraries.scala` |
 | Lisp (Clojure) | `heads/lisp/clojure/src/main/clojure/hydra/lib/libraries.clj` |
 
@@ -65,7 +65,7 @@ Evaluation tests call `Reduction.reduceTerm` and assert the result matches expec
 
 When a primitive test fails in Java, the call chain is:
 
-1. Test defines a term using `primitive _flows_xxx @@ arg1 @@ arg2`
+1. Test defines a term using `primitive _lists_xxx @@ arg1 @@ arg2`
 2. `Reduction.reduceTerm` reduces the term
 3. The reducer looks up the primitive in the graph by name
 4. It calls `prim.implementation.apply(reducedArgs)`
@@ -77,15 +77,14 @@ When a primitive test fails in Java, the call chain is:
 **If step 4 fails**: check the `implementation()` method of the primitive class.
 The `implementation()` method must construct a term-level result, not execute native code.
 A stub that throws `UnsupportedOperationException` will cause runtime failures.
-See `heads/java/src/main/java/hydra/lib/flows/Map.java` for a good example using
-`hydra.dsl.Terms` helpers (`wrap`, `unwrap`, `lambda`, `app`, `flowState`, `project`,
-`variable`, `just`, `nothing`, etc.).
+See `heads/java/src/main/java/hydra/lib/lists/Map.java` for a higher-order example
+using `hydra.dsl.Terms` helpers (`lambda`, `app`, `variable`, etc.).
 
 ### Higher-order primitives (`prim2Eval`)
 
 In `Libraries.hs`, primitives are registered with either `prim1`/`prim2`/`prim3` (simple)
 or `prim1Eval`/`prim2Eval`/`prim3Eval` (higher-order). The `Eval` variants have an
-additional "eval element" in `packages/hydra-haskell/src/main/haskell/Hydra/Sources/Eval/Lib/`,
+additional "eval element" in `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Eval/Lib/`,
 generated into `dist/java/hydra-kernel/src/main/java/hydra/eval/lib/`.
 
 **Both paths matter**: The reducer calls `implementation()` for all primitives, so even
@@ -145,7 +144,7 @@ understand new constructors to generate itself. The solution is:
 2. Rebuild
 3. Regenerate to overwrite your manual patches
 
-This also applies to generated DSL modules in `src/gen-main/haskell/Hydra/Dsl/`.
+This also applies to generated DSL modules in `dist/haskell/hydra-kernel/src/main/haskell/Hydra/Dsl/`.
 See [extending Hydra Core](recipes/extending-hydra-core.md) for the full walkthrough.
 
 ## Floating-point test portability

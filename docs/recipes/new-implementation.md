@@ -40,9 +40,9 @@ Some considerations to keep in mind:
 Look at other syntax models for inspiration:
 
 **Kernel languages** (in packages/hydra-haskell):
-- [Haskell syntax](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Types/Haskell.hs) -
+- [Haskell syntax](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Types/Haskell.hs) -
   Based on Haskell language specification
-- [JSON syntax](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Types/Json.hs) - Simple data format
+- [JSON syntax](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Types/Json.hs) - Simple data format
 
 **Extended languages** (in per-language packages):
 - [Java syntax](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-java/src/main/haskell/Hydra/Sources/Java/Syntax.hs) - Based on standardized grammar
@@ -104,7 +104,7 @@ set of language constraints, then refining them as you get to know the target la
 
 **Kernel languages**:
 - [Haskell constraints](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-haskell/src/main/haskell/Hydra/Sources/Haskell/Language.hs) - Written in DSL
-- [JSON constraints](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-haskell/src/main/haskell/Hydra/Sources/Json/Language.hs) - Very constrained (no functions)
+- [JSON constraints](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-kernel/src/main/haskell/Hydra/Sources/Json/Language.hs) - Very constrained (no functions)
 
 **Extended languages**:
 - [Java constraints](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-java/src/main/haskell/Hydra/Sources/Java/Language.hs) - OOP language
@@ -143,7 +143,7 @@ to generate the Haskell code:
 -- In packages/hydra-haskell REPL
 import Hydra.Generation
 -- writeHaskell takes: output dir, universe modules, modules to generate
-writeHaskell "src/gen-main/haskell" mainModules [newLangSyntaxModule, newLangLanguageModule]
+writeHaskell "../../dist/haskell/hydra-kernel/src/main/haskell" mainModules [newLangSyntaxModule, newLangLanguageModule]
 ```
 
 ### For extended languages
@@ -158,7 +158,7 @@ Add them to the appropriate registry in heads/haskell, then generate:
 -- In heads/haskell REPL or script
 import Hydra.Generation
 let universeModules = kernelModules ++ hydraExtModules
-writeHaskell "src/gen-main/haskell" universeModules [newLangSyntaxModule, newLangLanguageModule]
+writeHaskell "../../dist/haskell/hydra-kernel/src/main/haskell" universeModules [newLangSyntaxModule, newLangLanguageModule]
 ```
 
 After generation, you will be able to import the generated code:
@@ -182,7 +182,7 @@ Currently, the Hydra kernel and also the language coders are written in Haskell.
 
 **Kernel language coders**:
 - [Haskell coder](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-haskell/src/main/haskell/Hydra/Sources/Haskell/Coder.hs) - ~600 lines, very close to Hydra Core
-- [JSON coder](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-haskell/src/main/haskell/Hydra/Sources/Json/Coder.hs) - Data format coder
+- [JSON coder](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-kernel/src/main/haskell/Hydra/Sources/Json/Coder.hs) - Data format coder
 
 **Extended language coders** (generated in dist/haskell/hydra-ext/):
 - [Java coder](https://github.com/CategoricalData/hydra/blob/main/dist/haskell/hydra-ext/src/main/haskell/Hydra/Java/Coder.hs) - ~1500 lines, OOP patterns
@@ -249,7 +249,7 @@ module here.
 
 **Kernel languages**:
 - [Haskell SerDe](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-haskell/src/main/haskell/Hydra/Sources/Haskell/Serde.hs) - Written in DSL
-- [JSON SerDe](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-haskell/src/main/haskell/Hydra/Sources/Json/Serde.hs) - Simple format
+- [JSON SerDe](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-kernel/src/main/haskell/Hydra/Sources/Json/Serde.hs) - Simple format
 
 **Extended languages** (generated in dist/haskell/hydra-ext/):
 - [Java SerDe](https://github.com/CategoricalData/hydra/blob/main/dist/haskell/hydra-ext/src/main/haskell/Hydra/Java/Serde.hs) - Handles complex syntax
@@ -336,7 +336,7 @@ though their behavior must be the same across implementations.
 
 **Haskell**:
 - Metadata:
-  [Hydra/Sources/Libraries.hs](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-haskell/src/main/haskell/Hydra/Sources/Libraries.hs) (DSL)
+  [Hydra/Sources/Libraries.hs](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-kernel/src/main/haskell/Hydra/Sources/Libraries.hs) (DSL)
 - Implementations:
   [Hydra/Lib](https://github.com/CategoricalData/hydra/tree/main/heads/haskell/src/main/haskell/Hydra/Lib) (native Haskell)
 
@@ -358,7 +358,7 @@ though their behavior must be the same across implementations.
 4. The runtime behavior of the primitive conforms to Hydra's language-independent test suite (see step 9)
 
 See
-[Graph.hs:57](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Types/Graph.hs#L57)
+[Graph.hs:57](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Types/Graph.hs#L57)
 for the required fields: `name`, `type`, and `implementation`.
 
 Note that while in principle, every Hydra implementation ought to implement every primitive in the standard library,
@@ -369,7 +369,7 @@ At a bare minimum, all of the primitives which are referenced in the Hydra kerne
 each primitive must also be *registered* in a central registry (e.g.
 `Libraries.java` in Java) so it can be looked up by name at runtime.
 Periodically compare your registry against the authoritative list in
-[Hydra/Sources/Libraries.hs](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-haskell/src/main/haskell/Hydra/Sources/Libraries.hs) to catch any missing registrations.
+[Hydra/Sources/Libraries.hs](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-kernel/src/main/haskell/Hydra/Sources/Libraries.hs) to catch any missing registrations.
 
 ### Lazy evaluation and thunking
 
@@ -474,7 +474,7 @@ These are language-specific representations of Hydra's core algebraic types:
 
 Hydra includes a common test suite which is intended to be evaluated in the same way across
 implementations, ensuring parity. The sources for the test suite can be found in the Haskell DSL at
-[Hydra/Sources/Test](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-haskell/src/main/haskell/Hydra/Sources/Test).
+[Hydra/Sources/Test](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-kernel/src/main/haskell/Hydra/Sources/Test).
 
 See the [Testing wiki page](https://github.com/CategoricalData/hydra/wiki/Testing) for comprehensive documentation.
 
@@ -483,7 +483,7 @@ See the [Testing wiki page](https://github.com/CategoricalData/hydra/wiki/Testin
 The common test suite uses **universal test cases** -- each test case is defined once and produces
 both a kernel-style test (where `reduceTerm` evaluates the test expression) and a generation-style
 test (where the target runtime evaluates natively generated code). Both styles are generated to
-`src/gen-test/` from a single source definition.
+`dist/<lang>/hydra-kernel/src/test/<lang>/` from a single source definition.
 
 - **Kernel evaluation** validates that Hydra's runtime works correctly in your implementation. Your
   implementation runs test cases against its own kernel (primitives, type checker, reducer, etc.).
@@ -495,8 +495,8 @@ test (where the target runtime evaluates natively generated code). Both styles a
   generated by Hydra work correctly in the target language?"*
 
 In other words, kernel evaluation exercises Hydra-as-interpreter, while generation evaluation
-exercises Hydra-as-compiler. Both are generated to `src/gen-test/` and both need a hand-written
-test runner.
+exercises Hydra-as-compiler. Both are generated to `dist/<lang>/hydra-kernel/src/test/<lang>/`
+and both need a hand-written test runner.
 
 Test runners should produce structured benchmark JSON with per-group timing data (not just aggregate
 pass/fail counts) so results appear in the benchmark dashboard. Each group needs `path`,

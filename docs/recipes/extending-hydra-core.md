@@ -83,7 +83,7 @@ New DSL Code → Needs Generator → Generator Needs New Code → ⚠️  Circul
 
 ### Step 1: Update Core Schema
 
-**File:** `packages/hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Types/Core.hs`
+**File:** `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Types/Core.hs`
 
 Add your new type constructor to the `Type` union and your new term constructor to the `Term` union.
 
@@ -199,7 +199,7 @@ Place in alphabetical order among the other `termVariantX` helpers.
 
 #### 2.5.3: Update Meta Enum Definitions (CRITICAL!)
 
-**File:** `packages/hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Types/Meta.hs`
+**File:** `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Types/Meta.hs`
 
 > **⚠️ CRITICAL:** You MUST add your new constructor to the TermVariant and TypeVariant enum definitions
 > in the Meta module. This is the source of the "No such field: X" error during code generation.
@@ -234,7 +234,7 @@ def "TypeVariant" $
 **Why this is necessary:** The `Variants` module uses these enums to map between Term/Type constructors
 and their metadata. The enums are defined in the `hydra.meta` module
 (in the source file
-[`Hydra/Sources/Kernel/Types/Meta.hs`](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Types/Meta.hs)),
+[`Hydra/Sources/Kernel/Types/Meta.hs`](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Types/Meta.hs)),
 which provides metadata and reflection types that describe the structure of Hydra core types and terms.
 Without adding your constructor here, code generation will fail with "No such field: X".
 
@@ -242,7 +242,7 @@ Without adding your constructor here, code generation will fail with "No such fi
 
 ### Step 3: Add Type Inference
 
-**File:** `packages/hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Terms/Inference.hs`
+**File:** `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Terms/Inference.hs`
 
 #### 3.1: Create Inference Function
 
@@ -252,7 +252,7 @@ Without adding your constructor here, code generation will fail with "No such fi
 > Use descriptive names like `pairFst`, `pairSnd`, `listHead`, etc.
 
 ```haskell
-inferTypeOfEitherDef :: TTermDefinition (InferenceContext -> Prelude.Either Term Term -> Either (InContext OtherError) InferenceResult)
+inferTypeOfEitherDef :: TTermDefinition (InferenceContext -> Prelude.Either Term Term -> Either Error InferenceResult)
 inferTypeOfEitherDef = define "inferTypeOfEither" $
   doc "Infer the type of an either value" $
   "cx" ~> "e" ~>
@@ -319,12 +319,12 @@ import qualified Hydra.Dsl.Meta.Lib.Eithers as Eithers
 
 ### Step 3.5: Add Type Checking
 
-**File:** `packages/hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Terms/Checking.hs`
+**File:** `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Terms/Checking.hs`
 
 Type checking reconstructs types from terms that already have type applications (added during inference).
 
 ```haskell
-typeOfEitherDef :: TTermDefinition (TypeContext -> [Type] -> Prelude.Either Term Term -> Either (InContext OtherError) Type)
+typeOfEitherDef :: TTermDefinition (TypeContext -> [Type] -> Prelude.Either Term Term -> Either Error Type)
 typeOfEitherDef = define "typeOfEither" $
   doc "Reconstruct the type of an either value" $
   "tx" ~> "typeArgs" ~> "et" ~>
@@ -353,7 +353,7 @@ Add case to main checking function and register in `definitions` list, similar t
 
 ### Step 4: Update Rewriting Functions
 
-**File:** `packages/hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Terms/Rewriting.hs`
+**File:** `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Terms/Rewriting.hs`
 
 > **⚠️ Critical Distinction:** Use library elimination functions (`Eithers.either_`) for Haskell's
 > **built-in** types like `Prelude.Either`, `Prelude.Maybe`, etc.
@@ -404,7 +404,7 @@ import qualified Hydra.Dsl.Meta.Lib.Eithers as Eithers
 
 **Verification:** Check your constructor appears in the file:
 ```bash
-grep "_Term_either" packages/hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Terms/Rewriting.hs
+grep "_Term_either" packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Terms/Rewriting.hs
 ```
 
 ---
@@ -415,10 +415,10 @@ Find other files that pattern match on Term constructors. Replace `Either` with 
 
 ```bash
 # Find files that might need updates
-grep -l "TermApplication\|TermLet\|TermList" packages/hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Terms/*.hs
+grep -l "TermApplication\|TermLet\|TermList" packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Terms/*.hs
 
 # After adding, verify your constructor is handled everywhere
-grep -c "TermEither" packages/hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Terms/*.hs
+grep -c "TermEither" packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Terms/*.hs
 ```
 
 Common files to update:
@@ -449,7 +449,7 @@ Follow the same pattern: use library elimination functions for Haskell built-in 
 
 ### Step 6: Register Library Functions
 
-**File:** `packages/hydra-haskell/src/main/haskell/Hydra/Sources/Libraries.hs`
+**File:** `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Libraries.hs`
 
 If using library functions, ensure they're registered:
 
@@ -488,7 +488,7 @@ Add the inference function. Translate from the DSL source to plain Haskell:
 
 ```haskell
 -- Around line 570
-inferTypeOfEither :: (Typing_.InferenceContext -> Either Core.Term Core.Term -> Either (Compute.InContext Compute.OtherError) Typing_.InferenceResult)
+inferTypeOfEither :: (Context.Context -> Graph.Graph -> Either Core.Term Core.Term -> Either Errors.Error Typing_.InferenceResult)
 inferTypeOfEither cx e = ((\x -> case x of
     Left l -> (Eithers.bind (inferTypeOfTerm cx l "either left value") (\r1 ->
       let leftType = (Typing_.inferenceResultType r1)
@@ -522,7 +522,7 @@ Core.TermEither v1 -> (inferTypeOfEither cx v1)
 Similarly, add the type checking function. This requires exact type arguments:
 
 ```haskell
-typeOfEither :: (Typing_.TypeContext -> [Core.Type] -> Either Core.Term Core.Term -> Either (Compute.InContext Compute.OtherError) Core.Type)
+typeOfEither :: (Context.Context -> Graph.Graph -> [Core.Type] -> Either Core.Term Core.Term -> Either Errors.Error (Core.Type, Context.Context))
 typeOfEither tx typeArgs et = -- Implementation similar to Checking.hs source
 ```
 
@@ -795,9 +795,9 @@ stack test
 
 | Error | Cause | Solution |
 |-------|-------|----------|
-| `No such field: pair` during code generation | Missing from TermVariant/TypeVariant enums in Meta module | **CRITICAL:** Add to `TermVariant` and `TypeVariant` enum definitions in `packages/hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Types/Meta.hs` |
+| `No such field: pair` during code generation | Missing from TermVariant/TypeVariant enums in Meta module | **CRITICAL:** Add to `TermVariant` and `TypeVariant` enum definitions in `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Types/Meta.hs` |
 | `Variable not in scope: fst` compilation error | Variable name clashes with Prelude function | Use descriptive names: `pairFst`, `pairSnd`, not `fst`, `snd` |
-| `No such field: either` | Term union missing the constructor in Core schema | Add to `packages/hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Types/Core.hs` |
+| `No such field: either` | Term union missing the constructor in Core schema | Add to `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Types/Core.hs` |
 | `Variable not bound to type: hydra.inference.inferTypeOfX` | Function not registered in module exports | Add `toDefinition inferTypeOfXDef` to `definitions` list |
 | Using `cases _Either` on built-in types | Confusion between Hydra unions and Haskell types | Use library functions (`Eithers.either_`) for Haskell built-ins |
 | `unexpected type: either<...>` in codegen | Coder doesn't know how to encode the type | Manually patch `Hydra/Haskell/Coder.hs` |
@@ -817,10 +817,10 @@ stack test
 3. **Strategic grepping** - Find all places needing updates (replace with your constructor):
    ```bash
    # Find files handling term constructors
-   grep -r "TermApplication\|TermLet" packages/hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Terms/
+   grep -r "TermApplication\|TermLet" packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Terms/
 
    # After adding, verify your constructor is everywhere it should be
-   grep -r "TermEither" packages/hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Terms/
+   grep -r "TermEither" packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Terms/
    ```
 
 4. **Understand the distinction:**
@@ -850,12 +850,12 @@ stack test
 
 ### Source Files (Always Modified)
 
-- [ ] `packages/hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Types/Core.hs`
+- [ ] `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Types/Core.hs`
   - [ ] Add to Term union
   - [ ] Add to Type union (if applicable)
   - [ ] Add supporting type definitions
 
-- [ ] `packages/hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Types/Meta.hs` (**CRITICAL!**)
+- [ ] `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Types/Meta.hs` (**CRITICAL!**)
   - [ ] Add to `TermVariant` enum definition
   - [ ] Add to `TypeVariant` enum definition (if applicable)
 
@@ -865,20 +865,20 @@ stack test
   - [ ] Add case to `typeVariant` pattern match (if applicable)
   - [ ] Add `typeVariantX` helper function (if applicable)
 
-- [ ] `packages/hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Terms/Inference.hs`
+- [ ] `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Terms/Inference.hs`
   - [ ] Create `inferTypeOfXDef` function with type applications
   - [ ] Add case to `inferTypeOfTermDef`
   - [ ] Register in `definitions` list
   - [ ] Add necessary imports
 
-- [ ] `packages/hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Terms/Checking.hs`
+- [ ] `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Terms/Checking.hs`
   - [ ] Create `typeOfXDef` function
   - [ ] Verify type arguments are provided correctly
   - [ ] Add case to main checking function
   - [ ] Register in `definitions` list
   - [ ] Add necessary imports
 
-- [ ] `packages/hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Terms/Rewriting.hs`
+- [ ] `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Terms/Rewriting.hs`
   - [ ] Add cases to all `rewriteTerm*` functions (search for `_Term_maybe` to find them all)
   - [ ] Add case in `subtermsDef`
   - [ ] Add necessary imports
@@ -886,8 +886,8 @@ stack test
 ### Source Files (Sometimes Modified)
 
 - [ ] `heads/haskell/src/main/haskell/Hydra/Dsl/Phantoms.hs` - Add DSL constructors if missing
-- [ ] `packages/hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Terms/Extract/Core.hs` - Add extraction logic
-- [ ] `packages/hydra-haskell/src/main/haskell/Hydra/Sources/Libraries.hs` - Register library functions
+- [ ] `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Terms/Extract/Core.hs` - Add extraction logic
+- [ ] `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Libraries.hs` - Register library functions
 
 ### Generated Files (Bootstrap Patches)
 
@@ -994,7 +994,7 @@ where bootstrap patching of generated files is the main challenge.
 #### Step 1: Update the Type Definition
 
 **File:** The schema file where the record is defined
-(e.g., `packages/hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Types/Typing.hs` for `TypeContext`)
+(e.g., `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Types/Typing.hs` for `TypeContext`)
 
 Add the new field to the record definition:
 
@@ -1091,10 +1091,10 @@ grep -r "Typing.typeContext" packages/hydra-haskell/src/main/haskell/Hydra/Sourc
 ```
 
 **Common locations for TypeContext:**
-- `packages/hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Terms/Schemas.hs` -
+- `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Terms/Schemas.hs` -
   `graphToTypeContext`, `extendTypeContextForLet`, `extendTypeContextForLambda`
-- `packages/hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Terms/Hoisting.hs` - Empty TypeContext constructions
-- `packages/hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Terms/Inference.hs` - `initialTypeContext`
+- `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Terms/Hoisting.hs` - Empty TypeContext constructions
+- `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Terms/Inference.hs` - `initialTypeContext`
 
 **Example updates:**
 
@@ -1169,7 +1169,7 @@ stack build
 # Regenerate code to verify DSL sources are correct
 stack runghc tmp_write_haskell.hs
 # Or in GHCi:
-# writeHaskell "src/gen-main/haskell" mainModules mainModules
+# writeHaskell "../../dist/haskell/hydra-kernel/src/main/haskell" mainModules mainModules
 
 # Rebuild with regenerated files
 stack build

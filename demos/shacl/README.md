@@ -44,7 +44,7 @@ The SHACL coder provides two capabilities:
 The demo runs both on the Hydra kernel:
 
 ```
-Kernel type modules (hydra.core, hydra.module, hydra.graph, ...)
+Kernel type modules (hydra.core, hydra.packaging, hydra.graph, ...)
         |
         |  encodeType (per type element)
         v
@@ -54,7 +54,7 @@ SHACL ShapesGraph (218 shapes)
         v
 shapes.nt (N-Triples)
 
-Kernel module JSON files (hydra-haskell/src/gen-main/json/)
+Kernel module JSON files (dist/json/hydra-kernel/src/main/json/)
         |
         |  decode JSON -> Module -> Encode.Module.module_ -> encodeTerm
         v
@@ -74,9 +74,9 @@ The demo uses Hydra's own kernel as both schema and data:
   optionals) become shapes. Types it cannot represent (functions, polymorphic types, type
   applications) are skipped.
 
-- **Data**: kernel modules serialized as JSON in `hydra-haskell/src/gen-main/json/`, decoded
+- **Data**: kernel modules serialized as JSON in `dist/json/hydra-kernel/src/main/json/`, decoded
   back into `Module` values and encoded as RDF. Each module becomes an RDF description with
-  the `hydra.module.Module` type, containing its namespace, element list, dependencies,
+  the `hydra.packaging.Module` type, containing its namespace, element list, dependencies,
   and description.
 
 ## Output files
@@ -93,9 +93,9 @@ The demo generates three intentionally invalid RDF instances:
 
 | Instance | Type | Violation |
 |----------|------|-----------|
-| `urn:invalid:module1` | `hydra.module.Module` | Missing required fields: `namespace`, `elements`, `termDependencies`, `typeDependencies` |
-| `urn:invalid:ns1` | `hydra.module.Namespace` | Integer value where string is expected |
-| `urn:invalid:qn1` | `hydra.module.QualifiedName` | Missing required field: `local` |
+| `urn:invalid:module1` | `hydra.packaging.Module` | Missing required fields: `namespace`, `elements`, `termDependencies`, `typeDependencies` |
+| `urn:invalid:ns1` | `hydra.packaging.Namespace` | Integer value where string is expected |
+| `urn:invalid:qn1` | `hydra.packaging.QualifiedName` | Missing required field: `local` |
 
 ## Prerequisites
 

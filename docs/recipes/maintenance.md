@@ -86,13 +86,14 @@ renaming a single type leaves an orphan class file on the classpath.
 
 ### Where to look
 
-Generated files live in `src/gen-main/` and `src/gen-test/` within each implementation:
+All generated output lives under `dist/<lang>/` in 0.15:
 
 | Implementation | Path | Granularity |
 |---------------|------|-------------|
 | Haskell | `dist/haskell/hydra-kernel/src/main/haskell/` | One `.hs` per module |
 | Haskell (decode/encode) | `dist/haskell/hydra-kernel/src/main/haskell/Hydra/Decode/`, `Hydra/Encode/` | One `.hs` per type module |
 | Haskell (DSL) | `dist/haskell/hydra-kernel/src/main/haskell/Hydra/Dsl/` | One `.hs` per type module |
+| Haskell (ext coders) | `dist/haskell/hydra-ext/src/main/haskell/` | One `.hs` per coder module |
 | JSON | `dist/json/hydra-kernel/src/main/json/` | One `.json` per module |
 | Java | `dist/java/hydra-kernel/src/main/java/` | **One `.java` per type** |
 | Python | `dist/python/hydra-kernel/src/main/python/` | One `.py` per module |
@@ -102,7 +103,7 @@ Generated files live in `src/gen-main/` and `src/gen-test/` within each implemen
 | Common Lisp | `dist/common-lisp/hydra-kernel/src/main/common-lisp/` | One `.lisp` per module |
 | Emacs Lisp | `dist/emacs-lisp/hydra-kernel/src/main/emacs-lisp/` | One `.el` per module |
 
-Test files follow the same pattern under `src/gen-test/`.
+Test files follow the same pattern under `src/test/` within each `dist/<lang>/hydra-kernel/`.
 
 ### Procedure
 
@@ -111,17 +112,23 @@ The general approach is to cross-reference generated files against their Source 
 #### Step 1: identify current Source modules
 
 Source modules define what *should* be generated.
-They live in `packages/hydra-haskell/src/main/haskell/Hydra/Sources/`.
+Kernel DSL sources live in `packages/hydra-kernel/src/main/haskell/Hydra/Sources/`.
+Per-coder DSL sources live in `packages/hydra-<lang>/src/main/haskell/Hydra/Sources/<Lang>/`
+and in `packages/hydra-ext/src/main/haskell/Hydra/Sources/`.
 
 ```bash
-# List all Source modules (these define the expected generated output)
-find packages/hydra-haskell/src/main/haskell/Hydra/Sources -name '*.hs' | sort
+# List all kernel Source modules
+find packages/hydra-kernel/src/main/haskell/Hydra/Sources -name '*.hs' | sort
+
+# List all coder Source modules
+find packages/hydra-*/src/main/haskell/Hydra/Sources -name '*.hs' | sort
 ```
 
 Also check the module registries that control what gets generated:
-- `Hydra/Sources/Kernel/Types/All.hs` — `kernelTypesModules`
-- `Hydra/Sources/Kernel/Terms/All.hs` — `kernelPrimaryTermsModules`
-- `Hydra/Sources/All.hs` — `mainModules`, `otherModules`
+- `Hydra/Sources/Kernel/Types/All.hs` — `kernelTypesModules` (in `packages/hydra-kernel/`)
+- `Hydra/Sources/Kernel/Terms/All.hs` — `kernelPrimaryTermsModules` (in `packages/hydra-kernel/`)
+- `Hydra/Sources/All.hs` — `mainModules`, `otherModules` (in `packages/hydra-haskell/`)
+- `Hydra/Sources/Ext.hs` — `hydraExtModules` and per-language module lists (in `heads/haskell/`)
 
 #### Step 2: check each implementation for orphans
 
@@ -129,16 +136,16 @@ For each implementation, list the generated files and verify each has a correspo
 
 **Haskell** — check for modules not imported anywhere:
 ```bash
-# For each file in gen-main, check if its module is imported
+# For each file in dist, check if its module is imported
 for f in $(find dist/haskell/hydra-kernel/src/main/haskell/Hydra -name '*.hs'); do
   mod=$(echo "$f" | sed 's|.*/haskell/||;s|/|.|g;s|\.hs$||')
-  if ! grep -rq "import.*$mod" packages/hydra-haskell/src/ heads/haskell/src/; then
+  if ! grep -rq "import.*$mod" packages/ heads/haskell/src/; then
     echo "POSSIBLY STALE: $f ($mod)"
   fi
 done
 ```
 
-Note: many generated modules are legitimately not imported within packages/hydra-haskell
+Note: many generated modules are legitimately not imported within `packages/`
 but serve downstream consumers.
 Cross-reference against the module registries (Step 1) before deleting.
 
@@ -179,9 +186,9 @@ Before deleting a file, confirm it's truly stale:
 rm <stale-files>
 
 # Verify each implementation still builds
-cd packages/hydra-haskell && stack build && stack test
-cd packages/hydra-java && ./gradlew compileTestJava
-cd packages/hydra-python && uv run pytest
+cd heads/haskell && stack build && stack test
+./gradlew :hydra-java:compileTestJava
+cd heads/python && uv run pytest
 # etc.
 ```
 
@@ -227,16 +234,16 @@ section requires that both the `definitions` list and the corresponding
 definition bodies appear in **alphabetical order** within each module.
 
 This applies to:
-- Haskell Source modules (`packages/hydra-haskell/src/main/haskell/Hydra/Sources/`)
-- Extension Source modules (in `packages/hydra-pg/`, `packages/hydra-rdf/`, `packages/hydra-ext/`, and `packages/hydra-java/` etc.)
-- Hand-written kernel modules (`heads/haskell/src/main/haskell/Hydra/`)
+- Kernel Source modules (`packages/hydra-kernel/src/main/haskell/Hydra/Sources/`)
+- Per-language coder Source modules (`packages/hydra-haskell/`, `packages/hydra-java/`, `packages/hydra-python/`, `packages/hydra-scala/`, `packages/hydra-lisp/`, `packages/hydra-ext/`, `packages/hydra-pg/`, `packages/hydra-rdf/`, `packages/hydra-coq/`, `packages/hydra-javascript/`)
+- Hand-written runtime modules (`heads/haskell/src/main/haskell/Hydra/`)
 
 Generated files inherit their ordering from Source modules,
 so fixing the Source fixes all implementations.
 
 **Check a single module:**
 ```bash
-grep 'toDefinition\|toBinding' packages/hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Terms/Lexical.hs \
+grep 'toDefinition\|toBinding' packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Terms/Lexical.hs \
   | sed 's/.*toDefinition //; s/.*toBinding //; s/[,\]]//g' \
   | awk '{name=$1} NR>1 && name<prev {print prev " before " name " (out of order)"} {prev=name}'
 ```
@@ -245,11 +252,7 @@ grep 'toDefinition\|toBinding' packages/hydra-haskell/src/main/haskell/Hydra/Sou
 ```bash
 #!/bin/bash
 # check-definition-order.sh — run from the repo root
-for f in $(find packages/hydra-haskell/src/main/haskell/Hydra/Sources \
-                packages/hydra-pg/src/main/haskell \
-                packages/hydra-rdf/src/main/haskell \
-                packages/hydra-ext/src/main/haskell \
-                -name '*.hs' 2>/dev/null); do
+for f in $(find packages/*/src/main/haskell -name '*.hs' 2>/dev/null); do
   out=$(grep 'toDefinition\|toBinding' "$f" \
     | sed 's/.*toDefinition //; s/.*toBinding //; s/[,\]]//g' \
     | awk '{name=$1} NR>1 && name<prev {print "  " prev " before " name} {prev=name}')
@@ -299,7 +302,7 @@ Each implementation has a registration file that maps primitive names to impleme
 
 | Implementation | Registration file |
 |---------------|-------------------|
-| Haskell | `packages/hydra-haskell/src/main/haskell/Hydra/Sources/Libraries.hs` |
+| Haskell | `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Libraries.hs` |
 | Java | `heads/java/src/main/java/hydra/lib/Libraries.java` |
 | Python | `heads/python/src/main/python/hydra/sources/libraries.py` |
 | Scala | `heads/scala/src/main/scala/hydra/lib/Libraries.scala` |
@@ -316,7 +319,7 @@ Each implementation has a registration file that maps primitive names to impleme
    but the set of fully qualified primitive names should match.
    ```bash
    # Extract Haskell primitive names
-   grep -E 'prim[0-3]' packages/hydra-haskell/src/main/haskell/Hydra/Sources/Libraries.hs \
+   grep -E 'prim[0-3]' packages/hydra-kernel/src/main/haskell/Hydra/Sources/Libraries.hs \
      | grep -oE '_[a-z]+_[a-zA-Z]+' | sort -u
 
    # Compare against Java class files
@@ -372,19 +375,19 @@ All implementations should have the same number of passing tests
 1. **Run tests in each implementation** and capture the summary line:
    ```bash
    # Haskell
-   cd packages/hydra-haskell && stack test 2>&1 | tail -5
+   cd heads/haskell && stack test 2>&1 | tail -5
 
    # Java
-   cd packages/hydra-java && ./gradlew test 2>&1 | grep -E 'tests.*passed'
+   ./gradlew :hydra-java:test 2>&1 | grep -E 'tests.*passed'
 
    # Python
-   cd packages/hydra-python && uv run pytest --tb=no -q 2>&1 | tail -3
+   cd heads/python && uv run pytest --tb=no -q 2>&1 | tail -3
 
    # Scala
    cd packages/hydra-scala && sbt test 2>&1 | tail -5
 
-   # Clojure
-   cd packages/hydra-lisp/hydra-clojure && clojure -M:test 2>&1 | tail -5
+   # Lisp dialects (clojure, common-lisp, emacs-lisp, scheme)
+   packages/hydra-lisp/bin/run-tests.sh clojure 2>&1 | tail -5
    ```
 
 2. **Compare pass/skip/fail counts.**
@@ -400,28 +403,26 @@ All implementations should have the same number of passing tests
 
 ---
 
-## Checking `.cabal` exposed-modules
+## Checking `.cabal` / `package.yaml` source-dirs
 
-When generated Haskell modules are deleted, their entries in the `exposed-modules`
-list of `heads/haskell/hydra.cabal` (or `package.yaml`) may linger.
-This causes build errors on clean builds or warnings about missing modules.
+`heads/haskell/package.yaml` does not use an explicit `exposed-modules` list;
+instead it uses `source-dirs:` to auto-expose everything under the listed directories.
+The check is therefore to verify that every listed source directory exists.
 
 ### Procedure
 
 ```bash
-# Extract exposed-modules from package.yaml and check each exists
-grep '^ *- Hydra\.' heads/haskell/package.yaml \
-  | sed 's/^ *- //' \
-  | while read mod; do
-      path="dist/haskell/hydra-kernel/src/main/haskell/$(echo $mod | tr '.' '/').hs"
-      if [ ! -f "$path" ]; then
-        alt="heads/haskell/src/main/haskell/$(echo $mod | tr '.' '/').hs"
-        if [ ! -f "$alt" ]; then
-          echo "MISSING: $mod"
-        fi
-      fi
+# Extract source-dirs from package.yaml (under the library section) and check each exists
+awk '/^library:/{in_lib=1} in_lib && /^  source-dirs:/{in_sd=1; next} in_sd && /^    - /{print $2} in_sd && /^  [a-z]/{in_sd=0}' \
+  heads/haskell/package.yaml \
+  | while read d; do
+      full="heads/haskell/$d"
+      [ -d "$full" ] || echo "MISSING: $full"
     done
 ```
+
+A missing source-dir causes stack to fail at configuration time rather than at
+build time, so this is a quick sanity check after restructuring.
 
 ---
 
@@ -432,7 +433,7 @@ They can go stale if someone rebuilds Haskell but forgets to re-export.
 The `verify-json-kernel.sh` script checks that JSON files match the current Haskell modules.
 
 ```bash
-cd packages/hydra-haskell && bin/verify-json-kernel.sh
+heads/haskell/bin/verify-json-kernel.sh
 ```
 
 This loads each kernel module from Haskell, decodes the corresponding JSON file,
@@ -443,23 +444,28 @@ Run this after any kernel changes, or as a periodic sanity check.
 
 ## Checking Python `__init__.py` freshness
 
-Python `__init__.py` files contain explicit imports of submodules.
-When a Python module is added or removed by regeneration,
-these files can go stale (missing imports for new modules, or imports of deleted modules).
+In 0.15, Python `__init__.py` files under `dist/python/hydra-kernel/` are
+**namespace-package markers**: each one just extends `__path__` via
+`pkgutil.extend_path` so that `hydra.*` submodules can be discovered across both
+`src/main/python` (hand-written) and `dist/python/hydra-kernel/src/main/python`
+(generated). They do not contain explicit imports of submodules, so they cannot
+go stale in the way earlier versions could.
 
 ### Procedure
 
-For each `__init__.py` under `dist/python/hydra-kernel/src/main/python/hydra/`,
-check that every `.py` sibling and subdirectory with an `__init__.py` is imported,
-and that no import references a missing file.
+Spot-check that every `__init__.py` is just the namespace-package stub:
 
 ```bash
-# Check for imports of nonexistent modules in __init__.py files
-find dist/python/hydra-kernel/src/main/python/hydra -name '__init__.py' -exec \
-  grep -l 'from \. import' {} \;
+# Any __init__.py that is NOT the namespace-package stub is suspicious
+for f in $(find dist/python/hydra-kernel/src/main/python/hydra -name '__init__.py'); do
+  if ! grep -q 'extend_path' "$f"; then
+    echo "NON-NAMESPACE-PACKAGE __init__.py: $f"
+  fi
+done
 ```
 
-A mismatch typically manifests as `ImportError` at test time.
+If this prints anything, investigate whether the file is intentional or leftover
+from a pre-0.15 version.
 
 ---
 

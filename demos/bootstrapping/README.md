@@ -57,15 +57,15 @@ demos/
 heads/haskell/
 ├── src/exec/bootstrap-from-json/
 │   └── Main.hs                      # Haskell bootstrap executable
-hydra-java/
+heads/java/
 └── src/main/java/hydra/
     ├── Generation.java              # Java I/O wrapper
     └── Bootstrap.java               # Java bootstrap CLI
-hydra-scala/
+heads/scala/
 └── src/main/scala/hydra/
     ├── Generation.scala             # Scala I/O wrapper
     └── Bootstrap.scala              # Scala bootstrap CLI
-hydra-python/
+heads/python/
 └── src/main/python/hydra/
     ├── generation.py                # Python I/O wrapper
     └── bootstrap.py                 # Python bootstrap CLI
@@ -95,7 +95,7 @@ Verify that both Haskell packages build:
 cd heads/haskell && stack build
 ```
 
-See the [Hydra-Haskell README](https://github.com/CategoricalData/hydra/blob/main/hydra-haskell/README.md)
+See the [Hydra-Haskell README](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-haskell/README.md)
 for more details.
 
 ### Java
@@ -103,16 +103,16 @@ for more details.
 Install JDK 11 or later. Build with Gradle from the repository root:
 
 ```bash
-./gradlew compileJava
+./gradlew :hydra-java:compileJava
 ```
 
 You may need to set `JAVA_HOME` if your default Java version is too old:
 
 ```bash
-JAVA_HOME=/path/to/java11 ./gradlew compileJava
+JAVA_HOME=/path/to/java11 ./gradlew :hydra-java:compileJava
 ```
 
-See the [Hydra-Java README](https://github.com/CategoricalData/hydra/blob/main/hydra-java/README.md)
+See the [Hydra-Java README](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-java/README.md)
 for more details.
 
 ### Python
@@ -126,13 +126,13 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 Set up the Python environment:
 
 ```bash
-cd hydra-python
+cd heads/python
 uv venv --python 3.12
 source .venv/bin/activate
 uv sync
 ```
 
-See the [Hydra-Python README](https://github.com/CategoricalData/hydra/blob/main/hydra-python/README.md)
+See the [Hydra-Python README](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-python/README.md)
 for more details.
 
 ### Repository state
@@ -183,10 +183,10 @@ stack exec bootstrap-from-json -- --target java +RTS -K256M -A32M -RTS
 ./demos/bootstrapping/bin/java-bootstrap.sh --target haskell
 
 # Python
-cd hydra-python
-PYTHONPATH=src/main/python:src/gen-main/python \
+cd heads/python
+PYTHONPATH=src/main/python:../../dist/python/hydra-kernel/src/main/python \
   python3 -m hydra.bootstrap \
-  --target haskell --kernel-only --json-dir ../hydra-haskell/src/gen-main/json
+  --target haskell --kernel-only --json-dir ../../dist/json/hydra-kernel/src/main/json
 ```
 
 ### Command-line options

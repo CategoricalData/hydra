@@ -41,9 +41,9 @@ Types:
 
 Terms:
   ...
-  hydra.inference.freshVariableType : (∀[t0].(hydra.compute.Flow @ t0 @ hydra.core.Type))
-  hydra.inference.generalize : ((hydra.typing.InferenceContext → hydra.core.Type → hydra.core.TypeScheme))
-  hydra.inference.inferGraphTypes : (∀[t0].(hydra.graph.Graph → (hydra.compute.Flow @ t0 @ hydra.graph.Graph)))
+  hydra.inference.freshVariableType : ((hydra.context.Context → (hydra.core.Type, hydra.context.Context)))
+  hydra.inference.generalize : ((hydra.graph.Graph → hydra.core.Type → hydra.core.TypeScheme))
+  hydra.inference.inferGraphTypes : ((hydra.context.Context → list<hydra.core.Binding> → hydra.graph.Graph → either<hydra.errors.Error, ((hydra.graph.Graph, list<hydra.core.Binding>), hydra.context.Context)>))
   ...
 ```
 
@@ -56,7 +56,7 @@ The lexicon is automatically generated from Hydra's kernel graph.
 To regenerate it (for example, after adding new kernel functions):
 
 ```bash
-cd hydra-haskell
+cd heads/haskell
 echo -e "import Hydra.Generation\nwriteLexiconToStandardPath" | stack ghci
 ```
 

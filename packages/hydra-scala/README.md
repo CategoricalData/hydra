@@ -17,7 +17,8 @@ producing output identical to the Haskell, Java, Python, and Lisp hosts for all 
 Requires **Scala 3.3.7** (LTS) and **sbt 1.10.x**.
 
 ```bash
-# Compile all generated and hand-written code
+# From packages/hydra-scala (where build.sbt lives)
+cd packages/hydra-scala
 sbt compile
 
 # Run the bootstrapping entry point (generates code for a target language from JSON)
@@ -32,50 +33,38 @@ sbt console
 To regenerate the Scala code from the Haskell source of truth:
 
 ```bash
-# From the heads/haskell directory
-cd ../../heads/haskell
-./bin/sync-scala.sh          # Full sync (build, generate, post-process, compile)
-./bin/sync-scala.sh --quick  # Skip Scala compilation
+# From the repo root
+heads/haskell/bin/sync-scala.sh          # Full sync (build, generate, post-process, compile)
+heads/haskell/bin/sync-scala.sh --quick  # Skip Scala compilation
 ```
 
 Or include Scala in the full sync:
 
 ```bash
-# From the repo root
 ./bin/sync-all.sh --targets all
 ```
 
-## Project structure
+## Code organization
 
-```
-hydra-scala/
-  src/
-    main/scala/hydra/
-      Bootstrap.scala        # Bootstrapping entry point (JSON → code generation)
-      Generation.scala       # I/O wrapper for code generation with JSON parser
-      lib/                   # Hand-written primitive implementations
-        Libraries.scala      # Primitive registry (231 primitives)
-        chars.scala          # Character primitives
-        eithers.scala        # Either primitives (with lazy defaults)
-        equality.scala       # Comparison and equality
-        lists.scala          # List operations
-        literals.scala       # Literal type conversions
-        logic.scala          # Boolean logic (with lazy ifElse)
-        maps.scala           # Map operations
-        math.scala           # Arithmetic and math functions
-        maybes.scala         # Option/Maybe primitives (with lazy defaults)
-        pairs.scala          # Tuple operations
-        sets.scala           # Set operations
-        strings.scala        # String operations
-    gen-main/scala/hydra/    # Generated kernel code (do not edit)
-      core.scala             # Core types (Term, Type, Name, etc.)
-      graph.scala            # Graph, Primitive, TermCoder
-      module.scala           # Module, Namespace, Definition
-      ...                    # ~145 modules total
-  bin/
-    break-long-lines.py      # Post-processor for generated code
-  build.sbt                  # SBT build configuration
-```
+In 0.15, Hydra's Scala code is split across three locations
+(see [Code organization wiki page](https://github.com/CategoricalData/hydra/wiki/Code-organization) for the full picture):
+
+- **This package** (`packages/hydra-scala/`) — Scala coder DSL sources and the sbt build
+  - `src/main/haskell/Hydra/Sources/Scala/` — Scala coder DSL sources (written in Haskell)
+  - `build.sbt` — sbt build configuration (points at the head and the generated kernel)
+  - `bin/break-long-lines.py` — post-processor for generated code
+
+- **Scala head** ([`heads/scala/src/main/scala/`](https://github.com/CategoricalData/hydra/tree/main/heads/scala/src/main/scala))
+  — hand-written Scala runtime
+  - `hydra/Bootstrap.scala` — bootstrapping entry point (JSON → code generation)
+  - `hydra/Generation.scala` — I/O wrapper for code generation with JSON parser
+  - `hydra/lib/` — hand-written primitive implementations
+    (`Libraries.scala`, `chars.scala`, `eithers.scala`, `equality.scala`, `lists.scala`,
+    `literals.scala`, `logic.scala`, `maps.scala`, `math.scala`, `maybes.scala`,
+    `pairs.scala`, `sets.scala`, `strings.scala`)
+
+- **Generated Scala kernel** ([`dist/scala/hydra-kernel/src/main/scala/`](https://github.com/CategoricalData/hydra/tree/main/dist/scala/hydra-kernel/src/main/scala))
+  - `hydra/core.scala`, `hydra/graph.scala`, `hydra/packaging.scala`, ... — generated kernel modules
 
 ## Contributing
 

@@ -102,10 +102,10 @@ generateHealthGraphSON   -- processes health data
 ### Python mode
 
 Python 3.10+ is required (for `match` statement support).
-Set up a virtual environment from the `hydra-python` directory:
+Set up a virtual environment from the `heads/python` directory:
 
 ```bash
-cd hydra-python
+cd heads/python
 uv venv --python 3.12
 source .venv/bin/activate
 ```
@@ -114,8 +114,8 @@ Then run the demo from the repo root:
 
 ```bash
 cd ../..
-.venv/bin/python demos/src/main/python/hydra/demos/genpg/demo.py sales   # processes sales data
-.venv/bin/python demos/src/main/python/hydra/demos/genpg/demo.py health  # processes health data
+heads/python/.venv/bin/python demos/src/main/python/hydra/demos/genpg/demo.py sales   # processes sales data
+heads/python/.venv/bin/python demos/src/main/python/hydra/demos/genpg/demo.py health  # processes health data
 ```
 
 The `sales` argument is the default, so it can be omitted.
@@ -172,7 +172,7 @@ with [pyshacl](https://github.com/RDFLib/pySHACL) if installed.
 
 Haskell (GHCi):
 ```haskell
-:l Hydra.Ext.Demos.GenPG.Rdf
+:l Hydra.Sources.Demos.GenPG.Rdf
 generateSalesRdf
 ```
 
@@ -235,7 +235,7 @@ Take the generated prompt and:
 1. Copy it into your favorite LLM chat interface
    ([ChatGPT](https://chatgpt.com), [Claude](https://claude.ai), etc.; Claude was used in the video)
 2. Copy the LLM-generated files to their expected locations under
-   `demos/src/main/haskell/Hydra/Ext/Demos/GenPG/Examples/Health`
+   `demos/src/main/haskell/Hydra/Sources/Demos/GenPG/Examples/Health`
 
 Just overwrite the files which are already checked in at that location.
 Feel free to use any file system integration available in your tool to avoid manual copy-and-paste.
@@ -281,9 +281,9 @@ stack ghci
 In GHCI:
 ```haskell
 :set +m
-writeEncoderSourceHaskell "src/gen-main/haskell" (kernelModules <> hydraExtModules) [
-  Hydra.Ext.Sources.Pg.Mapping.module_,
-  Hydra.Ext.Sources.Pg.Model.module_]
+writeEncoderSourceHaskell "../../dist/haskell/hydra-ext/src/main/haskell" (kernelModules <> hydraExtModules) [
+  Hydra.Sources.Pg.Mapping.module_,
+  Hydra.Sources.Pg.Model.module_]
 ```
 
 ### Step 2: Sync Python kernel (if kernel code changed)
@@ -306,7 +306,7 @@ stack ghci < ../../demos/genpg/bin/generate-python.ghci
 
 Or interactively in GHCI:
 ```haskell
-import Hydra.Ext.Demos.GenPG.GeneratePython
+import Hydra.Sources.Demos.GenPG.GeneratePython
 generatePythonModules
 ```
 
@@ -330,7 +330,7 @@ stack ghci --ghci-options='+RTS -K256M -A32M -RTS' < ../../demos/genpg/bin/gener
 
 Or interactively in GHCI:
 ```haskell
-import Hydra.Ext.Demos.GenPG.GenerateJava
+import Hydra.Sources.Demos.GenPG.GenerateJava
 generateJavaModules
 ```
 
@@ -342,7 +342,7 @@ This generates to `dist/java/hydra-pg/src/main/java` (and related directories):
 - `hydra.demos.genpg.sales` - Sales demo schemas and mapping
 - `hydra.demos.genpg.health` - Health demo schemas and mapping
 
-Note: `hydra.pg.model` types are already generated in `hydra-java/src/gen-main/java/`.
+Note: `hydra.pg.model` types are already generated in `dist/java/hydra-kernel/src/main/java/`.
 
 ## How it works
 

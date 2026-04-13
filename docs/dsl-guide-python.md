@@ -559,13 +559,13 @@ Term-level modules define Hydra functions using the Phantom-typed DSL.
 
 ```python
 import hydra.core
-import hydra.module
+import hydra.packaging
 import hydra.dsl.meta.phantoms as P
 import hydra.dsl.meta.core as Core
 from hydra.dsl.python import Just, Nothing
 from hydra.phantoms import TBinding
 
-ns = hydra.module.Namespace("my.namespace")
+ns = hydra.packaging.Namespace("my.namespace")
 
 def define(lname: str, term) -> TBinding:
     return P.definition_in_namespace(ns, lname, term)
@@ -718,12 +718,14 @@ TERM__VARIABLE__NAME = Name("variable")
 
 ## Error handling
 
-Hydra computations use `Either[InContext[OtherError], A]` for error handling.
-`InContext` carries execution state such as a trace stack, messages, and metadata via a `Context` object.
+Hydra computations use `Either[Error, A]` for error handling (the former Flow monad
+was removed in #245). A `Context` value is threaded alongside the graph and carries a
+trace stack and diagnostic messages.
 
 ```python
 from hydra.util import Either
-from hydra.compute import Context, InContext, OtherError
+from hydra.context import Context
+from hydra.errors import Error
 
 # Create a successful result
 ok = Either.right("result")
@@ -734,16 +736,16 @@ mapped = hydra.lib.eithers.map_.apply(lambda s: len(s), ok)
 # Chain computations (bind / flatMap)
 bound = hydra.lib.eithers.bind.apply(result1, lambda value: Either.right(value + " processed"))
 
-# Create a failure
-err = Either.left(InContext(OtherError("something went wrong"), cx))
+# Create a failure (Error is a tagged-union type; construct a variant from hydra.errors)
+err = Either.left(Error.other("something went wrong"))
 
 # Inspect a result
 match result:
     case Either.Right(value):
         # use value
         pass
-    case Either.Left(failure):
-        # failure.value is OtherError, failure.context is Context
+    case Either.Left(e):
+        # e is an Error value
         pass
 ```
 

@@ -25,14 +25,14 @@ demos/
 │   │   └── element-counts.graphql         # Rank modules by number of elements
 │   └── output/                            # Generated GraphQL schema files
 │       └── hydra/
-│           ├── module.graphql             # Schema for hydra.module types
+│           ├── module.graphql             # Schema for hydra.packaging types
 │           └── util.graphql               # Schema for hydra.util types (Pair, Either, etc.)
-├── src/main/haskell/Hydra/Ext/Demos/
+demos/src/main/haskell/Hydra/Demos/
 │   └── GraphqlJson.hs                    # Haskell demo module (schema generation)
 ```
 
 The JSON data lives in the existing kernel at
-`hydra-haskell/src/gen-main/json/hydra/` and does not need to be regenerated.
+`dist/json/hydra-kernel/src/main/json/hydra/` and does not need to be regenerated.
 
 ## Prerequisites
 
@@ -54,7 +54,7 @@ stack ghci hydra-haskell:lib --ghci-options='+RTS -K256M -A32M -RTS'
 ```
 
 ```haskell
-import Hydra.Ext.Demos.GraphqlJson
+import Hydra.Sources.Demos.GraphqlJson
 demoGraphqlJson
 ```
 
@@ -107,7 +107,7 @@ query ($ns: String!) {
 
 Output:
 ```
-Namespace: hydra.module
+Namespace: hydra.packaging
 Description: A model for Hydra namespaces and modules
 Term dependencies: ['hydra.graph']
 Type dependencies: ['hydra.core']
@@ -140,7 +140,7 @@ other supported language.
 
 The demo exercises two core Hydra capabilities in parallel:
 
-1. **GraphQL coder** (`Hydra.Ext.Graphql.Coder`): converts Hydra type definitions
+1. **GraphQL coder** (`Hydra.Graphql.Coder`): converts Hydra type definitions
    into GraphQL SDL. Record types become GraphQL object types; unit-variant unions
    become enums; data-carrying unions become object types with nullable fields.
    Built-in Pair and Either type constructors are mapped to the named fallback types
@@ -150,7 +150,7 @@ The demo exercises two core Hydra capabilities in parallel:
    JSON using a two-step process: first a generated term encoder converts the typed
    Haskell value to a `Core.Term`, then the JSON encoder converts the `Term` to a
    JSON value. These JSON files are already present in the kernel at
-   `hydra-haskell/src/gen-main/json/hydra/`.
+   `dist/json/hydra-kernel/src/main/json/hydra/`.
 
 Because both pipelines are derived from the same Hydra type definitions, the GraphQL
 schema and the JSON data are structurally aligned. The Python query script bridges the

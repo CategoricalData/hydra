@@ -210,7 +210,7 @@ import Hydra.Generation
 import qualified Hydra.Sources.YourModule as YourModule
 import qualified Data.List as L
 
-writeHaskell "src/gen-main/haskell" (mainModules `L.union` hydraExtModules) [YourModule.module_]
+writeHaskell "../../dist/haskell/hydra-kernel/src/main/haskell" (mainModules `L.union` hydraExtModules) [YourModule.module_]
 ```
 
 **Important:** The first argument to `writeHaskell` is the universe of all modules (for type resolution).
@@ -470,7 +470,7 @@ Eithers.mapList ("x" ~> ...) (var "xs")
 
 ### Either (error-handling) operations
 
-Hydra computations use `Either (InContext OtherError) a` for error handling:
+Hydra computations use `Either Error a` for error handling:
 
 ```haskell
 -- Raw: Right x (success)
@@ -985,7 +985,7 @@ console output), the I/O must be separated out first. Only the pure logic can be
    Example from `Generation.hs`:
    ```haskell
    -- Pure core (promotable):
-   generateSourceFiles :: ... -> Context -> Graph -> Either (InContext OtherError) [(FilePath, String)]
+   generateSourceFiles :: ... -> Context -> Graph -> Either Error [(FilePath, String)]
    generateSourceFiles printDefs lang ... cx bsGraph universe mods = ...
 
    -- I/O wrapper (stays in Haskell):

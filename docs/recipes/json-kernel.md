@@ -137,7 +137,7 @@ stack exec verify-json-kernel
 Output (success):
 ```
 === SUCCESS ===
-All 112 modules verified successfully!
+All 118 modules verified successfully!
 ```
 
 Output (failure):
@@ -145,7 +145,7 @@ Output (failure):
 === FAILED ===
 3 modules failed verification:
   hydra.core: element count differs: 42 vs 41
-  hydra.module: type differs for moduleNamespace
+  hydra.packaging: type differs for moduleNamespace
   ...
 ```
 

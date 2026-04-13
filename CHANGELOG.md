@@ -10,9 +10,41 @@ The format is inspired by [Keep a Changelog](https://keepachangelog.com/en/1.0.0
 
 ---
 
-## [Unreleased]
+## [0.15.0] - in progress
 
 ### Changed
+
+- **Packaging restructure: `packages/`, `heads/`, `dist/` layout** (#290).
+  The repository has been reorganized around three top-level trees:
+  - `packages/hydra-*/` — language-independent package definitions and DSL sources
+    (e.g. kernel types, coder DSL sources for each target language)
+  - `heads/<lang>/` — per-host build infrastructure: hand-written primitives,
+    DSL runtime, generation drivers, exec binaries, test runners
+  - `dist/<lang>/` — all generated output (`json`, `haskell`, `java`, `python`, `scala`,
+    `clojure`, `common-lisp`, `emacs-lisp`, `scheme`, `coq`)
+
+  The old `hydra-haskell/`, `hydra-java/`, `hydra-python/`, etc. top-level directories
+  and their `src/main` / `src/gen-main` / `src/gen-test` subdirectories are gone.
+  Build commands now run from the heads (`cd heads/haskell && stack test`,
+  `cd heads/python && pytest`, etc.). **Breaking**: many path references in scripts,
+  CI configs, and docs need updating.
+
+- **Removed `Hydra.Ext.*` module prefix; flattened domain hierarchies** (#331).
+  Generated Haskell modules formerly under `Hydra.Ext.Java.*`, `Hydra.Ext.Python.*`, etc.
+  now live under `Hydra.Java.*`, `Hydra.Python.*`, etc. DSL sources follow the same
+  pattern: `Hydra.Sources.Foo.*` rather than `Hydra.Ext.Sources.Foo.*`. Similarly,
+  over-deep domain hierarchies like `hydra.ext.org.w3.shacl.model` have been flattened
+  to `hydra.shacl.model`. **Breaking**: every import of `Hydra.Ext.*` must be updated.
+
+- **Split hydra-ext into hydra-coq, hydra-pg, hydra-rdf, hydra-misc, and hydra-ext** (#290).
+  The old monolithic `hydra-ext` package has been split into domain-specific packages:
+  `hydra-coq` (Coq coder), `hydra-pg` (property graph model), `hydra-rdf` (RDF/SHACL/OWL),
+  and `hydra-ext` (miscellaneous extensions: Avro, Protobuf, GraphQL, C++, Go, Rust,
+  TypeScript, etc.). The `hydra-ext` name is retained for Maven Central continuity.
+
+- **Renamed `hydra.module` to `hydra.packaging`**.
+  Module, Namespace, QualifiedName, Definition, and related types now live in
+  `hydra.packaging`. The old `hydra.module` namespace is gone.
 
 - **Unified variable resolution: removed `FunctionPrimitive`** (#251).
   The `primitive` variant has been removed from the `Function` union type.
