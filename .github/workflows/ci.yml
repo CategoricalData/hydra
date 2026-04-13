@@ -106,3 +106,14 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y sbcl cl-ppcre
       - run: packages/hydra-lisp/bin/run-tests.sh common-lisp
+
+  scheme:
+    name: Scheme tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Guile
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y guile-3.0
+      - run: packages/hydra-lisp/bin/run-tests.sh scheme
