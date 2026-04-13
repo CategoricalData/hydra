@@ -72,6 +72,16 @@ echo ""
 stack exec bootstrap-from-json -- --target python --include-coders --include-dsls --include-tests $RTS_FLAGS || \
     warn "Python test generation had errors (some polymorphic types not supported). Continuing..."
 
+# Copy hand-written test_env.py from heads/ into dist/. The patched test_graph.py
+# below imports `hydra.test.test_env`, which must resolve under the dist tree at
+# test time; the canonical source lives under heads/python/.
+TEST_ENV_SRC="$HYDRA_ROOT_DIR/heads/python/src/test/python/hydra/test/test_env.py"
+TEST_ENV_DST="$HYDRA_ROOT_DIR/dist/python/hydra-kernel/src/test/python/hydra/test/test_env.py"
+if [ -f "$TEST_ENV_SRC" ]; then
+    echo "  Copying test_env.py from heads/ into dist/..."
+    cp "$TEST_ENV_SRC" "$TEST_ENV_DST"
+fi
+
 # Patch test_graph.py to replace empty test_graph/test_context with lazy versions via test_env
 TESTGRAPH="../../dist/python/hydra-kernel/src/test/python/hydra/test/test_graph.py"
 if [ -f "$TESTGRAPH" ]; then
