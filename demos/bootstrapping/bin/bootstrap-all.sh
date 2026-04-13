@@ -554,7 +554,7 @@ run_tests_for_path() {
                 ;;
             python)
                 cd "$demo_dir"
-                HYDRA_BENCHMARK_OUTPUT="$bench_file" pytest src/test/ 2>&1
+                HYDRA_BENCHMARK_OUTPUT="$bench_file" HYDRA_JSON_DIR="$HYDRA_ROOT/dist/json/hydra-kernel/src/main/json" pytest src/test/ 2>&1
                 test_exit=$?
                 ;;
             clojure)
@@ -743,7 +743,7 @@ ENDJSON
                                 ;;
                             python)
                                 cd "$demo_dir"
-                                HYDRA_BENCHMARK_OUTPUT="$extra_bench" pytest src/test/ 2>&1
+                                HYDRA_BENCHMARK_OUTPUT="$extra_bench" HYDRA_JSON_DIR="$HYDRA_ROOT/dist/json/hydra-kernel/src/main/json" pytest src/test/ 2>&1
                                 test_exit=$?
                                 ;;
                             clojure)

@@ -7,8 +7,8 @@ infrastructure) to form a self-contained, buildable project.
 
 ## Structure
 
-- `src/gen-main/python/` -- Generated main modules (from JSON)
-- `src/gen-test/python/` -- Generated test modules (from JSON)
+- `src/main/python/` -- Generated main modules (from JSON)
+- `src/test/python/` -- Generated test modules (from JSON)
 - `src/main/python/`     -- Hand-written source files (primitives, DSL, etc.)
 - `src/test/python/`     -- Test harness
 
@@ -19,7 +19,7 @@ infrastructure) to form a self-contained, buildable project.
 ## Running the tests
 
 ```
-pytest src/test/ src/gen-test/
+pytest src/test/ src/test/
 ```
 
 This runs the full test suite. All tests should pass, confirming that the

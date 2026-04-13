@@ -204,7 +204,7 @@ public class Bootstrap {
         fullMods.addAll(coderMods);
 
         // Generate main modules
-        String outMain = outDir + File.separator + "src/gen-main";
+        String outMain = outDir + File.separator + "src/main";
         System.out.println("Mapping " + modsToGenerate.size() + " modules to " + targetCap + "...");
         System.out.println("  Universe: " + allMainMods.size() + " modules");
         System.out.println("  Output: " + outMain);
@@ -283,7 +283,7 @@ public class Bootstrap {
             List<Module> allUniverse = new ArrayList<>(fullMods);
             allUniverse.addAll(testMods);
 
-            String outTest = outDir + File.separator + "src/gen-test";
+            String outTest = outDir + File.separator + "src/test";
             System.out.println("Mapping test modules to " + targetCap + "...");
             System.out.println("  Universe: " + allUniverse.size() + " modules");
             System.out.println("  Generating: " + testMods.size() + " test modules");

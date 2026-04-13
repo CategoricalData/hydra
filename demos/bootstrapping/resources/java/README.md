@@ -7,8 +7,8 @@ infrastructure) to form a self-contained, buildable project.
 
 ## Structure
 
-- `src/gen-main/java/` -- Generated main modules (from JSON)
-- `src/gen-test/java/` -- Generated test modules (from JSON)
+- `src/main/java/` -- Generated main modules (from JSON)
+- `src/test/java/` -- Generated test modules (from JSON)
 - `src/main/java/`     -- Hand-written source files (primitives, DSL, etc.)
 - `src/test/java/`     -- Test harness
 
