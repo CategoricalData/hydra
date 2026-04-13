@@ -45,9 +45,16 @@ case "$DIALECT" in
         ;;
     common-lisp)
         cd "$PKG_DIR"
+        # Filter SBCL compiler chatter — every comment line (anything starting
+        # with `;`) is compile-time noise from the eager-eval loader, plus a
+        # couple of known-benign WARNING lines from struct-compat overrides
+        # and quicklisp's cl-ppcre.asd quirk. Collapse runs of blank lines.
+        # Anything that doesn't match these patterns (real errors, FAIL: lines,
+        # test progress, test summary) passes through.
         sbcl --noinform --non-interactive --no-userinit \
              --load "$HEAD_DIR/src/test/common-lisp/run-tests.lisp" 2>&1 \
-          | grep -v "STYLE-WARNING\|caught.*WARNING"
+          | grep -E -v '^;|^WARNING: redefining COMMON-LISP|^WARNING: System definition file.*cl-ppcre' \
+          | awk '/^$/{if (blank) next; blank=1; print; next} {blank=0; print}'
         ;;
     emacs-lisp)
         cd "$PKG_DIR"

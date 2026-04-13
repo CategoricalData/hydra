@@ -9,6 +9,15 @@
 ;; a d0 suffix. Without this setting, SBCL reads them as single-float, losing precision.
 (setf *read-default-float-format* 'double-float)
 
+;; Disable IEEE-754 floating-point traps. macOS SBCL leaves these disabled by
+;; default, so NaN- and overflow-producing operations return quiet NaN/Inf.
+;; Linux SBCL leaves them enabled, so the same operations raise
+;; FLOATING-POINT-INVALID-OPERATION at load time when generated test data
+;; contains expressions like (sqrt -1) or (log 0). Hydra's IEEE-754 semantics
+;; require quiet NaN/Inf, so we explicitly disable the traps here.
+#+sbcl
+(sb-int:set-floating-point-modes :traps nil)
+
 ;; Load cl-ppcre for regex support. Required by the regex test suite —
 ;; fail loudly if it cannot be loaded, since silently skipping would let
 ;; regex tests run with broken primitives.
