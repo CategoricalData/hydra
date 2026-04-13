@@ -577,19 +577,50 @@ the target language.
 Implementations are allowed and expected to vary in the DSLs and utilities they provide,
 so as to make the best use of the programming constructs and libraries available in the particular host language.
 
-## Step 11: Implement code generation I/O (for self-hosting)
+## Step 11: Building and bootstrapping
 
 Now let's turn it up to 11.
 
-If you want your implementation to generate code (i.e. participate in Hydra's signature bootstrapping functionality),
-you need an I/O wrapper that loads modules from JSON, assembles a bootstrap `Graph` with all
-standard primitives, runs the code generation pipeline, and writes output files.
+The previous ten steps give you a working Hydra implementation: it can load generated kernel modules,
+run the standard library, and pass the universal test suite. The final step is to bring the new
+implementation into Hydra's full development lifecycle so it stays in step with the kernel and so
+regressions are caught automatically. There are four pieces, in order:
+
+**1. Implement code generation I/O (self-hosting).**
+For your implementation to *generate* Hydra code (not just run it), you need an I/O wrapper that
+loads modules from JSON, assembles a bootstrap `Graph` with all standard primitives, runs the code
+generation pipeline (the coder + serializer from steps 4–5), and writes output files. Once this
+exists, your implementation can participate in Hydra's bootstrapping demo as both source and target.
 
 | Language | Module |
 |----------|--------|
 | Java | [hydra/Generation.java](https://github.com/CategoricalData/hydra/blob/main/heads/java/src/main/java/hydra/Generation.java), [hydra/Bootstrap.java](https://github.com/CategoricalData/hydra/blob/main/heads/java/src/main/java/hydra/Bootstrap.java) |
 | Python | [hydra/generation.py](https://github.com/CategoricalData/hydra/blob/main/heads/python/src/main/python/hydra/generation.py), [hydra/bootstrap.py](https://github.com/CategoricalData/hydra/blob/main/heads/python/src/main/python/hydra/bootstrap.py) |
 | Haskell | [Hydra/Generation.hs](https://github.com/CategoricalData/hydra/blob/main/heads/haskell/src/main/haskell/Hydra/Generation.hs) |
+
+**2. Wire the implementation into the sync workflow.**
+Add a `sync-<lang>.sh` script under `heads/haskell/bin/` that regenerates your implementation's
+content under `dist/<lang>/` from the DSL sources, and hook it into `bin/sync-all.sh` so a
+repo-wide sync keeps your implementation in step with the kernel. See
+[code-generation.md](code-generation.md) for the end-to-end shape these scripts follow.
+
+**3. Demonstrate bootstrapping end-to-end.**
+Use `bin/run-bootstrapping-demo.sh` to confirm that your implementation can generate Hydra code
+targeting *every* supported target (including itself), and that *every* supported source can in
+turn generate code targeting your implementation. The demo runs an N×M host×target matrix; your
+new language adds a row and a column. Both must pass before the implementation is ready for CI.
+
+**4. Add a CI build.**
+Add a job to `.github/workflows/ci.yml` so the test suite runs on every push and pull request.
+Mirror the structure of an existing job (`common-lisp` and `scheme` are good minimal references):
+check out the repo, install the toolchain via `apt-get`, then invoke the implementation's test
+runner script. The job should fail loudly on any test failure or load error, matching the
+project-wide rule against silently swallowing errors.
+
+Without these four pieces — self-hosting I/O, sync integration, a passing bootstrap matrix, and
+CI — regressions in your implementation will only surface during local development and may go
+unnoticed for long stretches, defeating the cross-implementation parity that the rest of this
+recipe sets up.
 
 ## Summary
 
@@ -605,7 +636,7 @@ Creating a new Hydra implementation involves:
 8. ✅ Implement runtime foundation types
 9. ✅ Create test runners for universal test cases (kernel and generation evaluation)
 10. ✅ Create native DSLs and build applications
-11. ✅ Implement code generation I/O for self-hosting
+11. ✅ Building and bootstrapping
 
 The key insight: most of the implementation is **automatically generated** from DSL sources,
 ensuring parity across all Hydra implementations.

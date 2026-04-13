@@ -154,7 +154,7 @@ See [docs/recipes/index.md](docs/recipes/index.md) for the full list. Key recipe
 | [Refactoring namespaces](docs/recipes/refactoring-namespaces.md) | Rename/move a Hydra namespace across all implementations |
 | [Repository maintenance](docs/recipes/maintenance.md) | Periodic checks: non-source files, stale artifacts, definition ordering |
 | [JSON kernel](docs/recipes/json-kernel.md) | Export Hydra modules to JSON for cross-language access |
-| [New implementation](docs/recipes/new-implementation.md) | Implement Hydra in a new language (10 steps) |
+| [New implementation](docs/recipes/new-implementation.md) | Implement Hydra in a new language (11 steps) |
 | [Syncing Python](docs/recipes/syncing-python.md) | Regenerate Python from Haskell |
 
 ### Implementation READMEs
