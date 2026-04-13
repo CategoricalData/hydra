@@ -1,0 +1,63 @@
+// Note: this is an automatically generated file. Do not edit.
+
+package hydra.tinkerpop.gremlin;
+
+import java.io.Serializable;
+
+public class TraversalPredicateAndNestedTraversal implements Serializable, Comparable<TraversalPredicateAndNestedTraversal> {
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.tinkerpop.gremlin.TraversalPredicateAndNestedTraversal");
+
+  public static final hydra.core.Name PREDICATE = new hydra.core.Name("predicate");
+
+  public static final hydra.core.Name TRAVERSAL = new hydra.core.Name("traversal");
+
+  public final hydra.tinkerpop.gremlin.TraversalPredicate predicate;
+
+  public final hydra.tinkerpop.gremlin.NestedTraversal traversal;
+
+  public TraversalPredicateAndNestedTraversal (hydra.tinkerpop.gremlin.TraversalPredicate predicate, hydra.tinkerpop.gremlin.NestedTraversal traversal) {
+    this.predicate = predicate;
+    this.traversal = traversal;
+  }
+
+  @Override
+  public boolean equals(Object other) {
+    if (!(other instanceof TraversalPredicateAndNestedTraversal)) {
+      return false;
+    }
+    TraversalPredicateAndNestedTraversal o = (TraversalPredicateAndNestedTraversal) other;
+    return java.util.Objects.equals(
+      this.predicate,
+      o.predicate) && java.util.Objects.equals(
+      this.traversal,
+      o.traversal);
+  }
+
+  @Override
+  public int hashCode() {
+    return 2 * java.util.Objects.hashCode(predicate) + 3 * java.util.Objects.hashCode(traversal);
+  }
+
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(TraversalPredicateAndNestedTraversal other) {
+    int cmp = 0;
+    cmp = hydra.util.Comparing.compare(
+      predicate,
+      other.predicate);
+    if (cmp != 0) {
+      return cmp;
+    }
+    return hydra.util.Comparing.compare(
+      traversal,
+      other.traversal);
+  }
+
+  public TraversalPredicateAndNestedTraversal withPredicate(hydra.tinkerpop.gremlin.TraversalPredicate predicate) {
+    return new TraversalPredicateAndNestedTraversal(predicate, traversal);
+  }
+
+  public TraversalPredicateAndNestedTraversal withTraversal(hydra.tinkerpop.gremlin.NestedTraversal traversal) {
+    return new TraversalPredicateAndNestedTraversal(predicate, traversal);
+  }
+}

@@ -839,11 +839,11 @@ Lists.find ("b" ~> (Core.bindingName (var "b")) `eq` (var "name")) elements
 - `Hydra/Sources/Kernel/Terms/Haskell/Coder.hs` + `Hydra/Haskell/Coder.hs`
 
 **Extension packages (packages/hydra-ext, etc.):**
-- `Hydra/Ext/Python/Coder.hs`
-- `Hydra/Ext/Python/TestCodec.hs`
-- `Hydra/Ext/Tools/Analysis/Dependencies.hs`
-- `Hydra/Ext/Tools/Analysis/Summaries.hs`
-- `Hydra/Ext/Tools/AvroWorkflows.hs`
+- `Hydra/Python/Coder.hs`
+- `Hydra/Python/TestCodec.hs`
+- `Hydra/Tools/Analysis/Dependencies.hs`
+- `Hydra/Tools/Analysis/Summaries.hs`
+- `Hydra/Tools/AvroWorkflows.hs`
 
 **Other:**
 - `heads/haskell/src/exec/verify-json-kernel/Main.hs`

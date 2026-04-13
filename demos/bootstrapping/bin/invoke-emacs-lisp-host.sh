@@ -10,7 +10,7 @@ set -e
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 HYDRA_ROOT="$( cd "$SCRIPT_DIR/../../.." && pwd )"
-HYDRA_EL_DIR="$HYDRA_ROOT/packages/hydra-lisp/hydra-emacs-lisp"
+HYDRA_EL_DIR="$HYDRA_ROOT/heads/lisp/hydra-emacs-lisp"
 
 # Parse arguments (pass through to EL bootstrap)
 TARGET=""
@@ -44,10 +44,10 @@ echo ""
 # Ensure coder modules are available
 CODER_CHECK=""
 case "$TARGET" in
-    haskell)                               CODER_CHECK="$HYDRA_ROOT/dist/emacs-lisp/hydra-kernel/src/main/emacs-lisp/hydra/ext/haskell/coder.el" ;;
-    java)                                  CODER_CHECK="$HYDRA_ROOT/dist/emacs-lisp/hydra-kernel/src/main/emacs-lisp/hydra/ext/java/coder.el" ;;
-    python)                                CODER_CHECK="$HYDRA_ROOT/dist/emacs-lisp/hydra-kernel/src/main/emacs-lisp/hydra/ext/python/coder.el" ;;
-    clojure|scheme|common-lisp|emacs-lisp) CODER_CHECK="$HYDRA_ROOT/dist/emacs-lisp/hydra-kernel/src/main/emacs-lisp/hydra/ext/lisp/coder.el" ;;
+    haskell)                               CODER_CHECK="$HYDRA_ROOT/dist/emacs-lisp/hydra-kernel/src/main/emacs-lisp/hydra/haskell/coder.el" ;;
+    java)                                  CODER_CHECK="$HYDRA_ROOT/dist/emacs-lisp/hydra-kernel/src/main/emacs-lisp/hydra/java/coder.el" ;;
+    python)                                CODER_CHECK="$HYDRA_ROOT/dist/emacs-lisp/hydra-kernel/src/main/emacs-lisp/hydra/python/coder.el" ;;
+    clojure|scheme|common-lisp|emacs-lisp) CODER_CHECK="$HYDRA_ROOT/dist/emacs-lisp/hydra-kernel/src/main/emacs-lisp/hydra/lisp/coder.el" ;;
 esac
 
 if [ -n "$CODER_CHECK" ] && [ ! -f "$CODER_CHECK" ]; then

@@ -1,0 +1,72 @@
+// Note: this is an automatically generated file. Do not edit.
+
+package hydra.haskell.syntax;
+
+import java.io.Serializable;
+
+/**
+ * A qualified name
+ */
+public class QualifiedName implements Serializable, Comparable<QualifiedName> {
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.haskell.syntax.QualifiedName");
+
+  public static final hydra.core.Name QUALIFIERS = new hydra.core.Name("qualifiers");
+
+  public static final hydra.core.Name UNQUALIFIED = new hydra.core.Name("unqualified");
+
+  /**
+   * The qualifier parts
+   */
+  public final java.util.List<hydra.haskell.syntax.NamePart> qualifiers;
+
+  /**
+   * The unqualified name part
+   */
+  public final hydra.haskell.syntax.NamePart unqualified;
+
+  public QualifiedName (java.util.List<hydra.haskell.syntax.NamePart> qualifiers, hydra.haskell.syntax.NamePart unqualified) {
+    this.qualifiers = qualifiers;
+    this.unqualified = unqualified;
+  }
+
+  @Override
+  public boolean equals(Object other) {
+    if (!(other instanceof QualifiedName)) {
+      return false;
+    }
+    QualifiedName o = (QualifiedName) other;
+    return java.util.Objects.equals(
+      this.qualifiers,
+      o.qualifiers) && java.util.Objects.equals(
+      this.unqualified,
+      o.unqualified);
+  }
+
+  @Override
+  public int hashCode() {
+    return 2 * java.util.Objects.hashCode(qualifiers) + 3 * java.util.Objects.hashCode(unqualified);
+  }
+
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(QualifiedName other) {
+    int cmp = 0;
+    cmp = hydra.util.Comparing.compare(
+      qualifiers,
+      other.qualifiers);
+    if (cmp != 0) {
+      return cmp;
+    }
+    return hydra.util.Comparing.compare(
+      unqualified,
+      other.unqualified);
+  }
+
+  public QualifiedName withQualifiers(java.util.List<hydra.haskell.syntax.NamePart> qualifiers) {
+    return new QualifiedName(qualifiers, unqualified);
+  }
+
+  public QualifiedName withUnqualified(hydra.haskell.syntax.NamePart unqualified) {
+    return new QualifiedName(qualifiers, unqualified);
+  }
+}

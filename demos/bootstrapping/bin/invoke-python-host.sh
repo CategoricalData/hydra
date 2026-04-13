@@ -12,7 +12,7 @@ set -eo pipefail
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 HYDRA_ROOT="$( cd "$SCRIPT_DIR/../../.." && pwd )"
-HYDRA_PYTHON_DIR="$HYDRA_ROOT/packages/hydra-python"
+HYDRA_PYTHON_DIR="$HYDRA_ROOT/heads/python"
 
 # Locate Python interpreter
 # PyPy3 is strongly recommended for term-level generation (CPython is too slow).
@@ -32,7 +32,7 @@ fi
 echo "Python: $($PYTHON --version 2>&1)"
 echo ""
 
-PYTHONPATH="$HYDRA_PYTHON_DIR/src/main/python:$HYDRA_PYTHON_DIR/src/main/python"
+PYTHONPATH="$HYDRA_PYTHON_DIR/src/main/python:$HYDRA_ROOT/dist/python/hydra-kernel/src/main/python:$HYDRA_ROOT/dist/python/hydra-ext/src/main/python"
 export PYTHONPATH
 
 # Run the Python bootstrap (its output includes detailed timing and file counts)

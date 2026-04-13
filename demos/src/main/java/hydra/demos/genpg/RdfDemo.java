@@ -5,9 +5,9 @@ import hydra.context.Context;
 import hydra.core.*;
 import hydra.errors.Error_;
 import hydra.errors.OtherError;
-import hydra.ext.org.w3.rdf.syntax.*;
-import hydra.ext.org.w3.shacl.model.*;
-import hydra.ext.rdf.Utils;
+import hydra.rdf.syntax.*;
+import hydra.shacl.model.*;
+import hydra.rdf.Utils;
 import hydra.graph.Graph;
 import hydra.pg.model.*;
 import hydra.pg.rdf.Mappings;
@@ -72,7 +72,7 @@ public class RdfDemo {
         throw new RuntimeException("Unsupported term type for IRI encoding: " + term);
     }
 
-    private static hydra.ext.org.w3.rdf.syntax.Literal termToLiteral(Term term) {
+    private static hydra.rdf.syntax.Literal termToLiteral(Term term) {
         if (term instanceof Term.Literal) {
             return Utils.encodeLiteral(((Term.Literal) term).value);
         }
@@ -251,13 +251,13 @@ public class RdfDemo {
         if (psc instanceof PropertyShapeConstraint.MinCount) {
             BigInteger n = ((PropertyShapeConstraint.MinCount) psc).value;
             return Collections.singletonList(new Triple(subj, sh("minCount"),
-                new Node.Literal(new hydra.ext.org.w3.rdf.syntax.Literal(
+                new Node.Literal(new hydra.rdf.syntax.Literal(
                     n.toString(), new Iri(xsd + "integer"), Maybe.nothing()))));
         }
         if (psc instanceof PropertyShapeConstraint.MaxCount) {
             BigInteger n = ((PropertyShapeConstraint.MaxCount) psc).value;
             return Collections.singletonList(new Triple(subj, sh("maxCount"),
-                new Node.Literal(new hydra.ext.org.w3.rdf.syntax.Literal(
+                new Node.Literal(new hydra.rdf.syntax.Literal(
                     n.toString(), new Iri(xsd + "integer"), Maybe.nothing()))));
         }
         return Collections.emptyList();
@@ -286,7 +286,7 @@ public class RdfDemo {
         return sb.toString();
     }
 
-    private static String graphToNtriples(hydra.ext.org.w3.rdf.syntax.Graph g) {
+    private static String graphToNtriples(hydra.rdf.syntax.Graph g) {
         return triplesToNtriples(new ArrayList<>(g.value));
     }
 
@@ -308,7 +308,7 @@ public class RdfDemo {
         if (n instanceof Node.Iri) return iriToNt(((Node.Iri) n).value);
         if (n instanceof Node.Bnode) return "_:" + ((Node.Bnode) n).value.value;
         if (n instanceof Node.Literal) {
-            hydra.ext.org.w3.rdf.syntax.Literal lit = ((Node.Literal) n).value;
+            hydra.rdf.syntax.Literal lit = ((Node.Literal) n).value;
             String escaped = lit.lexicalForm.replace("\\", "\\\\").replace("\"", "\\\"").replace("\n", "\\n");
             return "\"" + escaped + "\"^^" + iriToNt(lit.datatypeIri);
         }
@@ -345,7 +345,7 @@ public class RdfDemo {
     }
 
     private static Node litNode(String value, String datatype) {
-        return new Node.Literal(new hydra.ext.org.w3.rdf.syntax.Literal(
+        return new Node.Literal(new hydra.rdf.syntax.Literal(
             value, new Iri(datatype), Maybe.nothing()));
     }
 
@@ -427,7 +427,7 @@ public class RdfDemo {
         }
         List<Description> allDescs = new ArrayList<>(vertexDescs);
         allDescs.addAll(edgeDescs);
-        hydra.ext.org.w3.rdf.syntax.Graph dataGraph = Utils.descriptionsToGraph(allDescs);
+        hydra.rdf.syntax.Graph dataGraph = Utils.descriptionsToGraph(allDescs);
         String dataNt = graphToNtriples(dataGraph);
         Path dataFile = Paths.get(outputDir + "-data.nt");
         Files.write(dataFile, dataNt.getBytes(StandardCharsets.UTF_8));

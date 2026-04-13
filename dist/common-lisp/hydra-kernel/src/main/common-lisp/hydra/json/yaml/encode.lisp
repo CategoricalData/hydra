@@ -1,5 +1,5 @@
 (defpackage :hydra.json.yaml.encode
-(:use :cl :hydra.ext.org.yaml.model :hydra.json.encode :hydra.json.model :hydra.lib.eithers :hydra.lib.lists :hydra.lib.maps :hydra.lib.pairs)
+(:use :cl :hydra.json.encode :hydra.json.model :hydra.lib.eithers :hydra.lib.lists :hydra.lib.maps :hydra.lib.pairs :hydra.yaml.model)
 (:export :hydra_json_yaml_encode_json_to_yaml :hydra_json_yaml_encode_to_yaml))
 
 (in-package :hydra.json.yaml.encode)

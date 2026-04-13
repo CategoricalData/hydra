@@ -1,5 +1,5 @@
 (ns hydra.json.yaml.decode
-  (:require [hydra.ext.org.yaml.model :refer :all] [hydra.json.decode :refer :all] [hydra.json.model :refer :all] [hydra.lib.eithers :refer :all] [hydra.lib.literals :refer :all] [hydra.lib.maps :refer :all] [hydra.lib.pairs :refer :all]
+  (:require [hydra.json.decode :refer :all] [hydra.json.model :refer :all] [hydra.lib.eithers :refer :all] [hydra.lib.literals :refer :all] [hydra.lib.maps :refer :all] [hydra.lib.pairs :refer :all] [hydra.yaml.model :refer :all]
 ))
 
 (declare hydra_json_yaml_decode_yaml_to_json hydra_json_yaml_decode_from_yaml)

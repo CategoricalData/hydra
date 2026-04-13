@@ -5,9 +5,9 @@ import hydra.graph.{Graph, Primitive}
 import hydra.json.model.Value
 import hydra.packaging.{Module, Namespace, Definition}
 
-import java.io.File
-import java.nio.charset.StandardCharsets
-import java.nio.file.{Files, Paths}
+import _root_.java.io.File
+import _root_.java.nio.charset.StandardCharsets
+import _root_.java.nio.file.{Files, Paths}
 
 /**
  * I/O wrapper for Hydra code generation in Scala.
@@ -126,9 +126,9 @@ object Generation:
           case _ => throw new RuntimeException(s"manifest field '$fieldName' not found or not an array")
       case _ => throw new RuntimeException("manifest.json is not an object")
 
-  /** Filter to kernel-only modules (exclude hydra.ext.*) */
+  /** Filter to kernel-only modules (exclude hydra.*) */
   def filterKernelModules(mods: Seq[Module]): Seq[Module] =
-    mods.filter(m => !m.namespace.startsWith("hydra.ext.") && !m.namespace.startsWith("hydra.json.yaml."))
+    mods.filter(m => !m.namespace.startsWith("hydra.") && !m.namespace.startsWith("hydra.json.yaml."))
 
   /** Generate source files and write them to disk. Returns number of files written. */
   def generateSources(
@@ -161,32 +161,32 @@ object Generation:
   /** Generate Java source files from modules. */
   def writeJava(basePath: String, universe: Seq[Module], mods: Seq[Module]): Int =
     generateSources(
-      mod => defs => cx => g => hydra.ext.java.coder.moduleToJava(mod)(defs)(cx)(g),
-      hydra.ext.java.language.javaLanguage,
+      mod => defs => cx => g => hydra.java.coder.moduleToJava(mod)(defs)(cx)(g),
+      hydra.java.language.javaLanguage,
       doInfer = false, doExpand = true, doHoistCaseStatements = false, doHoistPolymorphicLetBindings = true,
       basePath, universe, mods)
 
   /** Generate Python source files from modules. */
   def writePython(basePath: String, universe: Seq[Module], mods: Seq[Module]): Int =
     generateSources(
-      mod => defs => cx => g => hydra.ext.python.coder.moduleToPython(mod)(defs)(cx)(g),
-      hydra.ext.python.language.pythonLanguage,
+      mod => defs => cx => g => hydra.python.coder.moduleToPython(mod)(defs)(cx)(g),
+      hydra.python.language.pythonLanguage,
       doInfer = false, doExpand = true, doHoistCaseStatements = true, doHoistPolymorphicLetBindings = false,
       basePath, universe, mods)
 
   /** Generate Scala source files from modules. */
   def writeScala(basePath: String, universe: Seq[Module], mods: Seq[Module]): Int =
     generateSources(
-      mod => defs => cx => g => hydra.ext.scala.coder.moduleToScala(mod)(defs)(cx)(g),
-      hydra.ext.scala.language.scalaLanguage,
+      mod => defs => cx => g => hydra.scala.coder.moduleToScala(mod)(defs)(cx)(g),
+      hydra.scala.language.scalaLanguage,
       doInfer = false, doExpand = true, doHoistCaseStatements = false, doHoistPolymorphicLetBindings = false,
       basePath, universe, mods)
 
   /** Generate Haskell source files from modules. */
   def writeHaskell(basePath: String, universe: Seq[Module], mods: Seq[Module]): Int =
     generateSources(
-      mod => defs => cx => g => hydra.ext.haskell.coder.moduleToHaskell(mod)(defs)(cx)(g),
-      hydra.ext.haskell.language.haskellLanguage,
+      mod => defs => cx => g => hydra.haskell.coder.moduleToHaskell(mod)(defs)(cx)(g),
+      hydra.haskell.language.haskellLanguage,
       doInfer = false, doExpand = false, doHoistCaseStatements = false, doHoistPolymorphicLetBindings = false,
       basePath, universe, mods)
 

@@ -9,55 +9,55 @@ from functools import lru_cache
 from hydra.dsl.python import Either, FrozenDict, Left, Right, frozenlist
 from typing import cast
 import hydra.core
-import hydra.ext.org.yaml.model
 import hydra.json.decode
 import hydra.json.model
 import hydra.lib.eithers
 import hydra.lib.literals
 import hydra.lib.maps
 import hydra.lib.pairs
+import hydra.yaml.model
 
-def yaml_to_json(node: hydra.ext.org.yaml.model.Node_):
+def yaml_to_json(node: hydra.yaml.model.Node_):
     def _hoist_hydra_json_yaml_decode_yaml_to_json_1(v1):
         match v1:
-            case hydra.ext.org.yaml.model.ScalarBool(value=b):
+            case hydra.yaml.model.ScalarBool(value=b):
                 return Right(cast(hydra.json.model.Value, hydra.json.model.ValueBoolean(b)))
 
-            case hydra.ext.org.yaml.model.ScalarFloat(value=f):
+            case hydra.yaml.model.ScalarFloat(value=f):
                 return Right(cast(hydra.json.model.Value, hydra.json.model.ValueNumber(f)))
 
-            case hydra.ext.org.yaml.model.ScalarInt(value=i):
+            case hydra.yaml.model.ScalarInt(value=i):
                 return Right(cast(hydra.json.model.Value, hydra.json.model.ValueNumber(hydra.lib.literals.bigint_to_bigfloat(i))))
 
-            case hydra.ext.org.yaml.model.ScalarNull():
+            case hydra.yaml.model.ScalarNull():
                 return Right(cast(hydra.json.model.Value, hydra.json.model.ValueNull()))
 
-            case hydra.ext.org.yaml.model.ScalarStr(value=str):
+            case hydra.yaml.model.ScalarStr(value=str):
                 return Right(cast(hydra.json.model.Value, hydra.json.model.ValueString(str)))
 
             case _:
                 raise AssertionError("Unreachable: all variants handled")
     match node:
-        case hydra.ext.org.yaml.model.NodeMapping(value=m):
-            def convert_entry(kv: tuple[hydra.ext.org.yaml.model.Node_, hydra.ext.org.yaml.model.Node_]) -> Either[str, tuple[str, hydra.json.model.Value]]:
+        case hydra.yaml.model.NodeMapping(value=m):
+            def convert_entry(kv: tuple[hydra.yaml.model.Node_, hydra.yaml.model.Node_]) -> Either[str, tuple[str, hydra.json.model.Value]]:
                 @lru_cache(1)
-                def key_node() -> hydra.ext.org.yaml.model.Node_:
+                def key_node() -> hydra.yaml.model.Node_:
                     return hydra.lib.pairs.first(kv)
                 @lru_cache(1)
-                def val_node() -> hydra.ext.org.yaml.model.Node_:
+                def val_node() -> hydra.yaml.model.Node_:
                     return hydra.lib.pairs.second(kv)
                 @lru_cache(1)
                 def key_result():
                     def _hoist_key_result_1(v1):
                         match v1:
-                            case hydra.ext.org.yaml.model.ScalarStr(value=str):
+                            case hydra.yaml.model.ScalarStr(value=str):
                                 return Right(str)
 
                             case _:
                                 return Left("non-string YAML mapping key")
                     def _hoist_key_result_2(v1):
                         match v1:
-                            case hydra.ext.org.yaml.model.NodeScalar(value=s):
+                            case hydra.yaml.model.NodeScalar(value=s):
                                 return _hoist_key_result_1(s)
 
                             case _:
@@ -69,10 +69,10 @@ def yaml_to_json(node: hydra.ext.org.yaml.model.Node_):
                 return hydra.lib.eithers.map_list((lambda x1: convert_entry(x1)), hydra.lib.maps.to_list(m))
             return hydra.lib.eithers.map((lambda es: cast(hydra.json.model.Value, hydra.json.model.ValueObject(hydra.lib.maps.from_list(es)))), entries())
 
-        case hydra.ext.org.yaml.model.NodeScalar(value=s):
+        case hydra.yaml.model.NodeScalar(value=s):
             return _hoist_hydra_json_yaml_decode_yaml_to_json_1(s)
 
-        case hydra.ext.org.yaml.model.NodeSequence(value=nodes):
+        case hydra.yaml.model.NodeSequence(value=nodes):
             @lru_cache(1)
             def results() -> Either[str, frozenlist[hydra.json.model.Value]]:
                 return hydra.lib.eithers.map_list((lambda n: yaml_to_json(n)), nodes)
@@ -81,7 +81,7 @@ def yaml_to_json(node: hydra.ext.org.yaml.model.Node_):
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
-def from_yaml(types: FrozenDict[hydra.core.Name, hydra.core.Type], tname: hydra.core.Name, typ: hydra.core.Type, node: hydra.ext.org.yaml.model.Node_) -> Either[str, hydra.core.Term]:
+def from_yaml(types: FrozenDict[hydra.core.Name, hydra.core.Type], tname: hydra.core.Name, typ: hydra.core.Type, node: hydra.yaml.model.Node_) -> Either[str, hydra.core.Term]:
     r"""Decode a YAML node to a Hydra term via JSON decoding."""
 
     @lru_cache(1)

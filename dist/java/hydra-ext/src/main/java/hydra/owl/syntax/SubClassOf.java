@@ -1,0 +1,80 @@
+// Note: this is an automatically generated file. Do not edit.
+
+package hydra.owl.syntax;
+
+import java.io.Serializable;
+
+public class SubClassOf implements Serializable, Comparable<SubClassOf> {
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.owl.syntax.SubClassOf");
+
+  public static final hydra.core.Name ANNOTATIONS = new hydra.core.Name("annotations");
+
+  public static final hydra.core.Name SUB_CLASS = new hydra.core.Name("subClass");
+
+  public static final hydra.core.Name SUPER_CLASS = new hydra.core.Name("superClass");
+
+  public final java.util.List<hydra.owl.syntax.Annotation> annotations;
+
+  public final hydra.owl.syntax.ClassExpression subClass;
+
+  public final hydra.owl.syntax.ClassExpression superClass;
+
+  public SubClassOf (java.util.List<hydra.owl.syntax.Annotation> annotations, hydra.owl.syntax.ClassExpression subClass, hydra.owl.syntax.ClassExpression superClass) {
+    this.annotations = annotations;
+    this.subClass = subClass;
+    this.superClass = superClass;
+  }
+
+  @Override
+  public boolean equals(Object other) {
+    if (!(other instanceof SubClassOf)) {
+      return false;
+    }
+    SubClassOf o = (SubClassOf) other;
+    return java.util.Objects.equals(
+      this.annotations,
+      o.annotations) && java.util.Objects.equals(
+      this.subClass,
+      o.subClass) && java.util.Objects.equals(
+      this.superClass,
+      o.superClass);
+  }
+
+  @Override
+  public int hashCode() {
+    return 2 * java.util.Objects.hashCode(annotations) + 3 * java.util.Objects.hashCode(subClass) + 5 * java.util.Objects.hashCode(superClass);
+  }
+
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(SubClassOf other) {
+    int cmp = 0;
+    cmp = hydra.util.Comparing.compare(
+      annotations,
+      other.annotations);
+    if (cmp != 0) {
+      return cmp;
+    }
+    cmp = hydra.util.Comparing.compare(
+      subClass,
+      other.subClass);
+    if (cmp != 0) {
+      return cmp;
+    }
+    return hydra.util.Comparing.compare(
+      superClass,
+      other.superClass);
+  }
+
+  public SubClassOf withAnnotations(java.util.List<hydra.owl.syntax.Annotation> annotations) {
+    return new SubClassOf(annotations, subClass, superClass);
+  }
+
+  public SubClassOf withSubClass(hydra.owl.syntax.ClassExpression subClass) {
+    return new SubClassOf(annotations, subClass, superClass);
+  }
+
+  public SubClassOf withSuperClass(hydra.owl.syntax.ClassExpression superClass) {
+    return new SubClassOf(annotations, subClass, superClass);
+  }
+}

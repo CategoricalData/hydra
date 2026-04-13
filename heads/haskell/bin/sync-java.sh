@@ -95,11 +95,11 @@ echo ""
 stack exec bootstrap-from-json -- --target java --output "../../dist/java/hydra-ext" --include-coders --ext-only $RTS_FLAGS
 
 # Patch Lisp Coder.java for PartialVisitor type inference issue in encodeTermDefinition
-LISPCODER="../../dist/java/hydra-ext/src/main/java/hydra/ext/lisp/Coder.java"
+LISPCODER="../../dist/java/hydra-ext/src/main/java/hydra/lisp/Coder.java"
 if [ -f "$LISPCODER" ]; then
     echo "  Post-processing: patching Lisp Coder.java..."
-    sed_inplace 's/Either<hydra.ext.lisp.syntax.TopLevelFormWithComments, hydra.ext.lisp.syntax.TopLevelFormWithComments> otherwise/Either<T2, hydra.ext.lisp.syntax.TopLevelFormWithComments> otherwise/' "$LISPCODER"
-    sed_inplace 's/Either<hydra.ext.lisp.syntax.TopLevelFormWithComments, hydra.ext.lisp.syntax.TopLevelFormWithComments> visit/Either<T2, hydra.ext.lisp.syntax.TopLevelFormWithComments> visit/' "$LISPCODER"
+    sed_inplace 's/Either<hydra.lisp.syntax.TopLevelFormWithComments, hydra.lisp.syntax.TopLevelFormWithComments> otherwise/Either<T2, hydra.lisp.syntax.TopLevelFormWithComments> otherwise/' "$LISPCODER"
+    sed_inplace 's/Either<hydra.lisp.syntax.TopLevelFormWithComments, hydra.lisp.syntax.TopLevelFormWithComments> visit/Either<T2, hydra.lisp.syntax.TopLevelFormWithComments> visit/' "$LISPCODER"
 fi
 
 if [ "$QUICK_MODE" = false ]; then
@@ -108,10 +108,10 @@ if [ "$QUICK_MODE" = false ]; then
 
     cd "$HYDRA_ROOT_DIR"
 
-    ./gradlew :hydra-java:compileJava :hydra-ext:compileJava
-    ./gradlew :hydra-java:compileTestJava :hydra-ext:compileTestJava || \
+    ./gradlew :hydra-java:compileJava
+    ./gradlew :hydra-java:compileTestJava || \
         warn "Java test compilation had errors. Continuing..."
-    ./gradlew :hydra-java:test :hydra-ext:test || \
+    ./gradlew :hydra-java:test || \
         warn "Some Java tests failed. Continuing..."
 
     cd "$HYDRA_EXT_DIR"

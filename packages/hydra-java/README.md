@@ -180,7 +180,7 @@ writeJava "../../dist/java/hydra-kernel/src/test/java" allModules baseTestModule
 ### Algebraic Data Types
 
 The Hydra coder which generates everything in `src/gen-main` and `src/gen-test` can be found
-[here](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-java/src/main/haskell/Hydra/Ext/Sources/Java).
+[here](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-java/src/main/haskell/Hydra/Sources/Java).
 A variety of techniques are used in order to materialize Hydra's core language in Java,
 including a [pattern](https://garciat.com/posts/java-adt) for representing algebraic data types
 which was originally proposed by Gabriel Garcia,
@@ -227,7 +227,7 @@ for the complete class, as well as the `Vertex` type in
 [Pg/Model.hs](https://github.com/CategoricalData/hydra/blob/main/dist/haskell/hydra-pg/src/main/haskell/Hydra/Pg/Model.hs)
 for comparison.
 Both files were generated from the property graph model defined
-[here](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-pg/src/main/haskell/Hydra/Ext/Sources/Pg/Model.hs).
+[here](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-pg/src/main/haskell/Hydra/Sources/Pg/Model.hs).
 
 ### Union Types and Visitors
 

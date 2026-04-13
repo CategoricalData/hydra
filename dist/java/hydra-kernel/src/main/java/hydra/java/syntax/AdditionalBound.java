@@ -1,0 +1,41 @@
+// Note: this is an automatically generated file. Do not edit.
+
+package hydra.java.syntax;
+
+import java.io.Serializable;
+
+public class AdditionalBound implements Serializable, Comparable<AdditionalBound> {
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.java.syntax.AdditionalBound");
+
+  public static final hydra.core.Name VALUE = new hydra.core.Name("value");
+
+  public final hydra.java.syntax.InterfaceType value;
+
+  public AdditionalBound (hydra.java.syntax.InterfaceType value) {
+    this.value = value;
+  }
+
+  @Override
+  public boolean equals(Object other) {
+    if (!(other instanceof AdditionalBound)) {
+      return false;
+    }
+    AdditionalBound o = (AdditionalBound) other;
+    return java.util.Objects.equals(
+      this.value,
+      o.value);
+  }
+
+  @Override
+  public int hashCode() {
+    return 2 * java.util.Objects.hashCode(value);
+  }
+
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(AdditionalBound other) {
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
+  }
+}

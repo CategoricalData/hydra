@@ -109,12 +109,12 @@
     (timed "coder modules"
       #(do (case target
              "python" (load-coder-modules!
-                        ["hydra.ext.python.syntax" "hydra.ext.python.language" "hydra.ext.python.names"
-                         "hydra.ext.python.helpers" "hydra.ext.python.utils"
-                         "hydra.ext.python.serde" "hydra.ext.python.coder"])
+                        ["hydra.python.syntax" "hydra.python.language" "hydra.python.names"
+                         "hydra.python.helpers" "hydra.python.utils"
+                         "hydra.python.serde" "hydra.python.coder"])
              "clojure" (load-coder-modules!
-                         ["hydra.ext.lisp.syntax" "hydra.ext.lisp.language"
-                          "hydra.ext.lisp.serde" "hydra.ext.lisp.coder"]))
+                         ["hydra.lisp.syntax" "hydra.lisp.language"
+                          "hydra.lisp.serde" "hydra.lisp.coder"]))
            (preload/install-coder-performance-patches!)))
     (println)
 

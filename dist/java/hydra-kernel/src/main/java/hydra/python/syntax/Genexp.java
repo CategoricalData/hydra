@@ -1,0 +1,63 @@
+// Note: this is an automatically generated file. Do not edit.
+
+package hydra.python.syntax;
+
+import java.io.Serializable;
+
+public class Genexp implements Serializable, Comparable<Genexp> {
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.python.syntax.Genexp");
+
+  public static final hydra.core.Name HEAD = new hydra.core.Name("head");
+
+  public static final hydra.core.Name TAIL = new hydra.core.Name("tail");
+
+  public final hydra.python.syntax.GenexpHead head;
+
+  public final hydra.python.syntax.ForIfClauses tail;
+
+  public Genexp (hydra.python.syntax.GenexpHead head, hydra.python.syntax.ForIfClauses tail) {
+    this.head = head;
+    this.tail = tail;
+  }
+
+  @Override
+  public boolean equals(Object other) {
+    if (!(other instanceof Genexp)) {
+      return false;
+    }
+    Genexp o = (Genexp) other;
+    return java.util.Objects.equals(
+      this.head,
+      o.head) && java.util.Objects.equals(
+      this.tail,
+      o.tail);
+  }
+
+  @Override
+  public int hashCode() {
+    return 2 * java.util.Objects.hashCode(head) + 3 * java.util.Objects.hashCode(tail);
+  }
+
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(Genexp other) {
+    int cmp = 0;
+    cmp = hydra.util.Comparing.compare(
+      head,
+      other.head);
+    if (cmp != 0) {
+      return cmp;
+    }
+    return hydra.util.Comparing.compare(
+      tail,
+      other.tail);
+  }
+
+  public Genexp withHead(hydra.python.syntax.GenexpHead head) {
+    return new Genexp(head, tail);
+  }
+
+  public Genexp withTail(hydra.python.syntax.ForIfClauses tail) {
+    return new Genexp(head, tail);
+  }
+}

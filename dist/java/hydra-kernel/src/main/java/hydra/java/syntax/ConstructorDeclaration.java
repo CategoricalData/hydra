@@ -1,0 +1,97 @@
+// Note: this is an automatically generated file. Do not edit.
+
+package hydra.java.syntax;
+
+import java.io.Serializable;
+
+public class ConstructorDeclaration implements Serializable, Comparable<ConstructorDeclaration> {
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.java.syntax.ConstructorDeclaration");
+
+  public static final hydra.core.Name MODIFIERS = new hydra.core.Name("modifiers");
+
+  public static final hydra.core.Name CONSTRUCTOR = new hydra.core.Name("constructor");
+
+  public static final hydra.core.Name THROWS = new hydra.core.Name("throws");
+
+  public static final hydra.core.Name BODY = new hydra.core.Name("body");
+
+  public final java.util.List<hydra.java.syntax.ConstructorModifier> modifiers;
+
+  public final hydra.java.syntax.ConstructorDeclarator constructor;
+
+  public final hydra.util.Maybe<hydra.java.syntax.Throws> throws_;
+
+  public final hydra.java.syntax.ConstructorBody body;
+
+  public ConstructorDeclaration (java.util.List<hydra.java.syntax.ConstructorModifier> modifiers, hydra.java.syntax.ConstructorDeclarator constructor, hydra.util.Maybe<hydra.java.syntax.Throws> throws_, hydra.java.syntax.ConstructorBody body) {
+    this.modifiers = modifiers;
+    this.constructor = constructor;
+    this.throws_ = throws_;
+    this.body = body;
+  }
+
+  @Override
+  public boolean equals(Object other) {
+    if (!(other instanceof ConstructorDeclaration)) {
+      return false;
+    }
+    ConstructorDeclaration o = (ConstructorDeclaration) other;
+    return java.util.Objects.equals(
+      this.modifiers,
+      o.modifiers) && java.util.Objects.equals(
+      this.constructor,
+      o.constructor) && java.util.Objects.equals(
+      this.throws_,
+      o.throws_) && java.util.Objects.equals(
+      this.body,
+      o.body);
+  }
+
+  @Override
+  public int hashCode() {
+    return 2 * java.util.Objects.hashCode(modifiers) + 3 * java.util.Objects.hashCode(constructor) + 5 * java.util.Objects.hashCode(throws_) + 7 * java.util.Objects.hashCode(body);
+  }
+
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(ConstructorDeclaration other) {
+    int cmp = 0;
+    cmp = hydra.util.Comparing.compare(
+      modifiers,
+      other.modifiers);
+    if (cmp != 0) {
+      return cmp;
+    }
+    cmp = hydra.util.Comparing.compare(
+      constructor,
+      other.constructor);
+    if (cmp != 0) {
+      return cmp;
+    }
+    cmp = hydra.util.Comparing.compare(
+      throws_,
+      other.throws_);
+    if (cmp != 0) {
+      return cmp;
+    }
+    return hydra.util.Comparing.compare(
+      body,
+      other.body);
+  }
+
+  public ConstructorDeclaration withModifiers(java.util.List<hydra.java.syntax.ConstructorModifier> modifiers) {
+    return new ConstructorDeclaration(modifiers, constructor, throws_, body);
+  }
+
+  public ConstructorDeclaration withConstructor(hydra.java.syntax.ConstructorDeclarator constructor) {
+    return new ConstructorDeclaration(modifiers, constructor, throws_, body);
+  }
+
+  public ConstructorDeclaration withThrows(hydra.util.Maybe<hydra.java.syntax.Throws> throws_) {
+    return new ConstructorDeclaration(modifiers, constructor, throws_, body);
+  }
+
+  public ConstructorDeclaration withBody(hydra.java.syntax.ConstructorBody body) {
+    return new ConstructorDeclaration(modifiers, constructor, throws_, body);
+  }
+}

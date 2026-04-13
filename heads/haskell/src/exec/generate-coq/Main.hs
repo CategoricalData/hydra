@@ -1,8 +1,8 @@
 module Main where
 
 import Hydra.Sources.All (kernelModules)
-import Hydra.Ext.Generation (writeCoq)
-import Hydra.Ext.Coq.Generate (writeCoqProject)
+import Hydra.ExtGeneration (writeCoq)
+import Hydra.Coq.Generate (writeCoqProject)
 
 main :: IO ()
 main = do

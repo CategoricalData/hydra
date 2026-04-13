@@ -180,7 +180,7 @@ fi
 if $NEED_PYTHON; then
     # Check for any usable Python 3.12+.
     # Look on PATH first, then in the hydra-python venvs (matching invoke-python-host.sh).
-    HYDRA_PYTHON_DIR="$HYDRA_ROOT/packages/hydra-python"
+    HYDRA_PYTHON_DIR="$HYDRA_ROOT/heads/python"
     PYTHON_CMD=""
     for candidate in pypy3 python3 python \
         "$HYDRA_PYTHON_DIR/.venv-pypy/bin/pypy3" \

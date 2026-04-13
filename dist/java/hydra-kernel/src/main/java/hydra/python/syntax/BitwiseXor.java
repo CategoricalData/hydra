@@ -1,0 +1,63 @@
+// Note: this is an automatically generated file. Do not edit.
+
+package hydra.python.syntax;
+
+import java.io.Serializable;
+
+public class BitwiseXor implements Serializable, Comparable<BitwiseXor> {
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.python.syntax.BitwiseXor");
+
+  public static final hydra.core.Name LHS = new hydra.core.Name("lhs");
+
+  public static final hydra.core.Name RHS = new hydra.core.Name("rhs");
+
+  public final hydra.util.Maybe<hydra.python.syntax.BitwiseXor> lhs;
+
+  public final hydra.python.syntax.BitwiseAnd rhs;
+
+  public BitwiseXor (hydra.util.Maybe<hydra.python.syntax.BitwiseXor> lhs, hydra.python.syntax.BitwiseAnd rhs) {
+    this.lhs = lhs;
+    this.rhs = rhs;
+  }
+
+  @Override
+  public boolean equals(Object other) {
+    if (!(other instanceof BitwiseXor)) {
+      return false;
+    }
+    BitwiseXor o = (BitwiseXor) other;
+    return java.util.Objects.equals(
+      this.lhs,
+      o.lhs) && java.util.Objects.equals(
+      this.rhs,
+      o.rhs);
+  }
+
+  @Override
+  public int hashCode() {
+    return 2 * java.util.Objects.hashCode(lhs) + 3 * java.util.Objects.hashCode(rhs);
+  }
+
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(BitwiseXor other) {
+    int cmp = 0;
+    cmp = hydra.util.Comparing.compare(
+      lhs,
+      other.lhs);
+    if (cmp != 0) {
+      return cmp;
+    }
+    return hydra.util.Comparing.compare(
+      rhs,
+      other.rhs);
+  }
+
+  public BitwiseXor withLhs(hydra.util.Maybe<hydra.python.syntax.BitwiseXor> lhs) {
+    return new BitwiseXor(lhs, rhs);
+  }
+
+  public BitwiseXor withRhs(hydra.python.syntax.BitwiseAnd rhs) {
+    return new BitwiseXor(lhs, rhs);
+  }
+}

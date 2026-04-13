@@ -8,14 +8,14 @@ This document tracks the implementation progress of Hydra-JavaScript, following 
 
 ### Step 1: Create the syntax model (JavaScript AST)
 **Status**: DONE (locally, pending move to appropriate package)
-- Created `src/main/haskell/Hydra/Ext/Sources/JavaScript/Syntax.hs`
+- Created `src/main/haskell/Hydra/Sources/JavaScript/Syntax.hs`
 - Based on ECMAScript 2024 specification
 - Covers: identifiers, literals, types (JSDoc/TS style), expressions, statements, patterns, declarations, modules, operators, JSDoc comments
-- Ready to move to `packages/hydra-javascript/src/main/haskell/Hydra/Ext/Sources/JavaScript/Syntax.hs` when validated
+- Ready to move to `packages/hydra-javascript/src/main/haskell/Hydra/Sources/JavaScript/Syntax.hs` when validated
 
 ### Step 2: Define language constraints
 **Status**: DONE (locally, pending move to appropriate package)
-- Created `src/main/haskell/Hydra/Ext/Sources/JavaScript/Language.hs`
+- Created `src/main/haskell/Hydra/Sources/JavaScript/Language.hs`
 - Defines what Hydra features JavaScript supports
 - Key constraints:
   - Float types: float64 (JavaScript's number)
@@ -23,7 +23,7 @@ This document tracks the implementation progress of Hydra-JavaScript, following 
   - All term variants supported
   - All type variants supported
   - Reserved words defined (keywords, future reserved, built-ins)
-- Ready to move to `packages/hydra-javascript/src/main/haskell/Hydra/Ext/Sources/JavaScript/Language.hs` when validated
+- Ready to move to `packages/hydra-javascript/src/main/haskell/Hydra/Sources/JavaScript/Language.hs` when validated
 
 ### Step 3: Generate Haskell sources
 **Status**: Deferred (requires Haskell changes and validation of Steps 1-2)
@@ -273,21 +273,21 @@ export function string() { ... }
 
 When ready to proceed with Haskell changes:
 
-1. **Move and validate syntax model** from `hydra-javascript/src/main/haskell/...` to `packages/hydra-javascript/src/main/haskell/Hydra/Ext/Sources/JavaScript/Syntax.hs`
+1. **Move and validate syntax model** from `hydra-javascript/src/main/haskell/...` to `packages/hydra-javascript/src/main/haskell/Hydra/Sources/JavaScript/Syntax.hs`
    - Verify it compiles
-   - Register in `Hydra.Ext.Sources.All`
+   - Register in `Hydra.Sources.All`
 
-2. **Move and validate language constraints** to `packages/hydra-javascript/src/main/haskell/Hydra/Ext/Sources/JavaScript/Language.hs`
+2. **Move and validate language constraints** to `packages/hydra-javascript/src/main/haskell/Hydra/Sources/JavaScript/Language.hs`
    - Verify it compiles
    - Register in module
 
-3. **Create the coder** in `packages/hydra-javascript/src/main/haskell/Hydra/Ext/Staging/JavaScript/Coder.hs`
+3. **Create the coder** in `packages/hydra-javascript/src/main/haskell/Hydra/Staging/JavaScript/Coder.hs`
    - Map Hydra types to JavaScript class/object patterns
    - Map Hydra terms to JavaScript expressions
    - Handle union types via tagged objects
    - Handle records via frozen plain objects
 
-4. **Create the serializer** in `packages/hydra-javascript/src/main/haskell/Hydra/Ext/Staging/JavaScript/Serde.hs`
+4. **Create the serializer** in `packages/hydra-javascript/src/main/haskell/Hydra/Staging/JavaScript/Serde.hs`
    - Render JavaScript AST to concrete syntax
    - Handle indentation, semicolons, etc.
 

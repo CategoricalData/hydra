@@ -12,7 +12,7 @@ import qualified Hydra.Sources.Kernel.Types.Core as Core
 
 
 ns :: Namespace
-ns = Namespace "hydra.ext.org.yaml.model"
+ns = Namespace "hydra.yaml.model"
 
 define :: String -> Type -> Binding
 define = defineType ns

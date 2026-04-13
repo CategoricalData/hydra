@@ -279,7 +279,7 @@
                    (remove-if (lambda (m)
                                 (let ((ns (cdr (assoc :namespace m))))
                                   (let ((ns-str (if (stringp ns) ns (cdr (assoc :value ns)))))
-                                    (or (search "hydra.ext." ns-str)
+                                    (or (search "hydra." ns-str)
                                         (search "hydra.json.yaml." ns-str)))))
                               all-mods)
                    all-mods))

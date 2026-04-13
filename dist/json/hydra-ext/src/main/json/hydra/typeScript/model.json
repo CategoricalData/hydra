@@ -1,0 +1,185 @@
+{
+  "definitions": [
+    {
+      "type": {
+        "name": "hydra.typeScript.model.FunctionType",
+        "type": {
+          "type": {
+            "record": [
+              {
+                "name": "parameters",
+                "type": {"list": {"variable": "hydra.typeScript.model.Parameter"}}},
+              {"name": "range", "type": {"variable": "hydra.typeScript.model.Type"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.typeScript.model.Parameter",
+        "type": {
+          "type": {
+            "record": [
+              {"name": "name", "type": {"literal": {"string": {}}}},
+              {"name": "type", "type": {"variable": "hydra.typeScript.model.Type"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.typeScript.model.PrimitiveType",
+        "type": {
+          "type": {
+            "union": [
+              {
+                "name": "bigint",
+                "type": {
+                  "annotated": {
+                    "annotation": [
+                      {
+                        "@key": "description",
+                        "@value": {"literal": {"string": "integers in the arbitrary precision format"}}}],
+                    "body": {"unit": {}}}}},
+              {
+                "name": "boolean",
+                "type": {
+                  "annotated": {
+                    "annotation": [
+                      {
+                        "@key": "description",
+                        "@value": {"literal": {"string": "true and false"}}}],
+                    "body": {"unit": {}}}}},
+              {
+                "name": "null",
+                "type": {
+                  "annotated": {
+                    "annotation": [
+                      {
+                        "@key": "description",
+                        "@value": {"literal": {"string": "equivalent to the unit type"}}}],
+                    "body": {"unit": {}}}}},
+              {
+                "name": "number",
+                "type": {
+                  "annotated": {
+                    "annotation": [
+                      {
+                        "@key": "description",
+                        "@value": {"literal": {"string": "a double-precision IEEE 754 floating point"}}}],
+                    "body": {"unit": {}}}}},
+              {
+                "name": "object",
+                "type": {
+                  "annotated": {
+                    "annotation": [
+                      {
+                        "@key": "description",
+                        "@value": {"literal": {"string": "similar to records"}}}],
+                    "body": {"unit": {}}}}},
+              {
+                "name": "string",
+                "type": {
+                  "annotated": {
+                    "annotation": [
+                      {
+                        "@key": "description",
+                        "@value": {"literal": {"string": "an immutable UTF-16 string"}}}],
+                    "body": {"unit": {}}}}},
+              {
+                "name": "symbol",
+                "type": {
+                  "annotated": {
+                    "annotation": [
+                      {
+                        "@key": "description",
+                        "@value": {"literal": {"string": "a unique value usually used as a key"}}}],
+                    "body": {"unit": {}}}}},
+              {
+                "name": "undefined",
+                "type": {
+                  "annotated": {
+                    "annotation": [
+                      {
+                        "@key": "description",
+                        "@value": {"literal": {"string": "also equivalent to the unit type"}}}],
+                    "body": {"unit": {}}}}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.typeScript.model.Type",
+        "type": {
+          "type": {
+            "union": [
+              {
+                "name": "array",
+                "type": {
+                  "annotated": {
+                    "annotation": [
+                      {
+                        "@key": "description",
+                        "@value": {"literal": {"string": "mutable arrays, also written Array<T>"}}}],
+                    "body": {"variable": "hydra.typeScript.model.Type"}}}},
+              {
+                "name": "function",
+                "type": {
+                  "annotated": {
+                    "annotation": [
+                      {
+                        "@key": "description",
+                        "@value": {"literal": {"string": "functions"}}}],
+                    "body": {"variable": "hydra.typeScript.model.FunctionType"}}}},
+              {
+                "name": "never",
+                "type": {
+                  "annotated": {
+                    "annotation": [
+                      {
+                        "@key": "description",
+                        "@value": {"literal": {"string": "the bottom type"}}}],
+                    "body": {"unit": {}}}}},
+              {
+                "name": "objectLiteral",
+                "type": {
+                  "annotated": {
+                    "annotation": [
+                      {
+                        "@key": "description",
+                        "@value": {"literal": {"string": "e.g. { property: Type }"}}}],
+                    "body": {"unit": {}}}}},
+              {
+                "name": "primitive",
+                "type": {
+                  "annotated": {
+                    "annotation": [
+                      {
+                        "@key": "description",
+                        "@value": {"literal": {"string": "A primitive type"}}}],
+                    "body": {"variable": "hydra.typeScript.model.PrimitiveType"}}}},
+              {
+                "name": "tuple",
+                "type": {
+                  "annotated": {
+                    "annotation": [
+                      {
+                        "@key": "description",
+                        "@value": {"literal": {"string": "tuples, which are fixed-length but mutable"}}}],
+                    "body": {"list": {"variable": "hydra.typeScript.model.Type"}}}}},
+              {
+                "name": "unknown",
+                "type": {
+                  "annotated": {
+                    "annotation": [
+                      {
+                        "@key": "description",
+                        "@value": {"literal": {"string": "The top type"}}}],
+                    "body": {"unit": {}}}}},
+              {
+                "name": "void",
+                "type": {
+                  "annotated": {
+                    "annotation": [
+                      {
+                        "@key": "description",
+                        "@value": {
+                          "literal": {"string": "for functions with no documented return value"}}}],
+                    "body": {"unit": {}}}}}]},
+          "variables": []}}}],
+  "description": "A basic TypeScript model, constructed on the basis of the typescriptlang.org documentation",
+  "namespace": "hydra.typeScript.model",
+  "termDependencies": ["hydra.core"],
+  "typeDependencies": ["hydra.core"]}

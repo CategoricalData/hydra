@@ -88,8 +88,8 @@ import qualified Data.Set                                  as S
 import qualified Data.Maybe                                as Y
 
 -- Additional imports
-import qualified Hydra.Ext.Haskell.Environment as HE
-import qualified Hydra.Ext.Haskell.Syntax as H
+import qualified Hydra.Haskell.Environment as HE
+import qualified Hydra.Haskell.Syntax as H
 import qualified Hydra.Sources.Haskell.Environment as HaskellEnvironment
 import qualified Hydra.Sources.Haskell.Language as HaskellLanguage
 import qualified Hydra.Sources.Haskell.Syntax as HaskellSyntax
@@ -117,7 +117,7 @@ module_ = Module ns definitions
     (HaskellEnvironment.ns:HaskellSyntax.ns:KernelTypes.kernelTypesNamespaces) $
     Just "Functions for encoding Hydra modules as Haskell modules"
   where
-    ns = Namespace "hydra.ext.haskell.coder"
+    ns = Namespace "hydra.haskell.coder"
     definitions = [
       toDefinition includeTypeDefinitions,
       toDefinition useCoreImport,

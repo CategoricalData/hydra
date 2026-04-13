@@ -1,0 +1,656 @@
+{
+  "definitions": [
+    {
+      "term": {
+        "name": "hydra.lisp.language.lispLanguage",
+        "term": {
+          "annotated": {
+            "annotation": [
+              {
+                "@key": "description",
+                "@value": {"literal": {"string": "Language constraints for Lisp"}}}],
+            "body": {
+              "let": {
+                "bindings": [
+                  {
+                    "name": "eliminationVariants",
+                    "term": {
+                      "application": {
+                        "argument": {
+                          "list": [
+                            {
+                              "union": {
+                                "field": {"name": "record", "term": {"unit": {}}},
+                                "typeName": "hydra.variants.EliminationVariant"}},
+                            {
+                              "union": {
+                                "field": {"name": "union", "term": {"unit": {}}},
+                                "typeName": "hydra.variants.EliminationVariant"}},
+                            {
+                              "union": {
+                                "field": {"name": "wrap", "term": {"unit": {}}},
+                                "typeName": "hydra.variants.EliminationVariant"}}]},
+                        "function": {
+                          "typeApplication": {
+                            "body": {"variable": "hydra.lib.sets.fromList"},
+                            "type": {"variable": "hydra.variants.EliminationVariant"}}}}},
+                    "type": {
+                      "type": {"set": {"variable": "hydra.variants.EliminationVariant"}},
+                      "variables": []}},
+                  {
+                    "name": "literalVariants",
+                    "term": {
+                      "application": {
+                        "argument": {
+                          "list": [
+                            {
+                              "union": {
+                                "field": {"name": "binary", "term": {"unit": {}}},
+                                "typeName": "hydra.variants.LiteralVariant"}},
+                            {
+                              "union": {
+                                "field": {"name": "boolean", "term": {"unit": {}}},
+                                "typeName": "hydra.variants.LiteralVariant"}},
+                            {
+                              "union": {
+                                "field": {"name": "float", "term": {"unit": {}}},
+                                "typeName": "hydra.variants.LiteralVariant"}},
+                            {
+                              "union": {
+                                "field": {"name": "integer", "term": {"unit": {}}},
+                                "typeName": "hydra.variants.LiteralVariant"}},
+                            {
+                              "union": {
+                                "field": {"name": "string", "term": {"unit": {}}},
+                                "typeName": "hydra.variants.LiteralVariant"}}]},
+                        "function": {
+                          "typeApplication": {
+                            "body": {"variable": "hydra.lib.sets.fromList"},
+                            "type": {"variable": "hydra.variants.LiteralVariant"}}}}},
+                    "type": {
+                      "type": {"set": {"variable": "hydra.variants.LiteralVariant"}},
+                      "variables": []}},
+                  {
+                    "name": "floatTypes",
+                    "term": {
+                      "application": {
+                        "argument": {
+                          "list": [
+                            {
+                              "union": {
+                                "field": {"name": "bigfloat", "term": {"unit": {}}},
+                                "typeName": "hydra.core.FloatType"}},
+                            {
+                              "union": {
+                                "field": {"name": "float64", "term": {"unit": {}}},
+                                "typeName": "hydra.core.FloatType"}}]},
+                        "function": {
+                          "typeApplication": {
+                            "body": {"variable": "hydra.lib.sets.fromList"},
+                            "type": {"variable": "hydra.core.FloatType"}}}}},
+                    "type": {
+                      "type": {"set": {"variable": "hydra.core.FloatType"}},
+                      "variables": []}},
+                  {
+                    "name": "functionVariants",
+                    "term": {
+                      "application": {
+                        "argument": {
+                          "list": [
+                            {
+                              "union": {
+                                "field": {"name": "elimination", "term": {"unit": {}}},
+                                "typeName": "hydra.variants.FunctionVariant"}},
+                            {
+                              "union": {
+                                "field": {"name": "lambda", "term": {"unit": {}}},
+                                "typeName": "hydra.variants.FunctionVariant"}}]},
+                        "function": {
+                          "typeApplication": {
+                            "body": {"variable": "hydra.lib.sets.fromList"},
+                            "type": {"variable": "hydra.variants.FunctionVariant"}}}}},
+                    "type": {
+                      "type": {"set": {"variable": "hydra.variants.FunctionVariant"}},
+                      "variables": []}},
+                  {
+                    "name": "integerTypes",
+                    "term": {
+                      "application": {
+                        "argument": {
+                          "list": [
+                            {
+                              "union": {
+                                "field": {"name": "bigint", "term": {"unit": {}}},
+                                "typeName": "hydra.core.IntegerType"}}]},
+                        "function": {
+                          "typeApplication": {
+                            "body": {"variable": "hydra.lib.sets.fromList"},
+                            "type": {"variable": "hydra.core.IntegerType"}}}}},
+                    "type": {
+                      "type": {"set": {"variable": "hydra.core.IntegerType"}},
+                      "variables": []}},
+                  {
+                    "name": "termVariants",
+                    "term": {
+                      "application": {
+                        "argument": {
+                          "list": [
+                            {
+                              "union": {
+                                "field": {"name": "annotated", "term": {"unit": {}}},
+                                "typeName": "hydra.variants.TermVariant"}},
+                            {
+                              "union": {
+                                "field": {"name": "application", "term": {"unit": {}}},
+                                "typeName": "hydra.variants.TermVariant"}},
+                            {
+                              "union": {
+                                "field": {"name": "either", "term": {"unit": {}}},
+                                "typeName": "hydra.variants.TermVariant"}},
+                            {
+                              "union": {
+                                "field": {"name": "function", "term": {"unit": {}}},
+                                "typeName": "hydra.variants.TermVariant"}},
+                            {
+                              "union": {
+                                "field": {"name": "let", "term": {"unit": {}}},
+                                "typeName": "hydra.variants.TermVariant"}},
+                            {
+                              "union": {
+                                "field": {"name": "list", "term": {"unit": {}}},
+                                "typeName": "hydra.variants.TermVariant"}},
+                            {
+                              "union": {
+                                "field": {"name": "literal", "term": {"unit": {}}},
+                                "typeName": "hydra.variants.TermVariant"}},
+                            {
+                              "union": {
+                                "field": {"name": "map", "term": {"unit": {}}},
+                                "typeName": "hydra.variants.TermVariant"}},
+                            {
+                              "union": {
+                                "field": {"name": "maybe", "term": {"unit": {}}},
+                                "typeName": "hydra.variants.TermVariant"}},
+                            {
+                              "union": {
+                                "field": {"name": "pair", "term": {"unit": {}}},
+                                "typeName": "hydra.variants.TermVariant"}},
+                            {
+                              "union": {
+                                "field": {"name": "record", "term": {"unit": {}}},
+                                "typeName": "hydra.variants.TermVariant"}},
+                            {
+                              "union": {
+                                "field": {"name": "set", "term": {"unit": {}}},
+                                "typeName": "hydra.variants.TermVariant"}},
+                            {
+                              "union": {
+                                "field": {"name": "union", "term": {"unit": {}}},
+                                "typeName": "hydra.variants.TermVariant"}},
+                            {
+                              "union": {
+                                "field": {"name": "unit", "term": {"unit": {}}},
+                                "typeName": "hydra.variants.TermVariant"}},
+                            {
+                              "union": {
+                                "field": {"name": "variable", "term": {"unit": {}}},
+                                "typeName": "hydra.variants.TermVariant"}},
+                            {
+                              "union": {
+                                "field": {"name": "wrap", "term": {"unit": {}}},
+                                "typeName": "hydra.variants.TermVariant"}}]},
+                        "function": {
+                          "typeApplication": {
+                            "body": {"variable": "hydra.lib.sets.fromList"},
+                            "type": {"variable": "hydra.variants.TermVariant"}}}}},
+                    "type": {
+                      "type": {"set": {"variable": "hydra.variants.TermVariant"}},
+                      "variables": []}},
+                  {
+                    "name": "typeVariants",
+                    "term": {
+                      "application": {
+                        "argument": {
+                          "list": [
+                            {
+                              "union": {
+                                "field": {"name": "annotated", "term": {"unit": {}}},
+                                "typeName": "hydra.variants.TypeVariant"}},
+                            {
+                              "union": {
+                                "field": {"name": "application", "term": {"unit": {}}},
+                                "typeName": "hydra.variants.TypeVariant"}},
+                            {
+                              "union": {
+                                "field": {"name": "either", "term": {"unit": {}}},
+                                "typeName": "hydra.variants.TypeVariant"}},
+                            {
+                              "union": {
+                                "field": {"name": "function", "term": {"unit": {}}},
+                                "typeName": "hydra.variants.TypeVariant"}},
+                            {
+                              "union": {
+                                "field": {"name": "forall", "term": {"unit": {}}},
+                                "typeName": "hydra.variants.TypeVariant"}},
+                            {
+                              "union": {
+                                "field": {"name": "list", "term": {"unit": {}}},
+                                "typeName": "hydra.variants.TypeVariant"}},
+                            {
+                              "union": {
+                                "field": {"name": "literal", "term": {"unit": {}}},
+                                "typeName": "hydra.variants.TypeVariant"}},
+                            {
+                              "union": {
+                                "field": {"name": "map", "term": {"unit": {}}},
+                                "typeName": "hydra.variants.TypeVariant"}},
+                            {
+                              "union": {
+                                "field": {"name": "maybe", "term": {"unit": {}}},
+                                "typeName": "hydra.variants.TypeVariant"}},
+                            {
+                              "union": {
+                                "field": {"name": "pair", "term": {"unit": {}}},
+                                "typeName": "hydra.variants.TypeVariant"}},
+                            {
+                              "union": {
+                                "field": {"name": "record", "term": {"unit": {}}},
+                                "typeName": "hydra.variants.TypeVariant"}},
+                            {
+                              "union": {
+                                "field": {"name": "set", "term": {"unit": {}}},
+                                "typeName": "hydra.variants.TypeVariant"}},
+                            {
+                              "union": {
+                                "field": {"name": "union", "term": {"unit": {}}},
+                                "typeName": "hydra.variants.TypeVariant"}},
+                            {
+                              "union": {
+                                "field": {"name": "unit", "term": {"unit": {}}},
+                                "typeName": "hydra.variants.TypeVariant"}},
+                            {
+                              "union": {
+                                "field": {"name": "variable", "term": {"unit": {}}},
+                                "typeName": "hydra.variants.TypeVariant"}},
+                            {
+                              "union": {
+                                "field": {"name": "void", "term": {"unit": {}}},
+                                "typeName": "hydra.variants.TypeVariant"}},
+                            {
+                              "union": {
+                                "field": {"name": "wrap", "term": {"unit": {}}},
+                                "typeName": "hydra.variants.TypeVariant"}}]},
+                        "function": {
+                          "typeApplication": {
+                            "body": {"variable": "hydra.lib.sets.fromList"},
+                            "type": {"variable": "hydra.variants.TypeVariant"}}}}},
+                    "type": {
+                      "type": {"set": {"variable": "hydra.variants.TypeVariant"}},
+                      "variables": []}},
+                  {
+                    "name": "typePredicate",
+                    "term": {
+                      "typeLambda": {
+                        "body": {
+                          "function": {
+                            "lambda": {
+                              "body": {"literal": {"boolean": true}},
+                              "domain": {"variable": "t0"},
+                              "parameter": "_"}}},
+                        "parameter": "t0"}},
+                    "type": {
+                      "type": {
+                        "function": {
+                          "codomain": {"literal": {"boolean": {}}},
+                          "domain": {"variable": "t0"}}},
+                      "variables": ["t0"]}}],
+                "body": {
+                  "record": {
+                    "fields": [
+                      {
+                        "name": "name",
+                        "term": {
+                          "wrap": {
+                            "body": {"literal": {"string": "hydra.lisp"}},
+                            "typeName": "hydra.coders.LanguageName"}}},
+                      {
+                        "name": "constraints",
+                        "term": {
+                          "record": {
+                            "fields": [
+                              {
+                                "name": "eliminationVariants",
+                                "term": {"variable": "eliminationVariants"}},
+                              {"name": "literalVariants", "term": {"variable": "literalVariants"}},
+                              {"name": "floatTypes", "term": {"variable": "floatTypes"}},
+                              {"name": "functionVariants", "term": {"variable": "functionVariants"}},
+                              {"name": "integerTypes", "term": {"variable": "integerTypes"}},
+                              {"name": "termVariants", "term": {"variable": "termVariants"}},
+                              {"name": "typeVariants", "term": {"variable": "typeVariants"}},
+                              {
+                                "name": "types",
+                                "term": {
+                                  "typeApplication": {
+                                    "body": {"variable": "typePredicate"},
+                                    "type": {"variable": "hydra.core.Type"}}}}],
+                            "typeName": "hydra.coders.LanguageConstraints"}}}],
+                    "typeName": "hydra.coders.Language"}}}}}},
+        "type": {"type": {"variable": "hydra.coders.Language"}, "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.lisp.language.lispReservedWords",
+        "term": {
+          "annotated": {
+            "annotation": [
+              {
+                "@key": "description",
+                "@value": {
+                  "literal": {"string": "A set of reserved words across all four Lisp dialects"}}}],
+            "body": {
+              "let": {
+                "bindings": [
+                  {
+                    "name": "clojureKeywords",
+                    "term": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "Clojure special forms and reserved symbols"}}}],
+                        "body": {
+                          "list": [
+                            {"literal": {"string": "def"}},
+                            {"literal": {"string": "defn"}},
+                            {"literal": {"string": "defn-"}},
+                            {"literal": {"string": "defmacro"}},
+                            {"literal": {"string": "defrecord"}},
+                            {"literal": {"string": "deftype"}},
+                            {"literal": {"string": "defprotocol"}},
+                            {"literal": {"string": "defmulti"}},
+                            {"literal": {"string": "defmethod"}},
+                            {"literal": {"string": "fn"}},
+                            {"literal": {"string": "let"}},
+                            {"literal": {"string": "loop"}},
+                            {"literal": {"string": "recur"}},
+                            {"literal": {"string": "if"}},
+                            {"literal": {"string": "do"}},
+                            {"literal": {"string": "cond"}},
+                            {"literal": {"string": "case"}},
+                            {"literal": {"string": "when"}},
+                            {"literal": {"string": "when-not"}},
+                            {"literal": {"string": "when-let"}},
+                            {"literal": {"string": "if-let"}},
+                            {"literal": {"string": "and"}},
+                            {"literal": {"string": "or"}},
+                            {"literal": {"string": "not"}},
+                            {"literal": {"string": "nil"}},
+                            {"literal": {"string": "true"}},
+                            {"literal": {"string": "false"}},
+                            {"literal": {"string": "throw"}},
+                            {"literal": {"string": "try"}},
+                            {"literal": {"string": "catch"}},
+                            {"literal": {"string": "finally"}},
+                            {"literal": {"string": "quote"}},
+                            {"literal": {"string": "var"}},
+                            {"literal": {"string": "ns"}},
+                            {"literal": {"string": "require"}},
+                            {"literal": {"string": "import"}},
+                            {"literal": {"string": "use"}},
+                            {"literal": {"string": "in-ns"}},
+                            {"literal": {"string": "refer"}},
+                            {"literal": {"string": "new"}},
+                            {"literal": {"string": "set!"}},
+                            {"literal": {"string": "monitor-enter"}},
+                            {"literal": {"string": "monitor-exit"}}]}}},
+                    "type": {"type": {"list": {"literal": {"string": {}}}}, "variables": []}},
+                  {
+                    "name": "emacsLispKeywords",
+                    "term": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {"string": "Emacs Lisp special forms and reserved symbols"}}}],
+                        "body": {
+                          "list": [
+                            {"literal": {"string": "defun"}},
+                            {"literal": {"string": "defvar"}},
+                            {"literal": {"string": "defconst"}},
+                            {"literal": {"string": "defmacro"}},
+                            {"literal": {"string": "defsubst"}},
+                            {"literal": {"string": "defadvice"}},
+                            {"literal": {"string": "defcustom"}},
+                            {"literal": {"string": "defgroup"}},
+                            {"literal": {"string": "lambda"}},
+                            {"literal": {"string": "let"}},
+                            {"literal": {"string": "let*"}},
+                            {"literal": {"string": "if"}},
+                            {"literal": {"string": "cond"}},
+                            {"literal": {"string": "progn"}},
+                            {"literal": {"string": "prog1"}},
+                            {"literal": {"string": "prog2"}},
+                            {"literal": {"string": "while"}},
+                            {"literal": {"string": "dolist"}},
+                            {"literal": {"string": "dotimes"}},
+                            {"literal": {"string": "and"}},
+                            {"literal": {"string": "or"}},
+                            {"literal": {"string": "not"}},
+                            {"literal": {"string": "nil"}},
+                            {"literal": {"string": "t"}},
+                            {"literal": {"string": "quote"}},
+                            {"literal": {"string": "function"}},
+                            {"literal": {"string": "setq"}},
+                            {"literal": {"string": "setq-default"}},
+                            {"literal": {"string": "require"}},
+                            {"literal": {"string": "provide"}},
+                            {"literal": {"string": "condition-case"}},
+                            {"literal": {"string": "unwind-protect"}},
+                            {"literal": {"string": "save-excursion"}},
+                            {"literal": {"string": "save-restriction"}},
+                            {"literal": {"string": "catch"}},
+                            {"literal": {"string": "throw"}},
+                            {"literal": {"string": "interactive"}},
+                            {"literal": {"string": "cl-defstruct"}},
+                            {"literal": {"string": "cl-case"}},
+                            {"literal": {"string": "cl-loop"}},
+                            {"literal": {"string": "cl-labels"}},
+                            {"literal": {"string": "cl-flet"}},
+                            {"literal": {"string": "pcase"}},
+                            {"literal": {"string": "pcase-let"}},
+                            {"literal": {"string": "seq-let"}}]}}},
+                    "type": {"type": {"list": {"literal": {"string": {}}}}, "variables": []}},
+                  {
+                    "name": "commonLispKeywords",
+                    "term": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "Common Lisp special operators, macros, and reserved symbols"}}}],
+                        "body": {
+                          "list": [
+                            {"literal": {"string": "defun"}},
+                            {"literal": {"string": "defvar"}},
+                            {"literal": {"string": "defparameter"}},
+                            {"literal": {"string": "defconstant"}},
+                            {"literal": {"string": "defmacro"}},
+                            {"literal": {"string": "defgeneric"}},
+                            {"literal": {"string": "defmethod"}},
+                            {"literal": {"string": "defclass"}},
+                            {"literal": {"string": "defstruct"}},
+                            {"literal": {"string": "deftype"}},
+                            {"literal": {"string": "defpackage"}},
+                            {"literal": {"string": "defsetf"}},
+                            {"literal": {"string": "lambda"}},
+                            {"literal": {"string": "let"}},
+                            {"literal": {"string": "let*"}},
+                            {"literal": {"string": "flet"}},
+                            {"literal": {"string": "labels"}},
+                            {"literal": {"string": "macrolet"}},
+                            {"literal": {"string": "symbol-macrolet"}},
+                            {"literal": {"string": "if"}},
+                            {"literal": {"string": "cond"}},
+                            {"literal": {"string": "case"}},
+                            {"literal": {"string": "typecase"}},
+                            {"literal": {"string": "etypecase"}},
+                            {"literal": {"string": "ecase"}},
+                            {"literal": {"string": "progn"}},
+                            {"literal": {"string": "prog1"}},
+                            {"literal": {"string": "prog2"}},
+                            {"literal": {"string": "block"}},
+                            {"literal": {"string": "return-from"}},
+                            {"literal": {"string": "tagbody"}},
+                            {"literal": {"string": "go"}},
+                            {"literal": {"string": "and"}},
+                            {"literal": {"string": "or"}},
+                            {"literal": {"string": "not"}},
+                            {"literal": {"string": "nil"}},
+                            {"literal": {"string": "t"}},
+                            {"literal": {"string": "quote"}},
+                            {"literal": {"string": "function"}},
+                            {"literal": {"string": "setq"}},
+                            {"literal": {"string": "setf"}},
+                            {"literal": {"string": "do"}},
+                            {"literal": {"string": "do*"}},
+                            {"literal": {"string": "dolist"}},
+                            {"literal": {"string": "dotimes"}},
+                            {"literal": {"string": "loop"}},
+                            {"literal": {"string": "values"}},
+                            {"literal": {"string": "multiple-value-bind"}},
+                            {"literal": {"string": "multiple-value-list"}},
+                            {"literal": {"string": "the"}},
+                            {"literal": {"string": "declare"}},
+                            {"literal": {"string": "declaim"}},
+                            {"literal": {"string": "proclaim"}},
+                            {"literal": {"string": "in-package"}},
+                            {"literal": {"string": "use-package"}},
+                            {"literal": {"string": "export"}},
+                            {"literal": {"string": "import"}},
+                            {"literal": {"string": "intern"}},
+                            {"literal": {"string": "handler-case"}},
+                            {"literal": {"string": "handler-bind"}},
+                            {"literal": {"string": "restart-case"}},
+                            {"literal": {"string": "condition"}},
+                            {"literal": {"string": "unwind-protect"}},
+                            {"literal": {"string": "catch"}},
+                            {"literal": {"string": "throw"}},
+                            {"literal": {"string": "eval-when"}},
+                            {"literal": {"string": "load-time-value"}},
+                            {"literal": {"string": "locally"}},
+                            {"literal": {"string": "the"}},
+                            {"literal": {"string": "pi"}}]}}},
+                    "type": {"type": {"list": {"literal": {"string": {}}}}, "variables": []}},
+                  {
+                    "name": "schemeKeywords",
+                    "term": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "Scheme R7RS keywords and special forms"}}}],
+                        "body": {
+                          "list": [
+                            {"literal": {"string": "define"}},
+                            {"literal": {"string": "define-syntax"}},
+                            {"literal": {"string": "define-record-type"}},
+                            {"literal": {"string": "define-library"}},
+                            {"literal": {"string": "define-values"}},
+                            {"literal": {"string": "lambda"}},
+                            {"literal": {"string": "let"}},
+                            {"literal": {"string": "let*"}},
+                            {"literal": {"string": "letrec"}},
+                            {"literal": {"string": "letrec*"}},
+                            {"literal": {"string": "let-values"}},
+                            {"literal": {"string": "let*-values"}},
+                            {"literal": {"string": "if"}},
+                            {"literal": {"string": "cond"}},
+                            {"literal": {"string": "case"}},
+                            {"literal": {"string": "when"}},
+                            {"literal": {"string": "unless"}},
+                            {"literal": {"string": "and"}},
+                            {"literal": {"string": "or"}},
+                            {"literal": {"string": "not"}},
+                            {"literal": {"string": "begin"}},
+                            {"literal": {"string": "do"}},
+                            {"literal": {"string": "quote"}},
+                            {"literal": {"string": "quasiquote"}},
+                            {"literal": {"string": "unquote"}},
+                            {"literal": {"string": "unquote-splicing"}},
+                            {"literal": {"string": "set!"}},
+                            {"literal": {"string": "import"}},
+                            {"literal": {"string": "export"}},
+                            {"literal": {"string": "include"}},
+                            {"literal": {"string": "include-ci"}},
+                            {"literal": {"string": "syntax-rules"}},
+                            {"literal": {"string": "syntax-case"}},
+                            {"literal": {"string": "with-syntax"}},
+                            {"literal": {"string": "call-with-current-continuation"}},
+                            {"literal": {"string": "call/cc"}},
+                            {"literal": {"string": "call-with-values"}},
+                            {"literal": {"string": "values"}},
+                            {"literal": {"string": "dynamic-wind"}},
+                            {"literal": {"string": "guard"}},
+                            {"literal": {"string": "parameterize"}},
+                            {"literal": {"string": "else"}}]}}},
+                    "type": {"type": {"list": {"literal": {"string": {}}}}, "variables": []}},
+                  {
+                    "name": "hydraLispKeywords",
+                    "term": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {"string": "Reserved words specific to Hydra-Lisp code generation"}}}],
+                        "body": {"list": [{"literal": {"string": "Node"}}]}}},
+                    "type": {"type": {"list": {"literal": {"string": {}}}}, "variables": []}}],
+                "body": {
+                  "application": {
+                    "argument": {
+                      "application": {
+                        "argument": {
+                          "list": [
+                            {"variable": "clojureKeywords"},
+                            {"variable": "emacsLispKeywords"},
+                            {"variable": "commonLispKeywords"},
+                            {"variable": "schemeKeywords"},
+                            {"variable": "hydraLispKeywords"}]},
+                        "function": {
+                          "typeApplication": {
+                            "body": {"variable": "hydra.lib.lists.concat"},
+                            "type": {"literal": {"string": {}}}}}}},
+                    "function": {
+                      "typeApplication": {
+                        "body": {"variable": "hydra.lib.sets.fromList"},
+                        "type": {"literal": {"string": {}}}}}}}}}}},
+        "type": {"type": {"set": {"literal": {"string": {}}}}, "variables": []}}}],
+  "description": "Language constraints and reserved words for Lisp (covering Clojure, Emacs Lisp, Common Lisp, and Scheme)",
+  "namespace": "hydra.lisp.language",
+  "termDependencies": ["hydra.lexical"],
+  "typeDependencies": [
+    "hydra.paths",
+    "hydra.ast",
+    "hydra.classes",
+    "hydra.coders",
+    "hydra.context",
+    "hydra.core",
+    "hydra.error.checking",
+    "hydra.error.core",
+    "hydra.error.packaging",
+    "hydra.errors",
+    "hydra.graph",
+    "hydra.json.model",
+    "hydra.packaging",
+    "hydra.parsing",
+    "hydra.phantoms",
+    "hydra.query",
+    "hydra.relational",
+    "hydra.tabular",
+    "hydra.testing",
+    "hydra.topology",
+    "hydra.typing",
+    "hydra.util",
+    "hydra.variants"]}

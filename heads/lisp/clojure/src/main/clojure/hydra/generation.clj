@@ -142,11 +142,11 @@
     (if (string? ns) ns (:value ns))))
 
 (defn filter-kernel-modules
-  "Filter modules to only kernel modules (exclude hydra.ext.* namespaces)."
+  "Filter modules to only kernel modules (exclude hydra.* namespaces)."
   [modules]
   (filterv (fn [m]
              (let [ns-str (ns-str-of m)]
-               (and (not (.startsWith ^String ns-str "hydra.ext."))
+               (and (not (.startsWith ^String ns-str "hydra."))
                     (not (.startsWith ^String ns-str "hydra.json.yaml.")))))
            modules))
 

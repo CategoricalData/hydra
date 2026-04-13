@@ -1,0 +1,41 @@
+// Note: this is an automatically generated file. Do not edit.
+
+package hydra.python.syntax;
+
+import java.io.Serializable;
+
+public class StarTargetsListSeq implements Serializable, Comparable<StarTargetsListSeq> {
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.python.syntax.StarTargetsListSeq");
+
+  public static final hydra.core.Name VALUE = new hydra.core.Name("value");
+
+  public final java.util.List<hydra.python.syntax.StarTarget> value;
+
+  public StarTargetsListSeq (java.util.List<hydra.python.syntax.StarTarget> value) {
+    this.value = value;
+  }
+
+  @Override
+  public boolean equals(Object other) {
+    if (!(other instanceof StarTargetsListSeq)) {
+      return false;
+    }
+    StarTargetsListSeq o = (StarTargetsListSeq) other;
+    return java.util.Objects.equals(
+      this.value,
+      o.value);
+  }
+
+  @Override
+  public int hashCode() {
+    return 2 * java.util.Objects.hashCode(value);
+  }
+
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(StarTargetsListSeq other) {
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
+  }
+}

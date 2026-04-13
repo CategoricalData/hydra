@@ -1,0 +1,64 @@
+{
+  "definitions": [
+    {
+      "type": {
+        "name": "hydra.haskell.environment.HaskellModuleMetadata",
+        "type": {
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {
+                    "literal": {
+                      "string": "Metadata used to determine which standard imports are needed in a generated Haskell module"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "usesByteString",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {"string": "Whether the module uses Data.ByteString (B.ByteString)"}}}],
+                        "body": {"literal": {"boolean": {}}}}}},
+                  {
+                    "name": "usesInt",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "Whether the module uses Data.Int (I.Int8, I.Int16, I.Int64)"}}}],
+                        "body": {"literal": {"boolean": {}}}}}},
+                  {
+                    "name": "usesMap",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "Whether the module uses Data.Map (M.Map, M.fromList, M.empty)"}}}],
+                        "body": {"literal": {"boolean": {}}}}}},
+                  {
+                    "name": "usesSet",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "Whether the module uses Data.Set (S.Set, S.fromList, S.empty)"}}}],
+                        "body": {"literal": {"boolean": {}}}}}}]}}},
+          "variables": []}}}],
+  "description": "Environment types for Haskell code generation",
+  "namespace": "hydra.haskell.environment",
+  "termDependencies": [],
+  "typeDependencies": []}

@@ -10,7 +10,7 @@ Options:
     --include-coders       Also load and generate ext coder modules
     --include-tests        Also load and generate kernel test modules
     --ext-json-dir <dir>   Directory containing ext JSON modules (for --include-coders)
-    --kernel-only          Only generate kernel modules (exclude hydra.ext.*)
+    --kernel-only          Only generate kernel modules (exclude hydra.*)
     --types-only           Only generate type-defining modules
 """
 
@@ -79,7 +79,7 @@ def main():
     parser.add_argument("--types-only", action="store_true",
                         help="Only generate type-defining modules")
     parser.add_argument("--kernel-only", action="store_true",
-                        help="Only generate kernel modules (exclude hydra.ext.*)")
+                        help="Only generate kernel modules (exclude hydra.*)")
     args = parser.parse_args()
 
     if args.include_coders and not args.ext_json_dir:
@@ -204,7 +204,7 @@ def main():
     # Optionally load and generate test modules
     test_file_count = 0
     if args.include_tests:
-        test_json_dir = args.json_dir.replace("gen-main/json", "gen-test/json")
+        test_json_dir = args.json_dir.replace("src/main/json", "src/test/json")
         print("Loading test modules from JSON...", flush=True)
         print(f"  Source: {test_json_dir}", flush=True)
         step_start = time.time()
@@ -221,13 +221,13 @@ def main():
 
         # When --kernel-only is active, ext modules are excluded from the main
         # generation targets. But test modules may depend on ext modules (e.g.
-        # hydra.test.serialization depends on hydra.ext.haskell.operators).
+        # hydra.test.serialization depends on hydra.haskell.operators).
         # Generate those ext modules to outMain so test code can reference them.
         if args.kernel_only:
             test_ext_deps = set()
             for m in test_mods:
                 for ns in m.term_dependencies:
-                    if ns.value.startswith("hydra.ext."):
+                    if ns.value.startswith("hydra."):
                         test_ext_deps.add(ns.value)
             if test_ext_deps:
                 ext_mods_for_tests = [m for m in full_mods if m.namespace.value in test_ext_deps]

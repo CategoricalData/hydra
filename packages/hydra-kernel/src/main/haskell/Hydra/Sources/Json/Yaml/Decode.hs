@@ -81,7 +81,7 @@ import qualified Data.Maybe                                as Y
 
 -- Additional imports
 import Hydra.Json.Model
-import qualified Hydra.Ext.Org.Yaml.Model as YM
+import qualified Hydra.Yaml.Model as YM
 import qualified Hydra.Sources.Json.Decode as JsonDecode
 import qualified Hydra.Sources.Yaml.Model as YamlModel
 
