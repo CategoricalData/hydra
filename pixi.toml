@@ -173,7 +173,7 @@ cwd = "."
 # Module and code exploration tasks
 [feature.haskell.tasks.haskell-modules]
 cmd = "find src -name '*.hs' | head -n 20"
-cwd = "hydra-haskell"
+cwd = "heads/haskell"
 
 [feature.haskell.tasks.haskell-functions]
 cmd = "nu ../pixi-scripts/haskell-functions.nu"
@@ -194,28 +194,28 @@ cwd = "."
 # Data checking tasks
 [feature.haskell.tasks.check-data]
 cmd = "ls -la data/genpg/sources/"
-cwd = "hydra-ext"
+cwd = "packages/hydra-ext"
 
 [feature.haskell.tasks.check-graphson]
 cmd = "ls -la data/genpg/*.json"
-cwd = "hydra-ext"
+cwd = "packages/hydra-ext"
 
 [feature.haskell.tasks.check-copilot-data]
 cmd = "head -n 3 data/genpg/copilot.json"
-cwd = "hydra-ext"
+cwd = "packages/hydra-ext"
 
 [feature.haskell.tasks.check-sales-data]
 cmd = "head -n 3 data/genpg/sales.json"
-cwd = "hydra-ext"
+cwd = "packages/hydra-ext"
 
 # Stack cache management
 [feature.haskell.tasks.clear-stack-cache-haskell]
 cmd = "stack clean --full && rm -rf .stack-work"
-cwd = "hydra-haskell"
+cwd = "heads/haskell"
 
 [feature.haskell.tasks.clear-stack-cache-ext]
 cmd = "stack clean --full && rm -rf .stack-work"
-cwd = "hydra-ext"
+cwd = "packages/hydra-ext"
 
 [feature.haskell.tasks.clear-stack-cache-all]
 cmd = "stack clean --full && rm -rf .stack-work"
@@ -259,15 +259,15 @@ cmd = "bash -c 'bash bin/sync-all.sh 2>&1 | tee sync-all.log'"
 cwd = "."
 
 [feature.haskell.tasks.sync-haskell]
-cmd = "bash hydra-haskell/bin/sync-haskell.sh"
+cmd = "bash heads/haskell/bin/sync-haskell.sh"
 cwd = "."
 
 [feature.haskell.tasks.sync-java]
-cmd = "bash hydra-ext/bin/sync-java.sh"
+cmd = "bash packages/hydra-ext/bin/sync-java.sh"
 cwd = "."
 
 [feature.haskell.tasks.sync-python]
-cmd = "bash hydra-ext/bin/sync-python.sh"
+cmd = "bash packages/hydra-ext/bin/sync-python.sh"
 cwd = "."
 
 [feature.scala.dependencies]

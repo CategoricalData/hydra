@@ -22,9 +22,11 @@ graphs with deep support for polymorphism.
 
 ## The one rule
 
-- **`src/main/`** -- Hand-written code. Edit freely.
-- **`src/gen-main/`** and **`src/gen-test/`** -- Generated code. **Never manually edit**
+- **`packages/` and `heads/`** contain hand-written code. Edit freely.
+- **`dist/`** contains generated code. **Never manually edit**
   (unless doing a bootstrap patch, which must be overwritten by regeneration afterward).
+- Legacy: some packages still have `src/gen-main/` and `src/gen-test/` directories.
+  These are also generated. They will move to `dist/` later.
 
 Generated files have a header: "Note: this is an automatically generated file. Do not edit."
 
@@ -78,17 +80,38 @@ Before ending a session:
 
 ```
 hydra/
-  hydra-haskell/    # Bootstrap implementation (Haskell). Source of truth.
-  hydra-java/       # Complete Java implementation
-  hydra-python/     # Complete Python implementation
-  hydra-lisp/       # Complete Lisp implementation (Clojure, Scheme, Common Lisp, Emacs Lisp)
-  hydra-ext/        # Code generators, coders, demos, tools (Haskell)
-  hydra-scala/      # Complete Scala implementation
-  hydra-rust/       # Early-stage Rust
-  hydra-go/         # Early-stage Go
-  hydra-javascript/  # Early-stage JavaScript
-  docs/             # Documentation, recipes, guides
-  wiki/             # Local checkout of the GitHub wiki (separate repo)
+  packages/           # Language-independent package definitions and DSL sources
+    hydra-kernel/     # Kernel types, terms, DSL sources, and package manifest
+    hydra-haskell/    # Haskell coder DSL sources + generated Haskell coder output
+    hydra-java/       # Java coder DSL sources (Haskell-based)
+    hydra-python/     # Python coder DSL sources (Haskell-based)
+    hydra-scala/      # Scala coder DSL sources
+    hydra-lisp/       # Lisp coder DSL sources + per-dialect generated output
+    hydra-pg/         # Property graph model DSL sources
+    hydra-rdf/        # RDF/SHACL model DSL sources
+    hydra-ext/       # Miscellaneous extension DSL sources
+    hydra-coq/        # Coq output
+    hydra-javascript/  # JavaScript coder DSL sources
+  heads/              # Per-host build infrastructure: primitives, DSL runtime, generation
+    haskell/          # Stack package ("hydra"), exec binaries, Hydra.Dsl/Lib/Generation
+    java/             # Hand-written Java primitives, DSL, utils; gradle source-set crossover
+    python/           # Hand-written Python primitives, DSL; pyproject.toml lives here
+    scala/            # Hand-written Scala primitives; sbt source crossover
+    lisp/             # Per-dialect subdirs: clojure/, common-lisp/, emacs-lisp/, scheme/
+  dist/               # Generated output per host language
+    json/             # Always checked in. Kernel JSON modules.
+    haskell/          # Partially checked in (kernel + coders for bootstrap)
+    java/             # Generated Java kernel
+    python/           # Generated Python kernel
+    scala/            # Generated Scala kernel
+    clojure/          # Generated Clojure kernel
+    common-lisp/      # Generated Common Lisp kernel
+    emacs-lisp/       # Generated Emacs Lisp kernel
+    scheme/           # Generated Scheme kernel
+  demos/              # Example applications (not published)
+  bindings/           # Host-specific third-party integrations (future)
+  docs/               # Documentation, recipes, guides
+  wiki/               # Local checkout of the GitHub wiki (separate repo)
 ```
 
 For detailed code organization, see the
@@ -99,7 +122,7 @@ and [docs/implementation.md](docs/implementation.md).
 
 After modifying Haskell sources, regenerate downstream implementations in order:
 **Haskell -> Ext -> Java, Python, Scala**. Use `./bin/sync-all.sh` (or `--quick`
-to skip tests), or run individual `sync-*.sh` scripts from the appropriate directory.
+to skip tests), or run individual `sync-*.sh` scripts from `heads/haskell/bin/`.
 See [code-generation.md](docs/recipes/code-generation.md) for details.
 
 ---
@@ -142,12 +165,11 @@ Each has build/test commands and code organization details:
 
 | README | Highlights |
 |--------|------------|
-| [hydra-haskell/README.md](hydra-haskell/README.md) | Stack build, GHCi REPL, code generation, DSL overview, self-hosting demo |
-| [hydra-java/README.md](hydra-java/README.md) | Gradle build, visitor pattern, benchmark runner |
-| [hydra-python/README.md](hydra-python/README.md) | uv setup, pytest, ruff, pyright |
-| [hydra-ext/README.md](hydra-ext/README.md) | All coders with type mapping tables, sync scripts, demos |
-| [hydra-scala/README.md](hydra-scala/README.md) | sbt build, bootstrapping host |
-| [hydra-lisp/README.md](hydra-lisp/README.md) | Four Lisp dialects, shared coder, per-dialect test runners |
+| [packages/hydra-haskell/README.md](packages/hydra-haskell/README.md) | Haskell coder, DSL overview, self-hosting demo |
+| [packages/hydra-java/README.md](packages/hydra-java/README.md) | Gradle build, visitor pattern, benchmark runner |
+| [packages/hydra-python/README.md](packages/hydra-python/README.md) | uv setup, pytest, ruff, pyright |
+| [packages/hydra-scala/README.md](packages/hydra-scala/README.md) | sbt build, bootstrapping host |
+| [packages/hydra-lisp/README.md](packages/hydra-lisp/README.md) | Four Lisp dialects, shared coder, per-dialect test runners |
 
 ### Wiki pages
 
@@ -157,7 +179,7 @@ Each has build/test commands and code organization details:
 | [Concepts](https://github.com/CategoricalData/hydra/wiki/Concepts) | Core concepts, type system (System F + HM), design principles |
 | [Testing](https://github.com/CategoricalData/hydra/wiki/Testing) | Test suite, test runners, test categories |
 | [Benchmarking](https://github.com/CategoricalData/hydra/wiki/Benchmarking) | Cross-implementation performance measurement |
-| [Code organization](https://github.com/CategoricalData/hydra/wiki/Code-organization) | src/main vs src/gen-main per implementation |
+| [Code organization](https://github.com/CategoricalData/hydra/wiki/Code-organization) | packages/, heads/, dist/ layout |
 | [Developers](https://github.com/CategoricalData/hydra/wiki/Developers) | Source code guide, release processes |
 | [Release process](https://github.com/CategoricalData/hydra/wiki/Release-process) | Full release workflow, version file locations |
 | [Property graphs](https://github.com/CategoricalData/hydra/wiki/Property-graphs) | Algebraic Property Graphs, mapping annotations |
@@ -213,12 +235,12 @@ give the user a brief status update approximately every 10 minutes.
 | `/save()` | Save status to the plan document. Session may terminate. |
 | `/squash()` | Squash WIP commits, per "Commit workflow" section. |
 | `/sync-all()` | Run `bin/sync-all.sh --targets all`, propagating changes into all generated artifacts. |
-| `/sync-ext()` | Run `hydra-ext/bin/sync-ext.sh`. |
-| `/sync-haskell()` | Run `hydra-haskell/bin/sync-haskell.sh`. |
-| `/sync-java()` | Run `hydra-ext/bin/sync-java.sh`. |
-| `/sync-lisp()` | Run `hydra-ext/bin/sync-lisp.sh`. Pass `--dialects <list>` to limit dialects. |
-| `/sync-python()` | Run `hydra-ext/bin/sync-python.sh`. |
-| `/sync-scala()` | Run `hydra-ext/bin/sync-scala.sh`. |
+| `/sync-ext()` | Run `heads/haskell/bin/sync-ext.sh`. |
+| `/sync-haskell()` | Run `heads/haskell/bin/sync-haskell.sh`. |
+| `/sync-java()` | Run `heads/haskell/bin/sync-java.sh`. |
+| `/sync-lisp()` | Run `heads/haskell/bin/sync-lisp.sh`. Pass `--dialects <list>` to limit dialects. |
+| `/sync-python()` | Run `heads/haskell/bin/sync-python.sh`. |
+| `/sync-scala()` | Run `heads/haskell/bin/sync-scala.sh`. |
 
 ## Coding style (read the full guide!)
 
@@ -242,7 +264,8 @@ These are hard-won lessons. Read the linked docs for full context.
    workarounds. The answer is always: fix the errors first. This applies to every step —
    build errors, test failures, sync failures, demo failures.
 
-2. **Never edit generated files** (`src/gen-main/`, `src/gen-test/`) except for bootstrap
+2. **Never edit generated files** (anything under `dist/`, or legacy `src/gen-main/`,
+   `src/gen-test/` in packages that haven't been migrated yet) except for bootstrap
    patches that will be overwritten by regeneration.
 
 3. **The bootstrap problem**: Extending core types creates a circular dependency.
@@ -256,7 +279,7 @@ These are hard-won lessons. Read the linked docs for full context.
 5. **Three DSL levels**: Term-level, meta-level (phantom-typed), and generated DSL.
    Mixing levels is a common source of errors. See [docs/dsl-guide.md](docs/dsl-guide.md).
 
-6. **Haskell must pass first**: Always ensure `stack test` passes in `hydra-haskell`
+6. **Haskell must pass first**: Always ensure `stack test` passes in `heads/haskell`
    before syncing downstream implementations.
 
 7. **Primitive registration**: A primitive class can exist but be invisible at runtime

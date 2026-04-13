@@ -24,9 +24,9 @@ This supports [issue #243](https://github.com/CategoricalData/hydra/issues/243)
 
 There are three sets of JSON exports:
 
-**Kernel modules** (`hydra-haskell/src/gen-main/json/`):
+**Kernel modules** (`dist/json/hydra-kernel/src/main/json/`):
 ```
-src/gen-main/json/
+dist/json/hydra-kernel/src/main/json/
 ├── hydra/
 │   ├── core.json           # Core types and terms
 │   ├── module.json         # Module type definitions
@@ -34,12 +34,12 @@ src/gen-main/json/
 │   └── ...
 ```
 
-**Main modules** (also `hydra-haskell/src/gen-main/json/`):
+**Main modules** (also `dist/json/hydra-kernel/src/main/json/`):
 Includes all kernel modules plus additional main modules (encoders, decoders, JSON support, etc.).
 
-**Test modules** (`hydra-haskell/src/gen-test/json/`):
+**Test modules** (`dist/json/hydra-kernel/src/test/json/`):
 ```
-src/gen-test/json/
+dist/json/hydra-kernel/src/test/json/
 ├── hydra/
 │   └── test/
 │       ├── ...
@@ -52,28 +52,28 @@ Each file contains a single module encoded as JSON, using Hydra's type-directed 
 ### Export kernel modules to JSON
 
 ```bash
-cd hydra-haskell
+cd heads/haskell
 ./bin/update-json-kernel.sh
 ```
 
 ### Export all main modules to JSON
 
 ```bash
-cd hydra-haskell
+cd heads/haskell
 ./bin/update-json-main.sh
 ```
 
 ### Export test modules to JSON
 
 ```bash
-cd hydra-haskell
+cd heads/haskell
 ./bin/update-json-test.sh
 ```
 
 ### Verify JSON consistency (kernel)
 
 ```bash
-cd hydra-haskell
+cd heads/haskell
 ./bin/verify-json-kernel.sh
 ```
 
@@ -106,7 +106,7 @@ This is especially useful after:
 ### Building executables
 
 ```bash
-cd hydra-haskell
+cd heads/haskell
 stack build hydra:update-json-kernel hydra:update-json-main hydra:update-json-test hydra:verify-json-kernel
 ```
 
@@ -156,7 +156,7 @@ The verification process:
 1. **Builds a graph** from all kernel modules to provide type information
 2. **Creates a schema map** mapping type names to their definitions
 3. **For each module**:
-   - Reads the JSON file from `src/gen-main/json/`
+   - Reads the JSON file from `dist/json/hydra-kernel/src/main/json/`
    - Parses JSON using Aeson (fast native parser)
    - Decodes JSON to a Hydra Term using type-directed decoding
    - Decodes the Term to a Module structure
@@ -211,16 +211,16 @@ The tool uses Aeson for fast JSON parsing to minimize overhead.
 
 | File | Purpose |
 |------|---------|
-| `src/exec/update-json-kernel/Main.hs` | Executable to generate kernel module JSON files |
-| `src/exec/update-json-main/Main.hs` | Executable to generate main module JSON files |
-| `src/exec/update-json-test/Main.hs` | Executable to generate test module JSON files |
-| `src/exec/verify-json-kernel/Main.hs` | Executable to verify JSON consistency |
-| `bin/update-json-kernel.sh` | Wrapper script for kernel generation |
-| `bin/update-json-main.sh` | Wrapper script for main generation |
-| `bin/update-json-test.sh` | Wrapper script for test generation |
-| `bin/verify-json-kernel.sh` | Wrapper script for verification |
-| `src/gen-main/json/` | Generated JSON output (kernel + main) |
-| `src/gen-test/json/` | Generated JSON output (test) |
+| `heads/haskell/src/exec/update-json-kernel/Main.hs` | Executable to generate kernel module JSON files |
+| `heads/haskell/src/exec/update-json-main/Main.hs` | Executable to generate main module JSON files |
+| `heads/haskell/src/exec/update-json-test/Main.hs` | Executable to generate test module JSON files |
+| `heads/haskell/src/exec/verify-json-kernel/Main.hs` | Executable to verify JSON consistency |
+| `heads/haskell/bin/update-json-kernel.sh` | Wrapper script for kernel generation |
+| `heads/haskell/bin/update-json-main.sh` | Wrapper script for main generation |
+| `heads/haskell/bin/update-json-test.sh` | Wrapper script for test generation |
+| `heads/haskell/bin/verify-json-kernel.sh` | Wrapper script for verification |
+| `dist/json/hydra-kernel/src/main/json/` | Generated JSON output (kernel + main) |
+| `dist/json/hydra-kernel/src/test/json/` | Generated JSON output (test) |
 
 ### Dependencies
 

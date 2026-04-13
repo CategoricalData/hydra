@@ -48,15 +48,15 @@ a subset of modules that depend on others:
 
 ```haskell
 -- Generate kernel, using kernel as its own universe (no external dependencies)
-writeHaskell "src/gen-main/haskell" kernelModules kernelModules
+writeHaskell "../../dist/haskell/hydra-kernel/src/main/haskell" kernelModules kernelModules
 
 -- Generate test modules, which depend on main modules.
 -- Universe includes both; only tests are generated.
 let allMods = mainModules ++ testModules
-writeJava "../hydra-java/src/gen-test/java" allMods testModules
+writeJava "../../dist/java/hydra-kernel/src/test/java" allMods testModules
 
 -- Generate only ext modules, using main + ext as universe
-writeJava "../hydra-ext/src/gen-main/java" (mainModules ++ extModules) extModules
+writeJava "../../dist/java/hydra-ext/src/main/java" (mainModules ++ extModules) extModules
 ```
 
 If the universe is missing a transitive dependency, generation may fail with
@@ -107,7 +107,7 @@ or a Python script), call the `writeXxx` functions directly.
 ### Haskell example
 
 ```bash
-cd hydra-ext
+cd heads/haskell
 stack ghci --ghci-options='+RTS -K256M -A32M -RTS'
 ```
 
@@ -115,10 +115,10 @@ stack ghci --ghci-options='+RTS -K256M -A32M -RTS'
 import Hydra.Ext.Generation
 
 -- Generate Java for all main modules
-writeJava "../hydra-java/src/gen-main/java" mainModules mainModules
+writeJava "../../dist/java/hydra-kernel/src/main/java" mainModules mainModules
 
 -- Generate Python for kernel only
-writePython "../hydra-python/src/gen-main/python" kernelModules kernelModules
+writePython "../../dist/python/hydra-kernel/src/main/python" kernelModules kernelModules
 
 -- Generate GraphQL schema for specific modules
 writeGraphql "/tmp/graphql" mainModules [myCustomModule]
@@ -165,13 +165,13 @@ JSON module files are exported to two locations:
 
 | Directory | Contents |
 |-----------|----------|
-| `hydra-haskell/src/gen-main/json/` | Kernel and main modules |
-| `hydra-haskell/src/gen-test/json/` | Test modules |
-| `hydra-ext/src/gen-main/json/` | Ext modules (coders, demos, domain models) |
+| `dist/json/hydra-kernel/src/main/json/` | Kernel and main modules |
+| `dist/json/hydra-kernel/src/test/json/` | Test modules |
+| `dist/json/hydra-ext/src/main/json/` | Ext modules (coders, demos, domain models) |
 
 Each directory contains a `manifest.json` that lists available module groups:
 
-**Kernel manifest** (`hydra-haskell/src/gen-main/json/manifest.json`):
+**Kernel manifest** (`dist/json/hydra-kernel/src/main/json/manifest.json`):
 
 | Field | Contents |
 |-------|----------|
@@ -181,7 +181,7 @@ Each directory contains a `manifest.json` that lists available module groups:
 | `dslModules` | DSL generator output modules |
 | `testModules` | Test suite modules |
 
-**Ext manifest** (`hydra-ext/src/gen-main/json/manifest.json`):
+**Ext manifest** (`dist/json/hydra-ext/src/main/json/manifest.json`):
 
 | Field | Contents |
 |-------|----------|
@@ -198,28 +198,28 @@ The bootstrap CLI loads JSON modules and generates code:
 # Generate Java from kernel modules
 python -m hydra.bootstrap \
   --target java \
-  --json-dir ../hydra-haskell/src/gen-main/json \
+  --json-dir ../dist/json/hydra-kernel/src/main/json \
   --output /tmp/hydra-gen
 
 # Generate Python, including ext coders
 python -m hydra.bootstrap \
   --target python \
-  --json-dir ../hydra-haskell/src/gen-main/json \
-  --ext-json-dir ../hydra-ext/src/gen-main/json \
+  --json-dir ../dist/json/hydra-kernel/src/main/json \
+  --ext-json-dir ../dist/json/hydra-ext/src/main/json \
   --include-coders \
   --output /tmp/hydra-gen
 
 # Generate Java, kernel modules only
 python -m hydra.bootstrap \
   --target java \
-  --json-dir ../hydra-haskell/src/gen-main/json \
+  --json-dir ../dist/json/hydra-kernel/src/main/json \
   --kernel-only \
   --output /tmp/hydra-gen
 
 # Generate Haskell, including tests
 python -m hydra.bootstrap \
   --target haskell \
-  --json-dir ../hydra-haskell/src/gen-main/json \
+  --json-dir ../dist/json/hydra-kernel/src/main/json \
   --include-tests \
   --output /tmp/hydra-gen
 ```
@@ -258,15 +258,15 @@ These are the standard developer entry point:
 bin/sync-all.sh
 
 # Individual phases
-hydra-haskell/bin/sync-haskell.sh      # Regenerate Haskell kernel
-hydra-ext/bin/sync-ext.sh              # Regenerate ext modules and JSON exports
-hydra-ext/bin/sync-java.sh             # Regenerate Java from JSON
-hydra-ext/bin/sync-python.sh           # Regenerate Python from JSON
-hydra-ext/bin/sync-scala.sh            # Regenerate Scala
+heads/haskell/bin/sync-haskell.sh      # Regenerate Haskell kernel
+heads/haskell/bin/sync-ext.sh          # Regenerate ext modules and JSON exports
+heads/haskell/bin/sync-java.sh         # Regenerate Java from JSON
+heads/haskell/bin/sync-python.sh       # Regenerate Python from JSON
+heads/haskell/bin/sync-scala.sh        # Regenerate Scala
 
 # Quick mode (skip tests)
 bin/sync-all.sh --quick
-hydra-ext/bin/sync-java.sh --quick
+heads/haskell/bin/sync-java.sh --quick
 ```
 
 The sync scripts handle memory flags, build ordering, and test execution automatically.
@@ -276,7 +276,7 @@ The sync scripts handle memory flags, build ordering, and test execution automat
 To make DSL-defined modules available for JSON-based generation, export them:
 
 ```bash
-cd hydra-haskell
+cd heads/haskell
 ./bin/update-json-main.sh      # Export main modules
 ./bin/update-json-test.sh      # Export test modules
 ./bin/verify-json-kernel.sh    # Verify round-trip consistency
@@ -310,10 +310,10 @@ current working directory:
 
 ```bash
 # From the repo root:
-python -m hydra.bootstrap --json-dir hydra-haskell/src/gen-main/json ...
+python -m hydra.bootstrap --json-dir dist/json/hydra-kernel/src/main/json ...
 
-# From hydra-ext/:
-python -m hydra.bootstrap --json-dir ../hydra-haskell/src/gen-main/json ...
+# From heads/haskell/:
+python -m hydra.bootstrap --json-dir ../../dist/json/hydra-kernel/src/main/json ...
 ```
 
 ### --include-coders fails silently

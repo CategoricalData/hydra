@@ -19,7 +19,7 @@ For Java and Python DSL usage, see:
 
 **This guide is for:**
 - Writing Hydra kernel code (extending the type system or adding primitives)
-- Creating language coders in hydra-ext
+- Creating language coders (e.g., in packages/hydra-pg, packages/hydra-rdf, packages/hydra-ext)
 - Defining custom data models
 
 ## Table of contents
@@ -672,13 +672,13 @@ Use the meta DSLs when writing programs that construct Hydra terms or types:
 The entire Hydra kernel is defined using the meta DSLs.
 
 **Type modules**
-(see [Sources/Kernel/Types](https://github.com/CategoricalData/hydra/tree/main/hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Types)):
+(see [Sources/Kernel/Types](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Types)):
 - `Hydra/Sources/Kernel/Types/Core.hs` - Core type definitions (Type, Term, etc.)
 - `Hydra/Sources/Kernel/Types/Graph.hs` - Graph and module types
 - These modules import `qualified Hydra.Dsl.Types as T` along with unqualified operators `(>:)`, `(@@)`, `(~>)`
 
 **Term modules**
-(see [Sources/Kernel/Terms](https://github.com/CategoricalData/hydra/tree/main/hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Terms)):
+(see [Sources/Kernel/Terms](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Terms)):
 - `Hydra/Sources/Kernel/Terms/Inference.hs` - Type inference algorithm
 - `Hydra/Sources/Kernel/Terms/Reduction.hs` - Term reduction logic
 - `Hydra/Sources/Libraries.hs` - Primitive function signatures

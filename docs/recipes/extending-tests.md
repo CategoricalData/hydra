@@ -6,7 +6,7 @@ This recipe explains how to extend Hydra's common test suite with new test cases
 
 Hydra's [common test suite](../../wiki/Testing.md#common-test-suite) is designed to run identically in all language
 implementations (Haskell, Java, Python, Scala, and Lisp).
-Tests are written in Hydra's term-encoded DSL in [hydra-haskell/src/main/haskell/Hydra/Sources/Test/][sources-test]
+Tests are written in Hydra's term-encoded DSL in [packages/hydra-haskell/src/main/haskell/Hydra/Sources/Test/][sources-test]
 and code-generated into each target language.
 
 **The normal way to add tests** is to write them directly in the [Sources/Test][sources-test] directory using the
@@ -36,11 +36,11 @@ Test modules are organized in [Hydra/Sources/Test/][sources-test]:
 - **Formatting tests**: [Formatting.hs][test-formatting]
 - etc.
 
-[sources-test]: https://github.com/CategoricalData/hydra/tree/main/hydra-haskell/src/main/haskell/Hydra/Sources/Test
-[test-checking]: https://github.com/CategoricalData/hydra/blob/main/hydra-haskell/src/main/haskell/Hydra/Sources/Test/Checking.hs
-[test-inference]: https://github.com/CategoricalData/hydra/tree/main/hydra-haskell/src/main/haskell/Hydra/Sources/Test/Inference
-[test-lib]: https://github.com/CategoricalData/hydra/tree/main/hydra-haskell/src/main/haskell/Hydra/Sources/Test/Lib
-[test-formatting]: https://github.com/CategoricalData/hydra/blob/main/hydra-haskell/src/main/haskell/Hydra/Sources/Test/Formatting.hs
+[sources-test]: https://github.com/CategoricalData/hydra/tree/main/packages/hydra-haskell/src/main/haskell/Hydra/Sources/Test
+[test-checking]: https://github.com/CategoricalData/hydra/blob/main/packages/hydra-haskell/src/main/haskell/Hydra/Sources/Test/Checking.hs
+[test-inference]: https://github.com/CategoricalData/hydra/tree/main/packages/hydra-haskell/src/main/haskell/Hydra/Sources/Test/Inference
+[test-lib]: https://github.com/CategoricalData/hydra/tree/main/packages/hydra-haskell/src/main/haskell/Hydra/Sources/Test/Lib
+[test-formatting]: https://github.com/CategoricalData/hydra/blob/main/packages/hydra-haskell/src/main/haskell/Hydra/Sources/Test/Formatting.hs
 
 See [Testing.md](../../wiki/Testing.md#test-categories) for the full list.
 
@@ -76,7 +76,7 @@ Most new tests can be written using existing DSL functions.
 ### 3. Write test cases
 
 Open the appropriate test module in
-[Sources/Test/](https://github.com/CategoricalData/hydra/tree/main/hydra-haskell/src/main/haskell/Hydra/Sources/Test)
+[Sources/Test/](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-haskell/src/main/haskell/Hydra/Sources/Test)
 and add test cases using the term-encoded DSL.
 The test helper functions vary by test type:
 
@@ -131,7 +131,7 @@ The test framework converts TypeSchemes to Types using `typeSchemeToFType`.
 
 Build the Haskell code:
 ```bash
-cd hydra-haskell
+cd heads/haskell
 stack build
 ```
 
@@ -171,13 +171,13 @@ Common issues when tests fail:
 This section covers the special case of migrating tests from Haskell-specific spec files (like `CheckingSpec.hs`) to
 the common test suite.
 This is **not the normal workflow** for adding tests - most tests should be written directly in
-[Sources/Test/](https://github.com/CategoricalData/hydra/tree/main/hydra-haskell/src/main/haskell/Hydra/Sources/Test)
+[Sources/Test/](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-haskell/src/main/haskell/Hydra/Sources/Test)
 as described above.
 
 ### When to migrate
 
 Migrate tests when:
-- Moving tests from `hydra-haskell/src/test/haskell/Hydra/*Spec.hs` to the common suite
+- Moving tests from `heads/haskell/src/test/haskell/Hydra/*Spec.hs` to the common suite
 - Ensuring test coverage across all language implementations
 - Deprecating Haskell-specific tests in favor of cross-language tests
 
@@ -185,7 +185,7 @@ Migrate tests when:
 
 1. **Identify tests to migrate** - Look in spec files:
    ```bash
-   ls hydra-haskell/src/test/haskell/Hydra/*Spec.hs
+   ls heads/haskell/src/test/haskell/Hydra/*Spec.hs
    ```
 
 2. **Check for missing DSL functions** - Find `Terms.*` calls in the spec file:
@@ -213,7 +213,7 @@ Migrate tests when:
 ### Example migration workflow
 
 ```bash
-cd hydra-haskell
+cd heads/haskell
 
 # 1. Find missing DSL functions
 grep -o 'Terms\.[a-z][a-zA-Z0-9]*' src/test/haskell/Hydra/CheckingSpec.hs | sort -u
@@ -307,7 +307,7 @@ When writing test cases for `hydra.lib.math` primitives that use transcendental 
 - [TestSuiteSpec.hs][test-suite-spec] - Test runner framework
 - [*Spec.hs files][spec-files] - Haskell-specific tests (migration sources)
 
-[tterms]: https://github.com/CategoricalData/hydra/blob/main/hydra-haskell/src/main/haskell/Hydra/Dsl/TTerms.hs
-[ttypes]: https://github.com/CategoricalData/hydra/blob/main/hydra-haskell/src/main/haskell/Hydra/Dsl/TTypes.hs
-[test-suite-spec]: https://github.com/CategoricalData/hydra/blob/main/hydra-haskell/src/test/haskell/Hydra/TestSuiteSpec.hs
-[spec-files]: https://github.com/CategoricalData/hydra/tree/main/hydra-haskell/src/test/haskell/Hydra
+[tterms]: https://github.com/CategoricalData/hydra/blob/main/heads/haskell/src/main/haskell/Hydra/Dsl/TTerms.hs
+[ttypes]: https://github.com/CategoricalData/hydra/blob/main/heads/haskell/src/main/haskell/Hydra/Dsl/TTypes.hs
+[test-suite-spec]: https://github.com/CategoricalData/hydra/blob/main/heads/haskell/src/test/haskell/Hydra/TestSuiteSpec.hs
+[spec-files]: https://github.com/CategoricalData/hydra/tree/main/heads/haskell/src/test/haskell/Hydra
