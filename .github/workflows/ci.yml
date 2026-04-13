@@ -52,9 +52,9 @@ jobs:
           python-version: '3.12'
       - uses: astral-sh/setup-uv@v5
       - run: uv sync
-        working-directory: packages/hydra-python
+        working-directory: heads/python
       - run: uv run pytest
-        working-directory: packages/hydra-python
+        working-directory: heads/python
 
   clojure:
     name: Clojure tests
@@ -67,10 +67,9 @@ jobs:
       - uses: actions/cache@v4
         with:
           path: ~/.m2/repository
-          key: clojure-${{ hashFiles('packages/hydra-lisp/hydra-clojure/deps.edn') }}
+          key: clojure-${{ hashFiles('heads/lisp/clojure/deps.edn') }}
           restore-keys: clojure-
-      - run: bash run-tests.sh
-        working-directory: packages/hydra-lisp/hydra-clojure
+      - run: packages/hydra-lisp/bin/run-tests.sh clojure
 
   scala:
     name: Scala tests
@@ -106,5 +105,4 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y sbcl cl-ppcre
-      - run: bash run-tests.sh
-        working-directory: packages/hydra-lisp/hydra-common-lisp
+      - run: packages/hydra-lisp/bin/run-tests.sh common-lisp

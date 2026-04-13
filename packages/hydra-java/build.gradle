@@ -66,6 +66,11 @@ compileJava {
     exclude '**/hydra/xml/schema/String.java'
 }
 
+// Test-side excludes: tests that depend on classes excluded from compileJava above
+compileTestJava {
+    exclude '**/hydra/cypher/**'
+}
+
 test {
     useJUnitPlatform()
     testLogging {
