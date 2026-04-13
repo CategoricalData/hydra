@@ -5,7 +5,6 @@ import hydra.lib.sets.Member;
 import hydra.lib.sets.Empty;
 import hydra.lib.sets.FromList;
 import hydra.lib.sets.Insert;
-import hydra.lib.sets.IsEmpty;
 import hydra.lib.sets.Map;
 import hydra.lib.sets.Delete;
 import hydra.lib.sets.Singleton;
@@ -50,15 +49,6 @@ public interface Sets {
      */
     static Term insert() {
         return new Insert().term();
-    }
-
-    /**
-     * Returns a term representing the isEmpty primitive operation for sets.
-     *
-     * @return a term for testing if a set is empty
-     */
-    static Term isEmpty() {
-        return new IsEmpty().term();
     }
 
     /**

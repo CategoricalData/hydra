@@ -13,7 +13,6 @@ import hydra.lib.chars.IsAlphaNum;
 import hydra.lib.chars.IsLower;
 import hydra.lib.chars.IsSpace;
 import hydra.lib.chars.IsUpper;
-import hydra.lib.io.ShowTerm;
 import hydra.lib.maps.Elems;
 import hydra.lib.sets.Delete;
 import hydra.tools.PrimitiveFunction;
@@ -40,7 +39,6 @@ public class Libraries {
         prims.addAll(charsPrimitives());
         prims.addAll(eithersPrimitives());
         prims.addAll(equalityPrimitives());
-        prims.addAll(ioPrimitives());
         prims.addAll(listsPrimitives());
         prims.addAll(literalsPrimitives());
         prims.addAll(logicPrimitives());
@@ -95,10 +93,6 @@ public class Libraries {
                 new Lte(),
                 new Max(),
                 new Min());
-    }
-
-    private static List<PrimitiveFunction> ioPrimitives() {
-        return List.of(new ShowTerm());
     }
 
     private static List<PrimitiveFunction> listsPrimitives() {
@@ -224,7 +218,6 @@ public class Libraries {
                 new hydra.lib.maps.FindWithDefault(),
                 new hydra.lib.maps.FromList(),
                 new hydra.lib.maps.Insert(),
-                new hydra.lib.maps.IsEmpty(),
                 new hydra.lib.maps.Keys(),
                 new hydra.lib.maps.Lookup(),
                 new hydra.lib.maps.Map(),
@@ -336,7 +329,6 @@ public class Libraries {
                 new hydra.lib.sets.FromList(),
                 new hydra.lib.sets.Insert(),
                 new hydra.lib.sets.Intersection(),
-                new hydra.lib.sets.IsEmpty(),
                 new hydra.lib.sets.Map(),
                 new hydra.lib.sets.Member(),
                 new hydra.lib.sets.Null(),
@@ -354,7 +346,6 @@ public class Libraries {
                 new hydra.lib.strings.CharAt(),
                 new hydra.lib.strings.FromList(),
                 new hydra.lib.strings.Intercalate(),
-                new hydra.lib.strings.IsEmpty(),
                 new hydra.lib.strings.Length(),
                 new hydra.lib.strings.Lines(),
                 new hydra.lib.strings.MaybeCharAt(),
