@@ -1,7 +1,7 @@
 # Demos
 
 Hydra includes several demos that illustrate different capabilities of the system.
-Haskell source code for all demos lives in `demos/src/main/haskell/Hydra/Ext/Demos/`.
+Haskell source code for all demos lives in `demos/src/main/haskell/Hydra/Demos/`.
 Runnable scripts, input data, and output files live in `demos/`.
 
 ## GenPG (CSV to property graph)
@@ -107,7 +107,7 @@ It runs five sub-demos:
    [GraphSON](https://github.com/apache/tinkerpop/blob/master/docs/src/dev/io/graphson.asciidoc)
    3.0 output with vertices, edges, and properties.
 
-The underlying workflow engine is `Hydra.Ext.Tools.AvroWorkflows`, which parses Avro schemas,
+The underlying workflow engine is `Hydra.Tools.AvroWorkflows`, which parses Avro schemas,
 decodes JSON data into typed Hydra terms, and applies the chosen last-mile transformation.
 
 See the [Avro README](../demos/avro/README.md) for setup and usage.
@@ -139,4 +139,4 @@ reduces the terms, and prints how many times each primitive function was called 
 This demonstrates how the `Flow` monad's trace threading can be repurposed for instrumentation
 beyond error reporting -- for example, counting API calls that consume time or resources.
 
-Entry point: `demos/src/main/haskell/Hydra/Ext/Demos/MeteredEvaluation.hs`.
+Entry point: `demos/src/main/haskell/Hydra/Demos/MeteredEvaluation.hs`.

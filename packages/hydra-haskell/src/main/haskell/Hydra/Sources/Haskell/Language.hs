@@ -83,7 +83,7 @@ haskellLanguageDefinition :: String -> TTerm a -> TTermDefinition a
 haskellLanguageDefinition = definitionInModule module_
 
 ns :: Namespace
-ns = Namespace "hydra.ext.haskell.language"
+ns = Namespace "hydra.haskell.language"
 
 module_ :: Module
 module_ = Module ns
@@ -154,7 +154,7 @@ haskellLanguage = haskellLanguageDefinition "haskellLanguage" $
     Variants.typeVariantWrap],
   "typePredicate">: constant true] $
   Coders.language
-    (Coders.languageName_ $ string "hydra.ext.haskell")
+    (Coders.languageName_ $ string "hydra.haskell")
     (Coders.languageConstraints_
       (var "eliminationVariants")
       (var "literalVariants")

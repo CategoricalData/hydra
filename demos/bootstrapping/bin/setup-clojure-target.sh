@@ -15,7 +15,7 @@ fi
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 HYDRA_ROOT="$( cd "$SCRIPT_DIR/../../.." && pwd )"
-HYDRA_CLOJURE_DIR="$HYDRA_ROOT/packages/hydra-lisp/hydra-clojure"
+HYDRA_CLOJURE_DIR="$HYDRA_ROOT/heads/lisp/hydra-clojure"
 
 # Clean and create output directory
 echo "Preparing output directory: $OUTPUT_DIR"

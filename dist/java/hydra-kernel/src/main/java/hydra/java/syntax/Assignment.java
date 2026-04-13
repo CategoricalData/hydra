@@ -1,0 +1,80 @@
+// Note: this is an automatically generated file. Do not edit.
+
+package hydra.java.syntax;
+
+import java.io.Serializable;
+
+public class Assignment implements Serializable, Comparable<Assignment> {
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.java.syntax.Assignment");
+
+  public static final hydra.core.Name LHS = new hydra.core.Name("lhs");
+
+  public static final hydra.core.Name OP = new hydra.core.Name("op");
+
+  public static final hydra.core.Name EXPRESSION = new hydra.core.Name("expression");
+
+  public final hydra.java.syntax.LeftHandSide lhs;
+
+  public final hydra.java.syntax.AssignmentOperator op;
+
+  public final hydra.java.syntax.Expression expression;
+
+  public Assignment (hydra.java.syntax.LeftHandSide lhs, hydra.java.syntax.AssignmentOperator op, hydra.java.syntax.Expression expression) {
+    this.lhs = lhs;
+    this.op = op;
+    this.expression = expression;
+  }
+
+  @Override
+  public boolean equals(Object other) {
+    if (!(other instanceof Assignment)) {
+      return false;
+    }
+    Assignment o = (Assignment) other;
+    return java.util.Objects.equals(
+      this.lhs,
+      o.lhs) && java.util.Objects.equals(
+      this.op,
+      o.op) && java.util.Objects.equals(
+      this.expression,
+      o.expression);
+  }
+
+  @Override
+  public int hashCode() {
+    return 2 * java.util.Objects.hashCode(lhs) + 3 * java.util.Objects.hashCode(op) + 5 * java.util.Objects.hashCode(expression);
+  }
+
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(Assignment other) {
+    int cmp = 0;
+    cmp = hydra.util.Comparing.compare(
+      lhs,
+      other.lhs);
+    if (cmp != 0) {
+      return cmp;
+    }
+    cmp = hydra.util.Comparing.compare(
+      op,
+      other.op);
+    if (cmp != 0) {
+      return cmp;
+    }
+    return hydra.util.Comparing.compare(
+      expression,
+      other.expression);
+  }
+
+  public Assignment withLhs(hydra.java.syntax.LeftHandSide lhs) {
+    return new Assignment(lhs, op, expression);
+  }
+
+  public Assignment withOp(hydra.java.syntax.AssignmentOperator op) {
+    return new Assignment(lhs, op, expression);
+  }
+
+  public Assignment withExpression(hydra.java.syntax.Expression expression) {
+    return new Assignment(lhs, op, expression);
+  }
+}

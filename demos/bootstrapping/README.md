@@ -200,7 +200,7 @@ All three bootstrap executables accept the same options:
 | `--include-coders` | Include extension coder modules |
 | `--include-tests` | Include test modules |
 | `--include-gentests` | Generate generation tests |
-| `--kernel-only` | Exclude `hydra.ext.*` modules |
+| `--kernel-only` | Exclude `hydra.*` modules |
 | `--types-only` | Only type-defining modules |
 | `--json-dir <dir>` | Override kernel JSON directory |
 | `--ext-json-dir <dir>` | Override extension JSON directory |

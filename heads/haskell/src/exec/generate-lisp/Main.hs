@@ -1,6 +1,6 @@
 module Main where
 
-import Hydra.Ext.Generation
+import Hydra.ExtGeneration
 import Hydra.Kernel (Module, moduleNamespace)
 import qualified Hydra.Sources.Haskell.Operators as HaskellOperators
 import System.Directory (createDirectoryIfMissing, copyFile, listDirectory, doesFileExist)

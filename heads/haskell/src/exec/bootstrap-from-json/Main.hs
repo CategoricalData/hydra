@@ -19,7 +19,7 @@
 --   --output <dir>         Output base directory (default: repo target dir)
 --   --include-coders       Also load and generate ext coder modules
 --   --include-tests        Also load and generate kernel test modules
---   --kernel-only          Only generate kernel modules (exclude hydra.ext.*)
+--   --kernel-only          Only generate kernel modules (exclude ext coder modules)
 --   --types-only           Only generate type-defining modules
 --   --ext-only             Only generate hydraExtDemoModules from ext manifest
 --   --ext-java-only        Legacy alias for --ext-only
@@ -30,15 +30,17 @@
 module Main where
 
 import Hydra.Kernel
-import Hydra.Ext.Generation
-import Hydra.Ext.Haskell.Coder (moduleToHaskell)
-import Hydra.Ext.Haskell.Language (haskellLanguage)
-import Hydra.Ext.Java.Coder (moduleToJava)
-import Hydra.Ext.Java.Language (javaLanguage)
-import Hydra.Ext.Python.Coder (moduleToPython)
-import Hydra.Ext.Python.Language (pythonLanguage)
-import Hydra.Ext.Lisp.Language (lispLanguage)
-import qualified Hydra.Ext.Lisp.Syntax as LispSyntax
+import Hydra.Generation
+import Hydra.Sources.All (kernelModules)
+import Hydra.ExtGeneration (moduleToLispDialect)
+import Hydra.Haskell.Coder (moduleToHaskell)
+import Hydra.Haskell.Language (haskellLanguage)
+import Hydra.Java.Coder (moduleToJava)
+import Hydra.Java.Language (javaLanguage)
+import Hydra.Python.Coder (moduleToPython)
+import Hydra.Python.Language (pythonLanguage)
+import Hydra.Lisp.Language (lispLanguage)
+import qualified Hydra.Lisp.Syntax as LispSyntax
 import qualified Hydra.Sources.Test.TestSuite as TestSuite
 
 import Control.Exception (catch, IOException)
@@ -137,7 +139,7 @@ usage = unlines
   , "  --include-dsls         Also generate DSL modules"
   , "  --include-tests        Also generate kernel test modules"
   , "  --include-gentests     (deprecated, ignored)"
-  , "  --kernel-only          Only generate kernel modules (exclude hydra.ext.*)"
+  , "  --kernel-only          Only generate kernel modules (exclude ext coder modules)"
   , "  --types-only           Only generate type-defining modules"
   , "  --ext-only             Only generate hydraExtDemoModules from ext manifest"
   , "  --ext-java-only        Legacy alias for --ext-only"
@@ -259,9 +261,9 @@ main = do
 
   -- Apply filters
   let allMods = mainMods ++ coderMods ++ dslMods
+  let kernelNsStrings = fmap unNamespace allKernelNamespaces
   let filtered1 = if optKernelOnly opts
-        then Prelude.filter (\m -> let ns = unNamespace (moduleNamespace m)
-              in not (isPrefixOf "hydra.ext." ns) && not (isPrefixOf "hydra.json.yaml." ns)) allMods
+        then Prelude.filter (\m -> unNamespace (moduleNamespace m) `elem` kernelNsStrings) allMods
         else allMods
   let filtered2 = if optTypesOnly opts
         then Prelude.filter (\m -> any isNativeType (moduleBindings m)) filtered1
@@ -333,14 +335,14 @@ main = do
 
       let allUniverse = allMods ++ testMods
 
-      -- When --kernel-only is active, ext modules are excluded from allMainMods.
-      -- But test modules may depend on ext modules (e.g. hydra.test.serialization
-      -- depends on hydra.ext.haskell.operators). Generate those ext modules to outMain
+      -- When --kernel-only is active, non-kernel modules are excluded from allMainMods.
+      -- But test modules may depend on non-kernel modules (e.g. hydra.test.serialization
+      -- depends on hydra.haskell.operators). Generate those modules to outMain
       -- so test code can reference them.
       when (optKernelOnly opts) $ do
-        let testExtDeps = Prelude.filter (\ns -> isPrefixOf "hydra.ext." (unNamespace ns))
+        let testExtraDeps = Prelude.filter (\ns -> unNamespace ns `notElem` kernelNsStrings)
               $ concatMap moduleTermDependencies testMods
-            extModsForTests = Prelude.filter (\m -> moduleNamespace m `elem` testExtDeps) allMods
+            extModsForTests = Prelude.filter (\m -> moduleNamespace m `elem` testExtraDeps) allMods
         when (not (Prelude.null extModsForTests)) $ do
           putStrLn $ "Generating " ++ show (length extModsForTests) ++ " ext module(s) needed by tests..."
           case target of

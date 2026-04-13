@@ -1,0 +1,41 @@
+// Note: this is an automatically generated file. Do not edit.
+
+package hydra.java.syntax;
+
+import java.io.Serializable;
+
+public class AnnotationTypeBody implements Serializable, Comparable<AnnotationTypeBody> {
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.java.syntax.AnnotationTypeBody");
+
+  public static final hydra.core.Name VALUE = new hydra.core.Name("value");
+
+  public final java.util.List<java.util.List<hydra.java.syntax.AnnotationTypeMemberDeclaration>> value;
+
+  public AnnotationTypeBody (java.util.List<java.util.List<hydra.java.syntax.AnnotationTypeMemberDeclaration>> value) {
+    this.value = value;
+  }
+
+  @Override
+  public boolean equals(Object other) {
+    if (!(other instanceof AnnotationTypeBody)) {
+      return false;
+    }
+    AnnotationTypeBody o = (AnnotationTypeBody) other;
+    return java.util.Objects.equals(
+      this.value,
+      o.value);
+  }
+
+  @Override
+  public int hashCode() {
+    return 2 * java.util.Objects.hashCode(value);
+  }
+
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(AnnotationTypeBody other) {
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
+  }
+}

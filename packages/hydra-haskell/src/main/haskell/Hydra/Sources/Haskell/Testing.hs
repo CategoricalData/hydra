@@ -37,7 +37,7 @@ import qualified Data.Map                                  as M
 import qualified Data.Set                                  as S
 
 -- Additional imports
-import qualified Hydra.Ext.Haskell.Syntax as H
+import qualified Hydra.Haskell.Syntax as H
 import qualified Hydra.Sources.Haskell.Syntax as HaskellSyntax
 import qualified Hydra.Sources.Haskell.Utils as HaskellUtilsSource
 
@@ -47,7 +47,7 @@ define = definitionInModule module_
 
 
 ns :: Namespace
-ns = Namespace "hydra.ext.haskell.testing"
+ns = Namespace "hydra.haskell.testing"
 
 module_ :: Module
 module_ = Module ns definitions

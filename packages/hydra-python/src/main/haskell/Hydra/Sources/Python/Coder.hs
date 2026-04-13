@@ -1,0 +1,4226 @@
+-- | Python code generator in Hydra DSL.
+-- This module provides DSL versions of all Python code generation functions,
+-- including the main entry points (moduleToPython, encodePythonModule).
+
+module Hydra.Sources.Python.Coder where
+
+-- Standard imports for term-level sources outside of the kernel
+import Hydra.Kernel
+import Hydra.Sources.Libraries
+import           Hydra.Dsl.Meta.Lib.Strings                as Strings
+import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
+import qualified Hydra.Dsl.Annotations                     as Annotations
+import qualified Hydra.Dsl.Bootstrap                       as Bootstrap
+import qualified Hydra.Dsl.LiteralTypes                    as LiteralTypes
+import qualified Hydra.Dsl.Literals                        as Literals
+import qualified Hydra.Dsl.Paths                      as Paths
+import qualified Hydra.Dsl.Ast                        as Ast
+import qualified Hydra.Dsl.Meta.Base                       as MetaBase
+import qualified Hydra.Dsl.Coders                     as Coders
+import qualified Hydra.Dsl.Util                    as Util
+import qualified Hydra.Dsl.Meta.Context                    as Ctx
+import qualified Hydra.Dsl.Meta.Core                       as Core
+import qualified Hydra.Dsl.Errors                      as Error
+import qualified Hydra.Dsl.Meta.Graph                      as Graph
+import qualified Hydra.Dsl.Json.Model                       as Json
+import qualified Hydra.Dsl.Meta.Lib.Chars                  as Chars
+import qualified Hydra.Dsl.Meta.Lib.Eithers                as Eithers
+import qualified Hydra.Dsl.Meta.Lib.Equality               as Equality
+import qualified Hydra.Dsl.Meta.Lib.Lists                  as Lists
+import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
+import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
+import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
+import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
+import qualified Hydra.Dsl.Meta.Lib.Maybes                 as Maybes
+import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
+import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
+import qualified Hydra.Dsl.Packaging                     as Packaging
+import qualified Hydra.Dsl.Meta.Terms                      as MetaTerms
+import qualified Hydra.Dsl.Meta.Testing                    as Testing
+import qualified Hydra.Dsl.Topology                   as Topology
+import qualified Hydra.Dsl.Meta.Types                      as MetaTypes
+import qualified Hydra.Dsl.Typing                     as Typing
+import qualified Hydra.Dsl.Util                       as Util
+import qualified Hydra.Dsl.Meta.Variants                   as Variants
+import qualified Hydra.Dsl.Prims                           as Prims
+import qualified Hydra.Dsl.Meta.Tabular                         as Tabular
+import qualified Hydra.Dsl.Terms                           as Terms
+import qualified Hydra.Dsl.Tests                           as Tests
+import qualified Hydra.Dsl.Types                           as Types
+import qualified Hydra.Sources.Decode.Core                 as DecodeCore
+import qualified Hydra.Sources.Encode.Core                 as EncodeCore
+import qualified Hydra.Sources.Kernel.Terms.Adapt           as Adapt
+import qualified Hydra.Sources.Kernel.Terms.All            as KernelTerms
+import qualified Hydra.Sources.Kernel.Terms.Annotations    as Annotations
+import qualified Hydra.Sources.Kernel.Terms.Arity          as Arity
+import qualified Hydra.Sources.Kernel.Terms.Checking       as Checking
+import qualified Hydra.Sources.Kernel.Terms.Constants      as Constants
+import qualified Hydra.Sources.Kernel.Terms.Extract.Core   as ExtractCore
+import qualified Hydra.Sources.Kernel.Terms.Extract.Util   as ExtractUtil
+import qualified Hydra.Sources.Kernel.Terms.Formatting     as Formatting
+import qualified Hydra.Sources.Kernel.Terms.Inference      as Inference
+import qualified Hydra.Sources.Kernel.Terms.Languages      as Languages
+import qualified Hydra.Sources.Kernel.Terms.Lexical        as Lexical
+import qualified Hydra.Sources.Kernel.Terms.Literals       as Literals
+import qualified Hydra.Sources.Kernel.Terms.Names          as Names
+import qualified Hydra.Sources.Kernel.Terms.Reduction      as Reduction
+import qualified Hydra.Sources.Kernel.Terms.Reflect        as Reflect
+import qualified Hydra.Sources.Kernel.Terms.Rewriting      as Rewriting
+import qualified Hydra.Sources.Kernel.Terms.Strip          as Strip
+import qualified Hydra.Sources.Kernel.Terms.Variables      as Variables
+import qualified Hydra.Sources.Kernel.Terms.Dependencies   as Dependencies
+import qualified Hydra.Sources.Kernel.Terms.Scoping        as Scoping
+import qualified Hydra.Sources.Kernel.Terms.Predicates    as Predicates
+import qualified Hydra.Sources.Kernel.Terms.Resolution    as Resolution
+import qualified Hydra.Sources.Kernel.Terms.Analysis      as Analysis
+import qualified Hydra.Sources.Kernel.Terms.Environment   as Environment
+import qualified Hydra.Sources.Kernel.Terms.Serialization  as Serialization
+import qualified Hydra.Sources.Kernel.Terms.Show.Paths as ShowPaths
+import qualified Hydra.Sources.Kernel.Terms.Show.Core      as ShowCore
+import qualified Hydra.Sources.Kernel.Terms.Show.Graph     as ShowGraph
+import qualified Hydra.Sources.Kernel.Terms.Show.Variants  as ShowVariants
+import qualified Hydra.Sources.Kernel.Terms.Show.Typing    as ShowTyping
+import qualified Hydra.Sources.Kernel.Terms.Sorting        as Sorting
+import qualified Hydra.Sources.Kernel.Terms.Substitution   as Substitution
+import qualified Hydra.Sources.Kernel.Terms.Templates      as Templates
+import qualified Hydra.Sources.Kernel.Terms.Unification    as Unification
+import qualified Hydra.Sources.Kernel.Types.All            as KernelTypes
+import           Prelude hiding ((++))
+import qualified Data.Int                                  as I
+import qualified Data.List                                 as L
+import qualified Data.Map                                  as M
+import qualified Data.Set                                  as S
+import qualified Data.Maybe                                as Y
+
+-- Additional imports
+import qualified Hydra.Python.Syntax as Py
+import qualified Hydra.Python.Environment as PyHelpers
+import qualified Hydra.Sources.Python.Syntax as PySyntax
+import qualified Hydra.Sources.Python.Environment as PyEnvironmentSource
+import qualified Hydra.Sources.Python.Serde as PySerde
+import qualified Hydra.Sources.Python.Names as PyNames
+import qualified Hydra.Sources.Python.Utils as PyUtils
+import qualified Hydra.Dsl.Python.Helpers as PyDsl
+import qualified Hydra.Typing as HydraTyping
+
+def :: String -> TTerm a -> TTermDefinition a
+def = definitionInModule module_
+
+ns :: Namespace
+ns = Namespace "hydra.python.coder"
+
+module_ :: Module
+module_ = Module ns definitions
+    [PyUtils.ns, PyNames.ns, PySerde.ns, Serialization.ns, Analysis.ns, Environment.ns, Formatting.ns, Names.ns, Predicates.ns, Resolution.ns, Rewriting.ns, Dependencies.ns, Scoping.ns, Strip.ns, Variables.ns, ShowCore.ns, Reduction.ns, Sorting.ns, Inference.ns]
+    (PyEnvironmentSource.ns:PySyntax.ns:KernelTypes.kernelTypesNamespaces) $
+    Just "Python code generator: converts Hydra modules to Python source code"
+  where
+    definitions = [
+      toDefinition analyzePythonFunction,
+      toDefinition classVariantPatternUnit,
+      toDefinition classVariantPatternWithCapture,
+      toDefinition Environment.reorderDefs,
+      toDefinition collectTypeVariables,
+      toDefinition condImportSymbol,
+      toDefinition dataclassDecorator,
+      toDefinition deconflictVariantName,
+      toDefinition deduplicateCaseVariables,
+      toDefinition digForWrap,
+      toDefinition eliminateUnitVar,
+      toDefinition emptyMetadata,
+      toDefinition encodeApplication,
+      toDefinition encodeApplicationInner,
+      toDefinition encodeApplicationType,
+      toDefinition encodeBindingAs,
+      toDefinition encodeBindingAsAssignment,
+      toDefinition encodeBindingsAsDefs,
+      toDefinition encodeCaseBlock,
+      toDefinition encodeDefaultCaseBlock,
+      toDefinition encodeDefinition,
+      toDefinition encodeEnumValueAssignment,
+      toDefinition encodeField,
+      toDefinition encodeFieldType,
+      toDefinition encodeFloatValue,
+      toDefinition encodeFloatValue_encodeFloat32,
+      toDefinition encodeFloatValue_encodeFloat64,
+      toDefinition encodeFloatValue_pySpecialFloat,
+      toDefinition encodeForallType,
+      toDefinition encodeFunction,
+      toDefinition encodeFunctionDefinition,
+      toDefinition encodeFunctionType,
+      toDefinition encodeIntegerValue,
+      toDefinition encodeLiteral,
+      toDefinition encodeLiteralType,
+      toDefinition encodeNameConstants,
+      toDefinition encodePythonModule,
+      toDefinition encodeRecordType,
+      toDefinition encodeTermAssignment,
+      toDefinition encodeTermInline,
+      toDefinition encodeTermMultiline,
+      toDefinition encodeTermMultilineTCO,
+      toDefinition encodeType,
+      toDefinition encodeTypeAssignment,
+      toDefinition encodeTypeAssignmentInner,
+      toDefinition encodeTypeDefSingle,
+      toDefinition encodeTypeQuoted,
+      toDefinition encodeUnionEliminationInline,
+      toDefinition encodeUnionField,
+      toDefinition encodeUnionFieldAlt,
+      toDefinition encodeUnionType,
+      toDefinition encodeVariable,
+      toDefinition encodeWrappedType,
+      toDefinition enumVariantPattern,
+      toDefinition environmentTypeParameters,
+      toDefinition extendEnvWithLambdaParams,
+      toDefinition extendEnvWithTypeVar,
+      toDefinition extendMetaForTerm,
+      toDefinition extendMetaForType,
+      toDefinition extendMetaForTypes,
+      toDefinition extractCaseElimination,
+      toDefinition findTypeParams,
+      toDefinition functionArityWithPrimitives,
+      toDefinition gatherLambdas,
+      toDefinition gatherMetadata,
+      toDefinition genericArg,
+      toDefinition initialEnvironment,
+      toDefinition initialMetadata,
+      toDefinition isCasesFull,
+      toDefinition isCaseStatementApplication,
+      toDefinition isTypeModuleCheck,
+      toDefinition isTypeVariableName,
+      toDefinition isVariantUnitType,
+      toDefinition lruCacheDecorator,
+      toDefinition makeCurriedLambda,
+      toDefinition makePyGraph,
+      toDefinition makeSimpleLambda,
+      toDefinition makeThunk,
+      toDefinition makeUncurriedLambda,
+      toDefinition moduleDomainImports,
+      toDefinition moduleImports,
+      toDefinition moduleStandardImports,
+      toDefinition moduleToPython,
+      toDefinition pyGraphGraph,
+      toDefinition pyGraphMetadata,
+      toDefinition pyInt,
+      toDefinition pythonBindingMetadata,
+      toDefinition pythonEnvironmentGetGraph,
+      toDefinition pythonEnvironmentSetGraph,
+      toDefinition setMetaNamespaces,
+      toDefinition setMetaTypeVariables,
+      toDefinition setMetaUsesAnnotated,
+      toDefinition setMetaUsesCallable,
+      toDefinition setMetaUsesCast,
+      toDefinition setMetaUsesDataclass,
+      toDefinition setMetaUsesDecimal,
+      toDefinition setMetaUsesEither,
+      toDefinition setMetaUsesEnum,
+      toDefinition setMetaUsesFrozenDict,
+      toDefinition setMetaUsesFrozenList,
+      toDefinition setMetaUsesGeneric,
+      toDefinition setMetaUsesJust,
+      toDefinition setMetaUsesLeft,
+      toDefinition setMetaUsesLruCache,
+      toDefinition setMetaUsesMaybe,
+      toDefinition setMetaUsesName,
+      toDefinition setMetaUsesNode,
+      toDefinition setMetaUsesNothing,
+      toDefinition setMetaUsesRight,
+      toDefinition setMetaUsesTypeAlias,
+      toDefinition setMetaUsesTypeVar,
+      toDefinition shouldThunkBinding,
+      toDefinition standardImportStatement,
+      toDefinition targetPythonVersion,
+      toDefinition termArityWithPrimitives,
+      toDefinition tvarStatement,
+      toDefinition typeAliasStatementFor,
+      toDefinition unionTypeStatementsFor,
+      toDefinition unsupportedExpression,
+      toDefinition useInlineTypeParams,
+      toDefinition useInlineTypeParamsFor,
+      toDefinition variantArgs,
+      toDefinition variantClosedPattern,
+      toDefinition wildcardCaseBlock,
+      toDefinition withDefinitions,
+      toDefinition withLambda,
+      toDefinition withLet,
+      toDefinition withLetInline,
+      toDefinition withTypeLambda,
+      toDefinition wrapInNullaryLambda,
+      toDefinition wrapLazyArguments]
+
+-- | Analyze a function term with Python-specific Graph management.
+--   This is a wrapper around Analysis.analyzeFunctionTermWith that provides the Python-specific
+--   Graph getteranalyzePythonFunction/setter and Python-specific binding metadata (which skips trivial bindings).
+analyzePythonFunction :: TTermDefinition (Context -> PyHelpers.PythonEnvironment -> Term -> Either Error (FunctionStructure PyHelpers.PythonEnvironment))
+analyzePythonFunction = def "analyzePythonFunction" $
+  doc "Analyze a function term with Python-specific Graph management" $
+  lambda "cx" $ lambda "env" $ lambda "term" $
+    Analysis.analyzeFunctionTermWith @@ var "cx" @@
+      pythonBindingMetadata @@
+      pythonEnvironmentGetGraph @@
+      pythonEnvironmentSetGraph @@
+      var "env" @@ var "term"
+
+-- | Create a CaseBlock pattern for a class variant with no capture (unit variant).
+classVariantPatternUnit :: TTermDefinition (Py.Name -> Py.ClosedPattern)
+classVariantPatternUnit = def "classVariantPatternUnit" $
+  doc "Create a class pattern for a unit variant (no value captured)" $
+  "pyVariantName" ~>
+    PyDsl.closedPatternClass $
+      PyDsl.classPatternSimple
+        (PyDsl.nameOrAttribute $ list [var "pyVariantName"])
+
+-- | Create a CaseBlock pattern for a class variant with value capture.
+classVariantPatternWithCapture :: TTermDefinition (PyHelpers.PythonEnvironment -> Py.Name -> Name -> Py.ClosedPattern)
+classVariantPatternWithCapture = def "classVariantPatternWithCapture" $
+  doc "Create a class pattern for a variant with captured value" $
+  "env" ~> "pyVariantName" ~> "varName" ~>
+    "pyVarNameAttr" <~ (PyDsl.nameOrAttribute $ list [var "pyVariantName"]) $
+    "capturePattern" <~ (PyDsl.closedPatternCapture $ PyDsl.capturePattern $
+      PyDsl.patternCaptureTarget (PyNames.encodeName @@ false @@ Util.caseConventionLowerSnake @@ var "env" @@ var "varName")) $
+    "keywordPattern" <~ (PyDsl.keywordPattern (PyDsl.name $ string "value") $
+      PyDsl.patternOr $ PyDsl.orPattern $ list [var "capturePattern"]) $
+    PyDsl.closedPatternClass $
+      PyDsl.classPatternWithKeywords
+        (var "pyVarNameAttr")
+        (PyDsl.keywordPatterns $ list [var "keywordPattern"])
+
+-- | Collect type variables from a type.
+--   Collects both explicitly quantified variables (from forall) AND free type variables.
+--   Filters out qualified names (those containing '.') since those are nominal types.
+collectTypeVariables :: TTermDefinition (S.Set Name -> Type -> S.Set Name)
+collectTypeVariables = def "collectTypeVariables" $
+  doc "Collect type variables from a type" $
+  "initial" ~> "typ" ~>
+    cases _Type (Strip.deannotateType @@ var "typ") (Just $
+      -- Default: union initial with filtered free variables
+      -- Filter free variables to only include unqualified names (type variables)
+      "freeVars" <~ (Variables.freeVariablesInType @@ var "typ") $
+      "isTypeVar" <~ ("n" ~> isTypeVariableName @@ var "n") $
+      "filteredList" <~ Lists.filter (var "isTypeVar") (Sets.toList $ var "freeVars") $
+      Sets.union (var "initial") (Sets.fromList $ var "filteredList")) [
+      _Type_forall>>: "ft" ~>
+        "v" <~ Core.forallTypeParameter (var "ft") $
+        "body" <~ Core.forallTypeBody (var "ft") $
+        collectTypeVariables @@ (Sets.insert (var "v") (var "initial")) @@ var "body"]
+
+-- | Conditionally include a symbol name based on a boolean flag
+condImportSymbol :: TTermDefinition (String -> Bool -> Maybe String)
+condImportSymbol = def "condImportSymbol" $
+  doc "Conditionally include a symbol name based on a boolean flag" $
+  "name" ~> "flag" ~>
+    Logic.ifElse (var "flag") (just $ var "name") nothing
+
+-- | Create a @dataclass(frozen=True) decorator
+dataclassDecorator :: TTermDefinition Py.NamedExpression
+dataclassDecorator = def "dataclassDecorator" $
+  doc "Create a @dataclass(frozen=True) decorator" $
+  PyDsl.namedExpressionSimple $
+    PyUtils.pyPrimaryToPyExpression @@
+      (PyUtils.primaryWithRhs @@
+        (PyDsl.pyNameToPyPrimary $ PyDsl.name $ string "dataclass") @@
+        (PyDsl.primaryRhsCall $ PyDsl.args
+          (Phantoms.list ([] :: [TTerm Py.PosArg]))
+          (Phantoms.list [PyDsl.kwargOrStarredKwarg $ PyDsl.kwarg (PyDsl.name $ string "frozen") (PyUtils.pyAtomToPyExpression @@ PyDsl.atomTrue)])
+          (Phantoms.list ([] :: [TTerm Py.KwargOrDoubleStarred]))))
+
+-- | Deconflict a variant name by appending '_' if the corresponding Hydra name
+--   exists as an element in the graph. This prevents name collisions between
+--   variant wrapper classes and union type metaclasses in generated Python.
+deconflictVariantName :: TTermDefinition (Bool -> PyHelpers.PythonEnvironment -> Name -> Name -> Graph -> Py.Name)
+deconflictVariantName = def "deconflictVariantName" $
+  doc "Deconflict a variant name to avoid collisions with type names" $
+  "isQualified" ~> "env" ~> "unionName" ~> "fname" ~> "g" ~>
+    -- Compute the Hydra Name that the variant would correspond to
+    "candidateHydraName" <~ (wrap _Name $ Strings.cat2 (Core.unName $ var "unionName") (Formatting.capitalize @@ (Core.unName $ var "fname"))) $
+    -- Check if this name exists as a term binding or a schema type in the graph
+    "termCollision" <~ (Maps.member (var "candidateHydraName") (Graph.graphBoundTerms (var "g"))) $
+    "typeCollision" <~ (Maps.member (var "candidateHydraName") (Graph.graphSchemaTypes (var "g"))) $
+    "collision" <~ (Logic.or (var "termCollision") (var "typeCollision")) $
+    Logic.ifElse (var "collision")
+      -- Collision: append '_' to the Python name
+      (PyDsl.name $ Strings.cat2 (PyDsl.unName $ PyNames.variantName @@ var "isQualified" @@ var "env" @@ var "unionName" @@ var "fname") (string "_"))
+      -- No collision: use the normal variant name
+      (PyNames.variantName @@ var "isQualified" @@ var "env" @@ var "unionName" @@ var "fname")
+
+-- | Rewrite case statements in which the top-level lambda variables are re-used.
+--   Such case statements are legal in Hydra, but may lead to variable name collision in Python.
+--   For example: cases _Type Nothing [_Type_list>>: "t" ~> ..., _Type_set>>: "t" ~> ...]
+--   In Python, both branches would bind "t", so we rename them to "t1", "t2", etc.
+deduplicateCaseVariables :: TTermDefinition ([Field] -> [Field])
+deduplicateCaseVariables = def "deduplicateCaseVariables" $
+  doc "Rewrite case statements to avoid variable name collisions" $
+  "cases_" ~>
+    -- rewriteCase: (countByName, done) -> field -> (updatedCount, updatedDone)
+    "rewriteCase" <~ (
+      "state" ~> "field" ~>
+        "countByName" <~ Pairs.first (var "state") $
+        "done" <~ Pairs.second (var "state") $
+        "fname" <~ Core.fieldName (var "field") $
+        "fterm" <~ Core.fieldTerm (var "field") $
+        -- Check if term is a lambda (strip annotations and type wrappers)
+        cases _Term (Strip.deannotateAndDetypeTerm @@ var "fterm") (Just $ pair (var "countByName") (Lists.cons (var "field") (var "done"))) [
+          _Term_function>>: "f" ~>
+            cases _Function (var "f") (Just $ pair (var "countByName") (Lists.cons (var "field") (var "done"))) [
+              _Function_lambda>>: "lam" ~>
+                "v" <~ Core.lambdaParameter (var "lam") $
+                "mdom" <~ Core.lambdaDomain (var "lam") $
+                "body" <~ Core.lambdaBody (var "lam") $
+                -- Check if variable name already seen - use optCases for pattern matching
+                optCases (Maps.lookup (var "v") (var "countByName"))
+                  -- First occurrence: insert with count 1
+                  (pair (Maps.insert (var "v") (int32 1) (var "countByName"))
+                        (Lists.cons (var "field") (var "done")))
+                  -- Already seen: rename variable
+                  ("count" ~>
+                    "count2" <~ (Math.add (var "count") (int32 1)) $
+                    "v2" <~ (Core.name $ Strings.cat2 (Core.unName $ var "v") (Literals.showInt32 $ var "count2")) $
+                    "newBody" <~ (Reduction.alphaConvert @@ var "v" @@ var "v2" @@ var "body") $
+                    "newLam" <~ (Core.lambda (var "v2") (var "mdom") (var "newBody")) $
+                    "newTerm" <~ (inject _Term _Term_function $ inject _Function _Function_lambda $ var "newLam") $
+                    "newField" <~ (Core.field (var "fname") (var "newTerm")) $
+                    pair (Maps.insert (var "v") (var "count2") (var "countByName"))
+                         (Lists.cons (var "newField") (var "done")))]]) $
+    -- fold with initial state (empty map, empty list)
+    "result" <~ Lists.foldl (var "rewriteCase")
+                  (pair (Maps.empty :: TTerm (M.Map Name I.Int32)) (list ([] :: [TTerm Field])))
+                  (var "cases_") $
+    Lists.reverse (Pairs.second $ var "result")
+
+-- | Recursively dig through forall types to find wrap types.
+--   This is used to detect when we need to import Node for wrapped types
+--   that are nested inside forall types (e.g., forall s. forall v. Wrap(...)).
+digForWrap :: TTermDefinition (Bool -> PyHelpers.PythonModuleMetadata -> Type -> PyHelpers.PythonModuleMetadata)
+digForWrap = def "digForWrap" $
+  doc "Recursively dig through forall types to find wrap types" $
+  "isTermAnnot" ~> "meta" ~> "typ" ~>
+    cases _Type (Strip.deannotateType @@ var "typ") (Just $ var "meta") [
+      _Type_forall>>: "ft" ~>
+        digForWrap @@ var "isTermAnnot" @@ var "meta" @@ Core.forallTypeBody (var "ft"),
+      _Type_wrap>>: constant $
+        Logic.ifElse (var "isTermAnnot")
+          (var "meta")
+          (setMetaUsesNode @@ var "meta" @@ true)]
+
+-- | For unit variants, the case body may contain references to the lambda
+--   parameter `v` in applications like `(lambda _ -> innerBody) v`. Since
+--   we don't capture `v` in the pattern (unit variants have no value), we
+--   need to eliminate all references to `v`. We do this by substituting
+--   `v` with `unit` throughout the body, since `v` is only used as an
+--   argument to lambdas that ignore their parameter.
+eliminateUnitVar :: TTermDefinition (Name -> Term -> Term)
+eliminateUnitVar = def "eliminateUnitVar" $
+  doc "Substitute unit for a variable in a term (for unit variant case handling)" $
+  "v" ~> "term0" ~>
+    -- Helper functions that use rewrite
+    "rewriteField" <~ ("rewrite" ~> "fld" ~>
+      Core.field (Core.fieldName $ var "fld")
+                 (var "rewrite" @@ Core.fieldTerm (var "fld"))) $
+    "rewriteBinding" <~ ("rewrite" ~> "bnd" ~>
+      Core.binding (Core.bindingName $ var "bnd")
+                   (var "rewrite" @@ Core.bindingTerm (var "bnd"))
+                   (Core.bindingType $ var "bnd")) $
+    -- Main rewrite function as Y combinator style
+    "rewrite" <~ ("recurse" ~> "term" ~>
+      cases _Term (Strip.deannotateAndDetypeTerm @@ var "term") (Just $ var "term") [
+        -- Replace the variable with unit
+        _Term_variable>>: "n" ~>
+          Logic.ifElse (Equality.equal (var "n") (var "v"))
+            Core.termUnit
+            (var "term"),
+        -- Recursively rewrite subterms
+        _Term_annotated>>: "at" ~>
+          Core.termAnnotated $ Core.annotatedTerm
+            (var "recurse" @@ Core.annotatedTermBody (var "at"))
+            (Core.annotatedTermAnnotation $ var "at"),
+        _Term_application>>: "app" ~>
+          Core.termApplication $ Core.application
+            (var "recurse" @@ Core.applicationFunction (var "app"))
+            (var "recurse" @@ Core.applicationArgument (var "app")),
+        _Term_function>>: "f" ~>
+          cases _Function (var "f") (Just $ var "term") [
+            _Function_lambda>>: "lam" ~>
+              -- Don't descend if the lambda shadows our variable
+              Logic.ifElse (Equality.equal (Core.lambdaParameter $ var "lam") (var "v"))
+                (var "term")
+                (Core.termFunction $ Core.functionLambda $ Core.lambda
+                  (Core.lambdaParameter $ var "lam")
+                  (Core.lambdaDomain $ var "lam")
+                  (var "recurse" @@ Core.lambdaBody (var "lam"))),
+            _Function_elimination>>: "e" ~>
+              cases _Elimination (var "e") (Just $ var "term") [
+                _Elimination_union>>: "cs" ~>
+                  Core.termFunction $ Core.functionElimination $ Core.eliminationUnion $
+                    Core.caseStatement
+                      (Core.caseStatementTypeName $ var "cs")
+                      (Maybes.map (var "recurse") (Core.caseStatementDefault $ var "cs"))
+                      (Lists.map (var "rewriteField" @@ var "recurse") (Core.caseStatementCases $ var "cs"))]],
+        _Term_let>>: "lt" ~>
+          Core.termLet $ Core.let_
+            (Lists.map (var "rewriteBinding" @@ var "recurse") (Core.letBindings $ var "lt"))
+            (var "recurse" @@ Core.letBody (var "lt")),
+        _Term_list>>: "ts" ~>
+          Core.termList $ Lists.map (var "recurse") (var "ts"),
+        _Term_map>>: "m" ~>
+          Core.termMap $ Maps.fromList $ Lists.map
+            ("kv" ~> pair (var "recurse" @@ Pairs.first (var "kv"))
+                         (var "recurse" @@ Pairs.second (var "kv")))
+            (Maps.toList $ var "m"),
+        _Term_record>>: "rec" ~>
+          Core.termRecord $ Core.record
+            (Core.recordTypeName $ var "rec")
+            (Lists.map (var "rewriteField" @@ var "recurse") (Core.recordFields $ var "rec")),
+        _Term_set>>: "s" ~>
+          Core.termSet $ Sets.map (var "recurse") (var "s"),
+        _Term_union>>: "inj" ~>
+          Core.termUnion $ Core.injection
+            (Core.injectionTypeName $ var "inj")
+            (var "rewriteField" @@ var "recurse" @@ Core.injectionField (var "inj")),
+        _Term_maybe>>: "mt" ~>
+          Core.termMaybe $ Maybes.map (var "recurse") (var "mt"),
+        _Term_pair>>: "p" ~>
+          Core.termPair $ pair
+            (var "recurse" @@ Pairs.first (var "p"))
+            (var "recurse" @@ Pairs.second (var "p")),
+        _Term_wrap>>: "wt" ~>
+          Core.termWrap $ Core.wrappedTerm
+            (Core.wrappedTermTypeName $ var "wt")
+            (var "recurse" @@ Core.wrappedTermBody (var "wt")),
+        _Term_either>>: "e" ~>
+          Core.termEither $ Eithers.bimap (var "recurse") (var "recurse") (var "e"),
+        _Term_typeApplication>>: "ta" ~>
+          Core.termTypeApplication $ Core.typeApplicationTerm
+            (var "recurse" @@ Core.typeApplicationTermBody (var "ta"))
+            (Core.typeApplicationTermType $ var "ta"),
+        _Term_typeLambda>>: "tl" ~>
+          Core.termTypeLambda $ Core.typeLambda
+            (Core.typeLambdaParameter $ var "tl")
+            (var "recurse" @@ Core.typeLambdaBody (var "tl"))]) $
+    -- Fixed point: apply rewrite to itself
+    "go" <~ ("term" ~> var "rewrite" @@ var "go" @@ var "term") $
+    var "go" @@ var "term0"
+
+-- | Create an initial empty metadata record with given namespaces
+emptyMetadata :: TTermDefinition (Namespaces Py.DottedName -> PyHelpers.PythonModuleMetadata)
+emptyMetadata = def "emptyMetadata" $
+  doc "Create an initial empty metadata record with given namespaces" $
+  "ns" ~>
+    record PyHelpers._PythonModuleMetadata [
+      PyHelpers._PythonModuleMetadata_namespaces>>: var "ns",
+      PyHelpers._PythonModuleMetadata_typeVariables>>: Sets.empty,
+      PyHelpers._PythonModuleMetadata_usesAnnotated>>: false,
+      PyHelpers._PythonModuleMetadata_usesCallable>>: false,
+      PyHelpers._PythonModuleMetadata_usesCast>>: false,
+      PyHelpers._PythonModuleMetadata_usesLruCache>>: false,
+      PyHelpers._PythonModuleMetadata_usesTypeAlias>>: false,
+      PyHelpers._PythonModuleMetadata_usesDataclass>>: false,
+      PyHelpers._PythonModuleMetadata_usesDecimal>>: false,
+      PyHelpers._PythonModuleMetadata_usesEither>>: false,
+      PyHelpers._PythonModuleMetadata_usesEnum>>: false,
+      PyHelpers._PythonModuleMetadata_usesFrozenDict>>: false,
+      PyHelpers._PythonModuleMetadata_usesFrozenList>>: false,
+      PyHelpers._PythonModuleMetadata_usesGeneric>>: false,
+      PyHelpers._PythonModuleMetadata_usesJust>>: false,
+      PyHelpers._PythonModuleMetadata_usesLeft>>: false,
+      PyHelpers._PythonModuleMetadata_usesMaybe>>: false,
+      PyHelpers._PythonModuleMetadata_usesName>>: false,
+      PyHelpers._PythonModuleMetadata_usesNode>>: false,
+      PyHelpers._PythonModuleMetadata_usesNothing>>: false,
+      PyHelpers._PythonModuleMetadata_usesRight>>: false,
+      PyHelpers._PythonModuleMetadata_usesTypeVar>>: false]
+
+-- | Encode a function application to a Python expression.
+--   This is a complex function that handles various application patterns:
+--   - Record projection (field access)
+--   - Union case elimination (match expressions - currently unsupported inline)
+--   - Wrap elimination (unwrapping newtypes)
+--   - Primitive applications
+--   - Variable applications
+encodeApplication :: TTermDefinition (Context -> PyHelpers.PythonEnvironment
+  -> Application
+  -> Either Error Py.Expression)
+encodeApplication = def "encodeApplication" $
+  doc "Encode a function application to a Python expression" $
+  "cx" ~> "env" ~> "app" ~>
+    "g" <~ (pythonEnvironmentGetGraph @@ var "env") $
+    "term" <~ (Core.termApplication $ var "app") $
+    "gathered" <~ (Analysis.gatherArgs @@ var "term" @@ list ([] :: [TTerm Term])) $
+    "fun" <~ (Pairs.first $ var "gathered") $
+    "args" <~ (Pairs.second $ var "gathered") $
+    -- Use term-based arity, but ensure it is at least the number of gathered args.
+    -- This prevents curried application when termArityWithPrimitives returns 0 for
+    -- local variables (lambda parameters) not found in the graph. Since the Python coder
+    -- generates uncurried lambdas, all applications must also be uncurried.
+    "knownArity" <~ (termArityWithPrimitives @@ var "g" @@ var "fun") $
+    "arity" <~ (Math.max (var "knownArity") (Lists.length (var "args"))) $
+    "pargs" <<~ (Eithers.mapList ("t" ~> encodeTermInline @@ var "cx" @@ var "env" @@ false @@ var "t") (var "args")) $
+    "hargs" <~ (Lists.take (var "arity") (var "pargs")) $
+    "rargs" <~ (Lists.drop (var "arity") (var "pargs")) $
+    -- Apply args based on function type
+    "result" <<~ (encodeApplicationInner @@ var "cx" @@ var "env" @@ var "fun" @@ var "hargs" @@ var "rargs") $
+    "lhs" <~ (Pairs.first $ var "result") $
+    "remainingRargs" <~ (Pairs.second $ var "result") $
+    -- Fold remaining args into function calls
+    "pyapp" <~ (Lists.foldl
+      ("t" ~> "a" ~> PyUtils.functionCall @@ (PyUtils.pyExpressionToPyPrimary @@ var "t") @@ (list [var "a"]))
+      (var "lhs")
+      (var "remainingRargs")) $
+    right $ var "pyapp"
+
+-- | Inner helper for encodeApplication that handles the different function types.
+--   Returns (expression, remaining rargs).
+encodeApplicationInner :: TTermDefinition (Context -> PyHelpers.PythonEnvironment
+  -> TTerm Term  -- fun
+  -> [Py.Expression]  -- hargs
+  -> [Py.Expression]  -- rargs
+  -> Either Error (Py.Expression, [Py.Expression]))
+encodeApplicationInner = def "encodeApplicationInner" $
+  doc "Inner helper for encodeApplication" $
+  "cx" ~> "env" ~> "fun" ~> "hargs" ~> "rargs" ~>
+    "firstArg" <~ (Lists.head $ var "hargs") $
+    "restArgs" <~ (Lists.tail $ var "hargs") $
+    "withRest" <~ ("e" ~>
+      Logic.ifElse (Lists.null $ var "restArgs")
+        (var "e")
+        (PyUtils.functionCall @@ (PyUtils.pyExpressionToPyPrimary @@ var "e") @@ var "restArgs")) $
+    -- Default case: encode function and apply
+    "defaultCase" <~ ("pfun" <<~ (encodeTermInline @@ var "cx" @@ var "env" @@ false @@ var "fun") $
+      right $ pair (PyUtils.functionCall @@ (PyUtils.pyExpressionToPyPrimary @@ var "pfun") @@ var "hargs") (var "rargs")) $
+    cases _Term (Strip.deannotateAndDetypeTerm @@ var "fun") (Just $ var "defaultCase") [
+      _Term_function>>: "f" ~>
+        cases _Function (var "f") (Just $ var "defaultCase") [
+          _Function_elimination>>: "elm" ~>
+            cases _Elimination (var "elm") (Just $ var "defaultCase") [
+              -- Record projection: obj.field
+              _Elimination_record>>: "proj" ~>
+                "fname" <~ (project _Projection _Projection_field @@ var "proj") $
+                "fieldExpr" <~ (PyUtils.projectFromExpression @@ var "firstArg" @@ (PyNames.encodeFieldName @@ var "env" @@ var "fname")) $
+                right $ pair (var "withRest" @@ var "fieldExpr") (var "rargs"),
+              -- Union elimination: encode as inline conditional chain (isinstance-based ternary)
+              _Elimination_union>>: "cs" ~>
+                "inlineExpr" <<~ (encodeUnionEliminationInline @@ var "cx" @@ var "env" @@ var "cs" @@ var "firstArg") $
+                right $ pair (var "withRest" @@ var "inlineExpr") (var "rargs"),
+              -- Wrap elimination: obj.value
+              _Elimination_wrap>>: constant $
+                "valueExpr" <~ (PyUtils.projectFromExpression @@ var "firstArg" @@ (PyDsl.name $ string "value")) $
+                "allArgs" <~ (Lists.concat2 (var "restArgs") (var "rargs")) $
+                Logic.ifElse (Lists.null $ var "allArgs")
+                  (right $ pair (var "valueExpr") (list ([] :: [TTerm Py.Expression])))
+                  (right $ pair (PyUtils.functionCall @@ (PyUtils.pyExpressionToPyPrimary @@ var "valueExpr") @@ var "allArgs")
+                                  (list ([] :: [TTerm Py.Expression])))],
+          -- Other functions: encode and apply
+          _Function_lambda>>: constant $
+            "pfun" <<~ (encodeTermInline @@ var "cx" @@ var "env" @@ false @@ var "fun") $
+            right $ pair (PyUtils.functionCall @@ (PyUtils.pyExpressionToPyPrimary @@ var "pfun") @@ var "hargs") (var "rargs")],
+      -- Variable: encode and apply. If variable resolves to a primitive, wrap lazy args.
+      _Term_variable>>: "name" ~>
+        "g" <~ (pythonEnvironmentGetGraph @@ var "env") $
+        "allArgs" <~ (Lists.concat2 (var "hargs") (var "rargs")) $
+        Maybes.cases (Maps.lookup (var "name") (Graph.graphPrimitives (var "g")))
+          -- Not a primitive: use original logic
+          (Maybes.maybe
+            -- Not in graph elements: use encodeVariable
+            ("expr" <<~ (encodeVariable @@ var "cx" @@ var "env" @@ var "name" @@ var "hargs") $
+              right $ pair (var "expr") (var "rargs"))
+            -- In graph elements: check arity
+            ("el" ~>
+              Maybes.maybe
+                -- No type: use encodeVariable
+                ("expr" <<~ (encodeVariable @@ var "cx" @@ var "env" @@ var "name" @@ var "hargs") $
+                  right $ pair (var "expr") (var "rargs"))
+                -- Has type: use arity
+                ("ts" ~>
+                  "elArity" <~ (Arity.typeSchemeArity @@ var "ts") $
+                  "consumeCount" <~ (Math.min (var "elArity") (Lists.length $ var "allArgs")) $
+                  "consumedArgs" <~ (Lists.take (var "consumeCount") (var "allArgs")) $
+                  "remainingArgs" <~ (Lists.drop (var "consumeCount") (var "allArgs")) $
+                  Logic.ifElse (Lists.null $ var "consumedArgs")
+                    ("expr" <<~ (encodeVariable @@ var "cx" @@ var "env" @@ var "name" @@ (list ([] :: [TTerm Py.Expression]))) $
+                      right $ pair (var "expr") (var "rargs"))
+                    (right $ pair
+                      (PyUtils.functionCall @@ (PyUtils.pyNameToPyPrimary @@ (PyNames.encodeName @@ true @@ Util.caseConventionLowerSnake @@ var "env" @@ var "name")) @@ var "consumedArgs")
+                      (var "remainingArgs")))
+                (Core.bindingType $ var "el"))
+            (Lexical.lookupBinding @@ var "g" @@ var "name"))
+          -- Is a primitive: wrap lazy arguments and encode
+          (lambda "_prim" $
+            "wrappedArgs" <~ (wrapLazyArguments @@ var "name" @@ var "hargs") $
+            "expr" <<~ (encodeVariable @@ var "cx" @@ var "env" @@ var "name" @@ var "wrappedArgs") $
+            right $ pair (var "expr") (var "rargs"))]
+
+-- | Encode an application type to Python expression.
+--   Gathers all type arguments and encodes as primary[args].
+encodeApplicationType :: TTermDefinition (PyHelpers.PythonEnvironment -> ApplicationType -> Either Error Py.Expression)
+encodeApplicationType = def "encodeApplicationType" $
+  doc "Encode an application type to Python expression" $
+  "env" ~> "at" ~>
+    -- gatherParams collects all arguments from nested applications
+    "gatherParams" <~ (
+      "t" ~> "ps" ~>
+        cases _Type (Strip.deannotateType @@ var "t") Nothing [
+          _Type_application>>: "appT" ~>
+            var "gatherParams"
+              @@ (project _ApplicationType _ApplicationType_function @@ var "appT")
+              @@ (Lists.cons (project _ApplicationType _ApplicationType_argument @@ var "appT") (var "ps")),
+          -- Default: return (t, ps)
+          _Type_annotated>>: constant $ pair (var "t") (var "ps"),
+          _Type_function>>: constant $ pair (var "t") (var "ps"),
+          _Type_forall>>: constant $ pair (var "t") (var "ps"),
+          _Type_list>>: constant $ pair (var "t") (var "ps"),
+          _Type_literal>>: constant $ pair (var "t") (var "ps"),
+          _Type_map>>: constant $ pair (var "t") (var "ps"),
+          _Type_maybe>>: constant $ pair (var "t") (var "ps"),
+          _Type_either>>: constant $ pair (var "t") (var "ps"),
+          _Type_pair>>: constant $ pair (var "t") (var "ps"),
+          _Type_record>>: constant $ pair (var "t") (var "ps"),
+          _Type_set>>: constant $ pair (var "t") (var "ps"),
+          _Type_union>>: constant $ pair (var "t") (var "ps"),
+          _Type_unit>>: constant $ pair (var "t") (var "ps"),
+          _Type_variable>>: constant $ pair (var "t") (var "ps"),
+          _Type_void>>: constant $ pair (var "t") (var "ps"),
+          _Type_wrap>>: constant $ pair (var "t") (var "ps")]) $
+    "bodyAndArgs" <~ (var "gatherParams" @@ (inject _Type _Type_application $ var "at") @@ list ([] :: [TTerm Type])) $
+    "body" <~ Pairs.first (var "bodyAndArgs") $
+    "args" <~ Pairs.second (var "bodyAndArgs") $
+    "pyBody" <<~ encodeType @@ var "env" @@ var "body" $
+    "pyArgs" <<~ Eithers.mapList (encodeType @@ var "env") (var "args") $
+    right $ PyUtils.primaryAndParams @@ (PyUtils.pyExpressionToPyPrimary @@ var "pyBody") @@ var "pyArgs"
+
+-- | Encode a single binding as a Python statement
+--   This handles:
+--   1. Bindings with type schemes: use encodeTermAssignment
+--   2. Hoisted bindings: lambdas wrapping a case statement application (from hoisting)
+--   3. Case elimination functions: case statements as values
+--   4. Other terms: falls back to encodeTermMultiline
+encodeBindingAs :: TTermDefinition (Context -> PyHelpers.PythonEnvironment -> Binding -> Either Error Py.Statement)
+encodeBindingAs = def "encodeBindingAs" $
+  doc "Encode a binding as a Python statement (function definition or assignment)" $
+  "cx" ~> "env" ~> "binding" ~>
+    "name1" <~ Core.bindingName (var "binding") $
+    "term1" <~ Core.bindingTerm (var "binding") $
+    "mts" <~ Core.bindingType (var "binding") $
+    "fname" <~ (PyNames.encodeName @@ true @@ Util.caseConventionLowerSnake @@ var "env" @@ var "name1") $
+    -- Check if binding has a type scheme - if so, use encodeTermAssignment
+    Maybes.maybe
+      -- No type scheme (e.g., lifted local functions) - check for special patterns
+      ("gathered" <~ (gatherLambdas @@ var "term1") $
+        "lambdaParams" <~ (Pairs.first $ var "gathered") $
+        "innerBody" <~ (Pairs.second $ var "gathered") $
+        -- Check for hoisted binding pattern: lambdas wrapping a case statement application
+        "mcsa" <~ (isCaseStatementApplication @@ var "innerBody") $
+        -- Try hoisted binding pattern first
+        Maybes.maybe
+          -- Not a hoisted binding, try simple case elimination
+          ("mcs" <~ (extractCaseElimination @@ var "term1") $
+            Maybes.maybe
+              -- Default case: not a case elimination, encode term normally and take first statement
+              (Eithers.map ("stmts" ~> Lists.head (var "stmts")) (encodeTermMultiline @@ var "cx" @@ var "env" @@ var "term1"))
+              -- Case elimination function - encode as function with match statement
+          ("cs" ~>
+            "tname" <~ (Core.caseStatementTypeName $ var "cs") $
+            "dflt" <~ (Core.caseStatementDefault $ var "cs") $
+            "cases_" <~ (Core.caseStatementCases $ var "cs") $
+            "rt" <<~ (Resolution.requireUnionType @@ var "cx" @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "tname") $
+            "isEnum" <~ (Predicates.isEnumRowType @@ var "rt") $
+            "isFull" <~ (isCasesFull @@ var "rt" @@ var "cases_") $
+            "innerParam" <~ (PyDsl.param (PyDsl.name $ string "x") nothing) $
+            "param" <~ (Phantoms.record Py._ParamNoDefault [
+              Phantoms.field Py._ParamNoDefault_param (var "innerParam"),
+              Phantoms.field Py._ParamNoDefault_typeComment nothing]) $
+            "params" <~ (PyDsl.parametersParamNoDefault $ Phantoms.record Py._ParamNoDefaultParameters [
+              Phantoms.field Py._ParamNoDefaultParameters_paramNoDefault (list [var "param"]),
+              Phantoms.field Py._ParamNoDefaultParameters_paramWithDefault (Phantoms.list ([] :: [TTerm Py.ParamWithDefault])),
+              Phantoms.field Py._ParamNoDefaultParameters_starEtc nothing]) $
+            "pyCases" <<~ (Eithers.mapList (encodeCaseBlock @@ var "cx" @@ var "env" @@ var "tname" @@ var "rt" @@ var "isEnum" @@ ("e" ~> "t" ~> encodeTermMultiline @@ var "cx" @@ var "e" @@ var "t")) (var "cases_")) $
+            "pyDflt" <<~ (encodeDefaultCaseBlock @@ ("t" ~> encodeTermInline @@ var "cx" @@ var "env" @@ false @@ var "t") @@ var "isFull" @@ var "dflt" @@ var "tname") $
+            "subj" <~ (PyDsl.subjectExpressionSimple $ PyDsl.namedExpressionSimple $ PyUtils.pyNameToPyExpression @@ (PyDsl.name $ string "x")) $
+            "allCases" <~ (Lists.concat2 (var "pyCases") (var "pyDflt")) $
+            "matchStmt" <~ (PyDsl.statementCompound $ PyDsl.compoundStatementMatch $ Phantoms.record Py._MatchStatement [
+              Phantoms.field Py._MatchStatement_subject (var "subj"),
+              Phantoms.field Py._MatchStatement_cases (var "allCases")]) $
+            "body" <~ (PyUtils.indentedBlock @@ nothing @@ list [list [var "matchStmt"]]) $
+            "funcDefRaw" <~ (Phantoms.record Py._FunctionDefRaw [
+              Phantoms.field Py._FunctionDefRaw_async false,
+              Phantoms.field Py._FunctionDefRaw_name (var "fname"),
+              Phantoms.field Py._FunctionDefRaw_typeParams (Phantoms.list ([] :: [TTerm Py.TypeParameter])),
+              Phantoms.field Py._FunctionDefRaw_params (just $ var "params"),
+              Phantoms.field Py._FunctionDefRaw_returnType nothing,
+              Phantoms.field Py._FunctionDefRaw_funcTypeComment nothing,
+              Phantoms.field Py._FunctionDefRaw_block (var "body")]) $
+            right $ PyDsl.statementCompound (PyDsl.compoundStatementFunction $ PyDsl.functionDefinition nothing (var "funcDefRaw")))
+          (var "mcs"))
+      -- Hoisted binding: lambdas wrapping a case statement application
+      -- Only handle if there are actual lambda parameters
+      ("csa" ~>
+        Logic.ifElse (Lists.null $ var "lambdaParams")
+          -- No lambda params, fall back to case elimination check
+          ("mcs" <~ (extractCaseElimination @@ var "term1") $
+            Maybes.maybe
+              (Eithers.map ("stmts" ~> Lists.head (var "stmts")) (encodeTermMultiline @@ var "cx" @@ var "env" @@ var "term1"))
+              ("cs" ~>
+                "tname" <~ (Core.caseStatementTypeName $ var "cs") $
+                "dflt" <~ (Core.caseStatementDefault $ var "cs") $
+                "cases_" <~ (Core.caseStatementCases $ var "cs") $
+                "rt" <<~ (Resolution.requireUnionType @@ var "cx" @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "tname") $
+                "isEnum" <~ (Predicates.isEnumRowType @@ var "rt") $
+                "isFull" <~ (isCasesFull @@ var "rt" @@ var "cases_") $
+                "innerParam" <~ (PyDsl.param (PyDsl.name $ string "x") nothing) $
+                "param" <~ (Phantoms.record Py._ParamNoDefault [
+                  Phantoms.field Py._ParamNoDefault_param (var "innerParam"),
+                  Phantoms.field Py._ParamNoDefault_typeComment nothing]) $
+                "params" <~ (PyDsl.parametersParamNoDefault $ Phantoms.record Py._ParamNoDefaultParameters [
+                  Phantoms.field Py._ParamNoDefaultParameters_paramNoDefault (list [var "param"]),
+                  Phantoms.field Py._ParamNoDefaultParameters_paramWithDefault (Phantoms.list ([] :: [TTerm Py.ParamWithDefault])),
+                  Phantoms.field Py._ParamNoDefaultParameters_starEtc nothing]) $
+                "pyCases" <<~ (Eithers.mapList (encodeCaseBlock @@ var "cx" @@ var "env" @@ var "tname" @@ var "rt" @@ var "isEnum" @@ ("e" ~> "t" ~> encodeTermMultiline @@ var "cx" @@ var "e" @@ var "t")) (var "cases_")) $
+                "pyDflt" <<~ (encodeDefaultCaseBlock @@ ("t" ~> encodeTermInline @@ var "cx" @@ var "env" @@ false @@ var "t") @@ var "isFull" @@ var "dflt" @@ var "tname") $
+                "subj" <~ (PyDsl.subjectExpressionSimple $ PyDsl.namedExpressionSimple $ PyUtils.pyNameToPyExpression @@ (PyDsl.name $ string "x")) $
+                "allCases" <~ (Lists.concat2 (var "pyCases") (var "pyDflt")) $
+                "matchStmt" <~ (PyDsl.statementCompound $ PyDsl.compoundStatementMatch $ Phantoms.record Py._MatchStatement [
+                  Phantoms.field Py._MatchStatement_subject (var "subj"),
+                  Phantoms.field Py._MatchStatement_cases (var "allCases")]) $
+                "body" <~ (PyUtils.indentedBlock @@ nothing @@ list [list [var "matchStmt"]]) $
+                "funcDefRaw" <~ (Phantoms.record Py._FunctionDefRaw [
+                  Phantoms.field Py._FunctionDefRaw_async false,
+                  Phantoms.field Py._FunctionDefRaw_name (var "fname"),
+                  Phantoms.field Py._FunctionDefRaw_typeParams (Phantoms.list ([] :: [TTerm Py.TypeParameter])),
+                  Phantoms.field Py._FunctionDefRaw_params (just $ var "params"),
+                  Phantoms.field Py._FunctionDefRaw_returnType nothing,
+                  Phantoms.field Py._FunctionDefRaw_funcTypeComment nothing,
+                  Phantoms.field Py._FunctionDefRaw_block (var "body")]) $
+                right $ PyDsl.statementCompound (PyDsl.compoundStatementFunction $ PyDsl.functionDefinition nothing (var "funcDefRaw")))
+              (var "mcs"))
+          -- Has lambda params: this is a hoisted binding
+          -- The last lambda param is the case expression's own parameter (match subject).
+          -- Any preceding lambda params are captured variables from outer scopes.
+          -- Encode as: def fname(capturedParams..., matchParam): match matchParam: ...
+          -- Extract components from the nested tuple: (tname, (dflt, (cases, arg)))
+          ("tname" <~ (Pairs.first $ var "csa") $
+            "rest1" <~ (Pairs.second $ var "csa") $
+            "dflt" <~ (Pairs.first $ var "rest1") $
+            "rest2" <~ (Pairs.second $ var "rest1") $
+            "cases_" <~ (Pairs.first $ var "rest2") $
+            "rt" <<~ (Resolution.requireUnionType @@ var "cx" @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "tname") $
+            "isEnum" <~ (Predicates.isEnumRowType @@ var "rt") $
+            "isFull" <~ (isCasesFull @@ var "rt" @@ var "cases_") $
+            -- Separate captured variables (all but last) from the match parameter (last).
+            -- The last lambda parameter is the case expression's own parameter.
+            "capturedVarNames" <~ (Lists.init $ var "lambdaParams") $
+            "matchLambdaParam" <~ (Lists.last $ var "lambdaParams") $
+            -- Create parameters for captured variables only
+            "capturedParams" <~ (Lists.map
+              ("n" ~> Phantoms.record Py._ParamNoDefault [
+                Phantoms.field Py._ParamNoDefault_param (PyDsl.param
+                  (PyNames.encodeName @@ false @@ Util.caseConventionLowerSnake @@ var "env" @@ var "n")
+                  nothing),
+                Phantoms.field Py._ParamNoDefault_typeComment nothing])
+              (var "capturedVarNames")) $
+            -- Create the match argument parameter using the case lambda's parameter name
+            "matchArgName" <~ (PyNames.encodeName @@ false @@ Util.caseConventionLowerSnake @@ var "env" @@ var "matchLambdaParam") $
+            "matchParam" <~ (Phantoms.record Py._ParamNoDefault [
+              Phantoms.field Py._ParamNoDefault_param (PyDsl.param (var "matchArgName") nothing),
+              Phantoms.field Py._ParamNoDefault_typeComment nothing]) $
+            "allParams" <~ (Lists.concat2 (var "capturedParams") (list [var "matchParam"])) $
+            "params" <~ (PyDsl.parametersParamNoDefault $ Phantoms.record Py._ParamNoDefaultParameters [
+              Phantoms.field Py._ParamNoDefaultParameters_paramNoDefault (var "allParams"),
+              Phantoms.field Py._ParamNoDefaultParameters_paramWithDefault (Phantoms.list ([] :: [TTerm Py.ParamWithDefault])),
+              Phantoms.field Py._ParamNoDefaultParameters_starEtc nothing]) $
+            -- Extend environment with all gathered lambda parameters before encoding cases
+            "envWithParams" <~ (extendEnvWithLambdaParams @@ var "env" @@ var "term1") $
+            -- Encode the match statement using extended environment
+            "pyCases" <<~ (Eithers.mapList (encodeCaseBlock @@ var "cx" @@ var "envWithParams" @@ var "tname" @@ var "rt" @@ var "isEnum" @@ ("e" ~> "t" ~> encodeTermMultiline @@ var "cx" @@ var "e" @@ var "t")) (var "cases_")) $
+            "pyDflt" <<~ (encodeDefaultCaseBlock @@ ("t" ~> encodeTermInline @@ var "cx" @@ var "envWithParams" @@ false @@ var "t") @@ var "isFull" @@ var "dflt" @@ var "tname") $
+            "subj" <~ (PyDsl.subjectExpressionSimple $ PyDsl.namedExpressionSimple $ PyUtils.pyNameToPyExpression @@ var "matchArgName") $
+            "allCases" <~ (Lists.concat2 (var "pyCases") (var "pyDflt")) $
+            "matchStmt" <~ (PyDsl.statementCompound $ PyDsl.compoundStatementMatch $ Phantoms.record Py._MatchStatement [
+              Phantoms.field Py._MatchStatement_subject (var "subj"),
+              Phantoms.field Py._MatchStatement_cases (var "allCases")]) $
+            "body" <~ (PyUtils.indentedBlock @@ nothing @@ list [list [var "matchStmt"]]) $
+            "funcDefRaw" <~ (Phantoms.record Py._FunctionDefRaw [
+              Phantoms.field Py._FunctionDefRaw_async false,
+              Phantoms.field Py._FunctionDefRaw_name (var "fname"),
+              Phantoms.field Py._FunctionDefRaw_typeParams (Phantoms.list ([] :: [TTerm Py.TypeParameter])),
+              Phantoms.field Py._FunctionDefRaw_params (just $ var "params"),
+              Phantoms.field Py._FunctionDefRaw_returnType nothing,
+              Phantoms.field Py._FunctionDefRaw_funcTypeComment nothing,
+              Phantoms.field Py._FunctionDefRaw_block (var "body")]) $
+            right $ PyDsl.statementCompound (PyDsl.compoundStatementFunction $ PyDsl.functionDefinition nothing (var "funcDefRaw"))))
+          (var "mcsa"))
+      -- Binding with type scheme - use encodeTermAssignment
+      ("ts" ~>
+        "comment" <<~ (Annotations.getTermDescription @@ var "cx" @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "term1") $
+        "normComment" <~ (Maybes.map Formatting.normalizeComment (var "comment")) $
+        encodeTermAssignment @@ var "cx" @@ var "env" @@ var "name1" @@ var "term1" @@ var "ts" @@ var "normComment")
+      (var "mts")
+
+-- | Encode a binding as a walrus operator assignment (for inline let expressions).
+--   Takes: allowThunking flag, environment, binding
+--   Returns: NamedExpression (assignment expression)
+--   Note: This simplified version does not update metadata for lru_cache;
+--   the Staging version handles that.
+encodeBindingAsAssignment :: TTermDefinition (Context -> Bool -> PyHelpers.PythonEnvironment
+  -> Binding
+  -> Either Error Py.NamedExpression)
+encodeBindingAsAssignment = def "encodeBindingAsAssignment" $
+  doc "Encode a binding as a walrus operator assignment" $
+  "cx" ~> "allowThunking" ~> "env" ~> "binding" ~>
+    "name" <~ Core.bindingName (var "binding") $
+    "term" <~ Core.bindingTerm (var "binding") $
+    "mts" <~ Core.bindingType (var "binding") $
+    "pyName" <~ (PyNames.encodeName @@ false @@ Util.caseConventionLowerSnake @@ var "env" @@ var "name") $
+    "pbody" <<~ (encodeTermInline @@ var "cx" @@ var "env" @@ false @@ var "term") $
+    "tc" <~ (project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_graph @@ var "env") $
+    "isComplexVar" <~ (Predicates.isComplexVariable @@ var "tc" @@ var "name") $
+    "termIsComplex" <~ (Predicates.isComplexTerm @@ var "tc" @@ var "term") $
+    "isTrivial" <~ (Predicates.isTrivialTerm @@ var "term") $
+    -- Check if needs thunking based on type scheme arity and complexity
+    -- Trivial terms (literals, variables, field projections) are never thunked
+    "needsThunk" <~ Logic.ifElse (var "isTrivial") (boolean False)
+      (optCases (var "mts")
+        -- No type scheme: thunk if complex
+        (Logic.and (var "allowThunking") (Logic.or (var "isComplexVar") (var "termIsComplex")))
+        -- Has type scheme: thunk if arity == 0 and complex
+        ("ts" ~> Logic.and (var "allowThunking")
+          (Logic.and (Equality.equal (Arity.typeSchemeArity @@ var "ts") (Phantoms.int 0))
+                     (Logic.or (var "isComplexVar") (var "termIsComplex"))))) $
+    "pterm" <~ (Logic.ifElse (var "needsThunk") (makeThunk @@ var "pbody") (var "pbody")) $
+    right $ PyDsl.namedExpressionAssignment $ PyDsl.assignmentExpression (var "pyName") (var "pterm")
+
+-- | Encode bindings as function definitions
+encodeBindingsAsDefs :: TTermDefinition (PyHelpers.PythonEnvironment -> (PyHelpers.PythonEnvironment -> Binding -> Either Error Py.Statement) -> [Binding] -> Either Error [Py.Statement])
+encodeBindingsAsDefs = def "encodeBindingsAsDefs" $
+  doc "Encode bindings as function definitions" $
+  "env" ~> "encodeBinding" ~> "bindings" ~>
+    Eithers.mapList (var "encodeBinding" @@ var "env") (var "bindings")
+
+-- | Encode a single case (Field) into a CaseBlock for a match statement.
+--   This handles both enum variants and class-based variants with value capture.
+--   The encodeBody function is passed in to allow different encoding strategies
+--   (inline vs multiline).
+--   Uses withLambda to extend Graph with the case binding variable.
+encodeCaseBlock :: TTermDefinition (Context -> PyHelpers.PythonEnvironment -> Name -> [FieldType] -> Bool -> (PyHelpers.PythonEnvironment -> Term -> Either Error [Py.Statement]) -> Field -> Either Error Py.CaseBlock)
+encodeCaseBlock = def "encodeCaseBlock" $
+  doc "Encode a single case (Field) into a CaseBlock for a match statement" $
+  "cx" ~> "env" ~> "tname" ~> "rowType" ~> "isEnum" ~> "encodeBody" ~> "field" ~>
+    "fname" <~ Core.fieldName (var "field") $
+    "fterm" <~ Core.fieldTerm (var "field") $
+    -- The field term should be a lambda; strip annotations and type wrappers to extract it.
+    -- After case-statement hoisting, field terms may be variable references to hoisted functions
+    -- instead of inline lambdas. The default case handles this by synthesizing a lambda wrapper.
+    "stripped" <~ (Strip.deannotateAndDetypeTerm @@ var "fterm") $
+    "effectiveLambda" <~ (cases _Term (var "stripped")
+      -- Default: fterm is not a lambda (e.g. hoisted variable reference).
+      -- Wrap it in a synthetic lambda: \v -> fterm(v)
+      (Just $ "syntheticVar" <~ Core.name (string "_matchValue") $
+        Core.lambda (var "syntheticVar") nothing
+          (Core.termApplication $ Core.application (var "stripped") (Core.termVariable $ var "syntheticVar"))) [
+      _Term_function>>: "f" ~>
+        cases _Function (var "f")
+          -- Non-lambda function (e.g. primitive): wrap in lambda
+          (Just $ "syntheticVar2" <~ Core.name (string "_matchValue") $
+            Core.lambda (var "syntheticVar2") nothing
+              (Core.termApplication $ Core.application (var "stripped") (Core.termVariable $ var "syntheticVar2"))) [
+          _Function_lambda>>: "lam" ~> var "lam"]]) $
+    -- Now effectiveLambda is always a Lambda
+    "v" <~ Core.lambdaParameter (var "effectiveLambda") $
+    "rawBody" <~ Core.lambdaBody (var "effectiveLambda") $
+    -- Check if this variant has unit type
+    "isUnitVariant" <~ (isVariantUnitType @@ var "rowType" @@ var "fname") $
+    -- For unit variants, eliminate references to the lambda parameter
+    "effectiveBody" <~ (Logic.ifElse (var "isUnitVariant")
+      (eliminateUnitVar @@ var "v" @@ var "rawBody")
+      (var "rawBody")) $
+    -- Determine if we should capture the value
+    -- Don't capture if: unit variant, variable is free in body, or body is unit term
+    "shouldCapture" <~ (Logic.not $ Logic.or (var "isUnitVariant")
+      (Logic.or (Variables.isFreeVariableInTerm @@ var "v" @@ var "rawBody")
+                (Predicates.isUnitTerm @@ var "rawBody"))) $
+    -- Extend the Graph with the lambda parameter
+    -- to prevent the code generator from reducing it away
+    "env2" <~ (pythonEnvironmentSetGraph
+      @@ (Scoping.extendGraphForLambda @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "effectiveLambda")
+      @@ var "env") $
+    -- Deconflict the variant name in case it collides with a type name
+    "pyVariantName" <~ (deconflictVariantName @@ true @@ var "env2" @@ var "tname" @@ var "fname" @@ (project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_graph @@ var "env2")) $
+    -- Create the pattern using env2 (extended context)
+    "pattern" <~ (variantClosedPattern @@ var "env2" @@ var "tname" @@ var "fname" @@ var "pyVariantName"
+      @@ var "rowType" @@ var "isEnum" @@ var "v" @@ var "shouldCapture") $
+    -- Encode the body using the provided encoder with extended env
+    "stmts" <<~ (var "encodeBody" @@ var "env2" @@ var "effectiveBody") $
+    "pyBody" <~ (PyUtils.indentedBlock @@ nothing @@ list [var "stmts"]) $
+    right $ PyDsl.caseBlock
+      (PyUtils.pyClosedPatternToPyPatterns @@ var "pattern")
+      nothing
+      (var "pyBody")
+
+-- | Encode the default (wildcard) case block for a match statement.
+--   Takes: encoder function, isFull (whether all variants are covered), optional default term, type name
+--   Returns: list of CaseBlocks (empty or containing the wildcard case)
+--   The encoder function is passed in to allow calling from Staging code that provides encodeTermInline.
+encodeDefaultCaseBlock :: TTermDefinition ((Term -> Either Error Py.Expression) -> Bool -> Maybe Term -> Name -> Either Error [Py.CaseBlock])
+encodeDefaultCaseBlock = def "encodeDefaultCaseBlock" $
+  doc "Encode the default (wildcard) case block for a match statement" $
+  "encodeTerm" ~> "isFull" ~> "mdflt" ~> "tname" ~>
+    "stmt" <<~ optCases (var "mdflt")
+      -- No default provided
+      (right $ Logic.ifElse (var "isFull")
+        (PyUtils.raiseAssertionError @@ string "Unreachable: all variants handled")
+        (PyUtils.raiseTypeError @@ (Strings.cat2 (string "Unsupported ") (Names.localNameOf @@ var "tname"))))
+      -- Default term provided - encode it as a return statement
+      ("d" ~>
+        "pyexpr" <<~ (var "encodeTerm" @@ var "d") $
+        right $ PyUtils.returnSingle @@ var "pyexpr") $
+    "patterns" <~ (PyUtils.pyClosedPatternToPyPatterns @@ PyDsl.closedPatternWildcard) $
+    "body" <~ (PyUtils.indentedBlock @@ nothing @@ list [list [var "stmt"]]) $
+    right $ list [PyDsl.caseBlock (var "patterns") nothing (var "body")]
+
+-- | Encode a definition (term or type) to Python statements
+encodeDefinition :: TTermDefinition (Context -> PyHelpers.PythonEnvironment
+  -> Definition
+  -> Either Error [[Py.Statement]])
+encodeDefinition = def "encodeDefinition" $
+  doc "Encode a definition (term or type) to Python statements" $
+  "cx" ~> "env" ~> "def_" ~>
+    cases _Definition (var "def_") Nothing [
+      _Definition_term>>: "td" ~>
+        "name" <~ (project _TermDefinition _TermDefinition_name @@ var "td") $
+        "term" <~ (project _TermDefinition _TermDefinition_term @@ var "td") $
+        "typ" <~ Maybes.maybe
+          (Core.typeScheme (list ([] :: [TTerm Name])) (Core.typeVariable (wrap _Name (string "hydra.core.Unit"))) nothing)
+          ("x" ~> var "x")
+          (project _TermDefinition _TermDefinition_type @@ var "td") $
+        "comment" <<~ (Annotations.getTermDescription @@ var "cx" @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "term") $
+        "normComment" <~ (Maybes.map Formatting.normalizeComment (var "comment")) $
+        "stmt" <<~ (encodeTermAssignment @@ var "cx" @@ var "env" @@ var "name" @@ var "term" @@ var "typ" @@ var "normComment") $
+        right $ list [list [var "stmt"]],
+      _Definition_type>>: "td" ~>
+        "name" <~ (project _TypeDefinition _TypeDefinition_name @@ var "td") $
+        "typ" <~ (Core.typeSchemeType $ project _TypeDefinition _TypeDefinition_type @@ var "td") $
+        "comment" <<~ (Annotations.getTypeDescription @@ var "cx" @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "typ") $
+        "normComment" <~ (Maybes.map Formatting.normalizeComment (var "comment")) $
+        encodeTypeAssignment @@ var "cx" @@ var "env" @@ var "name" @@ var "typ" @@ var "normComment"]
+
+-- | Encode an enum value assignment: ENUM_VALUE = Name("enum_value")
+encodeEnumValueAssignment :: TTermDefinition (Context -> PyHelpers.PythonEnvironment -> FieldType -> Either Error [Py.Statement])
+encodeEnumValueAssignment = def "encodeEnumValueAssignment" $
+  doc "Encode an enum value assignment statement with optional comment" $
+  "cx" ~> "env" ~> "fieldType" ~>
+    "fname" <~ Core.fieldTypeName (var "fieldType") $
+    "ftype" <~ Core.fieldTypeType (var "fieldType") $
+    "mcomment" <<~ (Annotations.getTypeDescription @@ var "cx" @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "ftype") $
+    "pyName" <~ (PyNames.encodeEnumValue @@ var "env" @@ var "fname") $
+    "fnameStr" <~ (Core.unName $ var "fname") $
+    "pyValue" <~ (PyUtils.functionCall
+      @@ (PyUtils.pyNameToPyPrimary @@ (PyNames.encodeName @@ true @@ Util.caseConventionPascal @@ var "env" @@ (Core.name $ string "hydra.core.Name")))
+      @@ list [PyUtils.doubleQuotedString @@ var "fnameStr"]) $
+    "assignStmt" <~ (PyUtils.assignmentStatement @@ var "pyName" @@ var "pyValue") $
+    right $ optCases (var "mcomment")
+      (list [var "assignStmt"])
+      ("c" ~> list [var "assignStmt", PyUtils.pyExpressionToPyStatement @@ (PyUtils.tripleQuotedString @@ var "c")])
+
+-- | Encode a field (name-value pair) to a Python (Name, Expression) pair
+encodeField :: TTermDefinition (Context -> PyHelpers.PythonEnvironment -> Field -> (TTerm Term -> Either Error Py.Expression) -> Either Error (Py.Name, Py.Expression))
+encodeField = def "encodeField" $
+  doc "Encode a field (name-value pair) to a Python (Name, Expression) pair" $
+  "cx" ~> "env" ~> "field" ~> "encodeTerm" ~>
+    "fname" <~ Core.fieldName (var "field") $
+    "fterm" <~ Core.fieldTerm (var "field") $
+    "pterm" <<~ (var "encodeTerm" @@ var "fterm") $
+    right $ pair (PyNames.encodeFieldName @@ var "env" @@ var "fname") (var "pterm")
+
+-- | Encode a field type for record definitions (field: type annotation)
+encodeFieldType :: TTermDefinition (Context -> PyHelpers.PythonEnvironment -> FieldType -> Either Error Py.Statement)
+encodeFieldType = def "encodeFieldType" $
+  doc "Encode a field type for record definitions (field: type annotation)" $
+  "cx" ~> "env" ~> "fieldType" ~>
+    "fname" <~ Core.fieldTypeName (var "fieldType") $
+    "ftype" <~ Core.fieldTypeType (var "fieldType") $
+    "comment" <<~ (Annotations.getTypeDescription @@ var "cx" @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "ftype") $
+    "pyName" <~ (PyDsl.singleTargetName $ PyNames.encodeFieldName @@ var "env" @@ var "fname") $
+    "pyType" <<~ (encodeType @@ var "env" @@ var "ftype") $
+    "annotatedPyType" <~ (PyUtils.annotatedExpression @@ var "comment" @@ var "pyType") $
+    right $ PyUtils.pyAssignmentToPyStatement @@
+      (PyDsl.assignmentTyped $ PyDsl.typedAssignment (var "pyName") (var "annotatedPyType") nothing)
+
+-- | Encode a float value to a Python expression
+encodeFloatValue :: TTermDefinition (FloatValue -> Either Error Py.Expression)
+encodeFloatValue = def "encodeFloatValue" $
+  doc "Encode a float value to a Python expression" $
+  "fv" ~>
+    cases _FloatValue (var "fv") Nothing [
+      _FloatValue_bigfloat>>: "f" ~>
+        right $ PyUtils.functionCall @@
+          (PyUtils.pyNameToPyPrimary @@ (PyDsl.name $ string "Decimal")) @@
+          list [PyUtils.singleQuotedString @@ (Literals.showBigfloat $ var "f")],
+      _FloatValue_float32>>: "f" ~>
+        encodeFloatValue_encodeFloat32 @@ var "f",
+      _FloatValue_float64>>: "f" ~>
+        encodeFloatValue_encodeFloat64 @@ var "f"]
+
+-- | Encode a float32 value, handling NaN and Infinity specially since BigDecimal cannot represent them.
+encodeFloatValue_encodeFloat32 :: TTermDefinition (Float -> Either Error Py.Expression)
+encodeFloatValue_encodeFloat32 = def "encodeFloatValue_encodeFloat32" $
+  lambda "v" $ lets [
+    "s">: Literals.showFloat32 (var "v")] $
+    Logic.ifElse (Equality.equal (var "s") (string "NaN"))
+      (right $ encodeFloatValue_pySpecialFloat @@ string "nan") $
+    Logic.ifElse (Equality.equal (var "s") (string "Infinity"))
+      (right $ encodeFloatValue_pySpecialFloat @@ string "inf") $
+    Logic.ifElse (Equality.equal (var "s") (string "-Infinity"))
+      (right $ encodeFloatValue_pySpecialFloat @@ string "-inf") $
+    right $ PyUtils.pyAtomToPyExpression @@
+      (PyDsl.atomNumber $ PyDsl.numberFloat $ Literals.float32ToBigfloat $ var "v")
+
+-- | Encode a float64 value, handling NaN and Infinity specially since BigDecimal cannot represent them.
+encodeFloatValue_encodeFloat64 :: TTermDefinition (Double -> Either Error Py.Expression)
+encodeFloatValue_encodeFloat64 = def "encodeFloatValue_encodeFloat64" $
+  lambda "v" $ lets [
+    "s">: Literals.showFloat64 (var "v")] $
+    Logic.ifElse (Equality.equal (var "s") (string "NaN"))
+      (right $ encodeFloatValue_pySpecialFloat @@ string "nan") $
+    Logic.ifElse (Equality.equal (var "s") (string "Infinity"))
+      (right $ encodeFloatValue_pySpecialFloat @@ string "inf") $
+    Logic.ifElse (Equality.equal (var "s") (string "-Infinity"))
+      (right $ encodeFloatValue_pySpecialFloat @@ string "-inf") $
+    -- Negative zero must be emitted via float('-0.0') because routing it through
+    -- Bigfloat (which on the Java host is BigDecimal) would strip the sign.
+    Logic.ifElse (Equality.equal (var "s") (string "-0.0"))
+      (right $ encodeFloatValue_pySpecialFloat @@ string "-0.0") $
+    right $ PyUtils.pyAtomToPyExpression @@
+      (PyDsl.atomNumber $ PyDsl.numberFloat $ Literals.float64ToBigfloat $ var "v")
+
+-- | Emit a Python float('nan'), float('inf'), or float('-inf') expression.
+encodeFloatValue_pySpecialFloat :: TTermDefinition (String -> Py.Expression)
+encodeFloatValue_pySpecialFloat = def "encodeFloatValue_pySpecialFloat" $
+  lambda "value" $
+    PyUtils.functionCall @@
+      (PyUtils.pyNameToPyPrimary @@ (PyDsl.name $ string "float")) @@
+      list [PyUtils.singleQuotedString @@ var "value"]
+
+-- | Encode a forall type to Python expression.
+--   Gathers all type parameters and encodes the body with parameters.
+encodeForallType :: TTermDefinition (PyHelpers.PythonEnvironment -> ForallType -> Either Error Py.Expression)
+encodeForallType = def "encodeForallType" $
+  doc "Encode a forall type to Python expression" $
+  "env" ~> "lt" ~>
+    -- gatherParams collects all forall-bound type variables
+    "gatherParams" <~ (
+      "t" ~> "ps" ~>
+        cases _Type (Strip.deannotateType @@ var "t") Nothing [
+          _Type_forall>>: "forallT" ~>
+            var "gatherParams"
+              @@ (project _ForallType _ForallType_body @@ var "forallT")
+              @@ (Lists.cons (project _ForallType _ForallType_parameter @@ var "forallT") (var "ps")),
+          -- Default: return (t, reverse ps)
+          _Type_annotated>>: constant $ pair (var "t") (Lists.reverse (var "ps")),
+          _Type_application>>: constant $ pair (var "t") (Lists.reverse (var "ps")),
+          _Type_function>>: constant $ pair (var "t") (Lists.reverse (var "ps")),
+          _Type_list>>: constant $ pair (var "t") (Lists.reverse (var "ps")),
+          _Type_literal>>: constant $ pair (var "t") (Lists.reverse (var "ps")),
+          _Type_map>>: constant $ pair (var "t") (Lists.reverse (var "ps")),
+          _Type_maybe>>: constant $ pair (var "t") (Lists.reverse (var "ps")),
+          _Type_either>>: constant $ pair (var "t") (Lists.reverse (var "ps")),
+          _Type_pair>>: constant $ pair (var "t") (Lists.reverse (var "ps")),
+          _Type_record>>: constant $ pair (var "t") (Lists.reverse (var "ps")),
+          _Type_set>>: constant $ pair (var "t") (Lists.reverse (var "ps")),
+          _Type_union>>: constant $ pair (var "t") (Lists.reverse (var "ps")),
+          _Type_unit>>: constant $ pair (var "t") (Lists.reverse (var "ps")),
+          _Type_variable>>: constant $ pair (var "t") (Lists.reverse (var "ps")),
+          _Type_void>>: constant $ pair (var "t") (Lists.reverse (var "ps")),
+          _Type_wrap>>: constant $ pair (var "t") (Lists.reverse (var "ps"))]) $
+    "bodyAndParams" <~ (var "gatherParams" @@ (inject _Type _Type_forall $ var "lt") @@ list ([] :: [TTerm Name])) $
+    "body" <~ Pairs.first (var "bodyAndParams") $
+    "params" <~ Pairs.second (var "bodyAndParams") $
+    "pyBody" <<~ encodeType @@ var "env" @@ var "body" $
+    right $ PyUtils.primaryAndParams
+      @@ (PyUtils.pyExpressionToPyPrimary @@ var "pyBody")
+      @@ (Lists.map ("n" ~> PyDsl.pyNameToPyExpression $ PyDsl.name $ Core.unName (var "n")) (var "params"))
+
+-- | Encode a function term to a Python expression.
+--   This handles lambdas, primitives, projections, wrap eliminations, and case eliminations.
+encodeFunction :: TTermDefinition (Context -> PyHelpers.PythonEnvironment
+  -> Function
+  -> Either Error Py.Expression)
+encodeFunction = def "encodeFunction" $
+  doc "Encode a function term to a Python expression" $
+  "cx" ~> "env" ~> "f" ~>
+    cases _Function (var "f") Nothing [
+      _Function_lambda>>: "lam" ~>
+        "fs" <<~ (analyzePythonFunction @@ var "cx" @@ var "env" @@ (Core.termFunction $ Core.functionLambda $ var "lam")) $
+        "params" <~ (Phantoms.project HydraTyping._FunctionStructure HydraTyping._FunctionStructure_params @@ var "fs") $
+        "bindings" <~ (Phantoms.project HydraTyping._FunctionStructure HydraTyping._FunctionStructure_bindings @@ var "fs") $
+        "innerBody" <~ (Phantoms.project HydraTyping._FunctionStructure HydraTyping._FunctionStructure_body @@ var "fs") $
+        "innerEnv0" <~ (Phantoms.project HydraTyping._FunctionStructure HydraTyping._FunctionStructure_environment @@ var "fs") $
+        -- Add binding names to inlineVariables so they can be resolved during body encoding
+        "bindingNames" <~ (Lists.map ("b" ~> Core.bindingName (var "b")) (var "bindings")) $
+        "innerEnv" <~ (record PyHelpers._PythonEnvironment [
+          PyHelpers._PythonEnvironment_namespaces>>: project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_namespaces @@ var "innerEnv0",
+          PyHelpers._PythonEnvironment_boundTypeVariables>>: project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_boundTypeVariables @@ var "innerEnv0",
+          PyHelpers._PythonEnvironment_graph>>: project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_graph @@ var "innerEnv0",
+          PyHelpers._PythonEnvironment_nullaryBindings>>: project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_nullaryBindings @@ var "innerEnv0",
+          PyHelpers._PythonEnvironment_version>>: project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_version @@ var "innerEnv0",
+          PyHelpers._PythonEnvironment_skipCasts>>: project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_skipCasts @@ var "innerEnv0",
+          PyHelpers._PythonEnvironment_inlineVariables>>: Sets.union (Sets.fromList (var "bindingNames"))
+            (project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_inlineVariables @@ var "innerEnv0")]) $
+        "pbody" <<~ (encodeTermInline @@ var "cx" @@ var "innerEnv" @@ false @@ var "innerBody") $
+        "pparams" <~ (Lists.map (PyNames.encodeName @@ false @@ Util.caseConventionLowerSnake @@ var "innerEnv") (var "params")) $
+        Logic.ifElse (Lists.null $ var "bindings")
+          (right $ makeUncurriedLambda @@ var "pparams" @@ var "pbody")
+          -- Has bindings: create walrus operator expressions
+          ("pbindingExprs" <<~ (Eithers.mapList (encodeBindingAsAssignment @@ var "cx" @@ false @@ var "innerEnv") (var "bindings")) $
+            "pbindingStarExprs" <~ (Lists.map ("ne" ~> PyDsl.starNamedExpressionSimple (var "ne")) (var "pbindingExprs")) $
+            "pbodyStarExpr" <~ (PyUtils.pyExpressionToPyStarNamedExpression @@ var "pbody") $
+            "tupleElements" <~ (Lists.concat2 (var "pbindingStarExprs") (list [var "pbodyStarExpr"])) $
+            "tupleExpr" <~ (PyUtils.pyAtomToPyExpression @@ (PyDsl.atomTuple $ PyDsl.tuple $ var "tupleElements")) $
+            "indexValue" <~ (PyUtils.pyAtomToPyExpression @@ (PyDsl.atomNumber $ PyDsl.numberInteger $ Literals.int32ToBigint (Lists.length (var "bindings")))) $
+            "indexedExpr" <~ (PyUtils.primaryWithExpressionSlices @@ (PyUtils.pyExpressionToPyPrimary @@ var "tupleExpr") @@ list [var "indexValue"]) $
+            right $ makeUncurriedLambda @@ var "pparams" @@ (PyUtils.pyPrimaryToPyExpression @@ var "indexedExpr")),
+      -- Eliminations
+      _Function_elimination>>: "e" ~>
+        cases _Elimination (var "e") Nothing [
+          -- Record projection: lambda v1: v1.field
+          _Elimination_record>>: "proj" ~>
+            "fname" <~ (Phantoms.project _Projection _Projection_field @@ var "proj") $
+            right $ makeCurriedLambda @@ list [PyDsl.name $ string "v1"] @@
+              (PyUtils.projectFromExpression @@ (PyDsl.pyNameToPyExpression $ PyDsl.name $ string "v1") @@ (PyNames.encodeFieldName @@ var "env" @@ var "fname")),
+          -- Wrap elimination: lambda v1: v1.value
+          _Elimination_wrap>>: constant $
+            right $ makeCurriedLambda @@ list [PyDsl.name $ string "v1"] @@
+              (PyUtils.projectFromExpression @@ (PyDsl.pyNameToPyExpression $ PyDsl.name $ string "v1") @@ (PyDsl.name $ string "value")),
+          -- Union elimination (case) as value: not supported in Python
+          _Elimination_union>>: constant $
+            right $ unsupportedExpression @@ string "case expressions as values are not yet supported"]]
+
+-- | Encode a function definition with parameters and body.
+--   Takes: environment, name, type params, arg names, body term, domain types, optional codomain, comment, prefix statements
+encodeFunctionDefinition :: TTermDefinition (Context -> PyHelpers.PythonEnvironment
+  -> Name -> [Name] -> [Name] -> TTerm Term -> [Type] -> Maybe Type -> Maybe String -> [Py.Statement]
+  -> Either Error Py.Statement)
+encodeFunctionDefinition = def "encodeFunctionDefinition" $
+  doc "Encode a function definition with parameters and body" $
+  "cx" ~> "env" ~> "name" ~> "tparams" ~> "args" ~> "body" ~> "doms" ~> "mcod" ~> "comment" ~> "prefixes" ~>
+    -- Create parameters by zipping arg names with domain types
+    "pyArgs" <<~ Eithers.mapList
+      ("pair" ~>
+        "argName" <~ Pairs.first (var "pair") $
+        "typ" <~ Pairs.second (var "pair") $
+        "pyTyp" <<~ (encodeType @@ var "env" @@ var "typ") $
+        right $ PyDsl.paramNoDefaultSimple $ PyDsl.param
+          (PyNames.encodeName @@ false @@ Util.caseConventionLowerSnake @@ var "env" @@ var "argName")
+          (just $ PyDsl.annotation $ var "pyTyp"))
+      (Lists.zip (var "args") (var "doms")) $
+    "pyParams" <~ (PyDsl.parametersParamNoDefault $ PyDsl.paramNoDefaultParameters (var "pyArgs") (Phantoms.list ([] :: [TTerm Py.ParamWithDefault])) nothing) $
+    -- Check for tail-call optimization opportunity
+    "isTCO" <~ (Logic.and
+      (Logic.not $ Lists.null (var "args"))
+      (Analysis.isSelfTailRecursive @@ var "name" @@ var "body")) $
+    "block" <<~ (Logic.ifElse (var "isTCO")
+      -- TCO path: wrap body in while True loop
+      -- Note: prefixes (let-binding statements) go INSIDE the while loop so they are
+      -- re-evaluated each iteration when parameters change via reassignment + continue.
+      ("tcoStmts" <<~ (encodeTermMultilineTCO @@ var "cx" @@ var "env" @@ var "name" @@ var "args" @@ var "body") $
+        "trueExpr" <~ (PyDsl.namedExpressionSimple $ PyUtils.pyAtomToPyExpression @@ PyDsl.atomTrue) $
+        "whileBody" <~ (PyUtils.indentedBlock @@ nothing @@ list [Lists.concat2 (var "prefixes") (var "tcoStmts")]) $
+        "whileStmt" <~ (PyDsl.statementCompound $ PyDsl.compoundStatementWhile $
+          PyDsl.whileStatement (var "trueExpr") (var "whileBody") nothing) $
+        right $ PyUtils.indentedBlock @@ var "comment" @@ list [list [var "whileStmt"]])
+      -- Normal path: encode body as statements with return
+      ("stmts" <<~ (encodeTermMultiline @@ var "cx" @@ var "env" @@ var "body") $
+        right $ PyUtils.indentedBlock @@ var "comment" @@ list [Lists.concat2 (var "prefixes") (var "stmts")])) $
+    -- Encode return type if present
+    "mreturnType" <<~ optCases (var "mcod")
+      (right (nothing :: TTerm (Maybe Py.Expression)))
+      ("cod" ~>
+        "pytyp" <<~ (encodeType @@ var "env" @@ var "cod") $
+        right $ just (var "pytyp")) $
+    -- Type parameters (only for Python 3.12+)
+    "pyTparams" <~ (Logic.ifElse useInlineTypeParams
+      (Lists.map (PyUtils.pyNameToPyTypeParameter <.> PyNames.encodeTypeVariable) (var "tparams"))
+      (Phantoms.list ([] :: [TTerm Py.TypeParameter]))) $
+    -- Check if this is a thunk (zero-argument function)
+    "isThunk" <~ (Lists.null $ var "args") $
+    "mDecorators" <~ (Logic.ifElse (var "isThunk")
+      (just $ wrap Py._Decorators $ list [lruCacheDecorator])
+      nothing) $
+    -- Metadata for lru_cache is now pre-computed in gatherMetadata
+    "pyName" <~ (PyNames.encodeName @@ false @@ Util.caseConventionLowerSnake @@ var "env" @@ var "name") $
+    right $ PyDsl.statementCompound $ PyDsl.compoundStatementFunction $ PyDsl.functionDefinition (var "mDecorators") $
+      PyDsl.functionDefRaw false (var "pyName") (var "pyTparams") (just $ var "pyParams") (var "mreturnType") nothing (var "block")
+
+-- | Encode a function type to Python Callable[..., return_type].
+--   Gathers all domain types and the final codomain.
+encodeFunctionType :: TTermDefinition (PyHelpers.PythonEnvironment -> FunctionType -> Either Error Py.Expression)
+encodeFunctionType = def "encodeFunctionType" $
+  doc "Encode a function type to Python Callable expression" $
+  "env" ~> "ft" ~>
+    -- gatherParams collects all domain types and final codomain
+    "gatherParams" <~ (
+      "rdoms" ~> "ftype" ~>
+        "innerCod" <~ (project _FunctionType _FunctionType_codomain @@ var "ftype") $
+        "dom" <~ (project _FunctionType _FunctionType_domain @@ var "ftype") $
+        cases _Type (Strip.deannotateType @@ var "innerCod") Nothing [
+          _Type_function>>: "ft2" ~>
+            var "gatherParams" @@ (Lists.cons (var "dom") (var "rdoms")) @@ var "ft2",
+          -- Default: return (reverse (dom:rdoms), innerCod)
+          _Type_annotated>>: constant $ pair (Lists.reverse (Lists.cons (var "dom") (var "rdoms"))) (var "innerCod"),
+          _Type_application>>: constant $ pair (Lists.reverse (Lists.cons (var "dom") (var "rdoms"))) (var "innerCod"),
+          _Type_forall>>: constant $ pair (Lists.reverse (Lists.cons (var "dom") (var "rdoms"))) (var "innerCod"),
+          _Type_list>>: constant $ pair (Lists.reverse (Lists.cons (var "dom") (var "rdoms"))) (var "innerCod"),
+          _Type_literal>>: constant $ pair (Lists.reverse (Lists.cons (var "dom") (var "rdoms"))) (var "innerCod"),
+          _Type_map>>: constant $ pair (Lists.reverse (Lists.cons (var "dom") (var "rdoms"))) (var "innerCod"),
+          _Type_maybe>>: constant $ pair (Lists.reverse (Lists.cons (var "dom") (var "rdoms"))) (var "innerCod"),
+          _Type_either>>: constant $ pair (Lists.reverse (Lists.cons (var "dom") (var "rdoms"))) (var "innerCod"),
+          _Type_pair>>: constant $ pair (Lists.reverse (Lists.cons (var "dom") (var "rdoms"))) (var "innerCod"),
+          _Type_record>>: constant $ pair (Lists.reverse (Lists.cons (var "dom") (var "rdoms"))) (var "innerCod"),
+          _Type_set>>: constant $ pair (Lists.reverse (Lists.cons (var "dom") (var "rdoms"))) (var "innerCod"),
+          _Type_union>>: constant $ pair (Lists.reverse (Lists.cons (var "dom") (var "rdoms"))) (var "innerCod"),
+          _Type_unit>>: constant $ pair (Lists.reverse (Lists.cons (var "dom") (var "rdoms"))) (var "innerCod"),
+          _Type_variable>>: constant $ pair (Lists.reverse (Lists.cons (var "dom") (var "rdoms"))) (var "innerCod"),
+          _Type_void>>: constant $ pair (Lists.reverse (Lists.cons (var "dom") (var "rdoms"))) (var "innerCod"),
+          _Type_wrap>>: constant $ pair (Lists.reverse (Lists.cons (var "dom") (var "rdoms"))) (var "innerCod")]) $
+    "domsAndCod" <~ (var "gatherParams" @@ list ([] :: [TTerm Type]) @@ var "ft") $
+    "doms" <~ Pairs.first (var "domsAndCod") $
+    "cod" <~ Pairs.second (var "domsAndCod") $
+    "pydoms" <<~ Eithers.mapList (encodeType @@ var "env") (var "doms") $
+    "pycod" <<~ encodeType @@ var "env" @@ var "cod" $
+    right $ PyUtils.pyPrimaryToPyExpression @@
+      (PyUtils.primaryWithSlices
+        @@ (PyDsl.pyNameToPyPrimary $ PyDsl.name $ string "Callable")
+        @@ (PyUtils.pyPrimaryToPySlice @@
+            (PyDsl.primarySimple $ PyDsl.atomList $ PyUtils.pyList @@ var "pydoms"))
+        @@ list [PyDsl.sliceOrStarredExpressionSlice $ PyUtils.pyExpressionToPySlice @@ var "pycod"])
+
+-- | Encode an integer value to a Python expression
+encodeIntegerValue :: TTermDefinition (IntegerValue -> Either Error Py.Expression)
+encodeIntegerValue = def "encodeIntegerValue" $
+  doc "Encode an integer value to a Python expression" $
+  "iv" ~>
+    -- All integer types map to Python int (arbitrary precision)
+    "toPyInt" <~ ("n" ~>
+      right $ PyUtils.pyAtomToPyExpression @@
+        (PyDsl.atomNumber $ PyDsl.numberInteger $ var "n")) $
+    cases _IntegerValue (var "iv") Nothing [
+      _IntegerValue_bigint>>: "i" ~> var "toPyInt" @@ var "i",
+      _IntegerValue_int8>>: "i" ~> var "toPyInt" @@ (Literals.int8ToBigint $ var "i"),
+      _IntegerValue_int16>>: "i" ~> var "toPyInt" @@ (Literals.int16ToBigint $ var "i"),
+      _IntegerValue_int32>>: "i" ~> var "toPyInt" @@ (Literals.int32ToBigint $ var "i"),
+      _IntegerValue_int64>>: "i" ~> var "toPyInt" @@ (Literals.int64ToBigint $ var "i"),
+      _IntegerValue_uint8>>: "i" ~> var "toPyInt" @@ (Literals.uint8ToBigint $ var "i"),
+      _IntegerValue_uint16>>: "i" ~> var "toPyInt" @@ (Literals.uint16ToBigint $ var "i"),
+      _IntegerValue_uint32>>: "i" ~> var "toPyInt" @@ (Literals.uint32ToBigint $ var "i"),
+      _IntegerValue_uint64>>: "i" ~> var "toPyInt" @@ (Literals.uint64ToBigint $ var "i")]
+
+-- | Encode a literal value to a Python expression
+encodeLiteral :: TTermDefinition (Literal -> Either Error Py.Expression)
+encodeLiteral = def "encodeLiteral" $
+  doc "Encode a literal value to a Python expression" $
+  "lit" ~>
+    cases _Literal (var "lit") Nothing [
+      _Literal_binary>>: "bs" ~>
+        -- Convert binary to list of byte values (0-255) directly, without base64 encoding
+        "byteValues" <~ Literals.binaryToBytes (var "bs") $
+        right $ PyUtils.functionCall @@
+          (PyDsl.pyNameToPyPrimary $ PyDsl.name $ string "bytes") @@
+          list [PyUtils.pyAtomToPyExpression @@
+            (PyDsl.atomList $
+              PyUtils.pyList @@ (Lists.map
+                ("byteVal" ~>
+                  PyUtils.pyAtomToPyExpression @@
+                    (PyDsl.atomNumber $ PyDsl.numberInteger $ Literals.int32ToBigint $ var "byteVal"))
+                (var "byteValues")))],
+      _Literal_boolean>>: "b" ~>
+        right $ PyUtils.pyAtomToPyExpression @@
+          Logic.ifElse (var "b") PyDsl.atomTrue PyDsl.atomFalse,
+      _Literal_float>>: "f" ~> encodeFloatValue @@ var "f",
+      _Literal_integer>>: "i" ~> encodeIntegerValue @@ var "i",
+      _Literal_string>>: "s" ~>
+        right $ PyUtils.stringToPyExpression @@ PyDsl.quoteStyleDouble @@ var "s"]
+
+-- | Encode a literal type to a Python type expression
+encodeLiteralType :: TTermDefinition (LiteralType -> Either Error Py.Expression)
+encodeLiteralType = def "encodeLiteralType" $
+  doc "Encode a literal type to a Python type expression" $
+  "lt" ~>
+    "findName" <~ (cases _LiteralType (var "lt") Nothing [
+      _LiteralType_binary>>: constant $ string "bytes",
+      _LiteralType_boolean>>: constant $ string "bool",
+      _LiteralType_float>>: "ft" ~>
+        cases _FloatType (var "ft") Nothing [
+          _FloatType_bigfloat>>: constant $ string "Decimal",
+          _FloatType_float32>>: constant $ string "float",
+          _FloatType_float64>>: constant $ string "float"],
+      _LiteralType_integer>>: constant $ string "int",
+      _LiteralType_string>>: constant $ string "str"]) $
+    right $ PyDsl.pyNameToPyExpression $ PyDsl.name $ var "findName"
+
+-- | Generate name constants for a type as class-level attributes.
+--   Produces a TYPE_ constant for the type name, plus one constant per field.
+encodeNameConstants :: TTermDefinition (PyHelpers.PythonEnvironment -> Name -> [FieldType] -> [Py.Statement])
+encodeNameConstants = def "encodeNameConstants" $
+  doc "Generate name constants for a type as class-level attributes" $
+  "env" ~> "name" ~> "fields" ~>
+    -- Helper to create a statement from a (pyName, hname) pair
+    "toStmt" <~ ("pair" ~>
+      PyUtils.assignmentStatement
+        @@ (Pairs.first $ var "pair")
+        @@ (PyUtils.functionCall
+              @@ (PyUtils.pyNameToPyPrimary @@ (PyNames.encodeName @@ true @@ Util.caseConventionPascal @@ var "env" @@ (Core.name $ string "hydra.core.Name")))
+              @@ list [PyUtils.doubleQuotedString @@ (Core.unName $ Pairs.second $ var "pair")])) $
+    -- The name constant for the type itself (TYPE_)
+    "namePair" <~ pair (PyNames.encodeConstantForTypeName @@ var "env" @@ var "name") (var "name") $
+    -- Create field constant pairs from field types
+    "fieldPairs" <~ Lists.map ("field" ~>
+      pair
+        (PyNames.encodeConstantForFieldName @@ var "env" @@ var "name" @@ (project _FieldType _FieldType_name @@ var "field"))
+        (project _FieldType _FieldType_name @@ var "field")) (var "fields") $
+    Lists.map (var "toStmt") (Lists.cons (var "namePair") (var "fieldPairs"))
+
+-- | Encode a Hydra module to a Python module AST.
+--   This is the main orchestration function that:
+--   1. Reorders definitions (types first, then topologically sorted terms)
+--   2. Gathers initial metadata
+--   3. Sets up the environment
+--   4. Encodes all definitions
+--   5. Generates imports based on metadata
+--   6. Assembles the final module
+encodePythonModule :: TTermDefinition (Context -> Graph -> Module -> [Definition] -> Either Error Py.Module)
+encodePythonModule = def "encodePythonModule" $
+  doc "Encode a Hydra module to a Python module AST" $
+  "cx" ~> "g" ~> "mod" ~> "defs0" ~>
+    "defs" <~ (Environment.reorderDefs @@ var "defs0") $
+    "meta0" <~ (gatherMetadata @@ (Packaging.moduleNamespace $ var "mod") @@ var "defs") $
+    "namespaces0" <~ (project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_namespaces @@ var "meta0") $
+    "env0" <~ (initialEnvironment @@ var "namespaces0" @@ var "g") $
+    "isTypeMod" <~ (isTypeModuleCheck @@ var "defs0") $
+    withDefinitions @@ var "env0" @@ var "defs" @@ ("env" ~>
+      "defStmts" <<~ (Eithers.map ("xs" ~> Lists.concat (var "xs")) (Eithers.mapList ("d" ~> encodeDefinition @@ var "cx" @@ var "env" @@ var "d") (var "defs"))) $
+      -- Adjust metadata: if not type module and useInlineTypeParams, clear usesTypeVar
+      "meta2" <~ Logic.ifElse (Logic.and (Logic.not $ var "isTypeMod") (asTerm useInlineTypeParams))
+        (setMetaUsesTypeVar @@ var "meta0" @@ false)
+        (var "meta0") $
+      -- Adjust metadata: if type module and Python 3.10, set usesTypeAlias
+      "meta" <~ Logic.ifElse (Logic.and (var "isTypeMod")
+        (Equality.equal (asTerm targetPythonVersion) (inject PyHelpers._PythonVersion PyHelpers._PythonVersion_python310 unit)))
+        (setMetaUsesTypeAlias @@ var "meta2" @@ true)
+        (var "meta2") $
+      "namespaces" <~ (project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_namespaces @@ var "meta0") $
+      -- Generate comment statements from module description
+      "commentStmts" <~ (Maybes.maybe
+        (list ([] :: [TTerm Py.Statement]))
+        ("c" ~> list [PyUtils.commentStatement @@ var "c"])
+        (Maybes.map Formatting.normalizeComment (Packaging.moduleDescription $ var "mod"))) $
+      -- Generate import statements
+      "importStmts" <~ (moduleImports @@ var "namespaces" @@ var "meta") $
+      -- Generate type variable statements
+      "tvars" <~ Logic.ifElse (Logic.or (var "isTypeMod") (Logic.not $ asTerm useInlineTypeParams))
+        (project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_typeVariables @@ var "meta")
+        Sets.empty $
+      "tvarStmts" <~ Lists.map ("tv" ~> tvarStatement @@ (PyNames.encodeTypeVariable @@ var "tv")) (Sets.toList $ var "tvars") $
+      -- Assemble final module body: filter out empty groups
+      "body" <~ Lists.filter ("group" ~> Logic.not $ Lists.null $ var "group")
+        (Lists.concat (list [
+          list [var "commentStmts", var "importStmts", var "tvarStmts"],
+          var "defStmts"])) $
+      right $ PyDsl.module_ (var "body"))
+
+-- | Encode a record type as a Python dataclass
+encodeRecordType :: TTermDefinition (Context -> PyHelpers.PythonEnvironment -> Name -> [FieldType] -> Maybe String -> Either Error Py.Statement)
+encodeRecordType = def "encodeRecordType" $
+  doc "Encode a record type as a Python dataclass" $
+  "cx" ~> "env" ~> "name" ~> "rowType" ~> "comment" ~>
+    "pyFields" <<~ (Eithers.mapList (encodeFieldType @@ var "cx" @@ var "env") (var "rowType")) $
+    -- Generate class-level name constants
+    "constStmts" <~ (encodeNameConstants @@ var "env" @@ var "name" @@ var "rowType") $
+    "body" <~ (PyUtils.indentedBlock @@ var "comment" @@ list [var "pyFields", var "constStmts"]) $
+    -- Get bound type variables for Generic args
+    "boundVars" <~ (Phantoms.project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_boundTypeVariables @@ var "env") $
+    "tparamList" <~ Pairs.first (var "boundVars") $
+    "mGenericArg" <~ (genericArg @@ var "tparamList") $
+    "args" <~ optCases (var "mGenericArg")
+      nothing
+      ("a" ~> just (PyUtils.pyExpressionsToPyArgs @@ list [var "a"])) $
+    "decs" <~ (just $ wrap Py._Decorators $ list [dataclassDecorator]) $
+    "pyName" <~ (PyNames.encodeName @@ Phantoms.false @@ Util.caseConventionPascal @@ var "env" @@ var "name") $
+    "noTypeParams" <~ (Phantoms.list ([] :: [TTerm Py.TypeParameter])) $
+    right $ PyUtils.pyClassDefinitionToPyStatement @@
+      Phantoms.record Py._ClassDefinition [
+        Phantoms.field Py._ClassDefinition_decorators (var "decs"),
+        Phantoms.field Py._ClassDefinition_name (var "pyName"),
+        Phantoms.field Py._ClassDefinition_typeParams (var "noTypeParams"),
+        Phantoms.field Py._ClassDefinition_arguments (var "args"),
+        Phantoms.field Py._ClassDefinition_body (var "body")]
+
+-- | Encode a term assignment (top-level binding) to a Python statement.
+--   This dispatches to either a simple assignment or a function definition depending on complexity.
+encodeTermAssignment :: TTermDefinition (Context -> PyHelpers.PythonEnvironment
+  -> Name -> TTerm Term -> TypeScheme -> Maybe String
+  -> Either Error Py.Statement)
+encodeTermAssignment = def "encodeTermAssignment" $
+  doc "Encode a term assignment to a Python statement" $
+  "cx" ~> "env" ~> "name" ~> "term" ~> "ts" ~> "comment" ~>
+    "fs" <<~ (analyzePythonFunction @@ var "cx" @@ var "env" @@ var "term") $
+    "tparams" <~ (Phantoms.project HydraTyping._FunctionStructure HydraTyping._FunctionStructure_typeParams @@ var "fs") $
+    "params" <~ (Phantoms.project HydraTyping._FunctionStructure HydraTyping._FunctionStructure_params @@ var "fs") $
+    "bindings" <~ (Phantoms.project HydraTyping._FunctionStructure HydraTyping._FunctionStructure_bindings @@ var "fs") $
+    "body" <~ (Phantoms.project HydraTyping._FunctionStructure HydraTyping._FunctionStructure_body @@ var "fs") $
+    "doms" <~ (Phantoms.project HydraTyping._FunctionStructure HydraTyping._FunctionStructure_domains @@ var "fs") $
+    "mcod" <~ (Phantoms.project HydraTyping._FunctionStructure HydraTyping._FunctionStructure_codomain @@ var "fs") $
+    "env2" <~ (Phantoms.project HydraTyping._FunctionStructure HydraTyping._FunctionStructure_environment @@ var "fs") $
+    "tc" <~ (project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_graph @@ var "env2") $
+    "binding" <~ (Core.binding (var "name") (var "term") (just $ var "ts")) $
+    "isComplex" <~ (Predicates.isComplexBinding @@ var "tc" @@ var "binding") $
+    "isTrivial" <~ (Predicates.isTrivialTerm @@ var "term") $
+    Logic.ifElse (Logic.and (var "isComplex") (Logic.not (var "isTrivial")))
+      -- Complex binding (non-trivial): use function definition
+      ("bindingStmts" <<~ (Eithers.mapList (encodeBindingAs @@ var "cx" @@ var "env2") (var "bindings")) $
+        encodeFunctionDefinition @@ var "cx" @@ var "env2" @@ var "name" @@ var "tparams" @@ var "params" @@ var "body" @@ var "doms" @@ var "mcod" @@ var "comment" @@ var "bindingStmts")
+      -- Simple binding: use assignment
+      ("bodyExpr" <<~ (encodeTermInline @@ var "cx" @@ var "env2" @@ false @@ var "body") $
+        "pyName" <~ (PyNames.encodeName @@ false @@ Util.caseConventionLowerSnake @@ var "env2" @@ var "name") $
+        right $ PyUtils.annotatedStatement @@ var "comment" @@ (PyUtils.assignmentStatement @@ var "pyName" @@ var "bodyExpr"))
+
+-- | Encode a term to a Python expression (inline form).
+--   This is the main term encoding function that handles all term variants.
+--   Parameters: environment, noCast flag, term
+encodeTermInline :: TTermDefinition (Context -> PyHelpers.PythonEnvironment
+  -> Bool
+  -> TTerm Term
+  -> Either Error Py.Expression)
+encodeTermInline = def "encodeTermInline" $
+  doc "Encode a term to a Python expression (inline form)" $
+  "cx" ~> "env" ~> "noCast" ~> "term" ~>
+    -- Helper for recursive encoding (self-reference)
+    "encode" <~ ("t" ~> encodeTermInline @@ var "cx" @@ var "env" @@ false @@ var "t") $
+    -- Helper to strip type applications and annotations
+    "stripTypeApps" <~
+      ("t" ~> cases _Term (var "t") (Just $ var "t") [
+        _Term_annotated>>: "ann" ~>
+          var "stripTypeApps" @@ Core.annotatedTermBody (var "ann"),
+        _Term_typeApplication>>: "ta" ~>
+          var "stripTypeApps" @@ Core.typeApplicationTermBody (var "ta")]) $
+    -- withCast helper: adds cast() around expression when type is available
+    -- If noCast is true or skipCasts is enabled, just return the expression
+    -- Otherwise try to infer the type and wrap in cast(type, expr)
+    "withCast" <~ ("pyexp" ~>
+      -- Check if we should skip casting
+      Logic.ifElse (Logic.or (var "noCast")
+                             (project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_skipCasts @@ var "env"))
+        -- Skip casting: just return the expression
+        (right $ var "pyexp")
+        -- Try to get the type and wrap in cast if successful
+        ("tc" <~ (project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_graph @@ var "env") $
+         -- Use fromRight to handle type inference failures gracefully
+         "mtyp" <~ (Eithers.map ("_r" ~> Pairs.first (var "_r"))
+           (Checking.typeOf @@ var "cx" @@ var "tc" @@ list ([] :: [TTerm Type]) @@ var "term")) $
+         Eithers.either_
+           -- Type inference failed: return expression as-is
+           (constant $ right $ var "pyexp")
+           -- Type inference succeeded: try to encode the type and cast
+           ("typ" ~>
+             Eithers.either_
+               (constant $ right $ var "pyexp")
+               ("pytyp" ~> right $ PyUtils.castTo @@ var "pytyp" @@ var "pyexp")
+               (encodeType @@ var "env" @@ var "typ"))
+           (var "mtyp"))) $
+    -- Main case dispatch on term variant (strip annotations and type wrappers)
+    cases _Term (Strip.deannotateAndDetypeTerm @@ var "term") Nothing [
+      -- TermApplication
+      _Term_application>>: "app" ~>
+        encodeApplication @@ var "cx" @@ var "env" @@ var "app",
+
+      -- TermEither
+      _Term_either>>: "et" ~>
+        Eithers.either_
+          ("t1" ~>
+            "pyexp" <<~ (var "encode" @@ var "t1") $
+            var "withCast" @@ (PyUtils.functionCall @@ (PyUtils.pyNameToPyPrimary @@ PyDsl.name (string "Left")) @@ list [var "pyexp"]))
+          ("t1" ~>
+            "pyexp" <<~ (var "encode" @@ var "t1") $
+            var "withCast" @@ (PyUtils.functionCall @@ (PyUtils.pyNameToPyPrimary @@ PyDsl.name (string "Right")) @@ list [var "pyexp"]))
+          (var "et"),
+
+      -- TermFunction
+      _Term_function>>: "f" ~>
+        encodeFunction @@ var "cx" @@ var "env" @@ var "f",
+
+      -- TermLet - encode using walrus operators in a tuple
+      _Term_let>>: "lt" ~>
+        "bindings" <~ Core.letBindings (var "lt") $
+        "body" <~ Core.letBody (var "lt") $
+        Logic.ifElse (Lists.null $ var "bindings")
+          (encodeTermInline @@ var "cx" @@ var "env" @@ false @@ var "body")
+          (withLetInline @@ var "env" @@ var "lt" @@
+            ("innerEnv" ~>
+              "pbindingExprs" <<~ (Eithers.mapList (encodeBindingAsAssignment @@ var "cx" @@ false @@ var "innerEnv") (var "bindings")) $
+              "pbody" <<~ (encodeTermInline @@ var "cx" @@ var "innerEnv" @@ false @@ var "body") $
+              "pbindingStarExprs" <~ (Lists.map ("ne" ~> PyDsl.starNamedExpressionSimple (var "ne")) (var "pbindingExprs")) $
+              "pbodyStarExpr" <~ (PyUtils.pyExpressionToPyStarNamedExpression @@ var "pbody") $
+              "tupleElements" <~ (Lists.concat2 (var "pbindingStarExprs") (list [var "pbodyStarExpr"])) $
+              "tupleExpr" <~ (PyUtils.pyAtomToPyExpression @@ PyDsl.atomTuple (PyDsl.tuple (var "tupleElements"))) $
+              "indexValue" <~ (PyUtils.pyAtomToPyExpression @@ PyDsl.atomNumber (PyDsl.numberInteger (Literals.int32ToBigint (Lists.length $ var "bindings")))) $
+              "indexedExpr" <~ (PyUtils.primaryWithExpressionSlices @@ (PyUtils.pyExpressionToPyPrimary @@ var "tupleExpr") @@ list [var "indexValue"]) $
+              right $ PyUtils.pyPrimaryToPyExpression @@ var "indexedExpr")),
+
+      -- TermList - encode as tuple
+      _Term_list>>: "terms" ~>
+        "pyExprs" <<~ (Eithers.mapList (var "encode") (var "terms")) $
+        right $ PyUtils.pyAtomToPyExpression @@ PyDsl.atomTuple (PyDsl.tuple (Lists.map PyUtils.pyExpressionToPyStarNamedExpression (var "pyExprs"))),
+
+      -- TermLiteral
+      _Term_literal>>: "lit" ~>
+        encodeLiteral @@ var "lit",
+
+      -- TermMap - encode as FrozenDict
+      _Term_map>>: "m" ~>
+        "pairs" <<~ (Eithers.mapList
+          ("kv" ~>
+            "k" <~ (Pairs.first $ var "kv") $
+            "v" <~ (Pairs.second $ var "kv") $
+            "pyK" <<~ (var "encode" @@ var "k") $
+            "pyV" <<~ (var "encode" @@ var "v") $
+            right $ PyDsl.doubleStarredKvpairPair (PyDsl.kvpair (var "pyK") (var "pyV")))
+          (Maps.toList $ var "m")) $
+        right $ PyUtils.functionCall @@ (PyUtils.pyNameToPyPrimary @@ PyDsl.name (string "FrozenDict"))
+          @@ list [PyUtils.pyAtomToPyExpression @@ PyDsl.atomDict (PyDsl.dict (var "pairs"))],
+
+      -- TermMaybe - encode as Nothing() or Just(value)
+      _Term_maybe>>: "mt" ~>
+        Maybes.maybe
+          (right $ PyUtils.functionCall @@ (PyUtils.pyNameToPyPrimary @@ PyDsl.name (string "Nothing")) @@ list ([] :: [TTerm Py.Expression]))
+          ("t1" ~>
+            "pyexp" <<~ (var "encode" @@ var "t1") $
+            var "withCast" @@ (PyUtils.functionCall @@ (PyUtils.pyNameToPyPrimary @@ PyDsl.name (string "Just")) @@ list [var "pyexp"]))
+          (var "mt"),
+
+      -- TermPair - encode as 2-tuple
+      _Term_pair>>: "p" ~>
+        "t1" <~ (Pairs.first $ var "p") $
+        "t2" <~ (Pairs.second $ var "p") $
+        "pyExpr1" <<~ (var "encode" @@ var "t1") $
+        "pyExpr2" <<~ (var "encode" @@ var "t2") $
+        right $ PyUtils.pyAtomToPyExpression @@ PyDsl.atomTuple (PyDsl.tuple
+          (list [PyUtils.pyExpressionToPyStarNamedExpression @@ var "pyExpr1", PyUtils.pyExpressionToPyStarNamedExpression @@ var "pyExpr2"])),
+
+      -- TermRecord
+      _Term_record>>: "r" ~>
+        "tname" <~ Core.recordTypeName (var "r") $
+        "fields" <~ Core.recordFields (var "r") $
+        "pargs" <<~ (Eithers.mapList ("fld" ~> var "encode" @@ Core.fieldTerm (var "fld")) (var "fields")) $
+        right $ PyUtils.functionCall @@ (PyUtils.pyNameToPyPrimary @@ (PyNames.encodeNameQualified @@ var "env" @@ var "tname")) @@ var "pargs",
+
+      -- TermSet - encode as frozenset
+      _Term_set>>: "s" ~>
+        "pyEls" <<~ (Eithers.mapList (var "encode") (Sets.toList $ var "s")) $
+        right $ PyUtils.functionCall @@ (PyUtils.pyNameToPyPrimary @@ PyDsl.name (string "frozenset"))
+          @@ list [PyUtils.pyAtomToPyExpression @@ PyDsl.atomSet (PyDsl.set (Lists.map PyUtils.pyExpressionToPyStarNamedExpression (var "pyEls")))],
+
+      -- TermTypeApplication - strip type applications and potentially cast
+      _Term_typeApplication>>: "ta" ~>
+        "body" <~ Core.typeApplicationTermBody (var "ta") $
+        "pybase" <<~ (encodeTermInline @@ var "cx" @@ var "env" @@ true @@ (var "stripTypeApps" @@ var "body")) $
+        var "withCast" @@ var "pybase",
+
+      -- TermTypeLambda - descend into body with updated environment
+      _Term_typeLambda>>: "tl" ~>
+        "body" <~ Core.typeLambdaBody (var "tl") $
+        withTypeLambda @@ var "env" @@ var "tl" @@
+          ("env2" ~> encodeTermInline @@ var "cx" @@ var "env2" @@ var "noCast" @@ var "body"),
+
+      -- TermUnion (Injection)
+      _Term_union>>: "inj" ~>
+        "tname" <~ Core.injectionTypeName (var "inj") $
+        "field" <~ Core.injectionField (var "inj") $
+        "rt" <<~ (Resolution.requireUnionType @@ var "cx" @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "tname") $
+        Logic.ifElse (Predicates.isEnumRowType @@ var "rt")
+          -- Enum variant
+          (right $ PyUtils.projectFromExpression
+            @@ (PyUtils.pyNameToPyExpression @@ (PyNames.encodeNameQualified @@ var "env" @@ var "tname"))
+            @@ (PyNames.encodeEnumValue @@ var "env" @@ Core.fieldName (var "field")))
+          -- Class variant
+          ("fname" <~ Core.fieldName (var "field") $
+            -- Check if this is a unit variant
+            "isUnitVariant" <~ (Maybes.maybe
+              false
+              ("ft" ~> Predicates.isUnitType @@ (Strip.deannotateType @@ Core.fieldTypeType (var "ft")))
+              (Lists.find ("ft" ~> Core.equalName_ (Core.fieldTypeName (var "ft")) (var "fname")) (var "rt"))) $
+            "args" <<~ (Logic.ifElse (Logic.or (Predicates.isUnitTerm @@ Core.fieldTerm (var "field")) (var "isUnitVariant"))
+              (right (list ([] :: [TTerm Py.Expression])))
+              ("parg" <<~ (var "encode" @@ Core.fieldTerm (var "field")) $
+                right $ list [var "parg"])) $
+            -- Cast to union type - set usesCast flag
+            -- Metadata for usesCast is now pre-computed in gatherMetadata
+            "deconflictedName" <~ (deconflictVariantName @@ true @@ var "env" @@ var "tname" @@ var "fname" @@ (project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_graph @@ var "env")) $
+            right $
+              PyUtils.castTo
+                @@ (PyNames.typeVariableReference @@ var "env" @@ var "tname")
+                @@ (PyUtils.functionCall @@ (PyUtils.pyNameToPyPrimary @@ var "deconflictedName") @@ var "args")),
+
+      -- TermUnit
+      _Term_unit>>: constant $
+        right $ PyUtils.pyNameToPyExpression @@ PyUtils.pyNone,
+
+      -- TermVariable
+      _Term_variable>>: "name" ~>
+        encodeVariable @@ var "cx" @@ var "env" @@ var "name" @@ list ([] :: [TTerm Py.Expression]),
+
+      -- TermWrap
+      _Term_wrap>>: "wrapped" ~>
+        "tname" <~ Core.wrappedTermTypeName (var "wrapped") $
+        "inner" <~ Core.wrappedTermBody (var "wrapped") $
+        "parg" <<~ (var "encode" @@ var "inner") $
+        right $ PyUtils.functionCall @@ (PyUtils.pyNameToPyPrimary @@ (PyNames.encodeNameQualified @@ var "env" @@ var "tname")) @@ list [var "parg"]]
+
+-- | Encode a term to a list of statements, with the last statement as the return value.
+--   This handles case statements specially by generating match statements.
+encodeTermMultiline :: TTermDefinition (Context -> PyHelpers.PythonEnvironment
+  -> TTerm Term
+  -> Either Error [Py.Statement])
+encodeTermMultiline = def "encodeTermMultiline" $
+  doc "Encode a term to a list of statements with return as final statement" $
+  "cx" ~> "env" ~> "term" ~>
+    -- Define the default/fallback logic that handles non-case-statement terms
+    "dfltLogic" <~
+      ("fs" <<~ (analyzePythonFunction @@ var "cx" @@ var "env" @@ var "term") $
+        "params" <~ (Phantoms.project HydraTyping._FunctionStructure HydraTyping._FunctionStructure_params @@ var "fs") $
+        "bindings" <~ (Phantoms.project HydraTyping._FunctionStructure HydraTyping._FunctionStructure_bindings @@ var "fs") $
+        "innerBody" <~ (Phantoms.project HydraTyping._FunctionStructure HydraTyping._FunctionStructure_body @@ var "fs") $
+        "env2" <~ (Phantoms.project HydraTyping._FunctionStructure HydraTyping._FunctionStructure_environment @@ var "fs") $
+        Logic.ifElse (Lists.null $ var "bindings")
+          -- No bindings: encode inline and wrap in return
+          ("expr" <<~ (encodeTermInline @@ var "cx" @@ var "env" @@ false @@ var "term") $
+            right $ list [PyUtils.returnSingle @@ var "expr"])
+          -- Has bindings: encode bindings as defs, then recurse on body
+          ("bindingStmts" <<~ (Eithers.mapList (encodeBindingAs @@ var "cx" @@ var "env2") (var "bindings")) $
+            "bodyStmts" <<~ (encodeTermMultiline @@ var "cx" @@ var "env2" @@ var "innerBody") $
+            right $ Lists.concat2 (var "bindingStmts") (var "bodyStmts"))) $
+    "gathered" <~ (Analysis.gatherApplications @@ var "term") $
+    "args" <~ Pairs.first (var "gathered") $
+    "body" <~ Pairs.second (var "gathered") $
+    -- Check if exactly one argument for potential case statement
+    Logic.ifElse (Equality.equal (Lists.length $ var "args") (int32 1))
+      -- Try to handle case statement specially
+      ("arg" <~ (Lists.head $ var "args") $
+        cases _Term (Strip.deannotateAndDetypeTerm @@ var "body") (Just $ var "dfltLogic") [
+          _Term_function>>: "f" ~>
+            cases _Function (var "f") (Just $ var "dfltLogic") [
+              _Function_elimination>>: "e" ~>
+                cases _Elimination (var "e") (Just $ var "dfltLogic") [
+                  _Elimination_union>>: "cs" ~>
+                    "tname" <~ (Core.caseStatementTypeName $ var "cs") $
+                    "dflt" <~ (Core.caseStatementDefault $ var "cs") $
+                    "cases_" <~ (Core.caseStatementCases $ var "cs") $
+                    "rt" <<~ (Resolution.requireUnionType @@ var "cx" @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "tname") $
+                    "isEnum" <~ (Predicates.isEnumRowType @@ var "rt") $
+                    "isFull" <~ (isCasesFull @@ var "rt" @@ var "cases_") $
+                    "pyArg" <<~ (encodeTermInline @@ var "cx" @@ var "env" @@ false @@ var "arg") $
+                    "pyCases" <<~ (Eithers.mapList (encodeCaseBlock @@ var "cx" @@ var "env" @@ var "tname" @@ var "rt" @@ var "isEnum" @@ ("e" ~> "t" ~> encodeTermMultiline @@ var "cx" @@ var "e" @@ var "t")) (deduplicateCaseVariables @@ var "cases_")) $
+                    "pyDflt" <<~ (encodeDefaultCaseBlock @@ ("t" ~> encodeTermInline @@ var "cx" @@ var "env" @@ false @@ var "t") @@ var "isFull" @@ var "dflt" @@ var "tname") $
+                    "subj" <~ (PyDsl.subjectExpressionSimple $ PyDsl.namedExpressionSimple $ var "pyArg") $
+                    "matchStmt" <~ (PyDsl.statementCompound $ PyDsl.compoundStatementMatch $ Phantoms.record Py._MatchStatement [
+                      Phantoms.field Py._MatchStatement_subject (var "subj"),
+                      Phantoms.field Py._MatchStatement_cases (Lists.concat2 (var "pyCases") (var "pyDflt"))]) $
+                    right $ list [var "matchStmt"]]]])
+      -- Default case: use the fallback logic
+      (var "dfltLogic")
+
+-- | Encode a term body for TCO: tail self-calls become param reassignment + continue.
+--   Non-recursive returns stay as normal return statements.
+encodeTermMultilineTCO :: TTermDefinition (Context -> PyHelpers.PythonEnvironment
+  -> Name -> [Name] -> TTerm Term
+  -> Either Error [Py.Statement])
+encodeTermMultilineTCO = def "encodeTermMultilineTCO" $
+  doc "Encode a term body for TCO: tail self-calls become param reassignment + continue" $
+  "cx" ~> "env" ~> "funcName" ~> "paramNames" ~> "term" ~>
+    "stripped" <~ (Strip.deannotateAndDetypeTerm @@ var "term") $
+    -- Check if this term is a direct self-tail-call: funcName(args...)
+    "gathered" <~ (Analysis.gatherApplications @@ var "stripped") $
+    "gatherArgs" <~ (Pairs.first $ var "gathered") $
+    "gatherFun" <~ (Pairs.second $ var "gathered") $
+    "strippedFun" <~ (Strip.deannotateAndDetypeTerm @@ var "gatherFun") $
+    -- Check for self-call pattern: Variable(funcName)
+    "isSelfCall" <~ (cases _Term (var "strippedFun")
+      (Just false) [
+        _Term_variable>>: "n" ~> Equality.equal (var "n") (var "funcName")]) $
+    Logic.ifElse (Logic.and (var "isSelfCall")
+                            (Equality.equal (Lists.length $ var "gatherArgs") (Lists.length $ var "paramNames")))
+      -- TAIL CALL: emit param reassignment + continue
+      ("pyArgs" <<~ Eithers.mapList ("a" ~> encodeTermInline @@ var "cx" @@ var "env" @@ false @@ var "a") (var "gatherArgs") $
+        "assignments" <~ (Lists.map ("pair" ~>
+          "paramName" <~ (Pairs.first $ var "pair") $
+          "pyArg" <~ (Pairs.second $ var "pair") $
+          PyUtils.assignmentStatement
+            @@ (PyNames.encodeName @@ false @@ Util.caseConventionLowerSnake @@ var "env" @@ var "paramName")
+            @@ var "pyArg")
+          (Lists.zip (var "paramNames") (var "pyArgs"))) $
+        "continueStmt" <~ (PyDsl.statementSimple $ list [PyDsl.simpleStatementContinue]) $
+        right $ Lists.concat2 (var "assignments") (list [var "continueStmt"]))
+      -- NOT a self-call: check for case statement application
+      ("gathered2" <~ (Analysis.gatherApplications @@ var "term") $
+        "args2" <~ (Pairs.first $ var "gathered2") $
+        "body2" <~ (Pairs.second $ var "gathered2") $
+        Logic.ifElse (Equality.equal (Lists.length $ var "args2") (int32 1))
+          -- Single argument: try to match as case statement
+          ("arg" <~ (Lists.head $ var "args2") $
+            cases _Term (Strip.deannotateAndDetypeTerm @@ var "body2") (Just $
+              -- Default: not a case statement, encode as return
+              "expr" <<~ (encodeTermInline @@ var "cx" @@ var "env" @@ false @@ var "term") $
+              right $ list [PyUtils.returnSingle @@ var "expr"]) [
+              _Term_function>>: "f" ~>
+                cases _Function (var "f") (Just $
+                  "expr" <<~ (encodeTermInline @@ var "cx" @@ var "env" @@ false @@ var "term") $
+                  right $ list [PyUtils.returnSingle @@ var "expr"]) [
+                  _Function_elimination>>: "e" ~>
+                    cases _Elimination (var "e") (Just $
+                      "expr" <<~ (encodeTermInline @@ var "cx" @@ var "env" @@ false @@ var "term") $
+                      right $ list [PyUtils.returnSingle @@ var "expr"]) [
+                      _Elimination_union>>: "cs" ~>
+                        -- Case statement: use encodeCaseBlock with TCO-aware body encoder
+                        "tname" <~ (Core.caseStatementTypeName $ var "cs") $
+                        "dflt" <~ (Core.caseStatementDefault $ var "cs") $
+                        "cases_" <~ (Core.caseStatementCases $ var "cs") $
+                        "rt" <<~ (Resolution.requireUnionType @@ var "cx" @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "tname") $
+                        "isEnum" <~ (Predicates.isEnumRowType @@ var "rt") $
+                        "isFull" <~ (isCasesFull @@ var "rt" @@ var "cases_") $
+                        "pyArg" <<~ (encodeTermInline @@ var "cx" @@ var "env" @@ false @@ var "arg") $
+                        -- Use TCO body encoder for each case branch
+                        "pyCases" <<~ (Eithers.mapList
+                          (encodeCaseBlock @@ var "cx" @@ var "env" @@ var "tname" @@ var "rt" @@ var "isEnum"
+                            @@ ("e2" ~> "t2" ~> encodeTermMultilineTCO @@ var "cx" @@ var "e2" @@ var "funcName" @@ var "paramNames" @@ var "t2"))
+                          (deduplicateCaseVariables @@ var "cases_")) $
+                        -- Default case: uses normal return encoding (base case is never a tail call)
+                        "pyDflt" <<~ (encodeDefaultCaseBlock
+                          @@ ("t2" ~> encodeTermInline @@ var "cx" @@ var "env" @@ false @@ var "t2")
+                          @@ var "isFull" @@ var "dflt" @@ var "tname") $
+                        "subj" <~ (PyDsl.subjectExpressionSimple $ PyDsl.namedExpressionSimple $ var "pyArg") $
+                        "matchStmt" <~ (PyDsl.statementCompound $ PyDsl.compoundStatementMatch $
+                          Phantoms.record Py._MatchStatement [
+                            Phantoms.field Py._MatchStatement_subject (var "subj"),
+                            Phantoms.field Py._MatchStatement_cases (Lists.concat2 (var "pyCases") (var "pyDflt"))]) $
+                        right $ list [var "matchStmt"]]]])
+          -- Not a single-arg application: fall back to normal return
+          ("expr" <<~ (encodeTermInline @@ var "cx" @@ var "env" @@ false @@ var "term") $
+            right $ list [PyUtils.returnSingle @@ var "expr"]))
+
+-- | Encode a Hydra type to a Python type expression.
+--   This is the main recursive type encoder.
+encodeType :: TTermDefinition (PyHelpers.PythonEnvironment -> Type -> Either Error Py.Expression)
+encodeType = def "encodeType" $
+  doc "Encode a Hydra type to a Python type expression" $
+  "env" ~> "typ" ~>
+    -- dflt produces a quoted string fallback for unsupported types
+    "dflt" <~ (right $ PyUtils.doubleQuotedString @@ (Strings.cat2 (string "type = ") (ShowCore.type_ @@ (Strip.deannotateType @@ var "typ")))) $
+    cases _Type (Strip.deannotateType @@ var "typ") Nothing [
+      _Type_application>>: "at" ~> encodeApplicationType @@ var "env" @@ var "at",
+      _Type_function>>: "ft" ~> encodeFunctionType @@ var "env" @@ var "ft",
+      _Type_forall>>: "lt" ~> encodeForallType @@ var "env" @@ var "lt",
+      _Type_list>>: "et" ~>
+        "pyet" <<~ encodeType @@ var "env" @@ var "et" $
+        right $ PyUtils.nameAndParams @@ (PyDsl.name $ string "frozenlist") @@ list [var "pyet"],
+      _Type_map>>: "mt" ~>
+        "pykt" <<~ encodeType @@ var "env" @@ (project _MapType _MapType_keys @@ var "mt") $
+        "pyvt" <<~ encodeType @@ var "env" @@ (project _MapType _MapType_values @@ var "mt") $
+        right $ PyUtils.nameAndParams @@ (PyDsl.name $ string "FrozenDict") @@ list [var "pykt", var "pyvt"],
+      _Type_literal>>: "lt" ~> encodeLiteralType @@ var "lt",
+      _Type_maybe>>: "et" ~>
+        "ptype" <<~ encodeType @@ var "env" @@ var "et" $
+        right $ PyUtils.pyPrimaryToPyExpression @@
+          (PyUtils.primaryWithExpressionSlices @@
+            (PyDsl.pyNameToPyPrimary $ PyDsl.name $ string "Maybe") @@
+            list [var "ptype"]),
+      _Type_either>>: "eitherT" ~>
+        "pyleft" <<~ encodeType @@ var "env" @@ (project _EitherType _EitherType_left @@ var "eitherT") $
+        "pyright" <<~ encodeType @@ var "env" @@ (project _EitherType _EitherType_right @@ var "eitherT") $
+        right $ PyUtils.pyPrimaryToPyExpression @@
+          (PyUtils.primaryWithExpressionSlices @@
+            (PyDsl.pyNameToPyPrimary $ PyDsl.name $ string "Either") @@
+            list [var "pyleft", var "pyright"]),
+      _Type_pair>>: "pairT" ~>
+        "pyFirst" <<~ encodeType @@ var "env" @@ (project _PairType _PairType_first @@ var "pairT") $
+        "pySecond" <<~ encodeType @@ var "env" @@ (project _PairType _PairType_second @@ var "pairT") $
+        right $ PyUtils.nameAndParams @@ (PyDsl.name $ string "tuple") @@ list [var "pyFirst", var "pySecond"],
+      _Type_record>>: constant $ var "dflt",
+      _Type_set>>: "et" ~>
+        "pyet" <<~ encodeType @@ var "env" @@ var "et" $
+        right $ PyUtils.nameAndParams @@ (PyDsl.name $ string "frozenset") @@ list [var "pyet"],
+      _Type_union>>: constant $ var "dflt",
+      _Type_unit>>: constant $ right $ PyUtils.pyNameToPyExpression @@ PyUtils.pyNone,
+      _Type_void>>: constant $ right $ PyUtils.pyNameToPyExpression @@ PyUtils.pyNone,
+      _Type_variable>>: "name" ~>
+        right $ PyNames.typeVariableReference @@ var "env" @@ var "name",
+      _Type_wrap>>: constant $ var "dflt",
+      -- Default case for annotated and any other types
+      _Type_annotated>>: constant $ var "dflt"]
+
+-- | Encode a type assignment (dispatches to record, union, wrap, or simple typedef)
+--   Name constants are now generated inside the class body by each type encoder.
+encodeTypeAssignment :: TTermDefinition (Context -> PyHelpers.PythonEnvironment -> Name -> Type -> Maybe String -> Either Error [[Py.Statement]])
+encodeTypeAssignment = def "encodeTypeAssignment" $
+  doc "Encode a type definition, dispatching based on type structure" $
+  "cx" ~> "env" ~> "name" ~> "typ" ~> "comment" ~>
+    "defStmts" <<~ (encodeTypeAssignmentInner @@ var "cx" @@ var "env" @@ var "name" @@ var "typ" @@ var "comment") $
+    right $ Lists.map ("s" ~> list [var "s"]) (var "defStmts")
+
+-- | Inner type assignment encoding that handles forall unwrapping
+encodeTypeAssignmentInner :: TTermDefinition (Context -> PyHelpers.PythonEnvironment -> Name -> Type -> Maybe String -> Either Error [Py.Statement])
+encodeTypeAssignmentInner = def "encodeTypeAssignmentInner" $
+  doc "Encode the inner type definition, unwrapping forall types" $
+  "cx" ~> "env" ~> "name" ~> "typ" ~> "comment" ~>
+    "stripped" <~ (Strip.deannotateType @@ var "typ") $
+    -- Default: simple type alias
+    "dflt" <~ ("typeExpr" <<~ (encodeType @@ var "env" @@ var "typ") $
+       right $ encodeTypeDefSingle @@ var "env" @@ var "name" @@ var "comment" @@ var "typeExpr") $
+    cases _Type (var "stripped") (Just (var "dflt")) [
+      -- Forall: extend environment with type variable and recurse
+      _Type_forall>>: "ft" ~>
+        "tvar" <~ (Core.forallTypeParameter $ var "ft") $
+        "body" <~ (Core.forallTypeBody $ var "ft") $
+        "newEnv" <~ (extendEnvWithTypeVar @@ var "env" @@ var "tvar") $
+        encodeTypeAssignmentInner @@ var "cx" @@ var "newEnv" @@ var "name" @@ var "body" @@ var "comment",
+
+      -- Record type
+      _Type_record>>: "rt" ~>
+        Eithers.map ("s" ~> list [var "s"]) (encodeRecordType @@ var "cx" @@ var "env" @@ var "name" @@ var "rt" @@ var "comment"),
+
+      -- Union type
+      _Type_union>>: "rt" ~>
+        encodeUnionType @@ var "cx" @@ var "env" @@ var "name" @@ var "rt" @@ var "comment",
+
+      -- Wrapped type
+      _Type_wrap>>: "wt" ~>
+        encodeWrappedType @@ var "env" @@ var "name" @@ var "wt" @@ var "comment"]
+
+-- | Encode a type definition with a single statement result
+encodeTypeDefSingle :: TTermDefinition (PyHelpers.PythonEnvironment -> Name -> Maybe String -> Py.Expression -> [Py.Statement])
+encodeTypeDefSingle = def "encodeTypeDefSingle" $
+  doc "Encode a simple type alias definition" $
+  "env" ~> "name" ~> "comment" ~> "typeExpr" ~>
+    "pyName" <~ (PyNames.encodeName @@ false @@ Util.caseConventionPascal @@ var "env" @@ var "name") $
+    "tparams" <~ (environmentTypeParameters @@ var "env") $
+    list [typeAliasStatementFor @@ var "env" @@ var "pyName" @@ var "tparams" @@ var "comment" @@ var "typeExpr"]
+
+-- | Encode a type to a Python expression, quoting if the type has free variables.
+--   Free variables indicate forward references that need to be quoted strings in Python.
+encodeTypeQuoted :: TTermDefinition (PyHelpers.PythonEnvironment -> Type -> Either Error Py.Expression)
+encodeTypeQuoted = def "encodeTypeQuoted" $
+  doc "Encode a type to a Python expression, quoting if the type has free variables" $
+  "env" ~> "typ" ~>
+    "pytype" <<~ encodeType @@ var "env" @@ var "typ" $
+    right $ Logic.ifElse (Sets.null (Variables.freeVariablesInType @@ var "typ"))
+      (var "pytype")
+      (PyUtils.doubleQuotedString @@ (Serialization.printExpr @@ (PySerde.encodeExpression @@ var "pytype")))
+
+-- | Encode a union elimination (case expression) applied to an argument as an inline
+--   conditional expression chain:
+--     branch1_result if isinstance(arg, T1) else branch2_result if isinstance(arg, T2) else ...
+--   This is used when a case application appears in an expression context where a match
+--   statement cannot be emitted (e.g., inside a lambda or walrus assignment).
+encodeUnionEliminationInline :: TTermDefinition (Context -> PyHelpers.PythonEnvironment
+  -> CaseStatement -> Py.Expression
+  -> Either Error Py.Expression)
+encodeUnionEliminationInline = def "encodeUnionEliminationInline" $
+  doc "Encode a union elimination as an inline conditional chain (isinstance-based ternary)" $
+  "cx" ~> "env" ~> "cs" ~> "pyArg" ~>
+    "tname" <~ (Core.caseStatementTypeName $ var "cs") $
+    "mdefault" <~ (Core.caseStatementDefault $ var "cs") $
+    "cases_" <~ (Core.caseStatementCases $ var "cs") $
+    -- Get the row type for isEnum and isUnit checks
+    "rt" <<~ (Resolution.requireUnionType @@ var "cx" @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "tname") $
+    "isEnum" <~ (Predicates.isEnumRowType @@ var "rt") $
+    -- Project .value from the argument for non-enum types
+    "valueExpr" <~ (PyUtils.projectFromExpression @@ var "pyArg" @@ (PyDsl.name $ string "value")) $
+    -- Build the isinstance function reference
+    "isinstancePrimary" <~ (PyUtils.pyNameToPyPrimary @@ (PyDsl.name $ string "isinstance")) $
+    -- Encode the default expression (used as final else)
+    "pyDefault" <<~ (Maybes.maybe
+      -- No default: produce an unsupported expression as fallback
+      (right $ unsupportedExpression @@ string "no matching case in inline union elimination")
+      -- Has default: encode it inline (the default is a value, not a function to be applied)
+      ("dflt" ~>
+        encodeTermInline @@ var "cx" @@ var "env" @@ false @@ var "dflt")
+      (var "mdefault")) $
+    -- Encode each case branch into (isinstance_check_expression, result_expression) pairs
+    -- Then fold them into a chain of Conditional expressions from right to left
+    "encodeBranch" <~ (
+      "field" ~>
+        "fname" <~ Core.fieldName (var "field") $
+        "fterm" <~ Core.fieldTerm (var "field") $
+        -- Is this variant a unit type?
+        "isUnitVariant" <~ (isVariantUnitType @@ var "rt" @@ var "fname") $
+        -- Get the Python variant class name (deconflicted to avoid collisions)
+        "pyVariantName" <~ (deconflictVariantName @@ true @@ var "env" @@ var "tname" @@ var "fname" @@ (project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_graph @@ var "env")) $
+        -- Create the check expression:
+        --   Enum types: arg == EnumType.VARIANT (using comparison operator)
+        --   Non-enum types: isinstance(arg, VariantType) (using function call)
+        "isinstanceCheck" <~ (Logic.ifElse (var "isEnum")
+          -- Enum: arg == EnumType.VARIANT (e.g. AssignmentOperator.SIMPLE)
+          (PyDsl.pyComparisonToPyExpression $ PyDsl.comparison
+            (PyUtils.pyExpressionToBitwiseOr @@ var "pyArg")
+            (list [PyDsl.compPairEq
+              (PyUtils.pyExpressionToBitwiseOr @@ (PyUtils.pyNameToPyExpression @@ var "pyVariantName"))]))
+          -- Non-enum: isinstance(arg, VariantType)
+          (PyUtils.functionCall @@ var "isinstancePrimary"
+            @@ list [var "pyArg", PyUtils.pyNameToPyExpression @@ var "pyVariantName"])) $
+        -- Encode the branch term and apply it
+        "pyBranch" <<~ (encodeTermInline @@ var "cx" @@ var "env" @@ false @@ var "fterm") $
+        "pyResult" <~ (Logic.ifElse (var "isEnum")
+          -- Enum variant: the branch lambda expects nothing useful, just call with arg
+          (PyUtils.functionCall @@ (PyUtils.pyExpressionToPyPrimary @@ var "pyBranch") @@ list [var "pyArg"])
+          (Logic.ifElse (var "isUnitVariant")
+            -- Unit variant: no .value field, apply branch with the argument directly
+            (PyUtils.functionCall @@ (PyUtils.pyExpressionToPyPrimary @@ var "pyBranch") @@ list [var "pyArg"])
+            -- Normal variant: apply branch function to arg.value
+            (PyUtils.functionCall @@ (PyUtils.pyExpressionToPyPrimary @@ var "pyBranch") @@ list [var "valueExpr"]))) $
+        right $ pair (var "isinstanceCheck") (var "pyResult")) $
+    -- Encode all branches
+    "encodedBranches" <<~ (Eithers.mapList (var "encodeBranch") (var "cases_")) $
+    -- Fold branches into a conditional chain from right to left:
+    --   result_n if isinstance(arg, Tn) else ... else default
+    -- Use foldl on reversed branches: foldl (\acc branch -> cond(branch, acc)) default (reverse branches)
+    "buildChain" <~ (
+      "elseExpr" ~> "branchPair" ~>
+        "checkExpr" <~ Pairs.first (var "branchPair") $
+        "resultExpr" <~ Pairs.second (var "branchPair") $
+        PyDsl.expressionConditional $ PyDsl.conditional
+          (PyUtils.pyExpressionToDisjunction @@ var "resultExpr")
+          (PyUtils.pyExpressionToDisjunction @@ var "checkExpr")
+          (var "elseExpr")) $
+    right $ Lists.foldl (var "buildChain") (var "pyDefault") (Lists.reverse $ var "encodedBranches")
+
+-- | Encode a term to a Python expression (inline form).
+
+encodeUnionField :: TTermDefinition (Context -> PyHelpers.PythonEnvironment -> Name -> FieldType -> Either Error Py.Statement)
+encodeUnionField = def "encodeUnionField" $
+  doc "Encode a union field as a variant class" $
+  "cx" ~> "env" ~> "unionName" ~> "fieldType" ~>
+    "fname" <~ Core.fieldTypeName (var "fieldType") $
+    "ftype" <~ Core.fieldTypeType (var "fieldType") $
+    "fcomment" <<~ (Annotations.getTypeDescription @@ var "cx" @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "ftype") $
+    "isUnit" <~ (Equality.equal (Strip.deannotateType @@ var "ftype") (Core.typeUnit)) $
+    "varName" <~ (deconflictVariantName @@ false @@ var "env" @@ var "unionName" @@ var "fname" @@ (project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_graph @@ var "env")) $
+    "tparamNames" <~ (findTypeParams @@ var "env" @@ var "ftype") $
+    "tparamPyNames" <~ Lists.map PyNames.encodeTypeVariable (var "tparamNames") $
+    "fieldParams" <~ Lists.map PyUtils.pyNameToPyTypeParameter (var "tparamPyNames") $
+    -- For unit types, use unitVariantMethods for body; otherwise empty
+    "body" <~ Logic.ifElse (var "isUnit")
+      (PyUtils.indentedBlock @@ var "fcomment" @@ list [PyUtils.unitVariantMethods @@ var "varName"])
+      (PyUtils.indentedBlock @@ var "fcomment" @@ Phantoms.list ([] :: [TTerm [Py.Statement]])) $
+    -- For unit types, no args; otherwise variantArgs
+    "margs" <<~ Logic.ifElse (var "isUnit")
+      (right (nothing :: TTerm (Maybe Py.Args)))
+      ("quotedType" <<~ (encodeTypeQuoted @@ var "env" @@ var "ftype") $
+       right $ just (variantArgs @@ var "quotedType" @@ Phantoms.list ([] :: [TTerm Name]))) $
+    right $ PyUtils.pyClassDefinitionToPyStatement @@
+      PyDsl.classDefinition
+        nothing
+        (var "varName")
+        (var "fieldParams")
+        (var "margs")
+        (var "body")
+
+-- | Encode a union field as an alternative expression for the union type alias
+encodeUnionFieldAlt :: TTermDefinition (PyHelpers.PythonEnvironment -> Name -> FieldType -> Py.Primary)
+encodeUnionFieldAlt = def "encodeUnionFieldAlt" $
+  doc "Encode a union field as a primary expression for | alternatives" $
+  "env" ~> "unionName" ~> "fieldType" ~>
+    "fname" <~ Core.fieldTypeName (var "fieldType") $
+    "ftype" <~ Core.fieldTypeType (var "fieldType") $
+    "tparamNames" <~ (findTypeParams @@ var "env" @@ var "ftype") $
+    "tparams" <~ Lists.map PyNames.encodeTypeVariable (var "tparamNames") $
+    "namePrim" <~ (PyUtils.pyNameToPyPrimary @@ (PyNames.variantName @@ false @@ var "env" @@ var "unionName" @@ var "fname")) $
+    Logic.ifElse (Lists.null (var "tparams"))
+      (var "namePrim")
+      ("tparamExprs" <~ Lists.map PyUtils.pyNameToPyExpression (var "tparams") $
+       PyUtils.primaryWithExpressionSlices @@ var "namePrim" @@ var "tparamExprs")
+
+-- | Encode a union type as either an enum or a set of variant classes
+encodeUnionType :: TTermDefinition (Context -> PyHelpers.PythonEnvironment -> Name -> [FieldType] -> Maybe String -> Either Error [Py.Statement])
+encodeUnionType = def "encodeUnionType" $
+  doc "Encode a union type as an enum (for unit-only fields) or variant classes" $
+  "cx" ~> "env" ~> "name" ~> "rowType" ~> "comment" ~>
+    Logic.ifElse (Predicates.isEnumRowType @@ var "rowType")
+      -- Enum case: enum values are Name objects; TYPE_ assigned after class to avoid becoming a member
+      ("vals" <<~ (Eithers.mapList (encodeEnumValueAssignment @@ var "cx" @@ var "env") (var "rowType")) $
+       "body" <~ (PyUtils.indentedBlock @@ var "comment" @@ var "vals") $
+       "enumName" <~ PyDsl.name (string "Enum") $
+       "args" <~ (just $ PyUtils.pyExpressionsToPyArgs @@ list [PyUtils.pyNameToPyExpression @@ var "enumName"]) $
+       "pyName" <~ (PyNames.encodeName @@ false @@ Util.caseConventionPascal @@ var "env" @@ var "name") $
+       -- Generate TYPE_ as a dotted assignment after the class: ClassName.TYPE_ = Name("...")
+       "typeConstStmt" <~ (PyUtils.dottedAssignmentStatement
+         @@ var "pyName"
+         @@ (PyNames.encodeConstantForTypeName @@ var "env" @@ var "name")
+         @@ (PyUtils.functionCall
+               @@ (PyUtils.pyNameToPyPrimary @@ (PyNames.encodeName @@ true @@ Util.caseConventionPascal @@ var "env" @@ (Core.name $ string "hydra.core.Name")))
+               @@ list [PyUtils.doubleQuotedString @@ (Core.unName $ var "name")])) $
+       right $ list [PyUtils.pyClassDefinitionToPyStatement @@
+         PyDsl.classDefinition nothing (var "pyName") (Phantoms.list ([] :: [TTerm Py.TypeParameter])) (var "args") (var "body"),
+         var "typeConstStmt"])
+      -- Union case: pass constants to the union class body
+      ("constStmts" <~ (encodeNameConstants @@ var "env" @@ var "name" @@ var "rowType") $
+       "fieldStmts" <<~ (Eithers.mapList (encodeUnionField @@ var "cx" @@ var "env" @@ var "name") (var "rowType")) $
+       "tparams" <~ (environmentTypeParameters @@ var "env") $
+       "unionAlts" <~ Lists.map (encodeUnionFieldAlt @@ var "env" @@ var "name") (var "rowType") $
+       "unionStmts" <~ (unionTypeStatementsFor @@ var "env" @@
+         (PyNames.encodeName @@ false @@ Util.caseConventionPascal @@ var "env" @@ var "name") @@
+         (var "tparams") @@
+         (var "comment") @@
+         (PyUtils.orExpression @@ var "unionAlts") @@
+         (var "constStmts")) $
+       right $ Lists.concat2 (var "fieldStmts") (var "unionStmts"))
+
+-- | Encode a variable reference to a Python expression.
+--   This handles various cases: lambda variables, let-bound variables, primitives, and graph elements.
+--   The complexity arises from needing to determine when a variable needs call syntax () vs plain reference.
+encodeVariable :: TTermDefinition (Context -> PyHelpers.PythonEnvironment -> Name -> [Py.Expression] -> Either Error Py.Expression)
+encodeVariable = def "encodeVariable" $
+  doc "Encode a variable reference to a Python expression" $
+  "cx" ~> "env" ~> "name" ~> "args" ~>
+    "g" <~ (pythonEnvironmentGetGraph @@ var "env") $
+    "tc" <~ (project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_graph @@ var "env") $
+    "tcTypes" <~ (Graph.graphBoundTypes $ var "tc") $
+    "tcLambdaVars" <~ (Graph.graphLambdaVariables $ var "tc") $
+    "tcMetadata" <~ (Graph.graphMetadata $ var "tc") $
+    "inlineVars" <~ (project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_inlineVariables @@ var "env") $
+    "mTypScheme" <~ (Maps.lookup (var "name") (var "tcTypes")) $
+    "mTyp" <~ (Maybes.map ("ts_" ~> Core.typeSchemeType (var "ts_")) (var "mTypScheme")) $
+    "asVariable" <~ (PyNames.termVariableReference @@ var "env" @@ var "name") $
+    "asFunctionCall" <~ (PyUtils.functionCall @@ (PyUtils.pyNameToPyPrimary @@ (PyNames.encodeName @@ true @@ Util.caseConventionLowerSnake @@ var "env" @@ var "name")) @@ var "args") $
+    Logic.ifElse (Logic.not $ Lists.null (var "args"))
+      -- Non-empty args: check for primitives first
+      (Maybes.maybe
+        -- No primitive found: use regular function call
+        (right $ var "asFunctionCall")
+        -- Primitive found: check if full or partial application
+        ("prim" ~>
+          "primArity" <~ (Arity.primitiveArity @@ var "prim") $
+          Logic.ifElse (Equality.equal (var "primArity") (Lists.length (var "args")))
+            -- Full application
+            (right $ var "asFunctionCall")
+            -- Partial application: create lambda for remaining args
+            ("numRemaining" <~ (Math.sub (var "primArity") (Lists.length (var "args"))) $
+              "remainingParams" <~ (Lists.map ("i" ~> PyDsl.name (Strings.cat2 (string "x") (Literals.showInt32 (var "i")))) (Math.range (int32 1) (var "numRemaining"))) $
+              "remainingExprs" <~ (Lists.map ("n" ~> PyDsl.pyNameToPyExpression (var "n")) (var "remainingParams")) $
+              "allArgs" <~ (Lists.concat2 (var "args") (var "remainingExprs")) $
+              "fullCall" <~ (PyUtils.functionCall @@ (PyUtils.pyNameToPyPrimary @@ (PyNames.encodeName @@ true @@ Util.caseConventionLowerSnake @@ var "env" @@ var "name")) @@ var "allArgs") $
+              right $ makeUncurriedLambda @@ var "remainingParams" @@ var "fullCall"))
+        (Lexical.lookupPrimitive @@ var "g" @@ var "name"))
+      -- Empty args: check various contexts
+      (Maybes.maybe
+        -- Name not in graphBoundTypes
+        (Logic.ifElse (Sets.member (var "name") (var "tcLambdaVars"))
+          -- Untyped lambda variable
+          (right $ var "asVariable")
+          -- Not a lambda var - check inline vars first
+          (Logic.ifElse (Sets.member (var "name") (var "inlineVars"))
+            -- Untyped inline variable (e.g. from hoisting with no type annotation)
+            (right $ var "asVariable")
+            -- Not inline - check primitives
+            (Maybes.maybe
+              -- Not a primitive - check graph elements
+              (Maybes.maybe
+                -- Not in graph elements - check metadata
+                (Maybes.maybe
+                  (left $ Error.errorOther $ Error.otherError $ Strings.cat2 (string "Unknown variable: ") (Core.unName (var "name")))
+                  (constant $ right $ var "asFunctionCall")  -- Lifted case expression
+                  (Maps.lookup (var "name") (var "tcMetadata")))
+              -- In graph elements
+              ("el" ~>
+                "elTrivial1" <~ (Predicates.isTrivialTerm @@ (Core.bindingTerm $ var "el")) $
+                Maybes.maybe
+                  (right $ var "asVariable")
+                  ("ts" ~>
+                    Logic.ifElse (Logic.and (Logic.and (Equality.equal (Arity.typeSchemeArity @@ var "ts") (int32 0))
+                                                       (Predicates.isComplexBinding @@ var "tc" @@ var "el"))
+                                            (Logic.not (var "elTrivial1")))
+                      (right $ var "asFunctionCall")
+                      ("asFunctionRef" <~ (Logic.ifElse (Logic.not $ Lists.null (Core.typeSchemeVariables $ var "ts"))
+                          (makeSimpleLambda @@ (Arity.typeArity @@ (Core.typeSchemeType $ var "ts")) @@ var "asVariable")
+                          (var "asVariable")) $
+                        right $ var "asFunctionRef"))
+                  (Core.bindingType $ var "el"))
+              (Lexical.lookupBinding @@ var "g" @@ var "name"))
+            -- Is a primitive with no args: check if nullary
+            ("prim" ~>
+              "primArity" <~ (Arity.primitiveArity @@ var "prim") $
+              Logic.ifElse (Equality.equal (var "primArity") (int32 0))
+                -- Nullary primitive: call with ()
+                (right $ var "asFunctionCall")
+                -- Non-nullary primitive: function reference
+                ("ts" <~ (Phantoms.project _Primitive _Primitive_type @@ var "prim") $
+                  "asFunctionRef" <~ (Logic.ifElse (Logic.not $ Lists.null (Core.typeSchemeVariables $ var "ts"))
+                      (makeSimpleLambda @@ (Arity.typeArity @@ (Core.typeSchemeType $ var "ts")) @@ var "asVariable")
+                      (var "asVariable")) $
+                  right $ var "asFunctionRef"))
+            (Lexical.lookupPrimitive @@ var "g" @@ var "name"))))
+        -- Name is in graphBoundTypes
+        ("typ" ~>
+          Logic.ifElse (Sets.member (var "name") (var "tcLambdaVars"))
+            -- Lambda variable
+            (right $ var "asVariable")
+            -- Not a lambda variable
+            (Logic.ifElse (Sets.member (var "name") (var "inlineVars"))
+              -- Inline variable: function reference
+              ("asFunctionRef" <~ (Logic.ifElse (Logic.not $ Sets.null (Variables.freeVariablesInType @@ var "typ"))
+                  (makeSimpleLambda @@ (Arity.typeArity @@ var "typ") @@ var "asVariable")
+                  (var "asVariable")) $
+                right $ var "asFunctionRef")
+              -- Not inline variable
+              (Logic.ifElse (Logic.not $ Maps.member (var "name") (var "tcMetadata"))
+                -- Not in metadata - check graph elements
+                (Maybes.maybe
+                  -- Not in graph elements: inline let binding
+                  ("asFunctionRef" <~ (Logic.ifElse (Logic.not $ Sets.null (Variables.freeVariablesInType @@ var "typ"))
+                      (makeSimpleLambda @@ (Arity.typeArity @@ var "typ") @@ var "asVariable")
+                      (var "asVariable")) $
+                    right $ var "asFunctionRef")
+                  -- In graph elements
+                  ("el" ~>
+                    "elTrivial" <~ (Predicates.isTrivialTerm @@ (Core.bindingTerm $ var "el")) $
+                    Maybes.maybe
+                      (Logic.ifElse (Logic.and (Equality.equal (Arity.typeArity @@ var "typ") (int32 0))
+                                               (Logic.not (var "elTrivial")))
+                        (right $ var "asFunctionCall")
+                        ("asFunctionRef" <~ (Logic.ifElse (Logic.not $ Sets.null (Variables.freeVariablesInType @@ var "typ"))
+                            (makeSimpleLambda @@ (Arity.typeArity @@ var "typ") @@ var "asVariable")
+                            (var "asVariable")) $
+                          right $ var "asFunctionRef"))
+                      ("ts" ~>
+                        Logic.ifElse (Logic.and (Logic.and (Equality.equal (Arity.typeArity @@ var "typ") (int32 0))
+                                                           (Predicates.isComplexBinding @@ var "tc" @@ var "el"))
+                                                (Logic.not (var "elTrivial")))
+                          (right $ var "asFunctionCall")
+                          ("asFunctionRef" <~ (Logic.ifElse (Logic.not $ Sets.null (Variables.freeVariablesInType @@ var "typ"))
+                              (makeSimpleLambda @@ (Arity.typeArity @@ var "typ") @@ var "asVariable")
+                              (var "asVariable")) $
+                            right $ var "asFunctionRef"))
+                      (Core.bindingType $ var "el"))
+                  (Lexical.lookupBinding @@ var "g" @@ var "name"))
+                -- Is in metadata: regular let binding
+                (Logic.ifElse (Logic.and (Equality.equal (Arity.typeArity @@ var "typ") (int32 0))
+                                          (Predicates.isComplexVariable @@ var "tc" @@ var "name"))
+                  (right $ var "asFunctionCall")
+                  ("asFunctionRef" <~ (Logic.ifElse (Logic.not $ Sets.null (Variables.freeVariablesInType @@ var "typ"))
+                      (makeSimpleLambda @@ (Arity.typeArity @@ var "typ") @@ var "asVariable")
+                      (var "asVariable")) $
+                    right $ var "asFunctionRef")))))
+        (var "mTyp"))
+
+-- | Encode a wrapped type (newtype) to a Python class definition.
+--   Creates a class that extends Node[inner_type] with optional Generic[T] for polymorphic types.
+--   TYPE_ is assigned after the class to avoid self-reference issues (e.g., Name.TYPE_ = Name(...)).
+encodeWrappedType :: TTermDefinition (PyHelpers.PythonEnvironment -> Name -> Type -> Maybe String -> Either Error [Py.Statement])
+encodeWrappedType = def "encodeWrappedType" $
+  doc "Encode a wrapped type (newtype) to a Python class definition" $
+  "env" ~> "name" ~> "typ" ~> "comment" ~>
+    "tparamList" <~ (Pairs.first $ project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_boundTypeVariables @@ var "env") $
+    "ptypeQuoted" <<~ encodeTypeQuoted @@ var "env" @@ var "typ" $
+    "pyName" <~ (PyNames.encodeName @@ false @@ Util.caseConventionPascal @@ var "env" @@ var "name") $
+    "body" <~ (PyUtils.indentedBlock @@ var "comment" @@ list ([] :: [TTerm [Py.Statement]])) $
+    -- Generate TYPE_ as a dotted assignment after the class: ClassName.TYPE_ = Name("...")
+    "typeConstStmt" <~ (PyUtils.dottedAssignmentStatement
+      @@ var "pyName"
+      @@ (PyNames.encodeConstantForTypeName @@ var "env" @@ var "name")
+      @@ (PyUtils.functionCall
+            @@ (PyUtils.pyNameToPyPrimary @@ (PyNames.encodeName @@ true @@ Util.caseConventionPascal @@ var "env" @@ (Core.name $ string "hydra.core.Name")))
+            @@ list [PyUtils.doubleQuotedString @@ (Core.unName $ var "name")])) $
+    right $ list [
+      PyUtils.pyClassDefinitionToPyStatement @@
+        PyDsl.classDefinition
+          nothing
+          (var "pyName")
+          (Lists.map (PyUtils.pyNameToPyTypeParameter <.> PyNames.encodeTypeVariable) (findTypeParams @@ var "env" @@ var "typ"))
+          (just (variantArgs @@ var "ptypeQuoted" @@ var "tparamList"))
+          (var "body"),
+      var "typeConstStmt"]
+
+-- | Create a CaseBlock pattern for an enum variant (value pattern).
+enumVariantPattern :: TTermDefinition (PyHelpers.PythonEnvironment -> Name -> Name -> Py.ClosedPattern)
+enumVariantPattern = def "enumVariantPattern" $
+  doc "Create a value pattern for an enum variant" $
+  "env" ~> "typeName" ~> "fieldName" ~>
+    PyDsl.closedPatternValue $ PyDsl.valuePattern $ PyDsl.attribute $ list [
+      PyNames.encodeName @@ true @@ Util.caseConventionPascal @@ var "env" @@ var "typeName",
+      PyNames.encodeEnumValue @@ var "env" @@ var "fieldName"]
+
+-- | Get type parameters from environment as Python TypeParameters
+environmentTypeParameters :: TTermDefinition (PyHelpers.PythonEnvironment -> [Py.TypeParameter])
+environmentTypeParameters = def "environmentTypeParameters" $
+  doc "Get type parameters from environment as Python TypeParameters" $
+  "env" ~>
+    Lists.map
+      (PyUtils.pyNameToPyTypeParameter <.> PyNames.encodeTypeVariable)
+      (Pairs.first (project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_boundTypeVariables @@ var "env"))
+
+-- | Extend PythonEnvironment's Graph by adding lambda parameters.
+--   This is used when we've gathered lambdas from a term but need to manually extend the context.
+extendEnvWithLambdaParams :: TTermDefinition (PyHelpers.PythonEnvironment -> Term -> PyHelpers.PythonEnvironment)
+extendEnvWithLambdaParams = def "extendEnvWithLambdaParams" $
+  doc "Extend environment with lambda parameters from a term" $
+  "env" ~> "term" ~>
+    "go" <~ ("e" ~> "t" ~>
+      cases _Term (Strip.deannotateAndDetypeTerm @@ var "t") (Just $ var "e") [
+        _Term_function>>: "f" ~>
+          cases _Function (var "f") (Just $ var "e") [
+            _Function_lambda>>: "lam" ~>
+              "newTc" <~ (Scoping.extendGraphForLambda @@
+                (pythonEnvironmentGetGraph @@ var "e") @@ var "lam") $
+              "newEnv" <~ (pythonEnvironmentSetGraph @@ var "newTc" @@ var "e") $
+              var "go" @@ var "newEnv" @@ (Core.lambdaBody $ var "lam")]]) $
+    var "go" @@ var "env" @@ var "term"
+
+-- | Extend a PythonEnvironment with a new bound type variable.
+--   This creates a new environment with the variable added to the type parameter list and map.
+extendEnvWithTypeVar :: TTermDefinition (PyHelpers.PythonEnvironment -> Name -> PyHelpers.PythonEnvironment)
+extendEnvWithTypeVar = def "extendEnvWithTypeVar" $
+  doc "Extend a PythonEnvironment with a new bound type variable" $
+  "env" ~> "var_" ~>
+    "oldBound" <~ (project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_boundTypeVariables @@ var "env") $
+    "tparamList" <~ (Pairs.first $ var "oldBound") $
+    "tparamMap" <~ (Pairs.second $ var "oldBound") $
+    "newList" <~ (Lists.concat2 (var "tparamList") (list [var "var_"])) $
+    "newMap" <~ (Maps.insert (var "var_") (PyNames.encodeTypeVariable @@ var "var_") (var "tparamMap")) $
+    record PyHelpers._PythonEnvironment [
+      PyHelpers._PythonEnvironment_namespaces>>: project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_namespaces @@ var "env",
+      PyHelpers._PythonEnvironment_boundTypeVariables>>: pair (var "newList") (var "newMap"),
+      PyHelpers._PythonEnvironment_graph>>: project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_graph @@ var "env",
+      PyHelpers._PythonEnvironment_nullaryBindings>>: project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_nullaryBindings @@ var "env",
+      PyHelpers._PythonEnvironment_version>>: project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_version @@ var "env",
+      PyHelpers._PythonEnvironment_skipCasts>>: project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_skipCasts @@ var "env",
+      PyHelpers._PythonEnvironment_inlineVariables>>: project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_inlineVariables @@ var "env"]
+
+-- | Extend metadata based on a term (used during module encoding).
+--   Traverses a term and updates metadata flags based on what features are used.
+--   The topLevel parameter affects whether we track function type annotations at this level.
+extendMetaForTerm :: TTermDefinition (Bool -> PyHelpers.PythonModuleMetadata -> Term -> PyHelpers.PythonModuleMetadata)
+extendMetaForTerm = def "extendMetaForTerm" $
+  doc "Extend metadata based on a term (used during module encoding)" $
+  "topLevel" ~> "meta0" ~> "term" ~>
+    "step" <~ ("meta" ~> "t" ~>
+      cases _Term (var "t") (Just $ var "meta") [
+        _Term_either>>: "e" ~>
+          -- Either terms need cast() in Python for proper typing
+          "metaWithCast" <~ (setMetaUsesCast @@ true @@ var "meta") $
+          Eithers.either_
+            (constant $ setMetaUsesLeft @@ var "metaWithCast" @@ true)
+            (constant $ setMetaUsesRight @@ var "metaWithCast" @@ true)
+            (var "e"),
+        _Term_function>>: "f" ~>
+          cases _Function (var "f") (Just $ var "meta") [
+            _Function_lambda>>: "lam" ~>
+              Maybes.maybe
+                (var "meta")
+                ("dom" ~> Logic.ifElse (var "topLevel")
+                  (extendMetaForType @@ true @@ false @@ var "dom" @@ var "meta")
+                  (var "meta"))
+                (Core.lambdaDomain $ var "lam")],
+        _Term_let>>: "lt" ~>
+          "bindings" <~ Core.letBindings (var "lt") $
+          Lists.foldl ("forBinding" <~ ("m" ~> "b" ~>
+            Maybes.maybe
+              (var "m")
+              ("ts" ~>
+                "term1" <~ Core.bindingTerm (var "b") $
+                Logic.ifElse (Analysis.isSimpleAssignment @@ var "term1")
+                  (var "m")
+                  (extendMetaForType @@ true @@ true @@ (Core.typeSchemeType $ var "ts") @@ var "m"))
+              (Core.bindingType $ var "b")) $
+            var "forBinding") (var "meta") (var "bindings"),
+        _Term_literal>>: "l" ~>
+          cases _Literal (var "l") (Just $ var "meta") [
+            _Literal_float>>: "fv" ~>
+              cases _FloatValue (var "fv") (Just $ var "meta") [
+                _FloatValue_bigfloat>>: constant $
+                  setMetaUsesDecimal @@ var "meta" @@ true]],
+        _Term_map>>: constant $
+          setMetaUsesFrozenDict @@ var "meta" @@ true,
+        _Term_maybe>>: "m" ~>
+          Maybes.maybe
+            (setMetaUsesNothing @@ var "meta" @@ true)
+            (constant $ setMetaUsesJust @@ var "meta" @@ true)
+            (var "m"),
+        -- Union injections require cast() for proper typing
+        _Term_union>>: constant $
+          setMetaUsesCast @@ true @@ var "meta"]) $
+    Rewriting.foldOverTerm @@ Coders.traversalOrderPre @@ var "step" @@ var "meta0" @@ var "term"
+
+-- Helper functions to set individual metadata fields
+
+-- | Extend metadata based on a type (used during module encoding).
+--   topLevel: whether this is a top-level type annotation
+--   isTermAnnot: whether this is a term's type annotation vs a type definition
+extendMetaForType :: TTermDefinition (Bool -> Bool -> Type -> PyHelpers.PythonModuleMetadata -> PyHelpers.PythonModuleMetadata)
+extendMetaForType = def "extendMetaForType" $
+  doc "Extend metadata based on a type (used during module encoding)" $
+  "topLevel" ~> "isTermAnnot" ~> "typ" ~> "meta" ~>
+    -- First, collect type variables from this type
+    "currentTvars" <~ (project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_typeVariables @@ var "meta") $
+    "newTvars" <~ (collectTypeVariables @@ var "currentTvars" @@ var "typ") $
+    "metaWithTvars" <~ (setMetaTypeVariables @@ var "meta" @@ var "newTvars") $
+    -- Then, extend metadata for subtypes recursively
+    "metaWithSubtypes" <~ (Lists.foldl
+      ("m" ~> "t" ~> extendMetaForType @@ false @@ var "isTermAnnot" @@ var "t" @@ var "m")
+      (var "metaWithTvars")
+      (Rewriting.subtypes @@ var "typ")) $
+    -- Finally process this type for imports
+    cases _Type (Strip.deannotateType @@ var "typ") (Just $ var "metaWithSubtypes") [
+      -- Function type: may need Callable import
+      _Type_function>>: "ft" ~>
+        "cod" <~ Core.functionTypeCodomain (var "ft") $
+        "dom" <~ Core.functionTypeDomain (var "ft") $
+        "meta2" <~ (extendMetaForType @@ var "topLevel" @@ var "isTermAnnot" @@ var "cod" @@ var "metaWithSubtypes") $
+        "meta3" <~ (extendMetaForType @@ false @@ var "isTermAnnot" @@ var "dom" @@ var "meta2") $
+        Logic.ifElse (Logic.and (var "isTermAnnot") (var "topLevel"))
+          (var "meta3")  -- Top-level function type on term: no Callable needed (def syntax)
+          (setMetaUsesCallable @@ var "meta3" @@ true),  -- Otherwise need Callable
+      -- List type: need frozenlist import
+      _Type_list>>: constant $
+        setMetaUsesFrozenList @@ var "metaWithSubtypes" @@ true,
+      -- Map type: need FrozenDict import
+      _Type_map>>: constant $
+        setMetaUsesFrozenDict @@ var "metaWithSubtypes" @@ true,
+      -- Maybe type: need Maybe import
+      _Type_maybe>>: constant $
+        setMetaUsesMaybe @@ var "metaWithSubtypes" @@ true,
+      -- Either type: need Either import
+      _Type_either>>: constant $
+        setMetaUsesEither @@ var "metaWithSubtypes" @@ true,
+      -- Literal type: check for Decimal
+      _Type_literal>>: "lt" ~>
+        cases _LiteralType (var "lt") (Just $ var "metaWithSubtypes") [
+          _LiteralType_float>>: "ft" ~>
+            cases _FloatType (var "ft") (Just $ var "metaWithSubtypes") [
+              _FloatType_bigfloat>>: constant $
+                setMetaUsesDecimal @@ var "metaWithSubtypes" @@ true]],
+      -- Union type: need Enum or Node
+      _Type_union>>: "rt" ~>
+        Logic.ifElse (Predicates.isEnumRowType @@ var "rt")
+          (setMetaUsesEnum @@ var "metaWithSubtypes" @@ true)
+          (Logic.ifElse (Logic.not (Lists.null (var "rt")))
+            (setMetaUsesNode @@ var "metaWithSubtypes" @@ true)
+            (var "metaWithSubtypes")),
+      -- Forall type: may need Generic for records, Node for wraps
+      _Type_forall>>: "ft" ~>
+        "body" <~ Core.forallTypeBody (var "ft") $
+        -- Recursively check for wrap types (dig through nested foralls)
+        "metaForWrap" <~ (digForWrap @@ var "isTermAnnot" @@ var "metaWithSubtypes" @@ var "body") $
+        cases _Type (Strip.deannotateType @@ var "body") (Just $ var "metaForWrap") [
+          _Type_record>>: constant $
+            setMetaUsesGeneric @@ var "metaForWrap" @@ true],
+      -- Record type: need dataclass (if non-empty) and possibly Annotated
+      _Type_record>>: "rt" ~>
+        -- Check if any field has a type description (needs Annotated)
+        "hasAnnotated" <~ (Lists.foldl
+          ("b" ~> "ft" ~> Logic.or (var "b") (Annotations.hasTypeDescription @@ Core.fieldTypeType (var "ft")))
+          false
+          (var "rt")) $
+        -- Set usesDataclass if fields are non-empty
+        "meta1" <~ (Logic.ifElse (Lists.null $ var "rt")
+          (var "metaWithSubtypes")
+          (setMetaUsesDataclass @@ var "metaWithSubtypes" @@ true)) $
+        -- Set usesAnnotated if any field has description
+        Logic.ifElse (var "hasAnnotated")
+          (setMetaUsesAnnotated @@ var "meta1" @@ true)
+          (var "meta1"),
+      -- Wrap type: need Node import (unless it's a term annotation)
+      _Type_wrap>>: constant $
+        Logic.ifElse (var "isTermAnnot")
+          (var "metaWithSubtypes")
+          (setMetaUsesNode @@ var "metaWithSubtypes" @@ true)]
+
+-- | Extend metadata for a list of types.
+--   Collects dependency names and extends metadata for each type.
+extendMetaForTypes :: TTermDefinition ([Type] -> PyHelpers.PythonModuleMetadata -> PyHelpers.PythonModuleMetadata)
+extendMetaForTypes = def "extendMetaForTypes" $
+  doc "Extend metadata for a list of types" $
+  "types" ~> "meta" ~>
+    -- First compute names from all types
+    "names" <~ Sets.unions (Lists.map ("t" ~> Dependencies.typeDependencyNames @@ false @@ var "t") (var "types")) $
+    -- Update namespaces with the collected names
+    "currentNs" <~ (project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_namespaces @@ var "meta") $
+    "updatedNs" <~ (Analysis.addNamesToNamespaces @@ PyNames.encodeNamespace @@ var "names" @@ var "currentNs") $
+    -- Create meta1 with updated namespaces
+    "meta1" <~ (setMetaNamespaces @@ var "updatedNs" @@ var "meta") $
+    -- Now fold extendMetaForType over all types with isTypeDef=True, isTermAnnot=False
+    Lists.foldl ("m" ~> "t" ~> extendMetaForType @@ true @@ false @@ var "t" @@ var "m") (var "meta1") (var "types")
+
+-- | Extract CaseStatement from a term if it's a case elimination function.
+--   Returns Just the CaseStatement if the term is a case elimination, Nothing otherwise.
+extractCaseElimination :: TTermDefinition (Term -> Maybe CaseStatement)
+extractCaseElimination = def "extractCaseElimination" $
+  doc "Extract CaseStatement from a case elimination term" $
+  "term" ~>
+    cases _Term (Strip.deannotateAndDetypeTerm @@ var "term") (Just nothing) [
+      _Term_function>>: "f" ~>
+        cases _Function (var "f") (Just nothing) [
+          _Function_elimination>>: "e" ~>
+            cases _Elimination (var "e") (Just nothing) [
+              _Elimination_union>>: "cs" ~> just (var "cs")]]]
+
+-- | Find type parameters in a type that are bound in the environment.
+--   Returns the free type variables that are also in the bound type variables map.
+findTypeParams :: TTermDefinition (PyHelpers.PythonEnvironment -> Type -> [Name])
+findTypeParams = def "findTypeParams" $
+  doc "Find type parameters in a type that are bound in the environment" $
+  "env" ~> "typ" ~>
+    "boundVars" <~ (Pairs.second $ project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_boundTypeVariables @@ var "env") $
+    "isBound" <~ ("v" ~> Maybes.isJust (Maps.lookup (var "v") (var "boundVars"))) $
+    Lists.filter (var "isBound") (Sets.toList (Variables.freeVariablesInType @@ var "typ"))
+
+-- | Calculate the arity of a function, with proper handling of primitives.
+functionArityWithPrimitives :: TTermDefinition (Graph -> Function -> Int)
+functionArityWithPrimitives = def "functionArityWithPrimitives" $
+  doc "Calculate function arity with proper primitive handling" $
+  "graph" ~> "f" ~>
+    cases _Function (var "f") (Just (Phantoms.int 0)) [
+      _Function_elimination>>: constant (Phantoms.int 1),
+      _Function_lambda>>: "lam" ~>
+        Math.add (Phantoms.int 1) (termArityWithPrimitives @@ var "graph" @@ (Core.lambdaBody $ var "lam"))]
+
+-- | Extract lambdas and their bodies from a term.
+--   Returns the list of lambda parameters (in order from outermost to innermost) and the innermost body.
+gatherLambdas :: TTermDefinition (Term -> ([Name], Term))
+gatherLambdas = def "gatherLambdas" $
+  doc "Extract lambdas and their bodies from a term" $
+  "term" ~>
+  "go" <~ ("params" ~> "t" ~>
+    cases _Term (Strip.deannotateAndDetypeTerm @@ var "t")
+      (Just $ pair (var "params") (var "t")) [
+      _Term_function>>: "f" ~>
+        cases _Function (var "f")
+          (Just $ pair (var "params") (var "t")) [
+          _Function_lambda>>: "l" ~>
+            var "go" @@ Lists.concat2 (var "params") (list [Core.lambdaParameter $ var "l"])
+                     @@ Core.lambdaBody (var "l")]]) $
+  var "go" @@ list ([] :: [TTerm Name]) @@ var "term"
+
+-- | Gather metadata from a list of definitions.
+--   This is the main entry point for collecting all import requirements.
+gatherMetadata :: TTermDefinition (Namespace -> [Definition] -> PyHelpers.PythonModuleMetadata)
+gatherMetadata = def "gatherMetadata" $
+  doc "Gather metadata from definitions" $
+  "focusNs" ~> "defs" ~>
+    -- Start with initial metadata containing namespaces
+    "start" <~ (emptyMetadata @@ (PyUtils.findNamespaces @@ var "focusNs" @@ var "defs")) $
+    -- Add function to extend metadata for each definition
+    "addDef" <~ ("meta" ~> "def" ~>
+      cases _Definition (var "def") Nothing [
+        _Definition_term>>: "termDef" ~>
+          "term" <~ Packaging.termDefinitionTerm (var "termDef") $
+          "typ" <~ Maybes.maybe
+            (Core.typeVariable (wrap _Name (string "hydra.core.Unit")))
+            (unaryFunction Core.typeSchemeType)
+            (Packaging.termDefinitionType (var "termDef")) $
+          -- First extend for the type annotation (isTypeDef=True, isTermAnnot=True)
+          "meta2" <~ (extendMetaForType @@ true @@ true @@ var "typ" @@ var "meta") $
+          -- Then extend for the term body (isTopLevel=True)
+          extendMetaForTerm @@ true @@ var "meta2" @@ var "term",
+        _Definition_type>>: "typeDef" ~>
+          "typ" <~ (Core.typeSchemeType $ Packaging.typeDefinitionType (var "typeDef")) $
+          -- Set usesName=True for type definitions
+          "meta2" <~ (setMetaUsesName @@ var "meta" @@ true) $
+          -- Fold extendMetaForType over the type (isTypeDef=True, isTermAnnot=False)
+          Rewriting.foldOverType @@ Coders.traversalOrderPre @@
+            ("m" ~> "t" ~> extendMetaForType @@ true @@ false @@ var "t" @@ var "m") @@ var "meta2" @@ var "typ"]) $
+    -- Fold over all definitions
+    "result" <~ Lists.foldl (var "addDef") (var "start") (var "defs") $
+    -- Check if we have type variables and set usesTypeVar accordingly
+    "tvars" <~ (project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_typeVariables @@ var "result") $
+    -- Set usesCast and usesLruCache unconditionally so encoding functions don't need to track metadata
+    "result2" <~ (setMetaUsesCast @@ true @@ (setMetaUsesLruCache @@ true @@ var "result")) $
+    setMetaUsesTypeVar @@ var "result2" @@ (Logic.not $ Sets.null $ var "tvars")
+
+-- | Create Generic[...] argument expression for class definition
+genericArg :: TTermDefinition ([Name] -> Maybe Py.Expression)
+genericArg = def "genericArg" $
+  doc "Create Generic[...] argument expression for class definition" $
+  "tparamList" ~>
+    Logic.ifElse (Lists.null (var "tparamList"))
+      nothing
+      (just $
+        PyUtils.pyPrimaryToPyExpression @@
+          (PyUtils.primaryWithExpressionSlices @@
+            (PyDsl.pyNameToPyPrimary $ PyDsl.name $ string "Generic") @@
+            (Lists.map ("n" ~> PyDsl.pyNameToPyExpression (PyNames.encodeTypeVariable @@ var "n")) (var "tparamList"))))
+
+-- | Create an initial Python environment for code generation
+initialEnvironment :: TTermDefinition (Namespaces Py.DottedName -> Graph -> PyHelpers.PythonEnvironment)
+initialEnvironment = def "initialEnvironment" $
+  doc "Create an initial Python environment for code generation" $
+  "namespaces" ~> "tcontext" ~>
+    record PyHelpers._PythonEnvironment [
+      PyHelpers._PythonEnvironment_namespaces>>: var "namespaces",
+      PyHelpers._PythonEnvironment_boundTypeVariables>>: pair (list ([] :: [TTerm Name])) Maps.empty,
+      PyHelpers._PythonEnvironment_graph>>: var "tcontext",
+      PyHelpers._PythonEnvironment_nullaryBindings>>: Sets.empty,
+      PyHelpers._PythonEnvironment_version>>: targetPythonVersion,
+      PyHelpers._PythonEnvironment_skipCasts>>: true,
+      PyHelpers._PythonEnvironment_inlineVariables>>: Sets.empty]
+
+-- | Initial empty metadata for a Python module
+initialMetadata :: TTermDefinition (Namespace -> PyHelpers.PythonModuleMetadata)
+initialMetadata = def "initialMetadata" $
+  doc "Create initial empty metadata for a Python module" $
+  "ns" ~>
+    "dottedNs" <~ (PyNames.encodeNamespace @@ var "ns") $
+    "emptyNs" <~ (Packaging.namespaces (pair (var "ns") (var "dottedNs")) Maps.empty) $
+    record PyHelpers._PythonModuleMetadata [
+      PyHelpers._PythonModuleMetadata_namespaces>>: var "emptyNs",
+      PyHelpers._PythonModuleMetadata_typeVariables>>: Sets.empty,
+      PyHelpers._PythonModuleMetadata_usesAnnotated>>: false,
+      PyHelpers._PythonModuleMetadata_usesCallable>>: false,
+      PyHelpers._PythonModuleMetadata_usesCast>>: false,
+      PyHelpers._PythonModuleMetadata_usesLruCache>>: false,
+      PyHelpers._PythonModuleMetadata_usesTypeAlias>>: false,
+      PyHelpers._PythonModuleMetadata_usesDataclass>>: false,
+      PyHelpers._PythonModuleMetadata_usesDecimal>>: false,
+      PyHelpers._PythonModuleMetadata_usesEither>>: false,
+      PyHelpers._PythonModuleMetadata_usesEnum>>: false,
+      PyHelpers._PythonModuleMetadata_usesFrozenDict>>: false,
+      PyHelpers._PythonModuleMetadata_usesFrozenList>>: false,
+      PyHelpers._PythonModuleMetadata_usesGeneric>>: false,
+      PyHelpers._PythonModuleMetadata_usesJust>>: false,
+      PyHelpers._PythonModuleMetadata_usesLeft>>: false,
+      PyHelpers._PythonModuleMetadata_usesMaybe>>: false,
+      PyHelpers._PythonModuleMetadata_usesName>>: false,
+      PyHelpers._PythonModuleMetadata_usesNode>>: false,
+      PyHelpers._PythonModuleMetadata_usesNothing>>: false,
+      PyHelpers._PythonModuleMetadata_usesRight>>: false,
+      PyHelpers._PythonModuleMetadata_usesTypeVar>>: false]
+
+-- | Determine whether a union type's cases are fully covered.
+--   Returns true if the number of cases >= number of fields in the row type.
+isCasesFull :: TTermDefinition ([FieldType] -> [Field] -> Bool)
+isCasesFull = def "isCasesFull" $
+  doc "Check if union cases are fully covered" $
+  "rowType" ~> "cases_" ~>
+    "numCases" <~ (Lists.length $ var "cases_") $
+    "numFields" <~ (Lists.length $ var "rowType") $
+    -- numCases >= numFields is equivalent to NOT (numCases < numFields)
+    Logic.not $ Equality.lt (var "numCases") (var "numFields")
+
+-- | Check if a term is a case statement applied to exactly one argument.
+--   Returns Just (tname, dflt, cases, arg) if so, Nothing otherwise.
+isCaseStatementApplication :: TTermDefinition (Term -> Maybe (Name, Maybe Term, [Field], Term))
+isCaseStatementApplication = def "isCaseStatementApplication" $
+  doc "Check if a term is a case statement applied to exactly one argument" $
+  "term" ~>
+    "gathered" <~ (Analysis.gatherApplications @@ var "term") $
+    "args" <~ (Pairs.first $ var "gathered") $
+    "body" <~ (Pairs.second $ var "gathered") $
+    -- Check for exactly one argument
+    Logic.ifElse (Logic.not $ Equality.equal (Lists.length $ var "args") (int32 1))
+      nothing
+      ("arg" <~ (Lists.head $ var "args") $
+        cases _Term (Strip.deannotateAndDetypeTerm @@ var "body") (Just nothing) [
+          _Term_function>>: "f" ~>
+            cases _Function (var "f") (Just nothing) [
+              _Function_elimination>>: "e" ~>
+                cases _Elimination (var "e") (Just nothing) [
+                  _Elimination_union>>: "cs" ~>
+                    just $ Phantoms.tuple4
+                      (Core.caseStatementTypeName $ var "cs")
+                      (Core.caseStatementDefault $ var "cs")
+                      (Core.caseStatementCases $ var "cs")
+                      (var "arg")]]])
+
+-- | Check whether a list of definitions contains any type definitions
+isTypeModuleCheck :: TTermDefinition ([Definition] -> Bool)
+isTypeModuleCheck = def "isTypeModuleCheck" $
+  doc "Check whether a list of definitions contains any type definitions" $
+  "defs" ~>
+    Logic.not $ Lists.null $ Lists.filter
+      ("d" ~> cases _Definition (var "d") (Just false) [
+        _Definition_type>>: constant true])
+      (var "defs")
+
+-- | Check if a name is a type variable (unqualified - no dots)
+isTypeVariableName :: TTermDefinition (Name -> Bool)
+isTypeVariableName = def "isTypeVariableName" $
+  doc "Check if a name is a type variable (unqualified - no dots)" $
+  "name" ~>
+    -- Split on '.' and check if length is 1 (no dots means just one part)
+    Equality.equal (int32 1) (Lists.length (Strings.splitOn (string ".") (Core.unName (var "name"))))
+
+-- | Check if a field type in a row type represents a unit-valued variant.
+--   Used to determine if a variant has "no value" (unit type).
+isVariantUnitType :: TTermDefinition ([FieldType] -> Name -> Bool)
+isVariantUnitType = def "isVariantUnitType" $
+  doc "Check if a variant field has unit type" $
+  "rowType" ~> "fieldName" ~>
+    "mfield" <~ (Lists.find ("ft" ~> Equality.equal (Core.fieldTypeName $ var "ft") (var "fieldName")) (var "rowType")) $
+    Maybes.fromMaybe false $
+      Maybes.map
+        ("ft" ~> Predicates.isUnitType @@ (Strip.deannotateType @@ Core.fieldTypeType (var "ft")))
+        (var "mfield")
+
+-- | Decorator for @lru_cache(1) to memoize zero-argument function results
+lruCacheDecorator :: TTermDefinition Py.NamedExpression
+lruCacheDecorator = def "lruCacheDecorator" $
+  doc "Decorator for @lru_cache(1) to memoize zero-argument function results" $
+  PyDsl.namedExpressionSimple $
+    PyUtils.functionCall @@
+      (PyDsl.pyNameToPyPrimary $ PyDsl.name $ string "lru_cache") @@
+      list [pyInt @@ bigint 1]
+
+-- | Create a curried lambda chain from a list of parameter names and a body
+makeCurriedLambda :: TTermDefinition ([Py.Name] -> Py.Expression -> Py.Expression)
+makeCurriedLambda = def "makeCurriedLambda" $
+  doc "Create a curried lambda chain from a list of parameter names and a body" $
+  "params" ~> "body" ~>
+    Lists.foldl
+      ("acc" ~> "p" ~>
+        PyDsl.expressionLambda $ PyDsl.lambda_
+          (PyDsl.lambdaParametersSimple $ list [PyDsl.lambdaParamNoDefault $ var "p"])
+          (var "acc"))
+      (var "body")
+      (Lists.reverse (var "params"))
+
+-- | Constructor for PyGraph record
+makePyGraph :: TTermDefinition (Graph -> PyHelpers.PythonModuleMetadata -> PyHelpers.PyGraph)
+makePyGraph = def "makePyGraph" $
+  doc "Constructor for PyGraph record" $
+  "g" ~> "m" ~>
+    Phantoms.record PyHelpers._PyGraph [
+      Phantoms.field PyHelpers._PyGraph_graph (var "g"),
+      Phantoms.field PyHelpers._PyGraph_metadata (var "m")]
+
+-- | Wrap a bare reference to a polymorphic function in an uncurried lambda,
+--   avoiding pyright errors due to confusion about type parameters.
+--   Creates: lambda x1, x2, ...: f(x1, x2, ...)
+makeSimpleLambda :: TTermDefinition (Int -> Py.Expression -> Py.Expression)
+makeSimpleLambda = def "makeSimpleLambda" $
+  doc "Wrap a bare reference to a polymorphic function in an uncurried lambda" $
+  "arity" ~> "lhs" ~>
+    "args" <~ (Lists.map
+      ("i" ~> PyDsl.name (string "x" ++ Literals.showInt32 (var "i")))
+      (Math.range (int32 1) (var "arity"))) $
+    Logic.ifElse (Equality.equal (var "arity") (int32 0))
+      (var "lhs")
+      (PyDsl.expressionLambda $
+        PyDsl.lambda_
+          (PyDsl.lambdaParametersSimple $ Lists.map ("a" ~> PyDsl.lambdaParamNoDefault (var "a")) (var "args"))
+          (PyUtils.functionCall @@
+            (PyUtils.pyExpressionToPyPrimary @@ var "lhs") @@
+            (Lists.map ("a" ~> PyDsl.pyNameToPyExpression (var "a")) (var "args"))))
+
+-- | Create a thunk (zero-argument lambda) wrapped with lru_cache(1) for memoization
+makeThunk :: TTermDefinition (Py.Expression -> Py.Expression)
+makeThunk = def "makeThunk" $
+  doc "Create a thunk (zero-argument lambda) wrapped with lru_cache(1) for memoization" $
+  "pbody" ~>
+    PyUtils.functionCall @@
+      (PyUtils.pyExpressionToPyPrimary @@
+        (PyUtils.functionCall @@
+          (PyDsl.pyNameToPyPrimary $ PyDsl.name $ string "lru_cache") @@
+          list [pyInt @@ bigint 1])) @@
+      list [wrapInNullaryLambda @@ var "pbody"]
+
+-- | e.g., makeUncurriedLambda [p1, p2, p3] body => lambda p1, p2, p3: body
+makeUncurriedLambda :: TTermDefinition ([Py.Name] -> Py.Expression -> Py.Expression)
+makeUncurriedLambda = def "makeUncurriedLambda" $
+  doc "Create an uncurried lambda with multiple parameters" $
+  "params" ~> "body" ~>
+    PyDsl.expressionLambda $ PyDsl.lambda_
+      (PyDsl.lambdaParametersSimple $ Lists.map ("p" ~> PyDsl.lambdaParamNoDefault (var "p")) (var "params"))
+      (var "body")
+
+-- | Generate domain import statements from namespace mappings
+moduleDomainImports :: TTermDefinition (Namespaces Py.DottedName -> [Py.ImportStatement])
+moduleDomainImports = def "moduleDomainImports" $
+  doc "Generate domain import statements from namespace mappings" $
+  "namespaces" ~>
+    "names" <~ (Lists.sort $ Maps.elems $ Packaging.namespacesMapping (var "namespaces")) $
+    Lists.map
+      ("ns" ~>
+        inject Py._ImportStatement Py._ImportStatement_name
+          (wrap Py._ImportName $ list [
+            record Py._DottedAsName [
+              Py._DottedAsName_name>>: var "ns",
+              Py._DottedAsName_as>>: nothing]]))
+      (var "names")
+
+-- | Generate all import statements (standard + domain) for a Python module
+moduleImports :: TTermDefinition (Namespaces Py.DottedName -> PyHelpers.PythonModuleMetadata -> [Py.Statement])
+moduleImports = def "moduleImports" $
+  doc "Generate all import statements for a Python module" $
+  "namespaces" ~> "meta" ~>
+    Lists.map
+      ("imp" ~> PyUtils.pySimpleStatementToPyStatement @@
+        (PyDsl.simpleStatementImport $ var "imp"))
+      (Lists.concat (list [
+        moduleStandardImports @@ var "meta",
+        moduleDomainImports @@ var "namespaces"]))
+
+-- | Generate standard import statements based on module metadata
+moduleStandardImports :: TTermDefinition (PyHelpers.PythonModuleMetadata -> [Py.ImportStatement])
+moduleStandardImports = def "moduleStandardImports" $
+  doc "Generate standard import statements based on module metadata" $
+  "meta" ~>
+    -- Build list of (moduleName, [Maybe symbol]) pairs, then filter to non-empty
+    "pairs" <~ list [
+      pair (string "__future__") (list [
+        condImportSymbol @@ string "annotations" @@ PyNames.useFutureAnnotations]),
+      pair (string "collections.abc") (list [
+        condImportSymbol @@ string "Callable" @@
+          (project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesCallable @@ var "meta")]),
+      pair (string "dataclasses") (list [
+        condImportSymbol @@ string "dataclass" @@
+          (project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesDataclass @@ var "meta")]),
+      pair (string "decimal") (list [
+        condImportSymbol @@ string "Decimal" @@
+          (project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesDecimal @@ var "meta")]),
+      pair (string "enum") (list [
+        condImportSymbol @@ string "Enum" @@
+          (project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesEnum @@ var "meta")]),
+      pair (string "functools") (list [
+        condImportSymbol @@ string "lru_cache" @@
+          (project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesLruCache @@ var "meta")]),
+      pair (string "hydra.dsl.python") (list [
+        condImportSymbol @@ string "Either" @@
+          (project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesEither @@ var "meta"),
+        condImportSymbol @@ string "FrozenDict" @@
+          (project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenDict @@ var "meta"),
+        condImportSymbol @@ string "Just" @@
+          (project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesJust @@ var "meta"),
+        condImportSymbol @@ string "Left" @@
+          (project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesLeft @@ var "meta"),
+        condImportSymbol @@ string "Maybe" @@
+          (project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesMaybe @@ var "meta"),
+        condImportSymbol @@ string "Node" @@
+          (project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesNode @@ var "meta"),
+        condImportSymbol @@ string "Nothing" @@
+          (project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesNothing @@ var "meta"),
+        condImportSymbol @@ string "Right" @@
+          (project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesRight @@ var "meta"),
+        condImportSymbol @@ string "frozenlist" @@
+          (project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenList @@ var "meta")]),
+      pair (string "typing") (list [
+        condImportSymbol @@ string "Annotated" @@
+          (project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesAnnotated @@ var "meta"),
+        condImportSymbol @@ string "Generic" @@
+          (project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesGeneric @@ var "meta"),
+        condImportSymbol @@ string "TypeAlias" @@
+          (project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesTypeAlias @@ var "meta"),
+        condImportSymbol @@ string "TypeVar" @@
+          (project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesTypeVar @@ var "meta"),
+        condImportSymbol @@ string "cast" @@
+          (project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesCast @@ var "meta")])] $
+    -- Filter each pair to remove Nothing symbols, then filter out pairs with no remaining symbols
+    "simplified" <~ Maybes.cat (Lists.map
+      ("p" ~>
+        "modName" <~ Pairs.first (var "p") $
+        "symbols" <~ Maybes.cat (Pairs.second (var "p")) $
+        Logic.ifElse (Lists.null $ var "symbols")
+          nothing
+          (just $ pair (var "modName") (var "symbols")))
+      (var "pairs")) $
+    Lists.map
+      ("p" ~> standardImportStatement @@ Pairs.first (var "p") @@ Pairs.second (var "p"))
+      (var "simplified")
+
+-- | Main entry point: convert a Hydra module to Python source files.
+moduleToPython :: TTermDefinition (Module -> [Definition] -> Context -> Graph -> Either Error (M.Map FilePath String))
+moduleToPython = def "moduleToPython" $
+  doc "Convert a Hydra module to Python source files" $
+  "mod" ~> "defs" ~> "cx" ~> "g" ~>
+    "file" <<~ (encodePythonModule @@ var "cx" @@ var "g" @@ var "mod" @@ var "defs") $
+    "s" <~ (Serialization.printExpr @@ (Serialization.parenthesize @@ (PySerde.encodeModule @@ var "file"))) $
+    "path" <~ (Names.namespaceToFilePath @@ Util.caseConventionLowerSnake @@ (wrap _FileExtension $ string "py") @@ (Packaging.moduleNamespace $ var "mod")) $
+    right $ Maps.singleton (var "path") (var "s")
+
+-- | Accessor for the graph field of PyGraph
+pyGraphGraph :: TTermDefinition (PyHelpers.PyGraph -> Graph)
+pyGraphGraph = def "pyGraphGraph" $
+  doc "Accessor for the graph field of PyGraph" $
+  lambda "pyg" $ project PyHelpers._PyGraph PyHelpers._PyGraph_graph @@ var "pyg"
+
+-- | Accessor for the metadata field of PyGraph
+pyGraphMetadata :: TTermDefinition (PyHelpers.PyGraph -> PyHelpers.PythonModuleMetadata)
+pyGraphMetadata = def "pyGraphMetadata" $
+  doc "Accessor for the metadata field of PyGraph" $
+  lambda "pyg" $ project PyHelpers._PyGraph PyHelpers._PyGraph_metadata @@ var "pyg"
+
+-- | Create integer literal expression
+pyInt :: TTermDefinition (Integer -> Py.Expression)
+pyInt = def "pyInt" $
+  doc "Create integer literal expression" $
+  "n" ~>
+    PyUtils.pyAtomToPyExpression @@
+      (PyDsl.atomNumber $ PyDsl.numberInteger $ var "n")
+
+-- | Python-specific binding metadata function.
+--   Stores metadata only for bindings that will actually be thunked by encodeTermAssignment
+--   (isComplexBinding AND NOT isTrivial). This ensures encodeVariable adds () call syntax
+--   only when the binding was actually emitted as @lru_cache(1) def.
+pythonBindingMetadata :: TTermDefinition (Graph -> Binding -> Maybe Term)
+pythonBindingMetadata = def "pythonBindingMetadata" $
+  doc "Like bindingMetadata, but only for bindings that will actually be thunked" $
+  "g" ~> "b" ~>
+  Logic.ifElse (shouldThunkBinding @@ var "g" @@ var "b")
+    (Logic.ifElse (Predicates.isComplexBinding @@ var "g" @@ var "b") (just MetaTerms.true) nothing)
+    nothing
+
+-- | Get the Graph from a PythonEnvironment
+pythonEnvironmentGetGraph :: TTermDefinition (PyHelpers.PythonEnvironment -> Graph)
+pythonEnvironmentGetGraph = def "pythonEnvironmentGetGraph" $
+  doc "Get the Graph from a PythonEnvironment" $
+  lambda "env" $ project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_graph @@ var "env"
+
+-- | Set the Graph in a PythonEnvironment
+pythonEnvironmentSetGraph :: TTermDefinition (Graph -> PyHelpers.PythonEnvironment -> PyHelpers.PythonEnvironment)
+pythonEnvironmentSetGraph = def "pythonEnvironmentSetGraph" $
+  doc "Set the Graph in a PythonEnvironment" $
+  "tc" ~> "env" ~>
+    record PyHelpers._PythonEnvironment [
+      PyHelpers._PythonEnvironment_namespaces>>: project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_namespaces @@ var "env",
+      PyHelpers._PythonEnvironment_boundTypeVariables>>: project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_boundTypeVariables @@ var "env",
+      PyHelpers._PythonEnvironment_graph>>: var "tc",
+      PyHelpers._PythonEnvironment_nullaryBindings>>: project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_nullaryBindings @@ var "env",
+      PyHelpers._PythonEnvironment_version>>: project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_version @@ var "env",
+      PyHelpers._PythonEnvironment_skipCasts>>: project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_skipCasts @@ var "env",
+      PyHelpers._PythonEnvironment_inlineVariables>>: project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_inlineVariables @@ var "env"]
+
+-- | Set the namespaces in metadata
+setMetaNamespaces :: TTermDefinition (Namespaces Py.DottedName -> PyHelpers.PythonModuleMetadata -> PyHelpers.PythonModuleMetadata)
+setMetaNamespaces = def "setMetaNamespaces" $
+  "ns" ~> "m" ~>
+    record PyHelpers._PythonModuleMetadata [
+      PyHelpers._PythonModuleMetadata_namespaces>>: var "ns",
+      PyHelpers._PythonModuleMetadata_typeVariables>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_typeVariables @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesAnnotated>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesAnnotated @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesCallable>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesCallable @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesCast>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesCast @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesLruCache>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesLruCache @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesTypeAlias>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesTypeAlias @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesDataclass>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesDataclass @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesDecimal>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesDecimal @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesEither>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesEither @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesEnum>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesEnum @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesFrozenDict>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenDict @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesFrozenList>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenList @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesGeneric>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesGeneric @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesJust>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesJust @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesLeft>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesLeft @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesMaybe>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesMaybe @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesName>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesName @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesNode>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesNode @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesNothing>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesNothing @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesRight>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesRight @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesTypeVar>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesTypeVar @@ var "m"]
+
+-- | Set the type variables in metadata
+setMetaTypeVariables :: TTermDefinition (PyHelpers.PythonModuleMetadata -> S.Set Name -> PyHelpers.PythonModuleMetadata)
+setMetaTypeVariables = def "setMetaTypeVariables" $
+  "m" ~> "tvars" ~>
+    record PyHelpers._PythonModuleMetadata [
+      PyHelpers._PythonModuleMetadata_namespaces>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_namespaces @@ var "m",
+      PyHelpers._PythonModuleMetadata_typeVariables>>: var "tvars",
+      PyHelpers._PythonModuleMetadata_usesAnnotated>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesAnnotated @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesCallable>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesCallable @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesCast>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesCast @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesLruCache>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesLruCache @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesTypeAlias>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesTypeAlias @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesDataclass>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesDataclass @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesDecimal>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesDecimal @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesEither>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesEither @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesEnum>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesEnum @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesFrozenDict>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenDict @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesFrozenList>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenList @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesGeneric>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesGeneric @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesJust>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesJust @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesLeft>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesLeft @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesMaybe>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesMaybe @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesName>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesName @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesNode>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesNode @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesNothing>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesNothing @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesRight>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesRight @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesTypeVar>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesTypeVar @@ var "m"]
+
+-- | Check if a name is a type variable (unqualified - no dots)
+
+setMetaUsesAnnotated :: TTermDefinition (PyHelpers.PythonModuleMetadata -> Bool -> PyHelpers.PythonModuleMetadata)
+setMetaUsesAnnotated = def "setMetaUsesAnnotated" $
+  "m" ~> "b" ~>
+    record PyHelpers._PythonModuleMetadata [
+      PyHelpers._PythonModuleMetadata_namespaces>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_namespaces @@ var "m",
+      PyHelpers._PythonModuleMetadata_typeVariables>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_typeVariables @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesAnnotated>>: var "b",
+      PyHelpers._PythonModuleMetadata_usesCallable>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesCallable @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesCast>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesCast @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesLruCache>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesLruCache @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesTypeAlias>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesTypeAlias @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesDataclass>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesDataclass @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesDecimal>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesDecimal @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesEither>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesEither @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesEnum>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesEnum @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesFrozenDict>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenDict @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesFrozenList>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenList @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesGeneric>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesGeneric @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesJust>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesJust @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesLeft>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesLeft @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesMaybe>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesMaybe @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesName>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesName @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesNode>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesNode @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesNothing>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesNothing @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesRight>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesRight @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesTypeVar>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesTypeVar @@ var "m"]
+
+setMetaUsesCallable :: TTermDefinition (PyHelpers.PythonModuleMetadata -> Bool -> PyHelpers.PythonModuleMetadata)
+setMetaUsesCallable = def "setMetaUsesCallable" $
+  "m" ~> "b" ~>
+    record PyHelpers._PythonModuleMetadata [
+      PyHelpers._PythonModuleMetadata_namespaces>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_namespaces @@ var "m",
+      PyHelpers._PythonModuleMetadata_typeVariables>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_typeVariables @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesAnnotated>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesAnnotated @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesCallable>>: var "b",
+      PyHelpers._PythonModuleMetadata_usesCast>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesCast @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesLruCache>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesLruCache @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesTypeAlias>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesTypeAlias @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesDataclass>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesDataclass @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesDecimal>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesDecimal @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesEither>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesEither @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesEnum>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesEnum @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesFrozenDict>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenDict @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesFrozenList>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenList @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesGeneric>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesGeneric @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesJust>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesJust @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesLeft>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesLeft @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesMaybe>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesMaybe @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesName>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesName @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesNode>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesNode @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesNothing>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesNothing @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesRight>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesRight @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesTypeVar>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesTypeVar @@ var "m"]
+
+-- | Set usesCast flag in metadata - used when generating cast() expressions for union types
+setMetaUsesCast :: TTermDefinition (Bool -> PyHelpers.PythonModuleMetadata -> PyHelpers.PythonModuleMetadata)
+setMetaUsesCast = def "setMetaUsesCast" $
+  "b" ~> "m" ~>
+    record PyHelpers._PythonModuleMetadata [
+      PyHelpers._PythonModuleMetadata_namespaces>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_namespaces @@ var "m",
+      PyHelpers._PythonModuleMetadata_typeVariables>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_typeVariables @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesAnnotated>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesAnnotated @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesCallable>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesCallable @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesCast>>: var "b",
+      PyHelpers._PythonModuleMetadata_usesLruCache>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesLruCache @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesTypeAlias>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesTypeAlias @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesDataclass>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesDataclass @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesDecimal>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesDecimal @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesEither>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesEither @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesEnum>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesEnum @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesFrozenDict>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenDict @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesFrozenList>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenList @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesGeneric>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesGeneric @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesJust>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesJust @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesLeft>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesLeft @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesMaybe>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesMaybe @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesName>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesName @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesNode>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesNode @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesNothing>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesNothing @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesRight>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesRight @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesTypeVar>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesTypeVar @@ var "m"]
+
+-- | Set usesLruCache flag in metadata - used when generating @lru_cache(1) for thunks
+
+setMetaUsesDataclass :: TTermDefinition (PyHelpers.PythonModuleMetadata -> Bool -> PyHelpers.PythonModuleMetadata)
+setMetaUsesDataclass = def "setMetaUsesDataclass" $
+  "m" ~> "b" ~>
+    record PyHelpers._PythonModuleMetadata [
+      PyHelpers._PythonModuleMetadata_namespaces>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_namespaces @@ var "m",
+      PyHelpers._PythonModuleMetadata_typeVariables>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_typeVariables @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesAnnotated>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesAnnotated @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesCallable>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesCallable @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesCast>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesCast @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesLruCache>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesLruCache @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesTypeAlias>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesTypeAlias @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesDataclass>>: var "b",
+      PyHelpers._PythonModuleMetadata_usesDecimal>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesDecimal @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesEither>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesEither @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesEnum>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesEnum @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesFrozenDict>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenDict @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesFrozenList>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenList @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesGeneric>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesGeneric @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesJust>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesJust @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesLeft>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesLeft @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesMaybe>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesMaybe @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesName>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesName @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesNode>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesNode @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesNothing>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesNothing @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesRight>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesRight @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesTypeVar>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesTypeVar @@ var "m"]
+
+-- | Set the type variables in metadata
+
+setMetaUsesDecimal :: TTermDefinition (PyHelpers.PythonModuleMetadata -> Bool -> PyHelpers.PythonModuleMetadata)
+setMetaUsesDecimal = def "setMetaUsesDecimal" $
+  "m" ~> "b" ~>
+    record PyHelpers._PythonModuleMetadata [
+      PyHelpers._PythonModuleMetadata_namespaces>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_namespaces @@ var "m",
+      PyHelpers._PythonModuleMetadata_typeVariables>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_typeVariables @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesAnnotated>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesAnnotated @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesCallable>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesCallable @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesCast>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesCast @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesLruCache>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesLruCache @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesTypeAlias>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesTypeAlias @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesDataclass>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesDataclass @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesDecimal>>: var "b",
+      PyHelpers._PythonModuleMetadata_usesEither>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesEither @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesEnum>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesEnum @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesFrozenDict>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenDict @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesFrozenList>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenList @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesGeneric>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesGeneric @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesJust>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesJust @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesLeft>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesLeft @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesMaybe>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesMaybe @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesName>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesName @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesNode>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesNode @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesNothing>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesNothing @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesRight>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesRight @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesTypeVar>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesTypeVar @@ var "m"]
+
+setMetaUsesEither :: TTermDefinition (PyHelpers.PythonModuleMetadata -> Bool -> PyHelpers.PythonModuleMetadata)
+setMetaUsesEither = def "setMetaUsesEither" $
+  "m" ~> "b" ~>
+    record PyHelpers._PythonModuleMetadata [
+      PyHelpers._PythonModuleMetadata_namespaces>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_namespaces @@ var "m",
+      PyHelpers._PythonModuleMetadata_typeVariables>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_typeVariables @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesAnnotated>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesAnnotated @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesCallable>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesCallable @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesCast>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesCast @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesLruCache>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesLruCache @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesTypeAlias>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesTypeAlias @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesDataclass>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesDataclass @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesDecimal>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesDecimal @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesEither>>: var "b",
+      PyHelpers._PythonModuleMetadata_usesEnum>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesEnum @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesFrozenDict>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenDict @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesFrozenList>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenList @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesGeneric>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesGeneric @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesJust>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesJust @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesLeft>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesLeft @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesMaybe>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesMaybe @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesName>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesName @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesNode>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesNode @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesNothing>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesNothing @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesRight>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesRight @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesTypeVar>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesTypeVar @@ var "m"]
+
+setMetaUsesEnum :: TTermDefinition (PyHelpers.PythonModuleMetadata -> Bool -> PyHelpers.PythonModuleMetadata)
+setMetaUsesEnum = def "setMetaUsesEnum" $
+  "m" ~> "b" ~>
+    record PyHelpers._PythonModuleMetadata [
+      PyHelpers._PythonModuleMetadata_namespaces>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_namespaces @@ var "m",
+      PyHelpers._PythonModuleMetadata_typeVariables>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_typeVariables @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesAnnotated>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesAnnotated @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesCallable>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesCallable @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesCast>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesCast @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesLruCache>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesLruCache @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesTypeAlias>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesTypeAlias @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesDataclass>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesDataclass @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesDecimal>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesDecimal @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesEither>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesEither @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesEnum>>: var "b",
+      PyHelpers._PythonModuleMetadata_usesFrozenDict>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenDict @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesFrozenList>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenList @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesGeneric>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesGeneric @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesJust>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesJust @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesLeft>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesLeft @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesMaybe>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesMaybe @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesName>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesName @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesNode>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesNode @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesNothing>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesNothing @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesRight>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesRight @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesTypeVar>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesTypeVar @@ var "m"]
+
+-- | Recursively dig through forall types to find wrap types.
+
+setMetaUsesFrozenDict :: TTermDefinition (PyHelpers.PythonModuleMetadata -> Bool -> PyHelpers.PythonModuleMetadata)
+setMetaUsesFrozenDict = def "setMetaUsesFrozenDict" $
+  "m" ~> "b" ~>
+    record PyHelpers._PythonModuleMetadata [
+      PyHelpers._PythonModuleMetadata_namespaces>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_namespaces @@ var "m",
+      PyHelpers._PythonModuleMetadata_typeVariables>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_typeVariables @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesAnnotated>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesAnnotated @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesCallable>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesCallable @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesCast>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesCast @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesLruCache>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesLruCache @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesTypeAlias>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesTypeAlias @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesDataclass>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesDataclass @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesDecimal>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesDecimal @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesEither>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesEither @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesEnum>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesEnum @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesFrozenDict>>: var "b",
+      PyHelpers._PythonModuleMetadata_usesFrozenList>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenList @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesGeneric>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesGeneric @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesJust>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesJust @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesLeft>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesLeft @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesMaybe>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesMaybe @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesName>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesName @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesNode>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesNode @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesNothing>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesNothing @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesRight>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesRight @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesTypeVar>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesTypeVar @@ var "m"]
+
+setMetaUsesFrozenList :: TTermDefinition (PyHelpers.PythonModuleMetadata -> Bool -> PyHelpers.PythonModuleMetadata)
+setMetaUsesFrozenList = def "setMetaUsesFrozenList" $
+  "m" ~> "b" ~>
+    record PyHelpers._PythonModuleMetadata [
+      PyHelpers._PythonModuleMetadata_namespaces>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_namespaces @@ var "m",
+      PyHelpers._PythonModuleMetadata_typeVariables>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_typeVariables @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesAnnotated>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesAnnotated @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesCallable>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesCallable @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesCast>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesCast @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesLruCache>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesLruCache @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesTypeAlias>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesTypeAlias @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesDataclass>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesDataclass @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesDecimal>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesDecimal @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesEither>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesEither @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesEnum>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesEnum @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesFrozenDict>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenDict @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesFrozenList>>: var "b",
+      PyHelpers._PythonModuleMetadata_usesGeneric>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesGeneric @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesJust>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesJust @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesLeft>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesLeft @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesMaybe>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesMaybe @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesName>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesName @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesNode>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesNode @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesNothing>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesNothing @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesRight>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesRight @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesTypeVar>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesTypeVar @@ var "m"]
+
+setMetaUsesGeneric :: TTermDefinition (PyHelpers.PythonModuleMetadata -> Bool -> PyHelpers.PythonModuleMetadata)
+setMetaUsesGeneric = def "setMetaUsesGeneric" $
+  "m" ~> "b" ~>
+    record PyHelpers._PythonModuleMetadata [
+      PyHelpers._PythonModuleMetadata_namespaces>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_namespaces @@ var "m",
+      PyHelpers._PythonModuleMetadata_typeVariables>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_typeVariables @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesAnnotated>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesAnnotated @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesCallable>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesCallable @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesCast>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesCast @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesLruCache>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesLruCache @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesTypeAlias>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesTypeAlias @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesDataclass>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesDataclass @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesDecimal>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesDecimal @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesEither>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesEither @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesEnum>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesEnum @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesFrozenDict>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenDict @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesFrozenList>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenList @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesGeneric>>: var "b",
+      PyHelpers._PythonModuleMetadata_usesJust>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesJust @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesLeft>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesLeft @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesMaybe>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesMaybe @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesName>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesName @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesNode>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesNode @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesNothing>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesNothing @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesRight>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesRight @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesTypeVar>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesTypeVar @@ var "m"]
+
+setMetaUsesJust :: TTermDefinition (PyHelpers.PythonModuleMetadata -> Bool -> PyHelpers.PythonModuleMetadata)
+setMetaUsesJust = def "setMetaUsesJust" $
+  "m" ~> "b" ~>
+    record PyHelpers._PythonModuleMetadata [
+      PyHelpers._PythonModuleMetadata_namespaces>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_namespaces @@ var "m",
+      PyHelpers._PythonModuleMetadata_typeVariables>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_typeVariables @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesAnnotated>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesAnnotated @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesCallable>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesCallable @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesCast>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesCast @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesLruCache>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesLruCache @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesTypeAlias>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesTypeAlias @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesDataclass>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesDataclass @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesDecimal>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesDecimal @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesEither>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesEither @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesEnum>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesEnum @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesFrozenDict>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenDict @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesFrozenList>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenList @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesGeneric>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesGeneric @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesJust>>: var "b",
+      PyHelpers._PythonModuleMetadata_usesLeft>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesLeft @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesMaybe>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesMaybe @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesName>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesName @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesNode>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesNode @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesNothing>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesNothing @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesRight>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesRight @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesTypeVar>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesTypeVar @@ var "m"]
+
+setMetaUsesLeft :: TTermDefinition (PyHelpers.PythonModuleMetadata -> Bool -> PyHelpers.PythonModuleMetadata)
+setMetaUsesLeft = def "setMetaUsesLeft" $
+  "m" ~> "b" ~>
+    record PyHelpers._PythonModuleMetadata [
+      PyHelpers._PythonModuleMetadata_namespaces>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_namespaces @@ var "m",
+      PyHelpers._PythonModuleMetadata_typeVariables>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_typeVariables @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesAnnotated>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesAnnotated @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesCallable>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesCallable @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesCast>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesCast @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesLruCache>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesLruCache @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesTypeAlias>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesTypeAlias @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesDataclass>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesDataclass @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesDecimal>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesDecimal @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesEither>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesEither @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesEnum>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesEnum @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesFrozenDict>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenDict @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesFrozenList>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenList @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesGeneric>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesGeneric @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesJust>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesJust @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesLeft>>: var "b",
+      PyHelpers._PythonModuleMetadata_usesMaybe>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesMaybe @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesName>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesName @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesNode>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesNode @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesNothing>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesNothing @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesRight>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesRight @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesTypeVar>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesTypeVar @@ var "m"]
+
+-- | Set usesLruCache flag in metadata - used when generating @lru_cache(1) for thunks
+setMetaUsesLruCache :: TTermDefinition (Bool -> PyHelpers.PythonModuleMetadata -> PyHelpers.PythonModuleMetadata)
+setMetaUsesLruCache = def "setMetaUsesLruCache" $
+  "b" ~> "m" ~>
+    record PyHelpers._PythonModuleMetadata [
+      PyHelpers._PythonModuleMetadata_namespaces>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_namespaces @@ var "m",
+      PyHelpers._PythonModuleMetadata_typeVariables>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_typeVariables @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesAnnotated>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesAnnotated @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesCallable>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesCallable @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesCast>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesCast @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesLruCache>>: var "b",
+      PyHelpers._PythonModuleMetadata_usesTypeAlias>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesTypeAlias @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesDataclass>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesDataclass @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesDecimal>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesDecimal @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesEither>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesEither @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesEnum>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesEnum @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesFrozenDict>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenDict @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesFrozenList>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenList @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesGeneric>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesGeneric @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesJust>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesJust @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesLeft>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesLeft @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesMaybe>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesMaybe @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesName>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesName @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesNode>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesNode @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesNothing>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesNothing @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesRight>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesRight @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesTypeVar>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesTypeVar @@ var "m"]
+
+setMetaUsesMaybe :: TTermDefinition (PyHelpers.PythonModuleMetadata -> Bool -> PyHelpers.PythonModuleMetadata)
+setMetaUsesMaybe = def "setMetaUsesMaybe" $
+  "m" ~> "b" ~>
+    record PyHelpers._PythonModuleMetadata [
+      PyHelpers._PythonModuleMetadata_namespaces>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_namespaces @@ var "m",
+      PyHelpers._PythonModuleMetadata_typeVariables>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_typeVariables @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesAnnotated>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesAnnotated @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesCallable>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesCallable @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesCast>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesCast @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesLruCache>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesLruCache @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesTypeAlias>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesTypeAlias @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesDataclass>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesDataclass @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesDecimal>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesDecimal @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesEither>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesEither @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesEnum>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesEnum @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesFrozenDict>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenDict @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesFrozenList>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenList @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesGeneric>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesGeneric @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesJust>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesJust @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesLeft>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesLeft @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesMaybe>>: var "b",
+      PyHelpers._PythonModuleMetadata_usesName>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesName @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesNode>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesNode @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesNothing>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesNothing @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesRight>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesRight @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesTypeVar>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesTypeVar @@ var "m"]
+
+-- | Set usesName in metadata
+setMetaUsesName :: TTermDefinition (PyHelpers.PythonModuleMetadata -> Bool -> PyHelpers.PythonModuleMetadata)
+setMetaUsesName = def "setMetaUsesName" $
+  "m" ~> "b" ~>
+    record PyHelpers._PythonModuleMetadata [
+      PyHelpers._PythonModuleMetadata_namespaces>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_namespaces @@ var "m",
+      PyHelpers._PythonModuleMetadata_typeVariables>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_typeVariables @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesAnnotated>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesAnnotated @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesCallable>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesCallable @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesCast>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesCast @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesLruCache>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesLruCache @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesTypeAlias>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesTypeAlias @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesDataclass>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesDataclass @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesDecimal>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesDecimal @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesEither>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesEither @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesEnum>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesEnum @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesFrozenDict>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenDict @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesFrozenList>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenList @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesGeneric>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesGeneric @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesJust>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesJust @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesLeft>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesLeft @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesMaybe>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesMaybe @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesName>>: var "b",
+      PyHelpers._PythonModuleMetadata_usesNode>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesNode @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesNothing>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesNothing @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesRight>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesRight @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesTypeVar>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesTypeVar @@ var "m"]
+
+-- | Set usesTypeVar in metadata
+
+setMetaUsesNode :: TTermDefinition (PyHelpers.PythonModuleMetadata -> Bool -> PyHelpers.PythonModuleMetadata)
+setMetaUsesNode = def "setMetaUsesNode" $
+  "m" ~> "b" ~>
+    record PyHelpers._PythonModuleMetadata [
+      PyHelpers._PythonModuleMetadata_namespaces>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_namespaces @@ var "m",
+      PyHelpers._PythonModuleMetadata_typeVariables>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_typeVariables @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesAnnotated>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesAnnotated @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesCallable>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesCallable @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesCast>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesCast @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesLruCache>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesLruCache @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesTypeAlias>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesTypeAlias @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesDataclass>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesDataclass @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesDecimal>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesDecimal @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesEither>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesEither @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesEnum>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesEnum @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesFrozenDict>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenDict @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesFrozenList>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenList @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesGeneric>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesGeneric @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesJust>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesJust @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesLeft>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesLeft @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesMaybe>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesMaybe @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesName>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesName @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesNode>>: var "b",
+      PyHelpers._PythonModuleMetadata_usesNothing>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesNothing @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesRight>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesRight @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesTypeVar>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesTypeVar @@ var "m"]
+
+setMetaUsesNothing :: TTermDefinition (PyHelpers.PythonModuleMetadata -> Bool -> PyHelpers.PythonModuleMetadata)
+setMetaUsesNothing = def "setMetaUsesNothing" $
+  "m" ~> "b" ~>
+    record PyHelpers._PythonModuleMetadata [
+      PyHelpers._PythonModuleMetadata_namespaces>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_namespaces @@ var "m",
+      PyHelpers._PythonModuleMetadata_typeVariables>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_typeVariables @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesAnnotated>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesAnnotated @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesCallable>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesCallable @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesCast>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesCast @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesLruCache>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesLruCache @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesTypeAlias>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesTypeAlias @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesDataclass>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesDataclass @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesDecimal>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesDecimal @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesEither>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesEither @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesEnum>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesEnum @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesFrozenDict>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenDict @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesFrozenList>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenList @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesGeneric>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesGeneric @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesJust>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesJust @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesLeft>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesLeft @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesMaybe>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesMaybe @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesName>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesName @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesNode>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesNode @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesNothing>>: var "b",
+      PyHelpers._PythonModuleMetadata_usesRight>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesRight @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesTypeVar>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesTypeVar @@ var "m"]
+
+setMetaUsesRight :: TTermDefinition (PyHelpers.PythonModuleMetadata -> Bool -> PyHelpers.PythonModuleMetadata)
+setMetaUsesRight = def "setMetaUsesRight" $
+  "m" ~> "b" ~>
+    record PyHelpers._PythonModuleMetadata [
+      PyHelpers._PythonModuleMetadata_namespaces>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_namespaces @@ var "m",
+      PyHelpers._PythonModuleMetadata_typeVariables>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_typeVariables @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesAnnotated>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesAnnotated @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesCallable>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesCallable @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesCast>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesCast @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesLruCache>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesLruCache @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesTypeAlias>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesTypeAlias @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesDataclass>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesDataclass @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesDecimal>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesDecimal @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesEither>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesEither @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesEnum>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesEnum @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesFrozenDict>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenDict @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesFrozenList>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenList @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesGeneric>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesGeneric @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesJust>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesJust @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesLeft>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesLeft @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesMaybe>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesMaybe @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesName>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesName @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesNode>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesNode @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesNothing>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesNothing @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesRight>>: var "b",
+      PyHelpers._PythonModuleMetadata_usesTypeVar>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesTypeVar @@ var "m"]
+
+-- | Set the usesTypeAlias flag in metadata
+setMetaUsesTypeAlias :: TTermDefinition (PyHelpers.PythonModuleMetadata -> Bool -> PyHelpers.PythonModuleMetadata)
+setMetaUsesTypeAlias = def "setMetaUsesTypeAlias" $
+  "m" ~> "b" ~>
+    record PyHelpers._PythonModuleMetadata [
+      PyHelpers._PythonModuleMetadata_namespaces>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_namespaces @@ var "m",
+      PyHelpers._PythonModuleMetadata_typeVariables>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_typeVariables @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesAnnotated>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesAnnotated @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesCallable>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesCallable @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesCast>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesCast @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesLruCache>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesLruCache @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesTypeAlias>>: var "b",
+      PyHelpers._PythonModuleMetadata_usesDataclass>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesDataclass @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesDecimal>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesDecimal @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesEither>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesEither @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesEnum>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesEnum @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesFrozenDict>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenDict @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesFrozenList>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenList @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesGeneric>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesGeneric @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesJust>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesJust @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesLeft>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesLeft @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesMaybe>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesMaybe @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesName>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesName @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesNode>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesNode @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesNothing>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesNothing @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesRight>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesRight @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesTypeVar>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesTypeVar @@ var "m"]
+
+-- | Set usesTypeVar in metadata
+setMetaUsesTypeVar :: TTermDefinition (PyHelpers.PythonModuleMetadata -> Bool -> PyHelpers.PythonModuleMetadata)
+setMetaUsesTypeVar = def "setMetaUsesTypeVar" $
+  "m" ~> "b" ~>
+    record PyHelpers._PythonModuleMetadata [
+      PyHelpers._PythonModuleMetadata_namespaces>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_namespaces @@ var "m",
+      PyHelpers._PythonModuleMetadata_typeVariables>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_typeVariables @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesAnnotated>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesAnnotated @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesCallable>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesCallable @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesCast>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesCast @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesLruCache>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesLruCache @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesTypeAlias>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesTypeAlias @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesDataclass>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesDataclass @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesDecimal>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesDecimal @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesEither>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesEither @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesEnum>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesEnum @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesFrozenDict>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenDict @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesFrozenList>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenList @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesGeneric>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesGeneric @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesJust>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesJust @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesLeft>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesLeft @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesMaybe>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesMaybe @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesName>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesName @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesNode>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesNode @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesNothing>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesNothing @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesRight>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesRight @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesTypeVar>>: var "b"]
+
+-- | Create an initial empty metadata record with given namespaces
+
+shouldThunkBinding :: TTermDefinition (Graph -> Binding -> Bool)
+shouldThunkBinding = def "shouldThunkBinding" $
+  doc "Determine if a binding should be thunked based on its complexity and triviality" $
+  "g" ~> "b" ~>
+  Logic.and
+    (Predicates.isComplexBinding @@ var "g" @@ var "b")
+    (Logic.not (Predicates.isTrivialTerm @@ (Core.bindingTerm $ var "b")))
+
+-- | Generate a single "from X import Y, Z" standard import statement
+standardImportStatement :: TTermDefinition (String -> [String] -> Py.ImportStatement)
+standardImportStatement = def "standardImportStatement" $
+  doc "Generate a single from-import statement" $
+  "modName" ~> "symbols" ~>
+    inject Py._ImportStatement Py._ImportStatement_from
+      (record Py._ImportFrom [
+        Py._ImportFrom_prefixes>>: list ([] :: [TTerm Py.RelativeImportPrefix]),
+        Py._ImportFrom_dottedName>>: just (wrap Py._DottedName $ list [PyDsl.name $ var "modName"]),
+        Py._ImportFrom_targets>>:
+          inject Py._ImportFromTargets Py._ImportFromTargets_simple
+            (Lists.map ("s" ~>
+              record Py._ImportFromAsName [
+                Py._ImportFromAsName_name>>: PyDsl.name $ var "s",
+                Py._ImportFromAsName_as>>: nothing])
+              (var "symbols"))])
+
+-- | The target Python version for code generation (from Utils)
+targetPythonVersion :: TTermDefinition PyHelpers.PythonVersion
+targetPythonVersion = def "targetPythonVersion" $
+  doc "The target Python version for code generation" $
+  PyUtils.targetPythonVersion
+
+-- | Calculate the arity of a term, with proper handling of primitives.
+--   Unlike Arity.termArity, this looks up primitive arities from the graph
+--   rather than returning a placeholder value.
+termArityWithPrimitives :: TTermDefinition (Graph -> Term -> Int)
+termArityWithPrimitives = def "termArityWithPrimitives" $
+  doc "Calculate term arity with proper primitive handling" $
+  "graph" ~> "term" ~>
+    cases _Term (Strip.deannotateAndDetypeTerm @@ var "term") (Just (Phantoms.int 0)) [
+      _Term_application>>: "app" ~>
+        Math.max (Phantoms.int 0) (Math.sub
+          (termArityWithPrimitives @@ var "graph" @@ (Core.applicationFunction $ var "app"))
+          (Phantoms.int 1)),
+      _Term_function>>: "f" ~>
+        functionArityWithPrimitives @@ var "graph" @@ var "f",
+      -- Look up variables in the graph to compute arity from the binding's type scheme or term.
+      -- This is important for hoisted case statement bindings which are local functions.
+      _Term_variable>>: "name" ~>
+        optCases (Lexical.lookupBinding @@ var "graph" @@ var "name")
+          (Phantoms.int 0)
+          ("el" ~> optCases (Core.bindingType $ var "el")
+            -- No type scheme: compute arity from the binding's term structure.
+            -- Use Arity.termArity to avoid infinite recursion on self-referencing bindings.
+            (Arity.termArity @@ (Core.bindingTerm $ var "el"))
+            -- Has type scheme: use the type scheme's arity
+            ("ts" ~> Arity.typeSchemeArity @@ var "ts"))]
+
+-- | Create a TypeVar assignment statement for a type variable name
+tvarStatement :: TTermDefinition (Py.Name -> Py.Statement)
+tvarStatement = def "tvarStatement" $
+  doc "Create a TypeVar assignment statement for a type variable name" $
+  "name" ~>
+    PyUtils.assignmentStatement @@ var "name" @@
+      (PyUtils.functionCall @@
+        (PyDsl.pyNameToPyPrimary $ PyDsl.name $ string "TypeVar") @@
+        list [PyUtils.doubleQuotedString @@ (unwrap Py._Name @@ var "name")])
+
+-- | Version-aware type alias statement generation.
+--   Uses PEP 695 syntax for Python 3.12+, or TypeAlias syntax for Python 3.10+.
+typeAliasStatementFor :: TTermDefinition (PyHelpers.PythonEnvironment -> Py.Name -> [Py.TypeParameter] -> Maybe String -> Py.Expression -> Py.Statement)
+typeAliasStatementFor = def "typeAliasStatementFor" $
+  doc "Version-aware type alias statement generation" $
+  "env" ~> "name" ~> "tparams" ~> "mcomment" ~> "tyexpr" ~>
+    Logic.ifElse (useInlineTypeParamsFor @@ (project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_version @@ var "env"))
+      (PyUtils.typeAliasStatement @@ var "name" @@ var "tparams" @@ var "mcomment" @@ var "tyexpr")
+      (PyUtils.typeAliasStatement310 @@ var "name" @@ var "tparams" @@ var "mcomment" @@ var "tyexpr")
+
+-- | Version-aware union type statement generation.
+--   Uses PEP 695 type alias syntax for Python 3.12+.
+--   For Python 3.10, generates a metaclass-based class that is subscriptable at runtime.
+unionTypeStatementsFor :: TTermDefinition (PyHelpers.PythonEnvironment -> Py.Name -> [Py.TypeParameter] -> Maybe String -> Py.Expression -> [Py.Statement] -> [Py.Statement])
+unionTypeStatementsFor = def "unionTypeStatementsFor" $
+  doc "Version-aware union type statement generation" $
+  "env" ~> "name" ~> "tparams" ~> "mcomment" ~> "tyexpr" ~> "extraStmts" ~>
+    Logic.ifElse (useInlineTypeParamsFor @@ (project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_version @@ var "env"))
+      -- For 3.12+, type alias has no class body; append constants as module-level statements
+      (Lists.concat2
+        (list [PyUtils.typeAliasStatement @@ var "name" @@ var "tparams" @@ var "mcomment" @@ var "tyexpr"])
+        (var "extraStmts"))
+      (PyUtils.unionTypeClassStatements310 @@ var "name" @@ var "mcomment" @@ var "tyexpr" @@ var "extraStmts")
+
+-- | Create an expression that calls hydra.dsl.python.unsupported(message) at runtime.
+-- This is used for features that cannot be directly translated to Python.
+unsupportedExpression :: TTermDefinition (String -> Py.Expression)
+unsupportedExpression = def "unsupportedExpression" $
+  doc "Create an expression that calls hydra.dsl.python.unsupported(message) at runtime" $
+  "msg" ~>
+    PyUtils.functionCall @@
+      (PyUtils.pyExpressionToPyPrimary @@
+        (PyUtils.projectFromExpression @@
+          (PyUtils.projectFromExpression @@
+            (PyUtils.projectFromExpression @@
+              (PyDsl.pyNameToPyExpression $ PyDsl.name $ string "hydra") @@
+              (PyDsl.name $ string "dsl")) @@
+            (PyDsl.name $ string "python")) @@
+          (PyDsl.name $ string "unsupported"))) @@
+      list [PyUtils.stringToPyExpression @@ PyDsl.quoteStyleDouble @@ var "msg"]
+
+-- | Legacy constant for backward compatibility
+useInlineTypeParams :: TTermDefinition Bool
+useInlineTypeParams = def "useInlineTypeParams" $
+  doc "Legacy constant for backward compatibility; use useInlineTypeParamsFor in new code" $
+  useInlineTypeParamsFor @@ PyUtils.targetPythonVersion
+
+-- | Version-aware inline type parameters.
+--   Python 3.12+ supports `def foo[T]()` syntax.
+--   Python 3.10 requires `T = TypeVar("T"); def foo()` at module level.
+useInlineTypeParamsFor :: TTermDefinition (PyHelpers.PythonVersion -> Bool)
+useInlineTypeParamsFor = def "useInlineTypeParamsFor" $
+  doc "Version-aware inline type parameters" $
+  "version" ~>
+    Equality.equal (var "version") (inject PyHelpers._PythonVersion PyHelpers._PythonVersion_python312 unit)
+
+-- | Create args for variant (Node[type], Generic[tparams])
+variantArgs :: TTermDefinition (Py.Expression -> [Name] -> Py.Args)
+variantArgs = def "variantArgs" $
+  doc "Create args for variant (Node[type], Generic[tparams])" $
+  "ptype" ~> "tparams" ~>
+    PyUtils.pyExpressionsToPyArgs @@
+      (Maybes.cat (list [
+        just $ PyUtils.pyPrimaryToPyExpression @@
+          (PyUtils.primaryWithExpressionSlices @@
+            (PyDsl.pyNameToPyPrimary $ PyDsl.name $ string "Node") @@
+            list [var "ptype"]),
+        genericArg @@ var "tparams"]))
+
+-- | Create a ClosedPattern for a variant, choosing the appropriate pattern type
+--   based on whether the variant is an enum, unit type, or has a value.
+variantClosedPattern :: TTermDefinition (PyHelpers.PythonEnvironment -> Name -> Name -> Py.Name -> [FieldType] -> Bool -> Name -> Bool -> Py.ClosedPattern)
+variantClosedPattern = def "variantClosedPattern" $
+  doc "Create a ClosedPattern for a variant based on its characteristics" $
+  "env" ~> "typeName" ~> "fieldName" ~> "pyVariantName" ~> "rowType" ~> "isEnum" ~> "varName" ~> "shouldCapture" ~>
+    Logic.ifElse (var "isEnum")
+      (enumVariantPattern @@ var "env" @@ var "typeName" @@ var "fieldName")
+      (Logic.ifElse (Logic.not $ var "shouldCapture")
+        (classVariantPatternUnit @@ var "pyVariantName")
+        (classVariantPatternWithCapture @@ var "env" @@ var "pyVariantName" @@ var "varName"))
+
+-- | Create a wildcard case block with a given body statement.
+--   This is used for default cases in match statements.
+wildcardCaseBlock :: TTermDefinition (Py.Statement -> Py.CaseBlock)
+wildcardCaseBlock = def "wildcardCaseBlock" $
+  doc "Create a wildcard case block with a given body statement" $
+  "stmt" ~>
+    PyDsl.caseBlock
+      (PyUtils.pyClosedPatternToPyPatterns @@ PyDsl.closedPatternWildcard)
+      nothing
+      (PyUtils.indentedBlock @@ nothing @@ list [list [var "stmt"]])
+
+-- | Execute a computation with definitions in scope
+withDefinitions :: TTermDefinition (PyHelpers.PythonEnvironment -> [Definition] -> (PyHelpers.PythonEnvironment -> a) -> a)
+withDefinitions = def "withDefinitions" $
+  doc "Execute a computation with definitions in scope" $
+  "env" ~> "defs" ~> "body" ~>
+    -- Convert definitions to bindings for a dummy let
+    "bindings" <~ (Maybes.cat $ Lists.map
+      ("def_" ~>
+        cases _Definition (var "def_") (Just nothing) [
+          _Definition_term>>: "td" ~>
+            just $ Core.binding
+              (project _TermDefinition _TermDefinition_name @@ var "td")
+              (project _TermDefinition _TermDefinition_term @@ var "td")
+              (project _TermDefinition _TermDefinition_type @@ var "td"),
+          _Definition_type>>: constant nothing])
+      (var "defs")) $
+    "dummyLet" <~ (Core.let_ (var "bindings") (Core.termLiteral $ Core.literalString $ string "dummy")) $
+    withLet @@ var "env" @@ var "dummyLet" @@ var "body"
+
+-- | Execute a computation with lambda context (adds lambda parameter to Graph)
+withLambda :: TTermDefinition (PyHelpers.PythonEnvironment -> Lambda -> (PyHelpers.PythonEnvironment -> a) -> a)
+withLambda = def "withLambda" $
+  doc "Execute a computation with lambda context (adds lambda parameter to Graph)" $
+  Environment.withLambdaContext @@
+    pythonEnvironmentGetGraph @@
+    pythonEnvironmentSetGraph
+
+-- | Execute a computation with let context (adds let bindings to Graph with metadata)
+withLet :: TTermDefinition (PyHelpers.PythonEnvironment -> Let -> (PyHelpers.PythonEnvironment -> a) -> a)
+withLet = def "withLet" $
+  doc "Execute a computation with let context (adds let bindings to Graph)" $
+  Environment.withLetContext @@
+    pythonEnvironmentGetGraph @@
+    pythonEnvironmentSetGraph @@
+    pythonBindingMetadata
+
+-- | Execute a computation with inline let context (no metadata, for walrus operators)
+--   Also adds binding names to inlineVariables so encodeVariable knows not to add call syntax.
+withLetInline :: TTermDefinition (PyHelpers.PythonEnvironment -> Let -> (PyHelpers.PythonEnvironment -> a) -> a)
+withLetInline = def "withLetInline" $
+  doc "Execute a computation with inline let context (for walrus operators)" $
+  "env" ~> "lt" ~> "body" ~>
+    "bindingNames" <~ (Lists.map ("b" ~> Core.bindingName (var "b")) (Core.letBindings $ var "lt")) $
+    "inlineVars" <~ (Sets.fromList $ var "bindingNames") $
+    "noMetadata" <~ ("tc" ~> "b" ~> (nothing :: TTerm (Maybe Term))) $
+    Environment.withLetContext @@
+      pythonEnvironmentGetGraph @@
+      pythonEnvironmentSetGraph @@
+      var "noMetadata" @@
+      var "env" @@
+      var "lt" @@
+      ("innerEnv" ~>
+        "updatedEnv" <~ (record PyHelpers._PythonEnvironment [
+          PyHelpers._PythonEnvironment_namespaces>>: project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_namespaces @@ var "innerEnv",
+          PyHelpers._PythonEnvironment_boundTypeVariables>>: project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_boundTypeVariables @@ var "innerEnv",
+          PyHelpers._PythonEnvironment_graph>>: project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_graph @@ var "innerEnv",
+          PyHelpers._PythonEnvironment_nullaryBindings>>: project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_nullaryBindings @@ var "innerEnv",
+          PyHelpers._PythonEnvironment_version>>: project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_version @@ var "innerEnv",
+          PyHelpers._PythonEnvironment_skipCasts>>: project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_skipCasts @@ var "innerEnv",
+          PyHelpers._PythonEnvironment_inlineVariables>>: Sets.union (var "inlineVars")
+            (project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_inlineVariables @@ var "innerEnv")]) $
+        var "body" @@ var "updatedEnv")
+
+-- | Execute a computation with type lambda context (adds type parameter to Graph)
+withTypeLambda :: TTermDefinition (PyHelpers.PythonEnvironment -> TypeLambda -> (PyHelpers.PythonEnvironment -> a) -> a)
+withTypeLambda = def "withTypeLambda" $
+  doc "Execute a computation with type lambda context" $
+  Environment.withTypeLambdaContext @@
+    pythonEnvironmentGetGraph @@
+    pythonEnvironmentSetGraph
+
+-- | Wrap a Python expression in a nullary lambda (thunk) for lazy evaluation
+wrapInNullaryLambda :: TTermDefinition (Py.Expression -> Py.Expression)
+wrapInNullaryLambda = def "wrapInNullaryLambda" $
+  doc "Wrap a Python expression in a nullary lambda (thunk) for lazy evaluation" $
+  "expr" ~>
+    PyDsl.expressionLambda $ PyDsl.lambda_ PyDsl.lambdaParametersEmpty (var "expr")
+
+-- | Wrap specific arguments in nullary lambdas for primitives that require lazy evaluation
+wrapLazyArguments :: TTermDefinition (Name -> [Py.Expression] -> [Py.Expression])
+wrapLazyArguments = def "wrapLazyArguments" $
+  doc "Wrap specific arguments in nullary lambdas for primitives that require lazy evaluation" $
+  "name" ~> "args" ~>
+    Logic.ifElse
+      (Logic.and
+        (Equality.equal (var "name") (Core.name $ string "hydra.lib.logic.ifElse"))
+        (Equality.equal (Lists.length (var "args")) (int32 3)))
+      -- For if_else, wrap arguments 2 and 3 (the then/else branches)
+      (list [
+        Lists.at (int32 0) (var "args"),
+        wrapInNullaryLambda @@ (Lists.at (int32 1) (var "args")),
+        wrapInNullaryLambda @@ (Lists.at (int32 2) (var "args"))])
+      (Logic.ifElse
+        (Logic.and
+          (Equality.equal (var "name") (Core.name $ string "hydra.lib.maybes.cases"))
+          (Equality.equal (Lists.length (var "args")) (int32 3)))
+        -- For cases, wrap argument 2 (the Nothing branch) for lazy evaluation
+        (list [
+          Lists.at (int32 0) (var "args"),
+          wrapInNullaryLambda @@ (Lists.at (int32 1) (var "args")),
+          Lists.at (int32 2) (var "args")])
+        (Logic.ifElse
+          (Logic.and
+            (Logic.or
+              (Equality.equal (var "name") (Core.name $ string "hydra.lib.maybes.maybe"))
+              (Equality.equal (var "name") (Core.name $ string "hydra.lib.maybes.fromMaybe")))
+            (Equality.gte (Lists.length (var "args")) (int32 1)))
+          -- For maybe/fromMaybe, wrap argument 1 (the default value)
+          (Lists.cons (wrapInNullaryLambda @@ (Lists.at (int32 0) (var "args")))
+                      (Lists.tail (var "args")))
+          (var "args")))

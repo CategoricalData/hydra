@@ -9,8 +9,8 @@ module Hydra.Haskell.Generation (
 ) where
 
 import Hydra.Kernel
-import Hydra.Ext.Haskell.Coder
-import Hydra.Ext.Haskell.Language
+import Hydra.Haskell.Coder
+import Hydra.Haskell.Language
 import Hydra.Generation
 import qualified Hydra.Sources.All as Sources
 import qualified Hydra.Sources.Kernel.Types.Core as CoreTypes

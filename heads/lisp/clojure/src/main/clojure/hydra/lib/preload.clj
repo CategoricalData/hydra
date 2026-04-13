@@ -84,9 +84,9 @@
    "hydra.adapt"
    "hydra.json.decode" "hydra.json.encode" "hydra.json.parser"
    "hydra.json.writer" "hydra.json.yaml.decode" "hydra.json.yaml.encode"
-   "hydra.ext.org.json.decoding"
-   "hydra.ext.org.yaml.model"
-   "hydra.ext.haskell.operators"
+   "hydra.json.decoding"
+   "hydra.yaml.model"
+   "hydra.haskell.operators"
    "hydra.codeGeneration" "hydra.coderUtils"
    "hydra.lib.names"
    "hydra.test.transform" "hydra.test.utils"
@@ -155,11 +155,11 @@
    "hydra.json.bootstrap"
    "hydra.json.decode" "hydra.json.encode"
    "hydra.json.parser" "hydra.json.writer"
-   "hydra.ext.org.json.decoding"
+   "hydra.json.decoding"
    "hydra.adapt"
    "hydra.templates" "hydra.parsers"
    "hydra.json.yaml.decode" "hydra.json.yaml.encode"
-   "hydra.ext.org.yaml.model"
+   "hydra.yaml.model"
    "hydra.codeGeneration"])
 
 (def ^:private gen-test-load-order

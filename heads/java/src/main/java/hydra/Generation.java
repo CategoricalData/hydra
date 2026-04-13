@@ -419,8 +419,8 @@ public class Generation {
      */
     public static void writeJava(String basePath, List<Module> universe, List<Module> mods) {
         generateSources(
-                mod -> defs -> cx -> g -> hydra.ext.java.Coder.moduleToJava(mod, defs, cx, g),
-                hydra.ext.java.Language.javaLanguage(),
+                mod -> defs -> cx -> g -> hydra.java.Coder.moduleToJava(mod, defs, cx, g),
+                hydra.java.Language.javaLanguage(),
                 false, true, false, true,
                 basePath, universe, mods);
     }
@@ -430,8 +430,8 @@ public class Generation {
      */
     public static void writePython(String basePath, List<Module> universe, List<Module> mods) {
         generateSources(
-                mod -> defs -> cx -> g -> hydra.ext.python.Coder.moduleToPython(mod, defs, cx, g),
-                hydra.ext.python.Language.pythonLanguage(),
+                mod -> defs -> cx -> g -> hydra.python.Coder.moduleToPython(mod, defs, cx, g),
+                hydra.python.Language.pythonLanguage(),
                 false, true, true, false,
                 basePath, universe, mods);
     }
@@ -441,8 +441,8 @@ public class Generation {
      */
     public static void writeHaskell(String basePath, List<Module> universe, List<Module> mods) {
         generateSources(
-                mod -> defs -> cx -> g -> hydra.ext.haskell.Coder.moduleToHaskell(mod, defs, cx, g),
-                hydra.ext.haskell.Language.haskellLanguage(),
+                mod -> defs -> cx -> g -> hydra.haskell.Coder.moduleToHaskell(mod, defs, cx, g),
+                hydra.haskell.Language.haskellLanguage(),
                 false, false, false, false,
                 basePath, universe, mods);
     }
@@ -452,30 +452,30 @@ public class Generation {
      */
     public static void writeLispDialect(String basePath, String dialectName, String fileExt,
                                          List<Module> universe, List<Module> mods) {
-        hydra.ext.lisp.syntax.Dialect dialect;
+        hydra.lisp.syntax.Dialect dialect;
         hydra.util.CaseConvention caseConv;
         switch (dialectName) {
             case "clojure":
-                dialect = new hydra.ext.lisp.syntax.Dialect.Clojure();
+                dialect = new hydra.lisp.syntax.Dialect.Clojure();
                 caseConv = new hydra.util.CaseConvention.Camel();
                 break;
             case "scheme":
-                dialect = new hydra.ext.lisp.syntax.Dialect.Scheme();
+                dialect = new hydra.lisp.syntax.Dialect.Scheme();
                 caseConv = new hydra.util.CaseConvention.LowerSnake();
                 break;
             case "commonLisp":
-                dialect = new hydra.ext.lisp.syntax.Dialect.CommonLisp();
+                dialect = new hydra.lisp.syntax.Dialect.CommonLisp();
                 caseConv = new hydra.util.CaseConvention.LowerSnake();
                 break;
             case "emacsLisp":
-                dialect = new hydra.ext.lisp.syntax.Dialect.EmacsLisp();
+                dialect = new hydra.lisp.syntax.Dialect.EmacsLisp();
                 caseConv = new hydra.util.CaseConvention.LowerSnake();
                 break;
             default:
                 throw new IllegalArgumentException("Unknown Lisp dialect: " + dialectName);
         }
 
-        final hydra.ext.lisp.syntax.Dialect d = dialect;
+        final hydra.lisp.syntax.Dialect d = dialect;
         final hydra.util.CaseConvention cc = caseConv;
         generateSources(
                 mod -> defs -> cx -> g -> {
@@ -484,17 +484,17 @@ public class Generation {
                     if (result instanceof hydra.util.Either.Left) {
                         return result;
                     }
-                    hydra.ext.lisp.syntax.Program program = (hydra.ext.lisp.syntax.Program) ((hydra.util.Either.Right) result).value;
+                    hydra.lisp.syntax.Program program = (hydra.lisp.syntax.Program) ((hydra.util.Either.Right) result).value;
                     String code = hydra.Serialization.printExpr(
                             hydra.Serialization.parenthesize(
-                                    hydra.ext.lisp.Serde.programToExpr(program)));
+                                    hydra.lisp.Serde.programToExpr(program)));
                     String filePath = hydra.Names.namespaceToFilePath(
                             cc, new hydra.packaging.FileExtension(fileExt), mod.namespace);
                     Map<String, String> fileMap = new java.util.TreeMap<>();
                     fileMap.put(filePath, code);
                     return new hydra.util.Either.Right(fileMap);
                 },
-                hydra.ext.lisp.Language.lispLanguage(),
+                hydra.lisp.Language.lispLanguage(),
                 false, false, false, false,
                 basePath, universe, mods);
     }
@@ -546,12 +546,12 @@ public class Generation {
     }
 
     /**
-     * Filter modules to only kernel modules (exclude hydra.ext.* namespaces).
+     * Filter modules to only kernel modules (exclude hydra.* namespaces).
      */
     public static List<Module> filterKernelModules(List<Module> modules) {
         List<Module> result = new ArrayList<>();
         for (Module m : modules) {
-            if (!m.namespace.value.startsWith("hydra.ext.") && !m.namespace.value.startsWith("hydra.json.yaml.")) {
+            if (!m.namespace.value.startsWith("hydra.") && !m.namespace.value.startsWith("hydra.json.yaml.")) {
                 result.add(m);
             }
         }

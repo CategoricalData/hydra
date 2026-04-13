@@ -558,7 +558,7 @@
                                             (if (hydra_module_namespace? ns)
                                                 (hydra_module_namespace-value ns)
                                                 ns))))
-                           (unless (or (string-prefix? "hydra.ext." ns-str)
+                           (unless (or (string-prefix? "hydra." ns-str)
                                        (string-prefix? "hydra.json.yaml." ns-str))
                              (set! filtered (cons m filtered)))))
                        all-mods)

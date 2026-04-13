@@ -1,6 +1,6 @@
 package hydra
 
-import java.io.File
+import _root_.java.io.File
 
 /**
  * Bootstrapping entry point: loads Hydra modules from JSON and generates
@@ -15,7 +15,7 @@ import java.io.File
  *   --include-coders       Also load and generate ext coder modules
  *   --include-tests        Also load and generate kernel test modules
  *   --ext-json-dir <dir>   Directory containing ext JSON modules (for --include-coders)
- *   --kernel-only          Only generate kernel modules (exclude hydra.ext.*)
+ *   --kernel-only          Only generate kernel modules (exclude hydra.*)
  *   --types-only           Only generate type-defining modules
  */
 @main def bootstrap(args: String*): Unit =
@@ -50,7 +50,7 @@ import java.io.File
     println("  --include-coders       Also load and generate ext coder modules")
     println("  --include-tests        Also load and generate kernel test modules")
     println("  --ext-json-dir <dir>   Directory containing ext JSON modules (for --include-coders)")
-    println("  --kernel-only          Only generate kernel modules (exclude hydra.ext.*)")
+    println("  --kernel-only          Only generate kernel modules (exclude hydra.*)")
     println("  --types-only           Only generate type-defining modules")
     System.exit(1)
 
@@ -156,7 +156,7 @@ import java.io.File
   // Optionally load and generate test modules
   var testFileCount = 0
   if includeTests then
-    val testJsonDir = jDir.replace("gen-main/json", "gen-test/json")
+    val testJsonDir = jDir.replace("src/main/json", "src/test/json")
     println("Loading test modules from JSON...")
     println(s"  Source: $testJsonDir")
     stepStart = System.currentTimeMillis()

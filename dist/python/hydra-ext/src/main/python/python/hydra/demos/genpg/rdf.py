@@ -30,10 +30,10 @@ sys.path.insert(0, os.path.join(_hydra_python_root, "src/main/python"))
 
 from hydra.dsl.python import FrozenDict
 import hydra.core
-import hydra.ext.org.w3.rdf.syntax as rdf
-import hydra.ext.org.w3.shacl.model as shacl
-import hydra.ext.rdf.serde as rdf_serde
-import hydra.ext.rdf.utils as rdf_utils
+import hydra.rdf.syntax as rdf
+import hydra.shacl.model as shacl
+import hydra.rdf.serde as rdf_serde
+import hydra.rdf.utils as rdf_utils
 import hydra.pg.model as pg
 import hydra.pg.rdf.environment as pg_rdf_env
 import hydra.pg.rdf.mappings as pg_rdf_mappings

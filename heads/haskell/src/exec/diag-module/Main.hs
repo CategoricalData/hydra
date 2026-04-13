@@ -9,14 +9,15 @@ import Hydra.Lexical (elementsToGraph, graphToBindings, buildGraph)
 import Hydra.Inference (inferGraphTypes)
 import Hydra.Adapt (dataGraphToDefinitions)
 import qualified Hydra.Environment as Environment
-import Hydra.Ext.Generation (mainModules, hydraExtModules)
-import Hydra.Ext.Sources.All
-import Hydra.Ext.Haskell.Language (haskellLanguage)
-import Hydra.Ext.Haskell.Coder (moduleToHaskell)
+import Hydra.Sources.All (mainModules)
+import Hydra.Sources.Ext (hydraExtModules)
+import Hydra.Sources.All
+import Hydra.Haskell.Language (haskellLanguage)
+import Hydra.Haskell.Coder (moduleToHaskell)
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Show.Errors as ShowError
 
-import qualified Hydra.Ext.Sources.Cpp.Names as CppNames
+import qualified Hydra.Sources.Cpp.Names as CppNames
 
 import qualified Data.Map as M
 import qualified Data.List as L
@@ -99,4 +100,3 @@ main = do
   hFlush stdout
   case generateSourceFiles moduleToHaskell haskellLanguage True False False False bootstrapGraph uni [modToGen] cx of
     Left err -> putStrLn $ "  ERROR: " ++ ShowError.error err
-    Right files -> putStrLn $ "  OK: " ++ show (length files) ++ " files"

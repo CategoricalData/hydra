@@ -12,7 +12,7 @@ import qualified Hydra.Sources.Kernel.Types.Core as Core
 
 
 ns :: Namespace
-ns = Namespace "hydra.ext.haskell.syntax"
+ns = Namespace "hydra.haskell.syntax"
 
 define :: String -> Type -> Binding
 define = defineType ns

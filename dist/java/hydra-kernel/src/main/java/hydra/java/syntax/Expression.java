@@ -1,0 +1,123 @@
+// Note: this is an automatically generated file. Do not edit.
+
+package hydra.java.syntax;
+
+import java.io.Serializable;
+
+public abstract class Expression implements Serializable, Comparable<Expression> {
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.java.syntax.Expression");
+
+  public static final hydra.core.Name LAMBDA = new hydra.core.Name("lambda");
+
+  public static final hydra.core.Name ASSIGNMENT = new hydra.core.Name("assignment");
+
+  private Expression () {
+
+  }
+
+  public abstract <R> R accept(Visitor<R> visitor) ;
+
+  public interface Visitor<R> {
+    R visit(Lambda instance) ;
+
+    R visit(Assignment instance) ;
+  }
+
+  public interface PartialVisitor<R> extends Visitor<R> {
+    default R otherwise(Expression instance) {
+      throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
+    }
+
+    default R visit(Lambda instance) {
+      return otherwise(instance);
+    }
+
+    default R visit(Assignment instance) {
+      return otherwise(instance);
+    }
+  }
+
+  public static final class Lambda extends hydra.java.syntax.Expression implements Serializable {
+    public final hydra.java.syntax.LambdaExpression value;
+
+    public Lambda (hydra.java.syntax.LambdaExpression value) {
+      this.value = value;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Lambda)) {
+        return false;
+      }
+      Lambda o = (Lambda) other;
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
+    }
+
+    @Override
+    public int hashCode() {
+      return 2 * java.util.Objects.hashCode(value);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Expression other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Lambda o = (Lambda) other;
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
+    }
+
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+
+  public static final class Assignment extends hydra.java.syntax.Expression implements Serializable {
+    public final hydra.java.syntax.AssignmentExpression value;
+
+    public Assignment (hydra.java.syntax.AssignmentExpression value) {
+      this.value = value;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Assignment)) {
+        return false;
+      }
+      Assignment o = (Assignment) other;
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
+    }
+
+    @Override
+    public int hashCode() {
+      return 2 * java.util.Objects.hashCode(value);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Expression other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Assignment o = (Assignment) other;
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
+    }
+
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+}

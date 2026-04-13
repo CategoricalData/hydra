@@ -15,7 +15,7 @@ fi
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 HYDRA_ROOT="$( cd "$SCRIPT_DIR/../../.." && pwd )"
-HYDRA_PYTHON_DIR="$HYDRA_ROOT/packages/hydra-python"
+HYDRA_PYTHON_DIR="$HYDRA_ROOT/heads/python"
 PYTHON_RESOURCES="$SCRIPT_DIR/../resources/python"
 
 # Clean and create output directory
@@ -48,24 +48,31 @@ for d in lib dsl sources; do
     fi
 done
 
-# Copy ext modules from baseline.
-# Test infrastructure (e.g. test_suite_runner.py) imports ext modules.
-# Copy all ext from baseline to ensure they're available.
-echo "  Copying ext modules from baseline..."
+# Copy generated kernel modules from baseline.
+# Test infrastructure imports generated modules like hydra.annotations, hydra.core, etc.
+echo "  Copying generated kernel modules from baseline..."
 PY_GEN="$OUTPUT_DIR/src/main/python"
-PY_BASELINE="$HYDRA_PYTHON_DIR/src/main/python"
-if [ -d "$PY_BASELINE/hydra/ext" ]; then
+PY_BASELINE="$HYDRA_ROOT/dist/python/hydra-kernel/src/main/python"
+if [ -d "$PY_BASELINE/hydra" ]; then
     mkdir -p "$PY_GEN/hydra"
-    rm -rf "$PY_GEN/hydra/ext"
-    cp -r "$PY_BASELINE/hydra/ext" "$PY_GEN/hydra/"
-    # Ensure __init__.py files exist in ext directories
-    find "$PY_GEN/hydra/ext" -type d -not -name "__pycache__" -not -path "*/__pycache__/*" | while read dir; do
+    cp -r "$PY_BASELINE/hydra/." "$PY_GEN/hydra/"
+    # Ensure __init__.py files exist in all directories
+    find "$PY_GEN/hydra" -type d -not -name "__pycache__" -not -path "*/__pycache__/*" | while read dir; do
         if [ ! -f "$dir/__init__.py" ]; then
             echo "from pkgutil import extend_path" > "$dir/__init__.py"
             echo "__path__ = extend_path(__path__, __name__)" >> "$dir/__init__.py"
         fi
     done
-    echo "    Copied hydra/ext from baseline"
+    # Remove any __pycache__ that got copied
+    find "$PY_GEN/hydra" -name "__pycache__" -type d -exec rm -rf {} + 2>/dev/null || true
+    echo "    Copied hydra/ generated kernel modules from dist baseline"
+fi
+# Also copy ext modules from dist/python/hydra-ext
+PY_EXT_BASELINE="$HYDRA_ROOT/dist/python/hydra-ext/src/main/python"
+if [ -d "$PY_EXT_BASELINE/hydra" ]; then
+    cp -r "$PY_EXT_BASELINE/hydra/." "$PY_GEN/hydra/"
+    find "$PY_GEN/hydra" -name "__pycache__" -type d -exec rm -rf {} + 2>/dev/null || true
+    echo "    Overlaid hydra/ ext modules from dist baseline"
 fi
 
 # Test infrastructure

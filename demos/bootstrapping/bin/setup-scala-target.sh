@@ -13,7 +13,7 @@ fi
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 HYDRA_ROOT="$( cd "$SCRIPT_DIR/../../.." && pwd )"
-HYDRA_SCALA_DIR="$HYDRA_ROOT/packages/hydra-scala"
+HYDRA_SCALA_DIR="$HYDRA_ROOT/heads/scala"
 
 # Clean and create output directory
 echo "Preparing output directory: $OUTPUT_DIR"
@@ -31,7 +31,7 @@ cp "$HYDRA_SCALA_DIR/project/build.properties" "$OUTPUT_DIR/project/" 2>/dev/nul
 
 # Hand-written source files (primitive libraries)
 # Note: we exclude Generation.scala and Bootstrap.scala because they reference
-# hydra.ext.* coder modules which are not present in the bootstrapping target.
+# hydra.* coder modules which are not present in the bootstrapping target.
 echo "  Copying hand-written source files..."
 if [ -d "$HYDRA_SCALA_DIR/src/main/scala" ]; then
     mkdir -p "$OUTPUT_DIR/src/main/scala/hydra"

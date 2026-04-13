@@ -81,7 +81,7 @@ import qualified Data.Maybe                                as Y
 
 -- Additional imports
 import Hydra.Ast
-import qualified Hydra.Ext.Haskell.Syntax as H
+import qualified Hydra.Haskell.Syntax as H
 import qualified Hydra.Sources.Haskell.Syntax as HaskellSyntax
 import qualified Hydra.Sources.Haskell.Operators as HaskellOperators
 
@@ -90,7 +90,7 @@ haskellSerdeDefinition :: String -> TTerm a -> TTermDefinition a
 haskellSerdeDefinition = definitionInModule module_
 
 ns :: Namespace
-ns = Namespace "hydra.ext.haskell.serde"
+ns = Namespace "hydra.haskell.serde"
 
 module_ :: Module
 module_ = Module ns definitions
