@@ -222,9 +222,9 @@ multipleBindingsError name =
 multipleBindingsErrorName :: Phantoms.TTerm Errors.MultipleBindingsError -> Phantoms.TTerm Core.Name
 multipleBindingsErrorName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.errors.MultipleBindingsError"),
-        Core.projectionField = (Core.Name "name")})))),
+        Core.projectionField = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 multipleBindingsErrorWithName :: Phantoms.TTerm Errors.MultipleBindingsError -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Errors.MultipleBindingsError
@@ -248,9 +248,9 @@ multipleFieldsError fieldName =
 multipleFieldsErrorFieldName :: Phantoms.TTerm Errors.MultipleFieldsError -> Phantoms.TTerm Core.Name
 multipleFieldsErrorFieldName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.errors.MultipleFieldsError"),
-        Core.projectionField = (Core.Name "fieldName")})))),
+        Core.projectionField = (Core.Name "fieldName")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 multipleFieldsErrorWithFieldName :: Phantoms.TTerm Errors.MultipleFieldsError -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Errors.MultipleFieldsError
@@ -274,9 +274,9 @@ noMatchingFieldError fieldName =
 noMatchingFieldErrorFieldName :: Phantoms.TTerm Errors.NoMatchingFieldError -> Phantoms.TTerm Core.Name
 noMatchingFieldErrorFieldName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.errors.NoMatchingFieldError"),
-        Core.projectionField = (Core.Name "fieldName")})))),
+        Core.projectionField = (Core.Name "fieldName")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 noMatchingFieldErrorWithFieldName :: Phantoms.TTerm Errors.NoMatchingFieldError -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Errors.NoMatchingFieldError
@@ -300,9 +300,9 @@ noSuchBindingError name =
 noSuchBindingErrorName :: Phantoms.TTerm Errors.NoSuchBindingError -> Phantoms.TTerm Core.Name
 noSuchBindingErrorName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.errors.NoSuchBindingError"),
-        Core.projectionField = (Core.Name "name")})))),
+        Core.projectionField = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 noSuchBindingErrorWithName :: Phantoms.TTerm Errors.NoSuchBindingError -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Errors.NoSuchBindingError
@@ -326,9 +326,9 @@ noSuchPrimitiveError name =
 noSuchPrimitiveErrorName :: Phantoms.TTerm Errors.NoSuchPrimitiveError -> Phantoms.TTerm Core.Name
 noSuchPrimitiveErrorName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.errors.NoSuchPrimitiveError"),
-        Core.projectionField = (Core.Name "name")})))),
+        Core.projectionField = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 noSuchPrimitiveErrorWithName :: Phantoms.TTerm Errors.NoSuchPrimitiveError -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Errors.NoSuchPrimitiveError
@@ -361,17 +361,17 @@ otherInferenceError path message =
 otherInferenceErrorMessage :: Phantoms.TTerm Errors.OtherInferenceError -> Phantoms.TTerm String
 otherInferenceErrorMessage x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.errors.OtherInferenceError"),
-        Core.projectionField = (Core.Name "message")})))),
+        Core.projectionField = (Core.Name "message")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 otherInferenceErrorPath :: Phantoms.TTerm Errors.OtherInferenceError -> Phantoms.TTerm Paths.SubtermPath
 otherInferenceErrorPath x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.errors.OtherInferenceError"),
-        Core.projectionField = (Core.Name "path")})))),
+        Core.projectionField = (Core.Name "path")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 otherInferenceErrorWithMessage :: Phantoms.TTerm Errors.OtherInferenceError -> Phantoms.TTerm String -> Phantoms.TTerm Errors.OtherInferenceError
@@ -382,9 +382,9 @@ otherInferenceErrorWithMessage original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "path"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.errors.OtherInferenceError"),
-              Core.projectionField = (Core.Name "path")})))),
+              Core.projectionField = (Core.Name "path")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "message"),
@@ -401,9 +401,9 @@ otherInferenceErrorWithPath original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "message"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.errors.OtherInferenceError"),
-              Core.projectionField = (Core.Name "message")})))),
+              Core.projectionField = (Core.Name "message")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 otherResolutionError :: Phantoms.TTerm String -> Phantoms.TTerm Errors.OtherResolutionError
@@ -455,19 +455,19 @@ resolutionErrorUnexpectedShape x =
 unDecodingError :: Phantoms.TTerm Errors.DecodingError -> Phantoms.TTerm String
 unDecodingError x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.errors.DecodingError")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.errors.DecodingError")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unOtherError :: Phantoms.TTerm Errors.OtherError -> Phantoms.TTerm String
 unOtherError x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.errors.OtherError")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.errors.OtherError")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unOtherResolutionError :: Phantoms.TTerm Errors.OtherResolutionError -> Phantoms.TTerm String
 unOtherResolutionError x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.errors.OtherResolutionError")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.errors.OtherResolutionError")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unexpectedShapeError :: Phantoms.TTerm String -> Phantoms.TTerm String -> Phantoms.TTerm Errors.UnexpectedShapeError
@@ -485,17 +485,17 @@ unexpectedShapeError expected actual =
 unexpectedShapeErrorActual :: Phantoms.TTerm Errors.UnexpectedShapeError -> Phantoms.TTerm String
 unexpectedShapeErrorActual x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.errors.UnexpectedShapeError"),
-        Core.projectionField = (Core.Name "actual")})))),
+        Core.projectionField = (Core.Name "actual")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unexpectedShapeErrorExpected :: Phantoms.TTerm Errors.UnexpectedShapeError -> Phantoms.TTerm String
 unexpectedShapeErrorExpected x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.errors.UnexpectedShapeError"),
-        Core.projectionField = (Core.Name "expected")})))),
+        Core.projectionField = (Core.Name "expected")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unexpectedShapeErrorWithActual :: Phantoms.TTerm Errors.UnexpectedShapeError -> Phantoms.TTerm String -> Phantoms.TTerm Errors.UnexpectedShapeError
@@ -506,9 +506,9 @@ unexpectedShapeErrorWithActual original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "expected"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.errors.UnexpectedShapeError"),
-              Core.projectionField = (Core.Name "expected")})))),
+              Core.projectionField = (Core.Name "expected")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "actual"),
@@ -525,9 +525,9 @@ unexpectedShapeErrorWithExpected original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "actual"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.errors.UnexpectedShapeError"),
-              Core.projectionField = (Core.Name "actual")})))),
+              Core.projectionField = (Core.Name "actual")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 unificationError :: Phantoms.TTerm Core.Type -> Phantoms.TTerm Core.Type -> Phantoms.TTerm String -> Phantoms.TTerm Errors.UnificationError
@@ -548,25 +548,25 @@ unificationError leftType rightType message =
 unificationErrorLeftType :: Phantoms.TTerm Errors.UnificationError -> Phantoms.TTerm Core.Type
 unificationErrorLeftType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.errors.UnificationError"),
-        Core.projectionField = (Core.Name "leftType")})))),
+        Core.projectionField = (Core.Name "leftType")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unificationErrorMessage :: Phantoms.TTerm Errors.UnificationError -> Phantoms.TTerm String
 unificationErrorMessage x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.errors.UnificationError"),
-        Core.projectionField = (Core.Name "message")})))),
+        Core.projectionField = (Core.Name "message")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unificationErrorRightType :: Phantoms.TTerm Errors.UnificationError -> Phantoms.TTerm Core.Type
 unificationErrorRightType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.errors.UnificationError"),
-        Core.projectionField = (Core.Name "rightType")})))),
+        Core.projectionField = (Core.Name "rightType")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unificationErrorWithLeftType :: Phantoms.TTerm Errors.UnificationError -> Phantoms.TTerm Core.Type -> Phantoms.TTerm Errors.UnificationError
@@ -580,16 +580,16 @@ unificationErrorWithLeftType original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "rightType"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.errors.UnificationError"),
-              Core.projectionField = (Core.Name "rightType")})))),
+              Core.projectionField = (Core.Name "rightType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "message"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.errors.UnificationError"),
-              Core.projectionField = (Core.Name "message")})))),
+              Core.projectionField = (Core.Name "message")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 unificationErrorWithMessage :: Phantoms.TTerm Errors.UnificationError -> Phantoms.TTerm String -> Phantoms.TTerm Errors.UnificationError
@@ -600,16 +600,16 @@ unificationErrorWithMessage original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "leftType"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.errors.UnificationError"),
-              Core.projectionField = (Core.Name "leftType")})))),
+              Core.projectionField = (Core.Name "leftType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "rightType"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.errors.UnificationError"),
-              Core.projectionField = (Core.Name "rightType")})))),
+              Core.projectionField = (Core.Name "rightType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "message"),
@@ -623,9 +623,9 @@ unificationErrorWithRightType original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "leftType"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.errors.UnificationError"),
-              Core.projectionField = (Core.Name "leftType")})))),
+              Core.projectionField = (Core.Name "leftType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "rightType"),
@@ -633,9 +633,9 @@ unificationErrorWithRightType original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "message"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.errors.UnificationError"),
-              Core.projectionField = (Core.Name "message")})))),
+              Core.projectionField = (Core.Name "message")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 unificationInferenceError :: Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm Errors.UnificationError -> Phantoms.TTerm Errors.UnificationInferenceError
@@ -653,17 +653,17 @@ unificationInferenceError path cause =
 unificationInferenceErrorCause :: Phantoms.TTerm Errors.UnificationInferenceError -> Phantoms.TTerm Errors.UnificationError
 unificationInferenceErrorCause x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.errors.UnificationInferenceError"),
-        Core.projectionField = (Core.Name "cause")})))),
+        Core.projectionField = (Core.Name "cause")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unificationInferenceErrorPath :: Phantoms.TTerm Errors.UnificationInferenceError -> Phantoms.TTerm Paths.SubtermPath
 unificationInferenceErrorPath x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.errors.UnificationInferenceError"),
-        Core.projectionField = (Core.Name "path")})))),
+        Core.projectionField = (Core.Name "path")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unificationInferenceErrorWithCause :: Phantoms.TTerm Errors.UnificationInferenceError -> Phantoms.TTerm Errors.UnificationError -> Phantoms.TTerm Errors.UnificationInferenceError
@@ -674,9 +674,9 @@ unificationInferenceErrorWithCause original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "path"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.errors.UnificationInferenceError"),
-              Core.projectionField = (Core.Name "path")})))),
+              Core.projectionField = (Core.Name "path")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "cause"),
@@ -693,7 +693,7 @@ unificationInferenceErrorWithPath original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "cause"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.errors.UnificationInferenceError"),
-              Core.projectionField = (Core.Name "cause")})))),
+              Core.projectionField = (Core.Name "cause")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))

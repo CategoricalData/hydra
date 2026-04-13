@@ -225,7 +225,7 @@ adaptDataGraph = define "adaptDataGraph" $
   right $ pair (var "adaptedGraph") (var "els1")
 
 -- | Rewrite callback for adapting lambda domains in a term.
--- Dispatches on Term variants: for TermFunction, adapts the lambda domain type;
+-- Dispatches on Term variants: for TermLambda, adapts the lambda domain type;
 -- for all other variants, returns the term unchanged.
 -- This is a top-level function (not inline) so the Python code generator can emit match statements.
 adaptLambdaDomains :: TTermDefinition (LanguageConstraints -> M.Map LiteralType LiteralType -> (Term -> Prelude.Either Error Term) -> Term -> Prelude.Either Error Term)
@@ -235,19 +235,16 @@ adaptLambdaDomains = define "adaptLambdaDomains" $
   "rewritten" <<~ var "recurse" @@ var "term" $
   cases _Term (var "rewritten")
     (Just $ right $ var "rewritten") [
-    _Term_function>>: "f" ~>
-      cases _Function (var "f")
-        (Just $ right $ Core.termFunction $ var "f") [
-        _Function_lambda>>: "l" ~>
-          "adaptedDomain" <<~ optCases (Core.lambdaDomain $ var "l")
-            (right nothing)
-            ("dom" ~>
-              "dom1" <<~ adaptType @@ var "constraints" @@ var "litmap" @@ var "dom" $
-              right $ just $ var "dom1") $
-          right $ Core.termFunction $ Core.functionLambda $ Core.lambda
-            (Core.lambdaParameter $ var "l")
-            (var "adaptedDomain")
-            (Core.lambdaBody $ var "l")]]
+    _Term_lambda>>: "l" ~>
+      "adaptedDomain" <<~ optCases (Core.lambdaDomain $ var "l")
+        (right nothing)
+        ("dom" ~>
+          "dom1" <<~ adaptType @@ var "constraints" @@ var "litmap" @@ var "dom" $
+          right $ just $ var "dom1") $
+      right $ Core.termLambda $ Core.lambda
+        (Core.lambdaParameter $ var "l")
+        (var "adaptedDomain")
+        (Core.lambdaBody $ var "l")]
 
 -- | Rewrite callback for adapting nested let binding TypeSchemes in a term.
 -- Dispatches on Term variants: for TermLet, adapts the binding TypeSchemes;
@@ -468,7 +465,7 @@ adaptTypeScheme = define "adaptTypeScheme" $
 pushTypeAppsInward :: TTermDefinition (Term -> Term)
 pushTypeAppsInward = define "pushTypeAppsInward" $
   doc ("Normalize a term by pushing TermTypeApplication inward past TermApplication and"
-    <> " TermFunction (Lambda). This corrects structures produced by poly-let hoisting and"
+    <> " TermLambda. This corrects structures produced by poly-let hoisting and"
     <> " eta expansion, where type applications from inference end up wrapping term"
     <> " applications or lambda abstractions instead of being directly on the polymorphic variable.") $
   "term" ~>
@@ -484,16 +481,13 @@ pushTypeAppsInward = define "pushTypeAppsInward" $
           (var "typ"))
         (Core.applicationArgument $ var "a")),
     -- TypeApp(Lambda(v, d, body), τ) → go(Lambda(v, d, TypeApp(body, τ)))
-    _Term_function>>: "f" ~> cases _Function (var "f")
-      (Just $ Core.termTypeApplication $ Core.typeApplicationTerm
-        (Core.termFunction $ var "f") (var "typ")) [
-      _Function_lambda>>: "l" ~> var "go" @@
-        (Core.termFunction $ Core.functionLambda $ Core.lambda
-          (Core.lambdaParameter $ var "l")
-          (Core.lambdaDomain $ var "l")
-          (Core.termTypeApplication $ Core.typeApplicationTerm
-            (Core.lambdaBody $ var "l")
-            (var "typ")))],
+    _Term_lambda>>: "l" ~> var "go" @@
+      (Core.termLambda $ Core.lambda
+        (Core.lambdaParameter $ var "l")
+        (Core.lambdaDomain $ var "l")
+        (Core.termTypeApplication $ Core.typeApplicationTerm
+          (Core.lambdaBody $ var "l")
+          (var "typ"))),
     -- TypeApp(Let(bindings, body), τ) → go(Let(bindings, TypeApp(body, τ)))
     _Term_let>>: "lt" ~> var "go" @@
       (Core.termLet $ Core.let_
@@ -503,19 +497,6 @@ pushTypeAppsInward = define "pushTypeAppsInward" $
           (var "typ")))]),
   "go">: ("t" ~>
     "forField" <~ ("fld" ~> Core.fieldWithTerm (var "fld") (var "go" @@ (Core.fieldTerm $ var "fld"))) $
-    "forElimination" <~ ("elm" ~> cases _Elimination (var "elm") Nothing [
-      _Elimination_record>>: "p" ~> Core.eliminationRecord (var "p"),
-      _Elimination_union>>: "cs" ~> Core.eliminationUnion $ Core.caseStatement
-        (Core.caseStatementTypeName $ var "cs")
-        (Maybes.map (var "go") (Core.caseStatementDefault $ var "cs"))
-        (Lists.map (var "forField") (Core.caseStatementCases $ var "cs")),
-      _Elimination_wrap>>: "name" ~> Core.eliminationWrap $ var "name"]) $
-    "forFunction" <~ ("fun" ~> cases _Function (var "fun") Nothing [
-      _Function_elimination>>: "elm" ~> Core.functionElimination $ var "forElimination" @@ var "elm",
-      _Function_lambda>>: "l" ~> Core.functionLambda $ Core.lambda
-        (Core.lambdaParameter $ var "l")
-        (Core.lambdaDomain $ var "l")
-        (var "go" @@ (Core.lambdaBody $ var "l"))]) $
     "forLet" <~ ("lt" ~>
       "mapBinding" <~ ("b" ~> Core.binding
         (Core.bindingName $ var "b")
@@ -534,11 +515,18 @@ pushTypeAppsInward = define "pushTypeAppsInward" $
       _Term_application>>: "a" ~> Core.termApplication $ Core.application
         (var "go" @@ (Core.applicationFunction $ var "a"))
         (var "go" @@ (Core.applicationArgument $ var "a")),
+      _Term_cases>>: "cs" ~> Core.termCases $ Core.caseStatement
+        (Core.caseStatementTypeName $ var "cs")
+        (Maybes.map (var "go") (Core.caseStatementDefault $ var "cs"))
+        (Lists.map (var "forField") (Core.caseStatementCases $ var "cs")),
       _Term_either>>: "e" ~> Core.termEither $ Eithers.either_
         ("l" ~> left $ var "go" @@ var "l")
         ("r" ~> right $ var "go" @@ var "r")
         (var "e"),
-      _Term_function>>: "fun" ~> Core.termFunction $ var "forFunction" @@ var "fun",
+      _Term_lambda>>: "l" ~> Core.termLambda $ Core.lambda
+        (Core.lambdaParameter $ var "l")
+        (Core.lambdaDomain $ var "l")
+        (var "go" @@ (Core.lambdaBody $ var "l")),
       _Term_let>>: "lt" ~> Core.termLet $ var "forLet" @@ var "lt",
       _Term_list>>: "els" ~> Core.termList $ Lists.map (var "go") (var "els"),
       _Term_literal>>: "v" ~> Core.termLiteral $ var "v",
@@ -547,6 +535,7 @@ pushTypeAppsInward = define "pushTypeAppsInward" $
       _Term_pair>>: "p" ~> Core.termPair $ pair
         (var "go" @@ (Pairs.first $ var "p"))
         (var "go" @@ (Pairs.second $ var "p")),
+      _Term_project>>: "p" ~> Core.termProject $ var "p",
       _Term_record>>: "r" ~> Core.termRecord $ Core.record
         (Core.recordTypeName $ var "r")
         (Lists.map (var "forField") (Core.recordFields $ var "r")),
@@ -561,6 +550,7 @@ pushTypeAppsInward = define "pushTypeAppsInward" $
         (Core.injectionTypeName $ var "i")
         (var "forField" @@ (Core.injectionField $ var "i")),
       _Term_unit>>: constant Core.termUnit,
+      _Term_unwrap>>: "n" ~> Core.termUnwrap $ var "n",
       _Term_variable>>: "v" ~> Core.termVariable $ var "v",
       _Term_wrap>>: "wt" ~> Core.termWrap $ Core.wrappedTerm
         (Core.wrappedTermTypeName $ var "wt")

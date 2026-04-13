@@ -60,21 +60,47 @@
                 "@key": "description",
                 "@value": {"literal": {"string": "Escape and quote a string for JSON output"}}}],
             "body": {
-              "function": {
-                "lambda": {
-                  "body": {
-                    "let": {
-                      "bindings": [
-                        {
-                          "name": "hexEscape",
-                          "term": {
-                            "function": {
-                              "lambda": {
+              "lambda": {
+                "body": {
+                  "let": {
+                    "bindings": [
+                      {
+                        "name": "hexEscape",
+                        "term": {
+                          "lambda": {
+                            "body": {
+                              "let": {
+                                "bindings": [
+                                  {
+                                    "name": "hi",
+                                    "term": {
+                                      "application": {
+                                        "argument": {
+                                          "application": {
+                                            "argument": {
+                                              "application": {
+                                                "argument": {"literal": {"string": "0123456789abcdef"}},
+                                                "function": {
+                                                  "application": {
+                                                    "argument": {
+                                                      "application": {
+                                                        "argument": {"literal": {"integer": {"int32": 16}}},
+                                                        "function": {
+                                                          "application": {
+                                                            "argument": {"variable": "c"},
+                                                            "function": {"variable": "hydra.lib.math.div"}}}}},
+                                                    "function": {"variable": "hydra.lib.strings.charAt"}}}}},
+                                            "function": {
+                                              "typeApplication": {
+                                                "body": {"variable": "hydra.lib.lists.pure"},
+                                                "type": {"literal": {"integer": {"int32": {}}}}}}}},
+                                        "function": {"variable": "hydra.lib.strings.fromList"}}},
+                                    "type": {"type": {"literal": {"string": {}}}, "variables": []}}],
                                 "body": {
                                   "let": {
                                     "bindings": [
                                       {
-                                        "name": "hi",
+                                        "name": "lo",
                                         "term": {
                                           "application": {
                                             "argument": {
@@ -90,7 +116,7 @@
                                                             "function": {
                                                               "application": {
                                                                 "argument": {"variable": "c"},
-                                                                "function": {"variable": "hydra.lib.math.div"}}}}},
+                                                                "function": {"variable": "hydra.lib.math.mod"}}}}},
                                                         "function": {"variable": "hydra.lib.strings.charAt"}}}}},
                                                 "function": {
                                                   "typeApplication": {
@@ -99,63 +125,36 @@
                                             "function": {"variable": "hydra.lib.strings.fromList"}}},
                                         "type": {"type": {"literal": {"string": {}}}, "variables": []}}],
                                     "body": {
-                                      "let": {
-                                        "bindings": [
-                                          {
-                                            "name": "lo",
-                                            "term": {
-                                              "application": {
-                                                "argument": {
-                                                  "application": {
-                                                    "argument": {
-                                                      "application": {
-                                                        "argument": {"literal": {"string": "0123456789abcdef"}},
-                                                        "function": {
-                                                          "application": {
-                                                            "argument": {
-                                                              "application": {
-                                                                "argument": {"literal": {"integer": {"int32": 16}}},
-                                                                "function": {
-                                                                  "application": {
-                                                                    "argument": {"variable": "c"},
-                                                                    "function": {"variable": "hydra.lib.math.mod"}}}}},
-                                                            "function": {"variable": "hydra.lib.strings.charAt"}}}}},
-                                                    "function": {
-                                                      "typeApplication": {
-                                                        "body": {"variable": "hydra.lib.lists.pure"},
-                                                        "type": {"literal": {"integer": {"int32": {}}}}}}}},
-                                                "function": {"variable": "hydra.lib.strings.fromList"}}},
-                                            "type": {"type": {"literal": {"string": {}}}, "variables": []}}],
-                                        "body": {
+                                      "application": {
+                                        "argument": {"variable": "lo"},
+                                        "function": {
                                           "application": {
-                                            "argument": {"variable": "lo"},
-                                            "function": {
+                                            "argument": {
                                               "application": {
-                                                "argument": {
+                                                "argument": {"variable": "hi"},
+                                                "function": {
                                                   "application": {
-                                                    "argument": {"variable": "hi"},
-                                                    "function": {
-                                                      "application": {
-                                                        "argument": {"literal": {"string": "\\u00"}},
-                                                        "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                                "function": {"variable": "hydra.lib.strings.cat2"}}}}}}}}},
-                                "domain": {"literal": {"integer": {"int32": {}}}},
-                                "parameter": "c"}}},
+                                                    "argument": {"literal": {"string": "\\u00"}},
+                                                    "function": {"variable": "hydra.lib.strings.cat2"}}}}},
+                                            "function": {"variable": "hydra.lib.strings.cat2"}}}}}}}}},
+                            "domain": {"literal": {"integer": {"int32": {}}}},
+                            "parameter": "c"}},
+                        "type": {
                           "type": {
-                            "type": {
-                              "function": {
-                                "codomain": {"literal": {"string": {}}},
-                                "domain": {"literal": {"integer": {"int32": {}}}}}},
-                            "variables": []}}],
-                      "body": {
-                        "let": {
-                          "bindings": [
-                            {
-                              "name": "escape",
-                              "term": {
-                                "function": {
-                                  "lambda": {
-                                    "body": {
+                            "function": {
+                              "codomain": {"literal": {"string": {}}},
+                              "domain": {"literal": {"integer": {"int32": {}}}}}},
+                          "variables": []}}],
+                    "body": {
+                      "let": {
+                        "bindings": [
+                          {
+                            "name": "escape",
+                            "term": {
+                              "lambda": {
+                                "body": {
+                                  "application": {
+                                    "argument": {
                                       "application": {
                                         "argument": {
                                           "application": {
@@ -173,48 +172,27 @@
                                                                   "application": {
                                                                     "argument": {
                                                                       "application": {
-                                                                        "argument": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "c"},
-                                                                            "function": {
-                                                                              "typeApplication": {
-                                                                                "body": {"variable": "hydra.lib.lists.pure"},
-                                                                                "type": {"literal": {"integer": {"int32": {}}}}}}}},
-                                                                        "function": {"variable": "hydra.lib.strings.fromList"}}},
-                                                                    "function": {
-                                                                      "application": {
-                                                                        "argument": {
-                                                                          "application": {"argument": {"variable": "c"}, "function": {"variable": "hexEscape"}}},
+                                                                        "argument": {"variable": "c"},
                                                                         "function": {
-                                                                          "application": {
-                                                                            "argument": {
-                                                                              "application": {
-                                                                                "argument": {"literal": {"integer": {"int32": 32}}},
-                                                                                "function": {
-                                                                                  "application": {
-                                                                                    "argument": {"variable": "c"},
-                                                                                    "function": {
-                                                                                      "typeApplication": {
-                                                                                        "body": {"variable": "hydra.lib.equality.lt"},
-                                                                                        "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
-                                                                            "function": {
-                                                                              "typeApplication": {
-                                                                                "body": {"variable": "hydra.lib.logic.ifElse"},
-                                                                                "type": {"literal": {"string": {}}}}}}}}}}},
+                                                                          "typeApplication": {
+                                                                            "body": {"variable": "hydra.lib.lists.pure"},
+                                                                            "type": {"literal": {"integer": {"int32": {}}}}}}}},
+                                                                    "function": {"variable": "hydra.lib.strings.fromList"}}},
                                                                 "function": {
                                                                   "application": {
-                                                                    "argument": {"literal": {"string": "\\t"}},
+                                                                    "argument": {
+                                                                      "application": {"argument": {"variable": "c"}, "function": {"variable": "hexEscape"}}},
                                                                     "function": {
                                                                       "application": {
                                                                         "argument": {
                                                                           "application": {
-                                                                            "argument": {"literal": {"integer": {"int32": 9}}},
+                                                                            "argument": {"literal": {"integer": {"int32": 32}}},
                                                                             "function": {
                                                                               "application": {
                                                                                 "argument": {"variable": "c"},
                                                                                 "function": {
                                                                                   "typeApplication": {
-                                                                                    "body": {"variable": "hydra.lib.equality.equal"},
+                                                                                    "body": {"variable": "hydra.lib.equality.lt"},
                                                                                     "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
                                                                         "function": {
                                                                           "typeApplication": {
@@ -222,12 +200,12 @@
                                                                             "type": {"literal": {"string": {}}}}}}}}}}},
                                                             "function": {
                                                               "application": {
-                                                                "argument": {"literal": {"string": "\\r"}},
+                                                                "argument": {"literal": {"string": "\\t"}},
                                                                 "function": {
                                                                   "application": {
                                                                     "argument": {
                                                                       "application": {
-                                                                        "argument": {"literal": {"integer": {"int32": 13}}},
+                                                                        "argument": {"literal": {"integer": {"int32": 9}}},
                                                                         "function": {
                                                                           "application": {
                                                                             "argument": {"variable": "c"},
@@ -241,12 +219,12 @@
                                                                         "type": {"literal": {"string": {}}}}}}}}}}},
                                                         "function": {
                                                           "application": {
-                                                            "argument": {"literal": {"string": "\\n"}},
+                                                            "argument": {"literal": {"string": "\\r"}},
                                                             "function": {
                                                               "application": {
                                                                 "argument": {
                                                                   "application": {
-                                                                    "argument": {"literal": {"integer": {"int32": 10}}},
+                                                                    "argument": {"literal": {"integer": {"int32": 13}}},
                                                                     "function": {
                                                                       "application": {
                                                                         "argument": {"variable": "c"},
@@ -260,12 +238,12 @@
                                                                     "type": {"literal": {"string": {}}}}}}}}}}},
                                                     "function": {
                                                       "application": {
-                                                        "argument": {"literal": {"string": "\\f"}},
+                                                        "argument": {"literal": {"string": "\\n"}},
                                                         "function": {
                                                           "application": {
                                                             "argument": {
                                                               "application": {
-                                                                "argument": {"literal": {"integer": {"int32": 12}}},
+                                                                "argument": {"literal": {"integer": {"int32": 10}}},
                                                                 "function": {
                                                                   "application": {
                                                                     "argument": {"variable": "c"},
@@ -279,12 +257,12 @@
                                                                 "type": {"literal": {"string": {}}}}}}}}}}},
                                                 "function": {
                                                   "application": {
-                                                    "argument": {"literal": {"string": "\\b"}},
+                                                    "argument": {"literal": {"string": "\\f"}},
                                                     "function": {
                                                       "application": {
                                                         "argument": {
                                                           "application": {
-                                                            "argument": {"literal": {"integer": {"int32": 8}}},
+                                                            "argument": {"literal": {"integer": {"int32": 12}}},
                                                             "function": {
                                                               "application": {
                                                                 "argument": {"variable": "c"},
@@ -298,12 +276,12 @@
                                                             "type": {"literal": {"string": {}}}}}}}}}}},
                                             "function": {
                                               "application": {
-                                                "argument": {"literal": {"string": "\\\\"}},
+                                                "argument": {"literal": {"string": "\\b"}},
                                                 "function": {
                                                   "application": {
                                                     "argument": {
                                                       "application": {
-                                                        "argument": {"literal": {"integer": {"int32": 92}}},
+                                                        "argument": {"literal": {"integer": {"int32": 8}}},
                                                         "function": {
                                                           "application": {
                                                             "argument": {"variable": "c"},
@@ -317,12 +295,12 @@
                                                         "type": {"literal": {"string": {}}}}}}}}}}},
                                         "function": {
                                           "application": {
-                                            "argument": {"literal": {"string": "\\\""}},
+                                            "argument": {"literal": {"string": "\\\\"}},
                                             "function": {
                                               "application": {
                                                 "argument": {
                                                   "application": {
-                                                    "argument": {"literal": {"integer": {"int32": 34}}},
+                                                    "argument": {"literal": {"integer": {"int32": 92}}},
                                                     "function": {
                                                       "application": {
                                                         "argument": {"variable": "c"},
@@ -334,54 +312,73 @@
                                                   "typeApplication": {
                                                     "body": {"variable": "hydra.lib.logic.ifElse"},
                                                     "type": {"literal": {"string": {}}}}}}}}}}},
-                                    "domain": {"literal": {"integer": {"int32": {}}}},
-                                    "parameter": "c"}}},
+                                    "function": {
+                                      "application": {
+                                        "argument": {"literal": {"string": "\\\""}},
+                                        "function": {
+                                          "application": {
+                                            "argument": {
+                                              "application": {
+                                                "argument": {"literal": {"integer": {"int32": 34}}},
+                                                "function": {
+                                                  "application": {
+                                                    "argument": {"variable": "c"},
+                                                    "function": {
+                                                      "typeApplication": {
+                                                        "body": {"variable": "hydra.lib.equality.equal"},
+                                                        "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
+                                            "function": {
+                                              "typeApplication": {
+                                                "body": {"variable": "hydra.lib.logic.ifElse"},
+                                                "type": {"literal": {"string": {}}}}}}}}}}},
+                                "domain": {"literal": {"integer": {"int32": {}}}},
+                                "parameter": "c"}},
+                            "type": {
                               "type": {
-                                "type": {
-                                  "function": {
-                                    "codomain": {"literal": {"string": {}}},
-                                    "domain": {"literal": {"integer": {"int32": {}}}}}},
-                                "variables": []}}],
-                          "body": {
-                            "let": {
-                              "bindings": [
-                                {
-                                  "name": "escaped",
-                                  "term": {
-                                    "application": {
-                                      "argument": {
-                                        "application": {
-                                          "argument": {
-                                            "application": {
-                                              "argument": {"variable": "s"},
-                                              "function": {"variable": "hydra.lib.strings.toList"}}},
-                                          "function": {
-                                            "application": {
-                                              "argument": {"variable": "escape"},
-                                              "function": {
-                                                "typeApplication": {
-                                                  "body": {
-                                                    "typeApplication": {
-                                                      "body": {"variable": "hydra.lib.lists.map"},
-                                                      "type": {"literal": {"integer": {"int32": {}}}}}},
-                                                  "type": {"literal": {"string": {}}}}}}}}},
-                                      "function": {"variable": "hydra.lib.strings.cat"}}},
-                                  "type": {"type": {"literal": {"string": {}}}, "variables": []}}],
-                              "body": {
-                                "application": {
-                                  "argument": {"literal": {"string": "\""}},
-                                  "function": {
-                                    "application": {
-                                      "argument": {
-                                        "application": {
-                                          "argument": {"variable": "escaped"},
-                                          "function": {
-                                            "application": {
-                                              "argument": {"literal": {"string": "\""}},
-                                              "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                      "function": {"variable": "hydra.lib.strings.cat2"}}}}}}}}}}},
-                  "domain": {"literal": {"string": {}}},
-                  "parameter": "s"}}}}},
+                                "function": {
+                                  "codomain": {"literal": {"string": {}}},
+                                  "domain": {"literal": {"integer": {"int32": {}}}}}},
+                              "variables": []}}],
+                        "body": {
+                          "let": {
+                            "bindings": [
+                              {
+                                "name": "escaped",
+                                "term": {
+                                  "application": {
+                                    "argument": {
+                                      "application": {
+                                        "argument": {
+                                          "application": {
+                                            "argument": {"variable": "s"},
+                                            "function": {"variable": "hydra.lib.strings.toList"}}},
+                                        "function": {
+                                          "application": {
+                                            "argument": {"variable": "escape"},
+                                            "function": {
+                                              "typeApplication": {
+                                                "body": {
+                                                  "typeApplication": {
+                                                    "body": {"variable": "hydra.lib.lists.map"},
+                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                "type": {"literal": {"string": {}}}}}}}}},
+                                    "function": {"variable": "hydra.lib.strings.cat"}}},
+                                "type": {"type": {"literal": {"string": {}}}, "variables": []}}],
+                            "body": {
+                              "application": {
+                                "argument": {"literal": {"string": "\""}},
+                                "function": {
+                                  "application": {
+                                    "argument": {
+                                      "application": {
+                                        "argument": {"variable": "escaped"},
+                                        "function": {
+                                          "application": {
+                                            "argument": {"literal": {"string": "\""}},
+                                            "function": {"variable": "hydra.lib.strings.cat2"}}}}},
+                                    "function": {"variable": "hydra.lib.strings.cat2"}}}}}}}}}}},
+                "domain": {"literal": {"string": {}}},
+                "parameter": "s"}}}},
         "type": {
           "type": {
             "function": {
@@ -399,64 +396,63 @@
                 "@value": {
                   "literal": {"string": "Convert a key-value pair to an AST expression"}}}],
             "body": {
-              "function": {
-                "lambda": {
-                  "body": {
-                    "let": {
-                      "bindings": [
-                        {
-                          "name": "key",
-                          "term": {
-                            "application": {
-                              "argument": {"variable": "pair"},
-                              "function": {
-                                "typeApplication": {
-                                  "body": {
-                                    "typeApplication": {
-                                      "body": {"variable": "hydra.lib.pairs.first"},
-                                      "type": {"literal": {"string": {}}}}},
-                                  "type": {"variable": "hydra.json.model.Value"}}}}},
-                          "type": {"type": {"literal": {"string": {}}}, "variables": []}}],
-                      "body": {
-                        "let": {
-                          "bindings": [
-                            {
-                              "name": "value",
-                              "term": {
-                                "application": {
-                                  "argument": {"variable": "pair"},
-                                  "function": {
-                                    "typeApplication": {
-                                      "body": {
-                                        "typeApplication": {
-                                          "body": {"variable": "hydra.lib.pairs.second"},
-                                          "type": {"literal": {"string": {}}}}},
-                                      "type": {"variable": "hydra.json.model.Value"}}}}},
-                              "type": {"type": {"variable": "hydra.json.model.Value"}, "variables": []}}],
-                          "body": {
-                            "application": {
-                              "argument": {
-                                "application": {
-                                  "argument": {"variable": "value"},
-                                  "function": {"variable": "hydra.json.writer.valueToExpr"}}},
-                              "function": {
-                                "application": {
-                                  "argument": {
-                                    "application": {
-                                      "argument": {
-                                        "application": {
-                                          "argument": {"variable": "key"},
-                                          "function": {"variable": "hydra.json.writer.jsonString"}}},
-                                      "function": {"variable": "hydra.serialization.cst"}}},
-                                  "function": {
-                                    "application": {
-                                      "argument": {"variable": "hydra.json.writer.colonOp"},
-                                      "function": {"variable": "hydra.serialization.ifx"}}}}}}}}}}},
-                  "domain": {
-                    "pair": {
-                      "first": {"literal": {"string": {}}},
-                      "second": {"variable": "hydra.json.model.Value"}}},
-                  "parameter": "pair"}}}}},
+              "lambda": {
+                "body": {
+                  "let": {
+                    "bindings": [
+                      {
+                        "name": "key",
+                        "term": {
+                          "application": {
+                            "argument": {"variable": "pair"},
+                            "function": {
+                              "typeApplication": {
+                                "body": {
+                                  "typeApplication": {
+                                    "body": {"variable": "hydra.lib.pairs.first"},
+                                    "type": {"literal": {"string": {}}}}},
+                                "type": {"variable": "hydra.json.model.Value"}}}}},
+                        "type": {"type": {"literal": {"string": {}}}, "variables": []}}],
+                    "body": {
+                      "let": {
+                        "bindings": [
+                          {
+                            "name": "value",
+                            "term": {
+                              "application": {
+                                "argument": {"variable": "pair"},
+                                "function": {
+                                  "typeApplication": {
+                                    "body": {
+                                      "typeApplication": {
+                                        "body": {"variable": "hydra.lib.pairs.second"},
+                                        "type": {"literal": {"string": {}}}}},
+                                    "type": {"variable": "hydra.json.model.Value"}}}}},
+                            "type": {"type": {"variable": "hydra.json.model.Value"}, "variables": []}}],
+                        "body": {
+                          "application": {
+                            "argument": {
+                              "application": {
+                                "argument": {"variable": "value"},
+                                "function": {"variable": "hydra.json.writer.valueToExpr"}}},
+                            "function": {
+                              "application": {
+                                "argument": {
+                                  "application": {
+                                    "argument": {
+                                      "application": {
+                                        "argument": {"variable": "key"},
+                                        "function": {"variable": "hydra.json.writer.jsonString"}}},
+                                    "function": {"variable": "hydra.serialization.cst"}}},
+                                "function": {
+                                  "application": {
+                                    "argument": {"variable": "hydra.json.writer.colonOp"},
+                                    "function": {"variable": "hydra.serialization.ifx"}}}}}}}}}}},
+                "domain": {
+                  "pair": {
+                    "first": {"literal": {"string": {}}},
+                    "second": {"variable": "hydra.json.model.Value"}}},
+                "parameter": "pair"}}}},
         "type": {
           "type": {
             "function": {
@@ -476,17 +472,16 @@
                 "@key": "description",
                 "@value": {"literal": {"string": "Serialize a JSON value to a string"}}}],
             "body": {
-              "function": {
-                "lambda": {
-                  "body": {
-                    "application": {
-                      "argument": {
-                        "application": {
-                          "argument": {"variable": "value"},
-                          "function": {"variable": "hydra.json.writer.valueToExpr"}}},
-                      "function": {"variable": "hydra.serialization.printExpr"}}},
-                  "domain": {"variable": "hydra.json.model.Value"},
-                  "parameter": "value"}}}}},
+              "lambda": {
+                "body": {
+                  "application": {
+                    "argument": {
+                      "application": {
+                        "argument": {"variable": "value"},
+                        "function": {"variable": "hydra.json.writer.valueToExpr"}}},
+                    "function": {"variable": "hydra.serialization.printExpr"}}},
+                "domain": {"variable": "hydra.json.model.Value"},
+                "parameter": "value"}}}},
         "type": {
           "type": {
             "function": {
@@ -505,204 +500,195 @@
                   "literal": {
                     "string": "Convert a JSON value to an AST expression for serialization"}}}],
             "body": {
-              "function": {
-                "lambda": {
-                  "body": {
-                    "application": {
-                      "argument": {"variable": "value"},
-                      "function": {
-                        "function": {
-                          "elimination": {
-                            "union": {
-                              "cases": [
-                                {
-                                  "name": "array",
-                                  "term": {
-                                    "function": {
-                                      "lambda": {
-                                        "body": {
+              "lambda": {
+                "body": {
+                  "application": {
+                    "argument": {"variable": "value"},
+                    "function": {
+                      "cases": {
+                        "cases": [
+                          {
+                            "name": "array",
+                            "term": {
+                              "lambda": {
+                                "body": {
+                                  "application": {
+                                    "argument": {
+                                      "application": {
+                                        "argument": {"variable": "arr"},
+                                        "function": {
                                           "application": {
-                                            "argument": {
-                                              "application": {
-                                                "argument": {"variable": "arr"},
-                                                "function": {
-                                                  "application": {
-                                                    "argument": {"variable": "hydra.json.writer.valueToExpr"},
-                                                    "function": {
-                                                      "typeApplication": {
-                                                        "body": {
-                                                          "typeApplication": {
-                                                            "body": {"variable": "hydra.lib.lists.map"},
-                                                            "type": {"variable": "hydra.json.model.Value"}}},
-                                                        "type": {"variable": "hydra.ast.Expr"}}}}}}},
-                                            "function": {"variable": "hydra.serialization.bracketListAdaptive"}}},
-                                        "domain": {"list": {"variable": "hydra.json.model.Value"}},
-                                        "parameter": "arr"}}}},
-                                {
-                                  "name": "boolean",
-                                  "term": {
-                                    "function": {
-                                      "lambda": {
-                                        "body": {
-                                          "application": {
-                                            "argument": {
-                                              "application": {
-                                                "argument": {"literal": {"string": "false"}},
-                                                "function": {
-                                                  "application": {
-                                                    "argument": {"literal": {"string": "true"}},
-                                                    "function": {
-                                                      "application": {
-                                                        "argument": {"variable": "b"},
-                                                        "function": {
-                                                          "typeApplication": {
-                                                            "body": {"variable": "hydra.lib.logic.ifElse"},
-                                                            "type": {"literal": {"string": {}}}}}}}}}}},
-                                            "function": {"variable": "hydra.serialization.cst"}}},
-                                        "domain": {"literal": {"boolean": {}}},
-                                        "parameter": "b"}}}},
-                                {
-                                  "name": "null",
-                                  "term": {
-                                    "function": {
-                                      "lambda": {
-                                        "body": {
-                                          "application": {
-                                            "argument": {"literal": {"string": "null"}},
-                                            "function": {"variable": "hydra.serialization.cst"}}},
-                                        "domain": {"unit": {}},
-                                        "parameter": "_"}}}},
-                                {
-                                  "name": "number",
-                                  "term": {
-                                    "function": {
-                                      "lambda": {
-                                        "body": {
-                                          "let": {
-                                            "bindings": [
-                                              {
-                                                "name": "rounded",
-                                                "term": {
-                                                  "application": {
-                                                    "argument": {"variable": "n"},
-                                                    "function": {"variable": "hydra.lib.literals.bigfloatToBigint"}}},
-                                                "type": {"type": {"literal": {"integer": {"bigint": {}}}}, "variables": []}}],
-                                            "body": {
-                                              "let": {
-                                                "bindings": [
-                                                  {
-                                                    "name": "shown",
-                                                    "term": {
-                                                      "application": {
-                                                        "argument": {"variable": "n"},
-                                                        "function": {"variable": "hydra.lib.literals.showBigfloat"}}},
-                                                    "type": {"type": {"literal": {"string": {}}}, "variables": []}}],
+                                            "argument": {"variable": "hydra.json.writer.valueToExpr"},
+                                            "function": {
+                                              "typeApplication": {
                                                 "body": {
+                                                  "typeApplication": {
+                                                    "body": {"variable": "hydra.lib.lists.map"},
+                                                    "type": {"variable": "hydra.json.model.Value"}}},
+                                                "type": {"variable": "hydra.ast.Expr"}}}}}}},
+                                    "function": {"variable": "hydra.serialization.bracketListAdaptive"}}},
+                                "domain": {"list": {"variable": "hydra.json.model.Value"}},
+                                "parameter": "arr"}}},
+                          {
+                            "name": "boolean",
+                            "term": {
+                              "lambda": {
+                                "body": {
+                                  "application": {
+                                    "argument": {
+                                      "application": {
+                                        "argument": {"literal": {"string": "false"}},
+                                        "function": {
+                                          "application": {
+                                            "argument": {"literal": {"string": "true"}},
+                                            "function": {
+                                              "application": {
+                                                "argument": {"variable": "b"},
+                                                "function": {
+                                                  "typeApplication": {
+                                                    "body": {"variable": "hydra.lib.logic.ifElse"},
+                                                    "type": {"literal": {"string": {}}}}}}}}}}},
+                                    "function": {"variable": "hydra.serialization.cst"}}},
+                                "domain": {"literal": {"boolean": {}}},
+                                "parameter": "b"}}},
+                          {
+                            "name": "null",
+                            "term": {
+                              "lambda": {
+                                "body": {
+                                  "application": {
+                                    "argument": {"literal": {"string": "null"}},
+                                    "function": {"variable": "hydra.serialization.cst"}}},
+                                "domain": {"unit": {}},
+                                "parameter": "_"}}},
+                          {
+                            "name": "number",
+                            "term": {
+                              "lambda": {
+                                "body": {
+                                  "let": {
+                                    "bindings": [
+                                      {
+                                        "name": "rounded",
+                                        "term": {
+                                          "application": {
+                                            "argument": {"variable": "n"},
+                                            "function": {"variable": "hydra.lib.literals.bigfloatToBigint"}}},
+                                        "type": {"type": {"literal": {"integer": {"bigint": {}}}}, "variables": []}}],
+                                    "body": {
+                                      "let": {
+                                        "bindings": [
+                                          {
+                                            "name": "shown",
+                                            "term": {
+                                              "application": {
+                                                "argument": {"variable": "n"},
+                                                "function": {"variable": "hydra.lib.literals.showBigfloat"}}},
+                                            "type": {"type": {"literal": {"string": {}}}, "variables": []}}],
+                                        "body": {
+                                          "application": {
+                                            "argument": {
+                                              "application": {
+                                                "argument": {"variable": "shown"},
+                                                "function": {
                                                   "application": {
                                                     "argument": {
                                                       "application": {
-                                                        "argument": {"variable": "shown"},
-                                                        "function": {
+                                                        "argument": {"variable": "rounded"},
+                                                        "function": {"variable": "hydra.lib.literals.showBigint"}}},
+                                                    "function": {
+                                                      "application": {
+                                                        "argument": {
                                                           "application": {
                                                             "argument": {
                                                               "application": {
-                                                                "argument": {"variable": "rounded"},
-                                                                "function": {"variable": "hydra.lib.literals.showBigint"}}},
+                                                                "argument": {
+                                                                  "application": {
+                                                                    "argument": {"literal": {"string": "-0.0"}},
+                                                                    "function": {
+                                                                      "application": {
+                                                                        "argument": {"variable": "shown"},
+                                                                        "function": {
+                                                                          "typeApplication": {
+                                                                            "body": {"variable": "hydra.lib.equality.equal"},
+                                                                            "type": {"literal": {"string": {}}}}}}}}},
+                                                                "function": {"variable": "hydra.lib.logic.not"}}},
                                                             "function": {
                                                               "application": {
                                                                 "argument": {
                                                                   "application": {
                                                                     "argument": {
                                                                       "application": {
-                                                                        "argument": {
-                                                                          "application": {
-                                                                            "argument": {"literal": {"string": "-0.0"}},
-                                                                            "function": {
-                                                                              "application": {
-                                                                                "argument": {"variable": "shown"},
-                                                                                "function": {
-                                                                                  "typeApplication": {
-                                                                                    "body": {"variable": "hydra.lib.equality.equal"},
-                                                                                    "type": {"literal": {"string": {}}}}}}}}},
-                                                                        "function": {"variable": "hydra.lib.logic.not"}}},
+                                                                        "argument": {"variable": "rounded"},
+                                                                        "function": {"variable": "hydra.lib.literals.bigintToBigfloat"}}},
                                                                     "function": {
                                                                       "application": {
-                                                                        "argument": {
-                                                                          "application": {
-                                                                            "argument": {
-                                                                              "application": {
-                                                                                "argument": {"variable": "rounded"},
-                                                                                "function": {"variable": "hydra.lib.literals.bigintToBigfloat"}}},
-                                                                            "function": {
-                                                                              "application": {
-                                                                                "argument": {"variable": "n"},
-                                                                                "function": {
-                                                                                  "typeApplication": {
-                                                                                    "body": {"variable": "hydra.lib.equality.equal"},
-                                                                                    "type": {"literal": {"float": {"bigfloat": {}}}}}}}}}},
-                                                                        "function": {"variable": "hydra.lib.logic.and"}}}}},
-                                                                "function": {
-                                                                  "typeApplication": {
-                                                                    "body": {"variable": "hydra.lib.logic.ifElse"},
-                                                                    "type": {"literal": {"string": {}}}}}}}}}}},
-                                                    "function": {"variable": "hydra.serialization.cst"}}}}}}},
-                                        "domain": {"literal": {"float": {"bigfloat": {}}}},
-                                        "parameter": "n"}}}},
-                                {
-                                  "name": "object",
-                                  "term": {
-                                    "function": {
-                                      "lambda": {
-                                        "body": {
-                                          "application": {
-                                            "argument": {
-                                              "application": {
-                                                "argument": {
-                                                  "application": {
-                                                    "argument": {"variable": "obj"},
-                                                    "function": {
-                                                      "typeApplication": {
-                                                        "body": {
+                                                                        "argument": {"variable": "n"},
+                                                                        "function": {
+                                                                          "typeApplication": {
+                                                                            "body": {"variable": "hydra.lib.equality.equal"},
+                                                                            "type": {"literal": {"float": {"bigfloat": {}}}}}}}}}},
+                                                                "function": {"variable": "hydra.lib.logic.and"}}}}},
+                                                        "function": {
                                                           "typeApplication": {
-                                                            "body": {"variable": "hydra.lib.maps.toList"},
-                                                            "type": {"literal": {"string": {}}}}},
-                                                        "type": {"variable": "hydra.json.model.Value"}}}}},
-                                                "function": {
-                                                  "application": {
-                                                    "argument": {"variable": "hydra.json.writer.keyValueToExpr"},
-                                                    "function": {
-                                                      "typeApplication": {
-                                                        "body": {
-                                                          "typeApplication": {
-                                                            "body": {"variable": "hydra.lib.lists.map"},
-                                                            "type": {
-                                                              "pair": {
-                                                                "first": {"literal": {"string": {}}},
-                                                                "second": {"variable": "hydra.json.model.Value"}}}}},
-                                                        "type": {"variable": "hydra.ast.Expr"}}}}}}},
-                                            "function": {"variable": "hydra.serialization.bracesListAdaptive"}}},
-                                        "domain": {
-                                          "map": {
-                                            "keys": {"literal": {"string": {}}},
-                                            "values": {"variable": "hydra.json.model.Value"}}},
-                                        "parameter": "obj"}}}},
-                                {
-                                  "name": "string",
-                                  "term": {
-                                    "function": {
-                                      "lambda": {
-                                        "body": {
+                                                            "body": {"variable": "hydra.lib.logic.ifElse"},
+                                                            "type": {"literal": {"string": {}}}}}}}}}}},
+                                            "function": {"variable": "hydra.serialization.cst"}}}}}}},
+                                "domain": {"literal": {"float": {"bigfloat": {}}}},
+                                "parameter": "n"}}},
+                          {
+                            "name": "object",
+                            "term": {
+                              "lambda": {
+                                "body": {
+                                  "application": {
+                                    "argument": {
+                                      "application": {
+                                        "argument": {
                                           "application": {
-                                            "argument": {
-                                              "application": {
-                                                "argument": {"variable": "s"},
-                                                "function": {"variable": "hydra.json.writer.jsonString"}}},
-                                            "function": {"variable": "hydra.serialization.cst"}}},
-                                        "domain": {"literal": {"string": {}}},
-                                        "parameter": "s"}}}}],
-                              "typeName": "hydra.json.model.Value"}}}}}},
-                  "domain": {"variable": "hydra.json.model.Value"},
-                  "parameter": "value"}}}}},
+                                            "argument": {"variable": "obj"},
+                                            "function": {
+                                              "typeApplication": {
+                                                "body": {
+                                                  "typeApplication": {
+                                                    "body": {"variable": "hydra.lib.maps.toList"},
+                                                    "type": {"literal": {"string": {}}}}},
+                                                "type": {"variable": "hydra.json.model.Value"}}}}},
+                                        "function": {
+                                          "application": {
+                                            "argument": {"variable": "hydra.json.writer.keyValueToExpr"},
+                                            "function": {
+                                              "typeApplication": {
+                                                "body": {
+                                                  "typeApplication": {
+                                                    "body": {"variable": "hydra.lib.lists.map"},
+                                                    "type": {
+                                                      "pair": {
+                                                        "first": {"literal": {"string": {}}},
+                                                        "second": {"variable": "hydra.json.model.Value"}}}}},
+                                                "type": {"variable": "hydra.ast.Expr"}}}}}}},
+                                    "function": {"variable": "hydra.serialization.bracesListAdaptive"}}},
+                                "domain": {
+                                  "map": {
+                                    "keys": {"literal": {"string": {}}},
+                                    "values": {"variable": "hydra.json.model.Value"}}},
+                                "parameter": "obj"}}},
+                          {
+                            "name": "string",
+                            "term": {
+                              "lambda": {
+                                "body": {
+                                  "application": {
+                                    "argument": {
+                                      "application": {
+                                        "argument": {"variable": "s"},
+                                        "function": {"variable": "hydra.json.writer.jsonString"}}},
+                                    "function": {"variable": "hydra.serialization.cst"}}},
+                                "domain": {"literal": {"string": {}}},
+                                "parameter": "s"}}}],
+                        "typeName": "hydra.json.model.Value"}}}},
+                "domain": {"variable": "hydra.json.model.Value"},
+                "parameter": "value"}}}},
         "type": {
           "type": {
             "function": {

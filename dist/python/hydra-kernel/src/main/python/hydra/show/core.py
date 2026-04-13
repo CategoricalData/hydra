@@ -274,6 +274,13 @@ def literal(l: hydra.core.Literal) -> str:
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
+def projection(proj: hydra.core.Projection) -> str:
+    r"""Show a projection as a string."""
+
+    tname = proj.type_name.value
+    fname = proj.field.value
+    return hydra.lib.strings.cat(("project(", tname, "){", fname, "}"))
+
 def type_scheme(ts: hydra.core.TypeScheme) -> str:
     r"""Show a type scheme as a string."""
 
@@ -304,32 +311,19 @@ def binding(el: hydra.core.Binding) -> str:
         return hydra.lib.maybes.maybe((lambda : ""), (lambda ts: hydra.lib.strings.cat((":(", type_scheme(ts), ")"))), el.type)
     return hydra.lib.strings.cat((name, type_str(), " = ", term(t)))
 
-def elimination(elm: hydra.core.Elimination) -> str:
-    r"""Show an elimination as a string."""
+def case_statement(cs: hydra.core.CaseStatement) -> str:
+    r"""Show a case statement as a string."""
 
-    match elm:
-        case hydra.core.EliminationRecord(value=proj):
-            tname = proj.type_name.value
-            fname = proj.field.value
-            return hydra.lib.strings.cat(("project(", tname, "){", fname, "}"))
-
-        case hydra.core.EliminationUnion(value=cs):
-            tname = cs.type_name.value
-            mdef = cs.default
-            cases = cs.cases
-            @lru_cache(1)
-            def default_field() -> frozenlist[hydra.core.Field]:
-                return hydra.lib.maybes.maybe((lambda : ()), (lambda d: (hydra.core.Field(hydra.core.Name("[default]"), d),)), mdef)
-            @lru_cache(1)
-            def all_fields() -> frozenlist[hydra.core.Field]:
-                return hydra.lib.lists.concat((cases, default_field()))
-            return hydra.lib.strings.cat(("case(", tname, ")", fields(all_fields())))
-
-        case hydra.core.EliminationWrap(value=tname):
-            return hydra.lib.strings.cat(("unwrap(", tname.value, ")"))
-
-        case _:
-            raise AssertionError("Unreachable: all variants handled")
+    tname = cs.type_name.value
+    mdef = cs.default
+    cs_cases = cs.cases
+    @lru_cache(1)
+    def default_field() -> frozenlist[hydra.core.Field]:
+        return hydra.lib.maybes.maybe((lambda : ()), (lambda d: (hydra.core.Field(hydra.core.Name("[default]"), d),)), mdef)
+    @lru_cache(1)
+    def all_fields() -> frozenlist[hydra.core.Field]:
+        return hydra.lib.lists.concat((cs_cases, default_field()))
+    return hydra.lib.strings.cat(("case(", tname, ")", fields(all_fields())))
 
 def field(field: hydra.core.Field) -> str:
     fname = field.name.value
@@ -343,19 +337,6 @@ def fields(flds: frozenlist[hydra.core.Field]) -> str:
     def field_strs() -> frozenlist[str]:
         return hydra.lib.lists.map((lambda x1: field(x1)), flds)
     return hydra.lib.strings.cat(("{", hydra.lib.strings.intercalate(", ", field_strs()), "}"))
-
-def function(f: hydra.core.Function) -> str:
-    r"""Show a function as a string."""
-
-    match f:
-        case hydra.core.FunctionElimination(value=v1):
-            return elimination(v1)
-
-        case hydra.core.FunctionLambda(value=v12):
-            return lambda_(v12)
-
-        case _:
-            raise AssertionError("Unreachable: all variants handled")
 
 def injection(inj: hydra.core.Injection) -> str:
     r"""Show an injection as a string."""
@@ -413,11 +394,14 @@ def term(t: hydra.core.Term) -> str:
                 return hydra.lib.lists.map((lambda x1: term(x1)), terms())
             return hydra.lib.strings.cat(("(", hydra.lib.strings.intercalate(" @ ", term_strs()), ")"))
 
+        case hydra.core.TermCases(value=v1):
+            return case_statement(v1)
+
         case hydra.core.TermEither(value=e):
             return hydra.lib.eithers.either((lambda l: hydra.lib.strings.cat(("left(", term(l), ")"))), (lambda r: hydra.lib.strings.cat(("right(", term(r), ")"))), e)
 
-        case hydra.core.TermFunction(value=v1):
-            return function(v1)
+        case hydra.core.TermLambda(value=v12):
+            return lambda_(v12)
 
         case hydra.core.TermLet(value=l):
             return let(l)
@@ -442,6 +426,9 @@ def term(t: hydra.core.Term) -> str:
         case hydra.core.TermPair(value=p):
             return hydra.lib.strings.cat(("(", term(hydra.lib.pairs.first(p)), ", ", term(hydra.lib.pairs.second(p)), ")"))
 
+        case hydra.core.TermProject(value=v13):
+            return projection(v13)
+
         case hydra.core.TermRecord(value=rec):
             tname = rec.type_name.value
             flds = rec.fields
@@ -460,11 +447,14 @@ def term(t: hydra.core.Term) -> str:
             typ = tt.type
             return hydra.lib.strings.cat((term(t2), "⟨", type(typ), "⟩"))
 
-        case hydra.core.TermUnion(value=v12):
-            return injection(v12)
+        case hydra.core.TermUnion(value=v14):
+            return injection(v14)
 
         case hydra.core.TermUnit():
             return "unit"
+
+        case hydra.core.TermUnwrap(value=tname):
+            return hydra.lib.strings.cat(("unwrap(", tname.value, ")"))
 
         case hydra.core.TermVariable(value=name):
             return name.value

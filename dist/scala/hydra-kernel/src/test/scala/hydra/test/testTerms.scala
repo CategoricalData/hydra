@@ -9,4 +9,4 @@ lazy val testDataArthur: hydra.core.Term = hydra.core.Term.record(hydra.core.Rec
 
 lazy val testElementArthur: hydra.core.Binding = hydra.core.Binding("firstName", hydra.test.testTerms.testDataArthur, Some(hydra.core.TypeScheme(Seq(), hydra.core.Type.variable(hydra.test.testTypes.testTypePersonName), None)))
 
-lazy val testElementFirstName: hydra.core.Binding = hydra.core.Binding("firstName", hydra.core.Term.function(hydra.core.Function.elimination(hydra.core.Elimination.record(hydra.core.Projection(hydra.test.testTypes.testTypePersonName, "firstName")))), Some(hydra.core.TypeScheme(Seq(), hydra.core.Type.function(hydra.core.FunctionType(hydra.core.Type.variable(hydra.test.testTypes.testTypePersonName), hydra.core.Type.literal(hydra.core.LiteralType.string))), None)))
+lazy val testElementFirstName: hydra.core.Binding = hydra.core.Binding("firstName", hydra.core.Term.project(hydra.core.Projection(hydra.test.testTypes.testTypePersonName, "firstName")), Some(hydra.core.TypeScheme(Seq(), hydra.core.Type.function(hydra.core.FunctionType(hydra.core.Type.variable(hydra.test.testTypes.testTypePersonName), hydra.core.Type.literal(hydra.core.LiteralType.string))), None)))

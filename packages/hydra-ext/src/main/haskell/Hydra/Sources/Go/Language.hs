@@ -127,7 +127,14 @@ goLanguage = define "goLanguage" $
       Variants.termVariantAnnotated,
       Variants.termVariantApplication,
       Variants.termVariantEither, -- via interface with Left/Right structs
-      Variants.termVariantFunction,
+
+      Variants.termVariantCases,
+
+      Variants.termVariantLambda,
+
+      Variants.termVariantProject,
+
+      Variants.termVariantUnwrap,
       Variants.termVariantLet, -- via := and var
       Variants.termVariantList, -- slices []T
       Variants.termVariantLiteral,

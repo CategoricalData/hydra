@@ -28,10 +28,10 @@ allTests =
               Testing.testCaseWithMetadataName = "identity function applied to literal",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
                 Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> Core_.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                  Core.applicationFunction = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "x"),
                     Core.lambdaDomain = Nothing,
-                    Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))),
+                    Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})),
                   Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})))),
                 Testing.universalTestCaseExpected = (Core_.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
@@ -40,10 +40,10 @@ allTests =
               Testing.testCaseWithMetadataName = "constant function",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
                 Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> Core_.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                  Core.applicationFunction = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "x"),
                     Core.lambdaDomain = Nothing,
-                    Core.lambdaBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))}))),
+                    Core.lambdaBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))})),
                   Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})))),
                 Testing.universalTestCaseExpected = (Core_.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
@@ -53,13 +53,13 @@ allTests =
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
                 Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> Core_.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermApplication (Core.Application {
-                    Core.applicationFunction = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                    Core.applicationFunction = (Core.TermLambda (Core.Lambda {
                       Core.lambdaParameter = (Core.Name "x"),
                       Core.lambdaDomain = Nothing,
-                      Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.lambdaBody = (Core.TermLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.Name "y"),
                         Core.lambdaDomain = Nothing,
-                        Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})))}))),
+                        Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))})),
                     Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))})),
                   Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))})))),
                 Testing.universalTestCaseExpected = (Core_.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))))})),
@@ -503,10 +503,10 @@ allTests =
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
                 Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> Core_.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermList [
                   Core.TermApplication (Core.Application {
-                    Core.applicationFunction = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                    Core.applicationFunction = (Core.TermLambda (Core.Lambda {
                       Core.lambdaParameter = (Core.Name "x"),
                       Core.lambdaDomain = Nothing,
-                      Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))),
+                      Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})),
                     Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})]))),
                 Testing.universalTestCaseExpected = (Core_.term (Core.TermList [
                   Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))]))})),
@@ -535,10 +535,10 @@ allTests =
               Testing.testCaseWithMetadataName = "just with reducible content",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
                 Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> Core_.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermMaybe (Just (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                  Core.applicationFunction = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "x"),
                     Core.lambdaDomain = Nothing,
-                    Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))),
+                    Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})),
                   Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})))))),
                 Testing.universalTestCaseExpected = (Core_.term (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
@@ -569,77 +569,77 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "lambda with different variable is transparent",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Core_.term (Reduction.alphaConvert (Core.Name "x") (Core.Name "y") (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                Testing.universalTestCaseActual = (Core_.term (Reduction.alphaConvert (Core.Name "x") (Core.Name "y") (Core.TermLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "z"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermList [
                     Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)),
                     (Core.TermVariable (Core.Name "x")),
-                    (Core.TermVariable (Core.Name "z"))])}))))),
-                Testing.universalTestCaseExpected = (Core_.term (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                    (Core.TermVariable (Core.Name "z"))])})))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "z"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermList [
                     Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)),
                     (Core.TermVariable (Core.Name "y")),
-                    (Core.TermVariable (Core.Name "z"))])}))))})),
+                    (Core.TermVariable (Core.Name "z"))])})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "lambda with same variable is opaque",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Core_.term (Reduction.alphaConvert (Core.Name "x") (Core.Name "y") (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                Testing.universalTestCaseActual = (Core_.term (Reduction.alphaConvert (Core.Name "x") (Core.Name "y") (Core.TermLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "x"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermList [
                     Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)),
                     (Core.TermVariable (Core.Name "x")),
-                    (Core.TermVariable (Core.Name "z"))])}))))),
-                Testing.universalTestCaseExpected = (Core_.term (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                    (Core.TermVariable (Core.Name "z"))])})))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "x"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermList [
                     Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)),
                     (Core.TermVariable (Core.Name "x")),
-                    (Core.TermVariable (Core.Name "z"))])}))))})),
+                    (Core.TermVariable (Core.Name "z"))])})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "nested lambda outer variable",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Core_.term (Reduction.alphaConvert (Core.Name "x") (Core.Name "y") (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                Testing.universalTestCaseActual = (Core_.term (Reduction.alphaConvert (Core.Name "x") (Core.Name "y") (Core.TermLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "a"),
                   Core.lambdaDomain = Nothing,
-                  Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                  Core.lambdaBody = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "b"),
                     Core.lambdaDomain = Nothing,
-                    Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})))}))))),
-                Testing.universalTestCaseExpected = (Core_.term (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                    Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))})))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "a"),
                   Core.lambdaDomain = Nothing,
-                  Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                  Core.lambdaBody = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "b"),
                     Core.lambdaDomain = Nothing,
-                    Core.lambdaBody = (Core.TermVariable (Core.Name "y"))})))}))))})),
+                    Core.lambdaBody = (Core.TermVariable (Core.Name "y"))}))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "nested lambda shadows outer",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Core_.term (Reduction.alphaConvert (Core.Name "x") (Core.Name "z") (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                Testing.universalTestCaseActual = (Core_.term (Reduction.alphaConvert (Core.Name "x") (Core.Name "z") (Core.TermLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "x"),
                   Core.lambdaDomain = Nothing,
-                  Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                  Core.lambdaBody = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "y"),
                     Core.lambdaDomain = Nothing,
-                    Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})))}))))),
-                Testing.universalTestCaseExpected = (Core_.term (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                    Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))})))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "x"),
                   Core.lambdaDomain = Nothing,
-                  Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                  Core.lambdaBody = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "y"),
                     Core.lambdaDomain = Nothing,
-                    Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})))}))))})),
+                    Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
@@ -817,35 +817,35 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "lambda with fully applied primitive unchanged",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\_ -> "eta expansion failed") (\t -> Core_.term t) (Reduction.etaExpandTypedTerm TestGraph.testContext TestGraph.testGraph (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                Testing.universalTestCaseActual = (Eithers.either (\_ -> "eta expansion failed") (\t -> Core_.term t) (Reduction.etaExpandTypedTerm TestGraph.testContext TestGraph.testGraph (Core.TermLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "x"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermApplication (Core.Application {
                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.strings.splitOn")),
                       Core.applicationArgument = (Core.TermLiteral (Core.LiteralString ","))})),
-                    Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))))),
-                Testing.universalTestCaseExpected = (Core_.term (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                    Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))})))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "x"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermApplication (Core.Application {
                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.strings.splitOn")),
                       Core.applicationArgument = (Core.TermLiteral (Core.LiteralString ","))})),
-                    Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))))})),
+                    Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "lambda returning constant unchanged",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\_ -> "eta expansion failed") (\t -> Core_.term t) (Reduction.etaExpandTypedTerm TestGraph.testContext TestGraph.testGraph (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                Testing.universalTestCaseActual = (Eithers.either (\_ -> "eta expansion failed") (\t -> Core_.term t) (Reduction.etaExpandTypedTerm TestGraph.testContext TestGraph.testGraph (Core.TermLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "x"),
                   Core.lambdaDomain = Nothing,
-                  Core.lambdaBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}))))),
-                Testing.universalTestCaseExpected = (Core_.term (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                  Core.lambdaBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "x"),
                   Core.lambdaDomain = Nothing,
-                  Core.lambdaBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}))))})),
+                  Core.lambdaBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
@@ -868,52 +868,52 @@ allTests =
                 Testing.universalTestCaseActual = (Eithers.either (\_ -> "eta expansion failed") (\t -> Core_.term t) (Reduction.etaExpandTypedTerm TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.strings.splitOn")),
                   Core.applicationArgument = (Core.TermVariable (Core.Name "foo"))})))),
-                Testing.universalTestCaseExpected = (Core_.term (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "v1"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermApplication (Core.Application {
                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.strings.splitOn")),
                       Core.applicationArgument = (Core.TermVariable (Core.Name "foo"))})),
-                    Core.applicationArgument = (Core.TermVariable (Core.Name "v1"))}))}))))})),
+                    Core.applicationArgument = (Core.TermVariable (Core.Name "v1"))}))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "projection expands to lambda",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\_ -> "eta expansion failed") (\t -> Core_.term t) (Reduction.etaExpandTypedTerm TestGraph.testContext TestGraph.testGraph (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+                Testing.universalTestCaseActual = (Eithers.either (\_ -> "eta expansion failed") (\t -> Core_.term t) (Reduction.etaExpandTypedTerm TestGraph.testContext TestGraph.testGraph (Core.TermProject (Core.Projection {
                   Core.projectionTypeName = (Core.Name "Person"),
-                  Core.projectionField = (Core.Name "firstName")})))))),
-                Testing.universalTestCaseExpected = (Core_.term (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                  Core.projectionField = (Core.Name "firstName")})))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "v1"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermApplication (Core.Application {
-                    Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+                    Core.applicationFunction = (Core.TermProject (Core.Projection {
                       Core.projectionTypeName = (Core.Name "Person"),
-                      Core.projectionField = (Core.Name "firstName")})))),
-                    Core.applicationArgument = (Core.TermVariable (Core.Name "v1"))}))}))))})),
+                      Core.projectionField = (Core.Name "firstName")})),
+                    Core.applicationArgument = (Core.TermVariable (Core.Name "v1"))}))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "partial application inside lambda expands",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\_ -> "eta expansion failed") (\t -> Core_.term t) (Reduction.etaExpandTypedTerm TestGraph.testContext TestGraph.testGraph (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                Testing.universalTestCaseActual = (Eithers.either (\_ -> "eta expansion failed") (\t -> Core_.term t) (Reduction.etaExpandTypedTerm TestGraph.testContext TestGraph.testGraph (Core.TermLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "x"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.strings.splitOn")),
-                    Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))))),
-                Testing.universalTestCaseExpected = (Core_.term (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                    Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))})))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "x"),
                   Core.lambdaDomain = Nothing,
-                  Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                  Core.lambdaBody = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "v1"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermApplication (Core.Application {
                       Core.applicationFunction = (Core.TermApplication (Core.Application {
                         Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.strings.splitOn")),
                         Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
-                      Core.applicationArgument = (Core.TermVariable (Core.Name "v1"))}))})))}))))})),
+                      Core.applicationArgument = (Core.TermVariable (Core.Name "v1"))}))}))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
@@ -969,28 +969,28 @@ allTests =
               Testing.testCaseWithMetadataName = "partial application in list expands",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
                 Testing.universalTestCaseActual = (Eithers.either (\_ -> "eta expansion failed") (\t -> Core_.term t) (Reduction.etaExpandTypedTerm TestGraph.testContext TestGraph.testGraph (Core.TermList [
-                  Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                  Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "x"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermList [
-                      Core.TermLiteral (Core.LiteralString "foo")])})),
+                      Core.TermLiteral (Core.LiteralString "foo")])}),
                   (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.strings.splitOn")),
                     Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "bar"))}))]))),
                 Testing.universalTestCaseExpected = (Core_.term (Core.TermList [
-                  Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                  Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "x"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermList [
-                      Core.TermLiteral (Core.LiteralString "foo")])})),
-                  (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.TermLiteral (Core.LiteralString "foo")])}),
+                  (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "v1"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermApplication (Core.Application {
                       Core.applicationFunction = (Core.TermApplication (Core.Application {
                         Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.strings.splitOn")),
                         Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "bar"))})),
-                      Core.applicationArgument = (Core.TermVariable (Core.Name "v1"))}))})))]))})),
+                      Core.applicationArgument = (Core.TermVariable (Core.Name "v1"))}))}))]))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]}],
       Testing.testGroupCases = []}

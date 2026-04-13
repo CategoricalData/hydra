@@ -36,41 +36,41 @@ asset href title description type_ roles =
 assetDescription :: Phantoms.TTerm Items.Asset -> Phantoms.TTerm (Maybe String)
 assetDescription x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.stac.items.Asset"),
-        Core.projectionField = (Core.Name "description")})))),
+        Core.projectionField = (Core.Name "description")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 assetHref :: Phantoms.TTerm Items.Asset -> Phantoms.TTerm Items.Uri
 assetHref x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.stac.items.Asset"),
-        Core.projectionField = (Core.Name "href")})))),
+        Core.projectionField = (Core.Name "href")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 assetRoles :: Phantoms.TTerm Items.Asset -> Phantoms.TTerm [Items.Role]
 assetRoles x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.stac.items.Asset"),
-        Core.projectionField = (Core.Name "roles")})))),
+        Core.projectionField = (Core.Name "roles")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 assetTitle :: Phantoms.TTerm Items.Asset -> Phantoms.TTerm (Maybe String)
 assetTitle x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.stac.items.Asset"),
-        Core.projectionField = (Core.Name "title")})))),
+        Core.projectionField = (Core.Name "title")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 assetType :: Phantoms.TTerm Items.Asset -> Phantoms.TTerm (Maybe Items.MediaType)
 assetType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.stac.items.Asset"),
-        Core.projectionField = (Core.Name "type")})))),
+        Core.projectionField = (Core.Name "type")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 assetWithDescription :: Phantoms.TTerm Items.Asset -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Items.Asset
@@ -81,16 +81,16 @@ assetWithDescription original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "href"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.stac.items.Asset"),
-              Core.projectionField = (Core.Name "href")})))),
+              Core.projectionField = (Core.Name "href")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "title"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.stac.items.Asset"),
-              Core.projectionField = (Core.Name "title")})))),
+              Core.projectionField = (Core.Name "title")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "description"),
@@ -98,16 +98,16 @@ assetWithDescription original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.stac.items.Asset"),
-              Core.projectionField = (Core.Name "type")})))),
+              Core.projectionField = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "roles"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.stac.items.Asset"),
-              Core.projectionField = (Core.Name "roles")})))),
+              Core.projectionField = (Core.Name "roles")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 assetWithHref :: Phantoms.TTerm Items.Asset -> Phantoms.TTerm Items.Uri -> Phantoms.TTerm Items.Asset
@@ -121,30 +121,30 @@ assetWithHref original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "title"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.stac.items.Asset"),
-              Core.projectionField = (Core.Name "title")})))),
+              Core.projectionField = (Core.Name "title")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "description"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.stac.items.Asset"),
-              Core.projectionField = (Core.Name "description")})))),
+              Core.projectionField = (Core.Name "description")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.stac.items.Asset"),
-              Core.projectionField = (Core.Name "type")})))),
+              Core.projectionField = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "roles"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.stac.items.Asset"),
-              Core.projectionField = (Core.Name "roles")})))),
+              Core.projectionField = (Core.Name "roles")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 assetWithRoles :: Phantoms.TTerm Items.Asset -> Phantoms.TTerm [Items.Role] -> Phantoms.TTerm Items.Asset
@@ -155,30 +155,30 @@ assetWithRoles original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "href"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.stac.items.Asset"),
-              Core.projectionField = (Core.Name "href")})))),
+              Core.projectionField = (Core.Name "href")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "title"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.stac.items.Asset"),
-              Core.projectionField = (Core.Name "title")})))),
+              Core.projectionField = (Core.Name "title")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "description"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.stac.items.Asset"),
-              Core.projectionField = (Core.Name "description")})))),
+              Core.projectionField = (Core.Name "description")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.stac.items.Asset"),
-              Core.projectionField = (Core.Name "type")})))),
+              Core.projectionField = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "roles"),
@@ -192,9 +192,9 @@ assetWithTitle original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "href"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.stac.items.Asset"),
-              Core.projectionField = (Core.Name "href")})))),
+              Core.projectionField = (Core.Name "href")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "title"),
@@ -202,23 +202,23 @@ assetWithTitle original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "description"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.stac.items.Asset"),
-              Core.projectionField = (Core.Name "description")})))),
+              Core.projectionField = (Core.Name "description")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.stac.items.Asset"),
-              Core.projectionField = (Core.Name "type")})))),
+              Core.projectionField = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "roles"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.stac.items.Asset"),
-              Core.projectionField = (Core.Name "roles")})))),
+              Core.projectionField = (Core.Name "roles")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 assetWithType :: Phantoms.TTerm Items.Asset -> Phantoms.TTerm (Maybe Items.MediaType) -> Phantoms.TTerm Items.Asset
@@ -229,23 +229,23 @@ assetWithType original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "href"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.stac.items.Asset"),
-              Core.projectionField = (Core.Name "href")})))),
+              Core.projectionField = (Core.Name "href")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "title"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.stac.items.Asset"),
-              Core.projectionField = (Core.Name "title")})))),
+              Core.projectionField = (Core.Name "title")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "description"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.stac.items.Asset"),
-              Core.projectionField = (Core.Name "description")})))),
+              Core.projectionField = (Core.Name "description")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
@@ -253,9 +253,9 @@ assetWithType original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "roles"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.stac.items.Asset"),
-              Core.projectionField = (Core.Name "roles")})))),
+              Core.projectionField = (Core.Name "roles")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 item :: Phantoms.TTerm Model.Feature -> Phantoms.TTerm Items.StacVersion -> Phantoms.TTerm [Items.Url] -> Phantoms.TTerm [Items.Link] -> Phantoms.TTerm (M.Map String Items.Asset) -> Phantoms.TTerm (Maybe Model.Id) -> Phantoms.TTerm Items.Item
@@ -285,49 +285,49 @@ item feature stacVersion stacExtensions links assets collection =
 itemAssets :: Phantoms.TTerm Items.Item -> Phantoms.TTerm (M.Map String Items.Asset)
 itemAssets x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.stac.items.Item"),
-        Core.projectionField = (Core.Name "assets")})))),
+        Core.projectionField = (Core.Name "assets")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 itemCollection :: Phantoms.TTerm Items.Item -> Phantoms.TTerm (Maybe Model.Id)
 itemCollection x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.stac.items.Item"),
-        Core.projectionField = (Core.Name "collection")})))),
+        Core.projectionField = (Core.Name "collection")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 itemFeature :: Phantoms.TTerm Items.Item -> Phantoms.TTerm Model.Feature
 itemFeature x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.stac.items.Item"),
-        Core.projectionField = (Core.Name "feature")})))),
+        Core.projectionField = (Core.Name "feature")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 itemLinks :: Phantoms.TTerm Items.Item -> Phantoms.TTerm [Items.Link]
 itemLinks x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.stac.items.Item"),
-        Core.projectionField = (Core.Name "links")})))),
+        Core.projectionField = (Core.Name "links")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 itemStacExtensions :: Phantoms.TTerm Items.Item -> Phantoms.TTerm [Items.Url]
 itemStacExtensions x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.stac.items.Item"),
-        Core.projectionField = (Core.Name "stacExtensions")})))),
+        Core.projectionField = (Core.Name "stacExtensions")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 itemStacVersion :: Phantoms.TTerm Items.Item -> Phantoms.TTerm Items.StacVersion
 itemStacVersion x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.stac.items.Item"),
-        Core.projectionField = (Core.Name "stacVersion")})))),
+        Core.projectionField = (Core.Name "stacVersion")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 itemWithAssets :: Phantoms.TTerm Items.Item -> Phantoms.TTerm (M.Map String Items.Asset) -> Phantoms.TTerm Items.Item
@@ -338,30 +338,30 @@ itemWithAssets original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "feature"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.stac.items.Item"),
-              Core.projectionField = (Core.Name "feature")})))),
+              Core.projectionField = (Core.Name "feature")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "stacVersion"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.stac.items.Item"),
-              Core.projectionField = (Core.Name "stacVersion")})))),
+              Core.projectionField = (Core.Name "stacVersion")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "stacExtensions"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.stac.items.Item"),
-              Core.projectionField = (Core.Name "stacExtensions")})))),
+              Core.projectionField = (Core.Name "stacExtensions")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "links"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.stac.items.Item"),
-              Core.projectionField = (Core.Name "links")})))),
+              Core.projectionField = (Core.Name "links")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "assets"),
@@ -369,9 +369,9 @@ itemWithAssets original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "collection"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.stac.items.Item"),
-              Core.projectionField = (Core.Name "collection")})))),
+              Core.projectionField = (Core.Name "collection")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 itemWithCollection :: Phantoms.TTerm Items.Item -> Phantoms.TTerm (Maybe Model.Id) -> Phantoms.TTerm Items.Item
@@ -382,37 +382,37 @@ itemWithCollection original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "feature"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.stac.items.Item"),
-              Core.projectionField = (Core.Name "feature")})))),
+              Core.projectionField = (Core.Name "feature")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "stacVersion"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.stac.items.Item"),
-              Core.projectionField = (Core.Name "stacVersion")})))),
+              Core.projectionField = (Core.Name "stacVersion")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "stacExtensions"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.stac.items.Item"),
-              Core.projectionField = (Core.Name "stacExtensions")})))),
+              Core.projectionField = (Core.Name "stacExtensions")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "links"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.stac.items.Item"),
-              Core.projectionField = (Core.Name "links")})))),
+              Core.projectionField = (Core.Name "links")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "assets"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.stac.items.Item"),
-              Core.projectionField = (Core.Name "assets")})))),
+              Core.projectionField = (Core.Name "assets")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "collection"),
@@ -429,37 +429,37 @@ itemWithFeature original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "stacVersion"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.stac.items.Item"),
-              Core.projectionField = (Core.Name "stacVersion")})))),
+              Core.projectionField = (Core.Name "stacVersion")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "stacExtensions"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.stac.items.Item"),
-              Core.projectionField = (Core.Name "stacExtensions")})))),
+              Core.projectionField = (Core.Name "stacExtensions")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "links"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.stac.items.Item"),
-              Core.projectionField = (Core.Name "links")})))),
+              Core.projectionField = (Core.Name "links")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "assets"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.stac.items.Item"),
-              Core.projectionField = (Core.Name "assets")})))),
+              Core.projectionField = (Core.Name "assets")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "collection"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.stac.items.Item"),
-              Core.projectionField = (Core.Name "collection")})))),
+              Core.projectionField = (Core.Name "collection")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 itemWithLinks :: Phantoms.TTerm Items.Item -> Phantoms.TTerm [Items.Link] -> Phantoms.TTerm Items.Item
@@ -470,23 +470,23 @@ itemWithLinks original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "feature"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.stac.items.Item"),
-              Core.projectionField = (Core.Name "feature")})))),
+              Core.projectionField = (Core.Name "feature")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "stacVersion"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.stac.items.Item"),
-              Core.projectionField = (Core.Name "stacVersion")})))),
+              Core.projectionField = (Core.Name "stacVersion")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "stacExtensions"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.stac.items.Item"),
-              Core.projectionField = (Core.Name "stacExtensions")})))),
+              Core.projectionField = (Core.Name "stacExtensions")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "links"),
@@ -494,16 +494,16 @@ itemWithLinks original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "assets"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.stac.items.Item"),
-              Core.projectionField = (Core.Name "assets")})))),
+              Core.projectionField = (Core.Name "assets")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "collection"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.stac.items.Item"),
-              Core.projectionField = (Core.Name "collection")})))),
+              Core.projectionField = (Core.Name "collection")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 itemWithStacExtensions :: Phantoms.TTerm Items.Item -> Phantoms.TTerm [Items.Url] -> Phantoms.TTerm Items.Item
@@ -514,16 +514,16 @@ itemWithStacExtensions original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "feature"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.stac.items.Item"),
-              Core.projectionField = (Core.Name "feature")})))),
+              Core.projectionField = (Core.Name "feature")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "stacVersion"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.stac.items.Item"),
-              Core.projectionField = (Core.Name "stacVersion")})))),
+              Core.projectionField = (Core.Name "stacVersion")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "stacExtensions"),
@@ -531,23 +531,23 @@ itemWithStacExtensions original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "links"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.stac.items.Item"),
-              Core.projectionField = (Core.Name "links")})))),
+              Core.projectionField = (Core.Name "links")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "assets"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.stac.items.Item"),
-              Core.projectionField = (Core.Name "assets")})))),
+              Core.projectionField = (Core.Name "assets")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "collection"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.stac.items.Item"),
-              Core.projectionField = (Core.Name "collection")})))),
+              Core.projectionField = (Core.Name "collection")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 itemWithStacVersion :: Phantoms.TTerm Items.Item -> Phantoms.TTerm Items.StacVersion -> Phantoms.TTerm Items.Item
@@ -558,9 +558,9 @@ itemWithStacVersion original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "feature"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.stac.items.Item"),
-              Core.projectionField = (Core.Name "feature")})))),
+              Core.projectionField = (Core.Name "feature")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "stacVersion"),
@@ -568,30 +568,30 @@ itemWithStacVersion original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "stacExtensions"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.stac.items.Item"),
-              Core.projectionField = (Core.Name "stacExtensions")})))),
+              Core.projectionField = (Core.Name "stacExtensions")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "links"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.stac.items.Item"),
-              Core.projectionField = (Core.Name "links")})))),
+              Core.projectionField = (Core.Name "links")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "assets"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.stac.items.Item"),
-              Core.projectionField = (Core.Name "assets")})))),
+              Core.projectionField = (Core.Name "assets")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "collection"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.stac.items.Item"),
-              Core.projectionField = (Core.Name "collection")})))),
+              Core.projectionField = (Core.Name "collection")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 link :: Phantoms.TTerm Items.Url -> Phantoms.TTerm Items.RelationType -> Phantoms.TTerm (Maybe Items.MediaType) -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Items.Link
@@ -615,33 +615,33 @@ link href rel type_ title =
 linkHref :: Phantoms.TTerm Items.Link -> Phantoms.TTerm Items.Url
 linkHref x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.stac.items.Link"),
-        Core.projectionField = (Core.Name "href")})))),
+        Core.projectionField = (Core.Name "href")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 linkRel :: Phantoms.TTerm Items.Link -> Phantoms.TTerm Items.RelationType
 linkRel x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.stac.items.Link"),
-        Core.projectionField = (Core.Name "rel")})))),
+        Core.projectionField = (Core.Name "rel")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 linkTitle :: Phantoms.TTerm Items.Link -> Phantoms.TTerm (Maybe String)
 linkTitle x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.stac.items.Link"),
-        Core.projectionField = (Core.Name "title")})))),
+        Core.projectionField = (Core.Name "title")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 linkType :: Phantoms.TTerm Items.Link -> Phantoms.TTerm (Maybe Items.MediaType)
 linkType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.stac.items.Link"),
-        Core.projectionField = (Core.Name "type")})))),
+        Core.projectionField = (Core.Name "type")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 linkWithHref :: Phantoms.TTerm Items.Link -> Phantoms.TTerm Items.Url -> Phantoms.TTerm Items.Link
@@ -655,23 +655,23 @@ linkWithHref original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "rel"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.stac.items.Link"),
-              Core.projectionField = (Core.Name "rel")})))),
+              Core.projectionField = (Core.Name "rel")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.stac.items.Link"),
-              Core.projectionField = (Core.Name "type")})))),
+              Core.projectionField = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "title"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.stac.items.Link"),
-              Core.projectionField = (Core.Name "title")})))),
+              Core.projectionField = (Core.Name "title")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 linkWithRel :: Phantoms.TTerm Items.Link -> Phantoms.TTerm Items.RelationType -> Phantoms.TTerm Items.Link
@@ -682,9 +682,9 @@ linkWithRel original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "href"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.stac.items.Link"),
-              Core.projectionField = (Core.Name "href")})))),
+              Core.projectionField = (Core.Name "href")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "rel"),
@@ -692,16 +692,16 @@ linkWithRel original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.stac.items.Link"),
-              Core.projectionField = (Core.Name "type")})))),
+              Core.projectionField = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "title"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.stac.items.Link"),
-              Core.projectionField = (Core.Name "title")})))),
+              Core.projectionField = (Core.Name "title")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 linkWithTitle :: Phantoms.TTerm Items.Link -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Items.Link
@@ -712,23 +712,23 @@ linkWithTitle original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "href"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.stac.items.Link"),
-              Core.projectionField = (Core.Name "href")})))),
+              Core.projectionField = (Core.Name "href")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "rel"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.stac.items.Link"),
-              Core.projectionField = (Core.Name "rel")})))),
+              Core.projectionField = (Core.Name "rel")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.stac.items.Link"),
-              Core.projectionField = (Core.Name "type")})))),
+              Core.projectionField = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "title"),
@@ -742,16 +742,16 @@ linkWithType original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "href"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.stac.items.Link"),
-              Core.projectionField = (Core.Name "href")})))),
+              Core.projectionField = (Core.Name "href")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "rel"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.stac.items.Link"),
-              Core.projectionField = (Core.Name "rel")})))),
+              Core.projectionField = (Core.Name "rel")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
@@ -759,9 +759,9 @@ linkWithType original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "title"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.stac.items.Link"),
-              Core.projectionField = (Core.Name "title")})))),
+              Core.projectionField = (Core.Name "title")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 mediaType :: Phantoms.TTerm String -> Phantoms.TTerm Items.MediaType
@@ -883,25 +883,25 @@ stacVersion x =
 unMediaType :: Phantoms.TTerm Items.MediaType -> Phantoms.TTerm String
 unMediaType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.stac.items.MediaType")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.stac.items.MediaType")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unStacVersion :: Phantoms.TTerm Items.StacVersion -> Phantoms.TTerm String
 unStacVersion x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.stac.items.StacVersion")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.stac.items.StacVersion")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unUri :: Phantoms.TTerm Items.Uri -> Phantoms.TTerm String
 unUri x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.stac.items.Uri")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.stac.items.Uri")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unUrl :: Phantoms.TTerm Items.Url -> Phantoms.TTerm String
 unUrl x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.stac.items.Url")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.stac.items.Url")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 uri :: Phantoms.TTerm String -> Phantoms.TTerm Items.Uri

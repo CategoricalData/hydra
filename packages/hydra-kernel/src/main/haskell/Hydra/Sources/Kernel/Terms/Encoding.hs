@@ -571,8 +571,7 @@ encodeRecordTypeNamed = define "encodeRecordTypeNamed" $
                     @@@ DC.var "x"))]
 
     projectField typeName fieldName =
-      Core.termFunction $ Core.functionElimination $ Core.eliminationRecord $
-        Core.projection typeName fieldName
+      Core.termProject $ Core.projection typeName fieldName
 
 encodeRecordType :: TTermDefinition ([FieldType] -> Term)
 encodeRecordType = define "encodeRecordType" $
@@ -593,8 +592,7 @@ encodeTypeNamed = define "encodeTypeNamed" $
     _Type_either>>: "et" ~>
       encodeEitherType @@ var "et",
     _Type_forall>>: "ft" ~>
-      Core.termFunction $ Core.functionLambda $
-        Core.lambda (encodeBindingName @@ Core.forallTypeParameter (var "ft")) nothing
+      Core.termLambda $ Core.lambda (encodeBindingName @@ Core.forallTypeParameter (var "ft")) nothing
           (encodeTypeNamed @@ var "ename" @@ Core.forallTypeBody (var "ft")),
     _Type_function>>: constant identityEncoder,
     _Type_list>>: "elemType" ~>
@@ -671,8 +669,7 @@ encodeUnionTypeNamed :: TTermDefinition (Name -> [FieldType] -> Term)
 encodeUnionTypeNamed = define "encodeUnionTypeNamed" $
   doc "Generate an encoder for a union type with the given element name" $
   "ename" ~> "rt" ~>
-    Core.termFunction $ Core.functionElimination $ Core.eliminationUnion $
-      Core.caseStatement
+    Core.termCases $ Core.caseStatement
         (var "ename")
         nothing
         (primitive _lists_map @@
@@ -817,8 +814,7 @@ encodeForallType = define "encodeForallType" $
   doc "Generate an encoder for a polymorphic (forall) type" $
   "ft" ~>
     -- Generate a lambda that takes an encoder for the type parameter
-    Core.termFunction $ Core.functionLambda $
-      Core.lambda
+    Core.termLambda $ Core.lambda
         (encodeBindingName @@ Core.forallTypeParameter (var "ft"))
         nothing
         (encodeType @@ Core.forallTypeBody (var "ft"))

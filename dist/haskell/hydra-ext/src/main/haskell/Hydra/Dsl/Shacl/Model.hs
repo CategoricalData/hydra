@@ -26,17 +26,17 @@ closed isClosed ignoredProperties =
 closedIgnoredProperties :: Phantoms.TTerm Model.Closed -> Phantoms.TTerm (Maybe (S.Set Syntax.Property))
 closedIgnoredProperties x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shacl.model.Closed"),
-        Core.projectionField = (Core.Name "ignoredProperties")})))),
+        Core.projectionField = (Core.Name "ignoredProperties")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 closedIsClosed :: Phantoms.TTerm Model.Closed -> Phantoms.TTerm Bool
 closedIsClosed x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shacl.model.Closed"),
-        Core.projectionField = (Core.Name "isClosed")})))),
+        Core.projectionField = (Core.Name "isClosed")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 closedWithIgnoredProperties :: Phantoms.TTerm Model.Closed -> Phantoms.TTerm (Maybe (S.Set Syntax.Property)) -> Phantoms.TTerm Model.Closed
@@ -47,9 +47,9 @@ closedWithIgnoredProperties original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "isClosed"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.Closed"),
-              Core.projectionField = (Core.Name "isClosed")})))),
+              Core.projectionField = (Core.Name "isClosed")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "ignoredProperties"),
@@ -66,9 +66,9 @@ closedWithIsClosed original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "ignoredProperties"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.Closed"),
-              Core.projectionField = (Core.Name "ignoredProperties")})))),
+              Core.projectionField = (Core.Name "ignoredProperties")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 commonConstraintAnd :: Phantoms.TTerm (S.Set (Model.Reference Model.Shape)) -> Phantoms.TTerm Model.CommonConstraint
@@ -280,65 +280,65 @@ commonProperties constraints deactivated message severity targetClass targetNode
 commonPropertiesConstraints :: Phantoms.TTerm Model.CommonProperties -> Phantoms.TTerm (S.Set Model.CommonConstraint)
 commonPropertiesConstraints x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shacl.model.CommonProperties"),
-        Core.projectionField = (Core.Name "constraints")})))),
+        Core.projectionField = (Core.Name "constraints")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 commonPropertiesDeactivated :: Phantoms.TTerm Model.CommonProperties -> Phantoms.TTerm (Maybe Bool)
 commonPropertiesDeactivated x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shacl.model.CommonProperties"),
-        Core.projectionField = (Core.Name "deactivated")})))),
+        Core.projectionField = (Core.Name "deactivated")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 commonPropertiesMessage :: Phantoms.TTerm Model.CommonProperties -> Phantoms.TTerm Syntax.LangStrings
 commonPropertiesMessage x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shacl.model.CommonProperties"),
-        Core.projectionField = (Core.Name "message")})))),
+        Core.projectionField = (Core.Name "message")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 commonPropertiesSeverity :: Phantoms.TTerm Model.CommonProperties -> Phantoms.TTerm Model.Severity
 commonPropertiesSeverity x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shacl.model.CommonProperties"),
-        Core.projectionField = (Core.Name "severity")})))),
+        Core.projectionField = (Core.Name "severity")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 commonPropertiesTargetClass :: Phantoms.TTerm Model.CommonProperties -> Phantoms.TTerm (S.Set Syntax.RdfsClass)
 commonPropertiesTargetClass x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shacl.model.CommonProperties"),
-        Core.projectionField = (Core.Name "targetClass")})))),
+        Core.projectionField = (Core.Name "targetClass")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 commonPropertiesTargetNode :: Phantoms.TTerm Model.CommonProperties -> Phantoms.TTerm (S.Set Syntax.IriOrLiteral)
 commonPropertiesTargetNode x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shacl.model.CommonProperties"),
-        Core.projectionField = (Core.Name "targetNode")})))),
+        Core.projectionField = (Core.Name "targetNode")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 commonPropertiesTargetObjectsOf :: Phantoms.TTerm Model.CommonProperties -> Phantoms.TTerm (S.Set Syntax.Property)
 commonPropertiesTargetObjectsOf x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shacl.model.CommonProperties"),
-        Core.projectionField = (Core.Name "targetObjectsOf")})))),
+        Core.projectionField = (Core.Name "targetObjectsOf")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 commonPropertiesTargetSubjectsOf :: Phantoms.TTerm Model.CommonProperties -> Phantoms.TTerm (S.Set Syntax.Property)
 commonPropertiesTargetSubjectsOf x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shacl.model.CommonProperties"),
-        Core.projectionField = (Core.Name "targetSubjectsOf")})))),
+        Core.projectionField = (Core.Name "targetSubjectsOf")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 commonPropertiesWithConstraints :: Phantoms.TTerm Model.CommonProperties -> Phantoms.TTerm (S.Set Model.CommonConstraint) -> Phantoms.TTerm Model.CommonProperties
@@ -352,51 +352,51 @@ commonPropertiesWithConstraints original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "deactivated"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.CommonProperties"),
-              Core.projectionField = (Core.Name "deactivated")})))),
+              Core.projectionField = (Core.Name "deactivated")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "message"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.CommonProperties"),
-              Core.projectionField = (Core.Name "message")})))),
+              Core.projectionField = (Core.Name "message")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "severity"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.CommonProperties"),
-              Core.projectionField = (Core.Name "severity")})))),
+              Core.projectionField = (Core.Name "severity")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "targetClass"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.CommonProperties"),
-              Core.projectionField = (Core.Name "targetClass")})))),
+              Core.projectionField = (Core.Name "targetClass")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "targetNode"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.CommonProperties"),
-              Core.projectionField = (Core.Name "targetNode")})))),
+              Core.projectionField = (Core.Name "targetNode")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "targetObjectsOf"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.CommonProperties"),
-              Core.projectionField = (Core.Name "targetObjectsOf")})))),
+              Core.projectionField = (Core.Name "targetObjectsOf")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "targetSubjectsOf"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.CommonProperties"),
-              Core.projectionField = (Core.Name "targetSubjectsOf")})))),
+              Core.projectionField = (Core.Name "targetSubjectsOf")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 commonPropertiesWithDeactivated :: Phantoms.TTerm Model.CommonProperties -> Phantoms.TTerm (Maybe Bool) -> Phantoms.TTerm Model.CommonProperties
@@ -407,9 +407,9 @@ commonPropertiesWithDeactivated original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "constraints"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.CommonProperties"),
-              Core.projectionField = (Core.Name "constraints")})))),
+              Core.projectionField = (Core.Name "constraints")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "deactivated"),
@@ -417,44 +417,44 @@ commonPropertiesWithDeactivated original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "message"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.CommonProperties"),
-              Core.projectionField = (Core.Name "message")})))),
+              Core.projectionField = (Core.Name "message")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "severity"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.CommonProperties"),
-              Core.projectionField = (Core.Name "severity")})))),
+              Core.projectionField = (Core.Name "severity")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "targetClass"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.CommonProperties"),
-              Core.projectionField = (Core.Name "targetClass")})))),
+              Core.projectionField = (Core.Name "targetClass")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "targetNode"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.CommonProperties"),
-              Core.projectionField = (Core.Name "targetNode")})))),
+              Core.projectionField = (Core.Name "targetNode")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "targetObjectsOf"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.CommonProperties"),
-              Core.projectionField = (Core.Name "targetObjectsOf")})))),
+              Core.projectionField = (Core.Name "targetObjectsOf")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "targetSubjectsOf"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.CommonProperties"),
-              Core.projectionField = (Core.Name "targetSubjectsOf")})))),
+              Core.projectionField = (Core.Name "targetSubjectsOf")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 commonPropertiesWithMessage :: Phantoms.TTerm Model.CommonProperties -> Phantoms.TTerm Syntax.LangStrings -> Phantoms.TTerm Model.CommonProperties
@@ -465,16 +465,16 @@ commonPropertiesWithMessage original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "constraints"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.CommonProperties"),
-              Core.projectionField = (Core.Name "constraints")})))),
+              Core.projectionField = (Core.Name "constraints")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "deactivated"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.CommonProperties"),
-              Core.projectionField = (Core.Name "deactivated")})))),
+              Core.projectionField = (Core.Name "deactivated")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "message"),
@@ -482,37 +482,37 @@ commonPropertiesWithMessage original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "severity"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.CommonProperties"),
-              Core.projectionField = (Core.Name "severity")})))),
+              Core.projectionField = (Core.Name "severity")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "targetClass"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.CommonProperties"),
-              Core.projectionField = (Core.Name "targetClass")})))),
+              Core.projectionField = (Core.Name "targetClass")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "targetNode"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.CommonProperties"),
-              Core.projectionField = (Core.Name "targetNode")})))),
+              Core.projectionField = (Core.Name "targetNode")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "targetObjectsOf"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.CommonProperties"),
-              Core.projectionField = (Core.Name "targetObjectsOf")})))),
+              Core.projectionField = (Core.Name "targetObjectsOf")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "targetSubjectsOf"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.CommonProperties"),
-              Core.projectionField = (Core.Name "targetSubjectsOf")})))),
+              Core.projectionField = (Core.Name "targetSubjectsOf")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 commonPropertiesWithSeverity :: Phantoms.TTerm Model.CommonProperties -> Phantoms.TTerm Model.Severity -> Phantoms.TTerm Model.CommonProperties
@@ -523,23 +523,23 @@ commonPropertiesWithSeverity original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "constraints"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.CommonProperties"),
-              Core.projectionField = (Core.Name "constraints")})))),
+              Core.projectionField = (Core.Name "constraints")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "deactivated"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.CommonProperties"),
-              Core.projectionField = (Core.Name "deactivated")})))),
+              Core.projectionField = (Core.Name "deactivated")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "message"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.CommonProperties"),
-              Core.projectionField = (Core.Name "message")})))),
+              Core.projectionField = (Core.Name "message")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "severity"),
@@ -547,30 +547,30 @@ commonPropertiesWithSeverity original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "targetClass"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.CommonProperties"),
-              Core.projectionField = (Core.Name "targetClass")})))),
+              Core.projectionField = (Core.Name "targetClass")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "targetNode"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.CommonProperties"),
-              Core.projectionField = (Core.Name "targetNode")})))),
+              Core.projectionField = (Core.Name "targetNode")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "targetObjectsOf"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.CommonProperties"),
-              Core.projectionField = (Core.Name "targetObjectsOf")})))),
+              Core.projectionField = (Core.Name "targetObjectsOf")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "targetSubjectsOf"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.CommonProperties"),
-              Core.projectionField = (Core.Name "targetSubjectsOf")})))),
+              Core.projectionField = (Core.Name "targetSubjectsOf")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 commonPropertiesWithTargetClass :: Phantoms.TTerm Model.CommonProperties -> Phantoms.TTerm (S.Set Syntax.RdfsClass) -> Phantoms.TTerm Model.CommonProperties
@@ -581,30 +581,30 @@ commonPropertiesWithTargetClass original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "constraints"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.CommonProperties"),
-              Core.projectionField = (Core.Name "constraints")})))),
+              Core.projectionField = (Core.Name "constraints")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "deactivated"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.CommonProperties"),
-              Core.projectionField = (Core.Name "deactivated")})))),
+              Core.projectionField = (Core.Name "deactivated")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "message"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.CommonProperties"),
-              Core.projectionField = (Core.Name "message")})))),
+              Core.projectionField = (Core.Name "message")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "severity"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.CommonProperties"),
-              Core.projectionField = (Core.Name "severity")})))),
+              Core.projectionField = (Core.Name "severity")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "targetClass"),
@@ -612,23 +612,23 @@ commonPropertiesWithTargetClass original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "targetNode"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.CommonProperties"),
-              Core.projectionField = (Core.Name "targetNode")})))),
+              Core.projectionField = (Core.Name "targetNode")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "targetObjectsOf"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.CommonProperties"),
-              Core.projectionField = (Core.Name "targetObjectsOf")})))),
+              Core.projectionField = (Core.Name "targetObjectsOf")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "targetSubjectsOf"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.CommonProperties"),
-              Core.projectionField = (Core.Name "targetSubjectsOf")})))),
+              Core.projectionField = (Core.Name "targetSubjectsOf")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 commonPropertiesWithTargetNode :: Phantoms.TTerm Model.CommonProperties -> Phantoms.TTerm (S.Set Syntax.IriOrLiteral) -> Phantoms.TTerm Model.CommonProperties
@@ -639,37 +639,37 @@ commonPropertiesWithTargetNode original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "constraints"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.CommonProperties"),
-              Core.projectionField = (Core.Name "constraints")})))),
+              Core.projectionField = (Core.Name "constraints")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "deactivated"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.CommonProperties"),
-              Core.projectionField = (Core.Name "deactivated")})))),
+              Core.projectionField = (Core.Name "deactivated")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "message"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.CommonProperties"),
-              Core.projectionField = (Core.Name "message")})))),
+              Core.projectionField = (Core.Name "message")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "severity"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.CommonProperties"),
-              Core.projectionField = (Core.Name "severity")})))),
+              Core.projectionField = (Core.Name "severity")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "targetClass"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.CommonProperties"),
-              Core.projectionField = (Core.Name "targetClass")})))),
+              Core.projectionField = (Core.Name "targetClass")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "targetNode"),
@@ -677,16 +677,16 @@ commonPropertiesWithTargetNode original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "targetObjectsOf"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.CommonProperties"),
-              Core.projectionField = (Core.Name "targetObjectsOf")})))),
+              Core.projectionField = (Core.Name "targetObjectsOf")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "targetSubjectsOf"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.CommonProperties"),
-              Core.projectionField = (Core.Name "targetSubjectsOf")})))),
+              Core.projectionField = (Core.Name "targetSubjectsOf")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 commonPropertiesWithTargetObjectsOf :: Phantoms.TTerm Model.CommonProperties -> Phantoms.TTerm (S.Set Syntax.Property) -> Phantoms.TTerm Model.CommonProperties
@@ -697,44 +697,44 @@ commonPropertiesWithTargetObjectsOf original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "constraints"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.CommonProperties"),
-              Core.projectionField = (Core.Name "constraints")})))),
+              Core.projectionField = (Core.Name "constraints")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "deactivated"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.CommonProperties"),
-              Core.projectionField = (Core.Name "deactivated")})))),
+              Core.projectionField = (Core.Name "deactivated")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "message"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.CommonProperties"),
-              Core.projectionField = (Core.Name "message")})))),
+              Core.projectionField = (Core.Name "message")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "severity"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.CommonProperties"),
-              Core.projectionField = (Core.Name "severity")})))),
+              Core.projectionField = (Core.Name "severity")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "targetClass"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.CommonProperties"),
-              Core.projectionField = (Core.Name "targetClass")})))),
+              Core.projectionField = (Core.Name "targetClass")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "targetNode"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.CommonProperties"),
-              Core.projectionField = (Core.Name "targetNode")})))),
+              Core.projectionField = (Core.Name "targetNode")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "targetObjectsOf"),
@@ -742,9 +742,9 @@ commonPropertiesWithTargetObjectsOf original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "targetSubjectsOf"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.CommonProperties"),
-              Core.projectionField = (Core.Name "targetSubjectsOf")})))),
+              Core.projectionField = (Core.Name "targetSubjectsOf")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 commonPropertiesWithTargetSubjectsOf :: Phantoms.TTerm Model.CommonProperties -> Phantoms.TTerm (S.Set Syntax.Property) -> Phantoms.TTerm Model.CommonProperties
@@ -755,51 +755,51 @@ commonPropertiesWithTargetSubjectsOf original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "constraints"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.CommonProperties"),
-              Core.projectionField = (Core.Name "constraints")})))),
+              Core.projectionField = (Core.Name "constraints")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "deactivated"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.CommonProperties"),
-              Core.projectionField = (Core.Name "deactivated")})))),
+              Core.projectionField = (Core.Name "deactivated")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "message"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.CommonProperties"),
-              Core.projectionField = (Core.Name "message")})))),
+              Core.projectionField = (Core.Name "message")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "severity"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.CommonProperties"),
-              Core.projectionField = (Core.Name "severity")})))),
+              Core.projectionField = (Core.Name "severity")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "targetClass"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.CommonProperties"),
-              Core.projectionField = (Core.Name "targetClass")})))),
+              Core.projectionField = (Core.Name "targetClass")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "targetNode"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.CommonProperties"),
-              Core.projectionField = (Core.Name "targetNode")})))),
+              Core.projectionField = (Core.Name "targetNode")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "targetObjectsOf"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.CommonProperties"),
-              Core.projectionField = (Core.Name "targetObjectsOf")})))),
+              Core.projectionField = (Core.Name "targetObjectsOf")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "targetSubjectsOf"),
@@ -820,17 +820,17 @@ definition iri target =
 definitionIri :: Phantoms.TTerm (Model.Definition a) -> Phantoms.TTerm Syntax.Iri
 definitionIri x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shacl.model.Definition"),
-        Core.projectionField = (Core.Name "iri")})))),
+        Core.projectionField = (Core.Name "iri")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 definitionTarget :: Phantoms.TTerm (Model.Definition a) -> Phantoms.TTerm a
 definitionTarget x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shacl.model.Definition"),
-        Core.projectionField = (Core.Name "target")})))),
+        Core.projectionField = (Core.Name "target")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 definitionWithIri :: Phantoms.TTerm (Model.Definition a) -> Phantoms.TTerm Syntax.Iri -> Phantoms.TTerm (Model.Definition a)
@@ -844,9 +844,9 @@ definitionWithIri original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "target"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.Definition"),
-              Core.projectionField = (Core.Name "target")})))),
+              Core.projectionField = (Core.Name "target")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 definitionWithTarget :: Phantoms.TTerm (Model.Definition a) -> Phantoms.TTerm a -> Phantoms.TTerm (Model.Definition a)
@@ -857,9 +857,9 @@ definitionWithTarget original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "iri"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.Definition"),
-              Core.projectionField = (Core.Name "iri")})))),
+              Core.projectionField = (Core.Name "iri")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "target"),
@@ -925,9 +925,9 @@ nodeShape common =
 nodeShapeCommon :: Phantoms.TTerm Model.NodeShape -> Phantoms.TTerm Model.CommonProperties
 nodeShapeCommon x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shacl.model.NodeShape"),
-        Core.projectionField = (Core.Name "common")})))),
+        Core.projectionField = (Core.Name "common")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 nodeShapeWithCommon :: Phantoms.TTerm Model.NodeShape -> Phantoms.TTerm Model.CommonProperties -> Phantoms.TTerm Model.NodeShape
@@ -954,17 +954,17 @@ pattern regex flags =
 patternFlags :: Phantoms.TTerm Model.Pattern -> Phantoms.TTerm (Maybe String)
 patternFlags x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shacl.model.Pattern"),
-        Core.projectionField = (Core.Name "flags")})))),
+        Core.projectionField = (Core.Name "flags")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 patternRegex :: Phantoms.TTerm Model.Pattern -> Phantoms.TTerm String
 patternRegex x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shacl.model.Pattern"),
-        Core.projectionField = (Core.Name "regex")})))),
+        Core.projectionField = (Core.Name "regex")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 patternWithFlags :: Phantoms.TTerm Model.Pattern -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Model.Pattern
@@ -975,9 +975,9 @@ patternWithFlags original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "regex"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.Pattern"),
-              Core.projectionField = (Core.Name "regex")})))),
+              Core.projectionField = (Core.Name "regex")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "flags"),
@@ -994,9 +994,9 @@ patternWithRegex original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "flags"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.Pattern"),
-              Core.projectionField = (Core.Name "flags")})))),
+              Core.projectionField = (Core.Name "flags")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 propertyShape :: Phantoms.TTerm Model.CommonProperties -> Phantoms.TTerm (S.Set Model.PropertyShapeConstraint) -> Phantoms.TTerm (Maybe Syntax.Node) -> Phantoms.TTerm Syntax.LangStrings -> Phantoms.TTerm Syntax.LangStrings -> Phantoms.TTerm (Maybe Integer) -> Phantoms.TTerm Syntax.Iri -> Phantoms.TTerm Model.PropertyShape
@@ -1029,9 +1029,9 @@ propertyShape common constraints defaultValue description name order path =
 propertyShapeCommon :: Phantoms.TTerm Model.PropertyShape -> Phantoms.TTerm Model.CommonProperties
 propertyShapeCommon x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shacl.model.PropertyShape"),
-        Core.projectionField = (Core.Name "common")})))),
+        Core.projectionField = (Core.Name "common")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 propertyShapeConstraintLessThan :: Phantoms.TTerm (S.Set Syntax.Property) -> Phantoms.TTerm Model.PropertyShapeConstraint
@@ -1085,49 +1085,49 @@ propertyShapeConstraintUniqueLang x =
 propertyShapeConstraints :: Phantoms.TTerm Model.PropertyShape -> Phantoms.TTerm (S.Set Model.PropertyShapeConstraint)
 propertyShapeConstraints x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shacl.model.PropertyShape"),
-        Core.projectionField = (Core.Name "constraints")})))),
+        Core.projectionField = (Core.Name "constraints")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 propertyShapeDefaultValue :: Phantoms.TTerm Model.PropertyShape -> Phantoms.TTerm (Maybe Syntax.Node)
 propertyShapeDefaultValue x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shacl.model.PropertyShape"),
-        Core.projectionField = (Core.Name "defaultValue")})))),
+        Core.projectionField = (Core.Name "defaultValue")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 propertyShapeDescription :: Phantoms.TTerm Model.PropertyShape -> Phantoms.TTerm Syntax.LangStrings
 propertyShapeDescription x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shacl.model.PropertyShape"),
-        Core.projectionField = (Core.Name "description")})))),
+        Core.projectionField = (Core.Name "description")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 propertyShapeName :: Phantoms.TTerm Model.PropertyShape -> Phantoms.TTerm Syntax.LangStrings
 propertyShapeName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shacl.model.PropertyShape"),
-        Core.projectionField = (Core.Name "name")})))),
+        Core.projectionField = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 propertyShapeOrder :: Phantoms.TTerm Model.PropertyShape -> Phantoms.TTerm (Maybe Integer)
 propertyShapeOrder x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shacl.model.PropertyShape"),
-        Core.projectionField = (Core.Name "order")})))),
+        Core.projectionField = (Core.Name "order")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 propertyShapePath :: Phantoms.TTerm Model.PropertyShape -> Phantoms.TTerm Syntax.Iri
 propertyShapePath x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shacl.model.PropertyShape"),
-        Core.projectionField = (Core.Name "path")})))),
+        Core.projectionField = (Core.Name "path")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 propertyShapeWithCommon :: Phantoms.TTerm Model.PropertyShape -> Phantoms.TTerm Model.CommonProperties -> Phantoms.TTerm Model.PropertyShape
@@ -1141,44 +1141,44 @@ propertyShapeWithCommon original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "constraints"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.PropertyShape"),
-              Core.projectionField = (Core.Name "constraints")})))),
+              Core.projectionField = (Core.Name "constraints")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "defaultValue"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.PropertyShape"),
-              Core.projectionField = (Core.Name "defaultValue")})))),
+              Core.projectionField = (Core.Name "defaultValue")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "description"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.PropertyShape"),
-              Core.projectionField = (Core.Name "description")})))),
+              Core.projectionField = (Core.Name "description")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.PropertyShape"),
-              Core.projectionField = (Core.Name "name")})))),
+              Core.projectionField = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "order"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.PropertyShape"),
-              Core.projectionField = (Core.Name "order")})))),
+              Core.projectionField = (Core.Name "order")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "path"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.PropertyShape"),
-              Core.projectionField = (Core.Name "path")})))),
+              Core.projectionField = (Core.Name "path")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 propertyShapeWithConstraints :: Phantoms.TTerm Model.PropertyShape -> Phantoms.TTerm (S.Set Model.PropertyShapeConstraint) -> Phantoms.TTerm Model.PropertyShape
@@ -1189,9 +1189,9 @@ propertyShapeWithConstraints original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "common"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.PropertyShape"),
-              Core.projectionField = (Core.Name "common")})))),
+              Core.projectionField = (Core.Name "common")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "constraints"),
@@ -1199,37 +1199,37 @@ propertyShapeWithConstraints original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "defaultValue"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.PropertyShape"),
-              Core.projectionField = (Core.Name "defaultValue")})))),
+              Core.projectionField = (Core.Name "defaultValue")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "description"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.PropertyShape"),
-              Core.projectionField = (Core.Name "description")})))),
+              Core.projectionField = (Core.Name "description")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.PropertyShape"),
-              Core.projectionField = (Core.Name "name")})))),
+              Core.projectionField = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "order"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.PropertyShape"),
-              Core.projectionField = (Core.Name "order")})))),
+              Core.projectionField = (Core.Name "order")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "path"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.PropertyShape"),
-              Core.projectionField = (Core.Name "path")})))),
+              Core.projectionField = (Core.Name "path")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 propertyShapeWithDefaultValue :: Phantoms.TTerm Model.PropertyShape -> Phantoms.TTerm (Maybe Syntax.Node) -> Phantoms.TTerm Model.PropertyShape
@@ -1240,16 +1240,16 @@ propertyShapeWithDefaultValue original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "common"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.PropertyShape"),
-              Core.projectionField = (Core.Name "common")})))),
+              Core.projectionField = (Core.Name "common")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "constraints"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.PropertyShape"),
-              Core.projectionField = (Core.Name "constraints")})))),
+              Core.projectionField = (Core.Name "constraints")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "defaultValue"),
@@ -1257,30 +1257,30 @@ propertyShapeWithDefaultValue original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "description"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.PropertyShape"),
-              Core.projectionField = (Core.Name "description")})))),
+              Core.projectionField = (Core.Name "description")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.PropertyShape"),
-              Core.projectionField = (Core.Name "name")})))),
+              Core.projectionField = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "order"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.PropertyShape"),
-              Core.projectionField = (Core.Name "order")})))),
+              Core.projectionField = (Core.Name "order")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "path"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.PropertyShape"),
-              Core.projectionField = (Core.Name "path")})))),
+              Core.projectionField = (Core.Name "path")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 propertyShapeWithDescription :: Phantoms.TTerm Model.PropertyShape -> Phantoms.TTerm Syntax.LangStrings -> Phantoms.TTerm Model.PropertyShape
@@ -1291,23 +1291,23 @@ propertyShapeWithDescription original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "common"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.PropertyShape"),
-              Core.projectionField = (Core.Name "common")})))),
+              Core.projectionField = (Core.Name "common")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "constraints"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.PropertyShape"),
-              Core.projectionField = (Core.Name "constraints")})))),
+              Core.projectionField = (Core.Name "constraints")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "defaultValue"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.PropertyShape"),
-              Core.projectionField = (Core.Name "defaultValue")})))),
+              Core.projectionField = (Core.Name "defaultValue")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "description"),
@@ -1315,23 +1315,23 @@ propertyShapeWithDescription original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.PropertyShape"),
-              Core.projectionField = (Core.Name "name")})))),
+              Core.projectionField = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "order"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.PropertyShape"),
-              Core.projectionField = (Core.Name "order")})))),
+              Core.projectionField = (Core.Name "order")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "path"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.PropertyShape"),
-              Core.projectionField = (Core.Name "path")})))),
+              Core.projectionField = (Core.Name "path")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 propertyShapeWithName :: Phantoms.TTerm Model.PropertyShape -> Phantoms.TTerm Syntax.LangStrings -> Phantoms.TTerm Model.PropertyShape
@@ -1342,30 +1342,30 @@ propertyShapeWithName original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "common"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.PropertyShape"),
-              Core.projectionField = (Core.Name "common")})))),
+              Core.projectionField = (Core.Name "common")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "constraints"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.PropertyShape"),
-              Core.projectionField = (Core.Name "constraints")})))),
+              Core.projectionField = (Core.Name "constraints")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "defaultValue"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.PropertyShape"),
-              Core.projectionField = (Core.Name "defaultValue")})))),
+              Core.projectionField = (Core.Name "defaultValue")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "description"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.PropertyShape"),
-              Core.projectionField = (Core.Name "description")})))),
+              Core.projectionField = (Core.Name "description")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
@@ -1373,16 +1373,16 @@ propertyShapeWithName original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "order"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.PropertyShape"),
-              Core.projectionField = (Core.Name "order")})))),
+              Core.projectionField = (Core.Name "order")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "path"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.PropertyShape"),
-              Core.projectionField = (Core.Name "path")})))),
+              Core.projectionField = (Core.Name "path")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 propertyShapeWithOrder :: Phantoms.TTerm Model.PropertyShape -> Phantoms.TTerm (Maybe Integer) -> Phantoms.TTerm Model.PropertyShape
@@ -1393,37 +1393,37 @@ propertyShapeWithOrder original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "common"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.PropertyShape"),
-              Core.projectionField = (Core.Name "common")})))),
+              Core.projectionField = (Core.Name "common")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "constraints"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.PropertyShape"),
-              Core.projectionField = (Core.Name "constraints")})))),
+              Core.projectionField = (Core.Name "constraints")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "defaultValue"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.PropertyShape"),
-              Core.projectionField = (Core.Name "defaultValue")})))),
+              Core.projectionField = (Core.Name "defaultValue")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "description"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.PropertyShape"),
-              Core.projectionField = (Core.Name "description")})))),
+              Core.projectionField = (Core.Name "description")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.PropertyShape"),
-              Core.projectionField = (Core.Name "name")})))),
+              Core.projectionField = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "order"),
@@ -1431,9 +1431,9 @@ propertyShapeWithOrder original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "path"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.PropertyShape"),
-              Core.projectionField = (Core.Name "path")})))),
+              Core.projectionField = (Core.Name "path")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 propertyShapeWithPath :: Phantoms.TTerm Model.PropertyShape -> Phantoms.TTerm Syntax.Iri -> Phantoms.TTerm Model.PropertyShape
@@ -1444,44 +1444,44 @@ propertyShapeWithPath original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "common"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.PropertyShape"),
-              Core.projectionField = (Core.Name "common")})))),
+              Core.projectionField = (Core.Name "common")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "constraints"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.PropertyShape"),
-              Core.projectionField = (Core.Name "constraints")})))),
+              Core.projectionField = (Core.Name "constraints")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "defaultValue"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.PropertyShape"),
-              Core.projectionField = (Core.Name "defaultValue")})))),
+              Core.projectionField = (Core.Name "defaultValue")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "description"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.PropertyShape"),
-              Core.projectionField = (Core.Name "description")})))),
+              Core.projectionField = (Core.Name "description")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.PropertyShape"),
-              Core.projectionField = (Core.Name "name")})))),
+              Core.projectionField = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "order"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.PropertyShape"),
-              Core.projectionField = (Core.Name "order")})))),
+              Core.projectionField = (Core.Name "order")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "path"),
@@ -1508,33 +1508,33 @@ qualifiedValueShape qualifiedValueShape qualifiedMaxCount qualifiedMinCount qual
 qualifiedValueShapeQualifiedMaxCount :: Phantoms.TTerm Model.QualifiedValueShape -> Phantoms.TTerm Integer
 qualifiedValueShapeQualifiedMaxCount x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shacl.model.QualifiedValueShape"),
-        Core.projectionField = (Core.Name "qualifiedMaxCount")})))),
+        Core.projectionField = (Core.Name "qualifiedMaxCount")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 qualifiedValueShapeQualifiedMinCount :: Phantoms.TTerm Model.QualifiedValueShape -> Phantoms.TTerm Integer
 qualifiedValueShapeQualifiedMinCount x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shacl.model.QualifiedValueShape"),
-        Core.projectionField = (Core.Name "qualifiedMinCount")})))),
+        Core.projectionField = (Core.Name "qualifiedMinCount")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 qualifiedValueShapeQualifiedValueShape :: Phantoms.TTerm Model.QualifiedValueShape -> Phantoms.TTerm (Model.Reference Model.Shape)
 qualifiedValueShapeQualifiedValueShape x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shacl.model.QualifiedValueShape"),
-        Core.projectionField = (Core.Name "qualifiedValueShape")})))),
+        Core.projectionField = (Core.Name "qualifiedValueShape")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 qualifiedValueShapeQualifiedValueShapesDisjoint :: Phantoms.TTerm Model.QualifiedValueShape -> Phantoms.TTerm (Maybe Bool)
 qualifiedValueShapeQualifiedValueShapesDisjoint x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shacl.model.QualifiedValueShape"),
-        Core.projectionField = (Core.Name "qualifiedValueShapesDisjoint")})))),
+        Core.projectionField = (Core.Name "qualifiedValueShapesDisjoint")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 qualifiedValueShapeWithQualifiedMaxCount :: Phantoms.TTerm Model.QualifiedValueShape -> Phantoms.TTerm Integer -> Phantoms.TTerm Model.QualifiedValueShape
@@ -1545,9 +1545,9 @@ qualifiedValueShapeWithQualifiedMaxCount original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "qualifiedValueShape"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.QualifiedValueShape"),
-              Core.projectionField = (Core.Name "qualifiedValueShape")})))),
+              Core.projectionField = (Core.Name "qualifiedValueShape")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "qualifiedMaxCount"),
@@ -1555,16 +1555,16 @@ qualifiedValueShapeWithQualifiedMaxCount original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "qualifiedMinCount"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.QualifiedValueShape"),
-              Core.projectionField = (Core.Name "qualifiedMinCount")})))),
+              Core.projectionField = (Core.Name "qualifiedMinCount")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "qualifiedValueShapesDisjoint"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.QualifiedValueShape"),
-              Core.projectionField = (Core.Name "qualifiedValueShapesDisjoint")})))),
+              Core.projectionField = (Core.Name "qualifiedValueShapesDisjoint")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 qualifiedValueShapeWithQualifiedMinCount :: Phantoms.TTerm Model.QualifiedValueShape -> Phantoms.TTerm Integer -> Phantoms.TTerm Model.QualifiedValueShape
@@ -1575,16 +1575,16 @@ qualifiedValueShapeWithQualifiedMinCount original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "qualifiedValueShape"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.QualifiedValueShape"),
-              Core.projectionField = (Core.Name "qualifiedValueShape")})))),
+              Core.projectionField = (Core.Name "qualifiedValueShape")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "qualifiedMaxCount"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.QualifiedValueShape"),
-              Core.projectionField = (Core.Name "qualifiedMaxCount")})))),
+              Core.projectionField = (Core.Name "qualifiedMaxCount")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "qualifiedMinCount"),
@@ -1592,9 +1592,9 @@ qualifiedValueShapeWithQualifiedMinCount original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "qualifiedValueShapesDisjoint"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.QualifiedValueShape"),
-              Core.projectionField = (Core.Name "qualifiedValueShapesDisjoint")})))),
+              Core.projectionField = (Core.Name "qualifiedValueShapesDisjoint")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 qualifiedValueShapeWithQualifiedValueShape :: Phantoms.TTerm Model.QualifiedValueShape -> Phantoms.TTerm (Model.Reference Model.Shape) -> Phantoms.TTerm Model.QualifiedValueShape
@@ -1608,23 +1608,23 @@ qualifiedValueShapeWithQualifiedValueShape original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "qualifiedMaxCount"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.QualifiedValueShape"),
-              Core.projectionField = (Core.Name "qualifiedMaxCount")})))),
+              Core.projectionField = (Core.Name "qualifiedMaxCount")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "qualifiedMinCount"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.QualifiedValueShape"),
-              Core.projectionField = (Core.Name "qualifiedMinCount")})))),
+              Core.projectionField = (Core.Name "qualifiedMinCount")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "qualifiedValueShapesDisjoint"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.QualifiedValueShape"),
-              Core.projectionField = (Core.Name "qualifiedValueShapesDisjoint")})))),
+              Core.projectionField = (Core.Name "qualifiedValueShapesDisjoint")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 qualifiedValueShapeWithQualifiedValueShapesDisjoint :: Phantoms.TTerm Model.QualifiedValueShape -> Phantoms.TTerm (Maybe Bool) -> Phantoms.TTerm Model.QualifiedValueShape
@@ -1635,23 +1635,23 @@ qualifiedValueShapeWithQualifiedValueShapesDisjoint original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "qualifiedValueShape"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.QualifiedValueShape"),
-              Core.projectionField = (Core.Name "qualifiedValueShape")})))),
+              Core.projectionField = (Core.Name "qualifiedValueShape")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "qualifiedMaxCount"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.QualifiedValueShape"),
-              Core.projectionField = (Core.Name "qualifiedMaxCount")})))),
+              Core.projectionField = (Core.Name "qualifiedMaxCount")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "qualifiedMinCount"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shacl.model.QualifiedValueShape"),
-              Core.projectionField = (Core.Name "qualifiedMinCount")})))),
+              Core.projectionField = (Core.Name "qualifiedMinCount")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "qualifiedValueShapesDisjoint"),
@@ -1730,5 +1730,5 @@ shapesGraph x =
 unShapesGraph :: Phantoms.TTerm Model.ShapesGraph -> Phantoms.TTerm (S.Set (Model.Definition Model.Shape))
 unShapesGraph x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.shacl.model.ShapesGraph")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.shacl.model.ShapesGraph")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))

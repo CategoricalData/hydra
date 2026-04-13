@@ -359,12 +359,12 @@ inferTypeOfCaseStatement fcx cx caseStmt =
                           Typing_.typeConstraintComment = "case type"}) (Maps.lookup fname caseMap)) fnames itypes)
                 dfltClassConstraints = Maybes.fromMaybe Maps.empty (Maybes.map Typing_.inferenceResultClassConstraints dfltResult)
                 allElemConstraints = mergeClassConstraints caseElemConstraints dfltClassConstraints
-            in (Eithers.bind (mapConstraints fcx5 cx (\subst -> yieldWithConstraints fcx5 (buildTypeApplicationTerm svars (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
+            in (Eithers.bind (mapConstraints fcx5 cx (\subst -> yieldWithConstraints fcx5 (buildTypeApplicationTerm svars (Core.TermCases (Core.CaseStatement {
               Core.caseStatementTypeName = tname,
               Core.caseStatementDefault = (Maybes.map Typing_.inferenceResultTerm dfltResult),
               Core.caseStatementCases = (Lists.zipWith (\n -> \t -> Core.Field {
                 Core.fieldName = n,
-                Core.fieldTerm = t}) fnames iterms)}))))) (Core.TypeFunction (Core.FunctionType {
+                Core.fieldTerm = t}) fnames iterms)}))) (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (Resolution.nominalApplication tname (Lists.map (\x -> Core.TypeVariable x) svars)),
               Core.functionTypeCodomain = cod})) (Substitution.composeTypeSubstList (Lists.concat [
               Maybes.toList (Maybes.map Typing_.inferenceResultSubst dfltResult),
@@ -453,21 +453,6 @@ inferTypeOfEither fcx cx e =
                     Core.eitherTypeRight = rightType})
       in (Right (yieldChecked fcx3 termWithBothTypes eitherType subst)))) e
 
--- | Infer the type of an elimination (Either version)
-inferTypeOfElimination :: Context.Context -> Graph.Graph -> Core.Elimination -> Either Errors.Error Typing_.InferenceResult
-inferTypeOfElimination fcx cx elm =
-    case elm of
-      Core.EliminationRecord v0 -> inferTypeOfProjection fcx cx v0
-      Core.EliminationUnion v0 -> inferTypeOfCaseStatement fcx cx v0
-      Core.EliminationWrap v0 -> inferTypeOfUnwrap fcx cx v0
-
--- | Infer the type of a function (Either version)
-inferTypeOfFunction :: Context.Context -> Graph.Graph -> Core.Function -> Either Errors.Error Typing_.InferenceResult
-inferTypeOfFunction fcx cx f =
-    case f of
-      Core.FunctionElimination v0 -> inferTypeOfElimination fcx cx v0
-      Core.FunctionLambda v0 -> inferTypeOfLambda fcx cx v0
-
 -- | Infer the type of a union injection (Either version)
 inferTypeOfInjection :: Context.Context -> Graph.Graph -> Core.Injection -> Either Errors.Error Typing_.InferenceResult
 inferTypeOfInjection fcx cx injection =
@@ -519,10 +504,10 @@ inferTypeOfLambda fcx cx lambda =
             isubst = Typing_.inferenceResultSubst result
             rdom = Substitution.substInType isubst dom
             rterm =
-                    Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                    Core.TermLambda (Core.Lambda {
                       Core.lambdaParameter = var,
                       Core.lambdaDomain = (Just rdom),
-                      Core.lambdaBody = iterm}))
+                      Core.lambdaBody = iterm})
             rtype =
                     Core.TypeFunction (Core.FunctionType {
                       Core.functionTypeDomain = rdom,
@@ -819,9 +804,9 @@ inferTypeOfProjection fcx cx proj =
             fcx2 = Pairs.second stRp
             svars = Core.typeSchemeVariables schemaType
             stype = Core.typeSchemeType schemaType
-        in (Eithers.bind (Core_.recordType tname stype) (\sfields -> Eithers.bind (Resolution.findFieldType fcx2 fname sfields) (\ftyp -> Right (yield fcx2 (buildTypeApplicationTerm svars (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        in (Eithers.bind (Core_.recordType tname stype) (\sfields -> Eithers.bind (Resolution.findFieldType fcx2 fname sfields) (\ftyp -> Right (yield fcx2 (buildTypeApplicationTerm svars (Core.TermProject (Core.Projection {
           Core.projectionTypeName = tname,
-          Core.projectionField = fname}))))) (Core.TypeFunction (Core.FunctionType {
+          Core.projectionField = fname}))) (Core.TypeFunction (Core.FunctionType {
           Core.functionTypeDomain = (Resolution.nominalApplication tname (Lists.map (\x -> Core.TypeVariable x) svars)),
           Core.functionTypeCodomain = ftyp})) Substitution.idTypeSubst))))))
 
@@ -875,20 +860,23 @@ inferTypeOfTerm fcx cx term desc =
       in case term of
         Core.TermAnnotated v0 -> inferTypeOfAnnotatedTerm fcx2 cx v0
         Core.TermApplication v0 -> inferTypeOfApplication fcx2 cx v0
+        Core.TermCases v0 -> inferTypeOfCaseStatement fcx2 cx v0
         Core.TermEither v0 -> inferTypeOfEither fcx2 cx v0
-        Core.TermFunction v0 -> inferTypeOfFunction fcx2 cx v0
+        Core.TermLambda v0 -> inferTypeOfLambda fcx2 cx v0
         Core.TermLet v0 -> inferTypeOfLet fcx2 cx v0
         Core.TermList v0 -> inferTypeOfList fcx2 cx v0
         Core.TermLiteral v0 -> Right (inferTypeOfLiteral fcx2 v0)
         Core.TermMap v0 -> inferTypeOfMap fcx2 cx v0
         Core.TermMaybe v0 -> inferTypeOfOptional fcx2 cx v0
         Core.TermPair v0 -> inferTypeOfPair fcx2 cx v0
+        Core.TermProject v0 -> inferTypeOfProjection fcx2 cx v0
         Core.TermRecord v0 -> inferTypeOfRecord fcx2 cx v0
         Core.TermSet v0 -> inferTypeOfSet fcx2 cx v0
         Core.TermTypeApplication v0 -> inferTypeOfTypeApplication fcx2 cx v0
         Core.TermTypeLambda v0 -> inferTypeOfTypeLambda fcx2 cx v0
         Core.TermUnion v0 -> inferTypeOfInjection fcx2 cx v0
         Core.TermUnit -> Right (inferTypeOfUnit fcx2)
+        Core.TermUnwrap v0 -> inferTypeOfUnwrap fcx2 cx v0
         Core.TermVariable v0 -> inferTypeOfVariable fcx2 cx v0
         Core.TermWrap v0 -> inferTypeOfWrappedTerm fcx2 cx v0
 
@@ -918,7 +906,7 @@ inferTypeOfUnwrap fcx cx tname =
           fcx2 = Pairs.second stRp
           svars = Core.typeSchemeVariables schemaType
           stype = Core.typeSchemeType schemaType
-      in (Eithers.bind (Core_.wrappedType tname stype) (\wtyp -> Right (yield fcx2 (buildTypeApplicationTerm svars (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap tname)))) (Core.TypeFunction (Core.FunctionType {
+      in (Eithers.bind (Core_.wrappedType tname stype) (\wtyp -> Right (yield fcx2 (buildTypeApplicationTerm svars (Core.TermUnwrap tname)) (Core.TypeFunction (Core.FunctionType {
         Core.functionTypeDomain = (Resolution.nominalApplication tname (Lists.map (\x -> Core.TypeVariable x) svars)),
         Core.functionTypeCodomain = wtyp})) Substitution.idTypeSubst))))
 

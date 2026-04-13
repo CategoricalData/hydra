@@ -241,28 +241,18 @@ public interface Adapt {
         }
 
         @Override
-        public hydra.util.Either<hydra.errors.Error_, hydra.core.Term> visit(hydra.core.Term.Function f) {
-          return (f).value.accept(new hydra.core.Function.PartialVisitor<>() {
-            @Override
-            public hydra.util.Either<hydra.errors.Error_, hydra.core.Term> otherwise(hydra.core.Function instance) {
-              return hydra.util.Either.<hydra.errors.Error_, hydra.core.Term>right(new hydra.core.Term.Function((f).value));
-            }
-
-            @Override
-            public hydra.util.Either<hydra.errors.Error_, hydra.core.Term> visit(hydra.core.Function.Lambda l) {
-              return hydra.lib.eithers.Bind.apply(
-                hydra.lib.maybes.Maybe.applyLazy(
-                  () -> hydra.util.Either.<hydra.errors.Error_, hydra.util.Maybe<hydra.core.Type>>right((hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing())),
-                  (java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.errors.Error_, hydra.util.Maybe<hydra.core.Type>>>) (dom -> hydra.lib.eithers.Bind.apply(
-                    hydra.Adapt.adaptType(
-                      constraints,
-                      litmap,
-                      dom),
-                    (java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.errors.Error_, hydra.util.Maybe<hydra.core.Type>>>) (dom1 -> hydra.util.Either.<hydra.errors.Error_, hydra.util.Maybe<hydra.core.Type>>right(hydra.util.Maybe.just(dom1))))),
-                  (l).value.domain),
-                (java.util.function.Function<hydra.util.Maybe<hydra.core.Type>, hydra.util.Either<hydra.errors.Error_, hydra.core.Term>>) (adaptedDomain -> hydra.util.Either.<hydra.errors.Error_, hydra.core.Term>right(new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda((l).value.parameter, adaptedDomain, (l).value.body))))));
-            }
-          });
+        public hydra.util.Either<hydra.errors.Error_, hydra.core.Term> visit(hydra.core.Term.Lambda l) {
+          return hydra.lib.eithers.Bind.apply(
+            hydra.lib.maybes.Maybe.applyLazy(
+              () -> hydra.util.Either.<hydra.errors.Error_, hydra.util.Maybe<hydra.core.Type>>right((hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing())),
+              (java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.errors.Error_, hydra.util.Maybe<hydra.core.Type>>>) (dom -> hydra.lib.eithers.Bind.apply(
+                hydra.Adapt.adaptType(
+                  constraints,
+                  litmap,
+                  dom),
+                (java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.errors.Error_, hydra.util.Maybe<hydra.core.Type>>>) (dom1 -> hydra.util.Either.<hydra.errors.Error_, hydra.util.Maybe<hydra.core.Type>>right(hydra.util.Maybe.just(dom1))))),
+              (l).value.domain),
+            (java.util.function.Function<hydra.util.Maybe<hydra.core.Type>, hydra.util.Either<hydra.errors.Error_, hydra.core.Term>>) (adaptedDomain -> hydra.util.Either.<hydra.errors.Error_, hydra.core.Term>right(new hydra.core.Term.Lambda(new hydra.core.Lambda((l).value.parameter, adaptedDomain, (l).value.body)))));
         }
       })));
   }
@@ -997,37 +987,6 @@ public interface Adapt {
     java.util.concurrent.atomic.AtomicReference<java.util.function.Function<hydra.core.Term, java.util.function.Function<hydra.core.Type, hydra.core.Term>>> push = new java.util.concurrent.atomic.AtomicReference<>();
     go.set((java.util.function.Function<hydra.core.Term, hydra.core.Term>) (t -> {
       java.util.function.Function<hydra.core.Field, hydra.core.Field> forField = (java.util.function.Function<hydra.core.Field, hydra.core.Field>) (fld -> new hydra.core.Field((fld).name, go.get().apply((fld).term)));
-      java.util.function.Function<hydra.core.Elimination, hydra.core.Elimination> forElimination = (java.util.function.Function<hydra.core.Elimination, hydra.core.Elimination>) (elm -> (elm).accept(new hydra.core.Elimination.PartialVisitor<>() {
-        @Override
-        public hydra.core.Elimination visit(hydra.core.Elimination.Record p) {
-          return new hydra.core.Elimination.Record((p).value);
-        }
-
-        @Override
-        public hydra.core.Elimination visit(hydra.core.Elimination.Union cs) {
-          return new hydra.core.Elimination.Union(new hydra.core.CaseStatement((cs).value.typeName, hydra.lib.maybes.Map.apply(
-            go.get(),
-            (cs).value.default_), hydra.lib.lists.Map.apply(
-            forField,
-            (cs).value.cases)));
-        }
-
-        @Override
-        public hydra.core.Elimination visit(hydra.core.Elimination.Wrap name) {
-          return new hydra.core.Elimination.Wrap((name).value);
-        }
-      }));
-      java.util.function.Function<hydra.core.Function, hydra.core.Function> forFunction = (java.util.function.Function<hydra.core.Function, hydra.core.Function>) (fun -> (fun).accept(new hydra.core.Function.PartialVisitor<>() {
-        @Override
-        public hydra.core.Function visit(hydra.core.Function.Elimination elm) {
-          return new hydra.core.Function.Elimination((forElimination).apply((elm).value));
-        }
-
-        @Override
-        public hydra.core.Function visit(hydra.core.Function.Lambda l) {
-          return new hydra.core.Function.Lambda(new hydra.core.Lambda((l).value.parameter, (l).value.domain, go.get().apply((l).value.body)));
-        }
-      }));
       java.util.function.Function<hydra.core.Let, hydra.core.Let> forLet = (java.util.function.Function<hydra.core.Let, hydra.core.Let>) (lt -> {
         java.util.function.Function<hydra.core.Binding, hydra.core.Binding> mapBinding = (java.util.function.Function<hydra.core.Binding, hydra.core.Binding>) (b -> new hydra.core.Binding((b).name, go.get().apply((b).term), (b).type));
         return new hydra.core.Let(hydra.lib.lists.Map.apply(
@@ -1052,6 +1011,15 @@ public interface Adapt {
         }
 
         @Override
+        public hydra.core.Term visit(hydra.core.Term.Cases cs) {
+          return new hydra.core.Term.Cases(new hydra.core.CaseStatement((cs).value.typeName, hydra.lib.maybes.Map.apply(
+            go.get(),
+            (cs).value.default_), hydra.lib.lists.Map.apply(
+            forField,
+            (cs).value.cases)));
+        }
+
+        @Override
         public hydra.core.Term visit(hydra.core.Term.Either e) {
           return new hydra.core.Term.Either(hydra.lib.eithers.Either.apply(
             (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.core.Term, hydra.core.Term>>) (l -> hydra.util.Either.<hydra.core.Term, hydra.core.Term>left(go.get().apply(l))),
@@ -1060,8 +1028,8 @@ public interface Adapt {
         }
 
         @Override
-        public hydra.core.Term visit(hydra.core.Term.Function fun) {
-          return new hydra.core.Term.Function((forFunction).apply((fun).value));
+        public hydra.core.Term visit(hydra.core.Term.Lambda l) {
+          return new hydra.core.Term.Lambda(new hydra.core.Lambda((l).value.parameter, (l).value.domain, go.get().apply((l).value.body)));
         }
 
         @Override
@@ -1096,6 +1064,11 @@ public interface Adapt {
         @Override
         public hydra.core.Term visit(hydra.core.Term.Pair p) {
           return new hydra.core.Term.Pair((hydra.util.Pair<hydra.core.Term, hydra.core.Term>) ((hydra.util.Pair<hydra.core.Term, hydra.core.Term>) (new hydra.util.Pair<hydra.core.Term, hydra.core.Term>(go.get().apply(hydra.lib.pairs.First.apply((p).value)), go.get().apply(hydra.lib.pairs.Second.apply((p).value))))));
+        }
+
+        @Override
+        public hydra.core.Term visit(hydra.core.Term.Project p) {
+          return new hydra.core.Term.Project((p).value);
         }
 
         @Override
@@ -1134,6 +1107,11 @@ public interface Adapt {
         }
 
         @Override
+        public hydra.core.Term visit(hydra.core.Term.Unwrap n) {
+          return new hydra.core.Term.Unwrap((n).value);
+        }
+
+        @Override
         public hydra.core.Term visit(hydra.core.Term.Variable v) {
           return new hydra.core.Term.Variable((v).value);
         }
@@ -1156,18 +1134,8 @@ public interface Adapt {
       }
 
       @Override
-      public hydra.core.Term visit(hydra.core.Term.Function f) {
-        return (f).value.accept(new hydra.core.Function.PartialVisitor<>() {
-          @Override
-          public hydra.core.Term otherwise(hydra.core.Function instance) {
-            return new hydra.core.Term.TypeApplication(new hydra.core.TypeApplicationTerm(new hydra.core.Term.Function((f).value), typ));
-          }
-
-          @Override
-          public hydra.core.Term visit(hydra.core.Function.Lambda l) {
-            return go.get().apply(new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda((l).value.parameter, (l).value.domain, new hydra.core.Term.TypeApplication(new hydra.core.TypeApplicationTerm((l).value.body, typ))))));
-          }
-        });
+      public hydra.core.Term visit(hydra.core.Term.Lambda l) {
+        return go.get().apply(new hydra.core.Term.Lambda(new hydra.core.Lambda((l).value.parameter, (l).value.domain, new hydra.core.Term.TypeApplication(new hydra.core.TypeApplicationTerm((l).value.body, typ)))));
       }
 
       @Override

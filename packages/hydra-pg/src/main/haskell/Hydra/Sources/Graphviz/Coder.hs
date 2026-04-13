@@ -203,29 +203,23 @@ termLabel = define "termLabel" $
     match _Term (Just $ var "simpleLabel" @@ string "?") [
       _Term_annotated>>: constant $ var "simpleLabel" @@ string "@{}",
       _Term_application>>: constant $ var "simpleLabel" @@ (Logic.ifElse (var "compact") (string "$") (string "apply")),
-      _Term_function>>: "f" ~>
-        match _Function (Just $ var "simpleLabel" @@ string "?") [
-          _Function_lambda>>: constant $ var "simpleLabel" @@ (Logic.ifElse (var "compact") (string "\x03BB") (string "lambda")),
-          _Function_elimination>>: "e" ~>
-            match _Elimination (Just $ var "simpleLabel" @@ string "?") [
-              _Elimination_record>>: "proj" ~>
-                var "simpleLabel" @@ Strings.cat (list [
-                  string "{",
-                  Names.compactName @@ var "namespaces" @@ (project _Projection _Projection_typeName @@ var "proj"),
-                  string "}.",
-                  Core.unName (project _Projection _Projection_field @@ var "proj")]),
-              _Elimination_union>>: "cs" ~>
-                var "simpleLabel" @@ Strings.cat (list [
-                  string "cases_{",
-                  Names.compactName @@ var "namespaces" @@ (project _CaseStatement _CaseStatement_typeName @@ var "cs"),
-                  string "}"]),
-              _Elimination_wrap>>: "name" ~>
-                var "simpleLabel" @@ Strings.cat (list [
-                  string "unwrap_{",
-                  Names.compactName @@ var "namespaces" @@ var "name",
-                  string "}"])]
-              @@ var "e"]
-          @@ var "f",
+      _Term_lambda>>: constant $ var "simpleLabel" @@ (Logic.ifElse (var "compact") (string "\x03BB") (string "lambda")),
+      _Term_project>>: "proj" ~>
+        var "simpleLabel" @@ Strings.cat (list [
+          string "{",
+          Names.compactName @@ var "namespaces" @@ (project _Projection _Projection_typeName @@ var "proj"),
+          string "}.",
+          Core.unName (project _Projection _Projection_field @@ var "proj")]),
+      _Term_cases>>: "cs" ~>
+        var "simpleLabel" @@ Strings.cat (list [
+          string "cases_{",
+          Names.compactName @@ var "namespaces" @@ (project _CaseStatement _CaseStatement_typeName @@ var "cs"),
+          string "}"]),
+      _Term_unwrap>>: "name" ~>
+        var "simpleLabel" @@ Strings.cat (list [
+          string "unwrap_{",
+          Names.compactName @@ var "namespaces" @@ var "name",
+          string "}"]),
       _Term_let>>: constant $ var "simpleLabel" @@ string "let",
       _Term_list>>: constant $ var "simpleLabel" @@ (Logic.ifElse (var "compact") (string "[]") (string "list")),
       _Term_literal>>: "l" ~>
@@ -358,27 +352,24 @@ termToDotStmts = define "termToDotStmts" $
         (Rewriting.subtermsWithSteps @@ var "currentTerm")]
       -- Main case dispatch on the current term
       $ match _Term (Just $ var "dflt") [
-          _Term_function>>: "fun" ~>
-            match _Function (Just $ var "dflt") [
-              _Function_lambda>>: "lam" ~> lets [
-                "v">: Core.lambdaParameter $ var "lam",
-                "body">: Core.lambdaBody $ var "lam",
-                "vstr">: Core.unName (var "v"),
-                "varLabel">: Names.uniqueLabel @@ var "selfVisited" @@ var "vstr",
-                "varId">: wrap Dot._Id (var "varLabel"),
-                "visited1">: Sets.insert (var "varLabel") (var "selfVisited"),
-                "ids1">: Maps.insert (var "v") (var "varId") (var "ids"),
-                "varNodeStmt">: inject Dot._Stmt Dot._Stmt_node (record Dot._NodeStmt [
-                  Dot._NodeStmt_id>>: toNodeId @@ var "varId",
-                  Dot._NodeStmt_attributes>>: just $ labelAttrs @@ nodeStyleVariable @@ var "vstr"]),
-                "varEdgeStmt">: inject Dot._Stmt Dot._Stmt_edge (record Dot._EdgeStmt [
-                  Dot._EdgeStmt_left>>: toNodeOrSubgraph @@ var "selfId",
-                  Dot._EdgeStmt_right>>: list [toNodeOrSubgraph @@ var "varId"],
-                  Dot._EdgeStmt_attributes>>: just $ var "edgeAttrs" @@ string "var"])]
-                $ var "encode" @@ nothing @@ false @@ var "ids1" @@ just (var "selfId")
-                    @@ pair (Lists.concat (list [var "selfStmts", list [var "varNodeStmt", var "varEdgeStmt"]])) (var "visited1")
-                    @@ pair Paths.subtermStepLambdaBody (var "body")]
-              @@ var "fun",
+          _Term_lambda>>: "lam" ~> lets [
+            "v">: Core.lambdaParameter $ var "lam",
+            "body">: Core.lambdaBody $ var "lam",
+            "vstr">: Core.unName (var "v"),
+            "varLabel">: Names.uniqueLabel @@ var "selfVisited" @@ var "vstr",
+            "varId">: wrap Dot._Id (var "varLabel"),
+            "visited1">: Sets.insert (var "varLabel") (var "selfVisited"),
+            "ids1">: Maps.insert (var "v") (var "varId") (var "ids"),
+            "varNodeStmt">: inject Dot._Stmt Dot._Stmt_node (record Dot._NodeStmt [
+              Dot._NodeStmt_id>>: toNodeId @@ var "varId",
+              Dot._NodeStmt_attributes>>: just $ labelAttrs @@ nodeStyleVariable @@ var "vstr"]),
+            "varEdgeStmt">: inject Dot._Stmt Dot._Stmt_edge (record Dot._EdgeStmt [
+              Dot._EdgeStmt_left>>: toNodeOrSubgraph @@ var "selfId",
+              Dot._EdgeStmt_right>>: list [toNodeOrSubgraph @@ var "varId"],
+              Dot._EdgeStmt_attributes>>: just $ var "edgeAttrs" @@ string "var"])]
+            $ var "encode" @@ nothing @@ false @@ var "ids1" @@ just (var "selfId")
+                @@ pair (Lists.concat (list [var "selfStmts", list [var "varNodeStmt", var "varEdgeStmt"]])) (var "visited1")
+                @@ pair Paths.subtermStepLambdaBody (var "body"),
           _Term_let>>: "letExpr" ~> lets [
             "bindings">: Core.letBindings $ var "letExpr",
             "env">: Core.letBody $ var "letExpr",

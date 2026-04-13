@@ -138,24 +138,6 @@ _PairType_first = Name "first"
 
 _PairType_second = Name "second"
 
--- | A corresponding elimination for an introduction term
-data Elimination =
-  -- | Eliminates a record by projecting a given field
-  EliminationRecord Projection |
-  -- | Eliminates a union term by matching over the fields of the union. This is a case statement.
-  EliminationUnion CaseStatement |
-  -- | Unwrap a wrapped term
-  EliminationWrap Name
-  deriving (Eq, Ord, Read, Show)
-
-_Elimination = Name "hydra.core.Elimination"
-
-_Elimination_record = Name "record"
-
-_Elimination_union = Name "union"
-
-_Elimination_wrap = Name "wrap"
-
 -- | A name/term pair
 data Field =
   Field {
@@ -236,20 +218,6 @@ _ForallType = Name "hydra.core.ForallType"
 _ForallType_parameter = Name "parameter"
 
 _ForallType_body = Name "body"
-
--- | A function
-data Function =
-  -- | An elimination for any of a few term variants
-  FunctionElimination Elimination |
-  -- | A function abstraction (lambda)
-  FunctionLambda Lambda
-  deriving (Eq, Ord, Read, Show)
-
-_Function = Name "hydra.core.Function"
-
-_Function_elimination = Name "elimination"
-
-_Function_lambda = Name "lambda"
 
 -- | A function type, also known as an arrow type
 data FunctionType =
@@ -510,10 +478,12 @@ data Term =
   TermAnnotated AnnotatedTerm |
   -- | A function application
   TermApplication Application |
+  -- | A union elimination; a case statement
+  TermCases CaseStatement |
   -- | An either value
   TermEither (Either Term Term) |
-  -- | A function term
-  TermFunction Function |
+  -- | A function abstraction (lambda)
+  TermLambda Lambda |
   -- | A 'let' term, which binds variables to terms
   TermLet Let |
   -- | A list
@@ -526,6 +496,8 @@ data Term =
   TermMaybe (Maybe Term) |
   -- | A pair (2-tuple)
   TermPair (Term, Term) |
+  -- | A record elimination; a projection
+  TermProject Projection |
   -- | A record term
   TermRecord Record |
   -- | A set of values
@@ -538,6 +510,8 @@ data Term =
   TermUnion Injection |
   -- | A unit value; a term with no value
   TermUnit  |
+  -- | An unwrap elimination; the inverse of a wrap
+  TermUnwrap Name |
   -- | A variable reference
   TermVariable Name |
   -- | A wrapped term; an instance of a wrapper type (newtype)
@@ -550,9 +524,11 @@ _Term_annotated = Name "annotated"
 
 _Term_application = Name "application"
 
+_Term_cases = Name "cases"
+
 _Term_either = Name "either"
 
-_Term_function = Name "function"
+_Term_lambda = Name "lambda"
 
 _Term_let = Name "let"
 
@@ -566,6 +542,8 @@ _Term_maybe = Name "maybe"
 
 _Term_pair = Name "pair"
 
+_Term_project = Name "project"
+
 _Term_record = Name "record"
 
 _Term_set = Name "set"
@@ -577,6 +555,8 @@ _Term_typeLambda = Name "typeLambda"
 _Term_union = Name "union"
 
 _Term_unit = Name "unit"
+
+_Term_unwrap = Name "unwrap"
 
 _Term_variable = Name "variable"
 

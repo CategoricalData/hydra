@@ -146,13 +146,10 @@ def adaptLambdaDomains[T0](constraints: hydra.coders.LanguageConstraints)(litmap
    hydra.core.Term] =
   hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Term, hydra.core.Term](recurse(term))((rewritten: hydra.core.Term) =>
   rewritten match
-  case hydra.core.Term.function(v_Term_function_f) => v_Term_function_f match
-    case hydra.core.Function.lambda(v_Function_lambda_l) => hydra.lib.eithers.bind[hydra.errors.Error,
-       Option[hydra.core.Type], hydra.core.Term](hydra.lib.maybes.maybe[Either[hydra.errors.Error, Option[hydra.core.Type]],
-       hydra.core.Type](Right(None))((dom: hydra.core.Type) =>
-      hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Type, Option[hydra.core.Type]](hydra.adapt.adaptType(constraints)(litmap)(dom))((dom1: hydra.core.Type) => Right(Some(dom1))))(v_Function_lambda_l.domain))((adaptedDomain: Option[hydra.core.Type]) =>
-      Right(hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda(v_Function_lambda_l.parameter, adaptedDomain, (v_Function_lambda_l.body))))))
-    case _ => Right(hydra.core.Term.function(v_Term_function_f))
+  case hydra.core.Term.lambda(v_Term_lambda_l) => hydra.lib.eithers.bind[hydra.errors.Error, Option[hydra.core.Type],
+     hydra.core.Term](hydra.lib.maybes.maybe[Either[hydra.errors.Error, Option[hydra.core.Type]], hydra.core.Type](Right(None))((dom: hydra.core.Type) =>
+    hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Type, Option[hydra.core.Type]](hydra.adapt.adaptType(constraints)(litmap)(dom))((dom1: hydra.core.Type) => Right(Some(dom1))))(v_Term_lambda_l.domain))((adaptedDomain: Option[hydra.core.Type]) =>
+    Right(hydra.core.Term.lambda(hydra.core.Lambda(v_Term_lambda_l.parameter, adaptedDomain, (v_Term_lambda_l.body)))))
   case _ => Right(rewritten))
 
 def adaptLiteral(lt: hydra.core.LiteralType)(l: hydra.core.Literal): hydra.core.Literal =
@@ -529,29 +526,15 @@ def pushTypeAppsInward(term: hydra.core.Term): hydra.core.Term =
     body match
     case hydra.core.Term.application(v_Term_application_a) => go(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.typeApplication(hydra.core.TypeApplicationTerm(v_Term_application_a.function,
        typ)), (v_Term_application_a.argument))))
-    case hydra.core.Term.function(v_Term_function_f) => v_Term_function_f match
-      case hydra.core.Function.lambda(v_Function_lambda_l) => go(hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda(v_Function_lambda_l.parameter,
-         (v_Function_lambda_l.domain), hydra.core.Term.typeApplication(hydra.core.TypeApplicationTerm(v_Function_lambda_l.body,
-         typ))))))
-      case _ => hydra.core.Term.typeApplication(hydra.core.TypeApplicationTerm(hydra.core.Term.function(v_Term_function_f), typ))
+    case hydra.core.Term.lambda(v_Term_lambda_l) => go(hydra.core.Term.lambda(hydra.core.Lambda(v_Term_lambda_l.parameter,
+       (v_Term_lambda_l.domain), hydra.core.Term.typeApplication(hydra.core.TypeApplicationTerm(v_Term_lambda_l.body,
+       typ)))))
     case hydra.core.Term.let(v_Term_let_lt) => go(hydra.core.Term.let(hydra.core.Let(v_Term_let_lt.bindings,
        hydra.core.Term.typeApplication(hydra.core.TypeApplicationTerm(v_Term_let_lt.body, typ)))))
     case _ => hydra.core.Term.typeApplication(hydra.core.TypeApplicationTerm(body, typ))
   def go(t: hydra.core.Term): hydra.core.Term =
     {
     def forField(fld: hydra.core.Field): hydra.core.Field = hydra.core.Field(fld.name, go(fld.term))
-    def forElimination(elm: hydra.core.Elimination): hydra.core.Elimination =
-      elm match
-      case hydra.core.Elimination.record(v_Elimination_record_p) => hydra.core.Elimination.record(v_Elimination_record_p)
-      case hydra.core.Elimination.union(v_Elimination_union_cs) => hydra.core.Elimination.union(hydra.core.CaseStatement(v_Elimination_union_cs.typeName,
-         hydra.lib.maybes.map[hydra.core.Term, hydra.core.Term](go)(v_Elimination_union_cs.default), hydra.lib.lists.map[hydra.core.Field,
-         hydra.core.Field](forField)(v_Elimination_union_cs.cases)))
-      case hydra.core.Elimination.wrap(v_Elimination_wrap_name) => hydra.core.Elimination.wrap(v_Elimination_wrap_name)
-    def forFunction(fun: hydra.core.Function): hydra.core.Function =
-      fun match
-      case hydra.core.Function.elimination(v_Function_elimination_elm) => hydra.core.Function.elimination(forElimination(v_Function_elimination_elm))
-      case hydra.core.Function.lambda(v_Function_lambda_l) => hydra.core.Function.lambda(hydra.core.Lambda(v_Function_lambda_l.parameter,
-         (v_Function_lambda_l.domain), go(v_Function_lambda_l.body)))
     def forLet(lt: hydra.core.Let): hydra.core.Let =
       {
       def mapBinding(b: hydra.core.Binding): hydra.core.Binding = hydra.core.Binding(b.name, go(b.term), (b.`type`))
@@ -570,9 +553,13 @@ def pushTypeAppsInward(term: hydra.core.Term): hydra.core.Term =
          (v_Term_annotated_at.annotation)))
       case hydra.core.Term.application(v_Term_application_a) => hydra.core.Term.application(hydra.core.Application(go(v_Term_application_a.function),
          go(v_Term_application_a.argument)))
+      case hydra.core.Term.cases(v_Term_cases_cs) => hydra.core.Term.cases(hydra.core.CaseStatement(v_Term_cases_cs.typeName,
+         hydra.lib.maybes.map[hydra.core.Term, hydra.core.Term](go)(v_Term_cases_cs.default), hydra.lib.lists.map[hydra.core.Field,
+         hydra.core.Field](forField)(v_Term_cases_cs.cases)))
       case hydra.core.Term.either(v_Term_either_e) => hydra.core.Term.either(hydra.lib.eithers.either[hydra.core.Term,
          hydra.core.Term, Either[hydra.core.Term, hydra.core.Term]]((l: hydra.core.Term) => Left(go(l)))((r: hydra.core.Term) => Right(go(r)))(v_Term_either_e))
-      case hydra.core.Term.function(v_Term_function_fun) => hydra.core.Term.function(forFunction(v_Term_function_fun))
+      case hydra.core.Term.lambda(v_Term_lambda_l) => hydra.core.Term.lambda(hydra.core.Lambda(v_Term_lambda_l.parameter,
+         (v_Term_lambda_l.domain), go(v_Term_lambda_l.body)))
       case hydra.core.Term.let(v_Term_let_lt) => hydra.core.Term.let(forLet(v_Term_let_lt))
       case hydra.core.Term.list(v_Term_list_els) => hydra.core.Term.list(hydra.lib.lists.map[hydra.core.Term, hydra.core.Term](go)(v_Term_list_els))
       case hydra.core.Term.literal(v_Term_literal_v) => hydra.core.Term.literal(v_Term_literal_v)
@@ -580,6 +567,7 @@ def pushTypeAppsInward(term: hydra.core.Term): hydra.core.Term =
       case hydra.core.Term.maybe(v_Term_maybe_m) => hydra.core.Term.maybe(hydra.lib.maybes.map[hydra.core.Term, hydra.core.Term](go)(v_Term_maybe_m))
       case hydra.core.Term.pair(v_Term_pair_p) => hydra.core.Term.pair(Tuple2(go(hydra.lib.pairs.first[hydra.core.Term,
          hydra.core.Term](v_Term_pair_p)), go(hydra.lib.pairs.second[hydra.core.Term, hydra.core.Term](v_Term_pair_p))))
+      case hydra.core.Term.project(v_Term_project_p) => hydra.core.Term.project(v_Term_project_p)
       case hydra.core.Term.record(v_Term_record_r) => hydra.core.Term.record(hydra.core.Record(v_Term_record_r.typeName,
          hydra.lib.lists.map[hydra.core.Field, hydra.core.Field](forField)(v_Term_record_r.fields)))
       case hydra.core.Term.set(v_Term_set_s) => hydra.core.Term.set(hydra.lib.sets.fromList[hydra.core.Term](hydra.lib.lists.map[hydra.core.Term,
@@ -592,6 +580,7 @@ def pushTypeAppsInward(term: hydra.core.Term): hydra.core.Term =
          go(v_Term_typeLambda_ta.body)))
       case hydra.core.Term.union(v_Term_union_i) => hydra.core.Term.union(hydra.core.Injection(v_Term_union_i.typeName, forField(v_Term_union_i.field)))
       case hydra.core.Term.unit => hydra.core.Term.unit
+      case hydra.core.Term.unwrap(v_Term_unwrap_n) => hydra.core.Term.unwrap(v_Term_unwrap_n)
       case hydra.core.Term.variable(v_Term_variable_v) => hydra.core.Term.variable(v_Term_variable_v)
       case hydra.core.Term.wrap(v_Term_wrap_wt) => hydra.core.Term.wrap(hydra.core.WrappedTerm(v_Term_wrap_wt.typeName, go(v_Term_wrap_wt.body)))
   }

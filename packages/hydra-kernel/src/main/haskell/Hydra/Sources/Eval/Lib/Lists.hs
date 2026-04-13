@@ -321,7 +321,7 @@ sortOn_ = define "sortOn" $
         (Core.termApplication $ Core.application
           (Core.termVariable $ encodedName _lists_span)
           -- predicate lambda: \y -> lte (proj y) (proj x) -- use lte for stable sort
-          (Core.termFunction $ Core.functionLambda $ Core.lambda (wrap _Name $ string "y") nothing $
+          (Core.termLambda $ Core.lambda (wrap _Name $ string "y") nothing $
             Core.termApplication $ Core.application
               (Core.termApplication $ Core.application
                 (Core.termVariable $ encodedName _equality_lte)
@@ -485,7 +485,7 @@ group_ = define "group" $
     -- Helper: term-level variable
     tv s = Core.termVariable $ wrap _Name $ string s
     -- Helper: term-level lambda
-    lam s body = Core.termFunction $ Core.functionLambda $ Core.lambda (wrap _Name $ string s) nothing body
+    lam s body = Core.termLambda $ Core.lambda (wrap _Name $ string s) nothing body
 
     -- stepFn: \acc el -> maybe ([el], snd acc) (\h -> ifElse (equal el h) (extend) (flush)) (safeHead (fst acc))
     stepFn = lam "acc" $ lam "el" $
@@ -587,8 +587,8 @@ nub_ = define "nub" $
       (Core.termApplication $ Core.application
         (Core.termVariable $ encodedName _lists_foldl)
         -- fold function: \acc x -> ifElse (elem x acc) acc (concat2 acc [x])
-        (Core.termFunction $ Core.functionLambda $ Core.lambda (wrap _Name $ string "acc") nothing $
-          Core.termFunction $ Core.functionLambda $ Core.lambda (wrap _Name $ string "x") nothing $
+        (Core.termLambda $ Core.lambda (wrap _Name $ string "acc") nothing $
+          Core.termLambda $ Core.lambda (wrap _Name $ string "x") nothing $
             Core.termApplication $ Core.application
               (Core.termApplication $ Core.application
                 (Core.termApplication $ Core.application
@@ -629,7 +629,7 @@ replicate_ = define "replicate" $
   right $ Core.termApplication $ Core.application
     (Core.termApplication $ Core.application
       (Core.termVariable $ encodedName _lists_map)
-      (Core.termFunction $ Core.functionLambda $ Core.lambda (wrap _Name $ string "_") nothing $
+      (Core.termLambda $ Core.lambda (wrap _Name $ string "_") nothing $
         var "x"))
     (Core.termApplication $ Core.application
       (Core.termApplication $ Core.application

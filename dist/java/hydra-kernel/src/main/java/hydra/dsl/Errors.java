@@ -111,7 +111,7 @@ public interface Errors {
   }
 
   static hydra.phantoms.TTerm<hydra.core.Name> multipleBindingsErrorName(hydra.phantoms.TTerm<hydra.errors.MultipleBindingsError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.errors.MultipleBindingsError"), new hydra.core.Name("name"))))), (x).value)));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Project(new hydra.core.Projection(new hydra.core.Name("hydra.errors.MultipleBindingsError"), new hydra.core.Name("name"))), (x).value)));
   }
 
   static hydra.phantoms.TTerm<hydra.errors.MultipleBindingsError> multipleBindingsErrorWithName(hydra.phantoms.TTerm<hydra.errors.MultipleBindingsError> original, hydra.phantoms.TTerm<hydra.core.Name> newVal) {
@@ -123,7 +123,7 @@ public interface Errors {
   }
 
   static hydra.phantoms.TTerm<hydra.core.Name> multipleFieldsErrorFieldName(hydra.phantoms.TTerm<hydra.errors.MultipleFieldsError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.errors.MultipleFieldsError"), new hydra.core.Name("fieldName"))))), (x).value)));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Project(new hydra.core.Projection(new hydra.core.Name("hydra.errors.MultipleFieldsError"), new hydra.core.Name("fieldName"))), (x).value)));
   }
 
   static hydra.phantoms.TTerm<hydra.errors.MultipleFieldsError> multipleFieldsErrorWithFieldName(hydra.phantoms.TTerm<hydra.errors.MultipleFieldsError> original, hydra.phantoms.TTerm<hydra.core.Name> newVal) {
@@ -135,7 +135,7 @@ public interface Errors {
   }
 
   static hydra.phantoms.TTerm<hydra.core.Name> noMatchingFieldErrorFieldName(hydra.phantoms.TTerm<hydra.errors.NoMatchingFieldError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.errors.NoMatchingFieldError"), new hydra.core.Name("fieldName"))))), (x).value)));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Project(new hydra.core.Projection(new hydra.core.Name("hydra.errors.NoMatchingFieldError"), new hydra.core.Name("fieldName"))), (x).value)));
   }
 
   static hydra.phantoms.TTerm<hydra.errors.NoMatchingFieldError> noMatchingFieldErrorWithFieldName(hydra.phantoms.TTerm<hydra.errors.NoMatchingFieldError> original, hydra.phantoms.TTerm<hydra.core.Name> newVal) {
@@ -147,7 +147,7 @@ public interface Errors {
   }
 
   static hydra.phantoms.TTerm<hydra.core.Name> noSuchBindingErrorName(hydra.phantoms.TTerm<hydra.errors.NoSuchBindingError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.errors.NoSuchBindingError"), new hydra.core.Name("name"))))), (x).value)));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Project(new hydra.core.Projection(new hydra.core.Name("hydra.errors.NoSuchBindingError"), new hydra.core.Name("name"))), (x).value)));
   }
 
   static hydra.phantoms.TTerm<hydra.errors.NoSuchBindingError> noSuchBindingErrorWithName(hydra.phantoms.TTerm<hydra.errors.NoSuchBindingError> original, hydra.phantoms.TTerm<hydra.core.Name> newVal) {
@@ -159,7 +159,7 @@ public interface Errors {
   }
 
   static hydra.phantoms.TTerm<hydra.core.Name> noSuchPrimitiveErrorName(hydra.phantoms.TTerm<hydra.errors.NoSuchPrimitiveError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.errors.NoSuchPrimitiveError"), new hydra.core.Name("name"))))), (x).value)));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Project(new hydra.core.Projection(new hydra.core.Name("hydra.errors.NoSuchPrimitiveError"), new hydra.core.Name("name"))), (x).value)));
   }
 
   static hydra.phantoms.TTerm<hydra.errors.NoSuchPrimitiveError> noSuchPrimitiveErrorWithName(hydra.phantoms.TTerm<hydra.errors.NoSuchPrimitiveError> original, hydra.phantoms.TTerm<hydra.core.Name> newVal) {
@@ -177,23 +177,23 @@ public interface Errors {
   }
 
   static hydra.phantoms.TTerm<String> otherInferenceErrorMessage(hydra.phantoms.TTerm<hydra.errors.OtherInferenceError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.errors.OtherInferenceError"), new hydra.core.Name("message"))))), (x).value)));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Project(new hydra.core.Projection(new hydra.core.Name("hydra.errors.OtherInferenceError"), new hydra.core.Name("message"))), (x).value)));
   }
 
   static hydra.phantoms.TTerm<hydra.paths.SubtermPath> otherInferenceErrorPath(hydra.phantoms.TTerm<hydra.errors.OtherInferenceError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.errors.OtherInferenceError"), new hydra.core.Name("path"))))), (x).value)));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Project(new hydra.core.Projection(new hydra.core.Name("hydra.errors.OtherInferenceError"), new hydra.core.Name("path"))), (x).value)));
   }
 
   static hydra.phantoms.TTerm<hydra.errors.OtherInferenceError> otherInferenceErrorWithMessage(hydra.phantoms.TTerm<hydra.errors.OtherInferenceError> original, hydra.phantoms.TTerm<String> newVal) {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.errors.OtherInferenceError"), java.util.Arrays.asList(
-      new hydra.core.Field(new hydra.core.Name("path"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.errors.OtherInferenceError"), new hydra.core.Name("path"))))), (original).value))),
+      new hydra.core.Field(new hydra.core.Name("path"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Project(new hydra.core.Projection(new hydra.core.Name("hydra.errors.OtherInferenceError"), new hydra.core.Name("path"))), (original).value))),
       new hydra.core.Field(new hydra.core.Name("message"), (newVal).value)))));
   }
 
   static hydra.phantoms.TTerm<hydra.errors.OtherInferenceError> otherInferenceErrorWithPath(hydra.phantoms.TTerm<hydra.errors.OtherInferenceError> original, hydra.phantoms.TTerm<hydra.paths.SubtermPath> newVal) {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.errors.OtherInferenceError"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("path"), (newVal).value),
-      new hydra.core.Field(new hydra.core.Name("message"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.errors.OtherInferenceError"), new hydra.core.Name("message"))))), (original).value)))))));
+      new hydra.core.Field(new hydra.core.Name("message"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Project(new hydra.core.Projection(new hydra.core.Name("hydra.errors.OtherInferenceError"), new hydra.core.Name("message"))), (original).value)))))));
   }
 
   static hydra.phantoms.TTerm<hydra.errors.OtherResolutionError> otherResolutionError(hydra.phantoms.TTerm<String> x) {
@@ -221,15 +221,15 @@ public interface Errors {
   }
 
   static hydra.phantoms.TTerm<String> unDecodingError(hydra.phantoms.TTerm<hydra.errors.DecodingError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Wrap(new hydra.core.Name("hydra.errors.DecodingError")))), (x).value)));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Unwrap(new hydra.core.Name("hydra.errors.DecodingError")), (x).value)));
   }
 
   static hydra.phantoms.TTerm<String> unOtherError(hydra.phantoms.TTerm<hydra.errors.OtherError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Wrap(new hydra.core.Name("hydra.errors.OtherError")))), (x).value)));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Unwrap(new hydra.core.Name("hydra.errors.OtherError")), (x).value)));
   }
 
   static hydra.phantoms.TTerm<String> unOtherResolutionError(hydra.phantoms.TTerm<hydra.errors.OtherResolutionError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Wrap(new hydra.core.Name("hydra.errors.OtherResolutionError")))), (x).value)));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Unwrap(new hydra.core.Name("hydra.errors.OtherResolutionError")), (x).value)));
   }
 
   static hydra.phantoms.TTerm<hydra.errors.UnexpectedShapeError> unexpectedShapeError(hydra.phantoms.TTerm<String> expected, hydra.phantoms.TTerm<String> actual) {
@@ -239,23 +239,23 @@ public interface Errors {
   }
 
   static hydra.phantoms.TTerm<String> unexpectedShapeErrorActual(hydra.phantoms.TTerm<hydra.errors.UnexpectedShapeError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.errors.UnexpectedShapeError"), new hydra.core.Name("actual"))))), (x).value)));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Project(new hydra.core.Projection(new hydra.core.Name("hydra.errors.UnexpectedShapeError"), new hydra.core.Name("actual"))), (x).value)));
   }
 
   static hydra.phantoms.TTerm<String> unexpectedShapeErrorExpected(hydra.phantoms.TTerm<hydra.errors.UnexpectedShapeError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.errors.UnexpectedShapeError"), new hydra.core.Name("expected"))))), (x).value)));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Project(new hydra.core.Projection(new hydra.core.Name("hydra.errors.UnexpectedShapeError"), new hydra.core.Name("expected"))), (x).value)));
   }
 
   static hydra.phantoms.TTerm<hydra.errors.UnexpectedShapeError> unexpectedShapeErrorWithActual(hydra.phantoms.TTerm<hydra.errors.UnexpectedShapeError> original, hydra.phantoms.TTerm<String> newVal) {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.errors.UnexpectedShapeError"), java.util.Arrays.asList(
-      new hydra.core.Field(new hydra.core.Name("expected"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.errors.UnexpectedShapeError"), new hydra.core.Name("expected"))))), (original).value))),
+      new hydra.core.Field(new hydra.core.Name("expected"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Project(new hydra.core.Projection(new hydra.core.Name("hydra.errors.UnexpectedShapeError"), new hydra.core.Name("expected"))), (original).value))),
       new hydra.core.Field(new hydra.core.Name("actual"), (newVal).value)))));
   }
 
   static hydra.phantoms.TTerm<hydra.errors.UnexpectedShapeError> unexpectedShapeErrorWithExpected(hydra.phantoms.TTerm<hydra.errors.UnexpectedShapeError> original, hydra.phantoms.TTerm<String> newVal) {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.errors.UnexpectedShapeError"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("expected"), (newVal).value),
-      new hydra.core.Field(new hydra.core.Name("actual"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.errors.UnexpectedShapeError"), new hydra.core.Name("actual"))))), (original).value)))))));
+      new hydra.core.Field(new hydra.core.Name("actual"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Project(new hydra.core.Projection(new hydra.core.Name("hydra.errors.UnexpectedShapeError"), new hydra.core.Name("actual"))), (original).value)))))));
   }
 
   static hydra.phantoms.TTerm<hydra.errors.UnificationError> unificationError(hydra.phantoms.TTerm<hydra.core.Type> leftType, hydra.phantoms.TTerm<hydra.core.Type> rightType, hydra.phantoms.TTerm<String> message) {
@@ -266,36 +266,36 @@ public interface Errors {
   }
 
   static hydra.phantoms.TTerm<hydra.core.Type> unificationErrorLeftType(hydra.phantoms.TTerm<hydra.errors.UnificationError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.errors.UnificationError"), new hydra.core.Name("leftType"))))), (x).value)));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Project(new hydra.core.Projection(new hydra.core.Name("hydra.errors.UnificationError"), new hydra.core.Name("leftType"))), (x).value)));
   }
 
   static hydra.phantoms.TTerm<String> unificationErrorMessage(hydra.phantoms.TTerm<hydra.errors.UnificationError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.errors.UnificationError"), new hydra.core.Name("message"))))), (x).value)));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Project(new hydra.core.Projection(new hydra.core.Name("hydra.errors.UnificationError"), new hydra.core.Name("message"))), (x).value)));
   }
 
   static hydra.phantoms.TTerm<hydra.core.Type> unificationErrorRightType(hydra.phantoms.TTerm<hydra.errors.UnificationError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.errors.UnificationError"), new hydra.core.Name("rightType"))))), (x).value)));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Project(new hydra.core.Projection(new hydra.core.Name("hydra.errors.UnificationError"), new hydra.core.Name("rightType"))), (x).value)));
   }
 
   static hydra.phantoms.TTerm<hydra.errors.UnificationError> unificationErrorWithLeftType(hydra.phantoms.TTerm<hydra.errors.UnificationError> original, hydra.phantoms.TTerm<hydra.core.Type> newVal) {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.errors.UnificationError"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("leftType"), (newVal).value),
-      new hydra.core.Field(new hydra.core.Name("rightType"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.errors.UnificationError"), new hydra.core.Name("rightType"))))), (original).value))),
-      new hydra.core.Field(new hydra.core.Name("message"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.errors.UnificationError"), new hydra.core.Name("message"))))), (original).value)))))));
+      new hydra.core.Field(new hydra.core.Name("rightType"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Project(new hydra.core.Projection(new hydra.core.Name("hydra.errors.UnificationError"), new hydra.core.Name("rightType"))), (original).value))),
+      new hydra.core.Field(new hydra.core.Name("message"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Project(new hydra.core.Projection(new hydra.core.Name("hydra.errors.UnificationError"), new hydra.core.Name("message"))), (original).value)))))));
   }
 
   static hydra.phantoms.TTerm<hydra.errors.UnificationError> unificationErrorWithMessage(hydra.phantoms.TTerm<hydra.errors.UnificationError> original, hydra.phantoms.TTerm<String> newVal) {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.errors.UnificationError"), java.util.Arrays.asList(
-      new hydra.core.Field(new hydra.core.Name("leftType"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.errors.UnificationError"), new hydra.core.Name("leftType"))))), (original).value))),
-      new hydra.core.Field(new hydra.core.Name("rightType"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.errors.UnificationError"), new hydra.core.Name("rightType"))))), (original).value))),
+      new hydra.core.Field(new hydra.core.Name("leftType"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Project(new hydra.core.Projection(new hydra.core.Name("hydra.errors.UnificationError"), new hydra.core.Name("leftType"))), (original).value))),
+      new hydra.core.Field(new hydra.core.Name("rightType"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Project(new hydra.core.Projection(new hydra.core.Name("hydra.errors.UnificationError"), new hydra.core.Name("rightType"))), (original).value))),
       new hydra.core.Field(new hydra.core.Name("message"), (newVal).value)))));
   }
 
   static hydra.phantoms.TTerm<hydra.errors.UnificationError> unificationErrorWithRightType(hydra.phantoms.TTerm<hydra.errors.UnificationError> original, hydra.phantoms.TTerm<hydra.core.Type> newVal) {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.errors.UnificationError"), java.util.Arrays.asList(
-      new hydra.core.Field(new hydra.core.Name("leftType"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.errors.UnificationError"), new hydra.core.Name("leftType"))))), (original).value))),
+      new hydra.core.Field(new hydra.core.Name("leftType"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Project(new hydra.core.Projection(new hydra.core.Name("hydra.errors.UnificationError"), new hydra.core.Name("leftType"))), (original).value))),
       new hydra.core.Field(new hydra.core.Name("rightType"), (newVal).value),
-      new hydra.core.Field(new hydra.core.Name("message"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.errors.UnificationError"), new hydra.core.Name("message"))))), (original).value)))))));
+      new hydra.core.Field(new hydra.core.Name("message"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Project(new hydra.core.Projection(new hydra.core.Name("hydra.errors.UnificationError"), new hydra.core.Name("message"))), (original).value)))))));
   }
 
   static hydra.phantoms.TTerm<hydra.errors.UnificationInferenceError> unificationInferenceError(hydra.phantoms.TTerm<hydra.paths.SubtermPath> path, hydra.phantoms.TTerm<hydra.errors.UnificationError> cause) {
@@ -305,22 +305,22 @@ public interface Errors {
   }
 
   static hydra.phantoms.TTerm<hydra.errors.UnificationError> unificationInferenceErrorCause(hydra.phantoms.TTerm<hydra.errors.UnificationInferenceError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.errors.UnificationInferenceError"), new hydra.core.Name("cause"))))), (x).value)));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Project(new hydra.core.Projection(new hydra.core.Name("hydra.errors.UnificationInferenceError"), new hydra.core.Name("cause"))), (x).value)));
   }
 
   static hydra.phantoms.TTerm<hydra.paths.SubtermPath> unificationInferenceErrorPath(hydra.phantoms.TTerm<hydra.errors.UnificationInferenceError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.errors.UnificationInferenceError"), new hydra.core.Name("path"))))), (x).value)));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Project(new hydra.core.Projection(new hydra.core.Name("hydra.errors.UnificationInferenceError"), new hydra.core.Name("path"))), (x).value)));
   }
 
   static hydra.phantoms.TTerm<hydra.errors.UnificationInferenceError> unificationInferenceErrorWithCause(hydra.phantoms.TTerm<hydra.errors.UnificationInferenceError> original, hydra.phantoms.TTerm<hydra.errors.UnificationError> newVal) {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.errors.UnificationInferenceError"), java.util.Arrays.asList(
-      new hydra.core.Field(new hydra.core.Name("path"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.errors.UnificationInferenceError"), new hydra.core.Name("path"))))), (original).value))),
+      new hydra.core.Field(new hydra.core.Name("path"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Project(new hydra.core.Projection(new hydra.core.Name("hydra.errors.UnificationInferenceError"), new hydra.core.Name("path"))), (original).value))),
       new hydra.core.Field(new hydra.core.Name("cause"), (newVal).value)))));
   }
 
   static hydra.phantoms.TTerm<hydra.errors.UnificationInferenceError> unificationInferenceErrorWithPath(hydra.phantoms.TTerm<hydra.errors.UnificationInferenceError> original, hydra.phantoms.TTerm<hydra.paths.SubtermPath> newVal) {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.errors.UnificationInferenceError"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("path"), (newVal).value),
-      new hydra.core.Field(new hydra.core.Name("cause"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.errors.UnificationInferenceError"), new hydra.core.Name("cause"))))), (original).value)))))));
+      new hydra.core.Field(new hydra.core.Name("cause"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Project(new hydra.core.Projection(new hydra.core.Name("hydra.errors.UnificationInferenceError"), new hydra.core.Name("cause"))), (original).value)))))));
   }
 }

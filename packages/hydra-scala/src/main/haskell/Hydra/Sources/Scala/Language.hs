@@ -120,7 +120,18 @@ scalaLanguage = define "scalaLanguage" $
   "termVariants">: Sets.fromList $ list [
     Variants.termVariantApplication,
     Variants.termVariantEither,
-    Variants.termVariantFunction,
+
+    Variants.termVariantCases,
+
+    Variants.termVariantLambda,
+
+    Variants.termVariantProject,
+
+    Variants.termVariantUnwrap,
+
+    Variants.termVariantTypeApplication,
+
+    Variants.termVariantTypeLambda,
     Variants.termVariantLet,
     Variants.termVariantList,
     Variants.termVariantLiteral,

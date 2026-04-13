@@ -225,23 +225,8 @@ public interface Strip {
       }
 
       @Override
-      public hydra.core.Term visit(hydra.core.Term.Function f) {
-        return (f).value.accept(new hydra.core.Function.PartialVisitor<>() {
-          @Override
-          public hydra.core.Term otherwise(hydra.core.Function instance) {
-            return new hydra.core.Term.Function((f).value);
-          }
-
-          @Override
-          public hydra.core.Term visit(hydra.core.Function.Elimination e) {
-            return new hydra.core.Term.Function(new hydra.core.Function.Elimination((e).value));
-          }
-
-          @Override
-          public hydra.core.Term visit(hydra.core.Function.Lambda l) {
-            return new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda((l).value.parameter, (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), (l).value.body)));
-          }
-        });
+      public hydra.core.Term visit(hydra.core.Term.Lambda l) {
+        return new hydra.core.Term.Lambda(new hydra.core.Lambda((l).value.parameter, (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), (l).value.body));
       }
 
       @Override

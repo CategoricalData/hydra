@@ -62,105 +62,105 @@ aliases currentNamespace packages branchVars recursiveVars inScopeTypeParams pol
 aliasesBranchVars :: Phantoms.TTerm Environment.Aliases -> Phantoms.TTerm (S.Set Core.Name)
 aliasesBranchVars x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-        Core.projectionField = (Core.Name "branchVars")})))),
+        Core.projectionField = (Core.Name "branchVars")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 aliasesCurrentNamespace :: Phantoms.TTerm Environment.Aliases -> Phantoms.TTerm Packaging.Namespace
 aliasesCurrentNamespace x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-        Core.projectionField = (Core.Name "currentNamespace")})))),
+        Core.projectionField = (Core.Name "currentNamespace")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 aliasesInScopeJavaVars :: Phantoms.TTerm Environment.Aliases -> Phantoms.TTerm (S.Set Core.Name)
 aliasesInScopeJavaVars x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-        Core.projectionField = (Core.Name "inScopeJavaVars")})))),
+        Core.projectionField = (Core.Name "inScopeJavaVars")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 aliasesInScopeTypeParams :: Phantoms.TTerm Environment.Aliases -> Phantoms.TTerm (S.Set Core.Name)
 aliasesInScopeTypeParams x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-        Core.projectionField = (Core.Name "inScopeTypeParams")})))),
+        Core.projectionField = (Core.Name "inScopeTypeParams")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 aliasesLambdaVars :: Phantoms.TTerm Environment.Aliases -> Phantoms.TTerm (S.Set Core.Name)
 aliasesLambdaVars x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-        Core.projectionField = (Core.Name "lambdaVars")})))),
+        Core.projectionField = (Core.Name "lambdaVars")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 aliasesMethodCodomain :: Phantoms.TTerm Environment.Aliases -> Phantoms.TTerm (Maybe Core.Type)
 aliasesMethodCodomain x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-        Core.projectionField = (Core.Name "methodCodomain")})))),
+        Core.projectionField = (Core.Name "methodCodomain")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 aliasesPackages :: Phantoms.TTerm Environment.Aliases -> Phantoms.TTerm (M.Map Packaging.Namespace Syntax.PackageName)
 aliasesPackages x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-        Core.projectionField = (Core.Name "packages")})))),
+        Core.projectionField = (Core.Name "packages")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 aliasesPolymorphicLocals :: Phantoms.TTerm Environment.Aliases -> Phantoms.TTerm (S.Set Core.Name)
 aliasesPolymorphicLocals x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-        Core.projectionField = (Core.Name "polymorphicLocals")})))),
+        Core.projectionField = (Core.Name "polymorphicLocals")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 aliasesRecursiveVars :: Phantoms.TTerm Environment.Aliases -> Phantoms.TTerm (S.Set Core.Name)
 aliasesRecursiveVars x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-        Core.projectionField = (Core.Name "recursiveVars")})))),
+        Core.projectionField = (Core.Name "recursiveVars")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 aliasesThunkedVars :: Phantoms.TTerm Environment.Aliases -> Phantoms.TTerm (S.Set Core.Name)
 aliasesThunkedVars x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-        Core.projectionField = (Core.Name "thunkedVars")})))),
+        Core.projectionField = (Core.Name "thunkedVars")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 aliasesTrustedTypeVars :: Phantoms.TTerm Environment.Aliases -> Phantoms.TTerm (S.Set Core.Name)
 aliasesTrustedTypeVars x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-        Core.projectionField = (Core.Name "trustedTypeVars")})))),
+        Core.projectionField = (Core.Name "trustedTypeVars")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 aliasesTypeVarSubst :: Phantoms.TTerm Environment.Aliases -> Phantoms.TTerm (M.Map Core.Name Core.Name)
 aliasesTypeVarSubst x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-        Core.projectionField = (Core.Name "typeVarSubst")})))),
+        Core.projectionField = (Core.Name "typeVarSubst")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 aliasesVarRenames :: Phantoms.TTerm Environment.Aliases -> Phantoms.TTerm (M.Map Core.Name Core.Name)
 aliasesVarRenames x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-        Core.projectionField = (Core.Name "varRenames")})))),
+        Core.projectionField = (Core.Name "varRenames")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 aliasesWithBranchVars :: Phantoms.TTerm Environment.Aliases -> Phantoms.TTerm (S.Set Core.Name) -> Phantoms.TTerm Environment.Aliases
@@ -171,16 +171,16 @@ aliasesWithBranchVars original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "currentNamespace"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "currentNamespace")})))),
+              Core.projectionField = (Core.Name "currentNamespace")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "packages"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "packages")})))),
+              Core.projectionField = (Core.Name "packages")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "branchVars"),
@@ -188,72 +188,72 @@ aliasesWithBranchVars original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "recursiveVars"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "recursiveVars")})))),
+              Core.projectionField = (Core.Name "recursiveVars")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "inScopeTypeParams"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "inScopeTypeParams")})))),
+              Core.projectionField = (Core.Name "inScopeTypeParams")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "polymorphicLocals"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "polymorphicLocals")})))),
+              Core.projectionField = (Core.Name "polymorphicLocals")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "inScopeJavaVars"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "inScopeJavaVars")})))),
+              Core.projectionField = (Core.Name "inScopeJavaVars")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "varRenames"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "varRenames")})))),
+              Core.projectionField = (Core.Name "varRenames")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "lambdaVars"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "lambdaVars")})))),
+              Core.projectionField = (Core.Name "lambdaVars")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeVarSubst"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "typeVarSubst")})))),
+              Core.projectionField = (Core.Name "typeVarSubst")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "trustedTypeVars"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "trustedTypeVars")})))),
+              Core.projectionField = (Core.Name "trustedTypeVars")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "methodCodomain"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "methodCodomain")})))),
+              Core.projectionField = (Core.Name "methodCodomain")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "thunkedVars"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "thunkedVars")})))),
+              Core.projectionField = (Core.Name "thunkedVars")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 aliasesWithCurrentNamespace :: Phantoms.TTerm Environment.Aliases -> Phantoms.TTerm Packaging.Namespace -> Phantoms.TTerm Environment.Aliases
@@ -267,86 +267,86 @@ aliasesWithCurrentNamespace original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "packages"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "packages")})))),
+              Core.projectionField = (Core.Name "packages")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "branchVars"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "branchVars")})))),
+              Core.projectionField = (Core.Name "branchVars")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "recursiveVars"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "recursiveVars")})))),
+              Core.projectionField = (Core.Name "recursiveVars")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "inScopeTypeParams"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "inScopeTypeParams")})))),
+              Core.projectionField = (Core.Name "inScopeTypeParams")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "polymorphicLocals"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "polymorphicLocals")})))),
+              Core.projectionField = (Core.Name "polymorphicLocals")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "inScopeJavaVars"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "inScopeJavaVars")})))),
+              Core.projectionField = (Core.Name "inScopeJavaVars")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "varRenames"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "varRenames")})))),
+              Core.projectionField = (Core.Name "varRenames")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "lambdaVars"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "lambdaVars")})))),
+              Core.projectionField = (Core.Name "lambdaVars")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeVarSubst"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "typeVarSubst")})))),
+              Core.projectionField = (Core.Name "typeVarSubst")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "trustedTypeVars"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "trustedTypeVars")})))),
+              Core.projectionField = (Core.Name "trustedTypeVars")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "methodCodomain"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "methodCodomain")})))),
+              Core.projectionField = (Core.Name "methodCodomain")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "thunkedVars"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "thunkedVars")})))),
+              Core.projectionField = (Core.Name "thunkedVars")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 aliasesWithInScopeJavaVars :: Phantoms.TTerm Environment.Aliases -> Phantoms.TTerm (S.Set Core.Name) -> Phantoms.TTerm Environment.Aliases
@@ -357,44 +357,44 @@ aliasesWithInScopeJavaVars original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "currentNamespace"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "currentNamespace")})))),
+              Core.projectionField = (Core.Name "currentNamespace")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "packages"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "packages")})))),
+              Core.projectionField = (Core.Name "packages")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "branchVars"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "branchVars")})))),
+              Core.projectionField = (Core.Name "branchVars")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "recursiveVars"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "recursiveVars")})))),
+              Core.projectionField = (Core.Name "recursiveVars")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "inScopeTypeParams"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "inScopeTypeParams")})))),
+              Core.projectionField = (Core.Name "inScopeTypeParams")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "polymorphicLocals"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "polymorphicLocals")})))),
+              Core.projectionField = (Core.Name "polymorphicLocals")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "inScopeJavaVars"),
@@ -402,44 +402,44 @@ aliasesWithInScopeJavaVars original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "varRenames"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "varRenames")})))),
+              Core.projectionField = (Core.Name "varRenames")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "lambdaVars"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "lambdaVars")})))),
+              Core.projectionField = (Core.Name "lambdaVars")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeVarSubst"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "typeVarSubst")})))),
+              Core.projectionField = (Core.Name "typeVarSubst")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "trustedTypeVars"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "trustedTypeVars")})))),
+              Core.projectionField = (Core.Name "trustedTypeVars")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "methodCodomain"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "methodCodomain")})))),
+              Core.projectionField = (Core.Name "methodCodomain")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "thunkedVars"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "thunkedVars")})))),
+              Core.projectionField = (Core.Name "thunkedVars")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 aliasesWithInScopeTypeParams :: Phantoms.TTerm Environment.Aliases -> Phantoms.TTerm (S.Set Core.Name) -> Phantoms.TTerm Environment.Aliases
@@ -450,30 +450,30 @@ aliasesWithInScopeTypeParams original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "currentNamespace"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "currentNamespace")})))),
+              Core.projectionField = (Core.Name "currentNamespace")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "packages"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "packages")})))),
+              Core.projectionField = (Core.Name "packages")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "branchVars"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "branchVars")})))),
+              Core.projectionField = (Core.Name "branchVars")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "recursiveVars"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "recursiveVars")})))),
+              Core.projectionField = (Core.Name "recursiveVars")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "inScopeTypeParams"),
@@ -481,58 +481,58 @@ aliasesWithInScopeTypeParams original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "polymorphicLocals"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "polymorphicLocals")})))),
+              Core.projectionField = (Core.Name "polymorphicLocals")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "inScopeJavaVars"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "inScopeJavaVars")})))),
+              Core.projectionField = (Core.Name "inScopeJavaVars")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "varRenames"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "varRenames")})))),
+              Core.projectionField = (Core.Name "varRenames")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "lambdaVars"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "lambdaVars")})))),
+              Core.projectionField = (Core.Name "lambdaVars")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeVarSubst"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "typeVarSubst")})))),
+              Core.projectionField = (Core.Name "typeVarSubst")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "trustedTypeVars"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "trustedTypeVars")})))),
+              Core.projectionField = (Core.Name "trustedTypeVars")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "methodCodomain"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "methodCodomain")})))),
+              Core.projectionField = (Core.Name "methodCodomain")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "thunkedVars"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "thunkedVars")})))),
+              Core.projectionField = (Core.Name "thunkedVars")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 aliasesWithLambdaVars :: Phantoms.TTerm Environment.Aliases -> Phantoms.TTerm (S.Set Core.Name) -> Phantoms.TTerm Environment.Aliases
@@ -543,58 +543,58 @@ aliasesWithLambdaVars original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "currentNamespace"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "currentNamespace")})))),
+              Core.projectionField = (Core.Name "currentNamespace")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "packages"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "packages")})))),
+              Core.projectionField = (Core.Name "packages")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "branchVars"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "branchVars")})))),
+              Core.projectionField = (Core.Name "branchVars")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "recursiveVars"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "recursiveVars")})))),
+              Core.projectionField = (Core.Name "recursiveVars")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "inScopeTypeParams"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "inScopeTypeParams")})))),
+              Core.projectionField = (Core.Name "inScopeTypeParams")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "polymorphicLocals"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "polymorphicLocals")})))),
+              Core.projectionField = (Core.Name "polymorphicLocals")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "inScopeJavaVars"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "inScopeJavaVars")})))),
+              Core.projectionField = (Core.Name "inScopeJavaVars")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "varRenames"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "varRenames")})))),
+              Core.projectionField = (Core.Name "varRenames")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "lambdaVars"),
@@ -602,30 +602,30 @@ aliasesWithLambdaVars original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "typeVarSubst"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "typeVarSubst")})))),
+              Core.projectionField = (Core.Name "typeVarSubst")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "trustedTypeVars"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "trustedTypeVars")})))),
+              Core.projectionField = (Core.Name "trustedTypeVars")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "methodCodomain"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "methodCodomain")})))),
+              Core.projectionField = (Core.Name "methodCodomain")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "thunkedVars"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "thunkedVars")})))),
+              Core.projectionField = (Core.Name "thunkedVars")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 aliasesWithMethodCodomain :: Phantoms.TTerm Environment.Aliases -> Phantoms.TTerm (Maybe Core.Type) -> Phantoms.TTerm Environment.Aliases
@@ -636,79 +636,79 @@ aliasesWithMethodCodomain original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "currentNamespace"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "currentNamespace")})))),
+              Core.projectionField = (Core.Name "currentNamespace")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "packages"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "packages")})))),
+              Core.projectionField = (Core.Name "packages")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "branchVars"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "branchVars")})))),
+              Core.projectionField = (Core.Name "branchVars")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "recursiveVars"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "recursiveVars")})))),
+              Core.projectionField = (Core.Name "recursiveVars")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "inScopeTypeParams"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "inScopeTypeParams")})))),
+              Core.projectionField = (Core.Name "inScopeTypeParams")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "polymorphicLocals"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "polymorphicLocals")})))),
+              Core.projectionField = (Core.Name "polymorphicLocals")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "inScopeJavaVars"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "inScopeJavaVars")})))),
+              Core.projectionField = (Core.Name "inScopeJavaVars")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "varRenames"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "varRenames")})))),
+              Core.projectionField = (Core.Name "varRenames")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "lambdaVars"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "lambdaVars")})))),
+              Core.projectionField = (Core.Name "lambdaVars")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeVarSubst"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "typeVarSubst")})))),
+              Core.projectionField = (Core.Name "typeVarSubst")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "trustedTypeVars"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "trustedTypeVars")})))),
+              Core.projectionField = (Core.Name "trustedTypeVars")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "methodCodomain"),
@@ -716,9 +716,9 @@ aliasesWithMethodCodomain original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "thunkedVars"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "thunkedVars")})))),
+              Core.projectionField = (Core.Name "thunkedVars")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 aliasesWithPackages :: Phantoms.TTerm Environment.Aliases -> Phantoms.TTerm (M.Map Packaging.Namespace Syntax.PackageName) -> Phantoms.TTerm Environment.Aliases
@@ -729,9 +729,9 @@ aliasesWithPackages original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "currentNamespace"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "currentNamespace")})))),
+              Core.projectionField = (Core.Name "currentNamespace")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "packages"),
@@ -739,79 +739,79 @@ aliasesWithPackages original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "branchVars"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "branchVars")})))),
+              Core.projectionField = (Core.Name "branchVars")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "recursiveVars"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "recursiveVars")})))),
+              Core.projectionField = (Core.Name "recursiveVars")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "inScopeTypeParams"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "inScopeTypeParams")})))),
+              Core.projectionField = (Core.Name "inScopeTypeParams")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "polymorphicLocals"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "polymorphicLocals")})))),
+              Core.projectionField = (Core.Name "polymorphicLocals")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "inScopeJavaVars"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "inScopeJavaVars")})))),
+              Core.projectionField = (Core.Name "inScopeJavaVars")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "varRenames"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "varRenames")})))),
+              Core.projectionField = (Core.Name "varRenames")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "lambdaVars"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "lambdaVars")})))),
+              Core.projectionField = (Core.Name "lambdaVars")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeVarSubst"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "typeVarSubst")})))),
+              Core.projectionField = (Core.Name "typeVarSubst")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "trustedTypeVars"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "trustedTypeVars")})))),
+              Core.projectionField = (Core.Name "trustedTypeVars")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "methodCodomain"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "methodCodomain")})))),
+              Core.projectionField = (Core.Name "methodCodomain")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "thunkedVars"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "thunkedVars")})))),
+              Core.projectionField = (Core.Name "thunkedVars")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 aliasesWithPolymorphicLocals :: Phantoms.TTerm Environment.Aliases -> Phantoms.TTerm (S.Set Core.Name) -> Phantoms.TTerm Environment.Aliases
@@ -822,37 +822,37 @@ aliasesWithPolymorphicLocals original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "currentNamespace"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "currentNamespace")})))),
+              Core.projectionField = (Core.Name "currentNamespace")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "packages"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "packages")})))),
+              Core.projectionField = (Core.Name "packages")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "branchVars"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "branchVars")})))),
+              Core.projectionField = (Core.Name "branchVars")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "recursiveVars"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "recursiveVars")})))),
+              Core.projectionField = (Core.Name "recursiveVars")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "inScopeTypeParams"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "inScopeTypeParams")})))),
+              Core.projectionField = (Core.Name "inScopeTypeParams")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "polymorphicLocals"),
@@ -860,51 +860,51 @@ aliasesWithPolymorphicLocals original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "inScopeJavaVars"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "inScopeJavaVars")})))),
+              Core.projectionField = (Core.Name "inScopeJavaVars")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "varRenames"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "varRenames")})))),
+              Core.projectionField = (Core.Name "varRenames")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "lambdaVars"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "lambdaVars")})))),
+              Core.projectionField = (Core.Name "lambdaVars")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeVarSubst"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "typeVarSubst")})))),
+              Core.projectionField = (Core.Name "typeVarSubst")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "trustedTypeVars"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "trustedTypeVars")})))),
+              Core.projectionField = (Core.Name "trustedTypeVars")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "methodCodomain"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "methodCodomain")})))),
+              Core.projectionField = (Core.Name "methodCodomain")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "thunkedVars"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "thunkedVars")})))),
+              Core.projectionField = (Core.Name "thunkedVars")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 aliasesWithRecursiveVars :: Phantoms.TTerm Environment.Aliases -> Phantoms.TTerm (S.Set Core.Name) -> Phantoms.TTerm Environment.Aliases
@@ -915,23 +915,23 @@ aliasesWithRecursiveVars original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "currentNamespace"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "currentNamespace")})))),
+              Core.projectionField = (Core.Name "currentNamespace")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "packages"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "packages")})))),
+              Core.projectionField = (Core.Name "packages")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "branchVars"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "branchVars")})))),
+              Core.projectionField = (Core.Name "branchVars")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "recursiveVars"),
@@ -939,65 +939,65 @@ aliasesWithRecursiveVars original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "inScopeTypeParams"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "inScopeTypeParams")})))),
+              Core.projectionField = (Core.Name "inScopeTypeParams")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "polymorphicLocals"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "polymorphicLocals")})))),
+              Core.projectionField = (Core.Name "polymorphicLocals")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "inScopeJavaVars"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "inScopeJavaVars")})))),
+              Core.projectionField = (Core.Name "inScopeJavaVars")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "varRenames"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "varRenames")})))),
+              Core.projectionField = (Core.Name "varRenames")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "lambdaVars"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "lambdaVars")})))),
+              Core.projectionField = (Core.Name "lambdaVars")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeVarSubst"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "typeVarSubst")})))),
+              Core.projectionField = (Core.Name "typeVarSubst")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "trustedTypeVars"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "trustedTypeVars")})))),
+              Core.projectionField = (Core.Name "trustedTypeVars")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "methodCodomain"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "methodCodomain")})))),
+              Core.projectionField = (Core.Name "methodCodomain")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "thunkedVars"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "thunkedVars")})))),
+              Core.projectionField = (Core.Name "thunkedVars")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 aliasesWithThunkedVars :: Phantoms.TTerm Environment.Aliases -> Phantoms.TTerm (S.Set Core.Name) -> Phantoms.TTerm Environment.Aliases
@@ -1008,86 +1008,86 @@ aliasesWithThunkedVars original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "currentNamespace"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "currentNamespace")})))),
+              Core.projectionField = (Core.Name "currentNamespace")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "packages"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "packages")})))),
+              Core.projectionField = (Core.Name "packages")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "branchVars"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "branchVars")})))),
+              Core.projectionField = (Core.Name "branchVars")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "recursiveVars"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "recursiveVars")})))),
+              Core.projectionField = (Core.Name "recursiveVars")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "inScopeTypeParams"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "inScopeTypeParams")})))),
+              Core.projectionField = (Core.Name "inScopeTypeParams")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "polymorphicLocals"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "polymorphicLocals")})))),
+              Core.projectionField = (Core.Name "polymorphicLocals")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "inScopeJavaVars"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "inScopeJavaVars")})))),
+              Core.projectionField = (Core.Name "inScopeJavaVars")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "varRenames"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "varRenames")})))),
+              Core.projectionField = (Core.Name "varRenames")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "lambdaVars"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "lambdaVars")})))),
+              Core.projectionField = (Core.Name "lambdaVars")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeVarSubst"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "typeVarSubst")})))),
+              Core.projectionField = (Core.Name "typeVarSubst")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "trustedTypeVars"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "trustedTypeVars")})))),
+              Core.projectionField = (Core.Name "trustedTypeVars")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "methodCodomain"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "methodCodomain")})))),
+              Core.projectionField = (Core.Name "methodCodomain")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "thunkedVars"),
@@ -1101,72 +1101,72 @@ aliasesWithTrustedTypeVars original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "currentNamespace"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "currentNamespace")})))),
+              Core.projectionField = (Core.Name "currentNamespace")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "packages"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "packages")})))),
+              Core.projectionField = (Core.Name "packages")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "branchVars"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "branchVars")})))),
+              Core.projectionField = (Core.Name "branchVars")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "recursiveVars"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "recursiveVars")})))),
+              Core.projectionField = (Core.Name "recursiveVars")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "inScopeTypeParams"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "inScopeTypeParams")})))),
+              Core.projectionField = (Core.Name "inScopeTypeParams")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "polymorphicLocals"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "polymorphicLocals")})))),
+              Core.projectionField = (Core.Name "polymorphicLocals")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "inScopeJavaVars"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "inScopeJavaVars")})))),
+              Core.projectionField = (Core.Name "inScopeJavaVars")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "varRenames"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "varRenames")})))),
+              Core.projectionField = (Core.Name "varRenames")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "lambdaVars"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "lambdaVars")})))),
+              Core.projectionField = (Core.Name "lambdaVars")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeVarSubst"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "typeVarSubst")})))),
+              Core.projectionField = (Core.Name "typeVarSubst")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "trustedTypeVars"),
@@ -1174,16 +1174,16 @@ aliasesWithTrustedTypeVars original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "methodCodomain"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "methodCodomain")})))),
+              Core.projectionField = (Core.Name "methodCodomain")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "thunkedVars"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "thunkedVars")})))),
+              Core.projectionField = (Core.Name "thunkedVars")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 aliasesWithTypeVarSubst :: Phantoms.TTerm Environment.Aliases -> Phantoms.TTerm (M.Map Core.Name Core.Name) -> Phantoms.TTerm Environment.Aliases
@@ -1194,65 +1194,65 @@ aliasesWithTypeVarSubst original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "currentNamespace"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "currentNamespace")})))),
+              Core.projectionField = (Core.Name "currentNamespace")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "packages"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "packages")})))),
+              Core.projectionField = (Core.Name "packages")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "branchVars"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "branchVars")})))),
+              Core.projectionField = (Core.Name "branchVars")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "recursiveVars"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "recursiveVars")})))),
+              Core.projectionField = (Core.Name "recursiveVars")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "inScopeTypeParams"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "inScopeTypeParams")})))),
+              Core.projectionField = (Core.Name "inScopeTypeParams")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "polymorphicLocals"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "polymorphicLocals")})))),
+              Core.projectionField = (Core.Name "polymorphicLocals")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "inScopeJavaVars"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "inScopeJavaVars")})))),
+              Core.projectionField = (Core.Name "inScopeJavaVars")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "varRenames"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "varRenames")})))),
+              Core.projectionField = (Core.Name "varRenames")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "lambdaVars"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "lambdaVars")})))),
+              Core.projectionField = (Core.Name "lambdaVars")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeVarSubst"),
@@ -1260,23 +1260,23 @@ aliasesWithTypeVarSubst original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "trustedTypeVars"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "trustedTypeVars")})))),
+              Core.projectionField = (Core.Name "trustedTypeVars")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "methodCodomain"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "methodCodomain")})))),
+              Core.projectionField = (Core.Name "methodCodomain")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "thunkedVars"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "thunkedVars")})))),
+              Core.projectionField = (Core.Name "thunkedVars")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 aliasesWithVarRenames :: Phantoms.TTerm Environment.Aliases -> Phantoms.TTerm (M.Map Core.Name Core.Name) -> Phantoms.TTerm Environment.Aliases
@@ -1287,51 +1287,51 @@ aliasesWithVarRenames original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "currentNamespace"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "currentNamespace")})))),
+              Core.projectionField = (Core.Name "currentNamespace")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "packages"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "packages")})))),
+              Core.projectionField = (Core.Name "packages")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "branchVars"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "branchVars")})))),
+              Core.projectionField = (Core.Name "branchVars")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "recursiveVars"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "recursiveVars")})))),
+              Core.projectionField = (Core.Name "recursiveVars")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "inScopeTypeParams"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "inScopeTypeParams")})))),
+              Core.projectionField = (Core.Name "inScopeTypeParams")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "polymorphicLocals"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "polymorphicLocals")})))),
+              Core.projectionField = (Core.Name "polymorphicLocals")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "inScopeJavaVars"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "inScopeJavaVars")})))),
+              Core.projectionField = (Core.Name "inScopeJavaVars")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "varRenames"),
@@ -1339,37 +1339,37 @@ aliasesWithVarRenames original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "lambdaVars"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "lambdaVars")})))),
+              Core.projectionField = (Core.Name "lambdaVars")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeVarSubst"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "typeVarSubst")})))),
+              Core.projectionField = (Core.Name "typeVarSubst")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "trustedTypeVars"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "trustedTypeVars")})))),
+              Core.projectionField = (Core.Name "trustedTypeVars")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "methodCodomain"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "methodCodomain")})))),
+              Core.projectionField = (Core.Name "methodCodomain")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "thunkedVars"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.Aliases"),
-              Core.projectionField = (Core.Name "thunkedVars")})))),
+              Core.projectionField = (Core.Name "thunkedVars")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 javaEnvironment :: Phantoms.TTerm Environment.Aliases -> Phantoms.TTerm Graph.Graph -> Phantoms.TTerm Environment.JavaEnvironment
@@ -1387,17 +1387,17 @@ javaEnvironment aliases graph =
 javaEnvironmentAliases :: Phantoms.TTerm Environment.JavaEnvironment -> Phantoms.TTerm Environment.Aliases
 javaEnvironmentAliases x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.java.environment.JavaEnvironment"),
-        Core.projectionField = (Core.Name "aliases")})))),
+        Core.projectionField = (Core.Name "aliases")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 javaEnvironmentGraph :: Phantoms.TTerm Environment.JavaEnvironment -> Phantoms.TTerm Graph.Graph
 javaEnvironmentGraph x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.java.environment.JavaEnvironment"),
-        Core.projectionField = (Core.Name "graph")})))),
+        Core.projectionField = (Core.Name "graph")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 javaEnvironmentWithAliases :: Phantoms.TTerm Environment.JavaEnvironment -> Phantoms.TTerm Environment.Aliases -> Phantoms.TTerm Environment.JavaEnvironment
@@ -1411,9 +1411,9 @@ javaEnvironmentWithAliases original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "graph"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.JavaEnvironment"),
-              Core.projectionField = (Core.Name "graph")})))),
+              Core.projectionField = (Core.Name "graph")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 javaEnvironmentWithGraph :: Phantoms.TTerm Environment.JavaEnvironment -> Phantoms.TTerm Graph.Graph -> Phantoms.TTerm Environment.JavaEnvironment
@@ -1424,9 +1424,9 @@ javaEnvironmentWithGraph original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "aliases"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.environment.JavaEnvironment"),
-              Core.projectionField = (Core.Name "aliases")})))),
+              Core.projectionField = (Core.Name "aliases")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "graph"),
@@ -1444,9 +1444,9 @@ javaFeatures supportsDiamondOperator =
 javaFeaturesSupportsDiamondOperator :: Phantoms.TTerm Environment.JavaFeatures -> Phantoms.TTerm Bool
 javaFeaturesSupportsDiamondOperator x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.java.environment.JavaFeatures"),
-        Core.projectionField = (Core.Name "supportsDiamondOperator")})))),
+        Core.projectionField = (Core.Name "supportsDiamondOperator")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 javaFeaturesWithSupportsDiamondOperator :: Phantoms.TTerm Environment.JavaFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Environment.JavaFeatures

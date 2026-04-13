@@ -36,9 +36,9 @@ adapter isLossy source target coder =
 adapterCoder :: Phantoms.TTerm (Coders.Adapter t1 t2 v1 v2) -> Phantoms.TTerm (Coders.Coder v1 v2)
 adapterCoder x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coders.Adapter"),
-        Core.projectionField = (Core.Name "coder")})))),
+        Core.projectionField = (Core.Name "coder")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 adapterContext :: Phantoms.TTerm Graph.Graph -> Phantoms.TTerm Coders.Language -> Phantoms.TTerm (M.Map Core.Name (Coders.Adapter Core.Type Core.Type Core.Term Core.Term)) -> Phantoms.TTerm Coders.AdapterContext
@@ -59,25 +59,25 @@ adapterContext graph language adapters =
 adapterContextAdapters :: Phantoms.TTerm Coders.AdapterContext -> Phantoms.TTerm (M.Map Core.Name (Coders.Adapter Core.Type Core.Type Core.Term Core.Term))
 adapterContextAdapters x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coders.AdapterContext"),
-        Core.projectionField = (Core.Name "adapters")})))),
+        Core.projectionField = (Core.Name "adapters")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 adapterContextGraph :: Phantoms.TTerm Coders.AdapterContext -> Phantoms.TTerm Graph.Graph
 adapterContextGraph x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coders.AdapterContext"),
-        Core.projectionField = (Core.Name "graph")})))),
+        Core.projectionField = (Core.Name "graph")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 adapterContextLanguage :: Phantoms.TTerm Coders.AdapterContext -> Phantoms.TTerm Coders.Language
 adapterContextLanguage x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coders.AdapterContext"),
-        Core.projectionField = (Core.Name "language")})))),
+        Core.projectionField = (Core.Name "language")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 adapterContextWithAdapters :: Phantoms.TTerm Coders.AdapterContext -> Phantoms.TTerm (M.Map Core.Name (Coders.Adapter Core.Type Core.Type Core.Term Core.Term)) -> Phantoms.TTerm Coders.AdapterContext
@@ -88,16 +88,16 @@ adapterContextWithAdapters original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "graph"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coders.AdapterContext"),
-              Core.projectionField = (Core.Name "graph")})))),
+              Core.projectionField = (Core.Name "graph")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "language"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coders.AdapterContext"),
-              Core.projectionField = (Core.Name "language")})))),
+              Core.projectionField = (Core.Name "language")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "adapters"),
@@ -114,16 +114,16 @@ adapterContextWithGraph original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "language"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coders.AdapterContext"),
-              Core.projectionField = (Core.Name "language")})))),
+              Core.projectionField = (Core.Name "language")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "adapters"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coders.AdapterContext"),
-              Core.projectionField = (Core.Name "adapters")})))),
+              Core.projectionField = (Core.Name "adapters")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 adapterContextWithLanguage :: Phantoms.TTerm Coders.AdapterContext -> Phantoms.TTerm Coders.Language -> Phantoms.TTerm Coders.AdapterContext
@@ -134,9 +134,9 @@ adapterContextWithLanguage original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "graph"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coders.AdapterContext"),
-              Core.projectionField = (Core.Name "graph")})))),
+              Core.projectionField = (Core.Name "graph")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "language"),
@@ -144,33 +144,33 @@ adapterContextWithLanguage original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "adapters"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coders.AdapterContext"),
-              Core.projectionField = (Core.Name "adapters")})))),
+              Core.projectionField = (Core.Name "adapters")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 adapterIsLossy :: Phantoms.TTerm (Coders.Adapter t1 t2 v1 v2) -> Phantoms.TTerm Bool
 adapterIsLossy x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coders.Adapter"),
-        Core.projectionField = (Core.Name "isLossy")})))),
+        Core.projectionField = (Core.Name "isLossy")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 adapterSource :: Phantoms.TTerm (Coders.Adapter t1 t2 v1 v2) -> Phantoms.TTerm t1
 adapterSource x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coders.Adapter"),
-        Core.projectionField = (Core.Name "source")})))),
+        Core.projectionField = (Core.Name "source")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 adapterTarget :: Phantoms.TTerm (Coders.Adapter t1 t2 v1 v2) -> Phantoms.TTerm t2
 adapterTarget x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coders.Adapter"),
-        Core.projectionField = (Core.Name "target")})))),
+        Core.projectionField = (Core.Name "target")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 adapterWithCoder :: Phantoms.TTerm (Coders.Adapter t1 t2 v1 v2) -> Phantoms.TTerm (Coders.Coder v1 v2) -> Phantoms.TTerm (Coders.Adapter t1 t2 v1 v2)
@@ -181,23 +181,23 @@ adapterWithCoder original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "isLossy"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coders.Adapter"),
-              Core.projectionField = (Core.Name "isLossy")})))),
+              Core.projectionField = (Core.Name "isLossy")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "source"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coders.Adapter"),
-              Core.projectionField = (Core.Name "source")})))),
+              Core.projectionField = (Core.Name "source")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "target"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coders.Adapter"),
-              Core.projectionField = (Core.Name "target")})))),
+              Core.projectionField = (Core.Name "target")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "coder"),
@@ -214,23 +214,23 @@ adapterWithIsLossy original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "source"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coders.Adapter"),
-              Core.projectionField = (Core.Name "source")})))),
+              Core.projectionField = (Core.Name "source")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "target"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coders.Adapter"),
-              Core.projectionField = (Core.Name "target")})))),
+              Core.projectionField = (Core.Name "target")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "coder"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coders.Adapter"),
-              Core.projectionField = (Core.Name "coder")})))),
+              Core.projectionField = (Core.Name "coder")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 adapterWithSource :: Phantoms.TTerm (Coders.Adapter t1 t2 v1 v2) -> Phantoms.TTerm t1 -> Phantoms.TTerm (Coders.Adapter t1 t2 v1 v2)
@@ -241,9 +241,9 @@ adapterWithSource original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "isLossy"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coders.Adapter"),
-              Core.projectionField = (Core.Name "isLossy")})))),
+              Core.projectionField = (Core.Name "isLossy")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "source"),
@@ -251,16 +251,16 @@ adapterWithSource original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "target"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coders.Adapter"),
-              Core.projectionField = (Core.Name "target")})))),
+              Core.projectionField = (Core.Name "target")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "coder"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coders.Adapter"),
-              Core.projectionField = (Core.Name "coder")})))),
+              Core.projectionField = (Core.Name "coder")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 adapterWithTarget :: Phantoms.TTerm (Coders.Adapter t1 t2 v1 v2) -> Phantoms.TTerm t2 -> Phantoms.TTerm (Coders.Adapter t1 t2 v1 v2)
@@ -271,16 +271,16 @@ adapterWithTarget original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "isLossy"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coders.Adapter"),
-              Core.projectionField = (Core.Name "isLossy")})))),
+              Core.projectionField = (Core.Name "isLossy")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "source"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coders.Adapter"),
-              Core.projectionField = (Core.Name "source")})))),
+              Core.projectionField = (Core.Name "source")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "target"),
@@ -288,9 +288,9 @@ adapterWithTarget original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "coder"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coders.Adapter"),
-              Core.projectionField = (Core.Name "coder")})))),
+              Core.projectionField = (Core.Name "coder")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 bicoder :: Phantoms.TTerm (t1 -> Coders.Adapter t1 t2 v1 v2) -> Phantoms.TTerm (t2 -> Coders.Adapter t2 t1 v2 v1) -> Phantoms.TTerm (Coders.Bicoder t1 t2 v1 v2)
@@ -308,17 +308,17 @@ bicoder encode decode =
 bicoderDecode :: Phantoms.TTerm (Coders.Bicoder t1 t2 v1 v2) -> Phantoms.TTerm (t2 -> Coders.Adapter t2 t1 v2 v1)
 bicoderDecode x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coders.Bicoder"),
-        Core.projectionField = (Core.Name "decode")})))),
+        Core.projectionField = (Core.Name "decode")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 bicoderEncode :: Phantoms.TTerm (Coders.Bicoder t1 t2 v1 v2) -> Phantoms.TTerm (t1 -> Coders.Adapter t1 t2 v1 v2)
 bicoderEncode x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coders.Bicoder"),
-        Core.projectionField = (Core.Name "encode")})))),
+        Core.projectionField = (Core.Name "encode")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 bicoderWithDecode :: Phantoms.TTerm (Coders.Bicoder t1 t2 v1 v2) -> Phantoms.TTerm (t2 -> Coders.Adapter t2 t1 v2 v1) -> Phantoms.TTerm (Coders.Bicoder t1 t2 v1 v2)
@@ -329,9 +329,9 @@ bicoderWithDecode original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "encode"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coders.Bicoder"),
-              Core.projectionField = (Core.Name "encode")})))),
+              Core.projectionField = (Core.Name "encode")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "decode"),
@@ -348,9 +348,9 @@ bicoderWithEncode original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "decode"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coders.Bicoder"),
-              Core.projectionField = (Core.Name "decode")})))),
+              Core.projectionField = (Core.Name "decode")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 coder :: Phantoms.TTerm (Context.Context -> v1 -> Either Errors.Error v2) -> Phantoms.TTerm (Context.Context -> v2 -> Either Errors.Error v1) -> Phantoms.TTerm (Coders.Coder v1 v2)
@@ -368,9 +368,9 @@ coder encode decode =
 coderDecode :: Phantoms.TTerm (Coders.Coder v1 v2) -> Phantoms.TTerm (Context.Context -> v2 -> Either Errors.Error v1)
 coderDecode x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coders.Coder"),
-        Core.projectionField = (Core.Name "decode")})))),
+        Core.projectionField = (Core.Name "decode")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 coderDirectionDecode :: Phantoms.TTerm Coders.CoderDirection
@@ -392,9 +392,9 @@ coderDirectionEncode =
 coderEncode :: Phantoms.TTerm (Coders.Coder v1 v2) -> Phantoms.TTerm (Context.Context -> v1 -> Either Errors.Error v2)
 coderEncode x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coders.Coder"),
-        Core.projectionField = (Core.Name "encode")})))),
+        Core.projectionField = (Core.Name "encode")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 coderWithDecode :: Phantoms.TTerm (Coders.Coder v1 v2) -> Phantoms.TTerm (Context.Context -> v2 -> Either Errors.Error v1) -> Phantoms.TTerm (Coders.Coder v1 v2)
@@ -405,9 +405,9 @@ coderWithDecode original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "encode"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coders.Coder"),
-              Core.projectionField = (Core.Name "encode")})))),
+              Core.projectionField = (Core.Name "encode")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "decode"),
@@ -424,9 +424,9 @@ coderWithEncode original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "decode"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coders.Coder"),
-              Core.projectionField = (Core.Name "decode")})))),
+              Core.projectionField = (Core.Name "decode")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 language :: Phantoms.TTerm Coders.LanguageName -> Phantoms.TTerm Coders.LanguageConstraints -> Phantoms.TTerm Coders.Language
@@ -444,73 +444,73 @@ language name constraints =
 languageConstraints :: Phantoms.TTerm Coders.Language -> Phantoms.TTerm Coders.LanguageConstraints
 languageConstraints x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coders.Language"),
-        Core.projectionField = (Core.Name "constraints")})))),
+        Core.projectionField = (Core.Name "constraints")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 languageConstraintsEliminationVariants :: Phantoms.TTerm Coders.LanguageConstraints -> Phantoms.TTerm (S.Set Variants.EliminationVariant)
 languageConstraintsEliminationVariants x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coders.LanguageConstraints"),
-        Core.projectionField = (Core.Name "eliminationVariants")})))),
+        Core.projectionField = (Core.Name "eliminationVariants")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 languageConstraintsFloatTypes :: Phantoms.TTerm Coders.LanguageConstraints -> Phantoms.TTerm (S.Set Core.FloatType)
 languageConstraintsFloatTypes x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coders.LanguageConstraints"),
-        Core.projectionField = (Core.Name "floatTypes")})))),
+        Core.projectionField = (Core.Name "floatTypes")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 languageConstraintsFunctionVariants :: Phantoms.TTerm Coders.LanguageConstraints -> Phantoms.TTerm (S.Set Variants.FunctionVariant)
 languageConstraintsFunctionVariants x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coders.LanguageConstraints"),
-        Core.projectionField = (Core.Name "functionVariants")})))),
+        Core.projectionField = (Core.Name "functionVariants")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 languageConstraintsIntegerTypes :: Phantoms.TTerm Coders.LanguageConstraints -> Phantoms.TTerm (S.Set Core.IntegerType)
 languageConstraintsIntegerTypes x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coders.LanguageConstraints"),
-        Core.projectionField = (Core.Name "integerTypes")})))),
+        Core.projectionField = (Core.Name "integerTypes")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 languageConstraintsLiteralVariants :: Phantoms.TTerm Coders.LanguageConstraints -> Phantoms.TTerm (S.Set Variants.LiteralVariant)
 languageConstraintsLiteralVariants x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coders.LanguageConstraints"),
-        Core.projectionField = (Core.Name "literalVariants")})))),
+        Core.projectionField = (Core.Name "literalVariants")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 languageConstraintsTermVariants :: Phantoms.TTerm Coders.LanguageConstraints -> Phantoms.TTerm (S.Set Variants.TermVariant)
 languageConstraintsTermVariants x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coders.LanguageConstraints"),
-        Core.projectionField = (Core.Name "termVariants")})))),
+        Core.projectionField = (Core.Name "termVariants")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 languageConstraintsTypeVariants :: Phantoms.TTerm Coders.LanguageConstraints -> Phantoms.TTerm (S.Set Variants.TypeVariant)
 languageConstraintsTypeVariants x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coders.LanguageConstraints"),
-        Core.projectionField = (Core.Name "typeVariants")})))),
+        Core.projectionField = (Core.Name "typeVariants")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 languageConstraintsTypes :: Phantoms.TTerm Coders.LanguageConstraints -> Phantoms.TTerm (Core.Type -> Bool)
 languageConstraintsTypes x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coders.LanguageConstraints"),
-        Core.projectionField = (Core.Name "types")})))),
+        Core.projectionField = (Core.Name "types")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 languageConstraintsWithEliminationVariants :: Phantoms.TTerm Coders.LanguageConstraints -> Phantoms.TTerm (S.Set Variants.EliminationVariant) -> Phantoms.TTerm Coders.LanguageConstraints
@@ -524,51 +524,51 @@ languageConstraintsWithEliminationVariants original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "literalVariants"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coders.LanguageConstraints"),
-              Core.projectionField = (Core.Name "literalVariants")})))),
+              Core.projectionField = (Core.Name "literalVariants")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "floatTypes"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coders.LanguageConstraints"),
-              Core.projectionField = (Core.Name "floatTypes")})))),
+              Core.projectionField = (Core.Name "floatTypes")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "functionVariants"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coders.LanguageConstraints"),
-              Core.projectionField = (Core.Name "functionVariants")})))),
+              Core.projectionField = (Core.Name "functionVariants")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "integerTypes"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coders.LanguageConstraints"),
-              Core.projectionField = (Core.Name "integerTypes")})))),
+              Core.projectionField = (Core.Name "integerTypes")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "termVariants"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coders.LanguageConstraints"),
-              Core.projectionField = (Core.Name "termVariants")})))),
+              Core.projectionField = (Core.Name "termVariants")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeVariants"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coders.LanguageConstraints"),
-              Core.projectionField = (Core.Name "typeVariants")})))),
+              Core.projectionField = (Core.Name "typeVariants")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "types"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coders.LanguageConstraints"),
-              Core.projectionField = (Core.Name "types")})))),
+              Core.projectionField = (Core.Name "types")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 languageConstraintsWithFloatTypes :: Phantoms.TTerm Coders.LanguageConstraints -> Phantoms.TTerm (S.Set Core.FloatType) -> Phantoms.TTerm Coders.LanguageConstraints
@@ -579,16 +579,16 @@ languageConstraintsWithFloatTypes original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "eliminationVariants"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coders.LanguageConstraints"),
-              Core.projectionField = (Core.Name "eliminationVariants")})))),
+              Core.projectionField = (Core.Name "eliminationVariants")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "literalVariants"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coders.LanguageConstraints"),
-              Core.projectionField = (Core.Name "literalVariants")})))),
+              Core.projectionField = (Core.Name "literalVariants")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "floatTypes"),
@@ -596,37 +596,37 @@ languageConstraintsWithFloatTypes original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "functionVariants"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coders.LanguageConstraints"),
-              Core.projectionField = (Core.Name "functionVariants")})))),
+              Core.projectionField = (Core.Name "functionVariants")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "integerTypes"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coders.LanguageConstraints"),
-              Core.projectionField = (Core.Name "integerTypes")})))),
+              Core.projectionField = (Core.Name "integerTypes")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "termVariants"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coders.LanguageConstraints"),
-              Core.projectionField = (Core.Name "termVariants")})))),
+              Core.projectionField = (Core.Name "termVariants")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeVariants"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coders.LanguageConstraints"),
-              Core.projectionField = (Core.Name "typeVariants")})))),
+              Core.projectionField = (Core.Name "typeVariants")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "types"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coders.LanguageConstraints"),
-              Core.projectionField = (Core.Name "types")})))),
+              Core.projectionField = (Core.Name "types")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 languageConstraintsWithFunctionVariants :: Phantoms.TTerm Coders.LanguageConstraints -> Phantoms.TTerm (S.Set Variants.FunctionVariant) -> Phantoms.TTerm Coders.LanguageConstraints
@@ -637,23 +637,23 @@ languageConstraintsWithFunctionVariants original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "eliminationVariants"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coders.LanguageConstraints"),
-              Core.projectionField = (Core.Name "eliminationVariants")})))),
+              Core.projectionField = (Core.Name "eliminationVariants")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "literalVariants"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coders.LanguageConstraints"),
-              Core.projectionField = (Core.Name "literalVariants")})))),
+              Core.projectionField = (Core.Name "literalVariants")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "floatTypes"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coders.LanguageConstraints"),
-              Core.projectionField = (Core.Name "floatTypes")})))),
+              Core.projectionField = (Core.Name "floatTypes")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "functionVariants"),
@@ -661,30 +661,30 @@ languageConstraintsWithFunctionVariants original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "integerTypes"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coders.LanguageConstraints"),
-              Core.projectionField = (Core.Name "integerTypes")})))),
+              Core.projectionField = (Core.Name "integerTypes")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "termVariants"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coders.LanguageConstraints"),
-              Core.projectionField = (Core.Name "termVariants")})))),
+              Core.projectionField = (Core.Name "termVariants")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeVariants"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coders.LanguageConstraints"),
-              Core.projectionField = (Core.Name "typeVariants")})))),
+              Core.projectionField = (Core.Name "typeVariants")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "types"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coders.LanguageConstraints"),
-              Core.projectionField = (Core.Name "types")})))),
+              Core.projectionField = (Core.Name "types")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 languageConstraintsWithIntegerTypes :: Phantoms.TTerm Coders.LanguageConstraints -> Phantoms.TTerm (S.Set Core.IntegerType) -> Phantoms.TTerm Coders.LanguageConstraints
@@ -695,30 +695,30 @@ languageConstraintsWithIntegerTypes original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "eliminationVariants"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coders.LanguageConstraints"),
-              Core.projectionField = (Core.Name "eliminationVariants")})))),
+              Core.projectionField = (Core.Name "eliminationVariants")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "literalVariants"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coders.LanguageConstraints"),
-              Core.projectionField = (Core.Name "literalVariants")})))),
+              Core.projectionField = (Core.Name "literalVariants")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "floatTypes"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coders.LanguageConstraints"),
-              Core.projectionField = (Core.Name "floatTypes")})))),
+              Core.projectionField = (Core.Name "floatTypes")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "functionVariants"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coders.LanguageConstraints"),
-              Core.projectionField = (Core.Name "functionVariants")})))),
+              Core.projectionField = (Core.Name "functionVariants")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "integerTypes"),
@@ -726,23 +726,23 @@ languageConstraintsWithIntegerTypes original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "termVariants"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coders.LanguageConstraints"),
-              Core.projectionField = (Core.Name "termVariants")})))),
+              Core.projectionField = (Core.Name "termVariants")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeVariants"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coders.LanguageConstraints"),
-              Core.projectionField = (Core.Name "typeVariants")})))),
+              Core.projectionField = (Core.Name "typeVariants")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "types"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coders.LanguageConstraints"),
-              Core.projectionField = (Core.Name "types")})))),
+              Core.projectionField = (Core.Name "types")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 languageConstraintsWithLiteralVariants :: Phantoms.TTerm Coders.LanguageConstraints -> Phantoms.TTerm (S.Set Variants.LiteralVariant) -> Phantoms.TTerm Coders.LanguageConstraints
@@ -753,9 +753,9 @@ languageConstraintsWithLiteralVariants original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "eliminationVariants"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coders.LanguageConstraints"),
-              Core.projectionField = (Core.Name "eliminationVariants")})))),
+              Core.projectionField = (Core.Name "eliminationVariants")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "literalVariants"),
@@ -763,44 +763,44 @@ languageConstraintsWithLiteralVariants original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "floatTypes"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coders.LanguageConstraints"),
-              Core.projectionField = (Core.Name "floatTypes")})))),
+              Core.projectionField = (Core.Name "floatTypes")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "functionVariants"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coders.LanguageConstraints"),
-              Core.projectionField = (Core.Name "functionVariants")})))),
+              Core.projectionField = (Core.Name "functionVariants")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "integerTypes"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coders.LanguageConstraints"),
-              Core.projectionField = (Core.Name "integerTypes")})))),
+              Core.projectionField = (Core.Name "integerTypes")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "termVariants"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coders.LanguageConstraints"),
-              Core.projectionField = (Core.Name "termVariants")})))),
+              Core.projectionField = (Core.Name "termVariants")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeVariants"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coders.LanguageConstraints"),
-              Core.projectionField = (Core.Name "typeVariants")})))),
+              Core.projectionField = (Core.Name "typeVariants")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "types"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coders.LanguageConstraints"),
-              Core.projectionField = (Core.Name "types")})))),
+              Core.projectionField = (Core.Name "types")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 languageConstraintsWithTermVariants :: Phantoms.TTerm Coders.LanguageConstraints -> Phantoms.TTerm (S.Set Variants.TermVariant) -> Phantoms.TTerm Coders.LanguageConstraints
@@ -811,37 +811,37 @@ languageConstraintsWithTermVariants original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "eliminationVariants"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coders.LanguageConstraints"),
-              Core.projectionField = (Core.Name "eliminationVariants")})))),
+              Core.projectionField = (Core.Name "eliminationVariants")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "literalVariants"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coders.LanguageConstraints"),
-              Core.projectionField = (Core.Name "literalVariants")})))),
+              Core.projectionField = (Core.Name "literalVariants")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "floatTypes"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coders.LanguageConstraints"),
-              Core.projectionField = (Core.Name "floatTypes")})))),
+              Core.projectionField = (Core.Name "floatTypes")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "functionVariants"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coders.LanguageConstraints"),
-              Core.projectionField = (Core.Name "functionVariants")})))),
+              Core.projectionField = (Core.Name "functionVariants")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "integerTypes"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coders.LanguageConstraints"),
-              Core.projectionField = (Core.Name "integerTypes")})))),
+              Core.projectionField = (Core.Name "integerTypes")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "termVariants"),
@@ -849,16 +849,16 @@ languageConstraintsWithTermVariants original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "typeVariants"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coders.LanguageConstraints"),
-              Core.projectionField = (Core.Name "typeVariants")})))),
+              Core.projectionField = (Core.Name "typeVariants")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "types"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coders.LanguageConstraints"),
-              Core.projectionField = (Core.Name "types")})))),
+              Core.projectionField = (Core.Name "types")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 languageConstraintsWithTypeVariants :: Phantoms.TTerm Coders.LanguageConstraints -> Phantoms.TTerm (S.Set Variants.TypeVariant) -> Phantoms.TTerm Coders.LanguageConstraints
@@ -869,44 +869,44 @@ languageConstraintsWithTypeVariants original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "eliminationVariants"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coders.LanguageConstraints"),
-              Core.projectionField = (Core.Name "eliminationVariants")})))),
+              Core.projectionField = (Core.Name "eliminationVariants")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "literalVariants"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coders.LanguageConstraints"),
-              Core.projectionField = (Core.Name "literalVariants")})))),
+              Core.projectionField = (Core.Name "literalVariants")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "floatTypes"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coders.LanguageConstraints"),
-              Core.projectionField = (Core.Name "floatTypes")})))),
+              Core.projectionField = (Core.Name "floatTypes")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "functionVariants"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coders.LanguageConstraints"),
-              Core.projectionField = (Core.Name "functionVariants")})))),
+              Core.projectionField = (Core.Name "functionVariants")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "integerTypes"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coders.LanguageConstraints"),
-              Core.projectionField = (Core.Name "integerTypes")})))),
+              Core.projectionField = (Core.Name "integerTypes")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "termVariants"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coders.LanguageConstraints"),
-              Core.projectionField = (Core.Name "termVariants")})))),
+              Core.projectionField = (Core.Name "termVariants")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeVariants"),
@@ -914,9 +914,9 @@ languageConstraintsWithTypeVariants original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "types"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coders.LanguageConstraints"),
-              Core.projectionField = (Core.Name "types")})))),
+              Core.projectionField = (Core.Name "types")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 languageConstraintsWithTypes :: Phantoms.TTerm Coders.LanguageConstraints -> Phantoms.TTerm (Core.Type -> Bool) -> Phantoms.TTerm Coders.LanguageConstraints
@@ -927,51 +927,51 @@ languageConstraintsWithTypes original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "eliminationVariants"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coders.LanguageConstraints"),
-              Core.projectionField = (Core.Name "eliminationVariants")})))),
+              Core.projectionField = (Core.Name "eliminationVariants")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "literalVariants"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coders.LanguageConstraints"),
-              Core.projectionField = (Core.Name "literalVariants")})))),
+              Core.projectionField = (Core.Name "literalVariants")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "floatTypes"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coders.LanguageConstraints"),
-              Core.projectionField = (Core.Name "floatTypes")})))),
+              Core.projectionField = (Core.Name "floatTypes")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "functionVariants"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coders.LanguageConstraints"),
-              Core.projectionField = (Core.Name "functionVariants")})))),
+              Core.projectionField = (Core.Name "functionVariants")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "integerTypes"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coders.LanguageConstraints"),
-              Core.projectionField = (Core.Name "integerTypes")})))),
+              Core.projectionField = (Core.Name "integerTypes")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "termVariants"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coders.LanguageConstraints"),
-              Core.projectionField = (Core.Name "termVariants")})))),
+              Core.projectionField = (Core.Name "termVariants")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeVariants"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coders.LanguageConstraints"),
-              Core.projectionField = (Core.Name "typeVariants")})))),
+              Core.projectionField = (Core.Name "typeVariants")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "types"),
@@ -1010,9 +1010,9 @@ languageConstraints_ eliminationVariants literalVariants floatTypes functionVari
 languageName :: Phantoms.TTerm Coders.Language -> Phantoms.TTerm Coders.LanguageName
 languageName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coders.Language"),
-        Core.projectionField = (Core.Name "name")})))),
+        Core.projectionField = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 languageName_ :: Phantoms.TTerm String -> Phantoms.TTerm Coders.LanguageName
@@ -1029,9 +1029,9 @@ languageWithConstraints original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coders.Language"),
-              Core.projectionField = (Core.Name "name")})))),
+              Core.projectionField = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "constraints"),
@@ -1048,9 +1048,9 @@ languageWithName original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "constraints"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coders.Language"),
-              Core.projectionField = (Core.Name "constraints")})))),
+              Core.projectionField = (Core.Name "constraints")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 traversalOrderPost :: Phantoms.TTerm Coders.TraversalOrder
@@ -1072,5 +1072,5 @@ traversalOrderPre =
 unLanguageName :: Phantoms.TTerm Coders.LanguageName -> Phantoms.TTerm String
 unLanguageName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.coders.LanguageName")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.coders.LanguageName")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))

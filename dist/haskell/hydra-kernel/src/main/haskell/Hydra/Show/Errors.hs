@@ -45,7 +45,10 @@ error e =
       Errors.ErrorDecoding v0 -> decodingError v0
       Errors.ErrorDuplicateBinding v0 -> Core__.duplicateBindingError v0
       Errors.ErrorDuplicateField v0 -> Core__.duplicateFieldError v0
+      Errors.ErrorExtraction _ -> "extraction error"
+      Errors.ErrorInference _ -> "inference error"
       Errors.ErrorOther v0 -> otherError v0
+      Errors.ErrorResolution _ -> "resolution error"
       Errors.ErrorUndefinedField v0 -> Core__.undefinedFieldError v0
       Errors.ErrorUndefinedTermVariable v0 -> Core__.undefinedTermVariableError v0
       Errors.ErrorUntypedTermVariable v0 -> Core__.untypedTermVariableError v0

@@ -46,7 +46,7 @@ object TestSuiteRunner {
   // --- DSL helpers for building term-level representations ---
 
   private def lambda(param: String, body: Term): Term =
-    Term.function(Function.lambda(Lambda(param, None, body)))
+    Term.lambda(Lambda(param, None, body))
 
   private def lambda(p1: String, p2: String, body: Term): Term =
     lambda(p1, lambda(p2, body))
@@ -61,10 +61,10 @@ object TestSuiteRunner {
     Term.variable(name)
 
   private def matchTerm(typeName: String, default: Option[Term], fields: Field*): Term =
-    Term.function(Function.elimination(Elimination.union(CaseStatement(typeName, default, fields.toSeq))))
+    Term.cases(CaseStatement(typeName, default, fields.toSeq))
 
   private def project(typeName: String, fieldName: String): Term =
-    Term.function(Function.elimination(Elimination.record(Projection(typeName, fieldName))))
+    Term.project(Projection(typeName, fieldName))
 
   private def let_(name: String, value: Term, body: Term): Term =
     Term.let(Let(Seq(Binding(name, value, None)), body))

@@ -85,25 +85,25 @@ document id definitions root =
 documentDefinitions :: Phantoms.TTerm Schema.Document -> Phantoms.TTerm (Maybe (M.Map Schema.Keyword Schema.Schema))
 documentDefinitions x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.json.schema.Document"),
-        Core.projectionField = (Core.Name "definitions")})))),
+        Core.projectionField = (Core.Name "definitions")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 documentId :: Phantoms.TTerm Schema.Document -> Phantoms.TTerm (Maybe String)
 documentId x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.json.schema.Document"),
-        Core.projectionField = (Core.Name "id")})))),
+        Core.projectionField = (Core.Name "id")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 documentRoot :: Phantoms.TTerm Schema.Document -> Phantoms.TTerm Schema.Schema
 documentRoot x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.json.schema.Document"),
-        Core.projectionField = (Core.Name "root")})))),
+        Core.projectionField = (Core.Name "root")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 documentWithDefinitions :: Phantoms.TTerm Schema.Document -> Phantoms.TTerm (Maybe (M.Map Schema.Keyword Schema.Schema)) -> Phantoms.TTerm Schema.Document
@@ -114,9 +114,9 @@ documentWithDefinitions original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "id"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.json.schema.Document"),
-              Core.projectionField = (Core.Name "id")})))),
+              Core.projectionField = (Core.Name "id")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "definitions"),
@@ -124,9 +124,9 @@ documentWithDefinitions original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "root"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.json.schema.Document"),
-              Core.projectionField = (Core.Name "root")})))),
+              Core.projectionField = (Core.Name "root")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 documentWithId :: Phantoms.TTerm Schema.Document -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Schema.Document
@@ -140,16 +140,16 @@ documentWithId original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "definitions"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.json.schema.Document"),
-              Core.projectionField = (Core.Name "definitions")})))),
+              Core.projectionField = (Core.Name "definitions")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "root"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.json.schema.Document"),
-              Core.projectionField = (Core.Name "root")})))),
+              Core.projectionField = (Core.Name "root")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 documentWithRoot :: Phantoms.TTerm Schema.Document -> Phantoms.TTerm Schema.Schema -> Phantoms.TTerm Schema.Document
@@ -160,16 +160,16 @@ documentWithRoot original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "id"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.json.schema.Document"),
-              Core.projectionField = (Core.Name "id")})))),
+              Core.projectionField = (Core.Name "id")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "definitions"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.json.schema.Document"),
-              Core.projectionField = (Core.Name "definitions")})))),
+              Core.projectionField = (Core.Name "definitions")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "root"),
@@ -212,17 +212,17 @@ limit value exclusive =
 limitExclusive :: Phantoms.TTerm Schema.Limit -> Phantoms.TTerm Bool
 limitExclusive x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.json.schema.Limit"),
-        Core.projectionField = (Core.Name "exclusive")})))),
+        Core.projectionField = (Core.Name "exclusive")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 limitValue :: Phantoms.TTerm Schema.Limit -> Phantoms.TTerm Int
 limitValue x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.json.schema.Limit"),
-        Core.projectionField = (Core.Name "value")})))),
+        Core.projectionField = (Core.Name "value")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 limitWithExclusive :: Phantoms.TTerm Schema.Limit -> Phantoms.TTerm Bool -> Phantoms.TTerm Schema.Limit
@@ -233,9 +233,9 @@ limitWithExclusive original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "value"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.json.schema.Limit"),
-              Core.projectionField = (Core.Name "value")})))),
+              Core.projectionField = (Core.Name "value")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "exclusive"),
@@ -252,9 +252,9 @@ limitWithValue original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "exclusive"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.json.schema.Limit"),
-              Core.projectionField = (Core.Name "exclusive")})))),
+              Core.projectionField = (Core.Name "exclusive")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 multipleRestrictionAllOf :: Phantoms.TTerm [Schema.Schema] -> Phantoms.TTerm Schema.MultipleRestriction
@@ -582,23 +582,23 @@ typeSingle x =
 unKeyword :: Phantoms.TTerm Schema.Keyword -> Phantoms.TTerm String
 unKeyword x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.json.schema.Keyword")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.json.schema.Keyword")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unRegularExpression :: Phantoms.TTerm Schema.RegularExpression -> Phantoms.TTerm String
 unRegularExpression x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.json.schema.RegularExpression")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.json.schema.RegularExpression")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unSchema :: Phantoms.TTerm Schema.Schema -> Phantoms.TTerm [Schema.Restriction]
 unSchema x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.json.schema.Schema")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.json.schema.Schema")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unSchemaReference :: Phantoms.TTerm Schema.SchemaReference -> Phantoms.TTerm String
 unSchemaReference x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.json.schema.SchemaReference")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.json.schema.SchemaReference")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))

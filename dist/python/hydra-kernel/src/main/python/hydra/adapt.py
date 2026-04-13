@@ -126,21 +126,14 @@ def adapt_graph_schema(constraints: hydra.coders.LanguageConstraints, litmap: Fr
     return hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda x1: map_pair(x1)), hydra.lib.maps.to_list(types0)), (lambda pairs: Right(hydra.lib.maps.from_list(pairs))))
 
 def adapt_lambda_domains(constraints: hydra.coders.LanguageConstraints, litmap: FrozenDict[hydra.core.LiteralType, hydra.core.LiteralType], recurse: Callable[[T0], Either[hydra.errors.Error, hydra.core.Term]], term: T0):
-    def _hoist_hydra_adapt_adapt_lambda_domains_1(constraints, f, litmap, v1):
+    def _hoist_hydra_adapt_adapt_lambda_domains_1(constraints, litmap, rewritten, v1):
         match v1:
-            case hydra.core.FunctionLambda(value=l):
-                return hydra.lib.eithers.bind(hydra.lib.maybes.maybe((lambda : Right(Nothing())), (lambda dom: hydra.lib.eithers.bind(adapt_type(constraints, litmap, dom), (lambda dom1: Right(Just(dom1))))), l.domain), (lambda adapted_domain: Right(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(l.parameter, adapted_domain, l.body))))))))
-
-            case _:
-                return Right(cast(hydra.core.Term, hydra.core.TermFunction(f)))
-    def _hoist_hydra_adapt_adapt_lambda_domains_2(constraints, litmap, rewritten, v1):
-        match v1:
-            case hydra.core.TermFunction(value=f):
-                return _hoist_hydra_adapt_adapt_lambda_domains_1(constraints, f, litmap, f)
+            case hydra.core.TermLambda(value=l):
+                return hydra.lib.eithers.bind(hydra.lib.maybes.maybe((lambda : Right(Nothing())), (lambda dom: hydra.lib.eithers.bind(adapt_type(constraints, litmap, dom), (lambda dom1: Right(Just(dom1))))), l.domain), (lambda adapted_domain: Right(cast(hydra.core.Term, hydra.core.TermLambda(hydra.core.Lambda(l.parameter, adapted_domain, l.body))))))
 
             case _:
                 return Right(rewritten)
-    return hydra.lib.eithers.bind(recurse(term), (lambda rewritten: _hoist_hydra_adapt_adapt_lambda_domains_2(constraints, litmap, rewritten, rewritten)))
+    return hydra.lib.eithers.bind(recurse(term), (lambda rewritten: _hoist_hydra_adapt_adapt_lambda_domains_1(constraints, litmap, rewritten, rewritten)))
 
 def adapt_float_type(constraints: hydra.coders.LanguageConstraints, ft: hydra.core.FloatType) -> Maybe[hydra.core.FloatType]:
     r"""Attempt to adapt a floating-point type using the given language constraints."""
@@ -387,22 +380,15 @@ def adapt_term(constraints: hydra.coders.LanguageConstraints, litmap: FrozenDict
     return hydra.rewriting.rewrite_term_m((lambda x1, x2: rewrite(x1, x2)), term0)
 
 def push_type_apps_inward(term: hydra.core.Term) -> hydra.core.Term:
-    r"""Normalize a term by pushing TermTypeApplication inward past TermApplication and TermFunction (Lambda). This corrects structures produced by poly-let hoisting and eta expansion, where type applications from inference end up wrapping term applications or lambda abstractions instead of being directly on the polymorphic variable."""
+    r"""Normalize a term by pushing TermTypeApplication inward past TermApplication and TermLambda. This corrects structures produced by poly-let hoisting and eta expansion, where type applications from inference end up wrapping term applications or lambda abstractions instead of being directly on the polymorphic variable."""
 
-    def push(body: hydra.core.Term, typ: hydra.core.Type):
-        def _hoist_push_1(f, typ, v1):
-            match v1:
-                case hydra.core.FunctionLambda(value=l):
-                    return go(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(l.parameter, l.domain, cast(hydra.core.Term, hydra.core.TermTypeApplication(hydra.core.TypeApplicationTerm(l.body, typ)))))))))
-
-                case _:
-                    return cast(hydra.core.Term, hydra.core.TermTypeApplication(hydra.core.TypeApplicationTerm(cast(hydra.core.Term, hydra.core.TermFunction(f)), typ)))
+    def push(body: hydra.core.Term, typ: hydra.core.Type) -> hydra.core.Term:
         match body:
             case hydra.core.TermApplication(value=a):
                 return go(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermTypeApplication(hydra.core.TypeApplicationTerm(a.function, typ))), a.argument))))
 
-            case hydra.core.TermFunction(value=f):
-                return _hoist_push_1(f, typ, f)
+            case hydra.core.TermLambda(value=l):
+                return go(cast(hydra.core.Term, hydra.core.TermLambda(hydra.core.Lambda(l.parameter, l.domain, cast(hydra.core.Term, hydra.core.TermTypeApplication(hydra.core.TypeApplicationTerm(l.body, typ)))))))
 
             case hydra.core.TermLet(value=lt):
                 return go(cast(hydra.core.Term, hydra.core.TermLet(hydra.core.Let(lt.bindings, cast(hydra.core.Term, hydra.core.TermTypeApplication(hydra.core.TypeApplicationTerm(lt.body, typ)))))))
@@ -412,29 +398,6 @@ def push_type_apps_inward(term: hydra.core.Term) -> hydra.core.Term:
     def go(t: hydra.core.Term) -> hydra.core.Term:
         def for_field(fld: hydra.core.Field) -> hydra.core.Field:
             return hydra.core.Field(fld.name, go(fld.term))
-        def for_elimination(elm: hydra.core.Elimination) -> hydra.core.Elimination:
-            match elm:
-                case hydra.core.EliminationRecord(value=p):
-                    return cast(hydra.core.Elimination, hydra.core.EliminationRecord(p))
-
-                case hydra.core.EliminationUnion(value=cs):
-                    return cast(hydra.core.Elimination, hydra.core.EliminationUnion(hydra.core.CaseStatement(cs.type_name, hydra.lib.maybes.map((lambda x1: go(x1)), cs.default), hydra.lib.lists.map((lambda x1: for_field(x1)), cs.cases))))
-
-                case hydra.core.EliminationWrap(value=name):
-                    return cast(hydra.core.Elimination, hydra.core.EliminationWrap(name))
-
-                case _:
-                    raise AssertionError("Unreachable: all variants handled")
-        def for_function(fun: hydra.core.Function) -> hydra.core.Function:
-            match fun:
-                case hydra.core.FunctionElimination(value=elm):
-                    return cast(hydra.core.Function, hydra.core.FunctionElimination(for_elimination(elm)))
-
-                case hydra.core.FunctionLambda(value=l):
-                    return cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(l.parameter, l.domain, go(l.body))))
-
-                case _:
-                    raise AssertionError("Unreachable: all variants handled")
         def for_let(lt: hydra.core.Let) -> hydra.core.Let:
             def map_binding(b: hydra.core.Binding) -> hydra.core.Binding:
                 return hydra.core.Binding(b.name, go(b.term), b.type)
@@ -450,11 +413,14 @@ def push_type_apps_inward(term: hydra.core.Term) -> hydra.core.Term:
             case hydra.core.TermApplication(value=a):
                 return cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(go(a.function), go(a.argument))))
 
+            case hydra.core.TermCases(value=cs):
+                return cast(hydra.core.Term, hydra.core.TermCases(hydra.core.CaseStatement(cs.type_name, hydra.lib.maybes.map((lambda x1: go(x1)), cs.default), hydra.lib.lists.map((lambda x1: for_field(x1)), cs.cases))))
+
             case hydra.core.TermEither(value=e):
                 return cast(hydra.core.Term, hydra.core.TermEither(hydra.lib.eithers.either((lambda l: Left(go(l))), (lambda r: Right(go(r))), e)))
 
-            case hydra.core.TermFunction(value=fun):
-                return cast(hydra.core.Term, hydra.core.TermFunction(for_function(fun)))
+            case hydra.core.TermLambda(value=l):
+                return cast(hydra.core.Term, hydra.core.TermLambda(hydra.core.Lambda(l.parameter, l.domain, go(l.body))))
 
             case hydra.core.TermLet(value=lt):
                 return cast(hydra.core.Term, hydra.core.TermLet(for_let(lt)))
@@ -473,6 +439,9 @@ def push_type_apps_inward(term: hydra.core.Term) -> hydra.core.Term:
 
             case hydra.core.TermPair(value=p):
                 return cast(hydra.core.Term, hydra.core.TermPair((go(hydra.lib.pairs.first(p)), go(hydra.lib.pairs.second(p)))))
+
+            case hydra.core.TermProject(value=p2):
+                return cast(hydra.core.Term, hydra.core.TermProject(p2))
 
             case hydra.core.TermRecord(value=r):
                 return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(r.type_name, hydra.lib.lists.map((lambda x1: for_field(x1)), r.fields))))
@@ -494,6 +463,9 @@ def push_type_apps_inward(term: hydra.core.Term) -> hydra.core.Term:
 
             case hydra.core.TermUnit():
                 return cast(hydra.core.Term, hydra.core.TermUnit())
+
+            case hydra.core.TermUnwrap(value=n):
+                return cast(hydra.core.Term, hydra.core.TermUnwrap(n))
 
             case hydra.core.TermVariable(value=v2):
                 return cast(hydra.core.Term, hydra.core.TermVariable(v2))

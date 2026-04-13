@@ -191,7 +191,7 @@ toTermTerm (TTerm t) = TTerm t
 -- | Construct an unwrap elimination applied to a term
 unwrapApply :: String -> TTerm Term -> TTerm Term
 unwrapApply tname (TTerm arg) = TTerm $ TermApplication $ Application
-  (TermFunction $ FunctionElimination $ EliminationWrap (Name tname)) arg
+  (TermUnwrap (Name tname)) arg
 
 -- | Construct a primitive function reference
 primRef :: String -> TTerm Term
@@ -435,7 +435,7 @@ namingConventionTests = define "namingConventionTests" $
       (lambda "x" (var "x"))
       noError,
     untypedCase "lambda with empty name"
-      (TTerm $ TermFunction $ FunctionLambda $ Lambda (Name "") Nothing (TermVariable $ Name "x"))
+      (TTerm $ TermLambda $ Lambda (Name "") Nothing (TermVariable $ Name "x"))
       (invalidNameErr ""),
     untypedCase "let binding with valid name"
       (lets [(nm "x", int32 1)] (var "x"))

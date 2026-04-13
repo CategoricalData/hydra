@@ -26,17 +26,20 @@ module_ = Module ns (map toTypeDef definitions) [Core.ns] [Core.ns] $
       termVariant,
       typeVariant]
 
+-- Note: kept around for backward compatibility with the Hydra.Coders LanguageConstraints schema,
+-- even though hydra.core.Function and hydra.core.Elimination no longer exist as #332 of 2026-04.
 eliminationVariant :: Binding
 eliminationVariant = define "EliminationVariant" $
-  doc "The identifier of an elimination constructor" $
+  doc "The identifier of an elimination constructor (legacy)" $
   T.enum [
     "record",
     "union",
     "wrap"]
 
+-- Note: kept around for backward compatibility with the Hydra.Coders LanguageConstraints schema.
 functionVariant :: Binding
 functionVariant = define "FunctionVariant" $
-  doc "The identifier of a function constructor" $
+  doc "The identifier of a function constructor (legacy)" $
   T.enum [
     "elimination",
     "lambda"]
@@ -57,20 +60,23 @@ termVariant = define "TermVariant" $
   T.enum [
     "annotated",
     "application",
+    "cases",
     "either",
-    "function",
+    "lambda",
     "let",
     "list",
     "literal",
     "map",
     "maybe",
     "pair",
+    "project",
     "record",
     "set",
     "typeApplication",
     "typeLambda",
     "union",
     "unit",
+    "unwrap",
     "variable",
     "wrap"]
 

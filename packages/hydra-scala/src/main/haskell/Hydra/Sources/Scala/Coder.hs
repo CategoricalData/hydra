@@ -118,14 +118,12 @@ applyVar = def "applyVar" $
   lambda "fterm" $ lambda "avar" $ lets [
     "v">: Core.unName (var "avar")] $
     cases _Term (Strip.deannotateAndDetypeTerm @@ var "fterm") (Just $ Core.termApplication (record _Application [_Application_function>>: var "fterm", _Application_argument>>: Core.termVariable (var "avar")])) [
-      _Term_function>>: ("f" ~> cases _Function (var "f")
-        (Just $ Core.termApplication (record _Application [_Application_function>>: var "fterm", _Application_argument>>: Core.termVariable (var "avar")])) [
-          _Function_lambda>>: ("lam" ~> lets [
-            "lamParam">: project _Lambda _Lambda_parameter @@ var "lam",
-            "lamBody">: project _Lambda _Lambda_body @@ var "lam"] $
-            Logic.ifElse (Variables.isFreeVariableInTerm @@ var "lamParam" @@ var "lamBody")
-              (var "lamBody")
-              (Variables.substituteVariable @@ var "lamParam" @@ var "avar" @@ var "lamBody"))])]
+      _Term_lambda>>: ("lam" ~> lets [
+        "lamParam">: project _Lambda _Lambda_parameter @@ var "lam",
+        "lamBody">: project _Lambda _Lambda_body @@ var "lam"] $
+        Logic.ifElse (Variables.isFreeVariableInTerm @@ var "lamParam" @@ var "lamBody")
+          (var "lamBody")
+          (Variables.substituteVariable @@ var "lamParam" @@ var "avar" @@ var "lamBody"))]
 
 constructModule :: TTermDefinition (Context -> Graph -> Module -> [Definition] -> Either Error Scala.Pkg)
 constructModule = def "constructModule" $
@@ -179,15 +177,14 @@ encodeCase = def "encodeCase" $
     "isUnit">: Maybes.maybe
       -- If ftypes doesn't have this field, check the term structure
       (cases _Term (Strip.deannotateAndDetypeTerm @@ var "fterm") (Just false) [
-        _Term_function>>: ("fn" ~> cases _Function (var "fn") (Just false) [
-          -- Check lambda: unit if domain=Unit, or if lambda body doesn't use the parameter
-          _Function_lambda>>: ("lam" ~> lets [
-            "lamParam">: Core.lambdaParameter $ var "lam",
-            "lamBody">: Core.lambdaBody $ var "lam",
-            "domIsUnit">: Maybes.maybe false ("dom" ~> Equality.equal (var "dom") (Core.typeUnit)) (Core.lambdaDomain $ var "lam"),
-            -- isFreeVariableInTerm returns True when the variable is NOT present
-            "bodyIgnoresParam">: Variables.isFreeVariableInTerm @@ var "lamParam" @@ var "lamBody"] $
-            Logic.or (var "domIsUnit") (var "bodyIgnoresParam"))]),
+        -- Check lambda: unit if domain=Unit, or if lambda body doesn't use the parameter
+        _Term_lambda>>: ("lam" ~> lets [
+          "lamParam">: Core.lambdaParameter $ var "lam",
+          "lamBody">: Core.lambdaBody $ var "lam",
+          "domIsUnit">: Maybes.maybe false ("dom" ~> Equality.equal (var "dom") (Core.typeUnit)) (Core.lambdaDomain $ var "lam"),
+          -- isFreeVariableInTerm returns True when the variable is NOT present
+          "bodyIgnoresParam">: Variables.isFreeVariableInTerm @@ var "lamParam" @@ var "lamBody"] $
+          Logic.or (var "domIsUnit") (var "bodyIgnoresParam")),
         _Term_record>>: ("r" ~> Equality.equal (Lists.length (Core.recordFields (var "r"))) (int32 0)),
         _Term_unit>>: (constant true)])
       ("dom" ~> cases _Type (Strip.deannotateType @@ var "dom")
@@ -201,17 +198,15 @@ encodeCase = def "encodeCase" $
     "shortTypeName">: Lists.last (Strings.splitOn (string ".") (Maybes.maybe (string "x") ("n" ~> Core.unName (var "n")) (var "sn"))),
     -- Sanitize lambda param name for use as suffix: replace apostrophes with underscores
     "lamParamSuffix">: cases _Term (Strip.deannotateAndDetypeTerm @@ var "fterm") (Just $ string "") [
-      _Term_function>>: ("fn" ~> cases _Function (var "fn") (Just $ string "") [
-        _Function_lambda>>: ("lam" ~> lets [
-          "rawName">: Core.unName (Core.lambdaParameter $ var "lam"),
-          "safeName">: Strings.fromList (Lists.map ("c" ~> Logic.ifElse (Equality.equal (var "c") (int32 39)) (int32 95) (var "c")) (Strings.toList (var "rawName")))] $
-          Strings.cat2 (string "_") (var "safeName"))])],
+      _Term_lambda>>: ("lam" ~> lets [
+        "rawName">: Core.unName (Core.lambdaParameter $ var "lam"),
+        "safeName">: Strings.fromList (Lists.map ("c" ~> Logic.ifElse (Equality.equal (var "c") (int32 39)) (int32 95) (var "c")) (Strings.toList (var "rawName")))] $
+        Strings.cat2 (string "_") (var "safeName"))],
     "v">: Core.name (Strings.cat (list [string "v_", var "shortTypeName", string "_", Core.unName (var "fname"), var "lamParamSuffix"])),
     -- Check if variant is truly parameterless (domain is Unit) vs parameterized but unused
     "domainIsUnit">: cases _Term (Strip.deannotateAndDetypeTerm @@ var "fterm") (Just true) [
-      _Term_function>>: ("fn" ~> cases _Function (var "fn") (Just true) [
-        _Function_lambda>>: ("lam" ~>
-          Maybes.maybe true ("dom" ~> Equality.equal (var "dom") (Core.typeUnit)) (Core.lambdaDomain $ var "lam"))])],
+      _Term_lambda>>: ("lam" ~>
+        Maybes.maybe true ("dom" ~> Equality.equal (var "dom") (Core.typeUnit)) (Core.lambdaDomain $ var "lam"))],
     "patArgs">: Logic.ifElse (var "isUnit")
       (Logic.ifElse (var "domainIsUnit")
         (emptyList)
@@ -285,12 +280,12 @@ encodeComplexTermDef = def "encodeComplexTermDef" $
                       _Defn_Def_decltpe>>: just (var "scod"),
                       _Defn_Def_body>>: var "defBody"])))))))
 
-encodeFunction :: TTermDefinition (Context -> Graph -> M.Map Name Term -> Function -> Maybe Term -> Either Error Scala.Data)
+encodeFunction :: TTermDefinition (Context -> Graph -> M.Map Name Term -> Term -> Maybe Term -> Either Error Scala.Data)
 encodeFunction = def "encodeFunction" $
-  doc "Encode a Hydra function as a Scala expression" $
-  lambda "cx" $ lambda "g" $ lambda "meta" $ lambda "fun" $ lambda "arg" $
-    (cases _Function (var "fun") (Just $ left (Error.errorOther $ Error.otherError (string "unsupported function"))) [
-      _Function_lambda>>: ("lam" ~> lets [
+  doc "Encode a Hydra function-valued term (lambda, project, cases, or unwrap) as a Scala expression" $
+  lambda "cx" $ lambda "g" $ lambda "meta" $ lambda "funTerm" $ lambda "arg" $
+    (cases _Term (Strip.deannotateAndDetypeTerm @@ var "funTerm") (Just $ left (Error.errorOther $ Error.otherError (string "unsupported function"))) [
+      _Term_lambda>>: ("lam" ~> lets [
         "param">: project _Lambda _Lambda_parameter @@ var "lam",
         "v">: ScalaUtilsSource.scalaEscapeName @@ (Core.unName (var "param")),
         "body">: project _Lambda _Lambda_body @@ var "lam",
@@ -323,103 +318,101 @@ encodeFunction = def "encodeFunction" $
                 (var "mdom"))
               ("sdom" ~>
                 right (ScalaUtilsSource.slambda @@ var "v" @@ var "sbody" @@ var "sdom")))),
-      _Function_elimination>>: ("e" ~>
-        cases _Elimination (var "e") (Just $ left (Error.errorOther $ Error.otherError (string "unsupported elimination"))) [
-          _Elimination_wrap>>: ("name" ~>
-            -- Wrap elimination is identity in Scala (newtypes are erased)
-            Maybes.maybe
-              (Eithers.bind (asTerm findSdom @@ var "cx" @@ var "g" @@ var "meta")
-                ("sdom" ~> right (ScalaUtilsSource.slambda @@ string "x" @@ (ScalaUtilsSource.sname @@ string "x") @@ var "sdom")))
-              ("a" ~> asTerm encodeTerm @@ var "cx" @@ var "g" @@ var "a")
-              (var "arg")),
-          _Elimination_record>>: ("proj" ~> lets [
-            "fname">: ScalaUtilsSource.scalaEscapeName @@ (Core.unName (project _Projection _Projection_field @@ var "proj")),
-            "typeName">: project _Projection _Projection_typeName @@ var "proj",
-            "pv">: string "x"] $
-            Maybes.maybe
-              -- Unapplied projection: generate lambda x => x.fieldName
-              -- Try findSdom first (full type with type params), fall back to Projection.typeName
-              (Eithers.bind
-                (Eithers.either_
-                  -- findSdom failed: fall back to Projection.typeName
-                  (constant $ Eithers.bind
-                    (asTerm encodeType @@ var "cx" @@ var "g" @@ (Core.typeVariable (var "typeName")))
-                    ("st" ~> right (just (var "st"))))
-                  -- findSdom succeeded: check if result is Nothing, fall back to typeName
-                  ("msdom" ~> Maybes.maybe
-                    -- findSdom returned Nothing: fall back to Projection.typeName
-                    (Eithers.bind
-                      (asTerm encodeType @@ var "cx" @@ var "g" @@ (Core.typeVariable (var "typeName")))
-                      ("st" ~> right (just (var "st"))))
-                    -- findSdom returned Just: use it
-                    ("sdom" ~> right (just (var "sdom")))
-                    (var "msdom"))
-                  (asTerm findSdom @@ var "cx" @@ var "g" @@ var "meta"))
-                ("msdom" ~>
-                  right (ScalaUtilsSource.slambda @@ var "pv" @@
-                    (inject _Data _Data_ref (inject _Data_Ref _Data_Ref_select (
-                      record _Data_Select [
-                        _Data_Select_qual>>: ScalaUtilsSource.sname @@ var "pv",
-                        _Data_Select_name>>: record _Data_Name [
-                          _Data_Name_value>>: wrap _PredefString (var "fname")]])))
-                    @@ var "msdom")))
+      _Term_unwrap>>: ("name" ~>
+        -- Wrap elimination is identity in Scala (newtypes are erased)
+        Maybes.maybe
+          (Eithers.bind (asTerm findSdom @@ var "cx" @@ var "g" @@ var "meta")
+            ("sdom" ~> right (ScalaUtilsSource.slambda @@ string "x" @@ (ScalaUtilsSource.sname @@ string "x") @@ var "sdom")))
+          ("a" ~> asTerm encodeTerm @@ var "cx" @@ var "g" @@ var "a")
+          (var "arg")),
+      _Term_project>>: ("proj" ~> lets [
+        "fname">: ScalaUtilsSource.scalaEscapeName @@ (Core.unName (project _Projection _Projection_field @@ var "proj")),
+        "typeName">: project _Projection _Projection_typeName @@ var "proj",
+        "pv">: string "x"] $
+        Maybes.maybe
+          -- Unapplied projection: generate lambda x => x.fieldName
+          -- Try findSdom first (full type with type params), fall back to Projection.typeName
+          (Eithers.bind
+            (Eithers.either_
+              -- findSdom failed: fall back to Projection.typeName
+              (constant $ Eithers.bind
+                (asTerm encodeType @@ var "cx" @@ var "g" @@ (Core.typeVariable (var "typeName")))
+                ("st" ~> right (just (var "st"))))
+              -- findSdom succeeded: check if result is Nothing, fall back to typeName
+              ("msdom" ~> Maybes.maybe
+                -- findSdom returned Nothing: fall back to Projection.typeName
+                (Eithers.bind
+                  (asTerm encodeType @@ var "cx" @@ var "g" @@ (Core.typeVariable (var "typeName")))
+                  ("st" ~> right (just (var "st"))))
+                -- findSdom returned Just: use it
+                ("sdom" ~> right (just (var "sdom")))
+                (var "msdom"))
+              (asTerm findSdom @@ var "cx" @@ var "g" @@ var "meta"))
+            ("msdom" ~>
+              right (ScalaUtilsSource.slambda @@ var "pv" @@
+                (inject _Data _Data_ref (inject _Data_Ref _Data_Ref_select (
+                  record _Data_Select [
+                    _Data_Select_qual>>: ScalaUtilsSource.sname @@ var "pv",
+                    _Data_Select_name>>: record _Data_Name [
+                      _Data_Name_value>>: wrap _PredefString (var "fname")]])))
+                @@ var "msdom")))
 
-              -- Applied projection: encode in the application handler (shouldn't reach here)
-              ("a" ~>
+          -- Applied projection: encode in the application handler (shouldn't reach here)
+          ("a" ~>
+            Eithers.bind
+              (asTerm encodeTerm @@ var "cx" @@ var "g" @@ var "a")
+              ("sa" ~>
+                right (inject _Data _Data_ref (inject _Data_Ref _Data_Ref_select (
+                  record _Data_Select [
+                    _Data_Select_qual>>: var "sa",
+                    _Data_Select_name>>: record _Data_Name [
+                      _Data_Name_value>>: wrap _PredefString (var "fname")]])))))
+          (var "arg")),
+      _Term_cases>>: ("cs" ~> lets [
+        "v">: string "v",
+        "tname">: project _CaseStatement _CaseStatement_typeName @@ var "cs",
+        "dom">: Core.typeVariable (var "tname"),
+        "sn">: ScalaUtilsSource.nameOfType @@ var "g" @@ var "dom",
+        "cases">: project _CaseStatement _CaseStatement_cases @@ var "cs",
+        "dflt">: project _CaseStatement _CaseStatement_default @@ var "cs",
+        -- Try to get field types from the graph; fall back to empty map if unavailable
+        "ftypes">: Eithers.either_
+          (constant Maps.empty)
+          identity
+          (Resolution.fieldTypes @@ var "cx" @@ var "g" @@ var "dom")] $
+            Eithers.bind
+              (Eithers.mapList ("f" ~> asTerm encodeCase @@ var "cx" @@ var "g" @@ var "ftypes" @@ var "sn" @@ var "f") (var "cases"))
+              ("fieldCases" ~>
+                -- Add default case if present
                 Eithers.bind
-                  (asTerm encodeTerm @@ var "cx" @@ var "g" @@ var "a")
-                  ("sa" ~>
-                    right (inject _Data _Data_ref (inject _Data_Ref _Data_Ref_select (
-                      record _Data_Select [
-                        _Data_Select_qual>>: var "sa",
-                        _Data_Select_name>>: record _Data_Name [
-                          _Data_Name_value>>: wrap _PredefString (var "fname")]])))))
-              (var "arg")),
-          _Elimination_union>>: ("cs" ~> lets [
-            "v">: string "v",
-            "tname">: project _CaseStatement _CaseStatement_typeName @@ var "cs",
-            "dom">: Core.typeVariable (var "tname"),
-            "sn">: ScalaUtilsSource.nameOfType @@ var "g" @@ var "dom",
-            "cases">: project _CaseStatement _CaseStatement_cases @@ var "cs",
-            "dflt">: project _CaseStatement _CaseStatement_default @@ var "cs",
-            -- Try to get field types from the graph; fall back to empty map if unavailable
-            "ftypes">: Eithers.either_
-              (constant Maps.empty)
-              identity
-              (Resolution.fieldTypes @@ var "cx" @@ var "g" @@ var "dom")] $
-                Eithers.bind
-                  (Eithers.mapList ("f" ~> asTerm encodeCase @@ var "cx" @@ var "g" @@ var "ftypes" @@ var "sn" @@ var "f") (var "cases"))
-                  ("fieldCases" ~>
-                    -- Add default case if present
+                  (Maybes.maybe
+                    (right (var "fieldCases"))
+                    ("dfltTerm" ~>
+                      Eithers.bind
+                        (asTerm encodeTerm @@ var "cx" @@ var "g" @@ var "dfltTerm")
+                        ("sdflt" ~>
+                          right (Lists.concat2 (var "fieldCases") (list [
+                            record _Case [
+                              _Case_pat>>: inject _Pat _Pat_wildcard unit,
+                              _Case_cond>>: nothing,
+                              _Case_body>>: var "sdflt"]]))))
+                    (var "dflt"))
+                  ("scases" ~>
+                Maybes.maybe
+                  (Eithers.bind
+                    (asTerm findSdom @@ var "cx" @@ var "g" @@ var "meta")
+                    ("sdom" ~>
+                      right (ScalaUtilsSource.slambda @@ var "v" @@ (inject _Data _Data_match (record _Data_Match [
+                        _Data_Match_expr>>: ScalaUtilsSource.sname @@ var "v",
+                        _Data_Match_cases>>: var "scases"])) @@ var "sdom")))
+                  ("a" ~>
                     Eithers.bind
-                      (Maybes.maybe
-                        (right (var "fieldCases"))
-                        ("dfltTerm" ~>
-                          Eithers.bind
-                            (asTerm encodeTerm @@ var "cx" @@ var "g" @@ var "dfltTerm")
-                            ("sdflt" ~>
-                              right (Lists.concat2 (var "fieldCases") (list [
-                                record _Case [
-                                  _Case_pat>>: inject _Pat _Pat_wildcard unit,
-                                  _Case_cond>>: nothing,
-                                  _Case_body>>: var "sdflt"]]))))
-                        (var "dflt"))
-                      ("scases" ~>
-                    Maybes.maybe
-                      (Eithers.bind
-                        (asTerm findSdom @@ var "cx" @@ var "g" @@ var "meta")
-                        ("sdom" ~>
-                          right (ScalaUtilsSource.slambda @@ var "v" @@ (inject _Data _Data_match (record _Data_Match [
-                            _Data_Match_expr>>: ScalaUtilsSource.sname @@ var "v",
-                            _Data_Match_cases>>: var "scases"])) @@ var "sdom")))
-                      ("a" ~>
-                        Eithers.bind
-                          (asTerm encodeTerm @@ var "cx" @@ var "g" @@ var "a")
-                          ("sa" ~>
-                            right (inject _Data _Data_match (record _Data_Match [
-                              _Data_Match_expr>>: var "sa",
-                              _Data_Match_cases>>: var "scases"]))))
-                      (var "arg"))))])])
+                      (asTerm encodeTerm @@ var "cx" @@ var "g" @@ var "a")
+                      ("sa" ~>
+                        right (inject _Data _Data_match (record _Data_Match [
+                          _Data_Match_expr>>: var "sa",
+                          _Data_Match_cases>>: var "scases"]))))
+                  (var "arg"))))])
 
 -- | Helper to construct a lazy val statement (for top-level definitions to avoid forward reference errors)
 mkLazyVal :: TTerm String -> TTerm (Maybe Scala.Type) -> TTerm Scala.Data -> TTerm Scala.Stat
@@ -583,11 +576,11 @@ encodeTerm = def "encodeTerm" $
         cases _Term (Strip.deannotateTerm @@ var "substitutedBody")
           -- Not a function: encode the substituted body
           (Just $ asTerm encodeTerm @@ var "cx" @@ var "g" @@ var "substitutedBody")
-          [_Term_function>>: ("f" ~> cases _Function (var "f")
-            (Just $ asTerm encodeTerm @@ var "cx" @@ var "g" @@ var "substitutedBody") [
-            _Function_elimination>>: (constant $
-              -- For eliminations (record/union projections): encode the substituted body
-              asTerm encodeTerm @@ var "cx" @@ var "g" @@ var "substitutedBody")]),
+          [
+          -- For eliminations (record/union projections/unwrap): encode the substituted body
+          _Term_project>>: (constant $ asTerm encodeTerm @@ var "cx" @@ var "g" @@ var "substitutedBody"),
+          _Term_cases>>: (constant $ asTerm encodeTerm @@ var "cx" @@ var "g" @@ var "substitutedBody"),
+          _Term_unwrap>>: (constant $ asTerm encodeTerm @@ var "cx" @@ var "g" @@ var "substitutedBody"),
           -- TermVariable referencing a primitive: same treatment as Function_primitive
           _Term_variable>>: ("pname" ~>
             Maybes.cases (Maps.lookup (var "pname") (Graph.graphPrimitives (var "g")))
@@ -624,22 +617,25 @@ encodeTerm = def "encodeTerm" $
                 (asTerm encodeTerm @@ var "cx" @@ var "g" @@ var "arg")
                 ("sarg" ~>
                   right (ScalaUtilsSource.sapply @@ var "sfun" @@ list [var "sarg"])))) [
-          _Term_function>>: ("f" ~> cases _Function (var "f")
-            (Just $ Eithers.bind
-              (asTerm encodeTerm @@ var "cx" @@ var "g" @@ var "fun")
-              ("sfun" ~>
-                Eithers.bind
-                  (asTerm encodeTerm @@ var "cx" @@ var "g" @@ var "arg")
-                  ("sarg" ~>
-                    right (ScalaUtilsSource.sapply @@ var "sfun" @@ list [var "sarg"])))) [
-              -- Beta-reduce: Application(Lambda(v, body), arg) → encode body with arg substituted
-              -- Common case: Lambda(v, Elimination(Union(cs))(v)) applied to subject → subject match { cs }
-              _Function_lambda>>: ("lam" ~> lets [
-                "lamBody">: Core.lambdaBody $ var "lam"] $
-                -- Check if the body is a union elimination applied to the lambda param
-                -- i.e. Application(Function(Elimination(Union(cs))), Variable(v))
-                cases _Term (Strip.deannotateAndDetypeTerm @@ var "lamBody")
-                  -- Default: just encode as function application
+          -- Beta-reduce: Application(Lambda(v, body), arg) → encode body with arg substituted
+          -- Common case: Lambda(v, Cases(cs)(v)) applied to subject → subject match { cs }
+          _Term_lambda>>: ("lam" ~> lets [
+            "lamBody">: Core.lambdaBody $ var "lam"] $
+            -- Check if the body is a cases elimination applied to the lambda param
+            -- i.e. Application(Cases(cs), Variable(v))
+            cases _Term (Strip.deannotateAndDetypeTerm @@ var "lamBody")
+              -- Default: just encode as function application
+              (Just $ Eithers.bind
+                (asTerm encodeTerm @@ var "cx" @@ var "g" @@ var "fun")
+                ("sfun" ~>
+                  Eithers.bind
+                    (asTerm encodeTerm @@ var "cx" @@ var "g" @@ var "arg")
+                    ("sarg" ~>
+                      right (ScalaUtilsSource.sapply @@ var "sfun" @@ list [var "sarg"])))) [
+              -- Application(Cases(cs), lamParam) → encode as arg match { cs }
+              _Term_application>>: ("innerApp" ~> lets [
+                "innerFun">: Core.applicationFunction $ var "innerApp"] $
+                cases _Term (Strip.deannotateAndDetypeTerm @@ var "innerFun")
                   (Just $ Eithers.bind
                     (asTerm encodeTerm @@ var "cx" @@ var "g" @@ var "fun")
                     ("sfun" ~>
@@ -647,59 +643,30 @@ encodeTerm = def "encodeTerm" $
                         (asTerm encodeTerm @@ var "cx" @@ var "g" @@ var "arg")
                         ("sarg" ~>
                           right (ScalaUtilsSource.sapply @@ var "sfun" @@ list [var "sarg"])))) [
-                  -- Application(Elimination(Union(cs)), lamParam) → encode as arg match { cs }
-                  _Term_application>>: ("innerApp" ~> lets [
-                    "innerFun">: Core.applicationFunction $ var "innerApp"] $
-                    cases _Term (Strip.deannotateAndDetypeTerm @@ var "innerFun")
-                      (Just $ Eithers.bind
-                        (asTerm encodeTerm @@ var "cx" @@ var "g" @@ var "fun")
-                        ("sfun" ~>
-                          Eithers.bind
-                            (asTerm encodeTerm @@ var "cx" @@ var "g" @@ var "arg")
-                            ("sarg" ~>
-                              right (ScalaUtilsSource.sapply @@ var "sfun" @@ list [var "sarg"])))) [
-                      _Term_function>>: ("innerF" ~> cases _Function (var "innerF")
-                        (Just $ Eithers.bind
-                          (asTerm encodeTerm @@ var "cx" @@ var "g" @@ var "fun")
-                          ("sfun" ~>
-                            Eithers.bind
-                              (asTerm encodeTerm @@ var "cx" @@ var "g" @@ var "arg")
-                              ("sarg" ~>
-                                right (ScalaUtilsSource.sapply @@ var "sfun" @@ list [var "sarg"])))) [
-                        -- Found: Application(Elimination(Union(cs)), v) — beta-reduce to arg match { cs }
-                        _Function_elimination>>: ("innerE" ~> cases _Elimination (var "innerE")
-                          (Just $ Eithers.bind
-                            (asTerm encodeTerm @@ var "cx" @@ var "g" @@ var "fun")
-                            ("sfun" ~>
-                              Eithers.bind
-                                (asTerm encodeTerm @@ var "cx" @@ var "g" @@ var "arg")
-                                ("sarg" ~>
-                                  right (ScalaUtilsSource.sapply @@ var "sfun" @@ list [var "sarg"])))) [
-                          _Elimination_union>>: (constant $
-                            -- Pass arg as the applied argument to encodeFunction's union handler
-                            asTerm encodeFunction @@ var "cx" @@ var "g" @@ (Annotations.termAnnotationInternal @@ var "innerFun") @@ var "innerF" @@ just (var "arg"))])])])]),
-              _Function_elimination>>: ("e" ~> cases _Elimination (var "e")
-                (Just $ Eithers.bind
-                  (asTerm encodeTerm @@ var "cx" @@ var "g" @@ var "fun")
-                  ("sfun" ~>
-                    Eithers.bind
-                      (asTerm encodeTerm @@ var "cx" @@ var "g" @@ var "arg")
-                      ("sarg" ~>
-                        right (ScalaUtilsSource.sapply @@ var "sfun" @@ list [var "sarg"])))) [
-                  _Elimination_record>>: ("proj" ~> lets [
-                    "fname">: ScalaUtilsSource.scalaEscapeName @@ (Core.unName (project _Projection _Projection_field @@ var "proj"))] $
-                    Eithers.bind
-                      (asTerm encodeTerm @@ var "cx" @@ var "g" @@ var "arg")
-                      ("sarg" ~>
-                        right (inject _Data _Data_ref (inject _Data_Ref _Data_Ref_select (
-                          record _Data_Select [
-                            _Data_Select_qual>>: var "sarg",
-                            _Data_Select_name>>: record _Data_Name [
-                              _Data_Name_value>>: wrap _PredefString (var "fname")]]))))),
-                  _Elimination_union>>: (constant $
-                    asTerm encodeFunction @@ var "cx" @@ var "g" @@ (Annotations.termAnnotationInternal @@ var "fun") @@ var "f" @@ just (var "arg"))])])]),
-      _Term_function>>: ("f" ~>
-        asTerm encodeFunction @@ var "cx" @@ var "g" @@ (Annotations.termAnnotationInternal @@ var "term") @@ var "f" @@ nothing),
+                  -- Found: Application(Cases(cs), v) — beta-reduce to arg match { cs }
+                  _Term_cases>>: (constant $
+                    -- Pass arg as the applied argument to encodeFunction's cases handler
+                    asTerm encodeFunction @@ var "cx" @@ var "g" @@ (Annotations.termAnnotationInternal @@ var "innerFun") @@ var "innerFun" @@ just (var "arg"))])]),
+          _Term_project>>: ("proj" ~> lets [
+            "fname">: ScalaUtilsSource.scalaEscapeName @@ (Core.unName (project _Projection _Projection_field @@ var "proj"))] $
+            Eithers.bind
+              (asTerm encodeTerm @@ var "cx" @@ var "g" @@ var "arg")
+              ("sarg" ~>
+                right (inject _Data _Data_ref (inject _Data_Ref _Data_Ref_select (
+                  record _Data_Select [
+                    _Data_Select_qual>>: var "sarg",
+                    _Data_Select_name>>: record _Data_Name [
+                      _Data_Name_value>>: wrap _PredefString (var "fname")]]))))),
+          _Term_cases>>: (constant $
+            asTerm encodeFunction @@ var "cx" @@ var "g" @@ (Annotations.termAnnotationInternal @@ var "fun") @@ var "fun" @@ just (var "arg"))]),
+      _Term_lambda>>: (constant $
+        asTerm encodeFunction @@ var "cx" @@ var "g" @@ (Annotations.termAnnotationInternal @@ var "term") @@ var "term" @@ nothing),
+      _Term_project>>: (constant $
+        asTerm encodeFunction @@ var "cx" @@ var "g" @@ (Annotations.termAnnotationInternal @@ var "term") @@ var "term" @@ nothing),
+      _Term_cases>>: (constant $
+        asTerm encodeFunction @@ var "cx" @@ var "g" @@ (Annotations.termAnnotationInternal @@ var "term") @@ var "term" @@ nothing),
+      _Term_unwrap>>: (constant $
+        asTerm encodeFunction @@ var "cx" @@ var "g" @@ (Annotations.termAnnotationInternal @@ var "term") @@ var "term" @@ nothing),
       _Term_list>>: ("els" ~>
         Eithers.bind
           (Eithers.mapList ("e" ~> asTerm encodeTerm @@ var "cx" @@ var "g" @@ var "e") (var "els"))
@@ -1136,9 +1103,7 @@ extractBody = def "extractBody" $
   lambda "t" $
     cases _Term (Strip.deannotateAndDetypeTerm @@ var "t")
       (Just $ var "t") [
-      _Term_function>>: ("f" ~> cases _Function (var "f")
-        (Just $ var "t") [
-        _Function_lambda>>: ("lam" ~> extractBody @@ (Core.lambdaBody $ var "lam"))]),
+      _Term_lambda>>: ("lam" ~> extractBody @@ (Core.lambdaBody $ var "lam")),
       _Term_typeLambda>>: ("tl" ~> extractBody @@ (Core.typeLambdaBody $ var "tl")),
       _Term_typeApplication>>: ("ta" ~> extractBody @@ (Core.typeApplicationTermBody $ var "ta")),
       _Term_let>>: ("lt" ~> extractBody @@ (Core.letBody $ var "lt"))]
@@ -1173,9 +1138,7 @@ extractLetBindings = def "extractLetBindings" $
   lambda "t" $
     cases _Term (Strip.deannotateAndDetypeTerm @@ var "t")
       (Just $ list ([] :: [TTerm Binding])) [
-      _Term_function>>: ("f" ~> cases _Function (var "f")
-        (Just $ list ([] :: [TTerm Binding])) [
-        _Function_lambda>>: ("lam" ~> extractLetBindings @@ (Core.lambdaBody $ var "lam"))]),
+      _Term_lambda>>: ("lam" ~> extractLetBindings @@ (Core.lambdaBody $ var "lam")),
       _Term_typeLambda>>: ("tl" ~> extractLetBindings @@ (Core.typeLambdaBody $ var "tl")),
       _Term_typeApplication>>: ("ta" ~> extractLetBindings @@ (Core.typeApplicationTermBody $ var "ta")),
       _Term_let>>: ("lt" ~>
@@ -1190,12 +1153,10 @@ extractParams = def "extractParams" $
   lambda "t" $
     cases _Term (Strip.deannotateAndDetypeTerm @@ var "t")
       (Just $ list ([] :: [TTerm Name])) [
-      _Term_function>>: ("f" ~> cases _Function (var "f")
-        (Just $ list ([] :: [TTerm Name])) [
-        _Function_lambda>>: ("lam" ~>
-          Lists.cons
-            (Core.lambdaParameter $ var "lam")
-            (extractParams @@ (Core.lambdaBody $ var "lam")))]),
+      _Term_lambda>>: ("lam" ~>
+        Lists.cons
+          (Core.lambdaParameter $ var "lam")
+          (extractParams @@ (Core.lambdaBody $ var "lam"))),
       _Term_typeLambda>>: ("tl" ~> extractParams @@ (Core.typeLambdaBody $ var "tl")),
       _Term_typeApplication>>: ("ta" ~> extractParams @@ (Core.typeApplicationTermBody $ var "ta")),
       _Term_let>>: ("lt" ~> extractParams @@ (Core.letBody $ var "lt"))]
@@ -1346,26 +1307,18 @@ stripWrapEliminations = def "stripWrapEliminations" $
         cases _Term (Strip.deannotateAndDetypeTerm @@ var "appFun")
           (Just $ var "t") [
           -- unwrap(value) → value
-          _Term_function>>: ("f" ~> cases _Function (var "f")
-            (Just $ var "t") [
-            _Function_elimination>>: ("e" ~> cases _Elimination (var "e")
-              (Just $ var "t") [
-              _Elimination_wrap>>: (constant $ stripWrapEliminations @@ var "appArg")])]),
+          _Term_unwrap>>: (constant $ stripWrapEliminations @@ var "appArg"),
           -- unwrap(x)(arg) → x(arg) — strip the wrap but keep the intermediate application
           _Term_application>>: ("innerApp" ~> lets [
             "innerFun">: Core.applicationFunction $ var "innerApp",
             "innerArg">: Core.applicationArgument $ var "innerApp"] $
             cases _Term (Strip.deannotateAndDetypeTerm @@ var "innerFun")
               (Just $ var "t") [
-              _Term_function>>: ("innerF" ~> cases _Function (var "innerF")
-                (Just $ var "t") [
-                _Function_elimination>>: ("innerE" ~> cases _Elimination (var "innerE")
-                  (Just $ var "t") [
-                  _Elimination_wrap>>: (constant $
-                    -- Reconstruct as innerArg(appArg) with wrap stripped
-                    stripWrapEliminations @@ Core.termApplication (record _Application [
-                      _Application_function>>: var "innerArg",
-                      _Application_argument>>: var "appArg"]))])])])])]
+              _Term_unwrap>>: (constant $
+                -- Reconstruct as innerArg(appArg) with wrap stripped
+                stripWrapEliminations @@ Core.termApplication (record _Application [
+                  _Application_function>>: var "innerArg",
+                  _Application_argument>>: var "appArg"]))])])]
 
 toElImport :: TTermDefinition (Namespace -> Scala.Stat)
 toElImport = def "toElImport" $

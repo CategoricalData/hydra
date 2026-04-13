@@ -10,4 +10,4 @@
 
 (cl:defvar hydra_test_test_terms_test_element_arthur (make-hydra_core_binding "firstName" hydra_test_test_terms_test_data_arthur (list :just (make-hydra_core_type_scheme (cl:list) (list :variable hydra_test_test_types_test_type_person_name) (list :nothing)))))
 
-(cl:defvar hydra_test_test_terms_test_element_first_name (make-hydra_core_binding "firstName" (list :function (list :elimination (list :record (make-hydra_core_projection hydra_test_test_types_test_type_person_name "firstName")))) (list :just (make-hydra_core_type_scheme (cl:list) (list :function (make-hydra_core_function_type (list :variable hydra_test_test_types_test_type_person_name) (list :literal (list :string cl:nil)))) (list :nothing)))))
+(cl:defvar hydra_test_test_terms_test_element_first_name (make-hydra_core_binding "firstName" (list :project (make-hydra_core_projection hydra_test_test_types_test_type_person_name "firstName")) (list :just (make-hydra_core_type_scheme (cl:list) (list :function (make-hydra_core_function_type (list :variable hydra_test_test_types_test_type_person_name) (list :literal (list :string cl:nil)))) (list :nothing)))))

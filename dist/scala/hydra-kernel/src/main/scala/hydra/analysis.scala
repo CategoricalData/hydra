@@ -44,21 +44,19 @@ def analyzeFunctionTermWith_finish[T0, T1](cx: hydra.context.Context)(getTC: (T0
 def analyzeFunctionTermWith_gather[T0, T1](cx: hydra.context.Context)(forBinding: (hydra.graph.Graph => hydra.core.Binding => Option[hydra.core.Term]))(getTC: (T0 => hydra.graph.Graph))(setTC: (hydra.graph.Graph => T0 => T0))(argMode: Boolean)(gEnv: T0)(tparams: Seq[hydra.core.Name])(args: Seq[hydra.core.Name])(bindings: Seq[hydra.core.Binding])(doms: Seq[hydra.core.Type])(tapps: Seq[hydra.core.Type])(t: hydra.core.Term): Either[T1,
    hydra.typing.FunctionStructure[T0]] =
   hydra.strip.deannotateTerm(t) match
-  case hydra.core.Term.function(v_Term_function_f) => v_Term_function_f match
-    case hydra.core.Function.lambda(v_Function_lambda_lam) => hydra.lib.logic.ifElse[Either[T1, hydra.typing.FunctionStructure[T0]]](argMode)({
-      lazy val v: hydra.core.Name = (v_Function_lambda_lam.parameter)
+  case hydra.core.Term.lambda(v_Term_lambda_lam) => hydra.lib.logic.ifElse[Either[T1, hydra.typing.FunctionStructure[T0]]](argMode)({
+    lazy val v: hydra.core.Name = (v_Term_lambda_lam.parameter)
+    {
+      lazy val dom: hydra.core.Type = hydra.lib.maybes.maybe[hydra.core.Type, hydra.core.Type](hydra.core.Type.variable("_"))((`x_`: hydra.core.Type) => `x_`)(v_Term_lambda_lam.domain)
       {
-        lazy val dom: hydra.core.Type = hydra.lib.maybes.maybe[hydra.core.Type, hydra.core.Type](hydra.core.Type.variable("_"))((`x_`: hydra.core.Type) => `x_`)(v_Function_lambda_lam.domain)
+        lazy val body: hydra.core.Term = (v_Term_lambda_lam.body)
         {
-          lazy val body: hydra.core.Term = (v_Function_lambda_lam.body)
-          {
-            lazy val newEnv: T0 = setTC(hydra.scoping.extendGraphForLambda(getTC(gEnv))(v_Function_lambda_lam))(gEnv)
-            hydra.analysis.analyzeFunctionTermWith_gather(cx)(forBinding)(getTC)(setTC)(argMode)(newEnv)(tparams)(hydra.lib.lists.cons[hydra.core.Name](v)(args))(bindings)(hydra.lib.lists.cons[hydra.core.Type](dom)(doms))(tapps)(body)
-          }
+          lazy val newEnv: T0 = setTC(hydra.scoping.extendGraphForLambda(getTC(gEnv))(v_Term_lambda_lam))(gEnv)
+          hydra.analysis.analyzeFunctionTermWith_gather(cx)(forBinding)(getTC)(setTC)(argMode)(newEnv)(tparams)(hydra.lib.lists.cons[hydra.core.Name](v)(args))(bindings)(hydra.lib.lists.cons[hydra.core.Type](dom)(doms))(tapps)(body)
         }
       }
-    })(hydra.analysis.analyzeFunctionTermWith_finish(cx)(getTC)(gEnv)(tparams)(args)(bindings)(doms)(tapps)(t))
-    case _ => hydra.analysis.analyzeFunctionTermWith_finish(cx)(getTC)(gEnv)(tparams)(args)(bindings)(doms)(tapps)(t)
+    }
+  })(hydra.analysis.analyzeFunctionTermWith_finish(cx)(getTC)(gEnv)(tparams)(args)(bindings)(doms)(tapps)(t))
   case hydra.core.Term.let(v_Term_let_lt) => {
     lazy val newBindings: Seq[hydra.core.Binding] = (v_Term_let_lt.bindings)
     {
@@ -193,20 +191,14 @@ def isSelfTailRecursive(funcName: hydra.core.Name)(body: hydra.core.Term): Boole
 def isSimpleAssignment(term: hydra.core.Term): Boolean =
   term match
   case hydra.core.Term.annotated(v_Term_annotated_at) => hydra.analysis.isSimpleAssignment(v_Term_annotated_at.body)
-  case hydra.core.Term.function(v_Term_function_f) => v_Term_function_f match
-    case hydra.core.Function.lambda(v_Function_lambda__) => false
-    case _ => true
+  case hydra.core.Term.lambda(v_Term_lambda__) => false
   case hydra.core.Term.let(v_Term_let__) => false
   case hydra.core.Term.typeLambda(v_Term_typeLambda__) => false
   case hydra.core.Term.typeApplication(v_Term_typeApplication_ta) => hydra.analysis.isSimpleAssignment(v_Term_typeApplication_ta.body)
   case _ => {
     lazy val baseTerm: hydra.core.Term = hydra.lib.pairs.first[hydra.core.Term, Seq[hydra.core.Term]](hydra.analysis.gatherArgs(term)(Seq()))
     baseTerm match
-      case hydra.core.Term.function(v_Term_function_f) => v_Term_function_f match
-        case hydra.core.Function.elimination(v_Function_elimination_elim) => v_Function_elimination_elim match
-          case hydra.core.Elimination.union(v_Elimination_union__) => false
-          case _ => true
-        case _ => true
+      case hydra.core.Term.cases(v_Term_cases__) => false
       case _ => true
   }
 
@@ -233,48 +225,40 @@ def isTailRecursiveInTailPosition(funcName: hydra.core.Name)(term: hydra.core.Te
                     hydra.lib.logic.and(ok)(hydra.lib.logic.not(hydra.rewriting.foldOverTerm(hydra.coders.TraversalOrder.pre)((found: Boolean) =>
                     (t: hydra.core.Term) =>
                     hydra.lib.logic.or(found)(t match
-                    case hydra.core.Term.function(v_Term_function_f2) => v_Term_function_f2 match
-                      case hydra.core.Function.lambda(v_Function_lambda_lam) => {
-                        lazy val ignore: hydra.core.Term = (v_Function_lambda_lam.body)
-                        true
-                      }
-                      case _ => false
+                    case hydra.core.Term.lambda(v_Term_lambda_lam) => {
+                      lazy val ignore: hydra.core.Term = (v_Term_lambda_lam.body)
+                      true
+                    }
                     case _ => false))(false)(arg))))(true)(gatherArgs)
                   hydra.lib.logic.and(argsNoFunc)(argsNoLambda)
                 }
               })(hydra.variables.isFreeVariableInTerm(funcName)(term))
-              case hydra.core.Term.function(v_Term_function_f) => v_Term_function_f match
-                case hydra.core.Function.elimination(v_Function_elimination_e) => v_Function_elimination_e match
-                  case hydra.core.Elimination.union(v_Elimination_union_cs) => {
-                    lazy val `cases_`: Seq[hydra.core.Field] = (v_Elimination_union_cs.cases)
+              case hydra.core.Term.cases(v_Term_cases_cs) => {
+                lazy val `cases_`: Seq[hydra.core.Field] = (v_Term_cases_cs.cases)
+                {
+                  lazy val dflt: Option[hydra.core.Term] = (v_Term_cases_cs.default)
+                  {
+                    lazy val branchesOk: Boolean = hydra.lib.lists.foldl[Boolean, hydra.core.Field]((ok: Boolean) =>
+                      (field: hydra.core.Field) =>
+                      hydra.lib.logic.and(ok)(hydra.analysis.isTailRecursiveInTailPosition(funcName)(field.term)))(true)(`cases_`)
                     {
-                      lazy val dflt: Option[hydra.core.Term] = (v_Elimination_union_cs.default)
+                      lazy val dfltOk: Boolean = hydra.lib.maybes.maybe[Boolean, hydra.core.Term](true)((d: hydra.core.Term) => hydra.analysis.isTailRecursiveInTailPosition(funcName)(d))(dflt)
                       {
-                        lazy val branchesOk: Boolean = hydra.lib.lists.foldl[Boolean, hydra.core.Field]((ok: Boolean) =>
-                          (field: hydra.core.Field) =>
-                          hydra.lib.logic.and(ok)(hydra.analysis.isTailRecursiveInTailPosition(funcName)(field.term)))(true)(`cases_`)
-                        {
-                          lazy val dfltOk: Boolean = hydra.lib.maybes.maybe[Boolean, hydra.core.Term](true)((d: hydra.core.Term) => hydra.analysis.isTailRecursiveInTailPosition(funcName)(d))(dflt)
-                          {
-                            lazy val argsOk: Boolean = hydra.lib.lists.foldl[Boolean, hydra.core.Term]((ok: Boolean) =>
-                              (arg: hydra.core.Term) =>
-                              hydra.lib.logic.and(ok)(hydra.variables.isFreeVariableInTerm(funcName)(arg)))(true)(gatherArgs)
-                            hydra.lib.logic.and(hydra.lib.logic.and(branchesOk)(dfltOk))(argsOk)
-                          }
-                        }
+                        lazy val argsOk: Boolean = hydra.lib.lists.foldl[Boolean, hydra.core.Term]((ok: Boolean) =>
+                          (arg: hydra.core.Term) =>
+                          hydra.lib.logic.and(ok)(hydra.variables.isFreeVariableInTerm(funcName)(arg)))(true)(gatherArgs)
+                        hydra.lib.logic.and(hydra.lib.logic.and(branchesOk)(dfltOk))(argsOk)
                       }
                     }
                   }
-                  case _ => hydra.variables.isFreeVariableInTerm(funcName)(term)
-                case _ => hydra.variables.isFreeVariableInTerm(funcName)(term)
+                }
+              }
               case _ => hydra.variables.isFreeVariableInTerm(funcName)(term)
           }
         }
       }
     }
-    case hydra.core.Term.function(v_Term_function_f) => v_Term_function_f match
-      case hydra.core.Function.lambda(v_Function_lambda_lam) => hydra.analysis.isTailRecursiveInTailPosition(funcName)(v_Function_lambda_lam.body)
-      case _ => hydra.variables.isFreeVariableInTerm(funcName)(term)
+    case hydra.core.Term.lambda(v_Term_lambda_lam) => hydra.analysis.isTailRecursiveInTailPosition(funcName)(v_Term_lambda_lam.body)
     case hydra.core.Term.let(v_Term_let_lt) => {
       lazy val bindingsOk: Boolean = hydra.lib.lists.foldl[Boolean, hydra.core.Binding]((ok: Boolean) =>
         (b: hydra.core.Binding) =>

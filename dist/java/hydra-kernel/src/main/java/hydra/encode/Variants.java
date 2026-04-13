@@ -81,13 +81,18 @@ public interface Variants {
       }
 
       @Override
+      public hydra.core.Term visit(hydra.variants.TermVariant.Cases y) {
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.variants.TermVariant"), new hydra.core.Field(new hydra.core.Name("cases"), new hydra.core.Term.Unit())));
+      }
+
+      @Override
       public hydra.core.Term visit(hydra.variants.TermVariant.Either y) {
         return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.variants.TermVariant"), new hydra.core.Field(new hydra.core.Name("either"), new hydra.core.Term.Unit())));
       }
 
       @Override
-      public hydra.core.Term visit(hydra.variants.TermVariant.Function y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.variants.TermVariant"), new hydra.core.Field(new hydra.core.Name("function"), new hydra.core.Term.Unit())));
+      public hydra.core.Term visit(hydra.variants.TermVariant.Lambda y) {
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.variants.TermVariant"), new hydra.core.Field(new hydra.core.Name("lambda"), new hydra.core.Term.Unit())));
       }
 
       @Override
@@ -121,6 +126,11 @@ public interface Variants {
       }
 
       @Override
+      public hydra.core.Term visit(hydra.variants.TermVariant.Project y) {
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.variants.TermVariant"), new hydra.core.Field(new hydra.core.Name("project"), new hydra.core.Term.Unit())));
+      }
+
+      @Override
       public hydra.core.Term visit(hydra.variants.TermVariant.Record y) {
         return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.variants.TermVariant"), new hydra.core.Field(new hydra.core.Name("record"), new hydra.core.Term.Unit())));
       }
@@ -148,6 +158,11 @@ public interface Variants {
       @Override
       public hydra.core.Term visit(hydra.variants.TermVariant.Unit y) {
         return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.variants.TermVariant"), new hydra.core.Field(new hydra.core.Name("unit"), new hydra.core.Term.Unit())));
+      }
+
+      @Override
+      public hydra.core.Term visit(hydra.variants.TermVariant.Unwrap y) {
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.variants.TermVariant"), new hydra.core.Field(new hydra.core.Name("unwrap"), new hydra.core.Term.Unit())));
       }
 
       @Override

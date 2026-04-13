@@ -65,22 +65,12 @@ public interface Differentiation {
       }
 
       @Override
-      public hydra.core.Term visit(hydra.core.Term.Function f) {
-        return (f).value.accept(new hydra.core.Function.PartialVisitor<>() {
-          @Override
-          public hydra.core.Term visit(hydra.core.Function.Lambda l) {
-            hydra.core.Term body = (l).value.body;
-            hydra.core.Name paramName = (l).value.parameter;
-            return new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(paramName, (l).value.domain, hydra.Differentiation.differentiateTerm(
-              paramName,
-              body))));
-          }
-
-          @Override
-          public hydra.core.Term visit(hydra.core.Function.Elimination ignored) {
-            return term;
-          }
-        });
+      public hydra.core.Term visit(hydra.core.Term.Lambda l) {
+        hydra.core.Term body = (l).value.body;
+        hydra.core.Name paramName = (l).value.parameter;
+        return new hydra.core.Term.Lambda(new hydra.core.Lambda(paramName, (l).value.domain, hydra.Differentiation.differentiateTerm(
+          paramName,
+          body)));
       }
     });
   }
@@ -161,25 +151,30 @@ public interface Differentiation {
       }
 
       @Override
-      public hydra.core.Term visit(hydra.core.Term.Function f) {
-        return (f).value.accept(new hydra.core.Function.PartialVisitor<>() {
-          @Override
-          public hydra.core.Term visit(hydra.core.Function.Lambda l) {
-            return hydra.lib.logic.IfElse.lazy(
-              hydra.lib.equality.Equal.apply(
-                (l).value.parameter,
-                dx),
-              () -> new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda((l).value.parameter, (l).value.domain, new hydra.core.Term.Literal(new hydra.core.Literal.Float_(new hydra.core.FloatValue.Float64(0.0)))))),
-              () -> new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda((l).value.parameter, (l).value.domain, hydra.Differentiation.differentiateTerm(
-                dx,
-                (l).value.body)))));
-          }
+      public hydra.core.Term visit(hydra.core.Term.Lambda l) {
+        return hydra.lib.logic.IfElse.lazy(
+          hydra.lib.equality.Equal.apply(
+            (l).value.parameter,
+            dx),
+          () -> new hydra.core.Term.Lambda(new hydra.core.Lambda((l).value.parameter, (l).value.domain, new hydra.core.Term.Literal(new hydra.core.Literal.Float_(new hydra.core.FloatValue.Float64(0.0))))),
+          () -> new hydra.core.Term.Lambda(new hydra.core.Lambda((l).value.parameter, (l).value.domain, hydra.Differentiation.differentiateTerm(
+            dx,
+            (l).value.body))));
+      }
 
-          @Override
-          public hydra.core.Term visit(hydra.core.Function.Elimination ignored) {
-            return new hydra.core.Term.Literal(new hydra.core.Literal.Float_(new hydra.core.FloatValue.Float64(0.0)));
-          }
-        });
+      @Override
+      public hydra.core.Term visit(hydra.core.Term.Cases ignored) {
+        return new hydra.core.Term.Literal(new hydra.core.Literal.Float_(new hydra.core.FloatValue.Float64(0.0)));
+      }
+
+      @Override
+      public hydra.core.Term visit(hydra.core.Term.Project ignored) {
+        return new hydra.core.Term.Literal(new hydra.core.Literal.Float_(new hydra.core.FloatValue.Float64(0.0)));
+      }
+
+      @Override
+      public hydra.core.Term visit(hydra.core.Term.Unwrap ignored) {
+        return new hydra.core.Term.Literal(new hydra.core.Literal.Float_(new hydra.core.FloatValue.Float64(0.0)));
       }
 
       @Override
@@ -296,12 +291,12 @@ public interface Differentiation {
         hydra.lib.equality.Equal.apply(
           name,
           new hydra.core.Name("hydra.lib.math.cos")),
-        () -> hydra.util.Maybe.just(new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(new hydra.core.Name("_x"), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.math.negateFloat64")), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.math.sin")), new hydra.core.Term.Variable(new hydra.core.Name("_x")))))))))),
+        () -> hydra.util.Maybe.just(new hydra.core.Term.Lambda(new hydra.core.Lambda(new hydra.core.Name("_x"), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.math.negateFloat64")), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.math.sin")), new hydra.core.Term.Variable(new hydra.core.Name("_x"))))))))),
         () -> hydra.lib.logic.IfElse.lazy(
           hydra.lib.equality.Equal.apply(
             name,
             new hydra.core.Name("hydra.lib.math.tan")),
-          () -> hydra.util.Maybe.just(new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(new hydra.core.Name("_x"), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.math.pow")), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.math.cos")), new hydra.core.Term.Variable(new hydra.core.Name("_x")))))), new hydra.core.Term.Literal(new hydra.core.Literal.Float_(new hydra.core.FloatValue.Float64(-2.0))))))))),
+          () -> hydra.util.Maybe.just(new hydra.core.Term.Lambda(new hydra.core.Lambda(new hydra.core.Name("_x"), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.math.pow")), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.math.cos")), new hydra.core.Term.Variable(new hydra.core.Name("_x")))))), new hydra.core.Term.Literal(new hydra.core.Literal.Float_(new hydra.core.FloatValue.Float64(-2.0)))))))),
           () -> hydra.lib.logic.IfElse.lazy(
             hydra.lib.equality.Equal.apply(
               name,
@@ -311,27 +306,27 @@ public interface Differentiation {
               hydra.lib.equality.Equal.apply(
                 name,
                 new hydra.core.Name("hydra.lib.math.log")),
-              () -> hydra.util.Maybe.just(new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(new hydra.core.Name("_x"), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.math.pow")), new hydra.core.Term.Variable(new hydra.core.Name("_x")))), new hydra.core.Term.Literal(new hydra.core.Literal.Float_(new hydra.core.FloatValue.Float64(-1.0))))))))),
+              () -> hydra.util.Maybe.just(new hydra.core.Term.Lambda(new hydra.core.Lambda(new hydra.core.Name("_x"), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.math.pow")), new hydra.core.Term.Variable(new hydra.core.Name("_x")))), new hydra.core.Term.Literal(new hydra.core.Literal.Float_(new hydra.core.FloatValue.Float64(-1.0)))))))),
               () -> hydra.lib.logic.IfElse.lazy(
                 hydra.lib.equality.Equal.apply(
                   name,
                   new hydra.core.Name("hydra.lib.math.sqrt")),
-                () -> hydra.util.Maybe.just(new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(new hydra.core.Name("_x"), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.math.mulFloat64")), new hydra.core.Term.Literal(new hydra.core.Literal.Float_(new hydra.core.FloatValue.Float64(0.5))))), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.math.pow")), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.math.sqrt")), new hydra.core.Term.Variable(new hydra.core.Name("_x")))))), new hydra.core.Term.Literal(new hydra.core.Literal.Float_(new hydra.core.FloatValue.Float64(-1.0))))))))))),
+                () -> hydra.util.Maybe.just(new hydra.core.Term.Lambda(new hydra.core.Lambda(new hydra.core.Name("_x"), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.math.mulFloat64")), new hydra.core.Term.Literal(new hydra.core.Literal.Float_(new hydra.core.FloatValue.Float64(0.5))))), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.math.pow")), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.math.sqrt")), new hydra.core.Term.Variable(new hydra.core.Name("_x")))))), new hydra.core.Term.Literal(new hydra.core.Literal.Float_(new hydra.core.FloatValue.Float64(-1.0)))))))))),
                 () -> hydra.lib.logic.IfElse.lazy(
                   hydra.lib.equality.Equal.apply(
                     name,
                     new hydra.core.Name("hydra.lib.math.asin")),
-                  () -> hydra.util.Maybe.just(new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(new hydra.core.Name("_x"), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.math.pow")), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.math.sqrt")), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.math.subFloat64")), new hydra.core.Term.Literal(new hydra.core.Literal.Float_(new hydra.core.FloatValue.Float64(1.0))))), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.math.mulFloat64")), new hydra.core.Term.Variable(new hydra.core.Name("_x")))), new hydra.core.Term.Variable(new hydra.core.Name("_x")))))))))), new hydra.core.Term.Literal(new hydra.core.Literal.Float_(new hydra.core.FloatValue.Float64(-1.0))))))))),
+                  () -> hydra.util.Maybe.just(new hydra.core.Term.Lambda(new hydra.core.Lambda(new hydra.core.Name("_x"), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.math.pow")), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.math.sqrt")), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.math.subFloat64")), new hydra.core.Term.Literal(new hydra.core.Literal.Float_(new hydra.core.FloatValue.Float64(1.0))))), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.math.mulFloat64")), new hydra.core.Term.Variable(new hydra.core.Name("_x")))), new hydra.core.Term.Variable(new hydra.core.Name("_x")))))))))), new hydra.core.Term.Literal(new hydra.core.Literal.Float_(new hydra.core.FloatValue.Float64(-1.0)))))))),
                   () -> hydra.lib.logic.IfElse.lazy(
                     hydra.lib.equality.Equal.apply(
                       name,
                       new hydra.core.Name("hydra.lib.math.acos")),
-                    () -> hydra.util.Maybe.just(new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(new hydra.core.Name("_x"), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.math.negateFloat64")), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.math.pow")), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.math.sqrt")), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.math.subFloat64")), new hydra.core.Term.Literal(new hydra.core.Literal.Float_(new hydra.core.FloatValue.Float64(1.0))))), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.math.mulFloat64")), new hydra.core.Term.Variable(new hydra.core.Name("_x")))), new hydra.core.Term.Variable(new hydra.core.Name("_x")))))))))), new hydra.core.Term.Literal(new hydra.core.Literal.Float_(new hydra.core.FloatValue.Float64(-1.0))))))))))),
+                    () -> hydra.util.Maybe.just(new hydra.core.Term.Lambda(new hydra.core.Lambda(new hydra.core.Name("_x"), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.math.negateFloat64")), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.math.pow")), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.math.sqrt")), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.math.subFloat64")), new hydra.core.Term.Literal(new hydra.core.Literal.Float_(new hydra.core.FloatValue.Float64(1.0))))), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.math.mulFloat64")), new hydra.core.Term.Variable(new hydra.core.Name("_x")))), new hydra.core.Term.Variable(new hydra.core.Name("_x")))))))))), new hydra.core.Term.Literal(new hydra.core.Literal.Float_(new hydra.core.FloatValue.Float64(-1.0)))))))))),
                     () -> hydra.lib.logic.IfElse.lazy(
                       hydra.lib.equality.Equal.apply(
                         name,
                         new hydra.core.Name("hydra.lib.math.atan")),
-                      () -> hydra.util.Maybe.just(new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(new hydra.core.Name("_x"), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.math.pow")), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.math.addFloat64")), new hydra.core.Term.Literal(new hydra.core.Literal.Float_(new hydra.core.FloatValue.Float64(1.0))))), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.math.mulFloat64")), new hydra.core.Term.Variable(new hydra.core.Name("_x")))), new hydra.core.Term.Variable(new hydra.core.Name("_x")))))))), new hydra.core.Term.Literal(new hydra.core.Literal.Float_(new hydra.core.FloatValue.Float64(-1.0))))))))),
+                      () -> hydra.util.Maybe.just(new hydra.core.Term.Lambda(new hydra.core.Lambda(new hydra.core.Name("_x"), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.math.pow")), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.math.addFloat64")), new hydra.core.Term.Literal(new hydra.core.Literal.Float_(new hydra.core.FloatValue.Float64(1.0))))), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.math.mulFloat64")), new hydra.core.Term.Variable(new hydra.core.Name("_x")))), new hydra.core.Term.Variable(new hydra.core.Name("_x")))))))), new hydra.core.Term.Literal(new hydra.core.Literal.Float_(new hydra.core.FloatValue.Float64(-1.0)))))))),
                       () -> hydra.lib.logic.IfElse.lazy(
                         hydra.lib.equality.Equal.apply(
                           name,
@@ -346,27 +341,27 @@ public interface Differentiation {
                             hydra.lib.equality.Equal.apply(
                               name,
                               new hydra.core.Name("hydra.lib.math.tanh")),
-                            () -> hydra.util.Maybe.just(new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(new hydra.core.Name("_x"), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.math.subFloat64")), new hydra.core.Term.Literal(new hydra.core.Literal.Float_(new hydra.core.FloatValue.Float64(1.0))))), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.math.mulFloat64")), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.math.tanh")), new hydra.core.Term.Variable(new hydra.core.Name("_x")))))), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.math.tanh")), new hydra.core.Term.Variable(new hydra.core.Name("_x")))))))))))),
+                            () -> hydra.util.Maybe.just(new hydra.core.Term.Lambda(new hydra.core.Lambda(new hydra.core.Name("_x"), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.math.subFloat64")), new hydra.core.Term.Literal(new hydra.core.Literal.Float_(new hydra.core.FloatValue.Float64(1.0))))), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.math.mulFloat64")), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.math.tanh")), new hydra.core.Term.Variable(new hydra.core.Name("_x")))))), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.math.tanh")), new hydra.core.Term.Variable(new hydra.core.Name("_x"))))))))))),
                             () -> hydra.lib.logic.IfElse.lazy(
                               hydra.lib.equality.Equal.apply(
                                 name,
                                 new hydra.core.Name("hydra.lib.math.asinh")),
-                              () -> hydra.util.Maybe.just(new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(new hydra.core.Name("_x"), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.math.pow")), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.math.sqrt")), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.math.addFloat64")), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.math.mulFloat64")), new hydra.core.Term.Variable(new hydra.core.Name("_x")))), new hydra.core.Term.Variable(new hydra.core.Name("_x")))))), new hydra.core.Term.Literal(new hydra.core.Literal.Float_(new hydra.core.FloatValue.Float64(1.0))))))))), new hydra.core.Term.Literal(new hydra.core.Literal.Float_(new hydra.core.FloatValue.Float64(-1.0))))))))),
+                              () -> hydra.util.Maybe.just(new hydra.core.Term.Lambda(new hydra.core.Lambda(new hydra.core.Name("_x"), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.math.pow")), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.math.sqrt")), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.math.addFloat64")), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.math.mulFloat64")), new hydra.core.Term.Variable(new hydra.core.Name("_x")))), new hydra.core.Term.Variable(new hydra.core.Name("_x")))))), new hydra.core.Term.Literal(new hydra.core.Literal.Float_(new hydra.core.FloatValue.Float64(1.0))))))))), new hydra.core.Term.Literal(new hydra.core.Literal.Float_(new hydra.core.FloatValue.Float64(-1.0)))))))),
                               () -> hydra.lib.logic.IfElse.lazy(
                                 hydra.lib.equality.Equal.apply(
                                   name,
                                   new hydra.core.Name("hydra.lib.math.acosh")),
-                                () -> hydra.util.Maybe.just(new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(new hydra.core.Name("_x"), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.math.pow")), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.math.sqrt")), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.math.subFloat64")), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.math.mulFloat64")), new hydra.core.Term.Variable(new hydra.core.Name("_x")))), new hydra.core.Term.Variable(new hydra.core.Name("_x")))))), new hydra.core.Term.Literal(new hydra.core.Literal.Float_(new hydra.core.FloatValue.Float64(1.0))))))))), new hydra.core.Term.Literal(new hydra.core.Literal.Float_(new hydra.core.FloatValue.Float64(-1.0))))))))),
+                                () -> hydra.util.Maybe.just(new hydra.core.Term.Lambda(new hydra.core.Lambda(new hydra.core.Name("_x"), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.math.pow")), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.math.sqrt")), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.math.subFloat64")), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.math.mulFloat64")), new hydra.core.Term.Variable(new hydra.core.Name("_x")))), new hydra.core.Term.Variable(new hydra.core.Name("_x")))))), new hydra.core.Term.Literal(new hydra.core.Literal.Float_(new hydra.core.FloatValue.Float64(1.0))))))))), new hydra.core.Term.Literal(new hydra.core.Literal.Float_(new hydra.core.FloatValue.Float64(-1.0)))))))),
                                 () -> hydra.lib.logic.IfElse.lazy(
                                   hydra.lib.equality.Equal.apply(
                                     name,
                                     new hydra.core.Name("hydra.lib.math.atanh")),
-                                  () -> hydra.util.Maybe.just(new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(new hydra.core.Name("_x"), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.math.pow")), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.math.subFloat64")), new hydra.core.Term.Literal(new hydra.core.Literal.Float_(new hydra.core.FloatValue.Float64(1.0))))), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.math.mulFloat64")), new hydra.core.Term.Variable(new hydra.core.Name("_x")))), new hydra.core.Term.Variable(new hydra.core.Name("_x")))))))), new hydra.core.Term.Literal(new hydra.core.Literal.Float_(new hydra.core.FloatValue.Float64(-1.0))))))))),
+                                  () -> hydra.util.Maybe.just(new hydra.core.Term.Lambda(new hydra.core.Lambda(new hydra.core.Name("_x"), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.math.pow")), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.math.subFloat64")), new hydra.core.Term.Literal(new hydra.core.Literal.Float_(new hydra.core.FloatValue.Float64(1.0))))), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.math.mulFloat64")), new hydra.core.Term.Variable(new hydra.core.Name("_x")))), new hydra.core.Term.Variable(new hydra.core.Name("_x")))))))), new hydra.core.Term.Literal(new hydra.core.Literal.Float_(new hydra.core.FloatValue.Float64(-1.0)))))))),
                                   () -> hydra.lib.logic.IfElse.lazy(
                                     hydra.lib.equality.Equal.apply(
                                       name,
                                       new hydra.core.Name("hydra.lib.math.negate")),
-                                    () -> hydra.util.Maybe.just(new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(new hydra.core.Name("_x"), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), new hydra.core.Term.Literal(new hydra.core.Literal.Float_(new hydra.core.FloatValue.Float64(-1.0))))))),
+                                    () -> hydra.util.Maybe.just(new hydra.core.Term.Lambda(new hydra.core.Lambda(new hydra.core.Name("_x"), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), new hydra.core.Term.Literal(new hydra.core.Literal.Float_(new hydra.core.FloatValue.Float64(-1.0)))))),
                                     () -> hydra.lib.logic.IfElse.lazy(
                                       hydra.lib.equality.Equal.apply(
                                         name,
@@ -376,27 +371,27 @@ public interface Differentiation {
                                         hydra.lib.equality.Equal.apply(
                                           name,
                                           new hydra.core.Name("hydra.lib.math.ceiling")),
-                                        () -> hydra.util.Maybe.just(new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(new hydra.core.Name("_x"), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), new hydra.core.Term.Literal(new hydra.core.Literal.Float_(new hydra.core.FloatValue.Float64(0.0))))))),
+                                        () -> hydra.util.Maybe.just(new hydra.core.Term.Lambda(new hydra.core.Lambda(new hydra.core.Name("_x"), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), new hydra.core.Term.Literal(new hydra.core.Literal.Float_(new hydra.core.FloatValue.Float64(0.0)))))),
                                         () -> hydra.lib.logic.IfElse.lazy(
                                           hydra.lib.equality.Equal.apply(
                                             name,
                                             new hydra.core.Name("hydra.lib.math.floor")),
-                                          () -> hydra.util.Maybe.just(new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(new hydra.core.Name("_x"), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), new hydra.core.Term.Literal(new hydra.core.Literal.Float_(new hydra.core.FloatValue.Float64(0.0))))))),
+                                          () -> hydra.util.Maybe.just(new hydra.core.Term.Lambda(new hydra.core.Lambda(new hydra.core.Name("_x"), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), new hydra.core.Term.Literal(new hydra.core.Literal.Float_(new hydra.core.FloatValue.Float64(0.0)))))),
                                           () -> hydra.lib.logic.IfElse.lazy(
                                             hydra.lib.equality.Equal.apply(
                                               name,
                                               new hydra.core.Name("hydra.lib.math.round")),
-                                            () -> hydra.util.Maybe.just(new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(new hydra.core.Name("_x"), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), new hydra.core.Term.Literal(new hydra.core.Literal.Float_(new hydra.core.FloatValue.Float64(0.0))))))),
+                                            () -> hydra.util.Maybe.just(new hydra.core.Term.Lambda(new hydra.core.Lambda(new hydra.core.Name("_x"), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), new hydra.core.Term.Literal(new hydra.core.Literal.Float_(new hydra.core.FloatValue.Float64(0.0)))))),
                                             () -> hydra.lib.logic.IfElse.lazy(
                                               hydra.lib.equality.Equal.apply(
                                                 name,
                                                 new hydra.core.Name("hydra.lib.math.truncate")),
-                                              () -> hydra.util.Maybe.just(new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(new hydra.core.Name("_x"), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), new hydra.core.Term.Literal(new hydra.core.Literal.Float_(new hydra.core.FloatValue.Float64(0.0))))))),
+                                              () -> hydra.util.Maybe.just(new hydra.core.Term.Lambda(new hydra.core.Lambda(new hydra.core.Name("_x"), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), new hydra.core.Term.Literal(new hydra.core.Literal.Float_(new hydra.core.FloatValue.Float64(0.0)))))),
                                               () -> hydra.lib.logic.IfElse.lazy(
                                                 hydra.lib.equality.Equal.apply(
                                                   name,
                                                   new hydra.core.Name("hydra.lib.math.signum")),
-                                                () -> hydra.util.Maybe.just(new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(new hydra.core.Name("_x"), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), new hydra.core.Term.Literal(new hydra.core.Literal.Float_(new hydra.core.FloatValue.Float64(0.0))))))),
+                                                () -> hydra.util.Maybe.just(new hydra.core.Term.Lambda(new hydra.core.Lambda(new hydra.core.Name("_x"), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), new hydra.core.Term.Literal(new hydra.core.Literal.Float_(new hydra.core.FloatValue.Float64(0.0)))))),
                                                 () -> (hydra.util.Maybe<hydra.core.Term>) (hydra.util.Maybe.<hydra.core.Term>nothing())))))))))))))))))))))));
   }
 }

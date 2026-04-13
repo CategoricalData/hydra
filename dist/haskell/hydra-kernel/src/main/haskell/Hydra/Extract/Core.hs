@@ -95,17 +95,9 @@ caseField name n graph term =
 cases :: Core.Name -> Graph.Graph -> Core.Term -> Either Errors.Error Core.CaseStatement
 cases name graph term0 =
     Eithers.bind (Lexical.stripAndDereferenceTerm graph term0) (\term -> case term of
-      Core.TermFunction v0 -> case v0 of
-        Core.FunctionElimination v1 -> case v1 of
-          Core.EliminationUnion v2 -> Logic.ifElse (Equality.equal (Core.unName (Core.caseStatementTypeName v2)) (Core.unName name)) (Right v2) (Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
-            Errors.unexpectedShapeErrorExpected = (Strings.cat2 "case statement for type " (Core.unName name)),
-            Errors.unexpectedShapeErrorActual = (Core_.term term)}))))
-          _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
-            Errors.unexpectedShapeErrorExpected = "case statement",
-            Errors.unexpectedShapeErrorActual = (Core_.term term)})))
-        _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
-          Errors.unexpectedShapeErrorExpected = "case statement",
-          Errors.unexpectedShapeErrorActual = (Core_.term term)})))
+      Core.TermCases v0 -> Logic.ifElse (Equality.equal (Core.unName (Core.caseStatementTypeName v0)) (Core.unName name)) (Right v0) (Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
+        Errors.unexpectedShapeErrorExpected = (Strings.cat2 "case statement for type " (Core.unName name)),
+        Errors.unexpectedShapeErrorActual = (Core_.term term)}))))
       _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
         Errors.unexpectedShapeErrorExpected = "case statement",
         Errors.unexpectedShapeErrorActual = (Core_.term term)}))))
@@ -327,11 +319,7 @@ integerValue graph t = Eithers.bind (literal graph t) (\l -> integerLiteral l)
 lambda :: Graph.Graph -> Core.Term -> Either Errors.Error Core.Lambda
 lambda graph term0 =
     Eithers.bind (Lexical.stripAndDereferenceTerm graph term0) (\term -> case term of
-      Core.TermFunction v0 -> case v0 of
-        Core.FunctionLambda v1 -> Right v1
-        _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
-          Errors.unexpectedShapeErrorExpected = "lambda",
-          Errors.unexpectedShapeErrorActual = (Core_.term term)})))
+      Core.TermLambda v0 -> Right v0
       _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
         Errors.unexpectedShapeErrorExpected = "lambda",
         Errors.unexpectedShapeErrorActual = (Core_.term term)}))))

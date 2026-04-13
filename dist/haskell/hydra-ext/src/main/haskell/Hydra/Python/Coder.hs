@@ -134,27 +134,25 @@ deduplicateCaseVariables cases_ =
                     fname = Core.fieldName field
                     fterm = Core.fieldTerm field
                 in case (Strip.deannotateAndDetypeTerm fterm) of
-                  Core.TermFunction v0 -> case v0 of
-                    Core.FunctionLambda v1 ->
-                      let v = Core.lambdaParameter v1
-                          mdom = Core.lambdaDomain v1
-                          body = Core.lambdaBody v1
-                      in (Maybes.maybe (Maps.insert v 1 countByName, (Lists.cons field done)) (\count ->
-                        let count2 = Math.add count 1
-                            v2 = Core.Name (Strings.cat2 (Core.unName v) (Literals.showInt32 count2))
-                            newBody = Reduction.alphaConvert v v2 body
-                            newLam =
-                                    Core.Lambda {
-                                      Core.lambdaParameter = v2,
-                                      Core.lambdaDomain = mdom,
-                                      Core.lambdaBody = newBody}
-                            newTerm = Core.TermFunction (Core.FunctionLambda newLam)
-                            newField =
-                                    Core.Field {
-                                      Core.fieldName = fname,
-                                      Core.fieldTerm = newTerm}
-                        in (Maps.insert v count2 countByName, (Lists.cons newField done))) (Maps.lookup v countByName))
-                    _ -> (countByName, (Lists.cons field done))
+                  Core.TermLambda v0 ->
+                    let v = Core.lambdaParameter v0
+                        mdom = Core.lambdaDomain v0
+                        body = Core.lambdaBody v0
+                    in (Maybes.maybe (Maps.insert v 1 countByName, (Lists.cons field done)) (\count ->
+                      let count2 = Math.add count 1
+                          v2 = Core.Name (Strings.cat2 (Core.unName v) (Literals.showInt32 count2))
+                          newBody = Reduction.alphaConvert v v2 body
+                          newLam =
+                                  Core.Lambda {
+                                    Core.lambdaParameter = v2,
+                                    Core.lambdaDomain = mdom,
+                                    Core.lambdaBody = newBody}
+                          newTerm = Core.TermLambda newLam
+                          newField =
+                                  Core.Field {
+                                    Core.fieldName = fname,
+                                    Core.fieldTerm = newTerm}
+                      in (Maps.insert v count2 countByName, (Lists.cons newField done))) (Maps.lookup v countByName))
                   _ -> (countByName, (Lists.cons field done))
           result = Lists.foldl rewriteCase (Maps.empty, []) cases_
       in (Lists.reverse (Pairs.second result))
@@ -189,18 +187,14 @@ eliminateUnitVar v term0 =
                     Core.TermApplication v0 -> Core.TermApplication (Core.Application {
                       Core.applicationFunction = (recurse (Core.applicationFunction v0)),
                       Core.applicationArgument = (recurse (Core.applicationArgument v0))})
-                    Core.TermFunction v0 -> case v0 of
-                      Core.FunctionLambda v1 -> Logic.ifElse (Equality.equal (Core.lambdaParameter v1) v) term (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                        Core.lambdaParameter = (Core.lambdaParameter v1),
-                        Core.lambdaDomain = (Core.lambdaDomain v1),
-                        Core.lambdaBody = (recurse (Core.lambdaBody v1))})))
-                      Core.FunctionElimination v1 -> case v1 of
-                        Core.EliminationUnion v2 -> Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
-                          Core.caseStatementTypeName = (Core.caseStatementTypeName v2),
-                          Core.caseStatementDefault = (Maybes.map recurse (Core.caseStatementDefault v2)),
-                          Core.caseStatementCases = (Lists.map (rewriteField recurse) (Core.caseStatementCases v2))})))
-                        _ -> term
-                      _ -> term
+                    Core.TermLambda v0 -> Logic.ifElse (Equality.equal (Core.lambdaParameter v0) v) term (Core.TermLambda (Core.Lambda {
+                      Core.lambdaParameter = (Core.lambdaParameter v0),
+                      Core.lambdaDomain = (Core.lambdaDomain v0),
+                      Core.lambdaBody = (recurse (Core.lambdaBody v0))}))
+                    Core.TermCases v0 -> Core.TermCases (Core.CaseStatement {
+                      Core.caseStatementTypeName = (Core.caseStatementTypeName v0),
+                      Core.caseStatementDefault = (Maybes.map recurse (Core.caseStatementDefault v0)),
+                      Core.caseStatementCases = (Lists.map (rewriteField recurse) (Core.caseStatementCases v0))})
                     Core.TermLet v0 -> Core.TermLet (Core.Let {
                       Core.letBindings = (Lists.map (rewriteBinding recurse) (Core.letBindings v0)),
                       Core.letBody = (recurse (Core.letBody v0))})
@@ -287,20 +281,16 @@ encodeApplicationInner cx env fun hargs rargs =
           defaultCase =
                   Eithers.bind (encodeTermInline cx env False fun) (\pfun -> Right (Utils.functionCall (Utils.pyExpressionToPyPrimary pfun) hargs, rargs))
       in case (Strip.deannotateAndDetypeTerm fun) of
-        Core.TermFunction v0 -> case v0 of
-          Core.FunctionElimination v1 -> case v1 of
-            Core.EliminationRecord v2 ->
-              let fname = Core.projectionField v2
-                  fieldExpr = Utils.projectFromExpression firstArg (Names_.encodeFieldName env fname)
-              in (Right (withRest fieldExpr, rargs))
-            Core.EliminationUnion v2 -> Eithers.bind (encodeUnionEliminationInline cx env v2 firstArg) (\inlineExpr -> Right (withRest inlineExpr, rargs))
-            Core.EliminationWrap _ ->
-              let valueExpr = Utils.projectFromExpression firstArg (Syntax.Name "value")
-                  allArgs = Lists.concat2 restArgs rargs
-              in (Logic.ifElse (Lists.null allArgs) (Right (valueExpr, [])) (Right (Utils.functionCall (Utils.pyExpressionToPyPrimary valueExpr) allArgs, [])))
-            _ -> defaultCase
-          Core.FunctionLambda _ -> Eithers.bind (encodeTermInline cx env False fun) (\pfun -> Right (Utils.functionCall (Utils.pyExpressionToPyPrimary pfun) hargs, rargs))
-          _ -> defaultCase
+        Core.TermProject v0 ->
+          let fname = Core.projectionField v0
+              fieldExpr = Utils.projectFromExpression firstArg (Names_.encodeFieldName env fname)
+          in (Right (withRest fieldExpr, rargs))
+        Core.TermCases v0 -> Eithers.bind (encodeUnionEliminationInline cx env v0 firstArg) (\inlineExpr -> Right (withRest inlineExpr, rargs))
+        Core.TermUnwrap _ ->
+          let valueExpr = Utils.projectFromExpression firstArg (Syntax.Name "value")
+              allArgs = Lists.concat2 restArgs rargs
+          in (Logic.ifElse (Lists.null allArgs) (Right (valueExpr, [])) (Right (Utils.functionCall (Utils.pyExpressionToPyPrimary valueExpr) allArgs, [])))
+        Core.TermLambda _ -> Eithers.bind (encodeTermInline cx env False fun) (\pfun -> Right (Utils.functionCall (Utils.pyExpressionToPyPrimary pfun) hargs, rargs))
         Core.TermVariable v0 ->
           let g = pythonEnvironmentGetGraph env
               allArgs = Lists.concat2 hargs rargs
@@ -533,16 +523,7 @@ encodeCaseBlock cx env tname rowType isEnum encodeBody field =
           stripped = Strip.deannotateAndDetypeTerm fterm
           effectiveLambda =
                   case stripped of
-                    Core.TermFunction v0 -> case v0 of
-                      Core.FunctionLambda v1 -> v1
-                      _ ->
-                        let syntheticVar2 = Core.Name "_matchValue"
-                        in Core.Lambda {
-                          Core.lambdaParameter = syntheticVar2,
-                          Core.lambdaDomain = Nothing,
-                          Core.lambdaBody = (Core.TermApplication (Core.Application {
-                            Core.applicationFunction = stripped,
-                            Core.applicationArgument = (Core.TermVariable syntheticVar2)}))}
+                    Core.TermLambda v0 -> v0
                     _ ->
                       let syntheticVar = Core.Name "_matchValue"
                       in Core.Lambda {
@@ -720,87 +701,6 @@ encodeForallType env lt =
                             Syntax.awaitPrimaryPrimary = (Syntax.PrimarySimple (Syntax.AtomName (Syntax.Name (Core.unName n))))},
                           Syntax.powerRhs = Nothing}))}}}}}},
             Syntax.comparisonRhs = []})]])) params))))
-
--- | Encode a function term to a Python expression
-encodeFunction :: Context.Context -> Environment_.PythonEnvironment -> Core.Function -> Either Errors.Error Syntax.Expression
-encodeFunction cx env f =
-    case f of
-      Core.FunctionLambda v0 -> Eithers.bind (analyzePythonFunction cx env (Core.TermFunction (Core.FunctionLambda v0))) (\fs ->
-        let params = Typing.functionStructureParams fs
-            bindings = Typing.functionStructureBindings fs
-            innerBody = Typing.functionStructureBody fs
-            innerEnv0 = Typing.functionStructureEnvironment fs
-            bindingNames = Lists.map (\b -> Core.bindingName b) bindings
-            innerEnv =
-                    Environment_.PythonEnvironment {
-                      Environment_.pythonEnvironmentNamespaces = (Environment_.pythonEnvironmentNamespaces innerEnv0),
-                      Environment_.pythonEnvironmentBoundTypeVariables = (Environment_.pythonEnvironmentBoundTypeVariables innerEnv0),
-                      Environment_.pythonEnvironmentGraph = (Environment_.pythonEnvironmentGraph innerEnv0),
-                      Environment_.pythonEnvironmentNullaryBindings = (Environment_.pythonEnvironmentNullaryBindings innerEnv0),
-                      Environment_.pythonEnvironmentVersion = (Environment_.pythonEnvironmentVersion innerEnv0),
-                      Environment_.pythonEnvironmentSkipCasts = (Environment_.pythonEnvironmentSkipCasts innerEnv0),
-                      Environment_.pythonEnvironmentInlineVariables = (Sets.union (Sets.fromList bindingNames) (Environment_.pythonEnvironmentInlineVariables innerEnv0))}
-        in (Eithers.bind (encodeTermInline cx innerEnv False innerBody) (\pbody ->
-          let pparams = Lists.map (Names_.encodeName False Util.CaseConventionLowerSnake innerEnv) params
-          in (Logic.ifElse (Lists.null bindings) (Right (makeUncurriedLambda pparams pbody)) (Eithers.bind (Eithers.mapList (encodeBindingAsAssignment cx False innerEnv) bindings) (\pbindingExprs ->
-            let pbindingStarExprs = Lists.map (\ne -> Syntax.StarNamedExpressionSimple ne) pbindingExprs
-                pbodyStarExpr = Utils.pyExpressionToPyStarNamedExpression pbody
-                tupleElements = Lists.concat2 pbindingStarExprs [
-                      pbodyStarExpr]
-                tupleExpr = Utils.pyAtomToPyExpression (Syntax.AtomTuple (Syntax.Tuple tupleElements))
-                indexValue =
-                        Utils.pyAtomToPyExpression (Syntax.AtomNumber (Syntax.NumberInteger (Literals.int32ToBigint (Lists.length bindings))))
-                indexedExpr = Utils.primaryWithExpressionSlices (Utils.pyExpressionToPyPrimary tupleExpr) [
-                      indexValue]
-            in (Right (makeUncurriedLambda pparams (Utils.pyPrimaryToPyExpression indexedExpr)))))))))
-      Core.FunctionElimination v0 -> case v0 of
-        Core.EliminationRecord v1 ->
-          let fname = Core.projectionField v1
-          in (Right (makeCurriedLambda [
-            Syntax.Name "v1"] (Utils.projectFromExpression (Syntax.ExpressionSimple (Syntax.Disjunction [
-            Syntax.Conjunction [
-              Syntax.InversionSimple (Syntax.Comparison {
-                Syntax.comparisonLhs = Syntax.BitwiseOr {
-                  Syntax.bitwiseOrLhs = Nothing,
-                  Syntax.bitwiseOrRhs = Syntax.BitwiseXor {
-                    Syntax.bitwiseXorLhs = Nothing,
-                    Syntax.bitwiseXorRhs = Syntax.BitwiseAnd {
-                      Syntax.bitwiseAndLhs = Nothing,
-                      Syntax.bitwiseAndRhs = Syntax.ShiftExpression {
-                        Syntax.shiftExpressionLhs = Nothing,
-                        Syntax.shiftExpressionRhs = Syntax.Sum {
-                          Syntax.sumLhs = Nothing,
-                          Syntax.sumRhs = Syntax.Term {
-                            Syntax.termLhs = Nothing,
-                            Syntax.termRhs = (Syntax.FactorSimple (Syntax.Power {
-                              Syntax.powerLhs = Syntax.AwaitPrimary {
-                                Syntax.awaitPrimaryAwait = False,
-                                Syntax.awaitPrimaryPrimary = (Syntax.PrimarySimple (Syntax.AtomName (Syntax.Name "v1")))},
-                              Syntax.powerRhs = Nothing}))}}}}}},
-                Syntax.comparisonRhs = []})]])) (Names_.encodeFieldName env fname))))
-        Core.EliminationWrap _ -> Right (makeCurriedLambda [
-          Syntax.Name "v1"] (Utils.projectFromExpression (Syntax.ExpressionSimple (Syntax.Disjunction [
-          Syntax.Conjunction [
-            Syntax.InversionSimple (Syntax.Comparison {
-              Syntax.comparisonLhs = Syntax.BitwiseOr {
-                Syntax.bitwiseOrLhs = Nothing,
-                Syntax.bitwiseOrRhs = Syntax.BitwiseXor {
-                  Syntax.bitwiseXorLhs = Nothing,
-                  Syntax.bitwiseXorRhs = Syntax.BitwiseAnd {
-                    Syntax.bitwiseAndLhs = Nothing,
-                    Syntax.bitwiseAndRhs = Syntax.ShiftExpression {
-                      Syntax.shiftExpressionLhs = Nothing,
-                      Syntax.shiftExpressionRhs = Syntax.Sum {
-                        Syntax.sumLhs = Nothing,
-                        Syntax.sumRhs = Syntax.Term {
-                          Syntax.termLhs = Nothing,
-                          Syntax.termRhs = (Syntax.FactorSimple (Syntax.Power {
-                            Syntax.powerLhs = Syntax.AwaitPrimary {
-                              Syntax.awaitPrimaryAwait = False,
-                              Syntax.awaitPrimaryPrimary = (Syntax.PrimarySimple (Syntax.AtomName (Syntax.Name "v1")))},
-                            Syntax.powerRhs = Nothing}))}}}}}},
-              Syntax.comparisonRhs = []})]])) (Syntax.Name "value")))
-        Core.EliminationUnion _ -> Right (unsupportedExpression "case expressions as values are not yet supported")
 
 -- | Encode a function definition with parameters and body
 encodeFunctionDefinition :: Context.Context -> Environment_.PythonEnvironment -> Core.Name -> [Core.Name] -> [Core.Name] -> Core.Term -> [Core.Type] -> Maybe Core.Type -> Maybe String -> [Syntax.Statement] -> Either Errors.Error Syntax.Statement
@@ -1056,7 +956,81 @@ encodeTermInline cx env noCast term =
         Core.TermEither v0 -> Eithers.either (\t1 -> Eithers.bind (encode t1) (\pyexp -> withCast (Utils.functionCall (Utils.pyNameToPyPrimary (Syntax.Name "Left")) [
           pyexp]))) (\t1 -> Eithers.bind (encode t1) (\pyexp -> withCast (Utils.functionCall (Utils.pyNameToPyPrimary (Syntax.Name "Right")) [
           pyexp]))) v0
-        Core.TermFunction v0 -> encodeFunction cx env v0
+        Core.TermLambda v0 -> Eithers.bind (analyzePythonFunction cx env (Core.TermLambda v0)) (\fs ->
+          let params = Typing.functionStructureParams fs
+              bindings = Typing.functionStructureBindings fs
+              innerBody = Typing.functionStructureBody fs
+              innerEnv0 = Typing.functionStructureEnvironment fs
+              bindingNames = Lists.map (\b -> Core.bindingName b) bindings
+              innerEnv =
+                      Environment_.PythonEnvironment {
+                        Environment_.pythonEnvironmentNamespaces = (Environment_.pythonEnvironmentNamespaces innerEnv0),
+                        Environment_.pythonEnvironmentBoundTypeVariables = (Environment_.pythonEnvironmentBoundTypeVariables innerEnv0),
+                        Environment_.pythonEnvironmentGraph = (Environment_.pythonEnvironmentGraph innerEnv0),
+                        Environment_.pythonEnvironmentNullaryBindings = (Environment_.pythonEnvironmentNullaryBindings innerEnv0),
+                        Environment_.pythonEnvironmentVersion = (Environment_.pythonEnvironmentVersion innerEnv0),
+                        Environment_.pythonEnvironmentSkipCasts = (Environment_.pythonEnvironmentSkipCasts innerEnv0),
+                        Environment_.pythonEnvironmentInlineVariables = (Sets.union (Sets.fromList bindingNames) (Environment_.pythonEnvironmentInlineVariables innerEnv0))}
+          in (Eithers.bind (encodeTermInline cx innerEnv False innerBody) (\pbody ->
+            let pparams = Lists.map (Names_.encodeName False Util.CaseConventionLowerSnake innerEnv) params
+            in (Logic.ifElse (Lists.null bindings) (Right (makeUncurriedLambda pparams pbody)) (Eithers.bind (Eithers.mapList (encodeBindingAsAssignment cx False innerEnv) bindings) (\pbindingExprs ->
+              let pbindingStarExprs = Lists.map (\ne -> Syntax.StarNamedExpressionSimple ne) pbindingExprs
+                  pbodyStarExpr = Utils.pyExpressionToPyStarNamedExpression pbody
+                  tupleElements = Lists.concat2 pbindingStarExprs [
+                        pbodyStarExpr]
+                  tupleExpr = Utils.pyAtomToPyExpression (Syntax.AtomTuple (Syntax.Tuple tupleElements))
+                  indexValue =
+                          Utils.pyAtomToPyExpression (Syntax.AtomNumber (Syntax.NumberInteger (Literals.int32ToBigint (Lists.length bindings))))
+                  indexedExpr = Utils.primaryWithExpressionSlices (Utils.pyExpressionToPyPrimary tupleExpr) [
+                        indexValue]
+              in (Right (makeUncurriedLambda pparams (Utils.pyPrimaryToPyExpression indexedExpr)))))))))
+        Core.TermProject v0 ->
+          let fname = Core.projectionField v0
+          in (Right (makeCurriedLambda [
+            Syntax.Name "v1"] (Utils.projectFromExpression (Syntax.ExpressionSimple (Syntax.Disjunction [
+            Syntax.Conjunction [
+              Syntax.InversionSimple (Syntax.Comparison {
+                Syntax.comparisonLhs = Syntax.BitwiseOr {
+                  Syntax.bitwiseOrLhs = Nothing,
+                  Syntax.bitwiseOrRhs = Syntax.BitwiseXor {
+                    Syntax.bitwiseXorLhs = Nothing,
+                    Syntax.bitwiseXorRhs = Syntax.BitwiseAnd {
+                      Syntax.bitwiseAndLhs = Nothing,
+                      Syntax.bitwiseAndRhs = Syntax.ShiftExpression {
+                        Syntax.shiftExpressionLhs = Nothing,
+                        Syntax.shiftExpressionRhs = Syntax.Sum {
+                          Syntax.sumLhs = Nothing,
+                          Syntax.sumRhs = Syntax.Term {
+                            Syntax.termLhs = Nothing,
+                            Syntax.termRhs = (Syntax.FactorSimple (Syntax.Power {
+                              Syntax.powerLhs = Syntax.AwaitPrimary {
+                                Syntax.awaitPrimaryAwait = False,
+                                Syntax.awaitPrimaryPrimary = (Syntax.PrimarySimple (Syntax.AtomName (Syntax.Name "v1")))},
+                              Syntax.powerRhs = Nothing}))}}}}}},
+                Syntax.comparisonRhs = []})]])) (Names_.encodeFieldName env fname))))
+        Core.TermUnwrap _ -> Right (makeCurriedLambda [
+          Syntax.Name "v1"] (Utils.projectFromExpression (Syntax.ExpressionSimple (Syntax.Disjunction [
+          Syntax.Conjunction [
+            Syntax.InversionSimple (Syntax.Comparison {
+              Syntax.comparisonLhs = Syntax.BitwiseOr {
+                Syntax.bitwiseOrLhs = Nothing,
+                Syntax.bitwiseOrRhs = Syntax.BitwiseXor {
+                  Syntax.bitwiseXorLhs = Nothing,
+                  Syntax.bitwiseXorRhs = Syntax.BitwiseAnd {
+                    Syntax.bitwiseAndLhs = Nothing,
+                    Syntax.bitwiseAndRhs = Syntax.ShiftExpression {
+                      Syntax.shiftExpressionLhs = Nothing,
+                      Syntax.shiftExpressionRhs = Syntax.Sum {
+                        Syntax.sumLhs = Nothing,
+                        Syntax.sumRhs = Syntax.Term {
+                          Syntax.termLhs = Nothing,
+                          Syntax.termRhs = (Syntax.FactorSimple (Syntax.Power {
+                            Syntax.powerLhs = Syntax.AwaitPrimary {
+                              Syntax.awaitPrimaryAwait = False,
+                              Syntax.awaitPrimaryPrimary = (Syntax.PrimarySimple (Syntax.AtomName (Syntax.Name "v1")))},
+                            Syntax.powerRhs = Nothing}))}}}}}},
+              Syntax.comparisonRhs = []})]])) (Syntax.Name "value")))
+        Core.TermCases _ -> Right (unsupportedExpression "case expressions as values are not yet supported")
         Core.TermLet v0 ->
           let bindings = Core.letBindings v0
               body = Core.letBody v0
@@ -1137,25 +1111,21 @@ encodeTermMultiline cx env term =
       in (Logic.ifElse (Equality.equal (Lists.length args) 1) (
         let arg = Lists.head args
         in case (Strip.deannotateAndDetypeTerm body) of
-          Core.TermFunction v0 -> case v0 of
-            Core.FunctionElimination v1 -> case v1 of
-              Core.EliminationUnion v2 ->
-                let tname = Core.caseStatementTypeName v2
-                    dflt = Core.caseStatementDefault v2
-                    cases_ = Core.caseStatementCases v2
-                in (Eithers.bind (Resolution.requireUnionType cx (pythonEnvironmentGetGraph env) tname) (\rt ->
-                  let isEnum = Predicates.isEnumRowType rt
-                      isFull = isCasesFull rt cases_
-                  in (Eithers.bind (encodeTermInline cx env False arg) (\pyArg -> Eithers.bind (Eithers.mapList (encodeCaseBlock cx env tname rt isEnum (\e2 -> \t -> encodeTermMultiline cx e2 t)) (deduplicateCaseVariables cases_)) (\pyCases -> Eithers.bind (encodeDefaultCaseBlock (\t -> encodeTermInline cx env False t) isFull dflt tname) (\pyDflt ->
-                    let subj = Syntax.SubjectExpressionSimple (Syntax.NamedExpressionSimple pyArg)
-                        matchStmt =
-                                Syntax.StatementCompound (Syntax.CompoundStatementMatch (Syntax.MatchStatement {
-                                  Syntax.matchStatementSubject = subj,
-                                  Syntax.matchStatementCases = (Lists.concat2 pyCases pyDflt)}))
-                    in (Right [
-                      matchStmt])))))))
-              _ -> dfltLogic
-            _ -> dfltLogic
+          Core.TermCases v0 ->
+            let tname = Core.caseStatementTypeName v0
+                dflt = Core.caseStatementDefault v0
+                cases_ = Core.caseStatementCases v0
+            in (Eithers.bind (Resolution.requireUnionType cx (pythonEnvironmentGetGraph env) tname) (\rt ->
+              let isEnum = Predicates.isEnumRowType rt
+                  isFull = isCasesFull rt cases_
+              in (Eithers.bind (encodeTermInline cx env False arg) (\pyArg -> Eithers.bind (Eithers.mapList (encodeCaseBlock cx env tname rt isEnum (\e -> \t -> encodeTermMultiline cx e t)) (deduplicateCaseVariables cases_)) (\pyCases -> Eithers.bind (encodeDefaultCaseBlock (\t -> encodeTermInline cx env False t) isFull dflt tname) (\pyDflt ->
+                let subj = Syntax.SubjectExpressionSimple (Syntax.NamedExpressionSimple pyArg)
+                    matchStmt =
+                            Syntax.StatementCompound (Syntax.CompoundStatementMatch (Syntax.MatchStatement {
+                              Syntax.matchStatementSubject = subj,
+                              Syntax.matchStatementCases = (Lists.concat2 pyCases pyDflt)}))
+                in (Right [
+                  matchStmt])))))))
           _ -> dfltLogic) dfltLogic)
 
 -- | Encode a term body for TCO: tail self-calls become param reassignment + continue
@@ -1187,27 +1157,21 @@ encodeTermMultilineTCO cx env funcName paramNames term =
         in (Logic.ifElse (Equality.equal (Lists.length args2) 1) (
           let arg = Lists.head args2
           in case (Strip.deannotateAndDetypeTerm body2) of
-            Core.TermFunction v0 -> case v0 of
-              Core.FunctionElimination v1 -> case v1 of
-                Core.EliminationUnion v2 ->
-                  let tname = Core.caseStatementTypeName v2
-                      dflt = Core.caseStatementDefault v2
-                      cases_ = Core.caseStatementCases v2
-                  in (Eithers.bind (Resolution.requireUnionType cx (pythonEnvironmentGetGraph env) tname) (\rt ->
-                    let isEnum = Predicates.isEnumRowType rt
-                        isFull = isCasesFull rt cases_
-                    in (Eithers.bind (encodeTermInline cx env False arg) (\pyArg -> Eithers.bind (Eithers.mapList (encodeCaseBlock cx env tname rt isEnum (\e2 -> \t2 -> encodeTermMultilineTCO cx e2 funcName paramNames t2)) (deduplicateCaseVariables cases_)) (\pyCases -> Eithers.bind (encodeDefaultCaseBlock (\t2 -> encodeTermInline cx env False t2) isFull dflt tname) (\pyDflt ->
-                      let subj = Syntax.SubjectExpressionSimple (Syntax.NamedExpressionSimple pyArg)
-                          matchStmt =
-                                  Syntax.StatementCompound (Syntax.CompoundStatementMatch (Syntax.MatchStatement {
-                                    Syntax.matchStatementSubject = subj,
-                                    Syntax.matchStatementCases = (Lists.concat2 pyCases pyDflt)}))
-                      in (Right [
-                        matchStmt])))))))
-                _ -> Eithers.bind (encodeTermInline cx env False term) (\expr -> Right [
-                  Utils.returnSingle expr])
-              _ -> Eithers.bind (encodeTermInline cx env False term) (\expr -> Right [
-                Utils.returnSingle expr])
+            Core.TermCases v0 ->
+              let tname = Core.caseStatementTypeName v0
+                  dflt = Core.caseStatementDefault v0
+                  cases_ = Core.caseStatementCases v0
+              in (Eithers.bind (Resolution.requireUnionType cx (pythonEnvironmentGetGraph env) tname) (\rt ->
+                let isEnum = Predicates.isEnumRowType rt
+                    isFull = isCasesFull rt cases_
+                in (Eithers.bind (encodeTermInline cx env False arg) (\pyArg -> Eithers.bind (Eithers.mapList (encodeCaseBlock cx env tname rt isEnum (\e2 -> \t2 -> encodeTermMultilineTCO cx e2 funcName paramNames t2)) (deduplicateCaseVariables cases_)) (\pyCases -> Eithers.bind (encodeDefaultCaseBlock (\t2 -> encodeTermInline cx env False t2) isFull dflt tname) (\pyDflt ->
+                  let subj = Syntax.SubjectExpressionSimple (Syntax.NamedExpressionSimple pyArg)
+                      matchStmt =
+                              Syntax.StatementCompound (Syntax.CompoundStatementMatch (Syntax.MatchStatement {
+                                Syntax.matchStatementSubject = subj,
+                                Syntax.matchStatementCases = (Lists.concat2 pyCases pyDflt)}))
+                  in (Right [
+                    matchStmt])))))))
             _ -> Eithers.bind (encodeTermInline cx env False term) (\expr -> Right [
               Utils.returnSingle expr])) (Eithers.bind (encodeTermInline cx env False term) (\expr -> Right [
           Utils.returnSingle expr])))))
@@ -1506,12 +1470,10 @@ extendEnvWithLambdaParams env term =
 
       let go =
               \e -> \t -> case (Strip.deannotateAndDetypeTerm t) of
-                Core.TermFunction v0 -> case v0 of
-                  Core.FunctionLambda v1 ->
-                    let newTc = Scoping.extendGraphForLambda (pythonEnvironmentGetGraph e) v1
-                        newEnv = pythonEnvironmentSetGraph newTc e
-                    in (go newEnv (Core.lambdaBody v1))
-                  _ -> e
+                Core.TermLambda v0 ->
+                  let newTc = Scoping.extendGraphForLambda (pythonEnvironmentGetGraph e) v0
+                      newEnv = pythonEnvironmentSetGraph newTc e
+                  in (go newEnv (Core.lambdaBody v0))
                 _ -> e
       in (go env term)
 
@@ -1543,9 +1505,7 @@ extendMetaForTerm topLevel meta0 term =
                 Core.TermEither v0 ->
                   let metaWithCast = setMetaUsesCast True meta
                   in (Eithers.either (\_ -> setMetaUsesLeft metaWithCast True) (\_ -> setMetaUsesRight metaWithCast True) v0)
-                Core.TermFunction v0 -> case v0 of
-                  Core.FunctionLambda v1 -> Maybes.maybe meta (\dom -> Logic.ifElse topLevel (extendMetaForType True False dom meta) meta) (Core.lambdaDomain v1)
-                  _ -> meta
+                Core.TermLambda v0 -> Maybes.maybe meta (\dom -> Logic.ifElse topLevel (extendMetaForType True False dom meta) meta) (Core.lambdaDomain v0)
                 Core.TermLet v0 ->
                   let bindings = Core.letBindings v0
                   in (Lists.foldl (
@@ -1617,11 +1577,7 @@ extendMetaForTypes types meta =
 extractCaseElimination :: Core.Term -> Maybe Core.CaseStatement
 extractCaseElimination term =
     case (Strip.deannotateAndDetypeTerm term) of
-      Core.TermFunction v0 -> case v0 of
-        Core.FunctionElimination v1 -> case v1 of
-          Core.EliminationUnion v2 -> Just v2
-          _ -> Nothing
-        _ -> Nothing
+      Core.TermCases v0 -> Just v0
       _ -> Nothing
 
 -- | Find type parameters in a type that are bound in the environment
@@ -1632,24 +1588,14 @@ findTypeParams env typ =
           isBound = \v -> Maybes.isJust (Maps.lookup v boundVars)
       in (Lists.filter isBound (Sets.toList (Variables.freeVariablesInType typ)))
 
--- | Calculate function arity with proper primitive handling
-functionArityWithPrimitives :: Graph.Graph -> Core.Function -> Int
-functionArityWithPrimitives graph f =
-    case f of
-      Core.FunctionElimination _ -> 1
-      Core.FunctionLambda v0 -> Math.add 1 (termArityWithPrimitives graph (Core.lambdaBody v0))
-      _ -> 0
-
 -- | Extract lambdas and their bodies from a term
 gatherLambdas :: Core.Term -> ([Core.Name], Core.Term)
 gatherLambdas term =
 
       let go =
               \params -> \t -> case (Strip.deannotateAndDetypeTerm t) of
-                Core.TermFunction v0 -> case v0 of
-                  Core.FunctionLambda v1 -> go (Lists.concat2 params [
-                    Core.lambdaParameter v1]) (Core.lambdaBody v1)
-                  _ -> (params, t)
+                Core.TermLambda v0 -> go (Lists.concat2 params [
+                  Core.lambdaParameter v0]) (Core.lambdaBody v0)
                 _ -> (params, t)
       in (go [] term)
 
@@ -1754,11 +1700,7 @@ isCaseStatementApplication term =
       in (Logic.ifElse (Logic.not (Equality.equal (Lists.length args) 1)) Nothing (
         let arg = Lists.head args
         in case (Strip.deannotateAndDetypeTerm body) of
-          Core.TermFunction v0 -> case v0 of
-            Core.FunctionElimination v1 -> case v1 of
-              Core.EliminationUnion v2 -> Just (Core.caseStatementTypeName v2, (Core.caseStatementDefault v2, (Core.caseStatementCases v2, arg)))
-              _ -> Nothing
-            _ -> Nothing
+          Core.TermCases v0 -> Just (Core.caseStatementTypeName v0, (Core.caseStatementDefault v0, (Core.caseStatementCases v0, arg)))
           _ -> Nothing))
 
 -- | Check if union cases are fully covered
@@ -2559,7 +2501,10 @@ termArityWithPrimitives :: Graph.Graph -> Core.Term -> Int
 termArityWithPrimitives graph term =
     case (Strip.deannotateAndDetypeTerm term) of
       Core.TermApplication v0 -> Math.max 0 (Math.sub (termArityWithPrimitives graph (Core.applicationFunction v0)) 1)
-      Core.TermFunction v0 -> functionArityWithPrimitives graph v0
+      Core.TermLambda v0 -> Math.add 1 (termArityWithPrimitives graph (Core.lambdaBody v0))
+      Core.TermProject _ -> 1
+      Core.TermUnwrap _ -> 1
+      Core.TermCases _ -> 1
       Core.TermVariable v0 -> Maybes.maybe 0 (\el -> Maybes.maybe (Arity.termArity (Core.bindingTerm el)) (\ts -> Arity.typeSchemeArity ts) (Core.bindingType el)) (Lexical.lookupBinding graph v0)
       _ -> 0
 

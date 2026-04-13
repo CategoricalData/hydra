@@ -111,31 +111,8 @@ def is_valid_name(name: hydra.core.Name) -> bool:
     return hydra.lib.logic.not_(hydra.lib.equality.equal(name.value, ""))
 
 def check_term(typed: bool, path: hydra.paths.SubtermPath, cx: hydra.graph.Graph, term: hydra.core.Term):
-    def _hoist_hydra_validate_core_check_term_1(path, v1):
-        match v1:
-            case hydra.core.EliminationRecord(value=proj):
-                tname = proj.type_name
-                return hydra.lib.logic.if_else(hydra.lib.equality.equal(tname.value, ""), (lambda : Just(cast(hydra.error.core.InvalidTermError, hydra.error.core.InvalidTermErrorEmptyTypeNameInTerm(hydra.error.core.EmptyTypeNameInTermError(path))))), (lambda : Nothing()))
+    r"""Check a single term node for validation errors."""
 
-            case hydra.core.EliminationUnion(value=cs):
-                tname = cs.type_name
-                cs_default = cs.default
-                cs_cases = cs.cases
-                return first_error((hydra.lib.logic.if_else(hydra.lib.equality.equal(tname.value, ""), (lambda : Just(cast(hydra.error.core.InvalidTermError, hydra.error.core.InvalidTermErrorEmptyTypeNameInTerm(hydra.error.core.EmptyTypeNameInTermError(path))))), (lambda : Nothing())), hydra.lib.logic.if_else(hydra.lib.logic.and_(hydra.lib.lists.null(cs_cases), hydra.lib.maybes.is_nothing(cs_default)), (lambda : Just(cast(hydra.error.core.InvalidTermError, hydra.error.core.InvalidTermErrorEmptyCaseStatement(hydra.error.core.EmptyCaseStatementError(path, tname))))), (lambda : Nothing())), check_duplicate_fields(path, hydra.lib.lists.map((lambda v1: v1.name), cs_cases))))
-
-            case _:
-                return Nothing()
-    def _hoist_hydra_validate_core_check_term_2(cx, path, typed, v1):
-        match v1:
-            case hydra.core.FunctionLambda(value=lam):
-                param_name = lam.parameter
-                return first_error((hydra.lib.logic.if_else(hydra.lib.maybes.is_just(hydra.lib.maps.lookup(param_name, cx.bound_terms)), (lambda : Just(cast(hydra.error.core.InvalidTermError, hydra.error.core.InvalidTermErrorTermVariableShadowing(hydra.error.core.TermVariableShadowingError(path, param_name))))), (lambda : Nothing())), hydra.lib.logic.if_else(is_valid_name(param_name), (lambda : Nothing()), (lambda : Just(cast(hydra.error.core.InvalidTermError, hydra.error.core.InvalidTermErrorInvalidLambdaParameterName(hydra.error.core.InvalidLambdaParameterNameError(path, param_name)))))), hydra.lib.logic.if_else(typed, (lambda : hydra.lib.maybes.cases(lam.domain, (lambda : Nothing()), (lambda dom: check_undefined_type_variables_in_type(path, cx, dom, (lambda uv_name: Just(cast(hydra.error.core.InvalidTermError, hydra.error.core.InvalidTermErrorUndefinedTypeVariableInLambdaDomain(hydra.error.core.UndefinedTypeVariableInLambdaDomainError(path, uv_name))))))))), (lambda : Nothing()))))
-
-            case hydra.core.FunctionElimination(value=elim):
-                return _hoist_hydra_validate_core_check_term_1(path, elim)
-
-            case _:
-                return Nothing()
     match term:
         case hydra.core.TermAnnotated(value=ann):
             body = ann.body
@@ -189,7 +166,7 @@ def check_term(typed: bool, path: hydra.paths.SubtermPath, cx: hydra.graph.Graph
                         return Nothing()
             def _hoist_arg_body_6(v1):
                 match v1:
-                    case hydra.core.FunctionLambda(value=lam):
+                    case hydra.core.TermLambda(value=lam):
                         param = lam.parameter
                         body = lam.body
                         def _hoist_body_body_1(v12):
@@ -203,14 +180,7 @@ def check_term(typed: bool, path: hydra.paths.SubtermPath, cx: hydra.graph.Graph
 
                     case _:
                         return Nothing()
-            def _hoist_arg_body_7(v1):
-                match v1:
-                    case hydra.core.TermFunction(value=f):
-                        return _hoist_arg_body_6(f)
-
-                    case _:
-                        return Nothing()
-            def _hoist_arg_body_8(unwrap_name, v1):
+            def _hoist_arg_body_7(unwrap_name, v1):
                 match v1:
                     case hydra.core.TermWrap(value=wt):
                         wrap_name = wt.type_name
@@ -218,28 +188,14 @@ def check_term(typed: bool, path: hydra.paths.SubtermPath, cx: hydra.graph.Graph
 
                     case _:
                         return Nothing()
-            def _hoist_arg_body_9(v1):
+            def _hoist_arg_body_8(v1):
                 match v1:
-                    case hydra.core.EliminationWrap(value=unwrap_name):
-                        return _hoist_arg_body_8(unwrap_name, arg)
+                    case hydra.core.TermUnwrap(value=unwrap_name):
+                        return _hoist_arg_body_7(unwrap_name, arg)
 
                     case _:
                         return Nothing()
-            def _hoist_arg_body_10(v1):
-                match v1:
-                    case hydra.core.FunctionElimination(value=elim):
-                        return _hoist_arg_body_9(elim)
-
-                    case _:
-                        return Nothing()
-            def _hoist_arg_body_11(v1):
-                match v1:
-                    case hydra.core.TermFunction(value=f):
-                        return _hoist_arg_body_10(f)
-
-                    case _:
-                        return Nothing()
-            return first_error((_hoist_arg_body_3(fun), _hoist_arg_body_5(fun), _hoist_arg_body_7(fun), _hoist_arg_body_11(fun)))
+            return first_error((_hoist_arg_body_3(fun), _hoist_arg_body_5(fun), _hoist_arg_body_6(fun), _hoist_arg_body_8(fun)))
 
         case hydra.core.TermRecord(value=rec):
             tname = rec.type_name
@@ -257,8 +213,19 @@ def check_term(typed: bool, path: hydra.paths.SubtermPath, cx: hydra.graph.Graph
             tname = inj.type_name
             return hydra.lib.logic.if_else(hydra.lib.equality.equal(tname.value, ""), (lambda : Just(cast(hydra.error.core.InvalidTermError, hydra.error.core.InvalidTermErrorEmptyTypeNameInTerm(hydra.error.core.EmptyTypeNameInTermError(path))))), (lambda : Nothing()))
 
-        case hydra.core.TermFunction(value=fun):
-            return _hoist_hydra_validate_core_check_term_2(cx, path, typed, fun)
+        case hydra.core.TermLambda(value=lam):
+            param_name = lam.parameter
+            return first_error((hydra.lib.logic.if_else(hydra.lib.maybes.is_just(hydra.lib.maps.lookup(param_name, cx.bound_terms)), (lambda : Just(cast(hydra.error.core.InvalidTermError, hydra.error.core.InvalidTermErrorTermVariableShadowing(hydra.error.core.TermVariableShadowingError(path, param_name))))), (lambda : Nothing())), hydra.lib.logic.if_else(is_valid_name(param_name), (lambda : Nothing()), (lambda : Just(cast(hydra.error.core.InvalidTermError, hydra.error.core.InvalidTermErrorInvalidLambdaParameterName(hydra.error.core.InvalidLambdaParameterNameError(path, param_name)))))), hydra.lib.logic.if_else(typed, (lambda : hydra.lib.maybes.cases(lam.domain, (lambda : Nothing()), (lambda dom: check_undefined_type_variables_in_type(path, cx, dom, (lambda uv_name: Just(cast(hydra.error.core.InvalidTermError, hydra.error.core.InvalidTermErrorUndefinedTypeVariableInLambdaDomain(hydra.error.core.UndefinedTypeVariableInLambdaDomainError(path, uv_name))))))))), (lambda : Nothing()))))
+
+        case hydra.core.TermProject(value=proj):
+            tname = proj.type_name
+            return hydra.lib.logic.if_else(hydra.lib.equality.equal(tname.value, ""), (lambda : Just(cast(hydra.error.core.InvalidTermError, hydra.error.core.InvalidTermErrorEmptyTypeNameInTerm(hydra.error.core.EmptyTypeNameInTermError(path))))), (lambda : Nothing()))
+
+        case hydra.core.TermCases(value=cs):
+            tname = cs.type_name
+            cs_default = cs.default
+            cs_cases = cs.cases
+            return first_error((hydra.lib.logic.if_else(hydra.lib.equality.equal(tname.value, ""), (lambda : Just(cast(hydra.error.core.InvalidTermError, hydra.error.core.InvalidTermErrorEmptyTypeNameInTerm(hydra.error.core.EmptyTypeNameInTermError(path))))), (lambda : Nothing())), hydra.lib.logic.if_else(hydra.lib.logic.and_(hydra.lib.lists.null(cs_cases), hydra.lib.maybes.is_nothing(cs_default)), (lambda : Just(cast(hydra.error.core.InvalidTermError, hydra.error.core.InvalidTermErrorEmptyCaseStatement(hydra.error.core.EmptyCaseStatementError(path, tname))))), (lambda : Nothing())), check_duplicate_fields(path, hydra.lib.lists.map((lambda v1: v1.name), cs_cases))))
 
         case hydra.core.TermTypeApplication(value=ta):
             return hydra.lib.logic.if_else(typed, (lambda : check_undefined_type_variables_in_type(path, cx, ta.type, (lambda uv_name: Just(cast(hydra.error.core.InvalidTermError, hydra.error.core.InvalidTermErrorUndefinedTypeVariableInTypeApplication(hydra.error.core.UndefinedTypeVariableInTypeApplicationError(path, uv_name))))))), (lambda : Nothing()))

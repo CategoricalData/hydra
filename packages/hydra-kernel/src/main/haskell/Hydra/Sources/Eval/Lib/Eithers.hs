@@ -151,10 +151,10 @@ foldl_ = define "foldl" $
           (Core.termApplication $ Core.application
             (Core.termVariable $ encodedName _eithers_either)
             -- If acc is Left: short-circuit
-            (Core.termFunction $ Core.functionLambda $ Core.lambda (wrap _Name $ string "err") nothing $
+            (Core.termLambda $ Core.lambda (wrap _Name $ string "err") nothing $
               Core.termEither $ left $ Core.termVariable $ wrap _Name $ string "err"))
           -- If acc is Right: apply funTerm to acc value and element
-          (Core.termFunction $ Core.functionLambda $ Core.lambda (wrap _Name $ string "a") nothing $
+          (Core.termLambda $ Core.lambda (wrap _Name $ string "a") nothing $
             Core.termApplication $ Core.application
               (Core.termApplication $ Core.application (var "funTerm") (Core.termVariable $ wrap _Name $ string "a"))
               (var "el")))
@@ -275,19 +275,19 @@ mapList_ = define "mapList" $
           (Core.termApplication $ Core.application
             (Core.termVariable $ encodedName _eithers_either)
             -- If Left: return the Left unchanged (short-circuit)
-            (Core.termFunction $ Core.functionLambda $ Core.lambda (wrap _Name $ string "err") nothing $
+            (Core.termLambda $ Core.lambda (wrap _Name $ string "err") nothing $
               Core.termEither $ left $ Core.termVariable $ wrap _Name $ string "err"))
           -- If Right: check acc, if acc is Right then cons, else return acc's Left
-          (Core.termFunction $ Core.functionLambda $ Core.lambda (wrap _Name $ string "y") nothing $
+          (Core.termLambda $ Core.lambda (wrap _Name $ string "y") nothing $
             Core.termApplication $ Core.application
               (Core.termApplication $ Core.application
                 (Core.termApplication $ Core.application
                   (Core.termVariable $ encodedName _eithers_either)
                   -- If acc is Left: return it
-                  (Core.termFunction $ Core.functionLambda $ Core.lambda (wrap _Name $ string "accErr") nothing $
+                  (Core.termLambda $ Core.lambda (wrap _Name $ string "accErr") nothing $
                     Core.termEither $ left $ Core.termVariable $ wrap _Name $ string "accErr"))
                 -- If acc is Right: cons y onto the list using primitive
-                (Core.termFunction $ Core.functionLambda $ Core.lambda (wrap _Name $ string "ys") nothing $
+                (Core.termLambda $ Core.lambda (wrap _Name $ string "ys") nothing $
                   Core.termEither $ right $
                     Core.termApplication $ Core.application
                       (Core.termApplication $ Core.application
@@ -320,19 +320,19 @@ mapSet_ = define "mapSet" $
           (Core.termApplication $ Core.application
             (Core.termVariable $ encodedName _eithers_either)
             -- If Left: return the Left unchanged (short-circuit)
-            (Core.termFunction $ Core.functionLambda $ Core.lambda (wrap _Name $ string "err") nothing $
+            (Core.termLambda $ Core.lambda (wrap _Name $ string "err") nothing $
               Core.termEither $ left $ Core.termVariable $ wrap _Name $ string "err"))
           -- If Right: check acc, if acc is Right then cons, else return acc's Left
-          (Core.termFunction $ Core.functionLambda $ Core.lambda (wrap _Name $ string "y") nothing $
+          (Core.termLambda $ Core.lambda (wrap _Name $ string "y") nothing $
             Core.termApplication $ Core.application
               (Core.termApplication $ Core.application
                 (Core.termApplication $ Core.application
                   (Core.termVariable $ encodedName _eithers_either)
                   -- If acc is Left: return it
-                  (Core.termFunction $ Core.functionLambda $ Core.lambda (wrap _Name $ string "accErr") nothing $
+                  (Core.termLambda $ Core.lambda (wrap _Name $ string "accErr") nothing $
                     Core.termEither $ left $ Core.termVariable $ wrap _Name $ string "accErr"))
                 -- If acc is Right: insert y into the set using primitive
-                (Core.termFunction $ Core.functionLambda $ Core.lambda (wrap _Name $ string "ys") nothing $
+                (Core.termLambda $ Core.lambda (wrap _Name $ string "ys") nothing $
                   Core.termEither $ right $
                     Core.termApplication $ Core.application
                       (Core.termApplication $ Core.application
@@ -365,9 +365,9 @@ mapMaybe_ = define "mapMaybe" $
             (Core.termApplication $ Core.application
               (Core.termApplication $ Core.application
                 (Core.termVariable $ encodedName _eithers_either)
-                (Core.termFunction $ Core.functionLambda $ Core.lambda (wrap _Name $ string "err") nothing $
+                (Core.termLambda $ Core.lambda (wrap _Name $ string "err") nothing $
                   Core.termEither $ left $ Core.termVariable $ wrap _Name $ string "err"))
-              (Core.termFunction $ Core.functionLambda $ Core.lambda (wrap _Name $ string "y") nothing $
+              (Core.termLambda $ Core.lambda (wrap _Name $ string "y") nothing $
                 Core.termEither $ right $ Core.termMaybe $ just $ Core.termVariable $ wrap _Name $ string "y"))
             (Core.termApplication $ Core.application (var "funTerm") (var "val")))
         (var "opt")]

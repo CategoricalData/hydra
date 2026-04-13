@@ -46,11 +46,11 @@ testGroupForCollectionTerms =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#1",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> Core_.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> Core_.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "x"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermSet (S.fromList [
-                    Core.TermVariable (Core.Name "x")]))}))))),
+                    Core.TermVariable (Core.Name "x")]))})))),
                 Testing.universalTestCaseExpected = (Core_.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [
                     Core.Name "t0"],
@@ -67,15 +67,15 @@ testGroupForCollectionTerms =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#2",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> Core_.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> Core_.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "x"),
                   Core.lambdaDomain = Nothing,
-                  Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                  Core.lambdaBody = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "y"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermSet (S.fromList [
                       Core.TermVariable (Core.Name "x"),
-                      (Core.TermVariable (Core.Name "y"))]))})))}))))),
+                      (Core.TermVariable (Core.Name "y"))]))}))})))),
                 Testing.universalTestCaseExpected = (Core_.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [
                     Core.Name "t0"],
@@ -112,14 +112,14 @@ testGroupForCollectionTerms =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#1",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> Core_.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> Core_.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "k"),
                   Core.lambdaDomain = Nothing,
-                  Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                  Core.lambdaBody = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "v"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermMap (M.fromList [
-                      (Core.TermVariable (Core.Name "k"), (Core.TermVariable (Core.Name "v")))]))})))}))))),
+                      (Core.TermVariable (Core.Name "k"), (Core.TermVariable (Core.Name "v")))]))}))})))),
                 Testing.universalTestCaseExpected = (Core_.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [
                     Core.Name "t0",
@@ -160,14 +160,14 @@ testGroupForCollectionTerms =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#1",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> Core_.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> Core_.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "x"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermSet (S.fromList [
                     Core.TermApplication (Core.Application {
                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.math.negate")),
                       Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}),
-                    (Core.TermVariable (Core.Name "x"))]))}))))),
+                    (Core.TermVariable (Core.Name "x"))]))})))),
                 Testing.universalTestCaseExpected = (Core_.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [],
                   Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
@@ -180,14 +180,14 @@ testGroupForCollectionTerms =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#2",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> Core_.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> Core_.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "k"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermMap (M.fromList [
                     (Core.TermVariable (Core.Name "k"), (Core.TermApplication (Core.Application {
                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.sort")),
                       Core.applicationArgument = (Core.TermList [
-                        Core.TermVariable (Core.Name "k")])})))]))}))))),
+                        Core.TermVariable (Core.Name "k")])})))]))})))),
                 Testing.universalTestCaseExpected = (Core_.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [
                     Core.Name "t0"],
@@ -211,7 +211,7 @@ testGroupForCollectionTerms =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#1",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> Core_.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> Core_.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "xs"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermMap (M.fromList [
@@ -219,7 +219,7 @@ testGroupForCollectionTerms =
                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.length")),
                       Core.applicationArgument = (Core.TermVariable (Core.Name "xs"))}), (Core.TermApplication (Core.Application {
                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.sets.fromList")),
-                      Core.applicationArgument = (Core.TermVariable (Core.Name "xs"))})))]))}))))),
+                      Core.applicationArgument = (Core.TermVariable (Core.Name "xs"))})))]))})))),
                 Testing.universalTestCaseExpected = (Core_.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [
                     Core.Name "t0"],
@@ -275,13 +275,13 @@ testGroupForCollectionTerms =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#4",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> Core_.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> Core_.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "xs"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermSet (S.fromList [
                     Core.TermApplication (Core.Application {
                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.sets.fromList")),
-                      Core.applicationArgument = (Core.TermVariable (Core.Name "xs"))})]))}))))),
+                      Core.applicationArgument = (Core.TermVariable (Core.Name "xs"))})]))})))),
                 Testing.universalTestCaseExpected = (Core_.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [
                     Core.Name "t0"],
@@ -311,7 +311,7 @@ testGroupForComposition =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#1",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> Core_.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> Core_.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "xs"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermApplication (Core.Application {
@@ -319,11 +319,11 @@ testGroupForComposition =
                     Core.applicationArgument = (Core.TermApplication (Core.Application {
                       Core.applicationFunction = (Core.TermApplication (Core.Application {
                         Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.map")),
-                        Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                        Core.applicationArgument = (Core.TermLambda (Core.Lambda {
                           Core.lambdaParameter = (Core.Name "x"),
                           Core.lambdaDomain = Nothing,
-                          Core.lambdaBody = (Core.TermPair (Core.TermVariable (Core.Name "x"), (Core.TermVariable (Core.Name "x"))))})))})),
-                      Core.applicationArgument = (Core.TermVariable (Core.Name "xs"))}))}))}))))),
+                          Core.lambdaBody = (Core.TermPair (Core.TermVariable (Core.Name "x"), (Core.TermVariable (Core.Name "x"))))}))})),
+                      Core.applicationArgument = (Core.TermVariable (Core.Name "xs"))}))}))})))),
                 Testing.universalTestCaseExpected = (Core_.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [
                     Core.Name "t0"],
@@ -341,10 +341,10 @@ testGroupForComposition =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#2",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> Core_.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> Core_.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "f"),
                   Core.lambdaDomain = Nothing,
-                  Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                  Core.lambdaBody = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "xs"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermApplication (Core.Application {
@@ -353,7 +353,7 @@ testGroupForComposition =
                         Core.applicationFunction = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.map")),
                           Core.applicationArgument = (Core.TermVariable (Core.Name "f"))})),
-                        Core.applicationArgument = (Core.TermVariable (Core.Name "xs"))}))}))})))}))))),
+                        Core.applicationArgument = (Core.TermVariable (Core.Name "xs"))}))}))}))})))),
                 Testing.universalTestCaseExpected = (Core_.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [
                     Core.Name "t0",
@@ -379,14 +379,14 @@ testGroupForComposition =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#1",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> Core_.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> Core_.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "m"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermApplication (Core.Application {
                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maps.map")),
                       Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.lib.lists.sort"))})),
-                    Core.applicationArgument = (Core.TermVariable (Core.Name "m"))}))}))))),
+                    Core.applicationArgument = (Core.TermVariable (Core.Name "m"))}))})))),
                 Testing.universalTestCaseExpected = (Core_.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [
                     Core.Name "t0",
@@ -427,17 +427,17 @@ testGroupForLetBindings =
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "lookup"),
-                      Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.bindingTerm = (Core.TermLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.Name "k"),
                         Core.lambdaDomain = Nothing,
-                        Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                        Core.lambdaBody = (Core.TermLambda (Core.Lambda {
                           Core.lambdaParameter = (Core.Name "m"),
                           Core.lambdaDomain = Nothing,
                           Core.lambdaBody = (Core.TermApplication (Core.Application {
                             Core.applicationFunction = (Core.TermApplication (Core.Application {
                               Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maps.lookup")),
                               Core.applicationArgument = (Core.TermVariable (Core.Name "k"))})),
-                            Core.applicationArgument = (Core.TermVariable (Core.Name "m"))}))})))}))),
+                            Core.applicationArgument = (Core.TermVariable (Core.Name "m"))}))}))})),
                       Core.bindingType = Nothing}],
                   Core.letBody = (Core.TermVariable (Core.Name "lookup"))})))),
                 Testing.universalTestCaseExpected = (Core_.typeScheme (Core.TypeScheme {
@@ -464,17 +464,17 @@ testGroupForLetBindings =
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "member"),
-                      Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.bindingTerm = (Core.TermLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.Name "x"),
                         Core.lambdaDomain = Nothing,
-                        Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                        Core.lambdaBody = (Core.TermLambda (Core.Lambda {
                           Core.lambdaParameter = (Core.Name "s"),
                           Core.lambdaDomain = Nothing,
                           Core.lambdaBody = (Core.TermApplication (Core.Application {
                             Core.applicationFunction = (Core.TermApplication (Core.Application {
                               Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.sets.member")),
                               Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
-                            Core.applicationArgument = (Core.TermVariable (Core.Name "s"))}))})))}))),
+                            Core.applicationArgument = (Core.TermVariable (Core.Name "s"))}))}))})),
                       Core.bindingType = Nothing}],
                   Core.letBody = (Core.TermVariable (Core.Name "member"))})))),
                 Testing.universalTestCaseExpected = (Core_.typeScheme (Core.TypeScheme {
@@ -530,14 +530,14 @@ testGroupForLetBindings =
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "f"),
-                      Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.bindingTerm = (Core.TermLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.Name "m"),
                         Core.lambdaDomain = Nothing,
                         Core.lambdaBody = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermApplication (Core.Application {
                             Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maps.map")),
                             Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.lib.math.negate"))})),
-                          Core.applicationArgument = (Core.TermVariable (Core.Name "m"))}))}))),
+                          Core.applicationArgument = (Core.TermVariable (Core.Name "m"))}))})),
                       Core.bindingType = Nothing}],
                   Core.letBody = (Core.TermVariable (Core.Name "f"))})))),
                 Testing.universalTestCaseExpected = (Core_.typeScheme (Core.TypeScheme {
@@ -563,12 +563,12 @@ testGroupForLetBindings =
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "f"),
-                      Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.bindingTerm = (Core.TermLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.Name "xs"),
                         Core.lambdaDomain = Nothing,
                         Core.lambdaBody = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.sets.fromList")),
-                          Core.applicationArgument = (Core.TermVariable (Core.Name "xs"))}))}))),
+                          Core.applicationArgument = (Core.TermVariable (Core.Name "xs"))}))})),
                       Core.bindingType = Nothing}],
                   Core.letBody = (Core.TermVariable (Core.Name "f"))})))),
                 Testing.universalTestCaseExpected = (Core_.typeScheme (Core.TypeScheme {
@@ -785,14 +785,14 @@ testGroupForNestedContainers =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#1",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> Core_.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> Core_.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "m"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermApplication (Core.Application {
                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maps.map")),
                       Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.lib.sets.fromList"))})),
-                    Core.applicationArgument = (Core.TermVariable (Core.Name "m"))}))}))))),
+                    Core.applicationArgument = (Core.TermVariable (Core.Name "m"))}))})))),
                 Testing.universalTestCaseExpected = (Core_.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [
                     Core.Name "t0",
@@ -821,14 +821,14 @@ testGroupForNestedContainers =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#1",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> Core_.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> Core_.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "xss"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermApplication (Core.Application {
                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.sets.map")),
                       Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.lib.sets.fromList"))})),
-                    Core.applicationArgument = (Core.TermVariable (Core.Name "xss"))}))}))))),
+                    Core.applicationArgument = (Core.TermVariable (Core.Name "xss"))}))})))),
                 Testing.universalTestCaseExpected = (Core_.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [
                     Core.Name "t0"],
@@ -849,7 +849,7 @@ testGroupForNestedContainers =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#1",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> Core_.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> Core_.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "xs"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermApplication (Core.Application {
@@ -857,13 +857,13 @@ testGroupForNestedContainers =
                     Core.applicationArgument = (Core.TermApplication (Core.Application {
                       Core.applicationFunction = (Core.TermApplication (Core.Application {
                         Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.map")),
-                        Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                        Core.applicationArgument = (Core.TermLambda (Core.Lambda {
                           Core.lambdaParameter = (Core.Name "x"),
                           Core.lambdaDomain = Nothing,
                           Core.lambdaBody = (Core.TermPair (Core.TermVariable (Core.Name "x"), (Core.TermApplication (Core.Application {
                             Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.sets.singleton")),
-                            Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))))})))})),
-                      Core.applicationArgument = (Core.TermVariable (Core.Name "xs"))}))}))}))))),
+                            Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))))}))})),
+                      Core.applicationArgument = (Core.TermVariable (Core.Name "xs"))}))}))})))),
                 Testing.universalTestCaseExpected = (Core_.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [
                     Core.Name "t0"],
@@ -894,12 +894,12 @@ testGroupForPartialApplication =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#1",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> Core_.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> Core_.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "k"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maps.lookup")),
-                    Core.applicationArgument = (Core.TermVariable (Core.Name "k"))}))}))))),
+                    Core.applicationArgument = (Core.TermVariable (Core.Name "k"))}))})))),
                 Testing.universalTestCaseExpected = (Core_.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [
                     Core.Name "t0",
@@ -920,17 +920,17 @@ testGroupForPartialApplication =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#2",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> Core_.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> Core_.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "k"),
                   Core.lambdaDomain = Nothing,
-                  Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                  Core.lambdaBody = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "v"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermApplication (Core.Application {
                       Core.applicationFunction = (Core.TermApplication (Core.Application {
                         Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maps.singleton")),
                         Core.applicationArgument = (Core.TermVariable (Core.Name "k"))})),
-                      Core.applicationArgument = (Core.TermVariable (Core.Name "v"))}))})))}))))),
+                      Core.applicationArgument = (Core.TermVariable (Core.Name "v"))}))}))})))),
                 Testing.universalTestCaseExpected = (Core_.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [
                     Core.Name "t0",
@@ -956,12 +956,12 @@ testGroupForPartialApplication =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#1",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> Core_.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> Core_.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "x"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.sets.member")),
-                    Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))))),
+                    Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))})))),
                 Testing.universalTestCaseExpected = (Core_.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [
                     Core.Name "t0"],
@@ -984,17 +984,17 @@ testGroupForPartialApplication =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#1",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> Core_.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> Core_.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "x"),
                   Core.lambdaDomain = Nothing,
-                  Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                  Core.lambdaBody = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "y"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermApplication (Core.Application {
                       Core.applicationFunction = (Core.TermApplication (Core.Application {
                         Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.equality.equal")),
                         Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
-                      Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))})))}))))),
+                      Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}))})))),
                 Testing.universalTestCaseExpected = (Core_.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [
                     Core.Name "t0"],
@@ -1017,14 +1017,14 @@ testGroupForPartialApplication =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#1",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> Core_.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> Core_.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "v"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermApplication (Core.Application {
                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maps.singleton")),
                       Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "key"))})),
-                    Core.applicationArgument = (Core.TermVariable (Core.Name "v"))}))}))))),
+                    Core.applicationArgument = (Core.TermVariable (Core.Name "v"))}))})))),
                 Testing.universalTestCaseExpected = (Core_.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [
                     Core.Name "t0"],

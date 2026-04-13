@@ -58,7 +58,7 @@ def check_for_unbound_type_variables(cx: T0, tx: hydra.graph.Graph, term0: hydra
     @lru_cache(1)
     def svars() -> frozenset[hydra.core.Name]:
         return hydra.lib.sets.from_list(hydra.lib.maps.keys(tx.schema_types))
-    def check_recursive(vars: frozenset[hydra.core.Name], trace: frozenlist[str], lbinding: Maybe[hydra.core.Binding], term: hydra.core.Term):
+    def check_recursive(vars: frozenset[hydra.core.Name], trace: frozenlist[str], lbinding: Maybe[hydra.core.Binding], term: hydra.core.Term) -> Either[hydra.errors.Error, None]:
         def recurse(v1: hydra.core.Term) -> Either[hydra.errors.Error, None]:
             return check_recursive(vars, trace, lbinding, v1)
         @lru_cache(1)
@@ -74,21 +74,11 @@ def check_for_unbound_type_variables(cx: T0, tx: hydra.graph.Graph, term0: hydra
             return hydra.lib.logic.if_else(hydra.lib.sets.null(badvars()), (lambda : Right(None)), (lambda : Left(cast(hydra.errors.Error, hydra.errors.ErrorChecking(cast(hydra.error.checking.CheckingError, hydra.error.checking.CheckingErrorUnboundTypeVariables(hydra.error.checking.UnboundTypeVariablesError(badvars(), typ))))))))
         def check_optional(m: Maybe[hydra.core.Type]) -> Either[hydra.errors.Error, None]:
             return hydra.lib.eithers.bind(hydra.lib.eithers.map_maybe((lambda x1: check(x1)), m), (lambda _: Right(None)))
-        def _hoist_check_optional_body_1(v1):
-            match v1:
-                case hydra.core.FunctionElimination():
-                    return dflt()
-
-                case hydra.core.FunctionLambda(value=l):
-                    return hydra.lib.eithers.bind(check_optional(l.domain), (lambda _: recurse(l.body)))
-
-                case _:
-                    return dflt()
         match term:
-            case hydra.core.TermFunction(value=f):
-                return _hoist_check_optional_body_1(f)
+            case hydra.core.TermLambda(value=l):
+                return hydra.lib.eithers.bind(check_optional(l.domain), (lambda _: recurse(l.body)))
 
-            case hydra.core.TermLet(value=l):
+            case hydra.core.TermLet(value=l2):
                 def for_binding(b: hydra.core.Binding) -> Either[hydra.errors.Error, None]:
                     bterm = b.term
                     @lru_cache(1)
@@ -98,7 +88,7 @@ def check_for_unbound_type_variables(cx: T0, tx: hydra.graph.Graph, term0: hydra
                     def new_trace() -> frozenlist[str]:
                         return hydra.lib.lists.cons(b.name.value, trace)
                     return check_recursive(new_vars(), new_trace(), Just(b), bterm)
-                return hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda x1: for_binding(x1)), l.bindings), (lambda _: recurse(l.body)))
+                return hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda x1: for_binding(x1)), l2.bindings), (lambda _: recurse(l2.body)))
 
             case hydra.core.TermTypeApplication(value=tt):
                 return hydra.lib.eithers.bind(check(tt.type), (lambda _: recurse(tt.body)))
@@ -219,35 +209,12 @@ def type_of_variable(cx: hydra.context.Context, tx: hydra.graph.Graph, type_args
         return hydra.lib.eithers.bind(apply_type_arguments_to_type(cx2(), tx, type_args, t()), (lambda applied: Right((applied, cx2()))))
     return hydra.lib.maybes.maybe((lambda : hydra.lib.maybes.maybe((lambda : Left(cast(hydra.errors.Error, hydra.errors.ErrorUntypedTermVariable(hydra.error.core.UntypedTermVariableError(hydra.paths.SubtermPath(()), name))))), (lambda x1: for_scheme(x1)), hydra.lib.maybes.map((lambda _p: _p.type), hydra.lib.maps.lookup(name, tx.primitives)))), (lambda x1: for_scheme(x1)), raw_type_scheme())
 
-def type_of(cx: hydra.context.Context, tx: hydra.graph.Graph, type_args: frozenlist[hydra.core.Type], term: hydra.core.Term):
+def type_of(cx: hydra.context.Context, tx: hydra.graph.Graph, type_args: frozenlist[hydra.core.Type], term: hydra.core.Term) -> Either[hydra.errors.Error, tuple[hydra.core.Type, hydra.context.Context]]:
     r"""Given a type context, reconstruct the type of a System F term."""
 
     @lru_cache(1)
     def cx1() -> hydra.context.Context:
         return hydra.context.Context(hydra.lib.lists.cons("typeOf", cx.trace), cx.messages, cx.other)
-    def _hoist_cx1_body_1(v1):
-        match v1:
-            case hydra.core.EliminationRecord(value=v12):
-                return type_of_projection(cx1(), tx, type_args, v12)
-
-            case hydra.core.EliminationUnion(value=v12):
-                return type_of_case_statement(cx1(), tx, type_args, v12)
-
-            case hydra.core.EliminationWrap(value=v12):
-                return type_of_unwrap(cx1(), tx, type_args, v12)
-
-            case _:
-                raise AssertionError("Unreachable: all variants handled")
-    def _hoist_cx1_body_2(v1):
-        match v1:
-            case hydra.core.FunctionElimination(value=elm):
-                return _hoist_cx1_body_1(elm)
-
-            case hydra.core.FunctionLambda(value=v12):
-                return type_of_lambda(cx1(), tx, type_args, v12)
-
-            case _:
-                raise AssertionError("Unreachable: all variants handled")
     match term:
         case hydra.core.TermAnnotated(value=v1):
             return type_of_annotated_term(cx1(), tx, type_args, v1)
@@ -255,53 +222,62 @@ def type_of(cx: hydra.context.Context, tx: hydra.graph.Graph, type_args: frozenl
         case hydra.core.TermApplication(value=v12):
             return type_of_application(cx1(), tx, type_args, v12)
 
-        case hydra.core.TermEither(value=v13):
-            return type_of_either(cx1(), tx, type_args, v13)
+        case hydra.core.TermCases(value=v13):
+            return type_of_case_statement(cx1(), tx, type_args, v13)
 
-        case hydra.core.TermFunction(value=f):
-            return _hoist_cx1_body_2(f)
+        case hydra.core.TermEither(value=v14):
+            return type_of_either(cx1(), tx, type_args, v14)
 
-        case hydra.core.TermLet(value=v14):
-            return type_of_let(cx1(), tx, type_args, v14)
+        case hydra.core.TermLambda(value=v15):
+            return type_of_lambda(cx1(), tx, type_args, v15)
 
-        case hydra.core.TermList(value=v15):
-            return type_of_list(cx1(), tx, type_args, v15)
+        case hydra.core.TermLet(value=v16):
+            return type_of_let(cx1(), tx, type_args, v16)
 
-        case hydra.core.TermLiteral(value=v16):
-            return type_of_literal(cx1(), tx, type_args, v16)
+        case hydra.core.TermList(value=v17):
+            return type_of_list(cx1(), tx, type_args, v17)
 
-        case hydra.core.TermMap(value=v17):
-            return type_of_map(cx1(), tx, type_args, v17)
+        case hydra.core.TermLiteral(value=v18):
+            return type_of_literal(cx1(), tx, type_args, v18)
 
-        case hydra.core.TermMaybe(value=v18):
-            return type_of_maybe(cx1(), tx, type_args, v18)
+        case hydra.core.TermMap(value=v19):
+            return type_of_map(cx1(), tx, type_args, v19)
 
-        case hydra.core.TermPair(value=v19):
-            return type_of_pair(cx1(), tx, type_args, v19)
+        case hydra.core.TermMaybe(value=v110):
+            return type_of_maybe(cx1(), tx, type_args, v110)
 
-        case hydra.core.TermRecord(value=v110):
-            return type_of_record(cx1(), tx, type_args, v110)
+        case hydra.core.TermPair(value=v111):
+            return type_of_pair(cx1(), tx, type_args, v111)
 
-        case hydra.core.TermSet(value=v111):
-            return type_of_set(cx1(), tx, type_args, v111)
+        case hydra.core.TermProject(value=v112):
+            return type_of_projection(cx1(), tx, type_args, v112)
 
-        case hydra.core.TermTypeApplication(value=v112):
-            return type_of_type_application(cx1(), tx, type_args, v112)
+        case hydra.core.TermRecord(value=v113):
+            return type_of_record(cx1(), tx, type_args, v113)
 
-        case hydra.core.TermTypeLambda(value=v113):
-            return type_of_type_lambda(cx1(), tx, type_args, v113)
+        case hydra.core.TermSet(value=v114):
+            return type_of_set(cx1(), tx, type_args, v114)
 
-        case hydra.core.TermUnion(value=v114):
-            return type_of_injection(cx1(), tx, type_args, v114)
+        case hydra.core.TermTypeApplication(value=v115):
+            return type_of_type_application(cx1(), tx, type_args, v115)
+
+        case hydra.core.TermTypeLambda(value=v116):
+            return type_of_type_lambda(cx1(), tx, type_args, v116)
+
+        case hydra.core.TermUnion(value=v117):
+            return type_of_injection(cx1(), tx, type_args, v117)
 
         case hydra.core.TermUnit():
             return type_of_unit(cx1(), tx, type_args)
 
-        case hydra.core.TermVariable(value=v115):
-            return type_of_variable(cx1(), tx, type_args, v115)
+        case hydra.core.TermUnwrap(value=v118):
+            return type_of_unwrap(cx1(), tx, type_args, v118)
 
-        case hydra.core.TermWrap(value=v116):
-            return type_of_wrapped_term(cx1(), tx, type_args, v116)
+        case hydra.core.TermVariable(value=v119):
+            return type_of_variable(cx1(), tx, type_args, v119)
+
+        case hydra.core.TermWrap(value=v120):
+            return type_of_wrapped_term(cx1(), tx, type_args, v120)
 
         case _:
             return Left(cast(hydra.errors.Error, hydra.errors.ErrorChecking(cast(hydra.error.checking.CheckingError, hydra.error.checking.CheckingErrorUnsupportedTermVariant(hydra.error.checking.UnsupportedTermVariantError(hydra.reflect.term_variant(term)))))))

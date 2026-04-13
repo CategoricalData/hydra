@@ -396,12 +396,12 @@ nestedListsTests =
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "nested polymorphic",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-            Testing.universalTestCaseActual = (Eithers.either (\e -> "<<inference error>>") (\result -> Core_.type_ (Scoping.typeSchemeToFType (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+            Testing.universalTestCaseActual = (Eithers.either (\e -> "<<inference error>>") (\result -> Core_.type_ (Scoping.typeSchemeToFType (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "x"),
               Core.lambdaDomain = Nothing,
               Core.lambdaBody = (Core.TermList [
                 Core.TermList [
-                  Core.TermVariable (Core.Name "x")]])}))))),
+                  Core.TermVariable (Core.Name "x")]])})))),
             Testing.universalTestCaseExpected = (Core_.type_ (Core.TypeForall (Core.ForallType {
               Core.forallTypeParameter = (Core.Name "t0"),
               Core.forallTypeBody = (Core.TypeFunction (Core.FunctionType {
@@ -461,11 +461,11 @@ polymorphicListsTests =
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "list from lambda",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-            Testing.universalTestCaseActual = (Eithers.either (\e -> "<<inference error>>") (\result -> Core_.type_ (Scoping.typeSchemeToFType (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+            Testing.universalTestCaseActual = (Eithers.either (\e -> "<<inference error>>") (\result -> Core_.type_ (Scoping.typeSchemeToFType (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "x"),
               Core.lambdaDomain = Nothing,
               Core.lambdaBody = (Core.TermList [
-                Core.TermVariable (Core.Name "x")])}))))),
+                Core.TermVariable (Core.Name "x")])})))),
             Testing.universalTestCaseExpected = (Core_.type_ (Core.TypeForall (Core.ForallType {
               Core.forallTypeParameter = (Core.Name "t0"),
               Core.forallTypeBody = (Core.TypeFunction (Core.FunctionType {
@@ -476,12 +476,12 @@ polymorphicListsTests =
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "list with repeated var",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-            Testing.universalTestCaseActual = (Eithers.either (\e -> "<<inference error>>") (\result -> Core_.type_ (Scoping.typeSchemeToFType (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+            Testing.universalTestCaseActual = (Eithers.either (\e -> "<<inference error>>") (\result -> Core_.type_ (Scoping.typeSchemeToFType (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "x"),
               Core.lambdaDomain = Nothing,
               Core.lambdaBody = (Core.TermList [
                 Core.TermVariable (Core.Name "x"),
-                (Core.TermVariable (Core.Name "x"))])}))))),
+                (Core.TermVariable (Core.Name "x"))])})))),
             Testing.universalTestCaseExpected = (Core_.type_ (Core.TypeForall (Core.ForallType {
               Core.forallTypeParameter = (Core.Name "t0"),
               Core.forallTypeBody = (Core.TypeFunction (Core.FunctionType {
@@ -492,15 +492,15 @@ polymorphicListsTests =
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "list from two lambdas",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-            Testing.universalTestCaseActual = (Eithers.either (\e -> "<<inference error>>") (\result -> Core_.type_ (Scoping.typeSchemeToFType (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+            Testing.universalTestCaseActual = (Eithers.either (\e -> "<<inference error>>") (\result -> Core_.type_ (Scoping.typeSchemeToFType (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "x"),
               Core.lambdaDomain = Nothing,
-              Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+              Core.lambdaBody = (Core.TermLambda (Core.Lambda {
                 Core.lambdaParameter = (Core.Name "y"),
                 Core.lambdaDomain = Nothing,
                 Core.lambdaBody = (Core.TermList [
                   Core.TermVariable (Core.Name "x"),
-                  (Core.TermVariable (Core.Name "y"))])})))}))))),
+                  (Core.TermVariable (Core.Name "y"))])}))})))),
             Testing.universalTestCaseExpected = (Core_.type_ (Core.TypeForall (Core.ForallType {
               Core.forallTypeParameter = (Core.Name "t0"),
               Core.forallTypeBody = (Core.TypeFunction (Core.FunctionType {
@@ -521,11 +521,11 @@ polymorphicMapsTests =
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "map from lambda keys",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-            Testing.universalTestCaseActual = (Eithers.either (\e -> "<<inference error>>") (\result -> Core_.type_ (Scoping.typeSchemeToFType (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+            Testing.universalTestCaseActual = (Eithers.either (\e -> "<<inference error>>") (\result -> Core_.type_ (Scoping.typeSchemeToFType (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "k"),
               Core.lambdaDomain = Nothing,
               Core.lambdaBody = (Core.TermMap (M.fromList [
-                (Core.TermVariable (Core.Name "k"), (Core.TermLiteral (Core.LiteralString "value")))]))}))))),
+                (Core.TermVariable (Core.Name "k"), (Core.TermLiteral (Core.LiteralString "value")))]))})))),
             Testing.universalTestCaseExpected = (Core_.type_ (Core.TypeForall (Core.ForallType {
               Core.forallTypeParameter = (Core.Name "t0"),
               Core.forallTypeBody = (Core.TypeFunction (Core.FunctionType {
@@ -538,11 +538,11 @@ polymorphicMapsTests =
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "map from lambda values",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-            Testing.universalTestCaseActual = (Eithers.either (\e -> "<<inference error>>") (\result -> Core_.type_ (Scoping.typeSchemeToFType (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+            Testing.universalTestCaseActual = (Eithers.either (\e -> "<<inference error>>") (\result -> Core_.type_ (Scoping.typeSchemeToFType (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "v"),
               Core.lambdaDomain = Nothing,
               Core.lambdaBody = (Core.TermMap (M.fromList [
-                (Core.TermLiteral (Core.LiteralString "key"), (Core.TermVariable (Core.Name "v")))]))}))))),
+                (Core.TermLiteral (Core.LiteralString "key"), (Core.TermVariable (Core.Name "v")))]))})))),
             Testing.universalTestCaseExpected = (Core_.type_ (Core.TypeForall (Core.ForallType {
               Core.forallTypeParameter = (Core.Name "t0"),
               Core.forallTypeBody = (Core.TypeFunction (Core.FunctionType {
@@ -555,14 +555,14 @@ polymorphicMapsTests =
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "map from lambda both",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-            Testing.universalTestCaseActual = (Eithers.either (\e -> "<<inference error>>") (\result -> Core_.type_ (Scoping.typeSchemeToFType (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+            Testing.universalTestCaseActual = (Eithers.either (\e -> "<<inference error>>") (\result -> Core_.type_ (Scoping.typeSchemeToFType (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "k"),
               Core.lambdaDomain = Nothing,
-              Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+              Core.lambdaBody = (Core.TermLambda (Core.Lambda {
                 Core.lambdaParameter = (Core.Name "v"),
                 Core.lambdaDomain = Nothing,
                 Core.lambdaBody = (Core.TermMap (M.fromList [
-                  (Core.TermVariable (Core.Name "k"), (Core.TermVariable (Core.Name "v")))]))})))}))))),
+                  (Core.TermVariable (Core.Name "k"), (Core.TermVariable (Core.Name "v")))]))}))})))),
             Testing.universalTestCaseExpected = (Core_.type_ (Core.TypeForall (Core.ForallType {
               Core.forallTypeParameter = (Core.Name "t0"),
               Core.forallTypeBody = (Core.TypeForall (Core.ForallType {
@@ -579,11 +579,11 @@ polymorphicMapsTests =
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "map with repeated variables",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-            Testing.universalTestCaseActual = (Eithers.either (\e -> "<<inference error>>") (\result -> Core_.type_ (Scoping.typeSchemeToFType (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+            Testing.universalTestCaseActual = (Eithers.either (\e -> "<<inference error>>") (\result -> Core_.type_ (Scoping.typeSchemeToFType (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "x"),
               Core.lambdaDomain = Nothing,
               Core.lambdaBody = (Core.TermMap (M.fromList [
-                (Core.TermVariable (Core.Name "x"), (Core.TermVariable (Core.Name "x")))]))}))))),
+                (Core.TermVariable (Core.Name "x"), (Core.TermVariable (Core.Name "x")))]))})))),
             Testing.universalTestCaseExpected = (Core_.type_ (Core.TypeForall (Core.ForallType {
               Core.forallTypeParameter = (Core.Name "t0"),
               Core.forallTypeBody = (Core.TypeFunction (Core.FunctionType {
@@ -604,11 +604,11 @@ polymorphicSetsTests =
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "set from lambda",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-            Testing.universalTestCaseActual = (Eithers.either (\e -> "<<inference error>>") (\result -> Core_.type_ (Scoping.typeSchemeToFType (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+            Testing.universalTestCaseActual = (Eithers.either (\e -> "<<inference error>>") (\result -> Core_.type_ (Scoping.typeSchemeToFType (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "x"),
               Core.lambdaDomain = Nothing,
               Core.lambdaBody = (Core.TermSet (S.fromList [
-                Core.TermVariable (Core.Name "x")]))}))))),
+                Core.TermVariable (Core.Name "x")]))})))),
             Testing.universalTestCaseExpected = (Core_.type_ (Core.TypeForall (Core.ForallType {
               Core.forallTypeParameter = (Core.Name "t0"),
               Core.forallTypeBody = (Core.TypeFunction (Core.FunctionType {
@@ -619,11 +619,11 @@ polymorphicSetsTests =
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "set with repeated variable",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-            Testing.universalTestCaseActual = (Eithers.either (\e -> "<<inference error>>") (\result -> Core_.type_ (Scoping.typeSchemeToFType (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+            Testing.universalTestCaseActual = (Eithers.either (\e -> "<<inference error>>") (\result -> Core_.type_ (Scoping.typeSchemeToFType (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "x"),
               Core.lambdaDomain = Nothing,
               Core.lambdaBody = (Core.TermSet (S.fromList [
-                Core.TermVariable (Core.Name "x")]))}))))),
+                Core.TermVariable (Core.Name "x")]))})))),
             Testing.universalTestCaseExpected = (Core_.type_ (Core.TypeForall (Core.ForallType {
               Core.forallTypeParameter = (Core.Name "t0"),
               Core.forallTypeBody = (Core.TypeFunction (Core.FunctionType {
@@ -634,15 +634,15 @@ polymorphicSetsTests =
         Testing.TestCaseWithMetadata {
           Testing.testCaseWithMetadataName = "set from two variables",
           Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-            Testing.universalTestCaseActual = (Eithers.either (\e -> "<<inference error>>") (\result -> Core_.type_ (Scoping.typeSchemeToFType (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+            Testing.universalTestCaseActual = (Eithers.either (\e -> "<<inference error>>") (\result -> Core_.type_ (Scoping.typeSchemeToFType (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "x"),
               Core.lambdaDomain = Nothing,
-              Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+              Core.lambdaBody = (Core.TermLambda (Core.Lambda {
                 Core.lambdaParameter = (Core.Name "y"),
                 Core.lambdaDomain = Nothing,
                 Core.lambdaBody = (Core.TermSet (S.fromList [
                   Core.TermVariable (Core.Name "x"),
-                  (Core.TermVariable (Core.Name "y"))]))})))}))))),
+                  (Core.TermVariable (Core.Name "y"))]))}))})))),
             Testing.universalTestCaseExpected = (Core_.type_ (Core.TypeForall (Core.ForallType {
               Core.forallTypeParameter = (Core.Name "t0"),
               Core.forallTypeBody = (Core.TypeFunction (Core.FunctionType {

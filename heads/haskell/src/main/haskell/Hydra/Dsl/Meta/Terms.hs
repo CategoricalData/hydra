@@ -193,14 +193,14 @@ just = Phantoms.just
 -- | Create a term-encoded lambda function with one parameter
 -- Example: lambda "x" (var "add" @@ var "x" @@ int32 1)
 lambda :: String -> TTerm Term -> TTerm Term
-lambda var body = Core.termFunction $ Core.functionLambda $ Core.lambda (name var) Phantoms.nothing body
+lambda var body = Core.termLambda $ Core.lambda (name var) Phantoms.nothing body
 
 -- | Create a term-encoded multi-parameter lambda function (curried form)
 -- Example: lambdas ["x", "y"] (var "add" @@ var "x" @@ var "y")
 lambdas :: [String] -> TTerm Term -> TTerm Term
 lambdas params body = case params of
   [] -> body
-  (h:rest) -> Core.termFunction $ Core.functionLambda $ Core.lambda (name h) Phantoms.nothing $ lambdas rest body
+  (h:rest) -> Core.termLambda $ Core.lambda (name h) Phantoms.nothing $ lambdas rest body
 
 -- | Create a term-encoded let expression with multiple bindings
 -- Example: lets ["x">: int32 1, "y">: int32 2] (var "add" @@ var "x" @@ var "y")
@@ -230,7 +230,7 @@ mapTerm1 m = inject (Core.nameLift _Term) "map" $ Core.termMap m
 -- | Create a term-encoded pattern match on a union
 -- Example: match (name "Result") nothing ["success">: int32 42, "error">: string "fail"]
 match :: AsTerm t Name => t -> TTerm (Maybe Term) -> [(TTerm Name, TTerm Term)] -> TTerm Term
-match tname def pairs = Core.termFunction $ Core.functionElimination $ Core.eliminationUnion
+match tname def pairs = Core.termCases
     $ Core.caseStatement (asTerm tname) def $ Phantoms.list $ toField pairs
   where
     toField = fmap (\(n, t) -> Core.field n t)
@@ -264,7 +264,7 @@ primitive = Core.termVariable . TTerm . EncodeCore.name
 -- | Create a term-encoded field projection function
 -- Example: project (name "Person") (name "firstName")
 project :: (AsTerm t Name, AsTerm f Name) => t -> f -> TTerm Term
-project tname fname = Core.termFunction $ Core.functionElimination $ Core.eliminationRecord
+project tname fname = Core.termProject
   $ Core.projection (asTerm tname) (asTerm fname)
 
 -- | Create a term-encoded record with named fields
@@ -396,7 +396,7 @@ injectUnitPhantom tname fname = injectPhantom tname fname Core.termUnit
 -- | Create a term-encoded unwrap function for a wrapped type
 -- Example: unwrap (name "Email")
 unwrap :: AsTerm t Name => t -> TTerm Term
-unwrap = Core.termFunction . Core.functionElimination . Core.eliminationWrap . asTerm
+unwrap = Core.termUnwrap . asTerm
 
 -- | Create a term-encoded variable reference from a string
 -- Example: var "x"
@@ -429,7 +429,7 @@ wrap n = Core.termWrap . Core.wrappedTerm (asTerm n)
 -- | Create a term-encoded lambda with a type annotation
 -- Example: lambdaTyped "x" T.int32 (var "x")
 lambdaTyped :: String -> TTerm Type -> TTerm Term -> TTerm Term
-lambdaTyped param dom body = Core.termFunction $ Core.functionLambda $ Core.lambda (name param) (Phantoms.just dom) body
+lambdaTyped param dom body = Core.termLambda $ Core.lambda (name param) (Phantoms.just dom) body
 
 -- | Create a term-encoded type application
 -- Example: tyapp (list []) T.int32

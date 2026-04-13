@@ -101,34 +101,32 @@
                   "literal": {
                     "string": "Construct a Java package name from a list of string parts"}}}],
             "body": {
-              "function": {
-                "lambda": {
-                  "body": {
-                    "wrap": {
-                      "body": {
-                        "application": {
-                          "argument": {"variable": "parts"},
-                          "function": {
-                            "application": {
-                              "argument": {
-                                "function": {
-                                  "lambda": {
-                                    "body": {
-                                      "wrap": {
-                                        "body": {"variable": "p"},
-                                        "typeName": "hydra.java.syntax.Identifier"}},
-                                    "domain": {"literal": {"string": {}}},
-                                    "parameter": "p"}}},
-                              "function": {
-                                "typeApplication": {
-                                  "body": {
-                                    "typeApplication": {
-                                      "body": {"variable": "hydra.lib.lists.map"},
-                                      "type": {"literal": {"string": {}}}}},
-                                  "type": {"variable": "hydra.java.syntax.Identifier"}}}}}}},
-                      "typeName": "hydra.java.syntax.PackageName"}},
-                  "domain": {"list": {"literal": {"string": {}}}},
-                  "parameter": "parts"}}}}},
+              "lambda": {
+                "body": {
+                  "wrap": {
+                    "body": {
+                      "application": {
+                        "argument": {"variable": "parts"},
+                        "function": {
+                          "application": {
+                            "argument": {
+                              "lambda": {
+                                "body": {
+                                  "wrap": {
+                                    "body": {"variable": "p"},
+                                    "typeName": "hydra.java.syntax.Identifier"}},
+                                "domain": {"literal": {"string": {}}},
+                                "parameter": "p"}},
+                            "function": {
+                              "typeApplication": {
+                                "body": {
+                                  "typeApplication": {
+                                    "body": {"variable": "hydra.lib.lists.map"},
+                                    "type": {"literal": {"string": {}}}}},
+                                "type": {"variable": "hydra.java.syntax.Identifier"}}}}}}},
+                    "typeName": "hydra.java.syntax.PackageName"}},
+                "domain": {"list": {"literal": {"string": {}}}},
+                "parameter": "parts"}}}},
         "type": {
           "type": {
             "function": {

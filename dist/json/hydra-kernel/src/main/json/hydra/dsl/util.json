@@ -364,55 +364,54 @@
       "term": {
         "name": "hydra.dsl.util.precisionBits",
         "term": {
-          "function": {
-            "lambda": {
-              "body": {
-                "wrap": {
-                  "body": {
-                    "union": {
-                      "field": {
-                        "name": "union",
-                        "term": {
-                          "record": {
-                            "fields": [
-                              {
-                                "name": "typeName",
-                                "term": {
-                                  "wrap": {
-                                    "body": {"literal": {"string": "hydra.util.Precision"}},
-                                    "typeName": "hydra.core.Name"}}},
-                              {
-                                "name": "field",
-                                "term": {
-                                  "record": {
-                                    "fields": [
-                                      {
-                                        "name": "name",
-                                        "term": {
-                                          "wrap": {
-                                            "body": {"literal": {"string": "bits"}},
-                                            "typeName": "hydra.core.Name"}}},
-                                      {
-                                        "name": "term",
-                                        "term": {
-                                          "application": {
-                                            "argument": {"variable": "x"},
-                                            "function": {"function": {"elimination": {"wrap": "hydra.phantoms.TTerm"}}}}}}],
-                                    "typeName": "hydra.core.Field"}}}],
-                            "typeName": "hydra.core.Injection"}}},
-                      "typeName": "hydra.core.Term"}},
-                  "typeName": "hydra.phantoms.TTerm"}},
-              "domain": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "Precision to a specified number of bits"}}}],
-                      "body": {"literal": {"integer": {"int32": {}}}}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}},
-              "parameter": "x"}}},
+          "lambda": {
+            "body": {
+              "wrap": {
+                "body": {
+                  "union": {
+                    "field": {
+                      "name": "union",
+                      "term": {
+                        "record": {
+                          "fields": [
+                            {
+                              "name": "typeName",
+                              "term": {
+                                "wrap": {
+                                  "body": {"literal": {"string": "hydra.util.Precision"}},
+                                  "typeName": "hydra.core.Name"}}},
+                            {
+                              "name": "field",
+                              "term": {
+                                "record": {
+                                  "fields": [
+                                    {
+                                      "name": "name",
+                                      "term": {
+                                        "wrap": {
+                                          "body": {"literal": {"string": "bits"}},
+                                          "typeName": "hydra.core.Name"}}},
+                                    {
+                                      "name": "term",
+                                      "term": {
+                                        "application": {
+                                          "argument": {"variable": "x"},
+                                          "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                  "typeName": "hydra.core.Field"}}}],
+                          "typeName": "hydra.core.Injection"}}},
+                    "typeName": "hydra.core.Term"}},
+                "typeName": "hydra.phantoms.TTerm"}},
+            "domain": {
+              "application": {
+                "argument": {
+                  "annotated": {
+                    "annotation": [
+                      {
+                        "@key": "description",
+                        "@value": {"literal": {"string": "Precision to a specified number of bits"}}}],
+                    "body": {"literal": {"integer": {"int32": {}}}}}},
+                "function": {"variable": "hydra.phantoms.TTerm"}}},
+            "parameter": "x"}},
         "type": {
           "type": {
             "function": {

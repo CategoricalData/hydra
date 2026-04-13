@@ -2,7 +2,7 @@
 
 ;; Term-building helpers for annotation bindings
 (cl:defun t-lam (param body)
-  (cl:list :function (cl:list :lambda (make-hydra_core_lambda :parameter param :domain cl:nil :body body))))
+  (cl:list :lambda (make-hydra_core_lambda :parameter param :domain cl:nil :body body)))
 (cl:defun t-var (name)
   (cl:list :variable name))
 (cl:defun t-app (fun arg)
@@ -22,12 +22,10 @@
 (cl:defun t-field (name term)
   (make-hydra_core_field :name name :term term))
 (cl:defun t-project (type-name field-name)
-  (cl:list :function (cl:list :elimination
-    (cl:list :record (make-hydra_core_projection :type_name type-name :field field-name)))))
+  (cl:list :project (make-hydra_core_projection :type_name type-name :field field-name)))
 (cl:defun t-match (type-name default &rest case-fields)
-  (cl:list :function (cl:list :elimination
-    (cl:list :union (make-hydra_core_case_statement
-                      :type_name type-name :default default :cases case-fields)))))
+  (cl:list :cases (make-hydra_core_case_statement
+                    :type_name type-name :default default :cases case-fields)))
 (cl:defun t-right (v) (cl:list :either (cl:list :right v)))
 (cl:defun t-left (v) (cl:list :either (cl:list :left v)))
 (cl:defun t-just (v) (cl:list :maybe (t-inject "hydra.core.Term" "literal"

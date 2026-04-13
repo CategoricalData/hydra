@@ -5,7 +5,7 @@
 
 ;; Term-building helpers for annotation bindings
 (defn- t-lam [param body]
-  (list :function (list :lambda (->hydra_core_lambda param nil body))))
+  (list :lambda (->hydra_core_lambda param nil body)))
 (defn- t-var [name]
   (list :variable name))
 (defn- t-app [fun arg]
@@ -24,11 +24,9 @@
 (defn- t-field [name term]
   (->hydra_core_field name term))
 (defn- t-project [type-name field-name]
-  (list :function (list :elimination
-    (list :record (->hydra_core_projection type-name field-name)))))
+  (list :project (->hydra_core_projection type-name field-name)))
 (defn- t-match [type-name default & case-fields]
-  (list :function (list :elimination
-    (list :union (->hydra_core_case_statement type-name default case-fields)))))
+  (list :cases (->hydra_core_case_statement type-name default case-fields)))
 (defn- t-right [v] (list :either (list :right v)))
 (defn- t-left [v] (list :either (list :left v)))
 (defn- t-just [v] (list :maybe (t-inject "hydra.core.Term" "literal"

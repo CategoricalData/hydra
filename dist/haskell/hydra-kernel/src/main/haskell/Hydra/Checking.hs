@@ -86,10 +86,7 @@ checkForUnboundTypeVariables cx tx term0 =
                                     Checking.unboundTypeVariablesErrorType = typ})))))
                         checkOptional = \m -> Eithers.bind (Eithers.mapMaybe check m) (\_ -> Right ())
                     in case term of
-                      Core.TermFunction v0 -> case v0 of
-                        Core.FunctionElimination _ -> dflt
-                        Core.FunctionLambda v1 -> Eithers.bind (checkOptional (Core.lambdaDomain v1)) (\_ -> recurse (Core.lambdaBody v1))
-                        _ -> dflt
+                      Core.TermLambda v0 -> Eithers.bind (checkOptional (Core.lambdaDomain v0)) (\_ -> recurse (Core.lambdaBody v0))
                       Core.TermLet v0 ->
                         let forBinding =
                                 \b ->
@@ -199,25 +196,23 @@ typeOf cx tx typeArgs term =
       in case term of
         Core.TermAnnotated v0 -> typeOfAnnotatedTerm cx1 tx typeArgs v0
         Core.TermApplication v0 -> typeOfApplication cx1 tx typeArgs v0
+        Core.TermCases v0 -> typeOfCaseStatement cx1 tx typeArgs v0
         Core.TermEither v0 -> typeOfEither cx1 tx typeArgs v0
-        Core.TermFunction v0 -> case v0 of
-          Core.FunctionElimination v1 -> case v1 of
-            Core.EliminationRecord v2 -> typeOfProjection cx1 tx typeArgs v2
-            Core.EliminationUnion v2 -> typeOfCaseStatement cx1 tx typeArgs v2
-            Core.EliminationWrap v2 -> typeOfUnwrap cx1 tx typeArgs v2
-          Core.FunctionLambda v1 -> typeOfLambda cx1 tx typeArgs v1
+        Core.TermLambda v0 -> typeOfLambda cx1 tx typeArgs v0
         Core.TermLet v0 -> typeOfLet cx1 tx typeArgs v0
         Core.TermList v0 -> typeOfList cx1 tx typeArgs v0
         Core.TermLiteral v0 -> typeOfLiteral cx1 tx typeArgs v0
         Core.TermMap v0 -> typeOfMap cx1 tx typeArgs v0
         Core.TermMaybe v0 -> typeOfMaybe cx1 tx typeArgs v0
         Core.TermPair v0 -> typeOfPair cx1 tx typeArgs v0
+        Core.TermProject v0 -> typeOfProjection cx1 tx typeArgs v0
         Core.TermRecord v0 -> typeOfRecord cx1 tx typeArgs v0
         Core.TermSet v0 -> typeOfSet cx1 tx typeArgs v0
         Core.TermTypeApplication v0 -> typeOfTypeApplication cx1 tx typeArgs v0
         Core.TermTypeLambda v0 -> typeOfTypeLambda cx1 tx typeArgs v0
         Core.TermUnion v0 -> typeOfInjection cx1 tx typeArgs v0
         Core.TermUnit -> typeOfUnit cx1 tx typeArgs
+        Core.TermUnwrap v0 -> typeOfUnwrap cx1 tx typeArgs v0
         Core.TermVariable v0 -> typeOfVariable cx1 tx typeArgs v0
         Core.TermWrap v0 -> typeOfWrappedTerm cx1 tx typeArgs v0
         _ -> Left (Errors.ErrorChecking (Checking.CheckingErrorUnsupportedTermVariant (Checking.UnsupportedTermVariantError {

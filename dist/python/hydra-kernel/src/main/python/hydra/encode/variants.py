@@ -61,11 +61,14 @@ def term_variant(v1: hydra.variants.TermVariant) -> hydra.core.Term:
         case hydra.variants.TermVariant.APPLICATION:
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.variants.TermVariant"), hydra.core.Field(hydra.core.Name("application"), cast(hydra.core.Term, hydra.core.TermUnit())))))
 
+        case hydra.variants.TermVariant.CASES:
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.variants.TermVariant"), hydra.core.Field(hydra.core.Name("cases"), cast(hydra.core.Term, hydra.core.TermUnit())))))
+
         case hydra.variants.TermVariant.EITHER:
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.variants.TermVariant"), hydra.core.Field(hydra.core.Name("either"), cast(hydra.core.Term, hydra.core.TermUnit())))))
 
-        case hydra.variants.TermVariant.FUNCTION:
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.variants.TermVariant"), hydra.core.Field(hydra.core.Name("function"), cast(hydra.core.Term, hydra.core.TermUnit())))))
+        case hydra.variants.TermVariant.LAMBDA:
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.variants.TermVariant"), hydra.core.Field(hydra.core.Name("lambda"), cast(hydra.core.Term, hydra.core.TermUnit())))))
 
         case hydra.variants.TermVariant.LET:
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.variants.TermVariant"), hydra.core.Field(hydra.core.Name("let"), cast(hydra.core.Term, hydra.core.TermUnit())))))
@@ -85,6 +88,9 @@ def term_variant(v1: hydra.variants.TermVariant) -> hydra.core.Term:
         case hydra.variants.TermVariant.PAIR:
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.variants.TermVariant"), hydra.core.Field(hydra.core.Name("pair"), cast(hydra.core.Term, hydra.core.TermUnit())))))
 
+        case hydra.variants.TermVariant.PROJECT:
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.variants.TermVariant"), hydra.core.Field(hydra.core.Name("project"), cast(hydra.core.Term, hydra.core.TermUnit())))))
+
         case hydra.variants.TermVariant.RECORD:
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.variants.TermVariant"), hydra.core.Field(hydra.core.Name("record"), cast(hydra.core.Term, hydra.core.TermUnit())))))
 
@@ -102,6 +108,9 @@ def term_variant(v1: hydra.variants.TermVariant) -> hydra.core.Term:
 
         case hydra.variants.TermVariant.UNIT:
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.variants.TermVariant"), hydra.core.Field(hydra.core.Name("unit"), cast(hydra.core.Term, hydra.core.TermUnit())))))
+
+        case hydra.variants.TermVariant.UNWRAP:
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.variants.TermVariant"), hydra.core.Field(hydra.core.Name("unwrap"), cast(hydra.core.Term, hydra.core.TermUnit())))))
 
         case hydra.variants.TermVariant.VARIABLE:
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.variants.TermVariant"), hydra.core.Field(hydra.core.Name("variable"), cast(hydra.core.Term, hydra.core.TermUnit())))))

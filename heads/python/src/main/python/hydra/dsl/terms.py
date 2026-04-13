@@ -9,14 +9,8 @@ from hydra.core import (
     AnnotatedTerm,
     Application,
     CaseStatement,
-    Elimination,
-    EliminationRecord,
-    EliminationUnion,
-    EliminationWrap,
     Field,
     FloatValue,
-    FunctionElimination,
-    FunctionLambda,
     Injection,
     IntegerValue,
     Lambda,
@@ -29,20 +23,23 @@ from hydra.core import (
     Term,
     TermAnnotated,
     TermApplication,
+    TermCases,
     TermEither,
-    TermFunction,
+    TermLambda,
     TermLet,
     TermList,
     TermLiteral,
     TermMap,
     TermMaybe,
     TermPair,
+    TermProject,
     TermRecord,
     TermSet,
     TermTypeApplication,
     TermTypeLambda,
     TermUnion,
     TermUnit,
+    TermUnwrap,
     TermVariable,
     TermWrap,
     Type,
@@ -162,9 +159,7 @@ def compose(f: Term, g: Term) -> Term:
     This creates a function equivalent to: lambda x: stringLength(toString(x))
     Function composition applies right-to-left: (f . g)(x) = f(g(x))
     """
-    return TermFunction(
-        FunctionLambda(Lambda(Name("arg_"), Nothing(), apply(f, apply(g, var("arg_")))))
-    )
+    return TermLambda(Lambda(Name("arg_"), Nothing(), apply(f, apply(g, var("arg_")))))
 
 
 def constant(term: Term) -> Term:
@@ -173,11 +168,6 @@ def constant(term: Term) -> Term:
     Example: constant(true())  # A function that always returns True
     """
     return lambda_(hydra.constants.ignored_variable, term)
-
-
-def elimination(elim: Elimination) -> Term:
-    """Construct a term from an elimination (record projection, union case, or unwrap)."""
-    return TermFunction(FunctionElimination(elim))
 
 
 def false() -> Term:
@@ -295,7 +285,7 @@ def lambda_(param: str, body: Term) -> Term:
 
     Example: lambda_("x", apply(var("x"), int32(1)))
     """
-    return TermFunction(FunctionLambda(Lambda(Name(param), Nothing(), body)))
+    return TermLambda(Lambda(Name(param), Nothing(), body))
 
 
 def lambdas(params: Sequence[str], body: Term) -> Term:
@@ -314,7 +304,7 @@ def lambda_typed(param: str, dom: Type, body: Term) -> Term:
 
     Example: lambda_typed("x", Types.int32, list_([var("x")]))
     """
-    return TermFunction(FunctionLambda(Lambda(Name(param), Just(dom), body)))
+    return TermLambda(Lambda(Name(param), Just(dom), body))
 
 
 def let_multi(bindings: Sequence[tuple[str, Term]], body: Term) -> Term:
@@ -401,9 +391,7 @@ def match(tname: Name, def_: Maybe[Term], fields: Sequence[Field]) -> Term:
     This allows handling different cases of a union type with specific logic for each variant.
     The optional second parameter provides a default case for any unmatched variants.
     """
-    return TermFunction(
-        FunctionElimination(EliminationUnion(CaseStatement(tname, def_, tuple(fields))))
-    )
+    return TermCases(CaseStatement(tname, def_, tuple(fields)))
 
 
 def match_with_variants(
@@ -451,9 +439,7 @@ def project(tname: Name, fname: Name) -> Term:
 
     Example: project(Name("Person"), Name("firstName"))
     """
-    return TermFunction(
-        FunctionElimination(EliminationRecord(Projection(tname, fname)))
-    )
+    return TermProject(Projection(tname, fname))
 
 
 def record(tname: Name, fields: Sequence[Field]) -> Term:
@@ -650,7 +636,7 @@ def unwrap(name: Name) -> Term:
 
     Example: unwrap(Name("Email"))
     """
-    return TermFunction(FunctionElimination(EliminationWrap(name)))
+    return TermUnwrap(name)
 
 
 def var(name: str) -> Term:

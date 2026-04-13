@@ -4,62 +4,60 @@
       "term": {
         "name": "hydra.encode.topology.graph",
         "term": {
-          "function": {
-            "lambda": {
-              "body": {
-                "union": {
-                  "field": {
-                    "name": "map",
-                    "term": {
-                      "application": {
-                        "argument": {"variable": "m"},
-                        "function": {
-                          "application": {
-                            "argument": {
-                              "function": {
-                                "lambda": {
-                                  "body": {
-                                    "union": {
-                                      "field": {
-                                        "name": "list",
-                                        "term": {
+          "lambda": {
+            "body": {
+              "union": {
+                "field": {
+                  "name": "map",
+                  "term": {
+                    "application": {
+                      "argument": {"variable": "m"},
+                      "function": {
+                        "application": {
+                          "argument": {
+                            "lambda": {
+                              "body": {
+                                "union": {
+                                  "field": {
+                                    "name": "list",
+                                    "term": {
+                                      "application": {
+                                        "argument": {"variable": "xs"},
+                                        "function": {
                                           "application": {
-                                            "argument": {"variable": "xs"},
+                                            "argument": {"variable": "hydra.encode.topology.vertex"},
                                             "function": {
-                                              "application": {
-                                                "argument": {"variable": "hydra.encode.topology.vertex"},
-                                                "function": {
-                                                  "typeApplication": {
-                                                    "body": {
-                                                      "typeApplication": {
-                                                        "body": {"variable": "hydra.lib.lists.map"},
-                                                        "type": {"literal": {"integer": {"int32": {}}}}}},
-                                                    "type": {"variable": "hydra.core.Term"}}}}}}}},
-                                      "typeName": "hydra.core.Term"}},
-                                  "domain": {"list": {"literal": {"integer": {"int32": {}}}}},
-                                  "parameter": "xs"}}},
-                            "function": {
-                              "application": {
-                                "argument": {"variable": "hydra.encode.topology.vertex"},
-                                "function": {
-                                  "typeApplication": {
-                                    "body": {
-                                      "typeApplication": {
-                                        "body": {
-                                          "typeApplication": {
-                                            "body": {
                                               "typeApplication": {
-                                                "body": {"variable": "hydra.lib.maps.bimap"},
-                                                "type": {"literal": {"integer": {"int32": {}}}}}},
-                                            "type": {"variable": "hydra.core.Term"}}},
-                                        "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
-                                    "type": {"variable": "hydra.core.Term"}}}}}}}}}},
-                  "typeName": "hydra.core.Term"}},
-              "domain": {
-                "map": {
-                  "keys": {"literal": {"integer": {"int32": {}}}},
-                  "values": {"list": {"literal": {"integer": {"int32": {}}}}}}},
-              "parameter": "m"}}},
+                                                "body": {
+                                                  "typeApplication": {
+                                                    "body": {"variable": "hydra.lib.lists.map"},
+                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                "type": {"variable": "hydra.core.Term"}}}}}}}},
+                                  "typeName": "hydra.core.Term"}},
+                              "domain": {"list": {"literal": {"integer": {"int32": {}}}}},
+                              "parameter": "xs"}},
+                          "function": {
+                            "application": {
+                              "argument": {"variable": "hydra.encode.topology.vertex"},
+                              "function": {
+                                "typeApplication": {
+                                  "body": {
+                                    "typeApplication": {
+                                      "body": {
+                                        "typeApplication": {
+                                          "body": {
+                                            "typeApplication": {
+                                              "body": {"variable": "hydra.lib.maps.bimap"},
+                                              "type": {"literal": {"integer": {"int32": {}}}}}},
+                                          "type": {"variable": "hydra.core.Term"}}},
+                                      "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
+                                  "type": {"variable": "hydra.core.Term"}}}}}}}}}},
+                "typeName": "hydra.core.Term"}},
+            "domain": {
+              "map": {
+                "keys": {"literal": {"integer": {"int32": {}}}},
+                "values": {"list": {"literal": {"integer": {"int32": {}}}}}}},
+            "parameter": "m"}},
         "type": {
           "type": {
             "function": {
@@ -73,243 +71,108 @@
       "term": {
         "name": "hydra.encode.topology.tarjanState",
         "term": {
-          "function": {
-            "lambda": {
-              "body": {
-                "union": {
-                  "field": {
-                    "name": "record",
-                    "term": {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "typeName",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "hydra.topology.TarjanState"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "fields",
-                            "term": {
-                              "list": [
-                                {
-                                  "record": {
-                                    "fields": [
-                                      {
-                                        "name": "name",
-                                        "term": {
-                                          "wrap": {
-                                            "body": {"literal": {"string": "counter"}},
-                                            "typeName": "hydra.core.Name"}}},
-                                      {
-                                        "name": "term",
-                                        "term": {
-                                          "application": {
-                                            "argument": {
-                                              "application": {
-                                                "argument": {"variable": "x"},
-                                                "function": {
-                                                  "function": {
-                                                    "elimination": {
-                                                      "record": {"field": "counter", "typeName": "hydra.topology.TarjanState"}}}}}},
-                                            "function": {
+          "lambda": {
+            "body": {
+              "union": {
+                "field": {
+                  "name": "record",
+                  "term": {
+                    "record": {
+                      "fields": [
+                        {
+                          "name": "typeName",
+                          "term": {
+                            "wrap": {
+                              "body": {"literal": {"string": "hydra.topology.TarjanState"}},
+                              "typeName": "hydra.core.Name"}}},
+                        {
+                          "name": "fields",
+                          "term": {
+                            "list": [
+                              {
+                                "record": {
+                                  "fields": [
+                                    {
+                                      "name": "name",
+                                      "term": {
+                                        "wrap": {
+                                          "body": {"literal": {"string": "counter"}},
+                                          "typeName": "hydra.core.Name"}}},
+                                    {
+                                      "name": "term",
+                                      "term": {
+                                        "application": {
+                                          "argument": {
+                                            "application": {
+                                              "argument": {"variable": "x"},
                                               "function": {
-                                                "lambda": {
-                                                  "body": {
-                                                    "union": {
-                                                      "field": {
-                                                        "name": "literal",
-                                                        "term": {
-                                                          "union": {
-                                                            "field": {
-                                                              "name": "integer",
-                                                              "term": {
-                                                                "union": {
-                                                                  "field": {"name": "int32", "term": {"variable": "x"}},
-                                                                  "typeName": "hydra.core.IntegerValue"}}},
-                                                            "typeName": "hydra.core.Literal"}}},
-                                                      "typeName": "hydra.core.Term"}},
-                                                  "domain": {"literal": {"integer": {"int32": {}}}},
-                                                  "parameter": "x"}}}}}}],
-                                    "typeName": "hydra.core.Field"}},
-                                {
-                                  "record": {
-                                    "fields": [
-                                      {
-                                        "name": "name",
-                                        "term": {
-                                          "wrap": {
-                                            "body": {"literal": {"string": "indices"}},
-                                            "typeName": "hydra.core.Name"}}},
-                                      {
-                                        "name": "term",
-                                        "term": {
-                                          "application": {
-                                            "argument": {
-                                              "application": {
-                                                "argument": {"variable": "x"},
-                                                "function": {
-                                                  "function": {
-                                                    "elimination": {
-                                                      "record": {"field": "indices", "typeName": "hydra.topology.TarjanState"}}}}}},
-                                            "function": {
+                                                "project": {"field": "counter", "typeName": "hydra.topology.TarjanState"}}}},
+                                          "function": {
+                                            "lambda": {
+                                              "body": {
+                                                "union": {
+                                                  "field": {
+                                                    "name": "literal",
+                                                    "term": {
+                                                      "union": {
+                                                        "field": {
+                                                          "name": "integer",
+                                                          "term": {
+                                                            "union": {
+                                                              "field": {"name": "int32", "term": {"variable": "x"}},
+                                                              "typeName": "hydra.core.IntegerValue"}}},
+                                                        "typeName": "hydra.core.Literal"}}},
+                                                  "typeName": "hydra.core.Term"}},
+                                              "domain": {"literal": {"integer": {"int32": {}}}},
+                                              "parameter": "x"}}}}}],
+                                  "typeName": "hydra.core.Field"}},
+                              {
+                                "record": {
+                                  "fields": [
+                                    {
+                                      "name": "name",
+                                      "term": {
+                                        "wrap": {
+                                          "body": {"literal": {"string": "indices"}},
+                                          "typeName": "hydra.core.Name"}}},
+                                    {
+                                      "name": "term",
+                                      "term": {
+                                        "application": {
+                                          "argument": {
+                                            "application": {
+                                              "argument": {"variable": "x"},
                                               "function": {
-                                                "lambda": {
-                                                  "body": {
-                                                    "union": {
-                                                      "field": {
-                                                        "name": "map",
-                                                        "term": {
+                                                "project": {"field": "indices", "typeName": "hydra.topology.TarjanState"}}}},
+                                          "function": {
+                                            "lambda": {
+                                              "body": {
+                                                "union": {
+                                                  "field": {
+                                                    "name": "map",
+                                                    "term": {
+                                                      "application": {
+                                                        "argument": {"variable": "m"},
+                                                        "function": {
                                                           "application": {
-                                                            "argument": {"variable": "m"},
-                                                            "function": {
-                                                              "application": {
-                                                                "argument": {
-                                                                  "function": {
-                                                                    "lambda": {
-                                                                      "body": {
+                                                            "argument": {
+                                                              "lambda": {
+                                                                "body": {
+                                                                  "union": {
+                                                                    "field": {
+                                                                      "name": "literal",
+                                                                      "term": {
                                                                         "union": {
                                                                           "field": {
-                                                                            "name": "literal",
+                                                                            "name": "integer",
                                                                             "term": {
                                                                               "union": {
-                                                                                "field": {
-                                                                                  "name": "integer",
-                                                                                  "term": {
-                                                                                    "union": {
-                                                                                      "field": {"name": "int32", "term": {"variable": "x"}},
-                                                                                      "typeName": "hydra.core.IntegerValue"}}},
-                                                                                "typeName": "hydra.core.Literal"}}},
-                                                                          "typeName": "hydra.core.Term"}},
-                                                                      "domain": {"literal": {"integer": {"int32": {}}}},
-                                                                      "parameter": "x"}}},
-                                                                "function": {
-                                                                  "application": {
-                                                                    "argument": {"variable": "hydra.encode.topology.vertex"},
-                                                                    "function": {
-                                                                      "typeApplication": {
-                                                                        "body": {
-                                                                          "typeApplication": {
-                                                                            "body": {
-                                                                              "typeApplication": {
-                                                                                "body": {
-                                                                                  "typeApplication": {
-                                                                                    "body": {"variable": "hydra.lib.maps.bimap"},
-                                                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
-                                                                                "type": {"variable": "hydra.core.Term"}}},
-                                                                            "type": {"literal": {"integer": {"int32": {}}}}}},
-                                                                        "type": {"variable": "hydra.core.Term"}}}}}}}}}},
-                                                      "typeName": "hydra.core.Term"}},
-                                                  "domain": {
-                                                    "map": {
-                                                      "keys": {"literal": {"integer": {"int32": {}}}},
-                                                      "values": {"literal": {"integer": {"int32": {}}}}}},
-                                                  "parameter": "m"}}}}}}],
-                                    "typeName": "hydra.core.Field"}},
-                                {
-                                  "record": {
-                                    "fields": [
-                                      {
-                                        "name": "name",
-                                        "term": {
-                                          "wrap": {
-                                            "body": {"literal": {"string": "lowLinks"}},
-                                            "typeName": "hydra.core.Name"}}},
-                                      {
-                                        "name": "term",
-                                        "term": {
-                                          "application": {
-                                            "argument": {
-                                              "application": {
-                                                "argument": {"variable": "x"},
-                                                "function": {
-                                                  "function": {
-                                                    "elimination": {
-                                                      "record": {"field": "lowLinks", "typeName": "hydra.topology.TarjanState"}}}}}},
-                                            "function": {
-                                              "function": {
-                                                "lambda": {
-                                                  "body": {
-                                                    "union": {
-                                                      "field": {
-                                                        "name": "map",
-                                                        "term": {
-                                                          "application": {
-                                                            "argument": {"variable": "m"},
-                                                            "function": {
-                                                              "application": {
-                                                                "argument": {
-                                                                  "function": {
-                                                                    "lambda": {
-                                                                      "body": {
-                                                                        "union": {
-                                                                          "field": {
-                                                                            "name": "literal",
-                                                                            "term": {
-                                                                              "union": {
-                                                                                "field": {
-                                                                                  "name": "integer",
-                                                                                  "term": {
-                                                                                    "union": {
-                                                                                      "field": {"name": "int32", "term": {"variable": "x"}},
-                                                                                      "typeName": "hydra.core.IntegerValue"}}},
-                                                                                "typeName": "hydra.core.Literal"}}},
-                                                                          "typeName": "hydra.core.Term"}},
-                                                                      "domain": {"literal": {"integer": {"int32": {}}}},
-                                                                      "parameter": "x"}}},
-                                                                "function": {
-                                                                  "application": {
-                                                                    "argument": {"variable": "hydra.encode.topology.vertex"},
-                                                                    "function": {
-                                                                      "typeApplication": {
-                                                                        "body": {
-                                                                          "typeApplication": {
-                                                                            "body": {
-                                                                              "typeApplication": {
-                                                                                "body": {
-                                                                                  "typeApplication": {
-                                                                                    "body": {"variable": "hydra.lib.maps.bimap"},
-                                                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
-                                                                                "type": {"variable": "hydra.core.Term"}}},
-                                                                            "type": {"literal": {"integer": {"int32": {}}}}}},
-                                                                        "type": {"variable": "hydra.core.Term"}}}}}}}}}},
-                                                      "typeName": "hydra.core.Term"}},
-                                                  "domain": {
-                                                    "map": {
-                                                      "keys": {"literal": {"integer": {"int32": {}}}},
-                                                      "values": {"literal": {"integer": {"int32": {}}}}}},
-                                                  "parameter": "m"}}}}}}],
-                                    "typeName": "hydra.core.Field"}},
-                                {
-                                  "record": {
-                                    "fields": [
-                                      {
-                                        "name": "name",
-                                        "term": {
-                                          "wrap": {
-                                            "body": {"literal": {"string": "stack"}},
-                                            "typeName": "hydra.core.Name"}}},
-                                      {
-                                        "name": "term",
-                                        "term": {
-                                          "application": {
-                                            "argument": {
-                                              "application": {
-                                                "argument": {"variable": "x"},
-                                                "function": {
-                                                  "function": {
-                                                    "elimination": {
-                                                      "record": {"field": "stack", "typeName": "hydra.topology.TarjanState"}}}}}},
-                                            "function": {
-                                              "function": {
-                                                "lambda": {
-                                                  "body": {
-                                                    "union": {
-                                                      "field": {
-                                                        "name": "list",
-                                                        "term": {
-                                                          "application": {
-                                                            "argument": {"variable": "xs"},
+                                                                                "field": {"name": "int32", "term": {"variable": "x"}},
+                                                                                "typeName": "hydra.core.IntegerValue"}}},
+                                                                          "typeName": "hydra.core.Literal"}}},
+                                                                    "typeName": "hydra.core.Term"}},
+                                                                "domain": {"literal": {"integer": {"int32": {}}}},
+                                                                "parameter": "x"}},
                                                             "function": {
                                                               "application": {
                                                                 "argument": {"variable": "hydra.encode.topology.vertex"},
@@ -317,43 +180,69 @@
                                                                   "typeApplication": {
                                                                     "body": {
                                                                       "typeApplication": {
-                                                                        "body": {"variable": "hydra.lib.lists.map"},
+                                                                        "body": {
+                                                                          "typeApplication": {
+                                                                            "body": {
+                                                                              "typeApplication": {
+                                                                                "body": {"variable": "hydra.lib.maps.bimap"},
+                                                                                "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                            "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"literal": {"integer": {"int32": {}}}}}},
-                                                                    "type": {"variable": "hydra.core.Term"}}}}}}}},
-                                                      "typeName": "hydra.core.Term"}},
-                                                  "domain": {"list": {"literal": {"integer": {"int32": {}}}}},
-                                                  "parameter": "xs"}}}}}}],
-                                    "typeName": "hydra.core.Field"}},
-                                {
-                                  "record": {
-                                    "fields": [
-                                      {
-                                        "name": "name",
-                                        "term": {
-                                          "wrap": {
-                                            "body": {"literal": {"string": "onStack"}},
-                                            "typeName": "hydra.core.Name"}}},
-                                      {
-                                        "name": "term",
-                                        "term": {
-                                          "application": {
-                                            "argument": {
-                                              "application": {
-                                                "argument": {"variable": "x"},
-                                                "function": {
-                                                  "function": {
-                                                    "elimination": {
-                                                      "record": {"field": "onStack", "typeName": "hydra.topology.TarjanState"}}}}}},
-                                            "function": {
+                                                                    "type": {"variable": "hydra.core.Term"}}}}}}}}}},
+                                                  "typeName": "hydra.core.Term"}},
+                                              "domain": {
+                                                "map": {
+                                                  "keys": {"literal": {"integer": {"int32": {}}}},
+                                                  "values": {"literal": {"integer": {"int32": {}}}}}},
+                                              "parameter": "m"}}}}}],
+                                  "typeName": "hydra.core.Field"}},
+                              {
+                                "record": {
+                                  "fields": [
+                                    {
+                                      "name": "name",
+                                      "term": {
+                                        "wrap": {
+                                          "body": {"literal": {"string": "lowLinks"}},
+                                          "typeName": "hydra.core.Name"}}},
+                                    {
+                                      "name": "term",
+                                      "term": {
+                                        "application": {
+                                          "argument": {
+                                            "application": {
+                                              "argument": {"variable": "x"},
                                               "function": {
-                                                "lambda": {
-                                                  "body": {
-                                                    "union": {
-                                                      "field": {
-                                                        "name": "set",
-                                                        "term": {
+                                                "project": {"field": "lowLinks", "typeName": "hydra.topology.TarjanState"}}}},
+                                          "function": {
+                                            "lambda": {
+                                              "body": {
+                                                "union": {
+                                                  "field": {
+                                                    "name": "map",
+                                                    "term": {
+                                                      "application": {
+                                                        "argument": {"variable": "m"},
+                                                        "function": {
                                                           "application": {
-                                                            "argument": {"variable": "s"},
+                                                            "argument": {
+                                                              "lambda": {
+                                                                "body": {
+                                                                  "union": {
+                                                                    "field": {
+                                                                      "name": "literal",
+                                                                      "term": {
+                                                                        "union": {
+                                                                          "field": {
+                                                                            "name": "integer",
+                                                                            "term": {
+                                                                              "union": {
+                                                                                "field": {"name": "int32", "term": {"variable": "x"}},
+                                                                                "typeName": "hydra.core.IntegerValue"}}},
+                                                                          "typeName": "hydra.core.Literal"}}},
+                                                                    "typeName": "hydra.core.Term"}},
+                                                                "domain": {"literal": {"integer": {"int32": {}}}},
+                                                                "parameter": "x"}},
                                                             "function": {
                                                               "application": {
                                                                 "argument": {"variable": "hydra.encode.topology.vertex"},
@@ -361,83 +250,170 @@
                                                                   "typeApplication": {
                                                                     "body": {
                                                                       "typeApplication": {
-                                                                        "body": {"variable": "hydra.lib.sets.map"},
+                                                                        "body": {
+                                                                          "typeApplication": {
+                                                                            "body": {
+                                                                              "typeApplication": {
+                                                                                "body": {"variable": "hydra.lib.maps.bimap"},
+                                                                                "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                            "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"literal": {"integer": {"int32": {}}}}}},
-                                                                    "type": {"variable": "hydra.core.Term"}}}}}}}},
-                                                      "typeName": "hydra.core.Term"}},
-                                                  "domain": {"set": {"literal": {"integer": {"int32": {}}}}},
-                                                  "parameter": "s"}}}}}}],
-                                    "typeName": "hydra.core.Field"}},
-                                {
-                                  "record": {
-                                    "fields": [
-                                      {
-                                        "name": "name",
-                                        "term": {
-                                          "wrap": {
-                                            "body": {"literal": {"string": "sccs"}},
-                                            "typeName": "hydra.core.Name"}}},
-                                      {
-                                        "name": "term",
-                                        "term": {
-                                          "application": {
-                                            "argument": {
-                                              "application": {
-                                                "argument": {"variable": "x"},
-                                                "function": {
-                                                  "function": {
-                                                    "elimination": {
-                                                      "record": {"field": "sccs", "typeName": "hydra.topology.TarjanState"}}}}}},
-                                            "function": {
+                                                                    "type": {"variable": "hydra.core.Term"}}}}}}}}}},
+                                                  "typeName": "hydra.core.Term"}},
+                                              "domain": {
+                                                "map": {
+                                                  "keys": {"literal": {"integer": {"int32": {}}}},
+                                                  "values": {"literal": {"integer": {"int32": {}}}}}},
+                                              "parameter": "m"}}}}}],
+                                  "typeName": "hydra.core.Field"}},
+                              {
+                                "record": {
+                                  "fields": [
+                                    {
+                                      "name": "name",
+                                      "term": {
+                                        "wrap": {
+                                          "body": {"literal": {"string": "stack"}},
+                                          "typeName": "hydra.core.Name"}}},
+                                    {
+                                      "name": "term",
+                                      "term": {
+                                        "application": {
+                                          "argument": {
+                                            "application": {
+                                              "argument": {"variable": "x"},
                                               "function": {
-                                                "lambda": {
-                                                  "body": {
-                                                    "union": {
-                                                      "field": {
-                                                        "name": "list",
-                                                        "term": {
+                                                "project": {"field": "stack", "typeName": "hydra.topology.TarjanState"}}}},
+                                          "function": {
+                                            "lambda": {
+                                              "body": {
+                                                "union": {
+                                                  "field": {
+                                                    "name": "list",
+                                                    "term": {
+                                                      "application": {
+                                                        "argument": {"variable": "xs"},
+                                                        "function": {
                                                           "application": {
-                                                            "argument": {"variable": "xs"},
+                                                            "argument": {"variable": "hydra.encode.topology.vertex"},
                                                             "function": {
-                                                              "application": {
-                                                                "argument": {
-                                                                  "function": {
-                                                                    "lambda": {
-                                                                      "body": {
-                                                                        "union": {
-                                                                          "field": {
-                                                                            "name": "list",
-                                                                            "term": {
-                                                                              "application": {
-                                                                                "argument": {"variable": "xs"},
-                                                                                "function": {
-                                                                                  "application": {
-                                                                                    "argument": {"variable": "hydra.encode.topology.vertex"},
-                                                                                    "function": {
-                                                                                      "typeApplication": {
-                                                                                        "body": {
-                                                                                          "typeApplication": {
-                                                                                            "body": {"variable": "hydra.lib.lists.map"},
-                                                                                            "type": {"literal": {"integer": {"int32": {}}}}}},
-                                                                                        "type": {"variable": "hydra.core.Term"}}}}}}}},
-                                                                          "typeName": "hydra.core.Term"}},
-                                                                      "domain": {"list": {"literal": {"integer": {"int32": {}}}}},
-                                                                      "parameter": "xs"}}},
-                                                                "function": {
+                                                              "typeApplication": {
+                                                                "body": {
                                                                   "typeApplication": {
-                                                                    "body": {
-                                                                      "typeApplication": {
-                                                                        "body": {"variable": "hydra.lib.lists.map"},
-                                                                        "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
-                                                                    "type": {"variable": "hydra.core.Term"}}}}}}}},
-                                                      "typeName": "hydra.core.Term"}},
-                                                  "domain": {"list": {"list": {"literal": {"integer": {"int32": {}}}}}},
-                                                  "parameter": "xs"}}}}}}],
-                                    "typeName": "hydra.core.Field"}}]}}],
-                        "typeName": "hydra.core.Record"}}},
-                  "typeName": "hydra.core.Term"}},
-              "domain": {"variable": "hydra.topology.TarjanState"},
-              "parameter": "x"}}},
+                                                                    "body": {"variable": "hydra.lib.lists.map"},
+                                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                "type": {"variable": "hydra.core.Term"}}}}}}}},
+                                                  "typeName": "hydra.core.Term"}},
+                                              "domain": {"list": {"literal": {"integer": {"int32": {}}}}},
+                                              "parameter": "xs"}}}}}],
+                                  "typeName": "hydra.core.Field"}},
+                              {
+                                "record": {
+                                  "fields": [
+                                    {
+                                      "name": "name",
+                                      "term": {
+                                        "wrap": {
+                                          "body": {"literal": {"string": "onStack"}},
+                                          "typeName": "hydra.core.Name"}}},
+                                    {
+                                      "name": "term",
+                                      "term": {
+                                        "application": {
+                                          "argument": {
+                                            "application": {
+                                              "argument": {"variable": "x"},
+                                              "function": {
+                                                "project": {"field": "onStack", "typeName": "hydra.topology.TarjanState"}}}},
+                                          "function": {
+                                            "lambda": {
+                                              "body": {
+                                                "union": {
+                                                  "field": {
+                                                    "name": "set",
+                                                    "term": {
+                                                      "application": {
+                                                        "argument": {"variable": "s"},
+                                                        "function": {
+                                                          "application": {
+                                                            "argument": {"variable": "hydra.encode.topology.vertex"},
+                                                            "function": {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {"variable": "hydra.lib.sets.map"},
+                                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                "type": {"variable": "hydra.core.Term"}}}}}}}},
+                                                  "typeName": "hydra.core.Term"}},
+                                              "domain": {"set": {"literal": {"integer": {"int32": {}}}}},
+                                              "parameter": "s"}}}}}],
+                                  "typeName": "hydra.core.Field"}},
+                              {
+                                "record": {
+                                  "fields": [
+                                    {
+                                      "name": "name",
+                                      "term": {
+                                        "wrap": {
+                                          "body": {"literal": {"string": "sccs"}},
+                                          "typeName": "hydra.core.Name"}}},
+                                    {
+                                      "name": "term",
+                                      "term": {
+                                        "application": {
+                                          "argument": {
+                                            "application": {
+                                              "argument": {"variable": "x"},
+                                              "function": {
+                                                "project": {"field": "sccs", "typeName": "hydra.topology.TarjanState"}}}},
+                                          "function": {
+                                            "lambda": {
+                                              "body": {
+                                                "union": {
+                                                  "field": {
+                                                    "name": "list",
+                                                    "term": {
+                                                      "application": {
+                                                        "argument": {"variable": "xs"},
+                                                        "function": {
+                                                          "application": {
+                                                            "argument": {
+                                                              "lambda": {
+                                                                "body": {
+                                                                  "union": {
+                                                                    "field": {
+                                                                      "name": "list",
+                                                                      "term": {
+                                                                        "application": {
+                                                                          "argument": {"variable": "xs"},
+                                                                          "function": {
+                                                                            "application": {
+                                                                              "argument": {"variable": "hydra.encode.topology.vertex"},
+                                                                              "function": {
+                                                                                "typeApplication": {
+                                                                                  "body": {
+                                                                                    "typeApplication": {
+                                                                                      "body": {"variable": "hydra.lib.lists.map"},
+                                                                                      "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                                  "type": {"variable": "hydra.core.Term"}}}}}}}},
+                                                                    "typeName": "hydra.core.Term"}},
+                                                                "domain": {"list": {"literal": {"integer": {"int32": {}}}}},
+                                                                "parameter": "xs"}},
+                                                            "function": {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {"variable": "hydra.lib.lists.map"},
+                                                                    "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
+                                                                "type": {"variable": "hydra.core.Term"}}}}}}}},
+                                                  "typeName": "hydra.core.Term"}},
+                                              "domain": {"list": {"list": {"literal": {"integer": {"int32": {}}}}}},
+                                              "parameter": "xs"}}}}}],
+                                  "typeName": "hydra.core.Field"}}]}}],
+                      "typeName": "hydra.core.Record"}}},
+                "typeName": "hydra.core.Term"}},
+            "domain": {"variable": "hydra.topology.TarjanState"},
+            "parameter": "x"}},
         "type": {
           "type": {
             "function": {
@@ -448,24 +424,23 @@
       "term": {
         "name": "hydra.encode.topology.vertex",
         "term": {
-          "function": {
-            "lambda": {
-              "body": {
-                "union": {
-                  "field": {
-                    "name": "literal",
-                    "term": {
-                      "union": {
-                        "field": {
-                          "name": "integer",
-                          "term": {
-                            "union": {
-                              "field": {"name": "int32", "term": {"variable": "x"}},
-                              "typeName": "hydra.core.IntegerValue"}}},
-                        "typeName": "hydra.core.Literal"}}},
-                  "typeName": "hydra.core.Term"}},
-              "domain": {"literal": {"integer": {"int32": {}}}},
-              "parameter": "x"}}},
+          "lambda": {
+            "body": {
+              "union": {
+                "field": {
+                  "name": "literal",
+                  "term": {
+                    "union": {
+                      "field": {
+                        "name": "integer",
+                        "term": {
+                          "union": {
+                            "field": {"name": "int32", "term": {"variable": "x"}},
+                            "typeName": "hydra.core.IntegerValue"}}},
+                      "typeName": "hydra.core.Literal"}}},
+                "typeName": "hydra.core.Term"}},
+            "domain": {"literal": {"integer": {"int32": {}}}},
+            "parameter": "x"}},
         "type": {
           "type": {
             "function": {

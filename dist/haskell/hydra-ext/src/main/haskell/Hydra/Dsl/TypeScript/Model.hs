@@ -24,17 +24,17 @@ functionType parameters range =
 functionTypeParameters :: Phantoms.TTerm Model.FunctionType -> Phantoms.TTerm [Model.Parameter]
 functionTypeParameters x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.typeScript.model.FunctionType"),
-        Core.projectionField = (Core.Name "parameters")})))),
+        Core.projectionField = (Core.Name "parameters")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 functionTypeRange :: Phantoms.TTerm Model.FunctionType -> Phantoms.TTerm Model.Type
 functionTypeRange x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.typeScript.model.FunctionType"),
-        Core.projectionField = (Core.Name "range")})))),
+        Core.projectionField = (Core.Name "range")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 functionTypeWithParameters :: Phantoms.TTerm Model.FunctionType -> Phantoms.TTerm [Model.Parameter] -> Phantoms.TTerm Model.FunctionType
@@ -48,9 +48,9 @@ functionTypeWithParameters original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "range"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.typeScript.model.FunctionType"),
-              Core.projectionField = (Core.Name "range")})))),
+              Core.projectionField = (Core.Name "range")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 functionTypeWithRange :: Phantoms.TTerm Model.FunctionType -> Phantoms.TTerm Model.Type -> Phantoms.TTerm Model.FunctionType
@@ -61,9 +61,9 @@ functionTypeWithRange original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "parameters"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.typeScript.model.FunctionType"),
-              Core.projectionField = (Core.Name "parameters")})))),
+              Core.projectionField = (Core.Name "parameters")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "range"),
@@ -84,17 +84,17 @@ parameter name type_ =
 parameterName :: Phantoms.TTerm Model.Parameter -> Phantoms.TTerm String
 parameterName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.typeScript.model.Parameter"),
-        Core.projectionField = (Core.Name "name")})))),
+        Core.projectionField = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 parameterType :: Phantoms.TTerm Model.Parameter -> Phantoms.TTerm Model.Type
 parameterType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.typeScript.model.Parameter"),
-        Core.projectionField = (Core.Name "type")})))),
+        Core.projectionField = (Core.Name "type")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 parameterWithName :: Phantoms.TTerm Model.Parameter -> Phantoms.TTerm String -> Phantoms.TTerm Model.Parameter
@@ -108,9 +108,9 @@ parameterWithName original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.typeScript.model.Parameter"),
-              Core.projectionField = (Core.Name "type")})))),
+              Core.projectionField = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 parameterWithType :: Phantoms.TTerm Model.Parameter -> Phantoms.TTerm Model.Type -> Phantoms.TTerm Model.Parameter
@@ -121,9 +121,9 @@ parameterWithType original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.typeScript.model.Parameter"),
-              Core.projectionField = (Core.Name "name")})))),
+              Core.projectionField = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),

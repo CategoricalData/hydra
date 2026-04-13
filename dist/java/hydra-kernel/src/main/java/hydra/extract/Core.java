@@ -130,35 +130,15 @@ public interface Core {
         }
 
         @Override
-        public hydra.util.Either<hydra.errors.Error_, hydra.core.CaseStatement> visit(hydra.core.Term.Function function) {
-          return (function).value.accept(new hydra.core.Function.PartialVisitor<>() {
-            @Override
-            public hydra.util.Either<hydra.errors.Error_, hydra.core.CaseStatement> otherwise(hydra.core.Function instance) {
-              return hydra.util.Either.<hydra.errors.Error_, hydra.core.CaseStatement>left(new hydra.errors.Error_.Extraction(new hydra.errors.ExtractionError.UnexpectedShape(new hydra.errors.UnexpectedShapeError("case statement", hydra.show.Core.term(term)))));
-            }
-
-            @Override
-            public hydra.util.Either<hydra.errors.Error_, hydra.core.CaseStatement> visit(hydra.core.Function.Elimination elimination) {
-              return (elimination).value.accept(new hydra.core.Elimination.PartialVisitor<>() {
-                @Override
-                public hydra.util.Either<hydra.errors.Error_, hydra.core.CaseStatement> otherwise(hydra.core.Elimination instance) {
-                  return hydra.util.Either.<hydra.errors.Error_, hydra.core.CaseStatement>left(new hydra.errors.Error_.Extraction(new hydra.errors.ExtractionError.UnexpectedShape(new hydra.errors.UnexpectedShapeError("case statement", hydra.show.Core.term(term)))));
-                }
-
-                @Override
-                public hydra.util.Either<hydra.errors.Error_, hydra.core.CaseStatement> visit(hydra.core.Elimination.Union cs) {
-                  return hydra.lib.logic.IfElse.lazy(
-                    hydra.lib.equality.Equal.apply(
-                      (cs).value.typeName.value,
-                      (name).value),
-                    () -> hydra.util.Either.<hydra.errors.Error_, hydra.core.CaseStatement>right((cs).value),
-                    () -> hydra.util.Either.<hydra.errors.Error_, hydra.core.CaseStatement>left(new hydra.errors.Error_.Extraction(new hydra.errors.ExtractionError.UnexpectedShape(new hydra.errors.UnexpectedShapeError(hydra.lib.strings.Cat2.apply(
-                      "case statement for type ",
-                      (name).value), hydra.show.Core.term(term))))));
-                }
-              });
-            }
-          });
+        public hydra.util.Either<hydra.errors.Error_, hydra.core.CaseStatement> visit(hydra.core.Term.Cases cs) {
+          return hydra.lib.logic.IfElse.lazy(
+            hydra.lib.equality.Equal.apply(
+              (cs).value.typeName.value,
+              (name).value),
+            () -> hydra.util.Either.<hydra.errors.Error_, hydra.core.CaseStatement>right((cs).value),
+            () -> hydra.util.Either.<hydra.errors.Error_, hydra.core.CaseStatement>left(new hydra.errors.Error_.Extraction(new hydra.errors.ExtractionError.UnexpectedShape(new hydra.errors.UnexpectedShapeError(hydra.lib.strings.Cat2.apply(
+              "case statement for type ",
+              (name).value), hydra.show.Core.term(term))))));
         }
       })));
   }
@@ -639,18 +619,8 @@ public interface Core {
         }
 
         @Override
-        public hydra.util.Either<hydra.errors.Error_, hydra.core.Lambda> visit(hydra.core.Term.Function function) {
-          return (function).value.accept(new hydra.core.Function.PartialVisitor<>() {
-            @Override
-            public hydra.util.Either<hydra.errors.Error_, hydra.core.Lambda> otherwise(hydra.core.Function instance) {
-              return hydra.util.Either.<hydra.errors.Error_, hydra.core.Lambda>left(new hydra.errors.Error_.Extraction(new hydra.errors.ExtractionError.UnexpectedShape(new hydra.errors.UnexpectedShapeError("lambda", hydra.show.Core.term(term)))));
-            }
-
-            @Override
-            public hydra.util.Either<hydra.errors.Error_, hydra.core.Lambda> visit(hydra.core.Function.Lambda l) {
-              return hydra.util.Either.<hydra.errors.Error_, hydra.core.Lambda>right((l).value);
-            }
-          });
+        public hydra.util.Either<hydra.errors.Error_, hydra.core.Lambda> visit(hydra.core.Term.Lambda l) {
+          return hydra.util.Either.<hydra.errors.Error_, hydra.core.Lambda>right((l).value);
         }
       })));
   }

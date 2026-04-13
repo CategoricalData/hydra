@@ -60,7 +60,7 @@ findTablesInTerm :: Term -> S.Set String
 findTablesInTerm = foldOverTerm TraversalOrderPre f S.empty
   where
     f names term = case term of
-      TermFunction (FunctionElimination (EliminationRecord (Projection tname _))) -> S.insert (unName tname) names
+      TermProject (Projection tname _) -> S.insert (unName tname) names
       _ -> names
 
 findTablesInTerms :: [Term] -> S.Set String

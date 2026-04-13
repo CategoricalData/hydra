@@ -95,15 +95,9 @@ def substTypesInTerm(subst: hydra.typing.TypeSubst)(term0: hydra.core.Term): hyd
   def rewrite(recurse: (hydra.core.Term => hydra.core.Term))(term: hydra.core.Term): hydra.core.Term =
     {
     lazy val dflt: hydra.core.Term = recurse(term)
-    def forFunction(f: hydra.core.Function): hydra.core.Term =
-      f match
-      case hydra.core.Function.elimination(v_Function_elimination_e) => dflt
-      case hydra.core.Function.lambda(v_Function_lambda_l) => forLambda(v_Function_lambda_l)
-      case _ => dflt
     def forLambda(l: hydra.core.Lambda): hydra.core.Term =
-      hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda(l.parameter, hydra.lib.maybes.map[hydra.core.Type,
-         hydra.core.Type]((v1: hydra.core.Type) => hydra.substitution.substInType(subst)(v1))(l.domain),
-         hydra.substitution.substTypesInTerm(subst)(l.body))))
+      hydra.core.Term.lambda(hydra.core.Lambda(l.parameter, hydra.lib.maybes.map[hydra.core.Type, hydra.core.Type]((v1: hydra.core.Type) => hydra.substitution.substInType(subst)(v1))(l.domain),
+         hydra.substitution.substTypesInTerm(subst)(l.body)))
     def forLet(l: hydra.core.Let): hydra.core.Term =
       {
       def rewriteBinding(b: hydra.core.Binding): hydra.core.Binding =
@@ -122,7 +116,7 @@ def substTypesInTerm(subst: hydra.typing.TypeSubst)(term0: hydra.core.Term): hyd
       hydra.core.Term.typeLambda(hydra.core.TypeLambda(param, hydra.substitution.substTypesInTerm(subst2)(ta.body)))
     }
     term match
-      case hydra.core.Term.function(v_Term_function_f) => forFunction(v_Term_function_f)
+      case hydra.core.Term.lambda(v_Term_lambda_l) => forLambda(v_Term_lambda_l)
       case hydra.core.Term.let(v_Term_let_l) => forLet(v_Term_let_l)
       case hydra.core.Term.typeApplication(v_Term_typeApplication_ta) => forTypeApplication(v_Term_typeApplication_ta)
       case hydra.core.Term.typeLambda(v_Term_typeLambda_tl) => forTypeLambda(v_Term_typeLambda_tl)
@@ -149,7 +143,7 @@ def substituteInTerm(subst: hydra.typing.TermSubst)(term0: hydra.core.Term): hyd
       {
       lazy val v: hydra.core.Name = (l.parameter)
       lazy val subst2: hydra.typing.TermSubst = hydra.lib.maps.delete[hydra.core.Name, hydra.core.Term](v)(s)
-      hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda(v, (l.domain), hydra.substitution.substituteInTerm(subst2)(l.body))))
+      hydra.core.Term.lambda(hydra.core.Lambda(v, (l.domain), hydra.substitution.substituteInTerm(subst2)(l.body)))
     }
     def withLet(lt: hydra.core.Let): hydra.core.Term =
       {
@@ -165,9 +159,7 @@ def substituteInTerm(subst: hydra.typing.TermSubst)(term0: hydra.core.Term): hyd
          hydra.substitution.substituteInTerm(subst2)(lt.body)))
     }
     term match
-      case hydra.core.Term.function(v_Term_function_fun) => v_Term_function_fun match
-        case hydra.core.Function.lambda(v_Function_lambda_l) => withLambda(v_Function_lambda_l)
-        case _ => recurse(term)
+      case hydra.core.Term.lambda(v_Term_lambda_l) => withLambda(v_Term_lambda_l)
       case hydra.core.Term.let(v_Term_let_l) => withLet(v_Term_let_l)
       case hydra.core.Term.variable(v_Term_variable_name) => hydra.lib.maybes.maybe[hydra.core.Term, hydra.core.Term](recurse(term))((sterm: hydra.core.Term) => sterm)(hydra.lib.maps.lookup[hydra.core.Name,
          hydra.core.Term](v_Term_variable_name)(s))

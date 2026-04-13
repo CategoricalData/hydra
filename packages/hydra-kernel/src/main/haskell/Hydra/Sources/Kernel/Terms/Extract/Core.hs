@@ -247,16 +247,12 @@ cases = define "cases" $
   "term" <<~ Lexical.stripAndDereferenceTerm @@ var "graph" @@ var "term0" $
   Phantoms.cases _Term (var "term")
     (Just (unexpected(Phantoms.string "case statement") (ShowCore.term @@ var "term"))) [
-    _Term_function>>: "function" ~> Phantoms.cases _Function (var "function")
-      (Just (unexpected(Phantoms.string "case statement") (ShowCore.term @@ var "term"))) [
-      _Function_elimination>>: "elimination" ~> Phantoms.cases _Elimination (var "elimination")
-        (Just (unexpected(Phantoms.string "case statement") (ShowCore.term @@ var "term"))) [
-        _Elimination_union>>: "cs" ~>
-          Logic.ifElse (Core.equalName_ (Core.caseStatementTypeName (var "cs")) (var "name"))
-            (right (var "cs"))
-            (unexpected
-              (Phantoms.string "case statement for type " ++ (Core.unName (var "name")))
-              (ShowCore.term @@ var "term"))]]]
+    _Term_cases>>: "cs" ~>
+      Logic.ifElse (Core.equalName_ (Core.caseStatementTypeName (var "cs")) (var "name"))
+        (right (var "cs"))
+        (unexpected
+          (Phantoms.string "case statement for type " ++ (Core.unName (var "name")))
+          (ShowCore.term @@ var "term"))]
 
 -- TODO: nonstandard; move me
 field :: TTermDefinition (Name -> (Term -> Prelude.Either Error x) -> Graph -> [Field] -> Prelude.Either Error x)
@@ -450,9 +446,7 @@ lambda = define "lambda" $
   "term" <<~ Lexical.stripAndDereferenceTerm @@ var "graph" @@ var "term0" $
   Phantoms.cases _Term (var "term")
     (Just (unexpected(Phantoms.string "lambda") (ShowCore.term @@ var "term"))) [
-    _Term_function>>: "function" ~> Phantoms.cases _Function (var "function")
-      (Just (unexpected(Phantoms.string "lambda") (ShowCore.term @@ var "term"))) [
-      _Function_lambda>>: "l" ~> right (var "l")]]
+    _Term_lambda>>: "l" ~> right (var "l")]
 
 -- TODO: nonstandard; move me
 letBinding :: TTermDefinition (String -> Graph -> Term -> Prelude.Either Error Term)

@@ -12,23 +12,7 @@ import hydra.lib.lists
 import hydra.util
 import hydra.variants
 
-def elimination_variant(v1: hydra.core.Elimination) -> hydra.variants.EliminationVariant:
-    r"""Find the elimination inject (constructor) for a given elimination term."""
-
-    match v1:
-        case hydra.core.EliminationRecord():
-            return hydra.variants.EliminationVariant.RECORD
-
-        case hydra.core.EliminationUnion():
-            return hydra.variants.EliminationVariant.UNION
-
-        case hydra.core.EliminationWrap():
-            return hydra.variants.EliminationVariant.WRAP
-
-        case _:
-            raise AssertionError("Unreachable: all variants handled")
-
-# All elimination variants (constructors), in a canonical order.
+# All elimination variants (constructors), in a canonical order (legacy).
 elimination_variants = (hydra.variants.EliminationVariant.RECORD, hydra.variants.EliminationVariant.UNION, hydra.variants.EliminationVariant.WRAP)
 
 def float_type_precision(v1: hydra.core.FloatType) -> hydra.util.Precision:
@@ -66,20 +50,7 @@ def float_value_type(v1: hydra.core.FloatValue) -> hydra.core.FloatType:
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
-def function_variant(v1: hydra.core.Function) -> hydra.variants.FunctionVariant:
-    r"""Find the function inject (constructor) for a given function."""
-
-    match v1:
-        case hydra.core.FunctionElimination():
-            return hydra.variants.FunctionVariant.ELIMINATION
-
-        case hydra.core.FunctionLambda():
-            return hydra.variants.FunctionVariant.LAMBDA
-
-        case _:
-            raise AssertionError("Unreachable: all variants handled")
-
-# All function variants (constructors), in a canonical order.
+# All function variants (constructors), in a canonical order (legacy).
 function_variants = (hydra.variants.FunctionVariant.ELIMINATION, hydra.variants.FunctionVariant.LAMBDA)
 
 def integer_type_is_signed(v1: hydra.core.IntegerType) -> bool:
@@ -255,11 +226,14 @@ def term_variant(v1: hydra.core.Term) -> hydra.variants.TermVariant:
         case hydra.core.TermApplication():
             return hydra.variants.TermVariant.APPLICATION
 
+        case hydra.core.TermCases():
+            return hydra.variants.TermVariant.CASES
+
         case hydra.core.TermEither():
             return hydra.variants.TermVariant.EITHER
 
-        case hydra.core.TermFunction():
-            return hydra.variants.TermVariant.FUNCTION
+        case hydra.core.TermLambda():
+            return hydra.variants.TermVariant.LAMBDA
 
         case hydra.core.TermLet():
             return hydra.variants.TermVariant.LET
@@ -279,6 +253,9 @@ def term_variant(v1: hydra.core.Term) -> hydra.variants.TermVariant:
         case hydra.core.TermPair():
             return hydra.variants.TermVariant.PAIR
 
+        case hydra.core.TermProject():
+            return hydra.variants.TermVariant.PROJECT
+
         case hydra.core.TermRecord():
             return hydra.variants.TermVariant.RECORD
 
@@ -297,6 +274,9 @@ def term_variant(v1: hydra.core.Term) -> hydra.variants.TermVariant:
         case hydra.core.TermUnit():
             return hydra.variants.TermVariant.UNIT
 
+        case hydra.core.TermUnwrap():
+            return hydra.variants.TermVariant.UNWRAP
+
         case hydra.core.TermVariable():
             return hydra.variants.TermVariant.VARIABLE
 
@@ -307,7 +287,7 @@ def term_variant(v1: hydra.core.Term) -> hydra.variants.TermVariant:
             raise AssertionError("Unreachable: all variants handled")
 
 # All term (expression) variants, in a canonical order.
-term_variants = (hydra.variants.TermVariant.ANNOTATED, hydra.variants.TermVariant.APPLICATION, hydra.variants.TermVariant.EITHER, hydra.variants.TermVariant.FUNCTION, hydra.variants.TermVariant.LIST, hydra.variants.TermVariant.LITERAL, hydra.variants.TermVariant.MAP, hydra.variants.TermVariant.MAYBE, hydra.variants.TermVariant.PAIR, hydra.variants.TermVariant.RECORD, hydra.variants.TermVariant.SET, hydra.variants.TermVariant.TYPE_LAMBDA, hydra.variants.TermVariant.TYPE_APPLICATION, hydra.variants.TermVariant.UNION, hydra.variants.TermVariant.UNIT, hydra.variants.TermVariant.VARIABLE, hydra.variants.TermVariant.WRAP)
+term_variants = (hydra.variants.TermVariant.ANNOTATED, hydra.variants.TermVariant.APPLICATION, hydra.variants.TermVariant.CASES, hydra.variants.TermVariant.EITHER, hydra.variants.TermVariant.LAMBDA, hydra.variants.TermVariant.LET, hydra.variants.TermVariant.LIST, hydra.variants.TermVariant.LITERAL, hydra.variants.TermVariant.MAP, hydra.variants.TermVariant.MAYBE, hydra.variants.TermVariant.PAIR, hydra.variants.TermVariant.PROJECT, hydra.variants.TermVariant.RECORD, hydra.variants.TermVariant.SET, hydra.variants.TermVariant.TYPE_LAMBDA, hydra.variants.TermVariant.TYPE_APPLICATION, hydra.variants.TermVariant.UNION, hydra.variants.TermVariant.UNIT, hydra.variants.TermVariant.UNWRAP, hydra.variants.TermVariant.VARIABLE, hydra.variants.TermVariant.WRAP)
 
 def type_variant(v1: hydra.core.Type) -> hydra.variants.TypeVariant:
     r"""Find the type inject (constructor) for a given type."""

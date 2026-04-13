@@ -129,9 +129,9 @@ incorrectUnificationError substitution =
 incorrectUnificationErrorSubstitution :: Phantoms.TTerm Checking.IncorrectUnificationError -> Phantoms.TTerm Typing.TypeSubst
 incorrectUnificationErrorSubstitution x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.checking.IncorrectUnificationError"),
-        Core.projectionField = (Core.Name "substitution")})))),
+        Core.projectionField = (Core.Name "substitution")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 incorrectUnificationErrorWithSubstitution :: Phantoms.TTerm Checking.IncorrectUnificationError -> Phantoms.TTerm Typing.TypeSubst -> Phantoms.TTerm Checking.IncorrectUnificationError
@@ -158,17 +158,17 @@ notAForallTypeError type_ typeArguments =
 notAForallTypeErrorType :: Phantoms.TTerm Checking.NotAForallTypeError -> Phantoms.TTerm Core.Type
 notAForallTypeErrorType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.checking.NotAForallTypeError"),
-        Core.projectionField = (Core.Name "type")})))),
+        Core.projectionField = (Core.Name "type")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 notAForallTypeErrorTypeArguments :: Phantoms.TTerm Checking.NotAForallTypeError -> Phantoms.TTerm [Core.Type]
 notAForallTypeErrorTypeArguments x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.checking.NotAForallTypeError"),
-        Core.projectionField = (Core.Name "typeArguments")})))),
+        Core.projectionField = (Core.Name "typeArguments")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 notAForallTypeErrorWithType :: Phantoms.TTerm Checking.NotAForallTypeError -> Phantoms.TTerm Core.Type -> Phantoms.TTerm Checking.NotAForallTypeError
@@ -182,9 +182,9 @@ notAForallTypeErrorWithType original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "typeArguments"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.checking.NotAForallTypeError"),
-              Core.projectionField = (Core.Name "typeArguments")})))),
+              Core.projectionField = (Core.Name "typeArguments")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 notAForallTypeErrorWithTypeArguments :: Phantoms.TTerm Checking.NotAForallTypeError -> Phantoms.TTerm [Core.Type] -> Phantoms.TTerm Checking.NotAForallTypeError
@@ -195,9 +195,9 @@ notAForallTypeErrorWithTypeArguments original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.checking.NotAForallTypeError"),
-              Core.projectionField = (Core.Name "type")})))),
+              Core.projectionField = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeArguments"),
@@ -215,9 +215,9 @@ notAFunctionTypeError type_ =
 notAFunctionTypeErrorType :: Phantoms.TTerm Checking.NotAFunctionTypeError -> Phantoms.TTerm Core.Type
 notAFunctionTypeErrorType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.checking.NotAFunctionTypeError"),
-        Core.projectionField = (Core.Name "type")})))),
+        Core.projectionField = (Core.Name "type")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 notAFunctionTypeErrorWithType :: Phantoms.TTerm Checking.NotAFunctionTypeError -> Phantoms.TTerm Core.Type -> Phantoms.TTerm Checking.NotAFunctionTypeError
@@ -244,17 +244,17 @@ otherCheckingError path message =
 otherCheckingErrorMessage :: Phantoms.TTerm Checking.OtherCheckingError -> Phantoms.TTerm String
 otherCheckingErrorMessage x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.checking.OtherCheckingError"),
-        Core.projectionField = (Core.Name "message")})))),
+        Core.projectionField = (Core.Name "message")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 otherCheckingErrorPath :: Phantoms.TTerm Checking.OtherCheckingError -> Phantoms.TTerm Paths.SubtermPath
 otherCheckingErrorPath x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.checking.OtherCheckingError"),
-        Core.projectionField = (Core.Name "path")})))),
+        Core.projectionField = (Core.Name "path")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 otherCheckingErrorWithMessage :: Phantoms.TTerm Checking.OtherCheckingError -> Phantoms.TTerm String -> Phantoms.TTerm Checking.OtherCheckingError
@@ -265,9 +265,9 @@ otherCheckingErrorWithMessage original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "path"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.checking.OtherCheckingError"),
-              Core.projectionField = (Core.Name "path")})))),
+              Core.projectionField = (Core.Name "path")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "message"),
@@ -284,9 +284,9 @@ otherCheckingErrorWithPath original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "message"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.checking.OtherCheckingError"),
-              Core.projectionField = (Core.Name "message")})))),
+              Core.projectionField = (Core.Name "message")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 typeArityMismatchError :: Phantoms.TTerm Core.Type -> Phantoms.TTerm Int -> Phantoms.TTerm Int -> Phantoms.TTerm [Core.Type] -> Phantoms.TTerm Checking.TypeArityMismatchError
@@ -310,33 +310,33 @@ typeArityMismatchError type_ expectedArity actualArity typeArguments =
 typeArityMismatchErrorActualArity :: Phantoms.TTerm Checking.TypeArityMismatchError -> Phantoms.TTerm Int
 typeArityMismatchErrorActualArity x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.checking.TypeArityMismatchError"),
-        Core.projectionField = (Core.Name "actualArity")})))),
+        Core.projectionField = (Core.Name "actualArity")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 typeArityMismatchErrorExpectedArity :: Phantoms.TTerm Checking.TypeArityMismatchError -> Phantoms.TTerm Int
 typeArityMismatchErrorExpectedArity x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.checking.TypeArityMismatchError"),
-        Core.projectionField = (Core.Name "expectedArity")})))),
+        Core.projectionField = (Core.Name "expectedArity")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 typeArityMismatchErrorType :: Phantoms.TTerm Checking.TypeArityMismatchError -> Phantoms.TTerm Core.Type
 typeArityMismatchErrorType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.checking.TypeArityMismatchError"),
-        Core.projectionField = (Core.Name "type")})))),
+        Core.projectionField = (Core.Name "type")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 typeArityMismatchErrorTypeArguments :: Phantoms.TTerm Checking.TypeArityMismatchError -> Phantoms.TTerm [Core.Type]
 typeArityMismatchErrorTypeArguments x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.checking.TypeArityMismatchError"),
-        Core.projectionField = (Core.Name "typeArguments")})))),
+        Core.projectionField = (Core.Name "typeArguments")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 typeArityMismatchErrorWithActualArity :: Phantoms.TTerm Checking.TypeArityMismatchError -> Phantoms.TTerm Int -> Phantoms.TTerm Checking.TypeArityMismatchError
@@ -347,16 +347,16 @@ typeArityMismatchErrorWithActualArity original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.checking.TypeArityMismatchError"),
-              Core.projectionField = (Core.Name "type")})))),
+              Core.projectionField = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "expectedArity"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.checking.TypeArityMismatchError"),
-              Core.projectionField = (Core.Name "expectedArity")})))),
+              Core.projectionField = (Core.Name "expectedArity")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "actualArity"),
@@ -364,9 +364,9 @@ typeArityMismatchErrorWithActualArity original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "typeArguments"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.checking.TypeArityMismatchError"),
-              Core.projectionField = (Core.Name "typeArguments")})))),
+              Core.projectionField = (Core.Name "typeArguments")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 typeArityMismatchErrorWithExpectedArity :: Phantoms.TTerm Checking.TypeArityMismatchError -> Phantoms.TTerm Int -> Phantoms.TTerm Checking.TypeArityMismatchError
@@ -377,9 +377,9 @@ typeArityMismatchErrorWithExpectedArity original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.checking.TypeArityMismatchError"),
-              Core.projectionField = (Core.Name "type")})))),
+              Core.projectionField = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "expectedArity"),
@@ -387,16 +387,16 @@ typeArityMismatchErrorWithExpectedArity original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "actualArity"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.checking.TypeArityMismatchError"),
-              Core.projectionField = (Core.Name "actualArity")})))),
+              Core.projectionField = (Core.Name "actualArity")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeArguments"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.checking.TypeArityMismatchError"),
-              Core.projectionField = (Core.Name "typeArguments")})))),
+              Core.projectionField = (Core.Name "typeArguments")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 typeArityMismatchErrorWithType :: Phantoms.TTerm Checking.TypeArityMismatchError -> Phantoms.TTerm Core.Type -> Phantoms.TTerm Checking.TypeArityMismatchError
@@ -410,23 +410,23 @@ typeArityMismatchErrorWithType original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "expectedArity"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.checking.TypeArityMismatchError"),
-              Core.projectionField = (Core.Name "expectedArity")})))),
+              Core.projectionField = (Core.Name "expectedArity")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "actualArity"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.checking.TypeArityMismatchError"),
-              Core.projectionField = (Core.Name "actualArity")})))),
+              Core.projectionField = (Core.Name "actualArity")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeArguments"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.checking.TypeArityMismatchError"),
-              Core.projectionField = (Core.Name "typeArguments")})))),
+              Core.projectionField = (Core.Name "typeArguments")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 typeArityMismatchErrorWithTypeArguments :: Phantoms.TTerm Checking.TypeArityMismatchError -> Phantoms.TTerm [Core.Type] -> Phantoms.TTerm Checking.TypeArityMismatchError
@@ -437,23 +437,23 @@ typeArityMismatchErrorWithTypeArguments original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.checking.TypeArityMismatchError"),
-              Core.projectionField = (Core.Name "type")})))),
+              Core.projectionField = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "expectedArity"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.checking.TypeArityMismatchError"),
-              Core.projectionField = (Core.Name "expectedArity")})))),
+              Core.projectionField = (Core.Name "expectedArity")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "actualArity"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.checking.TypeArityMismatchError"),
-              Core.projectionField = (Core.Name "actualArity")})))),
+              Core.projectionField = (Core.Name "actualArity")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeArguments"),
@@ -474,17 +474,17 @@ typeMismatchError expectedType actualType =
 typeMismatchErrorActualType :: Phantoms.TTerm Checking.TypeMismatchError -> Phantoms.TTerm Core.Type
 typeMismatchErrorActualType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.checking.TypeMismatchError"),
-        Core.projectionField = (Core.Name "actualType")})))),
+        Core.projectionField = (Core.Name "actualType")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 typeMismatchErrorExpectedType :: Phantoms.TTerm Checking.TypeMismatchError -> Phantoms.TTerm Core.Type
 typeMismatchErrorExpectedType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.checking.TypeMismatchError"),
-        Core.projectionField = (Core.Name "expectedType")})))),
+        Core.projectionField = (Core.Name "expectedType")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 typeMismatchErrorWithActualType :: Phantoms.TTerm Checking.TypeMismatchError -> Phantoms.TTerm Core.Type -> Phantoms.TTerm Checking.TypeMismatchError
@@ -495,9 +495,9 @@ typeMismatchErrorWithActualType original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "expectedType"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.checking.TypeMismatchError"),
-              Core.projectionField = (Core.Name "expectedType")})))),
+              Core.projectionField = (Core.Name "expectedType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "actualType"),
@@ -514,9 +514,9 @@ typeMismatchErrorWithExpectedType original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "actualType"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.checking.TypeMismatchError"),
-              Core.projectionField = (Core.Name "actualType")})))),
+              Core.projectionField = (Core.Name "actualType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 unboundTypeVariablesError :: Phantoms.TTerm (S.Set Core.Name) -> Phantoms.TTerm Core.Type -> Phantoms.TTerm Checking.UnboundTypeVariablesError
@@ -534,17 +534,17 @@ unboundTypeVariablesError variables type_ =
 unboundTypeVariablesErrorType :: Phantoms.TTerm Checking.UnboundTypeVariablesError -> Phantoms.TTerm Core.Type
 unboundTypeVariablesErrorType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.checking.UnboundTypeVariablesError"),
-        Core.projectionField = (Core.Name "type")})))),
+        Core.projectionField = (Core.Name "type")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unboundTypeVariablesErrorVariables :: Phantoms.TTerm Checking.UnboundTypeVariablesError -> Phantoms.TTerm (S.Set Core.Name)
 unboundTypeVariablesErrorVariables x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.checking.UnboundTypeVariablesError"),
-        Core.projectionField = (Core.Name "variables")})))),
+        Core.projectionField = (Core.Name "variables")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unboundTypeVariablesErrorWithType :: Phantoms.TTerm Checking.UnboundTypeVariablesError -> Phantoms.TTerm Core.Type -> Phantoms.TTerm Checking.UnboundTypeVariablesError
@@ -555,9 +555,9 @@ unboundTypeVariablesErrorWithType original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "variables"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.checking.UnboundTypeVariablesError"),
-              Core.projectionField = (Core.Name "variables")})))),
+              Core.projectionField = (Core.Name "variables")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
@@ -574,9 +574,9 @@ unboundTypeVariablesErrorWithVariables original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.checking.UnboundTypeVariablesError"),
-              Core.projectionField = (Core.Name "type")})))),
+              Core.projectionField = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 undefinedTermVariableCheckingError :: Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Checking.UndefinedTermVariableCheckingError
@@ -594,17 +594,17 @@ undefinedTermVariableCheckingError path name =
 undefinedTermVariableCheckingErrorName :: Phantoms.TTerm Checking.UndefinedTermVariableCheckingError -> Phantoms.TTerm Core.Name
 undefinedTermVariableCheckingErrorName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.checking.UndefinedTermVariableCheckingError"),
-        Core.projectionField = (Core.Name "name")})))),
+        Core.projectionField = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 undefinedTermVariableCheckingErrorPath :: Phantoms.TTerm Checking.UndefinedTermVariableCheckingError -> Phantoms.TTerm Paths.SubtermPath
 undefinedTermVariableCheckingErrorPath x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.checking.UndefinedTermVariableCheckingError"),
-        Core.projectionField = (Core.Name "path")})))),
+        Core.projectionField = (Core.Name "path")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 undefinedTermVariableCheckingErrorWithName :: Phantoms.TTerm Checking.UndefinedTermVariableCheckingError -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Checking.UndefinedTermVariableCheckingError
@@ -615,9 +615,9 @@ undefinedTermVariableCheckingErrorWithName original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "path"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.checking.UndefinedTermVariableCheckingError"),
-              Core.projectionField = (Core.Name "path")})))),
+              Core.projectionField = (Core.Name "path")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
@@ -634,9 +634,9 @@ undefinedTermVariableCheckingErrorWithPath original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.checking.UndefinedTermVariableCheckingError"),
-              Core.projectionField = (Core.Name "name")})))),
+              Core.projectionField = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 unequalTypesError :: Phantoms.TTerm [Core.Type] -> Phantoms.TTerm String -> Phantoms.TTerm Checking.UnequalTypesError
@@ -654,17 +654,17 @@ unequalTypesError types description =
 unequalTypesErrorDescription :: Phantoms.TTerm Checking.UnequalTypesError -> Phantoms.TTerm String
 unequalTypesErrorDescription x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.checking.UnequalTypesError"),
-        Core.projectionField = (Core.Name "description")})))),
+        Core.projectionField = (Core.Name "description")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unequalTypesErrorTypes :: Phantoms.TTerm Checking.UnequalTypesError -> Phantoms.TTerm [Core.Type]
 unequalTypesErrorTypes x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.checking.UnequalTypesError"),
-        Core.projectionField = (Core.Name "types")})))),
+        Core.projectionField = (Core.Name "types")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unequalTypesErrorWithDescription :: Phantoms.TTerm Checking.UnequalTypesError -> Phantoms.TTerm String -> Phantoms.TTerm Checking.UnequalTypesError
@@ -675,9 +675,9 @@ unequalTypesErrorWithDescription original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "types"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.checking.UnequalTypesError"),
-              Core.projectionField = (Core.Name "types")})))),
+              Core.projectionField = (Core.Name "types")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "description"),
@@ -694,9 +694,9 @@ unequalTypesErrorWithTypes original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "description"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.checking.UnequalTypesError"),
-              Core.projectionField = (Core.Name "description")})))),
+              Core.projectionField = (Core.Name "description")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 unsupportedTermVariantError :: Phantoms.TTerm Variants.TermVariant -> Phantoms.TTerm Checking.UnsupportedTermVariantError
@@ -711,9 +711,9 @@ unsupportedTermVariantError termVariant =
 unsupportedTermVariantErrorTermVariant :: Phantoms.TTerm Checking.UnsupportedTermVariantError -> Phantoms.TTerm Variants.TermVariant
 unsupportedTermVariantErrorTermVariant x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.checking.UnsupportedTermVariantError"),
-        Core.projectionField = (Core.Name "termVariant")})))),
+        Core.projectionField = (Core.Name "termVariant")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unsupportedTermVariantErrorWithTermVariant :: Phantoms.TTerm Checking.UnsupportedTermVariantError -> Phantoms.TTerm Variants.TermVariant -> Phantoms.TTerm Checking.UnsupportedTermVariantError
@@ -743,9 +743,9 @@ untypedLetBindingError binding =
 untypedLetBindingErrorBinding :: Phantoms.TTerm Checking.UntypedLetBindingError -> Phantoms.TTerm Core.Binding
 untypedLetBindingErrorBinding x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.checking.UntypedLetBindingError"),
-        Core.projectionField = (Core.Name "binding")})))),
+        Core.projectionField = (Core.Name "binding")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 untypedLetBindingErrorWithBinding :: Phantoms.TTerm Checking.UntypedLetBindingError -> Phantoms.TTerm Core.Binding -> Phantoms.TTerm Checking.UntypedLetBindingError
@@ -772,17 +772,17 @@ untypedTermVariableCheckingError path name =
 untypedTermVariableCheckingErrorName :: Phantoms.TTerm Checking.UntypedTermVariableCheckingError -> Phantoms.TTerm Core.Name
 untypedTermVariableCheckingErrorName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.checking.UntypedTermVariableCheckingError"),
-        Core.projectionField = (Core.Name "name")})))),
+        Core.projectionField = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 untypedTermVariableCheckingErrorPath :: Phantoms.TTerm Checking.UntypedTermVariableCheckingError -> Phantoms.TTerm Paths.SubtermPath
 untypedTermVariableCheckingErrorPath x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.checking.UntypedTermVariableCheckingError"),
-        Core.projectionField = (Core.Name "path")})))),
+        Core.projectionField = (Core.Name "path")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 untypedTermVariableCheckingErrorWithName :: Phantoms.TTerm Checking.UntypedTermVariableCheckingError -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Checking.UntypedTermVariableCheckingError
@@ -793,9 +793,9 @@ untypedTermVariableCheckingErrorWithName original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "path"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.checking.UntypedTermVariableCheckingError"),
-              Core.projectionField = (Core.Name "path")})))),
+              Core.projectionField = (Core.Name "path")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
@@ -812,7 +812,7 @@ untypedTermVariableCheckingErrorWithPath original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.checking.UntypedTermVariableCheckingError"),
-              Core.projectionField = (Core.Name "name")})))),
+              Core.projectionField = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))

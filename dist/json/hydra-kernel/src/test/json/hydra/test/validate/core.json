@@ -103,14 +103,13 @@
                                               "function": {
                                                 "application": {
                                                   "argument": {
-                                                    "function": {
-                                                      "lambda": {
-                                                        "body": {
-                                                          "application": {
-                                                            "argument": {"variable": "e"},
-                                                            "function": {"variable": "hydra.show.error.core.invalidTermError"}}},
-                                                        "domain": {"variable": "hydra.error.core.InvalidTermError"},
-                                                        "parameter": "e"}}},
+                                                    "lambda": {
+                                                      "body": {
+                                                        "application": {
+                                                          "argument": {"variable": "e"},
+                                                          "function": {"variable": "hydra.show.error.core.invalidTermError"}}},
+                                                      "domain": {"variable": "hydra.error.core.InvalidTermError"},
+                                                      "parameter": "e"}},
                                                   "function": {
                                                     "application": {
                                                       "argument": {"literal": {"string": "valid"}},
@@ -132,14 +131,13 @@
                                               "function": {
                                                 "application": {
                                                   "argument": {
-                                                    "function": {
-                                                      "lambda": {
-                                                        "body": {
-                                                          "application": {
-                                                            "argument": {"variable": "e"},
-                                                            "function": {"variable": "hydra.show.error.core.invalidTermError"}}},
-                                                        "domain": {"variable": "hydra.error.core.InvalidTermError"},
-                                                        "parameter": "e"}}},
+                                                    "lambda": {
+                                                      "body": {
+                                                        "application": {
+                                                          "argument": {"variable": "e"},
+                                                          "function": {"variable": "hydra.show.error.core.invalidTermError"}}},
+                                                      "domain": {"variable": "hydra.error.core.InvalidTermError"},
+                                                      "parameter": "e"}},
                                                   "function": {
                                                     "application": {
                                                       "argument": {"literal": {"string": "valid"}},
@@ -242,14 +240,13 @@
                                               "function": {
                                                 "application": {
                                                   "argument": {
-                                                    "function": {
-                                                      "lambda": {
-                                                        "body": {
-                                                          "application": {
-                                                            "argument": {"variable": "e"},
-                                                            "function": {"variable": "hydra.show.error.core.invalidTermError"}}},
-                                                        "domain": {"variable": "hydra.error.core.InvalidTermError"},
-                                                        "parameter": "e"}}},
+                                                    "lambda": {
+                                                      "body": {
+                                                        "application": {
+                                                          "argument": {"variable": "e"},
+                                                          "function": {"variable": "hydra.show.error.core.invalidTermError"}}},
+                                                      "domain": {"variable": "hydra.error.core.InvalidTermError"},
+                                                      "parameter": "e"}},
                                                   "function": {
                                                     "application": {
                                                       "argument": {"literal": {"string": "valid"}},
@@ -271,14 +268,13 @@
                                               "function": {
                                                 "application": {
                                                   "argument": {
-                                                    "function": {
-                                                      "lambda": {
-                                                        "body": {
-                                                          "application": {
-                                                            "argument": {"variable": "e"},
-                                                            "function": {"variable": "hydra.show.error.core.invalidTermError"}}},
-                                                        "domain": {"variable": "hydra.error.core.InvalidTermError"},
-                                                        "parameter": "e"}}},
+                                                    "lambda": {
+                                                      "body": {
+                                                        "application": {
+                                                          "argument": {"variable": "e"},
+                                                          "function": {"variable": "hydra.show.error.core.invalidTermError"}}},
+                                                      "domain": {"variable": "hydra.error.core.InvalidTermError"},
+                                                      "parameter": "e"}},
                                                   "function": {
                                                     "application": {
                                                       "argument": {"literal": {"string": "valid"}},
@@ -411,14 +407,13 @@
                                               "function": {
                                                 "application": {
                                                   "argument": {
-                                                    "function": {
-                                                      "lambda": {
-                                                        "body": {
-                                                          "application": {
-                                                            "argument": {"variable": "e"},
-                                                            "function": {"variable": "hydra.show.error.core.invalidTermError"}}},
-                                                        "domain": {"variable": "hydra.error.core.InvalidTermError"},
-                                                        "parameter": "e"}}},
+                                                    "lambda": {
+                                                      "body": {
+                                                        "application": {
+                                                          "argument": {"variable": "e"},
+                                                          "function": {"variable": "hydra.show.error.core.invalidTermError"}}},
+                                                      "domain": {"variable": "hydra.error.core.InvalidTermError"},
+                                                      "parameter": "e"}},
                                                   "function": {
                                                     "application": {
                                                       "argument": {"literal": {"string": "valid"}},
@@ -440,14 +435,13 @@
                                               "function": {
                                                 "application": {
                                                   "argument": {
-                                                    "function": {
-                                                      "lambda": {
-                                                        "body": {
-                                                          "application": {
-                                                            "argument": {"variable": "e"},
-                                                            "function": {"variable": "hydra.show.error.core.invalidTermError"}}},
-                                                        "domain": {"variable": "hydra.error.core.InvalidTermError"},
-                                                        "parameter": "e"}}},
+                                                    "lambda": {
+                                                      "body": {
+                                                        "application": {
+                                                          "argument": {"variable": "e"},
+                                                          "function": {"variable": "hydra.show.error.core.invalidTermError"}}},
+                                                      "domain": {"variable": "hydra.error.core.InvalidTermError"},
+                                                      "parameter": "e"}},
                                                   "function": {
                                                     "application": {
                                                       "argument": {"literal": {"string": "valid"}},
@@ -582,14 +576,13 @@
                                               "function": {
                                                 "application": {
                                                   "argument": {
-                                                    "function": {
-                                                      "lambda": {
-                                                        "body": {
-                                                          "application": {
-                                                            "argument": {"variable": "e"},
-                                                            "function": {"variable": "hydra.show.error.core.invalidTermError"}}},
-                                                        "domain": {"variable": "hydra.error.core.InvalidTermError"},
-                                                        "parameter": "e"}}},
+                                                    "lambda": {
+                                                      "body": {
+                                                        "application": {
+                                                          "argument": {"variable": "e"},
+                                                          "function": {"variable": "hydra.show.error.core.invalidTermError"}}},
+                                                      "domain": {"variable": "hydra.error.core.InvalidTermError"},
+                                                      "parameter": "e"}},
                                                   "function": {
                                                     "application": {
                                                       "argument": {"literal": {"string": "valid"}},
@@ -630,14 +623,13 @@
                                               "function": {
                                                 "application": {
                                                   "argument": {
-                                                    "function": {
-                                                      "lambda": {
-                                                        "body": {
-                                                          "application": {
-                                                            "argument": {"variable": "e"},
-                                                            "function": {"variable": "hydra.show.error.core.invalidTermError"}}},
-                                                        "domain": {"variable": "hydra.error.core.InvalidTermError"},
-                                                        "parameter": "e"}}},
+                                                    "lambda": {
+                                                      "body": {
+                                                        "application": {
+                                                          "argument": {"variable": "e"},
+                                                          "function": {"variable": "hydra.show.error.core.invalidTermError"}}},
+                                                      "domain": {"variable": "hydra.error.core.InvalidTermError"},
+                                                      "parameter": "e"}},
                                                   "function": {
                                                     "application": {
                                                       "argument": {"literal": {"string": "valid"}},
@@ -683,108 +675,103 @@
                                                   "argument": {
                                                     "union": {
                                                       "field": {
-                                                        "name": "function",
+                                                        "name": "lambda",
                                                         "term": {
-                                                          "union": {
-                                                            "field": {
-                                                              "name": "lambda",
-                                                              "term": {
-                                                                "record": {
-                                                                  "fields": [
-                                                                    {
-                                                                      "name": "parameter",
+                                                          "record": {
+                                                            "fields": [
+                                                              {
+                                                                "name": "parameter",
+                                                                "term": {
+                                                                  "wrap": {"body": {"literal": {"string": "f"}}, "typeName": "hydra.core.Name"}}},
+                                                              {
+                                                                "name": "domain",
+                                                                "term": {
+                                                                  "typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.Type"}}}},
+                                                              {
+                                                                "name": "body",
+                                                                "term": {
+                                                                  "union": {
+                                                                    "field": {
+                                                                      "name": "let",
                                                                       "term": {
-                                                                        "wrap": {"body": {"literal": {"string": "f"}}, "typeName": "hydra.core.Name"}}},
-                                                                    {
-                                                                      "name": "domain",
-                                                                      "term": {
-                                                                        "typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.Type"}}}},
-                                                                    {
-                                                                      "name": "body",
-                                                                      "term": {
-                                                                        "union": {
-                                                                          "field": {
-                                                                            "name": "let",
-                                                                            "term": {
-                                                                              "record": {
-                                                                                "fields": [
+                                                                        "record": {
+                                                                          "fields": [
+                                                                            {
+                                                                              "name": "bindings",
+                                                                              "term": {
+                                                                                "list": [
                                                                                   {
-                                                                                    "name": "bindings",
-                                                                                    "term": {
-                                                                                      "list": [
+                                                                                    "record": {
+                                                                                      "fields": [
                                                                                         {
-                                                                                          "record": {
-                                                                                            "fields": [
-                                                                                              {
-                                                                                                "name": "name",
-                                                                                                "term": {
-                                                                                                  "wrap": {"body": {"literal": {"string": "a"}}, "typeName": "hydra.core.Name"}}},
-                                                                                              {
-                                                                                                "name": "term",
-                                                                                                "term": {
-                                                                                                  "union": {
-                                                                                                    "field": {
-                                                                                                      "name": "literal",
-                                                                                                      "term": {
-                                                                                                        "union": {
-                                                                                                          "field": {
-                                                                                                            "name": "integer",
-                                                                                                            "term": {
-                                                                                                              "union": {
-                                                                                                                "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 1}}}},
-                                                                                                                "typeName": "hydra.core.IntegerValue"}}},
-                                                                                                          "typeName": "hydra.core.Literal"}}},
-                                                                                                    "typeName": "hydra.core.Term"}}},
-                                                                                              {
-                                                                                                "name": "type",
-                                                                                                "term": {
-                                                                                                  "typeApplication": {
-                                                                                                    "body": {"maybe": null},
-                                                                                                    "type": {"variable": "hydra.core.TypeScheme"}}}}],
-                                                                                            "typeName": "hydra.core.Binding"}},
-                                                                                        {
-                                                                                          "record": {
-                                                                                            "fields": [
-                                                                                              {
-                                                                                                "name": "name",
-                                                                                                "term": {
-                                                                                                  "wrap": {"body": {"literal": {"string": "a"}}, "typeName": "hydra.core.Name"}}},
-                                                                                              {
-                                                                                                "name": "term",
-                                                                                                "term": {
-                                                                                                  "union": {
-                                                                                                    "field": {
-                                                                                                      "name": "literal",
-                                                                                                      "term": {
-                                                                                                        "union": {
-                                                                                                          "field": {
-                                                                                                            "name": "integer",
-                                                                                                            "term": {
-                                                                                                              "union": {
-                                                                                                                "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 2}}}},
-                                                                                                                "typeName": "hydra.core.IntegerValue"}}},
-                                                                                                          "typeName": "hydra.core.Literal"}}},
-                                                                                                    "typeName": "hydra.core.Term"}}},
-                                                                                              {
-                                                                                                "name": "type",
-                                                                                                "term": {
-                                                                                                  "typeApplication": {
-                                                                                                    "body": {"maybe": null},
-                                                                                                    "type": {"variable": "hydra.core.TypeScheme"}}}}],
-                                                                                            "typeName": "hydra.core.Binding"}}]}},
-                                                                                  {
-                                                                                    "name": "body",
-                                                                                    "term": {
-                                                                                      "union": {
-                                                                                        "field": {
-                                                                                          "name": "variable",
+                                                                                          "name": "name",
                                                                                           "term": {
                                                                                             "wrap": {"body": {"literal": {"string": "a"}}, "typeName": "hydra.core.Name"}}},
-                                                                                        "typeName": "hydra.core.Term"}}}],
-                                                                                "typeName": "hydra.core.Let"}}},
-                                                                          "typeName": "hydra.core.Term"}}}],
-                                                                  "typeName": "hydra.core.Lambda"}}},
-                                                            "typeName": "hydra.core.Function"}}},
+                                                                                        {
+                                                                                          "name": "term",
+                                                                                          "term": {
+                                                                                            "union": {
+                                                                                              "field": {
+                                                                                                "name": "literal",
+                                                                                                "term": {
+                                                                                                  "union": {
+                                                                                                    "field": {
+                                                                                                      "name": "integer",
+                                                                                                      "term": {
+                                                                                                        "union": {
+                                                                                                          "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 1}}}},
+                                                                                                          "typeName": "hydra.core.IntegerValue"}}},
+                                                                                                    "typeName": "hydra.core.Literal"}}},
+                                                                                              "typeName": "hydra.core.Term"}}},
+                                                                                        {
+                                                                                          "name": "type",
+                                                                                          "term": {
+                                                                                            "typeApplication": {
+                                                                                              "body": {"maybe": null},
+                                                                                              "type": {"variable": "hydra.core.TypeScheme"}}}}],
+                                                                                      "typeName": "hydra.core.Binding"}},
+                                                                                  {
+                                                                                    "record": {
+                                                                                      "fields": [
+                                                                                        {
+                                                                                          "name": "name",
+                                                                                          "term": {
+                                                                                            "wrap": {"body": {"literal": {"string": "a"}}, "typeName": "hydra.core.Name"}}},
+                                                                                        {
+                                                                                          "name": "term",
+                                                                                          "term": {
+                                                                                            "union": {
+                                                                                              "field": {
+                                                                                                "name": "literal",
+                                                                                                "term": {
+                                                                                                  "union": {
+                                                                                                    "field": {
+                                                                                                      "name": "integer",
+                                                                                                      "term": {
+                                                                                                        "union": {
+                                                                                                          "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 2}}}},
+                                                                                                          "typeName": "hydra.core.IntegerValue"}}},
+                                                                                                    "typeName": "hydra.core.Literal"}}},
+                                                                                              "typeName": "hydra.core.Term"}}},
+                                                                                        {
+                                                                                          "name": "type",
+                                                                                          "term": {
+                                                                                            "typeApplication": {
+                                                                                              "body": {"maybe": null},
+                                                                                              "type": {"variable": "hydra.core.TypeScheme"}}}}],
+                                                                                      "typeName": "hydra.core.Binding"}}]}},
+                                                                            {
+                                                                              "name": "body",
+                                                                              "term": {
+                                                                                "union": {
+                                                                                  "field": {
+                                                                                    "name": "variable",
+                                                                                    "term": {
+                                                                                      "wrap": {"body": {"literal": {"string": "a"}}, "typeName": "hydra.core.Name"}}},
+                                                                                  "typeName": "hydra.core.Term"}}}],
+                                                                          "typeName": "hydra.core.Let"}}},
+                                                                    "typeName": "hydra.core.Term"}}}],
+                                                            "typeName": "hydra.core.Lambda"}}},
                                                       "typeName": "hydra.core.Term"}},
                                                   "function": {
                                                     "application": {
@@ -796,14 +783,13 @@
                                               "function": {
                                                 "application": {
                                                   "argument": {
-                                                    "function": {
-                                                      "lambda": {
-                                                        "body": {
-                                                          "application": {
-                                                            "argument": {"variable": "e"},
-                                                            "function": {"variable": "hydra.show.error.core.invalidTermError"}}},
-                                                        "domain": {"variable": "hydra.error.core.InvalidTermError"},
-                                                        "parameter": "e"}}},
+                                                    "lambda": {
+                                                      "body": {
+                                                        "application": {
+                                                          "argument": {"variable": "e"},
+                                                          "function": {"variable": "hydra.show.error.core.invalidTermError"}}},
+                                                      "domain": {"variable": "hydra.error.core.InvalidTermError"},
+                                                      "parameter": "e"}},
                                                   "function": {
                                                     "application": {
                                                       "argument": {"literal": {"string": "valid"}},
@@ -846,14 +832,13 @@
                                               "function": {
                                                 "application": {
                                                   "argument": {
-                                                    "function": {
-                                                      "lambda": {
-                                                        "body": {
-                                                          "application": {
-                                                            "argument": {"variable": "e"},
-                                                            "function": {"variable": "hydra.show.error.core.invalidTermError"}}},
-                                                        "domain": {"variable": "hydra.error.core.InvalidTermError"},
-                                                        "parameter": "e"}}},
+                                                    "lambda": {
+                                                      "body": {
+                                                        "application": {
+                                                          "argument": {"variable": "e"},
+                                                          "function": {"variable": "hydra.show.error.core.invalidTermError"}}},
+                                                      "domain": {"variable": "hydra.error.core.InvalidTermError"},
+                                                      "parameter": "e"}},
                                                   "function": {
                                                     "application": {
                                                       "argument": {"literal": {"string": "valid"}},
@@ -1033,14 +1018,13 @@
                                               "function": {
                                                 "application": {
                                                   "argument": {
-                                                    "function": {
-                                                      "lambda": {
-                                                        "body": {
-                                                          "application": {
-                                                            "argument": {"variable": "e"},
-                                                            "function": {"variable": "hydra.show.error.core.invalidTermError"}}},
-                                                        "domain": {"variable": "hydra.error.core.InvalidTermError"},
-                                                        "parameter": "e"}}},
+                                                    "lambda": {
+                                                      "body": {
+                                                        "application": {
+                                                          "argument": {"variable": "e"},
+                                                          "function": {"variable": "hydra.show.error.core.invalidTermError"}}},
+                                                      "domain": {"variable": "hydra.error.core.InvalidTermError"},
+                                                      "parameter": "e"}},
                                                   "function": {
                                                     "application": {
                                                       "argument": {"literal": {"string": "valid"}},
@@ -1083,14 +1067,13 @@
                                               "function": {
                                                 "application": {
                                                   "argument": {
-                                                    "function": {
-                                                      "lambda": {
-                                                        "body": {
-                                                          "application": {
-                                                            "argument": {"variable": "e"},
-                                                            "function": {"variable": "hydra.show.error.core.invalidTermError"}}},
-                                                        "domain": {"variable": "hydra.error.core.InvalidTermError"},
-                                                        "parameter": "e"}}},
+                                                    "lambda": {
+                                                      "body": {
+                                                        "application": {
+                                                          "argument": {"variable": "e"},
+                                                          "function": {"variable": "hydra.show.error.core.invalidTermError"}}},
+                                                      "domain": {"variable": "hydra.error.core.InvalidTermError"},
+                                                      "parameter": "e"}},
                                                   "function": {
                                                     "application": {
                                                       "argument": {"literal": {"string": "valid"}},
@@ -1263,14 +1246,13 @@
                                               "function": {
                                                 "application": {
                                                   "argument": {
-                                                    "function": {
-                                                      "lambda": {
-                                                        "body": {
-                                                          "application": {
-                                                            "argument": {"variable": "e"},
-                                                            "function": {"variable": "hydra.show.error.core.invalidTermError"}}},
-                                                        "domain": {"variable": "hydra.error.core.InvalidTermError"},
-                                                        "parameter": "e"}}},
+                                                    "lambda": {
+                                                      "body": {
+                                                        "application": {
+                                                          "argument": {"variable": "e"},
+                                                          "function": {"variable": "hydra.show.error.core.invalidTermError"}}},
+                                                      "domain": {"variable": "hydra.error.core.InvalidTermError"},
+                                                      "parameter": "e"}},
                                                   "function": {
                                                     "application": {
                                                       "argument": {"literal": {"string": "valid"}},
@@ -1316,14 +1298,13 @@
                                               "function": {
                                                 "application": {
                                                   "argument": {
-                                                    "function": {
-                                                      "lambda": {
-                                                        "body": {
-                                                          "application": {
-                                                            "argument": {"variable": "e"},
-                                                            "function": {"variable": "hydra.show.error.core.invalidTermError"}}},
-                                                        "domain": {"variable": "hydra.error.core.InvalidTermError"},
-                                                        "parameter": "e"}}},
+                                                    "lambda": {
+                                                      "body": {
+                                                        "application": {
+                                                          "argument": {"variable": "e"},
+                                                          "function": {"variable": "hydra.show.error.core.invalidTermError"}}},
+                                                      "domain": {"variable": "hydra.error.core.InvalidTermError"},
+                                                      "parameter": "e"}},
                                                   "function": {
                                                     "application": {
                                                       "argument": {"literal": {"string": "valid"}},
@@ -1473,14 +1454,13 @@
                                               "function": {
                                                 "application": {
                                                   "argument": {
-                                                    "function": {
-                                                      "lambda": {
-                                                        "body": {
-                                                          "application": {
-                                                            "argument": {"variable": "e"},
-                                                            "function": {"variable": "hydra.show.error.core.invalidTermError"}}},
-                                                        "domain": {"variable": "hydra.error.core.InvalidTermError"},
-                                                        "parameter": "e"}}},
+                                                    "lambda": {
+                                                      "body": {
+                                                        "application": {
+                                                          "argument": {"variable": "e"},
+                                                          "function": {"variable": "hydra.show.error.core.invalidTermError"}}},
+                                                      "domain": {"variable": "hydra.error.core.InvalidTermError"},
+                                                      "parameter": "e"}},
                                                   "function": {
                                                     "application": {
                                                       "argument": {"literal": {"string": "valid"}},
@@ -1502,14 +1482,13 @@
                                               "function": {
                                                 "application": {
                                                   "argument": {
-                                                    "function": {
-                                                      "lambda": {
-                                                        "body": {
-                                                          "application": {
-                                                            "argument": {"variable": "e"},
-                                                            "function": {"variable": "hydra.show.error.core.invalidTermError"}}},
-                                                        "domain": {"variable": "hydra.error.core.InvalidTermError"},
-                                                        "parameter": "e"}}},
+                                                    "lambda": {
+                                                      "body": {
+                                                        "application": {
+                                                          "argument": {"variable": "e"},
+                                                          "function": {"variable": "hydra.show.error.core.invalidTermError"}}},
+                                                      "domain": {"variable": "hydra.error.core.InvalidTermError"},
+                                                      "parameter": "e"}},
                                                   "function": {
                                                     "application": {
                                                       "argument": {"literal": {"string": "valid"}},
@@ -1599,14 +1578,13 @@
                                               "function": {
                                                 "application": {
                                                   "argument": {
-                                                    "function": {
-                                                      "lambda": {
-                                                        "body": {
-                                                          "application": {
-                                                            "argument": {"variable": "e"},
-                                                            "function": {"variable": "hydra.show.error.core.invalidTermError"}}},
-                                                        "domain": {"variable": "hydra.error.core.InvalidTermError"},
-                                                        "parameter": "e"}}},
+                                                    "lambda": {
+                                                      "body": {
+                                                        "application": {
+                                                          "argument": {"variable": "e"},
+                                                          "function": {"variable": "hydra.show.error.core.invalidTermError"}}},
+                                                      "domain": {"variable": "hydra.error.core.InvalidTermError"},
+                                                      "parameter": "e"}},
                                                   "function": {
                                                     "application": {
                                                       "argument": {"literal": {"string": "valid"}},
@@ -1628,14 +1606,13 @@
                                               "function": {
                                                 "application": {
                                                   "argument": {
-                                                    "function": {
-                                                      "lambda": {
-                                                        "body": {
-                                                          "application": {
-                                                            "argument": {"variable": "e"},
-                                                            "function": {"variable": "hydra.show.error.core.invalidTermError"}}},
-                                                        "domain": {"variable": "hydra.error.core.InvalidTermError"},
-                                                        "parameter": "e"}}},
+                                                    "lambda": {
+                                                      "body": {
+                                                        "application": {
+                                                          "argument": {"variable": "e"},
+                                                          "function": {"variable": "hydra.show.error.core.invalidTermError"}}},
+                                                      "domain": {"variable": "hydra.error.core.InvalidTermError"},
+                                                      "parameter": "e"}},
                                                   "function": {
                                                     "application": {
                                                       "argument": {"literal": {"string": "valid"}},
@@ -1755,14 +1732,13 @@
                                               "function": {
                                                 "application": {
                                                   "argument": {
-                                                    "function": {
-                                                      "lambda": {
-                                                        "body": {
-                                                          "application": {
-                                                            "argument": {"variable": "e"},
-                                                            "function": {"variable": "hydra.show.error.core.invalidTermError"}}},
-                                                        "domain": {"variable": "hydra.error.core.InvalidTermError"},
-                                                        "parameter": "e"}}},
+                                                    "lambda": {
+                                                      "body": {
+                                                        "application": {
+                                                          "argument": {"variable": "e"},
+                                                          "function": {"variable": "hydra.show.error.core.invalidTermError"}}},
+                                                      "domain": {"variable": "hydra.error.core.InvalidTermError"},
+                                                      "parameter": "e"}},
                                                   "function": {
                                                     "application": {
                                                       "argument": {"literal": {"string": "valid"}},
@@ -1784,14 +1760,13 @@
                                               "function": {
                                                 "application": {
                                                   "argument": {
-                                                    "function": {
-                                                      "lambda": {
-                                                        "body": {
-                                                          "application": {
-                                                            "argument": {"variable": "e"},
-                                                            "function": {"variable": "hydra.show.error.core.invalidTermError"}}},
-                                                        "domain": {"variable": "hydra.error.core.InvalidTermError"},
-                                                        "parameter": "e"}}},
+                                                    "lambda": {
+                                                      "body": {
+                                                        "application": {
+                                                          "argument": {"variable": "e"},
+                                                          "function": {"variable": "hydra.show.error.core.invalidTermError"}}},
+                                                      "domain": {"variable": "hydra.error.core.InvalidTermError"},
+                                                      "parameter": "e"}},
                                                   "function": {
                                                     "application": {
                                                       "argument": {"literal": {"string": "valid"}},
@@ -1911,14 +1886,13 @@
                                               "function": {
                                                 "application": {
                                                   "argument": {
-                                                    "function": {
-                                                      "lambda": {
-                                                        "body": {
-                                                          "application": {
-                                                            "argument": {"variable": "e"},
-                                                            "function": {"variable": "hydra.show.error.core.invalidTermError"}}},
-                                                        "domain": {"variable": "hydra.error.core.InvalidTermError"},
-                                                        "parameter": "e"}}},
+                                                    "lambda": {
+                                                      "body": {
+                                                        "application": {
+                                                          "argument": {"variable": "e"},
+                                                          "function": {"variable": "hydra.show.error.core.invalidTermError"}}},
+                                                      "domain": {"variable": "hydra.error.core.InvalidTermError"},
+                                                      "parameter": "e"}},
                                                   "function": {
                                                     "application": {
                                                       "argument": {"literal": {"string": "valid"}},
@@ -1959,14 +1933,13 @@
                                               "function": {
                                                 "application": {
                                                   "argument": {
-                                                    "function": {
-                                                      "lambda": {
-                                                        "body": {
-                                                          "application": {
-                                                            "argument": {"variable": "e"},
-                                                            "function": {"variable": "hydra.show.error.core.invalidTermError"}}},
-                                                        "domain": {"variable": "hydra.error.core.InvalidTermError"},
-                                                        "parameter": "e"}}},
+                                                    "lambda": {
+                                                      "body": {
+                                                        "application": {
+                                                          "argument": {"variable": "e"},
+                                                          "function": {"variable": "hydra.show.error.core.invalidTermError"}}},
+                                                      "domain": {"variable": "hydra.error.core.InvalidTermError"},
+                                                      "parameter": "e"}},
                                                   "function": {
                                                     "application": {
                                                       "argument": {"literal": {"string": "valid"}},
@@ -2012,93 +1985,88 @@
                                                   "argument": {
                                                     "union": {
                                                       "field": {
-                                                        "name": "function",
+                                                        "name": "lambda",
                                                         "term": {
-                                                          "union": {
-                                                            "field": {
-                                                              "name": "lambda",
-                                                              "term": {
-                                                                "record": {
-                                                                  "fields": [
-                                                                    {
-                                                                      "name": "parameter",
+                                                          "record": {
+                                                            "fields": [
+                                                              {
+                                                                "name": "parameter",
+                                                                "term": {
+                                                                  "wrap": {"body": {"literal": {"string": "f"}}, "typeName": "hydra.core.Name"}}},
+                                                              {
+                                                                "name": "domain",
+                                                                "term": {
+                                                                  "typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.Type"}}}},
+                                                              {
+                                                                "name": "body",
+                                                                "term": {
+                                                                  "union": {
+                                                                    "field": {
+                                                                      "name": "record",
                                                                       "term": {
-                                                                        "wrap": {"body": {"literal": {"string": "f"}}, "typeName": "hydra.core.Name"}}},
-                                                                    {
-                                                                      "name": "domain",
-                                                                      "term": {
-                                                                        "typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.Type"}}}},
-                                                                    {
-                                                                      "name": "body",
-                                                                      "term": {
-                                                                        "union": {
-                                                                          "field": {
-                                                                            "name": "record",
-                                                                            "term": {
-                                                                              "record": {
-                                                                                "fields": [
+                                                                        "record": {
+                                                                          "fields": [
+                                                                            {
+                                                                              "name": "typeName",
+                                                                              "term": {
+                                                                                "wrap": {
+                                                                                  "body": {"literal": {"string": "Point"}},
+                                                                                  "typeName": "hydra.core.Name"}}},
+                                                                            {
+                                                                              "name": "fields",
+                                                                              "term": {
+                                                                                "list": [
                                                                                   {
-                                                                                    "name": "typeName",
-                                                                                    "term": {
-                                                                                      "wrap": {
-                                                                                        "body": {"literal": {"string": "Point"}},
-                                                                                        "typeName": "hydra.core.Name"}}},
-                                                                                  {
-                                                                                    "name": "fields",
-                                                                                    "term": {
-                                                                                      "list": [
+                                                                                    "record": {
+                                                                                      "fields": [
                                                                                         {
-                                                                                          "record": {
-                                                                                            "fields": [
-                                                                                              {
-                                                                                                "name": "name",
-                                                                                                "term": {
-                                                                                                  "wrap": {"body": {"literal": {"string": "x"}}, "typeName": "hydra.core.Name"}}},
-                                                                                              {
-                                                                                                "name": "term",
+                                                                                          "name": "name",
+                                                                                          "term": {
+                                                                                            "wrap": {"body": {"literal": {"string": "x"}}, "typeName": "hydra.core.Name"}}},
+                                                                                        {
+                                                                                          "name": "term",
+                                                                                          "term": {
+                                                                                            "union": {
+                                                                                              "field": {
+                                                                                                "name": "literal",
                                                                                                 "term": {
                                                                                                   "union": {
                                                                                                     "field": {
-                                                                                                      "name": "literal",
+                                                                                                      "name": "integer",
                                                                                                       "term": {
                                                                                                         "union": {
-                                                                                                          "field": {
-                                                                                                            "name": "integer",
-                                                                                                            "term": {
-                                                                                                              "union": {
-                                                                                                                "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 1}}}},
-                                                                                                                "typeName": "hydra.core.IntegerValue"}}},
-                                                                                                          "typeName": "hydra.core.Literal"}}},
-                                                                                                    "typeName": "hydra.core.Term"}}}],
-                                                                                            "typeName": "hydra.core.Field"}},
+                                                                                                          "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 1}}}},
+                                                                                                          "typeName": "hydra.core.IntegerValue"}}},
+                                                                                                    "typeName": "hydra.core.Literal"}}},
+                                                                                              "typeName": "hydra.core.Term"}}}],
+                                                                                      "typeName": "hydra.core.Field"}},
+                                                                                  {
+                                                                                    "record": {
+                                                                                      "fields": [
                                                                                         {
-                                                                                          "record": {
-                                                                                            "fields": [
-                                                                                              {
-                                                                                                "name": "name",
-                                                                                                "term": {
-                                                                                                  "wrap": {"body": {"literal": {"string": "x"}}, "typeName": "hydra.core.Name"}}},
-                                                                                              {
-                                                                                                "name": "term",
+                                                                                          "name": "name",
+                                                                                          "term": {
+                                                                                            "wrap": {"body": {"literal": {"string": "x"}}, "typeName": "hydra.core.Name"}}},
+                                                                                        {
+                                                                                          "name": "term",
+                                                                                          "term": {
+                                                                                            "union": {
+                                                                                              "field": {
+                                                                                                "name": "literal",
                                                                                                 "term": {
                                                                                                   "union": {
                                                                                                     "field": {
-                                                                                                      "name": "literal",
+                                                                                                      "name": "integer",
                                                                                                       "term": {
                                                                                                         "union": {
-                                                                                                          "field": {
-                                                                                                            "name": "integer",
-                                                                                                            "term": {
-                                                                                                              "union": {
-                                                                                                                "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 2}}}},
-                                                                                                                "typeName": "hydra.core.IntegerValue"}}},
-                                                                                                          "typeName": "hydra.core.Literal"}}},
-                                                                                                    "typeName": "hydra.core.Term"}}}],
-                                                                                            "typeName": "hydra.core.Field"}}]}}],
-                                                                                "typeName": "hydra.core.Record"}}},
-                                                                          "typeName": "hydra.core.Term"}}}],
-                                                                  "typeName": "hydra.core.Lambda"}}},
-                                                            "typeName": "hydra.core.Function"}}},
+                                                                                                          "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 2}}}},
+                                                                                                          "typeName": "hydra.core.IntegerValue"}}},
+                                                                                                    "typeName": "hydra.core.Literal"}}},
+                                                                                              "typeName": "hydra.core.Term"}}}],
+                                                                                      "typeName": "hydra.core.Field"}}]}}],
+                                                                          "typeName": "hydra.core.Record"}}},
+                                                                    "typeName": "hydra.core.Term"}}}],
+                                                            "typeName": "hydra.core.Lambda"}}},
                                                       "typeName": "hydra.core.Term"}},
                                                   "function": {
                                                     "application": {
@@ -2110,14 +2078,13 @@
                                               "function": {
                                                 "application": {
                                                   "argument": {
-                                                    "function": {
-                                                      "lambda": {
-                                                        "body": {
-                                                          "application": {
-                                                            "argument": {"variable": "e"},
-                                                            "function": {"variable": "hydra.show.error.core.invalidTermError"}}},
-                                                        "domain": {"variable": "hydra.error.core.InvalidTermError"},
-                                                        "parameter": "e"}}},
+                                                    "lambda": {
+                                                      "body": {
+                                                        "application": {
+                                                          "argument": {"variable": "e"},
+                                                          "function": {"variable": "hydra.show.error.core.invalidTermError"}}},
+                                                      "domain": {"variable": "hydra.error.core.InvalidTermError"},
+                                                      "parameter": "e"}},
                                                   "function": {
                                                     "application": {
                                                       "argument": {"literal": {"string": "valid"}},
@@ -2160,14 +2127,13 @@
                                               "function": {
                                                 "application": {
                                                   "argument": {
-                                                    "function": {
-                                                      "lambda": {
-                                                        "body": {
-                                                          "application": {
-                                                            "argument": {"variable": "e"},
-                                                            "function": {"variable": "hydra.show.error.core.invalidTermError"}}},
-                                                        "domain": {"variable": "hydra.error.core.InvalidTermError"},
-                                                        "parameter": "e"}}},
+                                                    "lambda": {
+                                                      "body": {
+                                                        "application": {
+                                                          "argument": {"variable": "e"},
+                                                          "function": {"variable": "hydra.show.error.core.invalidTermError"}}},
+                                                      "domain": {"variable": "hydra.error.core.InvalidTermError"},
+                                                      "parameter": "e"}},
                                                   "function": {
                                                     "application": {
                                                       "argument": {"literal": {"string": "valid"}},
@@ -2332,14 +2298,13 @@
                                               "function": {
                                                 "application": {
                                                   "argument": {
-                                                    "function": {
-                                                      "lambda": {
-                                                        "body": {
-                                                          "application": {
-                                                            "argument": {"variable": "e"},
-                                                            "function": {"variable": "hydra.show.error.core.invalidTermError"}}},
-                                                        "domain": {"variable": "hydra.error.core.InvalidTermError"},
-                                                        "parameter": "e"}}},
+                                                    "lambda": {
+                                                      "body": {
+                                                        "application": {
+                                                          "argument": {"variable": "e"},
+                                                          "function": {"variable": "hydra.show.error.core.invalidTermError"}}},
+                                                      "domain": {"variable": "hydra.error.core.InvalidTermError"},
+                                                      "parameter": "e"}},
                                                   "function": {
                                                     "application": {
                                                       "argument": {"literal": {"string": "valid"}},
@@ -2382,14 +2347,13 @@
                                               "function": {
                                                 "application": {
                                                   "argument": {
-                                                    "function": {
-                                                      "lambda": {
-                                                        "body": {
-                                                          "application": {
-                                                            "argument": {"variable": "e"},
-                                                            "function": {"variable": "hydra.show.error.core.invalidTermError"}}},
-                                                        "domain": {"variable": "hydra.error.core.InvalidTermError"},
-                                                        "parameter": "e"}}},
+                                                    "lambda": {
+                                                      "body": {
+                                                        "application": {
+                                                          "argument": {"variable": "e"},
+                                                          "function": {"variable": "hydra.show.error.core.invalidTermError"}}},
+                                                      "domain": {"variable": "hydra.error.core.InvalidTermError"},
+                                                      "parameter": "e"}},
                                                   "function": {
                                                     "application": {
                                                       "argument": {"literal": {"string": "valid"}},
@@ -2519,14 +2483,13 @@
                                               "function": {
                                                 "application": {
                                                   "argument": {
-                                                    "function": {
-                                                      "lambda": {
-                                                        "body": {
-                                                          "application": {
-                                                            "argument": {"variable": "e"},
-                                                            "function": {"variable": "hydra.show.error.core.invalidTermError"}}},
-                                                        "domain": {"variable": "hydra.error.core.InvalidTermError"},
-                                                        "parameter": "e"}}},
+                                                    "lambda": {
+                                                      "body": {
+                                                        "application": {
+                                                          "argument": {"variable": "e"},
+                                                          "function": {"variable": "hydra.show.error.core.invalidTermError"}}},
+                                                      "domain": {"variable": "hydra.error.core.InvalidTermError"},
+                                                      "parameter": "e"}},
                                                   "function": {
                                                     "application": {
                                                       "argument": {"literal": {"string": "valid"}},
@@ -2548,14 +2511,13 @@
                                               "function": {
                                                 "application": {
                                                   "argument": {
-                                                    "function": {
-                                                      "lambda": {
-                                                        "body": {
-                                                          "application": {
-                                                            "argument": {"variable": "e"},
-                                                            "function": {"variable": "hydra.show.error.core.invalidTermError"}}},
-                                                        "domain": {"variable": "hydra.error.core.InvalidTermError"},
-                                                        "parameter": "e"}}},
+                                                    "lambda": {
+                                                      "body": {
+                                                        "application": {
+                                                          "argument": {"variable": "e"},
+                                                          "function": {"variable": "hydra.show.error.core.invalidTermError"}}},
+                                                      "domain": {"variable": "hydra.error.core.InvalidTermError"},
+                                                      "parameter": "e"}},
                                                   "function": {
                                                     "application": {
                                                       "argument": {"literal": {"string": "valid"}},
@@ -2637,14 +2599,13 @@
                                               "function": {
                                                 "application": {
                                                   "argument": {
-                                                    "function": {
-                                                      "lambda": {
-                                                        "body": {
-                                                          "application": {
-                                                            "argument": {"variable": "e"},
-                                                            "function": {"variable": "hydra.show.error.core.invalidTermError"}}},
-                                                        "domain": {"variable": "hydra.error.core.InvalidTermError"},
-                                                        "parameter": "e"}}},
+                                                    "lambda": {
+                                                      "body": {
+                                                        "application": {
+                                                          "argument": {"variable": "e"},
+                                                          "function": {"variable": "hydra.show.error.core.invalidTermError"}}},
+                                                      "domain": {"variable": "hydra.error.core.InvalidTermError"},
+                                                      "parameter": "e"}},
                                                   "function": {
                                                     "application": {
                                                       "argument": {"literal": {"string": "valid"}},
@@ -2681,14 +2642,13 @@
                                               "function": {
                                                 "application": {
                                                   "argument": {
-                                                    "function": {
-                                                      "lambda": {
-                                                        "body": {
-                                                          "application": {
-                                                            "argument": {"variable": "e"},
-                                                            "function": {"variable": "hydra.show.error.core.invalidTermError"}}},
-                                                        "domain": {"variable": "hydra.error.core.InvalidTermError"},
-                                                        "parameter": "e"}}},
+                                                    "lambda": {
+                                                      "body": {
+                                                        "application": {
+                                                          "argument": {"variable": "e"},
+                                                          "function": {"variable": "hydra.show.error.core.invalidTermError"}}},
+                                                      "domain": {"variable": "hydra.error.core.InvalidTermError"},
+                                                      "parameter": "e"}},
                                                   "function": {
                                                     "application": {
                                                       "argument": {"literal": {"string": "valid"}},
@@ -2768,40 +2728,35 @@
                                                                 "term": {
                                                                   "union": {
                                                                     "field": {
-                                                                      "name": "function",
+                                                                      "name": "lambda",
                                                                       "term": {
-                                                                        "union": {
-                                                                          "field": {
-                                                                            "name": "lambda",
-                                                                            "term": {
-                                                                              "record": {
-                                                                                "fields": [
-                                                                                  {
-                                                                                    "name": "parameter",
-                                                                                    "term": {
-                                                                                      "wrap": {"body": {"literal": {"string": "x"}}, "typeName": "hydra.core.Name"}}},
-                                                                                  {
-                                                                                    "name": "domain",
-                                                                                    "term": {
-                                                                                      "typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.Type"}}}},
-                                                                                  {
-                                                                                    "name": "body",
+                                                                        "record": {
+                                                                          "fields": [
+                                                                            {
+                                                                              "name": "parameter",
+                                                                              "term": {
+                                                                                "wrap": {"body": {"literal": {"string": "x"}}, "typeName": "hydra.core.Name"}}},
+                                                                            {
+                                                                              "name": "domain",
+                                                                              "term": {
+                                                                                "typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.Type"}}}},
+                                                                            {
+                                                                              "name": "body",
+                                                                              "term": {
+                                                                                "union": {
+                                                                                  "field": {
+                                                                                    "name": "literal",
                                                                                     "term": {
                                                                                       "union": {
                                                                                         "field": {
-                                                                                          "name": "literal",
+                                                                                          "name": "integer",
                                                                                           "term": {
                                                                                             "union": {
-                                                                                              "field": {
-                                                                                                "name": "integer",
-                                                                                                "term": {
-                                                                                                  "union": {
-                                                                                                    "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 1}}}},
-                                                                                                    "typeName": "hydra.core.IntegerValue"}}},
-                                                                                              "typeName": "hydra.core.Literal"}}},
-                                                                                        "typeName": "hydra.core.Term"}}}],
-                                                                                "typeName": "hydra.core.Lambda"}}},
-                                                                          "typeName": "hydra.core.Function"}}},
+                                                                                              "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 1}}}},
+                                                                                              "typeName": "hydra.core.IntegerValue"}}},
+                                                                                        "typeName": "hydra.core.Literal"}}},
+                                                                                  "typeName": "hydra.core.Term"}}}],
+                                                                          "typeName": "hydra.core.Lambda"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
@@ -2831,14 +2786,13 @@
                                               "function": {
                                                 "application": {
                                                   "argument": {
-                                                    "function": {
-                                                      "lambda": {
-                                                        "body": {
-                                                          "application": {
-                                                            "argument": {"variable": "e"},
-                                                            "function": {"variable": "hydra.show.error.core.invalidTermError"}}},
-                                                        "domain": {"variable": "hydra.error.core.InvalidTermError"},
-                                                        "parameter": "e"}}},
+                                                    "lambda": {
+                                                      "body": {
+                                                        "application": {
+                                                          "argument": {"variable": "e"},
+                                                          "function": {"variable": "hydra.show.error.core.invalidTermError"}}},
+                                                      "domain": {"variable": "hydra.error.core.InvalidTermError"},
+                                                      "parameter": "e"}},
                                                   "function": {
                                                     "application": {
                                                       "argument": {"literal": {"string": "valid"}},
@@ -2860,14 +2814,13 @@
                                               "function": {
                                                 "application": {
                                                   "argument": {
-                                                    "function": {
-                                                      "lambda": {
-                                                        "body": {
-                                                          "application": {
-                                                            "argument": {"variable": "e"},
-                                                            "function": {"variable": "hydra.show.error.core.invalidTermError"}}},
-                                                        "domain": {"variable": "hydra.error.core.InvalidTermError"},
-                                                        "parameter": "e"}}},
+                                                    "lambda": {
+                                                      "body": {
+                                                        "application": {
+                                                          "argument": {"variable": "e"},
+                                                          "function": {"variable": "hydra.show.error.core.invalidTermError"}}},
+                                                      "domain": {"variable": "hydra.error.core.InvalidTermError"},
+                                                      "parameter": "e"}},
                                                   "function": {
                                                     "application": {
                                                       "argument": {"literal": {"string": "valid"}},
@@ -2922,33 +2875,28 @@
                                                                 "term": {
                                                                   "union": {
                                                                     "field": {
-                                                                      "name": "function",
+                                                                      "name": "lambda",
                                                                       "term": {
-                                                                        "union": {
-                                                                          "field": {
-                                                                            "name": "lambda",
-                                                                            "term": {
-                                                                              "record": {
-                                                                                "fields": [
-                                                                                  {
-                                                                                    "name": "parameter",
+                                                                        "record": {
+                                                                          "fields": [
+                                                                            {
+                                                                              "name": "parameter",
+                                                                              "term": {
+                                                                                "wrap": {"body": {"literal": {"string": "x"}}, "typeName": "hydra.core.Name"}}},
+                                                                            {
+                                                                              "name": "domain",
+                                                                              "term": {
+                                                                                "typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.Type"}}}},
+                                                                            {
+                                                                              "name": "body",
+                                                                              "term": {
+                                                                                "union": {
+                                                                                  "field": {
+                                                                                    "name": "variable",
                                                                                     "term": {
                                                                                       "wrap": {"body": {"literal": {"string": "x"}}, "typeName": "hydra.core.Name"}}},
-                                                                                  {
-                                                                                    "name": "domain",
-                                                                                    "term": {
-                                                                                      "typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.Type"}}}},
-                                                                                  {
-                                                                                    "name": "body",
-                                                                                    "term": {
-                                                                                      "union": {
-                                                                                        "field": {
-                                                                                          "name": "variable",
-                                                                                          "term": {
-                                                                                            "wrap": {"body": {"literal": {"string": "x"}}, "typeName": "hydra.core.Name"}}},
-                                                                                        "typeName": "hydra.core.Term"}}}],
-                                                                                "typeName": "hydra.core.Lambda"}}},
-                                                                          "typeName": "hydra.core.Function"}}},
+                                                                                  "typeName": "hydra.core.Term"}}}],
+                                                                          "typeName": "hydra.core.Lambda"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
                                                                 "name": "argument",
@@ -2978,14 +2926,13 @@
                                               "function": {
                                                 "application": {
                                                   "argument": {
-                                                    "function": {
-                                                      "lambda": {
-                                                        "body": {
-                                                          "application": {
-                                                            "argument": {"variable": "e"},
-                                                            "function": {"variable": "hydra.show.error.core.invalidTermError"}}},
-                                                        "domain": {"variable": "hydra.error.core.InvalidTermError"},
-                                                        "parameter": "e"}}},
+                                                    "lambda": {
+                                                      "body": {
+                                                        "application": {
+                                                          "argument": {"variable": "e"},
+                                                          "function": {"variable": "hydra.show.error.core.invalidTermError"}}},
+                                                      "domain": {"variable": "hydra.error.core.InvalidTermError"},
+                                                      "parameter": "e"}},
                                                   "function": {
                                                     "application": {
                                                       "argument": {"literal": {"string": "valid"}},
@@ -3022,14 +2969,13 @@
                                               "function": {
                                                 "application": {
                                                   "argument": {
-                                                    "function": {
-                                                      "lambda": {
-                                                        "body": {
-                                                          "application": {
-                                                            "argument": {"variable": "e"},
-                                                            "function": {"variable": "hydra.show.error.core.invalidTermError"}}},
-                                                        "domain": {"variable": "hydra.error.core.InvalidTermError"},
-                                                        "parameter": "e"}}},
+                                                    "lambda": {
+                                                      "body": {
+                                                        "application": {
+                                                          "argument": {"variable": "e"},
+                                                          "function": {"variable": "hydra.show.error.core.invalidTermError"}}},
+                                                      "domain": {"variable": "hydra.error.core.InvalidTermError"},
+                                                      "parameter": "e"}},
                                                   "function": {
                                                     "application": {
                                                       "argument": {"literal": {"string": "valid"}},
@@ -3100,33 +3046,28 @@
                                                   "argument": {
                                                     "union": {
                                                       "field": {
-                                                        "name": "function",
+                                                        "name": "lambda",
                                                         "term": {
-                                                          "union": {
-                                                            "field": {
-                                                              "name": "lambda",
-                                                              "term": {
-                                                                "record": {
-                                                                  "fields": [
-                                                                    {
-                                                                      "name": "parameter",
+                                                          "record": {
+                                                            "fields": [
+                                                              {
+                                                                "name": "parameter",
+                                                                "term": {
+                                                                  "wrap": {"body": {"literal": {"string": "x"}}, "typeName": "hydra.core.Name"}}},
+                                                              {
+                                                                "name": "domain",
+                                                                "term": {
+                                                                  "typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.Type"}}}},
+                                                              {
+                                                                "name": "body",
+                                                                "term": {
+                                                                  "union": {
+                                                                    "field": {
+                                                                      "name": "variable",
                                                                       "term": {
                                                                         "wrap": {"body": {"literal": {"string": "x"}}, "typeName": "hydra.core.Name"}}},
-                                                                    {
-                                                                      "name": "domain",
-                                                                      "term": {
-                                                                        "typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.Type"}}}},
-                                                                    {
-                                                                      "name": "body",
-                                                                      "term": {
-                                                                        "union": {
-                                                                          "field": {
-                                                                            "name": "variable",
-                                                                            "term": {
-                                                                              "wrap": {"body": {"literal": {"string": "x"}}, "typeName": "hydra.core.Name"}}},
-                                                                          "typeName": "hydra.core.Term"}}}],
-                                                                  "typeName": "hydra.core.Lambda"}}},
-                                                            "typeName": "hydra.core.Function"}}},
+                                                                    "typeName": "hydra.core.Term"}}}],
+                                                            "typeName": "hydra.core.Lambda"}}},
                                                       "typeName": "hydra.core.Term"}},
                                                   "function": {
                                                     "application": {
@@ -3138,14 +3079,13 @@
                                               "function": {
                                                 "application": {
                                                   "argument": {
-                                                    "function": {
-                                                      "lambda": {
-                                                        "body": {
-                                                          "application": {
-                                                            "argument": {"variable": "e"},
-                                                            "function": {"variable": "hydra.show.error.core.invalidTermError"}}},
-                                                        "domain": {"variable": "hydra.error.core.InvalidTermError"},
-                                                        "parameter": "e"}}},
+                                                    "lambda": {
+                                                      "body": {
+                                                        "application": {
+                                                          "argument": {"variable": "e"},
+                                                          "function": {"variable": "hydra.show.error.core.invalidTermError"}}},
+                                                      "domain": {"variable": "hydra.error.core.InvalidTermError"},
+                                                      "parameter": "e"}},
                                                   "function": {
                                                     "application": {
                                                       "argument": {"literal": {"string": "valid"}},
@@ -3167,14 +3107,13 @@
                                               "function": {
                                                 "application": {
                                                   "argument": {
-                                                    "function": {
-                                                      "lambda": {
-                                                        "body": {
-                                                          "application": {
-                                                            "argument": {"variable": "e"},
-                                                            "function": {"variable": "hydra.show.error.core.invalidTermError"}}},
-                                                        "domain": {"variable": "hydra.error.core.InvalidTermError"},
-                                                        "parameter": "e"}}},
+                                                    "lambda": {
+                                                      "body": {
+                                                        "application": {
+                                                          "argument": {"variable": "e"},
+                                                          "function": {"variable": "hydra.show.error.core.invalidTermError"}}},
+                                                      "domain": {"variable": "hydra.error.core.InvalidTermError"},
+                                                      "parameter": "e"}},
                                                   "function": {
                                                     "application": {
                                                       "argument": {"literal": {"string": "valid"}},
@@ -3220,57 +3159,47 @@
                                                   "argument": {
                                                     "union": {
                                                       "field": {
-                                                        "name": "function",
+                                                        "name": "lambda",
                                                         "term": {
-                                                          "union": {
-                                                            "field": {
-                                                              "name": "lambda",
-                                                              "term": {
-                                                                "record": {
-                                                                  "fields": [
-                                                                    {
-                                                                      "name": "parameter",
+                                                          "record": {
+                                                            "fields": [
+                                                              {
+                                                                "name": "parameter",
+                                                                "term": {
+                                                                  "wrap": {"body": {"literal": {"string": "x"}}, "typeName": "hydra.core.Name"}}},
+                                                              {
+                                                                "name": "domain",
+                                                                "term": {
+                                                                  "typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.Type"}}}},
+                                                              {
+                                                                "name": "body",
+                                                                "term": {
+                                                                  "union": {
+                                                                    "field": {
+                                                                      "name": "lambda",
                                                                       "term": {
-                                                                        "wrap": {"body": {"literal": {"string": "x"}}, "typeName": "hydra.core.Name"}}},
-                                                                    {
-                                                                      "name": "domain",
-                                                                      "term": {
-                                                                        "typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.Type"}}}},
-                                                                    {
-                                                                      "name": "body",
-                                                                      "term": {
-                                                                        "union": {
-                                                                          "field": {
-                                                                            "name": "function",
-                                                                            "term": {
-                                                                              "union": {
-                                                                                "field": {
-                                                                                  "name": "lambda",
-                                                                                  "term": {
-                                                                                    "record": {
-                                                                                      "fields": [
-                                                                                        {
-                                                                                          "name": "parameter",
-                                                                                          "term": {
-                                                                                            "wrap": {"body": {"literal": {"string": "x"}}, "typeName": "hydra.core.Name"}}},
-                                                                                        {
-                                                                                          "name": "domain",
-                                                                                          "term": {
-                                                                                            "typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.Type"}}}},
-                                                                                        {
-                                                                                          "name": "body",
-                                                                                          "term": {
-                                                                                            "union": {
-                                                                                              "field": {
-                                                                                                "name": "variable",
-                                                                                                "term": {
-                                                                                                  "wrap": {"body": {"literal": {"string": "x"}}, "typeName": "hydra.core.Name"}}},
-                                                                                              "typeName": "hydra.core.Term"}}}],
-                                                                                      "typeName": "hydra.core.Lambda"}}},
-                                                                                "typeName": "hydra.core.Function"}}},
-                                                                          "typeName": "hydra.core.Term"}}}],
-                                                                  "typeName": "hydra.core.Lambda"}}},
-                                                            "typeName": "hydra.core.Function"}}},
+                                                                        "record": {
+                                                                          "fields": [
+                                                                            {
+                                                                              "name": "parameter",
+                                                                              "term": {
+                                                                                "wrap": {"body": {"literal": {"string": "x"}}, "typeName": "hydra.core.Name"}}},
+                                                                            {
+                                                                              "name": "domain",
+                                                                              "term": {
+                                                                                "typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.Type"}}}},
+                                                                            {
+                                                                              "name": "body",
+                                                                              "term": {
+                                                                                "union": {
+                                                                                  "field": {
+                                                                                    "name": "variable",
+                                                                                    "term": {
+                                                                                      "wrap": {"body": {"literal": {"string": "x"}}, "typeName": "hydra.core.Name"}}},
+                                                                                  "typeName": "hydra.core.Term"}}}],
+                                                                          "typeName": "hydra.core.Lambda"}}},
+                                                                    "typeName": "hydra.core.Term"}}}],
+                                                            "typeName": "hydra.core.Lambda"}}},
                                                       "typeName": "hydra.core.Term"}},
                                                   "function": {
                                                     "application": {
@@ -3282,14 +3211,13 @@
                                               "function": {
                                                 "application": {
                                                   "argument": {
-                                                    "function": {
-                                                      "lambda": {
-                                                        "body": {
-                                                          "application": {
-                                                            "argument": {"variable": "e"},
-                                                            "function": {"variable": "hydra.show.error.core.invalidTermError"}}},
-                                                        "domain": {"variable": "hydra.error.core.InvalidTermError"},
-                                                        "parameter": "e"}}},
+                                                    "lambda": {
+                                                      "body": {
+                                                        "application": {
+                                                          "argument": {"variable": "e"},
+                                                          "function": {"variable": "hydra.show.error.core.invalidTermError"}}},
+                                                      "domain": {"variable": "hydra.error.core.InvalidTermError"},
+                                                      "parameter": "e"}},
                                                   "function": {
                                                     "application": {
                                                       "argument": {"literal": {"string": "valid"}},
@@ -3311,14 +3239,13 @@
                                               "function": {
                                                 "application": {
                                                   "argument": {
-                                                    "function": {
-                                                      "lambda": {
-                                                        "body": {
-                                                          "application": {
-                                                            "argument": {"variable": "e"},
-                                                            "function": {"variable": "hydra.show.error.core.invalidTermError"}}},
-                                                        "domain": {"variable": "hydra.error.core.InvalidTermError"},
-                                                        "parameter": "e"}}},
+                                                    "lambda": {
+                                                      "body": {
+                                                        "application": {
+                                                          "argument": {"variable": "e"},
+                                                          "function": {"variable": "hydra.show.error.core.invalidTermError"}}},
+                                                      "domain": {"variable": "hydra.error.core.InvalidTermError"},
+                                                      "parameter": "e"}},
                                                   "function": {
                                                     "application": {
                                                       "argument": {"literal": {"string": "valid"}},
@@ -3364,78 +3291,73 @@
                                                   "argument": {
                                                     "union": {
                                                       "field": {
-                                                        "name": "function",
+                                                        "name": "lambda",
                                                         "term": {
-                                                          "union": {
-                                                            "field": {
-                                                              "name": "lambda",
-                                                              "term": {
-                                                                "record": {
-                                                                  "fields": [
-                                                                    {
-                                                                      "name": "parameter",
+                                                          "record": {
+                                                            "fields": [
+                                                              {
+                                                                "name": "parameter",
+                                                                "term": {
+                                                                  "wrap": {"body": {"literal": {"string": "x"}}, "typeName": "hydra.core.Name"}}},
+                                                              {
+                                                                "name": "domain",
+                                                                "term": {
+                                                                  "typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.Type"}}}},
+                                                              {
+                                                                "name": "body",
+                                                                "term": {
+                                                                  "union": {
+                                                                    "field": {
+                                                                      "name": "let",
                                                                       "term": {
-                                                                        "wrap": {"body": {"literal": {"string": "x"}}, "typeName": "hydra.core.Name"}}},
-                                                                    {
-                                                                      "name": "domain",
-                                                                      "term": {
-                                                                        "typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.Type"}}}},
-                                                                    {
-                                                                      "name": "body",
-                                                                      "term": {
-                                                                        "union": {
-                                                                          "field": {
-                                                                            "name": "let",
-                                                                            "term": {
-                                                                              "record": {
-                                                                                "fields": [
+                                                                        "record": {
+                                                                          "fields": [
+                                                                            {
+                                                                              "name": "bindings",
+                                                                              "term": {
+                                                                                "list": [
                                                                                   {
-                                                                                    "name": "bindings",
-                                                                                    "term": {
-                                                                                      "list": [
+                                                                                    "record": {
+                                                                                      "fields": [
                                                                                         {
-                                                                                          "record": {
-                                                                                            "fields": [
-                                                                                              {
-                                                                                                "name": "name",
-                                                                                                "term": {
-                                                                                                  "wrap": {"body": {"literal": {"string": "x"}}, "typeName": "hydra.core.Name"}}},
-                                                                                              {
-                                                                                                "name": "term",
+                                                                                          "name": "name",
+                                                                                          "term": {
+                                                                                            "wrap": {"body": {"literal": {"string": "x"}}, "typeName": "hydra.core.Name"}}},
+                                                                                        {
+                                                                                          "name": "term",
+                                                                                          "term": {
+                                                                                            "union": {
+                                                                                              "field": {
+                                                                                                "name": "literal",
                                                                                                 "term": {
                                                                                                   "union": {
                                                                                                     "field": {
-                                                                                                      "name": "literal",
+                                                                                                      "name": "integer",
                                                                                                       "term": {
                                                                                                         "union": {
-                                                                                                          "field": {
-                                                                                                            "name": "integer",
-                                                                                                            "term": {
-                                                                                                              "union": {
-                                                                                                                "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 1}}}},
-                                                                                                                "typeName": "hydra.core.IntegerValue"}}},
-                                                                                                          "typeName": "hydra.core.Literal"}}},
-                                                                                                    "typeName": "hydra.core.Term"}}},
-                                                                                              {
-                                                                                                "name": "type",
-                                                                                                "term": {
-                                                                                                  "typeApplication": {
-                                                                                                    "body": {"maybe": null},
-                                                                                                    "type": {"variable": "hydra.core.TypeScheme"}}}}],
-                                                                                            "typeName": "hydra.core.Binding"}}]}},
-                                                                                  {
-                                                                                    "name": "body",
-                                                                                    "term": {
-                                                                                      "union": {
-                                                                                        "field": {
-                                                                                          "name": "variable",
+                                                                                                          "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 1}}}},
+                                                                                                          "typeName": "hydra.core.IntegerValue"}}},
+                                                                                                    "typeName": "hydra.core.Literal"}}},
+                                                                                              "typeName": "hydra.core.Term"}}},
+                                                                                        {
+                                                                                          "name": "type",
                                                                                           "term": {
-                                                                                            "wrap": {"body": {"literal": {"string": "x"}}, "typeName": "hydra.core.Name"}}},
-                                                                                        "typeName": "hydra.core.Term"}}}],
-                                                                                "typeName": "hydra.core.Let"}}},
-                                                                          "typeName": "hydra.core.Term"}}}],
-                                                                  "typeName": "hydra.core.Lambda"}}},
-                                                            "typeName": "hydra.core.Function"}}},
+                                                                                            "typeApplication": {
+                                                                                              "body": {"maybe": null},
+                                                                                              "type": {"variable": "hydra.core.TypeScheme"}}}}],
+                                                                                      "typeName": "hydra.core.Binding"}}]}},
+                                                                            {
+                                                                              "name": "body",
+                                                                              "term": {
+                                                                                "union": {
+                                                                                  "field": {
+                                                                                    "name": "variable",
+                                                                                    "term": {
+                                                                                      "wrap": {"body": {"literal": {"string": "x"}}, "typeName": "hydra.core.Name"}}},
+                                                                                  "typeName": "hydra.core.Term"}}}],
+                                                                          "typeName": "hydra.core.Let"}}},
+                                                                    "typeName": "hydra.core.Term"}}}],
+                                                            "typeName": "hydra.core.Lambda"}}},
                                                       "typeName": "hydra.core.Term"}},
                                                   "function": {
                                                     "application": {
@@ -3447,14 +3369,13 @@
                                               "function": {
                                                 "application": {
                                                   "argument": {
-                                                    "function": {
-                                                      "lambda": {
-                                                        "body": {
-                                                          "application": {
-                                                            "argument": {"variable": "e"},
-                                                            "function": {"variable": "hydra.show.error.core.invalidTermError"}}},
-                                                        "domain": {"variable": "hydra.error.core.InvalidTermError"},
-                                                        "parameter": "e"}}},
+                                                    "lambda": {
+                                                      "body": {
+                                                        "application": {
+                                                          "argument": {"variable": "e"},
+                                                          "function": {"variable": "hydra.show.error.core.invalidTermError"}}},
+                                                      "domain": {"variable": "hydra.error.core.InvalidTermError"},
+                                                      "parameter": "e"}},
                                                   "function": {
                                                     "application": {
                                                       "argument": {"literal": {"string": "valid"}},
@@ -3476,14 +3397,13 @@
                                               "function": {
                                                 "application": {
                                                   "argument": {
-                                                    "function": {
-                                                      "lambda": {
-                                                        "body": {
-                                                          "application": {
-                                                            "argument": {"variable": "e"},
-                                                            "function": {"variable": "hydra.show.error.core.invalidTermError"}}},
-                                                        "domain": {"variable": "hydra.error.core.InvalidTermError"},
-                                                        "parameter": "e"}}},
+                                                    "lambda": {
+                                                      "body": {
+                                                        "application": {
+                                                          "argument": {"variable": "e"},
+                                                          "function": {"variable": "hydra.show.error.core.invalidTermError"}}},
+                                                      "domain": {"variable": "hydra.error.core.InvalidTermError"},
+                                                      "parameter": "e"}},
                                                   "function": {
                                                     "application": {
                                                       "argument": {"literal": {"string": "valid"}},

@@ -1,7 +1,6 @@
 package hydra.dsl;
 
-import hydra.core.Elimination;
-import hydra.core.Function;
+import hydra.core.Projection;
 import hydra.core.Term;
 import hydra.dsl.prims.Strings;
 import hydra.core.Name;
@@ -64,18 +63,8 @@ public class TermsTest {
             }
 
             @Override
-            public Integer visit(Term.Function instance) {
-                return instance.value.accept(new Function.PartialVisitor<Integer>() {
-                    @Override
-                    public Integer otherwise(Function instance) {
-                        return 0;
-                    }
-
-                    @Override
-                    public Integer visit(Function.Lambda instance) {
-                        return 1 + instance.value.body.accept(countBoundVariables());
-                    }
-                });
+            public Integer visit(Term.Lambda instance) {
+                return 1 + instance.value.body.accept(countBoundVariables());
             }
 
             @Override
@@ -99,21 +88,14 @@ public class TermsTest {
         assertEquals(name("hydra.lib.strings.length"),
                 ((Term.Variable) Strings.length()).value);
 
-        assertTrue(cat3 instanceof Term.Function);
-        assertTrue(((Term.Function) cat3).value instanceof Function.Lambda);
+        assertTrue(cat3 instanceof Term.Lambda);
         assertEquals(new Name("s1"),
-                ((Function.Lambda) ((Term.Function) cat3).value).value.parameter);
+                ((Term.Lambda) cat3).value.parameter);
 
-        assertTrue(longitude instanceof Term.Function);
-        assertTrue(((Term.Function) longitude).value instanceof Function.Elimination);
-        assertTrue(
-                ((Function.Elimination) ((Term.Function) longitude).value).value instanceof Elimination.Record);
-        assertEquals(name("LatLon"),
-                ((Elimination.Record) ((Function.Elimination) ((Term.Function) longitude).value).value)
-                        .value.typeName);
-        assertEquals(name("lon"),
-                ((Elimination.Record) ((Function.Elimination) ((Term.Function) longitude).value).value)
-                        .value.field);
+        assertTrue(longitude instanceof Term.Project);
+        Projection proj = ((Term.Project) longitude).value;
+        assertEquals(name("LatLon"), proj.typeName);
+        assertEquals(name("lon"), proj.field);
 
         assertTrue(longitudeAnnotated instanceof Term.Annotated);
         // Notice that annotations, here, are String-valued

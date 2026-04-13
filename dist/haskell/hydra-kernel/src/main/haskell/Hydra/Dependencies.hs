@@ -129,9 +129,7 @@ inlineType schema typ =
 isLambda :: Core.Term -> Bool
 isLambda term =
     case (Strip.deannotateTerm term) of
-      Core.TermFunction v0 -> case v0 of
-        Core.FunctionLambda _ -> True
-        _ -> False
+      Core.TermLambda _ -> True
       Core.TermLet v0 -> isLambda (Core.letBody v0)
       _ -> False
 
@@ -152,12 +150,10 @@ liftLambdaAboveLet term0 =
                               Core.TermAnnotated v0 -> digForLambdas original (\t -> Core.TermAnnotated (Core.AnnotatedTerm {
                                 Core.annotatedTermBody = (cons t),
                                 Core.annotatedTermAnnotation = (Core.annotatedTermAnnotation v0)})) (Core.annotatedTermBody v0)
-                              Core.TermFunction v0 -> case v0 of
-                                Core.FunctionLambda v1 -> Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                                  Core.lambdaParameter = (Core.lambdaParameter v1),
-                                  Core.lambdaDomain = (Core.lambdaDomain v1),
-                                  Core.lambdaBody = (digForLambdas (cons (Core.lambdaBody v1)) (\t -> cons t) (Core.lambdaBody v1))}))
-                                _ -> recurse original
+                              Core.TermLambda v0 -> Core.TermLambda (Core.Lambda {
+                                Core.lambdaParameter = (Core.lambdaParameter v0),
+                                Core.lambdaDomain = (Core.lambdaDomain v0),
+                                Core.lambdaBody = (digForLambdas (cons (Core.lambdaBody v0)) (\t -> cons t) (Core.lambdaBody v0))})
                               Core.TermLet v0 -> digForLambdas original (\t -> cons (Core.TermLet (Core.Let {
                                 Core.letBindings = (rewriteBindings (Core.letBindings v0)),
                                 Core.letBody = t}))) (Core.letBody v0)
@@ -221,17 +217,12 @@ simplifyTerm term =
                           Core.TermVariable v0 -> simplifyTerm (Variables.substituteVariable var v0 body)
                           _ -> term2
                     forLhs =
-                            \lhs -> \rhs ->
-                              let forFun =
-                                      \fun -> case fun of
-                                        Core.FunctionLambda v0 ->
-                                          let var = Core.lambdaParameter v0
-                                              body = Core.lambdaBody v0
-                                          in (Logic.ifElse (Sets.member var (Variables.freeVariablesInTerm body)) (forRhs rhs var body) (simplifyTerm body))
-                                        _ -> term2
-                              in case (Strip.deannotateTerm lhs) of
-                                Core.TermFunction v0 -> forFun v0
-                                _ -> term2
+                            \lhs -> \rhs -> case (Strip.deannotateTerm lhs) of
+                              Core.TermLambda v0 ->
+                                let var = Core.lambdaParameter v0
+                                    body = Core.lambdaBody v0
+                                in (Logic.ifElse (Sets.member var (Variables.freeVariablesInTerm body)) (forRhs rhs var body) (simplifyTerm body))
+                              _ -> term2
                     forTerm =
                             \stripped -> case stripped of
                               Core.TermApplication v0 ->
@@ -253,12 +244,9 @@ termDependencyNames binds withPrims withNoms term0 =
                     prim = \name -> Logic.ifElse withPrims (Sets.insert name names) names
                     var = \name -> Logic.ifElse binds (Sets.insert name names) names
                 in case term of
-                  Core.TermFunction v0 -> case v0 of
-                    Core.FunctionElimination v1 -> case v1 of
-                      Core.EliminationRecord v2 -> nominal (Core.projectionTypeName v2)
-                      Core.EliminationUnion v2 -> nominal (Core.caseStatementTypeName v2)
-                      Core.EliminationWrap v2 -> nominal v2
-                    _ -> names
+                  Core.TermCases v0 -> nominal (Core.caseStatementTypeName v0)
+                  Core.TermProject v0 -> nominal (Core.projectionTypeName v0)
+                  Core.TermUnwrap v0 -> nominal v0
                   Core.TermRecord v0 -> nominal (Core.recordTypeName v0)
                   Core.TermUnion v0 -> nominal (Core.injectionTypeName v0)
                   Core.TermVariable v0 -> var v0

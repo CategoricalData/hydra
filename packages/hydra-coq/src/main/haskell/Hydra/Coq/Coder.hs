@@ -54,17 +54,17 @@ coqTermQualid s =
 coqTypeTerm :: Syntax.Term -> Syntax.Type
 coqTypeTerm t = Syntax.Type t
 
-encodeElimination :: Core.Elimination -> Syntax.Term
-encodeElimination elim =
-    case elim of
-      Core.EliminationRecord v0 ->
+encodeProjectionElim :: Core.Projection -> Syntax.Term
+encodeProjectionElim v0 =
         let fname = Core.projectionField v0
         in (Syntax.TermForallOrFun (Syntax.ForallOrFunFun (Syntax.Fun {
           Syntax.funBinders = (Syntax.OpenBindersBinders [
             Syntax.BinderName (coqName "r_")]),
           Syntax.funBody = (coqTermApp (coqTermQualid (Core.unName fname)) [
             coqTermQualid "r_"])})))
-      Core.EliminationUnion v0 ->
+
+encodeUnionElim :: Core.CaseStatement -> Syntax.Term
+encodeUnionElim v0 =
         let csName = Core.caseStatementTypeName v0
             csCases = Core.caseStatementCases v0
             csDefault = Core.caseStatementDefault v0
@@ -120,15 +120,14 @@ encodeElimination elim =
                       Syntax.equationTerm = encodeTerm defaultTerm}]
                     Nothing -> [])
                   })))))))})))
-      Core.EliminationWrap _ -> Syntax.TermForallOrFun (Syntax.ForallOrFunFun (Syntax.Fun {
+encodeWrapElim :: Core.Name -> Syntax.Term
+encodeWrapElim _ = Syntax.TermForallOrFun (Syntax.ForallOrFunFun (Syntax.Fun {
         Syntax.funBinders = (Syntax.OpenBindersBinders [
           Syntax.BinderName (coqName "w_")]),
         Syntax.funBody = (coqTermQualid "w_")}))
 
-encodeFunction :: Core.Function -> Syntax.Term
-encodeFunction fn =
-    case fn of
-      Core.FunctionLambda v0 ->
+encodeLambdaTerm :: Core.Lambda -> Syntax.Term
+encodeLambdaTerm v0 =
         let param = Core.lambdaParameter v0
             body = Core.lambdaBody v0
             mDomain = Core.lambdaDomain v0
@@ -141,7 +140,6 @@ encodeFunction fn =
         in (Syntax.TermForallOrFun (Syntax.ForallOrFunFun (Syntax.Fun {
           Syntax.funBinders = (Syntax.OpenBindersBinders [binder]),
           Syntax.funBody = (encodeTerm body)})))
-      Core.FunctionElimination v0 -> encodeElimination v0
 
 encodeLiteral :: Core.Literal -> Syntax.Term
 encodeLiteral lit =
@@ -202,7 +200,10 @@ encodeTerm tm =
       Core.TermEither v0 -> Eithers.either (\l -> coqTermApp (coqTermQualid "inl") [
         encodeTerm l]) (\r -> coqTermApp (coqTermQualid "inr") [
         encodeTerm r]) v0
-      Core.TermFunction v0 -> encodeFunction v0
+      Core.TermLambda v0 -> encodeLambdaTerm v0
+      Core.TermProject v0 -> encodeProjectionElim v0
+      Core.TermCases v0 -> encodeUnionElim v0
+      Core.TermUnwrap v0 -> encodeWrapElim v0
       Core.TermLet v0 ->
         let bindings = Core.letBindings v0
             body = Core.letBody v0
@@ -459,7 +460,7 @@ sanitizeVar s
 isUnitLambda :: Core.Term -> Bool
 isUnitLambda tm = case tm of
   Core.TermAnnotated v -> isUnitLambda (Core.annotatedTermBody v)
-  Core.TermFunction (Core.FunctionLambda lam) ->
+  Core.TermLambda lam ->
     let unused = not (termReferencesVar (Core.lambdaParameter lam) (Core.lambdaBody lam))
     in isUnitDomain (Core.lambdaDomain lam) && unused
   _ -> False
@@ -478,7 +479,7 @@ isUnitDomain (Just ty) = isUnitTy ty
 unitLambdaBody :: Core.Term -> Core.Term
 unitLambdaBody tm = case tm of
   Core.TermAnnotated v -> unitLambdaBody (Core.annotatedTermBody v)
-  Core.TermFunction (Core.FunctionLambda lam) -> Core.lambdaBody lam
+  Core.TermLambda lam -> Core.lambdaBody lam
   _ -> tm
 
 -- | Check if a term contains a reference to a given variable name.
@@ -489,13 +490,10 @@ termReferencesVar name tm = case tm of
   Core.TermApplication v ->
     termReferencesVar name (Core.applicationFunction v) ||
     termReferencesVar name (Core.applicationArgument v)
-  Core.TermFunction v -> case v of
-    Core.FunctionLambda lam -> termReferencesVar name (Core.lambdaBody lam)
-    Core.FunctionElimination elim -> case elim of
-      Core.EliminationUnion cs ->
-        any (\f -> termReferencesVar name (Core.fieldTerm f)) (Core.caseStatementCases cs) ||
-        maybe False (termReferencesVar name) (Core.caseStatementDefault cs)
-      _ -> False
+  Core.TermLambda lam -> termReferencesVar name (Core.lambdaBody lam)
+  Core.TermCases cs ->
+    any (\f -> termReferencesVar name (Core.fieldTerm f)) (Core.caseStatementCases cs) ||
+    maybe False (termReferencesVar name) (Core.caseStatementDefault cs)
   Core.TermLet v ->
     any (\b -> termReferencesVar name (Core.bindingTerm b)) (Core.letBindings v) ||
     termReferencesVar name (Core.letBody v)
@@ -514,7 +512,7 @@ termReferencesVar name tm = case tm of
 extractLambdaBinders :: Core.Term -> [Syntax.Binder]
 extractLambdaBinders tm = case tm of
   Core.TermAnnotated v -> extractLambdaBinders (Core.annotatedTermBody v)
-  Core.TermFunction (Core.FunctionLambda lam) ->
+  Core.TermLambda lam ->
     let param = Core.lambdaParameter lam
         mDomain = Core.lambdaDomain lam
         binder = case mDomain of
@@ -529,5 +527,5 @@ extractLambdaBinders tm = case tm of
 stripLambdas :: Core.Term -> Core.Term
 stripLambdas tm = case tm of
   Core.TermAnnotated v -> stripLambdas (Core.annotatedTermBody v)
-  Core.TermFunction (Core.FunctionLambda lam) -> stripLambdas (Core.lambdaBody lam)
+  Core.TermLambda lam -> stripLambdas (Core.lambdaBody lam)
   _ -> tm

@@ -87,22 +87,22 @@ def encode_literal_type(v1: hydra.core.LiteralType) -> hydra.core.Term:
 
     match v1:
         case hydra.core.LiteralTypeBinary():
-            return cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(hydra.core.Name("x"), Nothing(), cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("literal"), cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Literal"), hydra.core.Field(hydra.core.Name("binary"), cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("x"))))))))))))))))
+            return cast(hydra.core.Term, hydra.core.TermLambda(hydra.core.Lambda(hydra.core.Name("x"), Nothing(), cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("literal"), cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Literal"), hydra.core.Field(hydra.core.Name("binary"), cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("x"))))))))))))))
 
         case hydra.core.LiteralTypeBoolean():
-            return cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(hydra.core.Name("x"), Nothing(), cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("literal"), cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Literal"), hydra.core.Field(hydra.core.Name("boolean"), cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("x"))))))))))))))))
+            return cast(hydra.core.Term, hydra.core.TermLambda(hydra.core.Lambda(hydra.core.Name("x"), Nothing(), cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("literal"), cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Literal"), hydra.core.Field(hydra.core.Name("boolean"), cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("x"))))))))))))))
 
         case hydra.core.LiteralTypeString():
-            return cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(hydra.core.Name("x"), Nothing(), cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("literal"), cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Literal"), hydra.core.Field(hydra.core.Name("string"), cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("x"))))))))))))))))
+            return cast(hydra.core.Term, hydra.core.TermLambda(hydra.core.Lambda(hydra.core.Name("x"), Nothing(), cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("literal"), cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Literal"), hydra.core.Field(hydra.core.Name("string"), cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("x"))))))))))))))
 
         case hydra.core.LiteralTypeInteger(value=int_type):
-            return cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(hydra.core.Name("x"), Nothing(), cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("literal"), cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Literal"), hydra.core.Field(hydra.core.Name("integer"), encode_integer_value(int_type, cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("x")))))))))))))))))
+            return cast(hydra.core.Term, hydra.core.TermLambda(hydra.core.Lambda(hydra.core.Name("x"), Nothing(), cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("literal"), cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Literal"), hydra.core.Field(hydra.core.Name("integer"), encode_integer_value(int_type, cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("x")))))))))))))))
 
         case hydra.core.LiteralTypeFloat(value=float_type):
-            return cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(hydra.core.Name("x"), Nothing(), cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("literal"), cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Literal"), hydra.core.Field(hydra.core.Name("float"), encode_float_value(float_type, cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("x")))))))))))))))))
+            return cast(hydra.core.Term, hydra.core.TermLambda(hydra.core.Lambda(hydra.core.Name("x"), Nothing(), cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("literal"), cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Literal"), hydra.core.Field(hydra.core.Name("float"), encode_float_value(float_type, cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("x")))))))))))))))
 
         case _:
-            return cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(hydra.core.Name("x"), Nothing(), cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("x"))))))))
+            return cast(hydra.core.Term, hydra.core.TermLambda(hydra.core.Lambda(hydra.core.Name("x"), Nothing(), cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("x"))))))
 
 def encode_name(n: hydra.core.Name) -> hydra.core.Term:
     r"""Encode a Name as a term."""
@@ -117,37 +117,37 @@ def encode_injection(type_name: hydra.core.Name, field_name: hydra.core.Name, fi
 def encode_either_type(et: hydra.core.EitherType) -> hydra.core.Term:
     r"""Generate an encoder for an Either type."""
 
-    return cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(hydra.core.Name("e"), Nothing(), cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("either"), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("hydra.lib.eithers.bimap"))), encode_type(et.left)))), encode_type(et.right)))), cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("e")))))))))))))))
+    return cast(hydra.core.Term, hydra.core.TermLambda(hydra.core.Lambda(hydra.core.Name("e"), Nothing(), cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("either"), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("hydra.lib.eithers.bimap"))), encode_type(et.left)))), encode_type(et.right)))), cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("e")))))))))))))
 
 def encode_field_value(type_name: hydra.core.Name, field_name: hydra.core.Name, field_type: hydra.core.Type) -> hydra.core.Term:
     r"""Generate the encoder for a field's value."""
 
-    return cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(hydra.core.Name("y"), Nothing(), cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("union"), encode_injection(type_name, field_name, cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(encode_type(field_type), cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("y"))))))))))))))))
+    return cast(hydra.core.Term, hydra.core.TermLambda(hydra.core.Lambda(hydra.core.Name("y"), Nothing(), cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("union"), encode_injection(type_name, field_name, cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(encode_type(field_type), cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("y"))))))))))))))
 
 def encode_forall_type(ft: hydra.core.ForallType) -> hydra.core.Term:
     r"""Generate an encoder for a polymorphic (forall) type."""
 
-    return cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(encode_binding_name(ft.parameter), Nothing(), encode_type(ft.body))))))
+    return cast(hydra.core.Term, hydra.core.TermLambda(hydra.core.Lambda(encode_binding_name(ft.parameter), Nothing(), encode_type(ft.body))))
 
 def encode_list_type(elem_type: hydra.core.Type) -> hydra.core.Term:
     r"""Generate an encoder for a list type."""
 
-    return cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(hydra.core.Name("xs"), Nothing(), cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("list"), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("hydra.lib.lists.map"))), encode_type(elem_type)))), cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("xs")))))))))))))))
+    return cast(hydra.core.Term, hydra.core.TermLambda(hydra.core.Lambda(hydra.core.Name("xs"), Nothing(), cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("list"), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("hydra.lib.lists.map"))), encode_type(elem_type)))), cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("xs")))))))))))))
 
 def encode_map_type(mt: hydra.core.MapType) -> hydra.core.Term:
     r"""Generate an encoder for a map type."""
 
-    return cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(hydra.core.Name("m"), Nothing(), cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("map"), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("hydra.lib.maps.bimap"))), encode_type(mt.keys)))), encode_type(mt.values)))), cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("m")))))))))))))))
+    return cast(hydra.core.Term, hydra.core.TermLambda(hydra.core.Lambda(hydra.core.Name("m"), Nothing(), cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("map"), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("hydra.lib.maps.bimap"))), encode_type(mt.keys)))), encode_type(mt.values)))), cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("m")))))))))))))
 
 def encode_optional_type(elem_type: hydra.core.Type) -> hydra.core.Term:
     r"""Generate an encoder for a Maybe type."""
 
-    return cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(hydra.core.Name("opt"), Nothing(), cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("maybe"), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("hydra.lib.maybes.map"))), encode_type(elem_type)))), cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("opt")))))))))))))))
+    return cast(hydra.core.Term, hydra.core.TermLambda(hydra.core.Lambda(hydra.core.Name("opt"), Nothing(), cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("maybe"), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("hydra.lib.maybes.map"))), encode_type(elem_type)))), cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("opt")))))))))))))
 
 def encode_pair_type(pt: hydra.core.PairType) -> hydra.core.Term:
     r"""Generate an encoder for a pair type."""
 
-    return cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(hydra.core.Name("p"), Nothing(), cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("pair"), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("hydra.lib.pairs.bimap"))), encode_type(pt.first)))), encode_type(pt.second)))), cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("p")))))))))))))))
+    return cast(hydra.core.Term, hydra.core.TermLambda(hydra.core.Lambda(hydra.core.Name("p"), Nothing(), cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("pair"), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("hydra.lib.pairs.bimap"))), encode_type(pt.first)))), encode_type(pt.second)))), cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("p")))))))))))))
 
 def encode_record_type(rt: frozenlist[hydra.core.FieldType]) -> hydra.core.Term:
     r"""Generate an encoder for a record type (unnamed — should not be called directly)."""
@@ -157,12 +157,12 @@ def encode_record_type(rt: frozenlist[hydra.core.FieldType]) -> hydra.core.Term:
 def encode_record_type_named(ename: hydra.core.Name, rt: frozenlist[hydra.core.FieldType]) -> hydra.core.Term:
     r"""Generate an encoder for a record type with the given element name."""
 
-    return cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(hydra.core.Name("x"), Nothing(), cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("record"), cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.Record"), (hydra.core.Field(hydra.core.Name("typeName"), encode_name(ename)), hydra.core.Field(hydra.core.Name("fields"), cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map((lambda ft: cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.Field"), (hydra.core.Field(hydra.core.Name("name"), encode_name(ft.name)), hydra.core.Field(hydra.core.Name("term"), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(encode_type(ft.type), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionElimination(cast(hydra.core.Elimination, hydra.core.EliminationRecord(hydra.core.Projection(ename, ft.name))))))), cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("x"))))))))))))))), rt)))))))))))))))))
+    return cast(hydra.core.Term, hydra.core.TermLambda(hydra.core.Lambda(hydra.core.Name("x"), Nothing(), cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("record"), cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.Record"), (hydra.core.Field(hydra.core.Name("typeName"), encode_name(ename)), hydra.core.Field(hydra.core.Name("fields"), cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map((lambda ft: cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.Field"), (hydra.core.Field(hydra.core.Name("name"), encode_name(ft.name)), hydra.core.Field(hydra.core.Name("term"), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(encode_type(ft.type), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermProject(hydra.core.Projection(ename, ft.name))), cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("x"))))))))))))))), rt)))))))))))))))
 
 def encode_set_type(elem_type: hydra.core.Type) -> hydra.core.Term:
     r"""Generate an encoder for a set type."""
 
-    return cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(hydra.core.Name("s"), Nothing(), cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("set"), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("hydra.lib.sets.map"))), encode_type(elem_type)))), cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("s")))))))))))))))
+    return cast(hydra.core.Term, hydra.core.TermLambda(hydra.core.Lambda(hydra.core.Name("s"), Nothing(), cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("set"), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("hydra.lib.sets.map"))), encode_type(elem_type)))), cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("s")))))))))))))
 
 def encode_type(v1: hydra.core.Type) -> hydra.core.Term:
     r"""Generate an encoder term for a Type."""
@@ -181,7 +181,7 @@ def encode_type(v1: hydra.core.Type) -> hydra.core.Term:
             return encode_forall_type(ft)
 
         case hydra.core.TypeFunction():
-            return cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(hydra.core.Name("x"), Nothing(), cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("x"))))))))
+            return cast(hydra.core.Term, hydra.core.TermLambda(hydra.core.Lambda(hydra.core.Name("x"), Nothing(), cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("x"))))))
 
         case hydra.core.TypeList(value=elem_type):
             return encode_list_type(elem_type)
@@ -211,16 +211,16 @@ def encode_type(v1: hydra.core.Type) -> hydra.core.Term:
             return encode_wrapped_type(wt)
 
         case hydra.core.TypeUnit():
-            return cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(hydra.core.Name("_"), Nothing(), cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("unit"), cast(hydra.core.Term, hydra.core.TermUnit()))))))))))
+            return cast(hydra.core.Term, hydra.core.TermLambda(hydra.core.Lambda(hydra.core.Name("_"), Nothing(), cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("unit"), cast(hydra.core.Term, hydra.core.TermUnit()))))))))
 
         case hydra.core.TypeVoid():
-            return cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(hydra.core.Name("_"), Nothing(), cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("unit"), cast(hydra.core.Term, hydra.core.TermUnit()))))))))))
+            return cast(hydra.core.Term, hydra.core.TermLambda(hydra.core.Lambda(hydra.core.Name("_"), Nothing(), cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("unit"), cast(hydra.core.Term, hydra.core.TermUnit()))))))))
 
         case hydra.core.TypeVariable(value=type_name):
             return cast(hydra.core.Term, hydra.core.TermVariable(encode_binding_name(type_name)))
 
         case _:
-            return cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(hydra.core.Name("x"), Nothing(), cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("x"))))))))
+            return cast(hydra.core.Term, hydra.core.TermLambda(hydra.core.Lambda(hydra.core.Name("x"), Nothing(), cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("x"))))))
 
 def encode_union_type(rt: frozenlist[hydra.core.FieldType]) -> hydra.core.Term:
     r"""Generate an encoder for a union type (placeholder name)."""
@@ -230,7 +230,7 @@ def encode_union_type(rt: frozenlist[hydra.core.FieldType]) -> hydra.core.Term:
 def encode_union_type_named(ename: hydra.core.Name, rt: frozenlist[hydra.core.FieldType]) -> hydra.core.Term:
     r"""Generate an encoder for a union type with the given element name."""
 
-    return cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionElimination(cast(hydra.core.Elimination, hydra.core.EliminationUnion(hydra.core.CaseStatement(ename, Nothing(), hydra.lib.lists.map((lambda ft: hydra.core.Field(ft.name, encode_field_value(ename, ft.name, ft.type))), rt))))))))
+    return cast(hydra.core.Term, hydra.core.TermCases(hydra.core.CaseStatement(ename, Nothing(), hydra.lib.lists.map((lambda ft: hydra.core.Field(ft.name, encode_field_value(ename, ft.name, ft.type))), rt))))
 
 def encode_wrapped_type(wt: hydra.core.Type) -> hydra.core.Term:
     r"""Generate an encoder for a wrapped type (placeholder name)."""
@@ -240,7 +240,7 @@ def encode_wrapped_type(wt: hydra.core.Type) -> hydra.core.Term:
 def encode_wrapped_type_named(ename: hydra.core.Name, wt: hydra.core.Type) -> hydra.core.Term:
     r"""Generate an encoder for a wrapped type with the given element name."""
 
-    return cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(hydra.core.Name("x"), Nothing(), cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("wrap"), cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.WrappedTerm"), (hydra.core.Field(hydra.core.Name("typeName"), encode_name(ename)), hydra.core.Field(hydra.core.Name("body"), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(encode_type(wt), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionElimination(cast(hydra.core.Elimination, hydra.core.EliminationWrap(ename)))))), cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("x")))))))))))))))))))))))
+    return cast(hydra.core.Term, hydra.core.TermLambda(hydra.core.Lambda(hydra.core.Name("x"), Nothing(), cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("wrap"), cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.WrappedTerm"), (hydra.core.Field(hydra.core.Name("typeName"), encode_name(ename)), hydra.core.Field(hydra.core.Name("body"), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(encode_type(wt), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermUnwrap(ename)), cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("x")))))))))))))))))))))
 
 def encode_type_named(ename: hydra.core.Name, typ: hydra.core.Type) -> hydra.core.Term:
     r"""Generate an encoder term for a Type, with the element name for nominal types."""
@@ -256,10 +256,10 @@ def encode_type_named(ename: hydra.core.Name, typ: hydra.core.Type) -> hydra.cor
             return encode_either_type(et)
 
         case hydra.core.TypeForall(value=ft):
-            return cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(encode_binding_name(ft.parameter), Nothing(), encode_type_named(ename, ft.body))))))
+            return cast(hydra.core.Term, hydra.core.TermLambda(hydra.core.Lambda(encode_binding_name(ft.parameter), Nothing(), encode_type_named(ename, ft.body))))
 
         case hydra.core.TypeFunction():
-            return cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(hydra.core.Name("x"), Nothing(), cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("x"))))))))
+            return cast(hydra.core.Term, hydra.core.TermLambda(hydra.core.Lambda(hydra.core.Name("x"), Nothing(), cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("x"))))))
 
         case hydra.core.TypeList(value=elem_type):
             return encode_list_type(elem_type)
@@ -289,16 +289,16 @@ def encode_type_named(ename: hydra.core.Name, typ: hydra.core.Type) -> hydra.cor
             return encode_wrapped_type_named(ename, wt)
 
         case hydra.core.TypeUnit():
-            return cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(hydra.core.Name("_"), Nothing(), cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("unit"), cast(hydra.core.Term, hydra.core.TermUnit()))))))))))
+            return cast(hydra.core.Term, hydra.core.TermLambda(hydra.core.Lambda(hydra.core.Name("_"), Nothing(), cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("unit"), cast(hydra.core.Term, hydra.core.TermUnit()))))))))
 
         case hydra.core.TypeVoid():
-            return cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(hydra.core.Name("_"), Nothing(), cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("unit"), cast(hydra.core.Term, hydra.core.TermUnit()))))))))))
+            return cast(hydra.core.Term, hydra.core.TermLambda(hydra.core.Lambda(hydra.core.Name("_"), Nothing(), cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("unit"), cast(hydra.core.Term, hydra.core.TermUnit()))))))))
 
         case hydra.core.TypeVariable(value=type_name):
             return cast(hydra.core.Term, hydra.core.TermVariable(encode_binding_name(type_name)))
 
         case _:
-            return cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(hydra.core.Name("x"), Nothing(), cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("x"))))))))
+            return cast(hydra.core.Term, hydra.core.TermLambda(hydra.core.Lambda(hydra.core.Name("x"), Nothing(), cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("x"))))))
 
 def encoder_collect_forall_variables(typ: hydra.core.Type) -> frozenlist[hydra.core.Name]:
     r"""Collect forall type variable names from a type."""

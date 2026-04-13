@@ -131,41 +131,41 @@ lossinessTestCase description originalSchema hydraType recoveredSchema isLossy =
 lossinessTestCaseDescription :: Phantoms.TTerm Testing.LossinessTestCase -> Phantoms.TTerm String
 lossinessTestCaseDescription x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.avro.testing.LossinessTestCase"),
-        Core.projectionField = (Core.Name "description")})))),
+        Core.projectionField = (Core.Name "description")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 lossinessTestCaseHydraType :: Phantoms.TTerm Testing.LossinessTestCase -> Phantoms.TTerm Core.Type
 lossinessTestCaseHydraType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.avro.testing.LossinessTestCase"),
-        Core.projectionField = (Core.Name "hydraType")})))),
+        Core.projectionField = (Core.Name "hydraType")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 lossinessTestCaseIsLossy :: Phantoms.TTerm Testing.LossinessTestCase -> Phantoms.TTerm Bool
 lossinessTestCaseIsLossy x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.avro.testing.LossinessTestCase"),
-        Core.projectionField = (Core.Name "isLossy")})))),
+        Core.projectionField = (Core.Name "isLossy")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 lossinessTestCaseOriginalSchema :: Phantoms.TTerm Testing.LossinessTestCase -> Phantoms.TTerm Schema.Schema
 lossinessTestCaseOriginalSchema x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.avro.testing.LossinessTestCase"),
-        Core.projectionField = (Core.Name "originalSchema")})))),
+        Core.projectionField = (Core.Name "originalSchema")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 lossinessTestCaseRecoveredSchema :: Phantoms.TTerm Testing.LossinessTestCase -> Phantoms.TTerm Schema.Schema
 lossinessTestCaseRecoveredSchema x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.avro.testing.LossinessTestCase"),
-        Core.projectionField = (Core.Name "recoveredSchema")})))),
+        Core.projectionField = (Core.Name "recoveredSchema")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 lossinessTestCaseWithDescription :: Phantoms.TTerm Testing.LossinessTestCase -> Phantoms.TTerm String -> Phantoms.TTerm Testing.LossinessTestCase
@@ -179,30 +179,30 @@ lossinessTestCaseWithDescription original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "originalSchema"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.LossinessTestCase"),
-              Core.projectionField = (Core.Name "originalSchema")})))),
+              Core.projectionField = (Core.Name "originalSchema")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "hydraType"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.LossinessTestCase"),
-              Core.projectionField = (Core.Name "hydraType")})))),
+              Core.projectionField = (Core.Name "hydraType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "recoveredSchema"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.LossinessTestCase"),
-              Core.projectionField = (Core.Name "recoveredSchema")})))),
+              Core.projectionField = (Core.Name "recoveredSchema")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "isLossy"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.LossinessTestCase"),
-              Core.projectionField = (Core.Name "isLossy")})))),
+              Core.projectionField = (Core.Name "isLossy")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 lossinessTestCaseWithHydraType :: Phantoms.TTerm Testing.LossinessTestCase -> Phantoms.TTerm Core.Type -> Phantoms.TTerm Testing.LossinessTestCase
@@ -213,16 +213,16 @@ lossinessTestCaseWithHydraType original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "description"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.LossinessTestCase"),
-              Core.projectionField = (Core.Name "description")})))),
+              Core.projectionField = (Core.Name "description")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "originalSchema"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.LossinessTestCase"),
-              Core.projectionField = (Core.Name "originalSchema")})))),
+              Core.projectionField = (Core.Name "originalSchema")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "hydraType"),
@@ -230,16 +230,16 @@ lossinessTestCaseWithHydraType original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "recoveredSchema"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.LossinessTestCase"),
-              Core.projectionField = (Core.Name "recoveredSchema")})))),
+              Core.projectionField = (Core.Name "recoveredSchema")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "isLossy"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.LossinessTestCase"),
-              Core.projectionField = (Core.Name "isLossy")})))),
+              Core.projectionField = (Core.Name "isLossy")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 lossinessTestCaseWithIsLossy :: Phantoms.TTerm Testing.LossinessTestCase -> Phantoms.TTerm Bool -> Phantoms.TTerm Testing.LossinessTestCase
@@ -250,30 +250,30 @@ lossinessTestCaseWithIsLossy original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "description"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.LossinessTestCase"),
-              Core.projectionField = (Core.Name "description")})))),
+              Core.projectionField = (Core.Name "description")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "originalSchema"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.LossinessTestCase"),
-              Core.projectionField = (Core.Name "originalSchema")})))),
+              Core.projectionField = (Core.Name "originalSchema")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "hydraType"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.LossinessTestCase"),
-              Core.projectionField = (Core.Name "hydraType")})))),
+              Core.projectionField = (Core.Name "hydraType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "recoveredSchema"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.LossinessTestCase"),
-              Core.projectionField = (Core.Name "recoveredSchema")})))),
+              Core.projectionField = (Core.Name "recoveredSchema")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "isLossy"),
@@ -287,9 +287,9 @@ lossinessTestCaseWithOriginalSchema original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "description"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.LossinessTestCase"),
-              Core.projectionField = (Core.Name "description")})))),
+              Core.projectionField = (Core.Name "description")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "originalSchema"),
@@ -297,23 +297,23 @@ lossinessTestCaseWithOriginalSchema original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "hydraType"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.LossinessTestCase"),
-              Core.projectionField = (Core.Name "hydraType")})))),
+              Core.projectionField = (Core.Name "hydraType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "recoveredSchema"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.LossinessTestCase"),
-              Core.projectionField = (Core.Name "recoveredSchema")})))),
+              Core.projectionField = (Core.Name "recoveredSchema")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "isLossy"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.LossinessTestCase"),
-              Core.projectionField = (Core.Name "isLossy")})))),
+              Core.projectionField = (Core.Name "isLossy")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 lossinessTestCaseWithRecoveredSchema :: Phantoms.TTerm Testing.LossinessTestCase -> Phantoms.TTerm Schema.Schema -> Phantoms.TTerm Testing.LossinessTestCase
@@ -324,23 +324,23 @@ lossinessTestCaseWithRecoveredSchema original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "description"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.LossinessTestCase"),
-              Core.projectionField = (Core.Name "description")})))),
+              Core.projectionField = (Core.Name "description")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "originalSchema"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.LossinessTestCase"),
-              Core.projectionField = (Core.Name "originalSchema")})))),
+              Core.projectionField = (Core.Name "originalSchema")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "hydraType"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.LossinessTestCase"),
-              Core.projectionField = (Core.Name "hydraType")})))),
+              Core.projectionField = (Core.Name "hydraType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "recoveredSchema"),
@@ -348,9 +348,9 @@ lossinessTestCaseWithRecoveredSchema original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "isLossy"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.LossinessTestCase"),
-              Core.projectionField = (Core.Name "isLossy")})))),
+              Core.projectionField = (Core.Name "isLossy")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 nameMappingTestCase :: Phantoms.TTerm String -> Phantoms.TTerm Core.Name -> Phantoms.TTerm String -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Testing.NameMappingTestCase
@@ -374,33 +374,33 @@ nameMappingTestCase description hydraName avroName avroNamespace =
 nameMappingTestCaseAvroName :: Phantoms.TTerm Testing.NameMappingTestCase -> Phantoms.TTerm String
 nameMappingTestCaseAvroName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.avro.testing.NameMappingTestCase"),
-        Core.projectionField = (Core.Name "avroName")})))),
+        Core.projectionField = (Core.Name "avroName")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 nameMappingTestCaseAvroNamespace :: Phantoms.TTerm Testing.NameMappingTestCase -> Phantoms.TTerm (Maybe String)
 nameMappingTestCaseAvroNamespace x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.avro.testing.NameMappingTestCase"),
-        Core.projectionField = (Core.Name "avroNamespace")})))),
+        Core.projectionField = (Core.Name "avroNamespace")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 nameMappingTestCaseDescription :: Phantoms.TTerm Testing.NameMappingTestCase -> Phantoms.TTerm String
 nameMappingTestCaseDescription x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.avro.testing.NameMappingTestCase"),
-        Core.projectionField = (Core.Name "description")})))),
+        Core.projectionField = (Core.Name "description")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 nameMappingTestCaseHydraName :: Phantoms.TTerm Testing.NameMappingTestCase -> Phantoms.TTerm Core.Name
 nameMappingTestCaseHydraName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.avro.testing.NameMappingTestCase"),
-        Core.projectionField = (Core.Name "hydraName")})))),
+        Core.projectionField = (Core.Name "hydraName")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 nameMappingTestCaseWithAvroName :: Phantoms.TTerm Testing.NameMappingTestCase -> Phantoms.TTerm String -> Phantoms.TTerm Testing.NameMappingTestCase
@@ -411,16 +411,16 @@ nameMappingTestCaseWithAvroName original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "description"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.NameMappingTestCase"),
-              Core.projectionField = (Core.Name "description")})))),
+              Core.projectionField = (Core.Name "description")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "hydraName"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.NameMappingTestCase"),
-              Core.projectionField = (Core.Name "hydraName")})))),
+              Core.projectionField = (Core.Name "hydraName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "avroName"),
@@ -428,9 +428,9 @@ nameMappingTestCaseWithAvroName original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "avroNamespace"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.NameMappingTestCase"),
-              Core.projectionField = (Core.Name "avroNamespace")})))),
+              Core.projectionField = (Core.Name "avroNamespace")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 nameMappingTestCaseWithAvroNamespace :: Phantoms.TTerm Testing.NameMappingTestCase -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Testing.NameMappingTestCase
@@ -441,23 +441,23 @@ nameMappingTestCaseWithAvroNamespace original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "description"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.NameMappingTestCase"),
-              Core.projectionField = (Core.Name "description")})))),
+              Core.projectionField = (Core.Name "description")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "hydraName"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.NameMappingTestCase"),
-              Core.projectionField = (Core.Name "hydraName")})))),
+              Core.projectionField = (Core.Name "hydraName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "avroName"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.NameMappingTestCase"),
-              Core.projectionField = (Core.Name "avroName")})))),
+              Core.projectionField = (Core.Name "avroName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "avroNamespace"),
@@ -474,23 +474,23 @@ nameMappingTestCaseWithDescription original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "hydraName"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.NameMappingTestCase"),
-              Core.projectionField = (Core.Name "hydraName")})))),
+              Core.projectionField = (Core.Name "hydraName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "avroName"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.NameMappingTestCase"),
-              Core.projectionField = (Core.Name "avroName")})))),
+              Core.projectionField = (Core.Name "avroName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "avroNamespace"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.NameMappingTestCase"),
-              Core.projectionField = (Core.Name "avroNamespace")})))),
+              Core.projectionField = (Core.Name "avroNamespace")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 nameMappingTestCaseWithHydraName :: Phantoms.TTerm Testing.NameMappingTestCase -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Testing.NameMappingTestCase
@@ -501,9 +501,9 @@ nameMappingTestCaseWithHydraName original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "description"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.NameMappingTestCase"),
-              Core.projectionField = (Core.Name "description")})))),
+              Core.projectionField = (Core.Name "description")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "hydraName"),
@@ -511,16 +511,16 @@ nameMappingTestCaseWithHydraName original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "avroName"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.NameMappingTestCase"),
-              Core.projectionField = (Core.Name "avroName")})))),
+              Core.projectionField = (Core.Name "avroName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "avroNamespace"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.NameMappingTestCase"),
-              Core.projectionField = (Core.Name "avroNamespace")})))),
+              Core.projectionField = (Core.Name "avroNamespace")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 schemaSerializationTestCase :: Phantoms.TTerm String -> Phantoms.TTerm Schema.Schema -> Phantoms.TTerm Model.Value -> Phantoms.TTerm Testing.SchemaSerializationTestCase
@@ -541,25 +541,25 @@ schemaSerializationTestCase description schema json =
 schemaSerializationTestCaseDescription :: Phantoms.TTerm Testing.SchemaSerializationTestCase -> Phantoms.TTerm String
 schemaSerializationTestCaseDescription x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.avro.testing.SchemaSerializationTestCase"),
-        Core.projectionField = (Core.Name "description")})))),
+        Core.projectionField = (Core.Name "description")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 schemaSerializationTestCaseJson :: Phantoms.TTerm Testing.SchemaSerializationTestCase -> Phantoms.TTerm Model.Value
 schemaSerializationTestCaseJson x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.avro.testing.SchemaSerializationTestCase"),
-        Core.projectionField = (Core.Name "json")})))),
+        Core.projectionField = (Core.Name "json")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 schemaSerializationTestCaseSchema :: Phantoms.TTerm Testing.SchemaSerializationTestCase -> Phantoms.TTerm Schema.Schema
 schemaSerializationTestCaseSchema x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.avro.testing.SchemaSerializationTestCase"),
-        Core.projectionField = (Core.Name "schema")})))),
+        Core.projectionField = (Core.Name "schema")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 schemaSerializationTestCaseWithDescription :: Phantoms.TTerm Testing.SchemaSerializationTestCase -> Phantoms.TTerm String -> Phantoms.TTerm Testing.SchemaSerializationTestCase
@@ -573,16 +573,16 @@ schemaSerializationTestCaseWithDescription original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "schema"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.SchemaSerializationTestCase"),
-              Core.projectionField = (Core.Name "schema")})))),
+              Core.projectionField = (Core.Name "schema")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "json"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.SchemaSerializationTestCase"),
-              Core.projectionField = (Core.Name "json")})))),
+              Core.projectionField = (Core.Name "json")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 schemaSerializationTestCaseWithJson :: Phantoms.TTerm Testing.SchemaSerializationTestCase -> Phantoms.TTerm Model.Value -> Phantoms.TTerm Testing.SchemaSerializationTestCase
@@ -593,16 +593,16 @@ schemaSerializationTestCaseWithJson original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "description"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.SchemaSerializationTestCase"),
-              Core.projectionField = (Core.Name "description")})))),
+              Core.projectionField = (Core.Name "description")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "schema"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.SchemaSerializationTestCase"),
-              Core.projectionField = (Core.Name "schema")})))),
+              Core.projectionField = (Core.Name "schema")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "json"),
@@ -616,9 +616,9 @@ schemaSerializationTestCaseWithSchema original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "description"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.SchemaSerializationTestCase"),
-              Core.projectionField = (Core.Name "description")})))),
+              Core.projectionField = (Core.Name "description")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "schema"),
@@ -626,9 +626,9 @@ schemaSerializationTestCaseWithSchema original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "json"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.SchemaSerializationTestCase"),
-              Core.projectionField = (Core.Name "json")})))),
+              Core.projectionField = (Core.Name "json")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 termLevelForwardTestCase :: Phantoms.TTerm String -> Phantoms.TTerm Schema.Schema -> Phantoms.TTerm Model.Value -> Phantoms.TTerm Core.Term -> Phantoms.TTerm Testing.TermLevelForwardTestCase
@@ -652,33 +652,33 @@ termLevelForwardTestCase description schema json term =
 termLevelForwardTestCaseDescription :: Phantoms.TTerm Testing.TermLevelForwardTestCase -> Phantoms.TTerm String
 termLevelForwardTestCaseDescription x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.avro.testing.TermLevelForwardTestCase"),
-        Core.projectionField = (Core.Name "description")})))),
+        Core.projectionField = (Core.Name "description")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 termLevelForwardTestCaseJson :: Phantoms.TTerm Testing.TermLevelForwardTestCase -> Phantoms.TTerm Model.Value
 termLevelForwardTestCaseJson x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.avro.testing.TermLevelForwardTestCase"),
-        Core.projectionField = (Core.Name "json")})))),
+        Core.projectionField = (Core.Name "json")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 termLevelForwardTestCaseSchema :: Phantoms.TTerm Testing.TermLevelForwardTestCase -> Phantoms.TTerm Schema.Schema
 termLevelForwardTestCaseSchema x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.avro.testing.TermLevelForwardTestCase"),
-        Core.projectionField = (Core.Name "schema")})))),
+        Core.projectionField = (Core.Name "schema")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 termLevelForwardTestCaseTerm :: Phantoms.TTerm Testing.TermLevelForwardTestCase -> Phantoms.TTerm Core.Term
 termLevelForwardTestCaseTerm x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.avro.testing.TermLevelForwardTestCase"),
-        Core.projectionField = (Core.Name "term")})))),
+        Core.projectionField = (Core.Name "term")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 termLevelForwardTestCaseWithDescription :: Phantoms.TTerm Testing.TermLevelForwardTestCase -> Phantoms.TTerm String -> Phantoms.TTerm Testing.TermLevelForwardTestCase
@@ -692,23 +692,23 @@ termLevelForwardTestCaseWithDescription original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "schema"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.TermLevelForwardTestCase"),
-              Core.projectionField = (Core.Name "schema")})))),
+              Core.projectionField = (Core.Name "schema")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "json"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.TermLevelForwardTestCase"),
-              Core.projectionField = (Core.Name "json")})))),
+              Core.projectionField = (Core.Name "json")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "term"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.TermLevelForwardTestCase"),
-              Core.projectionField = (Core.Name "term")})))),
+              Core.projectionField = (Core.Name "term")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 termLevelForwardTestCaseWithJson :: Phantoms.TTerm Testing.TermLevelForwardTestCase -> Phantoms.TTerm Model.Value -> Phantoms.TTerm Testing.TermLevelForwardTestCase
@@ -719,16 +719,16 @@ termLevelForwardTestCaseWithJson original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "description"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.TermLevelForwardTestCase"),
-              Core.projectionField = (Core.Name "description")})))),
+              Core.projectionField = (Core.Name "description")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "schema"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.TermLevelForwardTestCase"),
-              Core.projectionField = (Core.Name "schema")})))),
+              Core.projectionField = (Core.Name "schema")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "json"),
@@ -736,9 +736,9 @@ termLevelForwardTestCaseWithJson original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "term"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.TermLevelForwardTestCase"),
-              Core.projectionField = (Core.Name "term")})))),
+              Core.projectionField = (Core.Name "term")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 termLevelForwardTestCaseWithSchema :: Phantoms.TTerm Testing.TermLevelForwardTestCase -> Phantoms.TTerm Schema.Schema -> Phantoms.TTerm Testing.TermLevelForwardTestCase
@@ -749,9 +749,9 @@ termLevelForwardTestCaseWithSchema original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "description"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.TermLevelForwardTestCase"),
-              Core.projectionField = (Core.Name "description")})))),
+              Core.projectionField = (Core.Name "description")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "schema"),
@@ -759,16 +759,16 @@ termLevelForwardTestCaseWithSchema original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "json"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.TermLevelForwardTestCase"),
-              Core.projectionField = (Core.Name "json")})))),
+              Core.projectionField = (Core.Name "json")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "term"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.TermLevelForwardTestCase"),
-              Core.projectionField = (Core.Name "term")})))),
+              Core.projectionField = (Core.Name "term")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 termLevelForwardTestCaseWithTerm :: Phantoms.TTerm Testing.TermLevelForwardTestCase -> Phantoms.TTerm Core.Term -> Phantoms.TTerm Testing.TermLevelForwardTestCase
@@ -779,23 +779,23 @@ termLevelForwardTestCaseWithTerm original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "description"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.TermLevelForwardTestCase"),
-              Core.projectionField = (Core.Name "description")})))),
+              Core.projectionField = (Core.Name "description")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "schema"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.TermLevelForwardTestCase"),
-              Core.projectionField = (Core.Name "schema")})))),
+              Core.projectionField = (Core.Name "schema")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "json"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.TermLevelForwardTestCase"),
-              Core.projectionField = (Core.Name "json")})))),
+              Core.projectionField = (Core.Name "json")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "term"),
@@ -822,33 +822,33 @@ termLevelReverseTestCase description schema term json =
 termLevelReverseTestCaseDescription :: Phantoms.TTerm Testing.TermLevelReverseTestCase -> Phantoms.TTerm String
 termLevelReverseTestCaseDescription x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.avro.testing.TermLevelReverseTestCase"),
-        Core.projectionField = (Core.Name "description")})))),
+        Core.projectionField = (Core.Name "description")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 termLevelReverseTestCaseJson :: Phantoms.TTerm Testing.TermLevelReverseTestCase -> Phantoms.TTerm Model.Value
 termLevelReverseTestCaseJson x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.avro.testing.TermLevelReverseTestCase"),
-        Core.projectionField = (Core.Name "json")})))),
+        Core.projectionField = (Core.Name "json")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 termLevelReverseTestCaseSchema :: Phantoms.TTerm Testing.TermLevelReverseTestCase -> Phantoms.TTerm Schema.Schema
 termLevelReverseTestCaseSchema x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.avro.testing.TermLevelReverseTestCase"),
-        Core.projectionField = (Core.Name "schema")})))),
+        Core.projectionField = (Core.Name "schema")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 termLevelReverseTestCaseTerm :: Phantoms.TTerm Testing.TermLevelReverseTestCase -> Phantoms.TTerm Core.Term
 termLevelReverseTestCaseTerm x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.avro.testing.TermLevelReverseTestCase"),
-        Core.projectionField = (Core.Name "term")})))),
+        Core.projectionField = (Core.Name "term")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 termLevelReverseTestCaseWithDescription :: Phantoms.TTerm Testing.TermLevelReverseTestCase -> Phantoms.TTerm String -> Phantoms.TTerm Testing.TermLevelReverseTestCase
@@ -862,23 +862,23 @@ termLevelReverseTestCaseWithDescription original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "schema"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.TermLevelReverseTestCase"),
-              Core.projectionField = (Core.Name "schema")})))),
+              Core.projectionField = (Core.Name "schema")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "term"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.TermLevelReverseTestCase"),
-              Core.projectionField = (Core.Name "term")})))),
+              Core.projectionField = (Core.Name "term")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "json"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.TermLevelReverseTestCase"),
-              Core.projectionField = (Core.Name "json")})))),
+              Core.projectionField = (Core.Name "json")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 termLevelReverseTestCaseWithJson :: Phantoms.TTerm Testing.TermLevelReverseTestCase -> Phantoms.TTerm Model.Value -> Phantoms.TTerm Testing.TermLevelReverseTestCase
@@ -889,23 +889,23 @@ termLevelReverseTestCaseWithJson original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "description"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.TermLevelReverseTestCase"),
-              Core.projectionField = (Core.Name "description")})))),
+              Core.projectionField = (Core.Name "description")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "schema"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.TermLevelReverseTestCase"),
-              Core.projectionField = (Core.Name "schema")})))),
+              Core.projectionField = (Core.Name "schema")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "term"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.TermLevelReverseTestCase"),
-              Core.projectionField = (Core.Name "term")})))),
+              Core.projectionField = (Core.Name "term")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "json"),
@@ -919,9 +919,9 @@ termLevelReverseTestCaseWithSchema original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "description"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.TermLevelReverseTestCase"),
-              Core.projectionField = (Core.Name "description")})))),
+              Core.projectionField = (Core.Name "description")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "schema"),
@@ -929,16 +929,16 @@ termLevelReverseTestCaseWithSchema original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "term"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.TermLevelReverseTestCase"),
-              Core.projectionField = (Core.Name "term")})))),
+              Core.projectionField = (Core.Name "term")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "json"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.TermLevelReverseTestCase"),
-              Core.projectionField = (Core.Name "json")})))),
+              Core.projectionField = (Core.Name "json")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 termLevelReverseTestCaseWithTerm :: Phantoms.TTerm Testing.TermLevelReverseTestCase -> Phantoms.TTerm Core.Term -> Phantoms.TTerm Testing.TermLevelReverseTestCase
@@ -949,16 +949,16 @@ termLevelReverseTestCaseWithTerm original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "description"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.TermLevelReverseTestCase"),
-              Core.projectionField = (Core.Name "description")})))),
+              Core.projectionField = (Core.Name "description")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "schema"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.TermLevelReverseTestCase"),
-              Core.projectionField = (Core.Name "schema")})))),
+              Core.projectionField = (Core.Name "schema")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "term"),
@@ -966,9 +966,9 @@ termLevelReverseTestCaseWithTerm original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "json"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.TermLevelReverseTestCase"),
-              Core.projectionField = (Core.Name "json")})))),
+              Core.projectionField = (Core.Name "json")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 termLevelRoundTripJsonTestCase :: Phantoms.TTerm String -> Phantoms.TTerm Schema.Schema -> Phantoms.TTerm Model.Value -> Phantoms.TTerm Model.Value -> Phantoms.TTerm Testing.TermLevelRoundTripJsonTestCase
@@ -992,33 +992,33 @@ termLevelRoundTripJsonTestCase description schema json expectedJson =
 termLevelRoundTripJsonTestCaseDescription :: Phantoms.TTerm Testing.TermLevelRoundTripJsonTestCase -> Phantoms.TTerm String
 termLevelRoundTripJsonTestCaseDescription x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.avro.testing.TermLevelRoundTripJsonTestCase"),
-        Core.projectionField = (Core.Name "description")})))),
+        Core.projectionField = (Core.Name "description")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 termLevelRoundTripJsonTestCaseExpectedJson :: Phantoms.TTerm Testing.TermLevelRoundTripJsonTestCase -> Phantoms.TTerm Model.Value
 termLevelRoundTripJsonTestCaseExpectedJson x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.avro.testing.TermLevelRoundTripJsonTestCase"),
-        Core.projectionField = (Core.Name "expectedJson")})))),
+        Core.projectionField = (Core.Name "expectedJson")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 termLevelRoundTripJsonTestCaseJson :: Phantoms.TTerm Testing.TermLevelRoundTripJsonTestCase -> Phantoms.TTerm Model.Value
 termLevelRoundTripJsonTestCaseJson x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.avro.testing.TermLevelRoundTripJsonTestCase"),
-        Core.projectionField = (Core.Name "json")})))),
+        Core.projectionField = (Core.Name "json")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 termLevelRoundTripJsonTestCaseSchema :: Phantoms.TTerm Testing.TermLevelRoundTripJsonTestCase -> Phantoms.TTerm Schema.Schema
 termLevelRoundTripJsonTestCaseSchema x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.avro.testing.TermLevelRoundTripJsonTestCase"),
-        Core.projectionField = (Core.Name "schema")})))),
+        Core.projectionField = (Core.Name "schema")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 termLevelRoundTripJsonTestCaseWithDescription :: Phantoms.TTerm Testing.TermLevelRoundTripJsonTestCase -> Phantoms.TTerm String -> Phantoms.TTerm Testing.TermLevelRoundTripJsonTestCase
@@ -1032,23 +1032,23 @@ termLevelRoundTripJsonTestCaseWithDescription original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "schema"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.TermLevelRoundTripJsonTestCase"),
-              Core.projectionField = (Core.Name "schema")})))),
+              Core.projectionField = (Core.Name "schema")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "json"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.TermLevelRoundTripJsonTestCase"),
-              Core.projectionField = (Core.Name "json")})))),
+              Core.projectionField = (Core.Name "json")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "expectedJson"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.TermLevelRoundTripJsonTestCase"),
-              Core.projectionField = (Core.Name "expectedJson")})))),
+              Core.projectionField = (Core.Name "expectedJson")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 termLevelRoundTripJsonTestCaseWithExpectedJson :: Phantoms.TTerm Testing.TermLevelRoundTripJsonTestCase -> Phantoms.TTerm Model.Value -> Phantoms.TTerm Testing.TermLevelRoundTripJsonTestCase
@@ -1059,23 +1059,23 @@ termLevelRoundTripJsonTestCaseWithExpectedJson original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "description"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.TermLevelRoundTripJsonTestCase"),
-              Core.projectionField = (Core.Name "description")})))),
+              Core.projectionField = (Core.Name "description")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "schema"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.TermLevelRoundTripJsonTestCase"),
-              Core.projectionField = (Core.Name "schema")})))),
+              Core.projectionField = (Core.Name "schema")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "json"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.TermLevelRoundTripJsonTestCase"),
-              Core.projectionField = (Core.Name "json")})))),
+              Core.projectionField = (Core.Name "json")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "expectedJson"),
@@ -1089,16 +1089,16 @@ termLevelRoundTripJsonTestCaseWithJson original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "description"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.TermLevelRoundTripJsonTestCase"),
-              Core.projectionField = (Core.Name "description")})))),
+              Core.projectionField = (Core.Name "description")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "schema"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.TermLevelRoundTripJsonTestCase"),
-              Core.projectionField = (Core.Name "schema")})))),
+              Core.projectionField = (Core.Name "schema")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "json"),
@@ -1106,9 +1106,9 @@ termLevelRoundTripJsonTestCaseWithJson original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "expectedJson"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.TermLevelRoundTripJsonTestCase"),
-              Core.projectionField = (Core.Name "expectedJson")})))),
+              Core.projectionField = (Core.Name "expectedJson")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 termLevelRoundTripJsonTestCaseWithSchema :: Phantoms.TTerm Testing.TermLevelRoundTripJsonTestCase -> Phantoms.TTerm Schema.Schema -> Phantoms.TTerm Testing.TermLevelRoundTripJsonTestCase
@@ -1119,9 +1119,9 @@ termLevelRoundTripJsonTestCaseWithSchema original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "description"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.TermLevelRoundTripJsonTestCase"),
-              Core.projectionField = (Core.Name "description")})))),
+              Core.projectionField = (Core.Name "description")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "schema"),
@@ -1129,16 +1129,16 @@ termLevelRoundTripJsonTestCaseWithSchema original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "json"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.TermLevelRoundTripJsonTestCase"),
-              Core.projectionField = (Core.Name "json")})))),
+              Core.projectionField = (Core.Name "json")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "expectedJson"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.TermLevelRoundTripJsonTestCase"),
-              Core.projectionField = (Core.Name "expectedJson")})))),
+              Core.projectionField = (Core.Name "expectedJson")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 termLevelRoundTripTermTestCase :: Phantoms.TTerm String -> Phantoms.TTerm Core.Type -> Phantoms.TTerm Core.Term -> Phantoms.TTerm Core.Term -> Phantoms.TTerm Testing.TermLevelRoundTripTermTestCase
@@ -1162,33 +1162,33 @@ termLevelRoundTripTermTestCase description type_ term expectedTerm =
 termLevelRoundTripTermTestCaseDescription :: Phantoms.TTerm Testing.TermLevelRoundTripTermTestCase -> Phantoms.TTerm String
 termLevelRoundTripTermTestCaseDescription x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.avro.testing.TermLevelRoundTripTermTestCase"),
-        Core.projectionField = (Core.Name "description")})))),
+        Core.projectionField = (Core.Name "description")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 termLevelRoundTripTermTestCaseExpectedTerm :: Phantoms.TTerm Testing.TermLevelRoundTripTermTestCase -> Phantoms.TTerm Core.Term
 termLevelRoundTripTermTestCaseExpectedTerm x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.avro.testing.TermLevelRoundTripTermTestCase"),
-        Core.projectionField = (Core.Name "expectedTerm")})))),
+        Core.projectionField = (Core.Name "expectedTerm")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 termLevelRoundTripTermTestCaseTerm :: Phantoms.TTerm Testing.TermLevelRoundTripTermTestCase -> Phantoms.TTerm Core.Term
 termLevelRoundTripTermTestCaseTerm x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.avro.testing.TermLevelRoundTripTermTestCase"),
-        Core.projectionField = (Core.Name "term")})))),
+        Core.projectionField = (Core.Name "term")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 termLevelRoundTripTermTestCaseType :: Phantoms.TTerm Testing.TermLevelRoundTripTermTestCase -> Phantoms.TTerm Core.Type
 termLevelRoundTripTermTestCaseType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.avro.testing.TermLevelRoundTripTermTestCase"),
-        Core.projectionField = (Core.Name "type")})))),
+        Core.projectionField = (Core.Name "type")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 termLevelRoundTripTermTestCaseWithDescription :: Phantoms.TTerm Testing.TermLevelRoundTripTermTestCase -> Phantoms.TTerm String -> Phantoms.TTerm Testing.TermLevelRoundTripTermTestCase
@@ -1202,23 +1202,23 @@ termLevelRoundTripTermTestCaseWithDescription original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.TermLevelRoundTripTermTestCase"),
-              Core.projectionField = (Core.Name "type")})))),
+              Core.projectionField = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "term"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.TermLevelRoundTripTermTestCase"),
-              Core.projectionField = (Core.Name "term")})))),
+              Core.projectionField = (Core.Name "term")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "expectedTerm"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.TermLevelRoundTripTermTestCase"),
-              Core.projectionField = (Core.Name "expectedTerm")})))),
+              Core.projectionField = (Core.Name "expectedTerm")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 termLevelRoundTripTermTestCaseWithExpectedTerm :: Phantoms.TTerm Testing.TermLevelRoundTripTermTestCase -> Phantoms.TTerm Core.Term -> Phantoms.TTerm Testing.TermLevelRoundTripTermTestCase
@@ -1229,23 +1229,23 @@ termLevelRoundTripTermTestCaseWithExpectedTerm original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "description"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.TermLevelRoundTripTermTestCase"),
-              Core.projectionField = (Core.Name "description")})))),
+              Core.projectionField = (Core.Name "description")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.TermLevelRoundTripTermTestCase"),
-              Core.projectionField = (Core.Name "type")})))),
+              Core.projectionField = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "term"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.TermLevelRoundTripTermTestCase"),
-              Core.projectionField = (Core.Name "term")})))),
+              Core.projectionField = (Core.Name "term")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "expectedTerm"),
@@ -1259,16 +1259,16 @@ termLevelRoundTripTermTestCaseWithTerm original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "description"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.TermLevelRoundTripTermTestCase"),
-              Core.projectionField = (Core.Name "description")})))),
+              Core.projectionField = (Core.Name "description")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.TermLevelRoundTripTermTestCase"),
-              Core.projectionField = (Core.Name "type")})))),
+              Core.projectionField = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "term"),
@@ -1276,9 +1276,9 @@ termLevelRoundTripTermTestCaseWithTerm original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "expectedTerm"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.TermLevelRoundTripTermTestCase"),
-              Core.projectionField = (Core.Name "expectedTerm")})))),
+              Core.projectionField = (Core.Name "expectedTerm")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 termLevelRoundTripTermTestCaseWithType :: Phantoms.TTerm Testing.TermLevelRoundTripTermTestCase -> Phantoms.TTerm Core.Type -> Phantoms.TTerm Testing.TermLevelRoundTripTermTestCase
@@ -1289,9 +1289,9 @@ termLevelRoundTripTermTestCaseWithType original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "description"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.TermLevelRoundTripTermTestCase"),
-              Core.projectionField = (Core.Name "description")})))),
+              Core.projectionField = (Core.Name "description")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
@@ -1299,16 +1299,16 @@ termLevelRoundTripTermTestCaseWithType original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "term"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.TermLevelRoundTripTermTestCase"),
-              Core.projectionField = (Core.Name "term")})))),
+              Core.projectionField = (Core.Name "term")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "expectedTerm"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.TermLevelRoundTripTermTestCase"),
-              Core.projectionField = (Core.Name "expectedTerm")})))),
+              Core.projectionField = (Core.Name "expectedTerm")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 typeLevelForwardTestCase :: Phantoms.TTerm String -> Phantoms.TTerm Schema.Schema -> Phantoms.TTerm Core.Type -> Phantoms.TTerm Testing.TypeLevelForwardTestCase
@@ -1329,25 +1329,25 @@ typeLevelForwardTestCase description schema type_ =
 typeLevelForwardTestCaseDescription :: Phantoms.TTerm Testing.TypeLevelForwardTestCase -> Phantoms.TTerm String
 typeLevelForwardTestCaseDescription x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.avro.testing.TypeLevelForwardTestCase"),
-        Core.projectionField = (Core.Name "description")})))),
+        Core.projectionField = (Core.Name "description")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 typeLevelForwardTestCaseSchema :: Phantoms.TTerm Testing.TypeLevelForwardTestCase -> Phantoms.TTerm Schema.Schema
 typeLevelForwardTestCaseSchema x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.avro.testing.TypeLevelForwardTestCase"),
-        Core.projectionField = (Core.Name "schema")})))),
+        Core.projectionField = (Core.Name "schema")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 typeLevelForwardTestCaseType :: Phantoms.TTerm Testing.TypeLevelForwardTestCase -> Phantoms.TTerm Core.Type
 typeLevelForwardTestCaseType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.avro.testing.TypeLevelForwardTestCase"),
-        Core.projectionField = (Core.Name "type")})))),
+        Core.projectionField = (Core.Name "type")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 typeLevelForwardTestCaseWithDescription :: Phantoms.TTerm Testing.TypeLevelForwardTestCase -> Phantoms.TTerm String -> Phantoms.TTerm Testing.TypeLevelForwardTestCase
@@ -1361,16 +1361,16 @@ typeLevelForwardTestCaseWithDescription original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "schema"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.TypeLevelForwardTestCase"),
-              Core.projectionField = (Core.Name "schema")})))),
+              Core.projectionField = (Core.Name "schema")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.TypeLevelForwardTestCase"),
-              Core.projectionField = (Core.Name "type")})))),
+              Core.projectionField = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 typeLevelForwardTestCaseWithSchema :: Phantoms.TTerm Testing.TypeLevelForwardTestCase -> Phantoms.TTerm Schema.Schema -> Phantoms.TTerm Testing.TypeLevelForwardTestCase
@@ -1381,9 +1381,9 @@ typeLevelForwardTestCaseWithSchema original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "description"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.TypeLevelForwardTestCase"),
-              Core.projectionField = (Core.Name "description")})))),
+              Core.projectionField = (Core.Name "description")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "schema"),
@@ -1391,9 +1391,9 @@ typeLevelForwardTestCaseWithSchema original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.TypeLevelForwardTestCase"),
-              Core.projectionField = (Core.Name "type")})))),
+              Core.projectionField = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 typeLevelForwardTestCaseWithType :: Phantoms.TTerm Testing.TypeLevelForwardTestCase -> Phantoms.TTerm Core.Type -> Phantoms.TTerm Testing.TypeLevelForwardTestCase
@@ -1404,16 +1404,16 @@ typeLevelForwardTestCaseWithType original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "description"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.TypeLevelForwardTestCase"),
-              Core.projectionField = (Core.Name "description")})))),
+              Core.projectionField = (Core.Name "description")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "schema"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.TypeLevelForwardTestCase"),
-              Core.projectionField = (Core.Name "schema")})))),
+              Core.projectionField = (Core.Name "schema")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
@@ -1437,25 +1437,25 @@ typeLevelReverseTestCase description type_ schema =
 typeLevelReverseTestCaseDescription :: Phantoms.TTerm Testing.TypeLevelReverseTestCase -> Phantoms.TTerm String
 typeLevelReverseTestCaseDescription x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.avro.testing.TypeLevelReverseTestCase"),
-        Core.projectionField = (Core.Name "description")})))),
+        Core.projectionField = (Core.Name "description")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 typeLevelReverseTestCaseSchema :: Phantoms.TTerm Testing.TypeLevelReverseTestCase -> Phantoms.TTerm Schema.Schema
 typeLevelReverseTestCaseSchema x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.avro.testing.TypeLevelReverseTestCase"),
-        Core.projectionField = (Core.Name "schema")})))),
+        Core.projectionField = (Core.Name "schema")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 typeLevelReverseTestCaseType :: Phantoms.TTerm Testing.TypeLevelReverseTestCase -> Phantoms.TTerm Core.Type
 typeLevelReverseTestCaseType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.avro.testing.TypeLevelReverseTestCase"),
-        Core.projectionField = (Core.Name "type")})))),
+        Core.projectionField = (Core.Name "type")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 typeLevelReverseTestCaseWithDescription :: Phantoms.TTerm Testing.TypeLevelReverseTestCase -> Phantoms.TTerm String -> Phantoms.TTerm Testing.TypeLevelReverseTestCase
@@ -1469,16 +1469,16 @@ typeLevelReverseTestCaseWithDescription original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.TypeLevelReverseTestCase"),
-              Core.projectionField = (Core.Name "type")})))),
+              Core.projectionField = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "schema"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.TypeLevelReverseTestCase"),
-              Core.projectionField = (Core.Name "schema")})))),
+              Core.projectionField = (Core.Name "schema")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 typeLevelReverseTestCaseWithSchema :: Phantoms.TTerm Testing.TypeLevelReverseTestCase -> Phantoms.TTerm Schema.Schema -> Phantoms.TTerm Testing.TypeLevelReverseTestCase
@@ -1489,16 +1489,16 @@ typeLevelReverseTestCaseWithSchema original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "description"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.TypeLevelReverseTestCase"),
-              Core.projectionField = (Core.Name "description")})))),
+              Core.projectionField = (Core.Name "description")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.TypeLevelReverseTestCase"),
-              Core.projectionField = (Core.Name "type")})))),
+              Core.projectionField = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "schema"),
@@ -1512,9 +1512,9 @@ typeLevelReverseTestCaseWithType original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "description"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.TypeLevelReverseTestCase"),
-              Core.projectionField = (Core.Name "description")})))),
+              Core.projectionField = (Core.Name "description")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
@@ -1522,9 +1522,9 @@ typeLevelReverseTestCaseWithType original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "schema"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.TypeLevelReverseTestCase"),
-              Core.projectionField = (Core.Name "schema")})))),
+              Core.projectionField = (Core.Name "schema")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 typeLevelRoundTripAvroTestCase :: Phantoms.TTerm String -> Phantoms.TTerm Schema.Schema -> Phantoms.TTerm Schema.Schema -> Phantoms.TTerm Testing.TypeLevelRoundTripAvroTestCase
@@ -1545,25 +1545,25 @@ typeLevelRoundTripAvroTestCase description schema expectedSchema =
 typeLevelRoundTripAvroTestCaseDescription :: Phantoms.TTerm Testing.TypeLevelRoundTripAvroTestCase -> Phantoms.TTerm String
 typeLevelRoundTripAvroTestCaseDescription x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.avro.testing.TypeLevelRoundTripAvroTestCase"),
-        Core.projectionField = (Core.Name "description")})))),
+        Core.projectionField = (Core.Name "description")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 typeLevelRoundTripAvroTestCaseExpectedSchema :: Phantoms.TTerm Testing.TypeLevelRoundTripAvroTestCase -> Phantoms.TTerm Schema.Schema
 typeLevelRoundTripAvroTestCaseExpectedSchema x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.avro.testing.TypeLevelRoundTripAvroTestCase"),
-        Core.projectionField = (Core.Name "expectedSchema")})))),
+        Core.projectionField = (Core.Name "expectedSchema")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 typeLevelRoundTripAvroTestCaseSchema :: Phantoms.TTerm Testing.TypeLevelRoundTripAvroTestCase -> Phantoms.TTerm Schema.Schema
 typeLevelRoundTripAvroTestCaseSchema x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.avro.testing.TypeLevelRoundTripAvroTestCase"),
-        Core.projectionField = (Core.Name "schema")})))),
+        Core.projectionField = (Core.Name "schema")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 typeLevelRoundTripAvroTestCaseWithDescription :: Phantoms.TTerm Testing.TypeLevelRoundTripAvroTestCase -> Phantoms.TTerm String -> Phantoms.TTerm Testing.TypeLevelRoundTripAvroTestCase
@@ -1577,16 +1577,16 @@ typeLevelRoundTripAvroTestCaseWithDescription original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "schema"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.TypeLevelRoundTripAvroTestCase"),
-              Core.projectionField = (Core.Name "schema")})))),
+              Core.projectionField = (Core.Name "schema")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "expectedSchema"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.TypeLevelRoundTripAvroTestCase"),
-              Core.projectionField = (Core.Name "expectedSchema")})))),
+              Core.projectionField = (Core.Name "expectedSchema")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 typeLevelRoundTripAvroTestCaseWithExpectedSchema :: Phantoms.TTerm Testing.TypeLevelRoundTripAvroTestCase -> Phantoms.TTerm Schema.Schema -> Phantoms.TTerm Testing.TypeLevelRoundTripAvroTestCase
@@ -1597,16 +1597,16 @@ typeLevelRoundTripAvroTestCaseWithExpectedSchema original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "description"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.TypeLevelRoundTripAvroTestCase"),
-              Core.projectionField = (Core.Name "description")})))),
+              Core.projectionField = (Core.Name "description")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "schema"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.TypeLevelRoundTripAvroTestCase"),
-              Core.projectionField = (Core.Name "schema")})))),
+              Core.projectionField = (Core.Name "schema")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "expectedSchema"),
@@ -1620,9 +1620,9 @@ typeLevelRoundTripAvroTestCaseWithSchema original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "description"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.TypeLevelRoundTripAvroTestCase"),
-              Core.projectionField = (Core.Name "description")})))),
+              Core.projectionField = (Core.Name "description")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "schema"),
@@ -1630,9 +1630,9 @@ typeLevelRoundTripAvroTestCaseWithSchema original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "expectedSchema"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.TypeLevelRoundTripAvroTestCase"),
-              Core.projectionField = (Core.Name "expectedSchema")})))),
+              Core.projectionField = (Core.Name "expectedSchema")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 typeLevelRoundTripHydraTestCase :: Phantoms.TTerm String -> Phantoms.TTerm Core.Type -> Phantoms.TTerm Core.Type -> Phantoms.TTerm Testing.TypeLevelRoundTripHydraTestCase
@@ -1653,25 +1653,25 @@ typeLevelRoundTripHydraTestCase description type_ expectedType =
 typeLevelRoundTripHydraTestCaseDescription :: Phantoms.TTerm Testing.TypeLevelRoundTripHydraTestCase -> Phantoms.TTerm String
 typeLevelRoundTripHydraTestCaseDescription x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.avro.testing.TypeLevelRoundTripHydraTestCase"),
-        Core.projectionField = (Core.Name "description")})))),
+        Core.projectionField = (Core.Name "description")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 typeLevelRoundTripHydraTestCaseExpectedType :: Phantoms.TTerm Testing.TypeLevelRoundTripHydraTestCase -> Phantoms.TTerm Core.Type
 typeLevelRoundTripHydraTestCaseExpectedType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.avro.testing.TypeLevelRoundTripHydraTestCase"),
-        Core.projectionField = (Core.Name "expectedType")})))),
+        Core.projectionField = (Core.Name "expectedType")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 typeLevelRoundTripHydraTestCaseType :: Phantoms.TTerm Testing.TypeLevelRoundTripHydraTestCase -> Phantoms.TTerm Core.Type
 typeLevelRoundTripHydraTestCaseType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.avro.testing.TypeLevelRoundTripHydraTestCase"),
-        Core.projectionField = (Core.Name "type")})))),
+        Core.projectionField = (Core.Name "type")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 typeLevelRoundTripHydraTestCaseWithDescription :: Phantoms.TTerm Testing.TypeLevelRoundTripHydraTestCase -> Phantoms.TTerm String -> Phantoms.TTerm Testing.TypeLevelRoundTripHydraTestCase
@@ -1685,16 +1685,16 @@ typeLevelRoundTripHydraTestCaseWithDescription original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.TypeLevelRoundTripHydraTestCase"),
-              Core.projectionField = (Core.Name "type")})))),
+              Core.projectionField = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "expectedType"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.TypeLevelRoundTripHydraTestCase"),
-              Core.projectionField = (Core.Name "expectedType")})))),
+              Core.projectionField = (Core.Name "expectedType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 typeLevelRoundTripHydraTestCaseWithExpectedType :: Phantoms.TTerm Testing.TypeLevelRoundTripHydraTestCase -> Phantoms.TTerm Core.Type -> Phantoms.TTerm Testing.TypeLevelRoundTripHydraTestCase
@@ -1705,16 +1705,16 @@ typeLevelRoundTripHydraTestCaseWithExpectedType original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "description"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.TypeLevelRoundTripHydraTestCase"),
-              Core.projectionField = (Core.Name "description")})))),
+              Core.projectionField = (Core.Name "description")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.TypeLevelRoundTripHydraTestCase"),
-              Core.projectionField = (Core.Name "type")})))),
+              Core.projectionField = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "expectedType"),
@@ -1728,9 +1728,9 @@ typeLevelRoundTripHydraTestCaseWithType original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "description"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.TypeLevelRoundTripHydraTestCase"),
-              Core.projectionField = (Core.Name "description")})))),
+              Core.projectionField = (Core.Name "description")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
@@ -1738,9 +1738,9 @@ typeLevelRoundTripHydraTestCaseWithType original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "expectedType"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.TypeLevelRoundTripHydraTestCase"),
-              Core.projectionField = (Core.Name "expectedType")})))),
+              Core.projectionField = (Core.Name "expectedType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 unionTestCase :: Phantoms.TTerm String -> Phantoms.TTerm Core.Type -> Phantoms.TTerm Schema.Schema -> Phantoms.TTerm [(Core.Term, Model.Value)] -> Phantoms.TTerm Testing.UnionTestCase
@@ -1764,33 +1764,33 @@ unionTestCase description hydraType avroSchema termPairs =
 unionTestCaseAvroSchema :: Phantoms.TTerm Testing.UnionTestCase -> Phantoms.TTerm Schema.Schema
 unionTestCaseAvroSchema x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.avro.testing.UnionTestCase"),
-        Core.projectionField = (Core.Name "avroSchema")})))),
+        Core.projectionField = (Core.Name "avroSchema")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unionTestCaseDescription :: Phantoms.TTerm Testing.UnionTestCase -> Phantoms.TTerm String
 unionTestCaseDescription x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.avro.testing.UnionTestCase"),
-        Core.projectionField = (Core.Name "description")})))),
+        Core.projectionField = (Core.Name "description")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unionTestCaseHydraType :: Phantoms.TTerm Testing.UnionTestCase -> Phantoms.TTerm Core.Type
 unionTestCaseHydraType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.avro.testing.UnionTestCase"),
-        Core.projectionField = (Core.Name "hydraType")})))),
+        Core.projectionField = (Core.Name "hydraType")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unionTestCaseTermPairs :: Phantoms.TTerm Testing.UnionTestCase -> Phantoms.TTerm [(Core.Term, Model.Value)]
 unionTestCaseTermPairs x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.avro.testing.UnionTestCase"),
-        Core.projectionField = (Core.Name "termPairs")})))),
+        Core.projectionField = (Core.Name "termPairs")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unionTestCaseWithAvroSchema :: Phantoms.TTerm Testing.UnionTestCase -> Phantoms.TTerm Schema.Schema -> Phantoms.TTerm Testing.UnionTestCase
@@ -1801,16 +1801,16 @@ unionTestCaseWithAvroSchema original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "description"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.UnionTestCase"),
-              Core.projectionField = (Core.Name "description")})))),
+              Core.projectionField = (Core.Name "description")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "hydraType"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.UnionTestCase"),
-              Core.projectionField = (Core.Name "hydraType")})))),
+              Core.projectionField = (Core.Name "hydraType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "avroSchema"),
@@ -1818,9 +1818,9 @@ unionTestCaseWithAvroSchema original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "termPairs"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.UnionTestCase"),
-              Core.projectionField = (Core.Name "termPairs")})))),
+              Core.projectionField = (Core.Name "termPairs")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 unionTestCaseWithDescription :: Phantoms.TTerm Testing.UnionTestCase -> Phantoms.TTerm String -> Phantoms.TTerm Testing.UnionTestCase
@@ -1834,23 +1834,23 @@ unionTestCaseWithDescription original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "hydraType"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.UnionTestCase"),
-              Core.projectionField = (Core.Name "hydraType")})))),
+              Core.projectionField = (Core.Name "hydraType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "avroSchema"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.UnionTestCase"),
-              Core.projectionField = (Core.Name "avroSchema")})))),
+              Core.projectionField = (Core.Name "avroSchema")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "termPairs"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.UnionTestCase"),
-              Core.projectionField = (Core.Name "termPairs")})))),
+              Core.projectionField = (Core.Name "termPairs")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 unionTestCaseWithHydraType :: Phantoms.TTerm Testing.UnionTestCase -> Phantoms.TTerm Core.Type -> Phantoms.TTerm Testing.UnionTestCase
@@ -1861,9 +1861,9 @@ unionTestCaseWithHydraType original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "description"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.UnionTestCase"),
-              Core.projectionField = (Core.Name "description")})))),
+              Core.projectionField = (Core.Name "description")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "hydraType"),
@@ -1871,16 +1871,16 @@ unionTestCaseWithHydraType original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "avroSchema"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.UnionTestCase"),
-              Core.projectionField = (Core.Name "avroSchema")})))),
+              Core.projectionField = (Core.Name "avroSchema")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "termPairs"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.UnionTestCase"),
-              Core.projectionField = (Core.Name "termPairs")})))),
+              Core.projectionField = (Core.Name "termPairs")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 unionTestCaseWithTermPairs :: Phantoms.TTerm Testing.UnionTestCase -> Phantoms.TTerm [(Core.Term, Model.Value)] -> Phantoms.TTerm Testing.UnionTestCase
@@ -1891,23 +1891,23 @@ unionTestCaseWithTermPairs original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "description"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.UnionTestCase"),
-              Core.projectionField = (Core.Name "description")})))),
+              Core.projectionField = (Core.Name "description")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "hydraType"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.UnionTestCase"),
-              Core.projectionField = (Core.Name "hydraType")})))),
+              Core.projectionField = (Core.Name "hydraType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "avroSchema"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.testing.UnionTestCase"),
-              Core.projectionField = (Core.Name "avroSchema")})))),
+              Core.projectionField = (Core.Name "avroSchema")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "termPairs"),

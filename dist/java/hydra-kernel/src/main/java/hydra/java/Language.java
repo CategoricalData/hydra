@@ -34,7 +34,12 @@ public interface Language {
     hydra.util.Lazy<java.util.Set<hydra.variants.TermVariant>> termVariants = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(java.util.Arrays.asList(
       new hydra.variants.TermVariant.Application(),
       new hydra.variants.TermVariant.Either(),
-      new hydra.variants.TermVariant.Function(),
+      new hydra.variants.TermVariant.Cases(),
+      new hydra.variants.TermVariant.Lambda(),
+      new hydra.variants.TermVariant.Project(),
+      new hydra.variants.TermVariant.Unwrap(),
+      new hydra.variants.TermVariant.TypeApplication(),
+      new hydra.variants.TermVariant.TypeLambda(),
       new hydra.variants.TermVariant.Let(),
       new hydra.variants.TermVariant.List(),
       new hydra.variants.TermVariant.Literal(),

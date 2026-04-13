@@ -199,14 +199,14 @@ allTests =
                       (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
                       (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3))),
                       (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 4)))])})),
-                  Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                  Core.applicationArgument = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "x"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermApplication (Core.Application {
                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.pure")),
                       Core.applicationArgument = (Core.TermApplication (Core.Application {
                         Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.math.negate")),
-                        Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))})))})))),
+                        Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}))})))),
                 Testing.universalTestCaseExpected = (Core_.term (Core.TermList [
                   Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (-1))),
                   (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (-2)))),
@@ -221,14 +221,14 @@ allTests =
                   Core.applicationFunction = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.bind")),
                     Core.applicationArgument = (Core.TermList [])})),
-                  Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                  Core.applicationArgument = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "x"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermApplication (Core.Application {
                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.pure")),
                       Core.applicationArgument = (Core.TermApplication (Core.Application {
                         Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.math.negate")),
-                        Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))})))})))),
+                        Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}))})))),
                 Testing.universalTestCaseExpected = (Core_.term (Core.TermList []))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
@@ -240,14 +240,14 @@ allTests =
                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.bind")),
                     Core.applicationArgument = (Core.TermList [
                       Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 5))])})),
-                  Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                  Core.applicationArgument = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "x"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermApplication (Core.Application {
                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.pure")),
                       Core.applicationArgument = (Core.TermApplication (Core.Application {
                         Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.math.negate")),
-                        Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))})))})))),
+                        Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}))})))),
                 Testing.universalTestCaseExpected = (Core_.term (Core.TermList [
                   Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (-5)))]))})),
               Testing.testCaseWithMetadataDescription = Nothing,
@@ -262,14 +262,14 @@ allTests =
                       Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
                       (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
                       (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))])})),
-                  Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                  Core.applicationArgument = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "x"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermApplication (Core.Application {
                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.pure")),
                       Core.applicationArgument = (Core.TermApplication (Core.Application {
                         Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.math.negate")),
-                        Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))})))})))),
+                        Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}))})))),
                 Testing.universalTestCaseExpected = (Core_.term (Core.TermList [
                   Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (-1))),
                   (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (-1)))),
@@ -634,14 +634,14 @@ allTests =
                 Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> Core_.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.dropWhile")),
-                    Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                    Core.applicationArgument = (Core.TermLambda (Core.Lambda {
                       Core.lambdaParameter = (Core.Name "x"),
                       Core.lambdaDomain = Nothing,
                       Core.lambdaBody = (Core.TermApplication (Core.Application {
                         Core.applicationFunction = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.equality.lt")),
                           Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
-                        Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))}))})))})),
+                        Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))}))}))})),
                   Core.applicationArgument = (Core.TermList [
                     Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
                     (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
@@ -660,14 +660,14 @@ allTests =
                 Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> Core_.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.dropWhile")),
-                    Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                    Core.applicationArgument = (Core.TermLambda (Core.Lambda {
                       Core.lambdaParameter = (Core.Name "x"),
                       Core.lambdaDomain = Nothing,
                       Core.lambdaBody = (Core.TermApplication (Core.Application {
                         Core.applicationFunction = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.equality.lt")),
                           Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
-                        Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 10)))}))})))})),
+                        Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 10)))}))}))})),
                   Core.applicationArgument = (Core.TermList [
                     Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
                     (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
@@ -681,14 +681,14 @@ allTests =
                 Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> Core_.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.dropWhile")),
-                    Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                    Core.applicationArgument = (Core.TermLambda (Core.Lambda {
                       Core.lambdaParameter = (Core.Name "x"),
                       Core.lambdaDomain = Nothing,
                       Core.lambdaBody = (Core.TermApplication (Core.Application {
                         Core.applicationFunction = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.equality.lt")),
                           Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
-                        Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}))})))})),
+                        Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}))}))})),
                   Core.applicationArgument = (Core.TermList [
                     Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
                     (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
@@ -705,14 +705,14 @@ allTests =
                 Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> Core_.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.dropWhile")),
-                    Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                    Core.applicationArgument = (Core.TermLambda (Core.Lambda {
                       Core.lambdaParameter = (Core.Name "x"),
                       Core.lambdaDomain = Nothing,
                       Core.lambdaBody = (Core.TermApplication (Core.Application {
                         Core.applicationFunction = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.equality.lt")),
                           Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
-                        Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 5)))}))})))})),
+                        Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 5)))}))}))})),
                   Core.applicationArgument = (Core.TermList [])})))),
                 Testing.universalTestCaseExpected = (Core_.term (Core.TermList []))})),
               Testing.testCaseWithMetadataDescription = Nothing,
@@ -838,14 +838,14 @@ allTests =
                 Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> Core_.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.filter")),
-                    Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                    Core.applicationArgument = (Core.TermLambda (Core.Lambda {
                       Core.lambdaParameter = (Core.Name "x"),
                       Core.lambdaDomain = Nothing,
                       Core.lambdaBody = (Core.TermApplication (Core.Application {
                         Core.applicationFunction = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.equality.gt")),
                           Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
-                        Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}))})))})),
+                        Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}))}))})),
                   Core.applicationArgument = (Core.TermList [
                     Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (-1))),
                     (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
@@ -864,14 +864,14 @@ allTests =
                 Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> Core_.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.filter")),
-                    Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                    Core.applicationArgument = (Core.TermLambda (Core.Lambda {
                       Core.lambdaParameter = (Core.Name "x"),
                       Core.lambdaDomain = Nothing,
                       Core.lambdaBody = (Core.TermApplication (Core.Application {
                         Core.applicationFunction = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.equality.lt")),
                           Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
-                        Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 10)))}))})))})),
+                        Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 10)))}))}))})),
                   Core.applicationArgument = (Core.TermList [
                     Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
                     (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
@@ -888,14 +888,14 @@ allTests =
                 Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> Core_.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.filter")),
-                    Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                    Core.applicationArgument = (Core.TermLambda (Core.Lambda {
                       Core.lambdaParameter = (Core.Name "x"),
                       Core.lambdaDomain = Nothing,
                       Core.lambdaBody = (Core.TermApplication (Core.Application {
                         Core.applicationFunction = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.equality.gt")),
                           Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
-                        Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 10)))}))})))})),
+                        Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 10)))}))}))})),
                   Core.applicationArgument = (Core.TermList [
                     Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
                     (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
@@ -909,14 +909,14 @@ allTests =
                 Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> Core_.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.filter")),
-                    Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                    Core.applicationArgument = (Core.TermLambda (Core.Lambda {
                       Core.lambdaParameter = (Core.Name "x"),
                       Core.lambdaDomain = Nothing,
                       Core.lambdaBody = (Core.TermApplication (Core.Application {
                         Core.applicationFunction = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.equality.gt")),
                           Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
-                        Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}))})))})),
+                        Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}))}))})),
                   Core.applicationArgument = (Core.TermList [])})))),
                 Testing.universalTestCaseExpected = (Core_.term (Core.TermList []))})),
               Testing.testCaseWithMetadataDescription = Nothing,
@@ -932,14 +932,14 @@ allTests =
                 Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> Core_.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.find")),
-                    Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                    Core.applicationArgument = (Core.TermLambda (Core.Lambda {
                       Core.lambdaParameter = (Core.Name "x"),
                       Core.lambdaDomain = Nothing,
                       Core.lambdaBody = (Core.TermApplication (Core.Application {
                         Core.applicationFunction = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.equality.gt")),
                           Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
-                        Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))}))})))})),
+                        Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))}))}))})),
                   Core.applicationArgument = (Core.TermList [
                     Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
                     (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
@@ -954,14 +954,14 @@ allTests =
                 Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> Core_.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.find")),
-                    Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                    Core.applicationArgument = (Core.TermLambda (Core.Lambda {
                       Core.lambdaParameter = (Core.Name "x"),
                       Core.lambdaDomain = Nothing,
                       Core.lambdaBody = (Core.TermApplication (Core.Application {
                         Core.applicationFunction = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.equality.gt")),
                           Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
-                        Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}))})))})),
+                        Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}))}))})),
                   Core.applicationArgument = (Core.TermList [
                     Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
                     (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
@@ -975,14 +975,14 @@ allTests =
                 Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> Core_.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.find")),
-                    Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                    Core.applicationArgument = (Core.TermLambda (Core.Lambda {
                       Core.lambdaParameter = (Core.Name "x"),
                       Core.lambdaDomain = Nothing,
                       Core.lambdaBody = (Core.TermApplication (Core.Application {
                         Core.applicationFunction = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.equality.gt")),
                           Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
-                        Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 10)))}))})))})),
+                        Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 10)))}))}))})),
                   Core.applicationArgument = (Core.TermList [
                     Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
                     (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
@@ -996,14 +996,14 @@ allTests =
                 Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> Core_.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.find")),
-                    Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                    Core.applicationArgument = (Core.TermLambda (Core.Lambda {
                       Core.lambdaParameter = (Core.Name "x"),
                       Core.lambdaDomain = Nothing,
                       Core.lambdaBody = (Core.TermApplication (Core.Application {
                         Core.applicationFunction = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.equality.gt")),
                           Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
-                        Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}))})))})),
+                        Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}))}))})),
                   Core.applicationArgument = (Core.TermList [])})))),
                 Testing.universalTestCaseExpected = (Core_.term (Core.TermMaybe Nothing))})),
               Testing.testCaseWithMetadataDescription = Nothing,
@@ -1014,14 +1014,14 @@ allTests =
                 Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> Core_.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.find")),
-                    Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                    Core.applicationArgument = (Core.TermLambda (Core.Lambda {
                       Core.lambdaParameter = (Core.Name "x"),
                       Core.lambdaDomain = Nothing,
                       Core.lambdaBody = (Core.TermApplication (Core.Application {
                         Core.applicationFunction = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.equality.equal")),
                           Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
-                        Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}))})))})),
+                        Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}))}))})),
                   Core.applicationArgument = (Core.TermList [
                     Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))])})))),
                 Testing.universalTestCaseExpected = (Core_.term (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))))))})),
@@ -2204,14 +2204,14 @@ allTests =
                 Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> Core_.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.partition")),
-                    Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                    Core.applicationArgument = (Core.TermLambda (Core.Lambda {
                       Core.lambdaParameter = (Core.Name "x"),
                       Core.lambdaDomain = Nothing,
                       Core.lambdaBody = (Core.TermApplication (Core.Application {
                         Core.applicationFunction = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.equality.gt")),
                           Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
-                        Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))}))})))})),
+                        Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))}))}))})),
                   Core.applicationArgument = (Core.TermList [
                     Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
                     (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
@@ -2234,14 +2234,14 @@ allTests =
                 Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> Core_.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.partition")),
-                    Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                    Core.applicationArgument = (Core.TermLambda (Core.Lambda {
                       Core.lambdaParameter = (Core.Name "x"),
                       Core.lambdaDomain = Nothing,
                       Core.lambdaBody = (Core.TermApplication (Core.Application {
                         Core.applicationFunction = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.equality.lt")),
                           Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
-                        Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 10)))}))})))})),
+                        Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 10)))}))}))})),
                   Core.applicationArgument = (Core.TermList [
                     Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
                     (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
@@ -2258,14 +2258,14 @@ allTests =
                 Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> Core_.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.partition")),
-                    Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                    Core.applicationArgument = (Core.TermLambda (Core.Lambda {
                       Core.lambdaParameter = (Core.Name "x"),
                       Core.lambdaDomain = Nothing,
                       Core.lambdaBody = (Core.TermApplication (Core.Application {
                         Core.applicationFunction = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.equality.gt")),
                           Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
-                        Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 10)))}))})))})),
+                        Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 10)))}))}))})),
                   Core.applicationArgument = (Core.TermList [
                     Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
                     (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
@@ -2282,12 +2282,12 @@ allTests =
                 Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> Core_.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.partition")),
-                    Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                    Core.applicationArgument = (Core.TermLambda (Core.Lambda {
                       Core.lambdaParameter = (Core.Name "x"),
                       Core.lambdaDomain = Nothing,
                       Core.lambdaBody = (Core.TermApplication (Core.Application {
                         Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.math.even")),
-                        Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))})))})),
+                        Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))})),
                   Core.applicationArgument = (Core.TermList [
                     Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
                     (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
@@ -2310,14 +2310,14 @@ allTests =
                 Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> Core_.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.partition")),
-                    Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                    Core.applicationArgument = (Core.TermLambda (Core.Lambda {
                       Core.lambdaParameter = (Core.Name "x"),
                       Core.lambdaDomain = Nothing,
                       Core.lambdaBody = (Core.TermApplication (Core.Application {
                         Core.applicationFunction = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.equality.lt")),
                           Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
-                        Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 5)))}))})))})),
+                        Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 5)))}))}))})),
                   Core.applicationArgument = (Core.TermList [])})))),
                 Testing.universalTestCaseExpected = (Core_.term (Core.TermPair (Core.TermList [], (Core.TermList []))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
@@ -2792,14 +2792,14 @@ allTests =
                 Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> Core_.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.span")),
-                    Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                    Core.applicationArgument = (Core.TermLambda (Core.Lambda {
                       Core.lambdaParameter = (Core.Name "x"),
                       Core.lambdaDomain = Nothing,
                       Core.lambdaBody = (Core.TermApplication (Core.Application {
                         Core.applicationFunction = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.equality.lt")),
                           Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
-                        Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))}))})))})),
+                        Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))}))}))})),
                   Core.applicationArgument = (Core.TermList [
                     Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
                     (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
@@ -2820,14 +2820,14 @@ allTests =
                 Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> Core_.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.span")),
-                    Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                    Core.applicationArgument = (Core.TermLambda (Core.Lambda {
                       Core.lambdaParameter = (Core.Name "x"),
                       Core.lambdaDomain = Nothing,
                       Core.lambdaBody = (Core.TermApplication (Core.Application {
                         Core.applicationFunction = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.equality.lt")),
                           Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
-                        Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 10)))}))})))})),
+                        Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 10)))}))}))})),
                   Core.applicationArgument = (Core.TermList [
                     Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
                     (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
@@ -2844,14 +2844,14 @@ allTests =
                 Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> Core_.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.span")),
-                    Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                    Core.applicationArgument = (Core.TermLambda (Core.Lambda {
                       Core.lambdaParameter = (Core.Name "x"),
                       Core.lambdaDomain = Nothing,
                       Core.lambdaBody = (Core.TermApplication (Core.Application {
                         Core.applicationFunction = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.equality.gt")),
                           Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
-                        Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 10)))}))})))})),
+                        Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 10)))}))}))})),
                   Core.applicationArgument = (Core.TermList [
                     Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
                     (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
@@ -2868,14 +2868,14 @@ allTests =
                 Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> Core_.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.span")),
-                    Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                    Core.applicationArgument = (Core.TermLambda (Core.Lambda {
                       Core.lambdaParameter = (Core.Name "x"),
                       Core.lambdaDomain = Nothing,
                       Core.lambdaBody = (Core.TermApplication (Core.Application {
                         Core.applicationFunction = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.equality.lt")),
                           Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
-                        Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 5)))}))})))})),
+                        Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 5)))}))}))})),
                   Core.applicationArgument = (Core.TermList [])})))),
                 Testing.universalTestCaseExpected = (Core_.term (Core.TermPair (Core.TermList [], (Core.TermList []))))})),
               Testing.testCaseWithMetadataDescription = Nothing,

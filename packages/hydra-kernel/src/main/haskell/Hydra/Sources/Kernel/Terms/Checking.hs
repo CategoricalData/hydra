@@ -231,12 +231,9 @@ checkForUnboundTypeVariables = define "checkForUnboundTypeVariables" $
         ("_" ~> right unit)) $
     cases _Term (var "term")
       (Just $ var "dflt") [
-      _Term_function>>: "f" ~> cases _Function (var "f")
-        (Just $ var "dflt") [
-        _Function_elimination>>: "e" ~> var "dflt",
-        _Function_lambda>>: "l" ~>
-          Eithers.bind (var "checkOptional" @@ (Core.lambdaDomain $ var "l"))
-            ("_" ~> var "recurse" @@ (Core.lambdaBody $ var "l"))],
+      _Term_lambda>>: "l" ~>
+        Eithers.bind (var "checkOptional" @@ (Core.lambdaDomain $ var "l"))
+          ("_" ~> var "recurse" @@ (Core.lambdaBody $ var "l")),
       _Term_let>>: "l" ~>
         "forBinding" <~ ("b" ~>
           "bterm" <~ Core.bindingTerm (var "b") $
@@ -406,27 +403,23 @@ typeOf = define "typeOf" $
     (Just $ Ctx.failInContext (Error.errorChecking $ ErrorsChecking.checkingErrorUnsupportedTermVariant $ ErrorsChecking.unsupportedTermVariantError (Reflect.termVariant @@ var "term")) (var "cx1")) [
     _Term_annotated>>: typeOfAnnotatedTerm @@ var "cx1" @@ var "tx" @@ var "typeArgs",
     _Term_application>>: typeOfApplication @@ var "cx1" @@ var "tx" @@ var "typeArgs",
+    _Term_cases>>: typeOfCaseStatement @@ var "cx1" @@ var "tx" @@ var "typeArgs",
     _Term_either>>: typeOfEither @@ var "cx1" @@ var "tx" @@ var "typeArgs",
-    _Term_function>>: "f" ~>
-      cases _Function (var "f") Nothing [
-        _Function_elimination>>: "elm" ~>
-          cases _Elimination (var "elm") Nothing [
-            _Elimination_record>>: typeOfProjection @@ var "cx1" @@ var "tx" @@ var "typeArgs",
-            _Elimination_union>>: typeOfCaseStatement @@ var "cx1" @@ var "tx" @@ var "typeArgs",
-            _Elimination_wrap>>: typeOfUnwrap @@ var "cx1" @@ var "tx" @@ var "typeArgs"],
-        _Function_lambda>>: typeOfLambda @@ var "cx1" @@ var "tx" @@ var "typeArgs"],
+    _Term_lambda>>: typeOfLambda @@ var "cx1" @@ var "tx" @@ var "typeArgs",
     _Term_let>>: typeOfLet @@ var "cx1" @@ var "tx" @@ var "typeArgs",
     _Term_list>>: typeOfList @@ var "cx1" @@ var "tx" @@ var "typeArgs",
     _Term_literal>>: typeOfLiteral @@ var "cx1" @@ var "tx" @@ var "typeArgs",
     _Term_map>>: typeOfMap @@ var "cx1" @@ var "tx" @@ var "typeArgs",
     _Term_maybe>>: typeOfMaybe @@ var "cx1" @@ var "tx" @@ var "typeArgs",
     _Term_pair>>: typeOfPair @@ var "cx1" @@ var "tx" @@ var "typeArgs",
+    _Term_project>>: typeOfProjection @@ var "cx1" @@ var "tx" @@ var "typeArgs",
     _Term_record>>: typeOfRecord @@ var "cx1" @@ var "tx" @@ var "typeArgs",
     _Term_set>>: typeOfSet @@ var "cx1" @@ var "tx" @@ var "typeArgs",
     _Term_typeApplication>>: typeOfTypeApplication @@ var "cx1" @@ var "tx" @@ var "typeArgs",
     _Term_typeLambda>>: typeOfTypeLambda @@ var "cx1" @@ var "tx" @@ var "typeArgs",
     _Term_union>>: typeOfInjection @@ var "cx1" @@ var "tx" @@ var "typeArgs",
     _Term_unit>>: constant $ typeOfUnit @@ var "cx1" @@ var "tx" @@ var "typeArgs",
+    _Term_unwrap>>: typeOfUnwrap @@ var "cx1" @@ var "tx" @@ var "typeArgs",
     _Term_variable>>: typeOfVariable @@ var "cx1" @@ var "tx" @@ var "typeArgs",
     _Term_wrap>>: typeOfWrappedTerm @@ var "cx1" @@ var "tx" @@ var "typeArgs"]
 

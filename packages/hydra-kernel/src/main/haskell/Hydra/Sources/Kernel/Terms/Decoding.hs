@@ -696,8 +696,7 @@ decodeRecordTypeImpl = define "decodeRecordTypeImpl" $
   -- The lambda for each field uses the field name with a prefix to avoid shadowing decoder functions
   "localVarName" <~ ("ft" ~> Core.name $ Strings.cat $ list [string "field_", Core.unName $ Core.fieldTypeName $ var "ft"]) $
   "toFieldLambda" <~ ("ft" ~> "body" ~>
-    Core.termFunction $ Core.functionLambda $
-      Core.lambda (var "localVarName" @@ var "ft") nothing $ var "body") $
+    Core.termLambda $ Core.lambda (var "localVarName" @@ var "ft") nothing $ var "body") $
   "decodeBody" <~ (
     Lists.foldl
       ("acc" ~> "ft" ~>
@@ -725,8 +724,7 @@ decodeForallType = define "decodeForallType" $
   doc "Generate a decoder for a polymorphic (forall) type" $
   "ft" ~>
     -- Generate a lambda that takes a decoder for the type parameter
-    Core.termFunction $ Core.functionLambda $
-      Core.lambda
+    Core.termLambda $ Core.lambda
         (decodeBindingName @@ Core.forallTypeParameter (var "ft"))
         nothing
         (decodeType @@ Core.forallTypeBody (var "ft"))
@@ -795,8 +793,7 @@ decodeTypeNamed = define "decodeTypeNamed" $
         @@@ (decodeType @@ Core.applicationTypeArgument (var "appType")),
     _Type_either>>: "et" ~> decodeEitherType @@ var "et",
     _Type_forall>>: "ft" ~>
-      Core.termFunction $ Core.functionLambda $
-        Core.lambda (decodeBindingName @@ Core.forallTypeParameter (var "ft")) nothing
+      Core.termLambda $ Core.lambda (decodeBindingName @@ Core.forallTypeParameter (var "ft")) nothing
           (decodeTypeNamed @@ var "ename" @@ Core.forallTypeBody (var "ft")),
     _Type_list>>: "elemType" ~> decodeListType @@ var "elemType",
     _Type_literal>>: "lt" ~> decodeLiteralType @@ var "lt",

@@ -74,14 +74,12 @@ analyzeFunctionTermWith_finish cx getTC fEnv tparams args bindings doms tapps bo
 analyzeFunctionTermWith_gather :: Context.Context -> (Graph.Graph -> Core.Binding -> Maybe Core.Term) -> (t0 -> Graph.Graph) -> (Graph.Graph -> t0 -> t0) -> Bool -> t0 -> [Core.Name] -> [Core.Name] -> [Core.Binding] -> [Core.Type] -> [Core.Type] -> Core.Term -> Either t1 (Typing.FunctionStructure t0)
 analyzeFunctionTermWith_gather cx forBinding getTC setTC argMode gEnv tparams args bindings doms tapps t =
     case (Strip.deannotateTerm t) of
-      Core.TermFunction v0 -> case v0 of
-        Core.FunctionLambda v1 -> Logic.ifElse argMode (
-          let v = Core.lambdaParameter v1
-              dom = Maybes.maybe (Core.TypeVariable (Core.Name "_")) (\x_ -> x_) (Core.lambdaDomain v1)
-              body = Core.lambdaBody v1
-              newEnv = setTC (Scoping.extendGraphForLambda (getTC gEnv) v1) gEnv
-          in (analyzeFunctionTermWith_gather cx forBinding getTC setTC argMode newEnv tparams (Lists.cons v args) bindings (Lists.cons dom doms) tapps body)) (analyzeFunctionTermWith_finish cx getTC gEnv tparams args bindings doms tapps t)
-        _ -> analyzeFunctionTermWith_finish cx getTC gEnv tparams args bindings doms tapps t
+      Core.TermLambda v0 -> Logic.ifElse argMode (
+        let v = Core.lambdaParameter v0
+            dom = Maybes.maybe (Core.TypeVariable (Core.Name "_")) (\x_ -> x_) (Core.lambdaDomain v0)
+            body = Core.lambdaBody v0
+            newEnv = setTC (Scoping.extendGraphForLambda (getTC gEnv) v0) gEnv
+        in (analyzeFunctionTermWith_gather cx forBinding getTC setTC argMode newEnv tparams (Lists.cons v args) bindings (Lists.cons dom doms) tapps body)) (analyzeFunctionTermWith_finish cx getTC gEnv tparams args bindings doms tapps t)
       Core.TermLet v0 ->
         let newBindings = Core.letBindings v0
             body = Core.letBody v0
@@ -189,20 +187,14 @@ isSimpleAssignment :: Core.Term -> Bool
 isSimpleAssignment term =
     case term of
       Core.TermAnnotated v0 -> isSimpleAssignment (Core.annotatedTermBody v0)
-      Core.TermFunction v0 -> case v0 of
-        Core.FunctionLambda _ -> False
-        _ -> True
+      Core.TermLambda _ -> False
       Core.TermLet _ -> False
       Core.TermTypeLambda _ -> False
       Core.TermTypeApplication v0 -> isSimpleAssignment (Core.typeApplicationTermBody v0)
       _ ->
         let baseTerm = Pairs.first (gatherArgs term [])
         in case baseTerm of
-          Core.TermFunction v0 -> case v0 of
-            Core.FunctionElimination v1 -> case v1 of
-              Core.EliminationUnion _ -> False
-              _ -> True
-            _ -> True
+          Core.TermCases _ -> False
           _ -> True
 
 -- | Check that all self-references are in tail position
@@ -221,29 +213,21 @@ isTailRecursiveInTailPosition funcName term =
               let argsNoFunc = Lists.foldl (\ok -> \arg -> Logic.and ok (Variables.isFreeVariableInTerm funcName arg)) True gatherArgs
                   argsNoLambda =
                           Lists.foldl (\ok -> \arg -> Logic.and ok (Logic.not (Rewriting.foldOverTerm Coders.TraversalOrderPre (\found -> \t -> Logic.or found (case t of
-                            Core.TermFunction v2 -> case v2 of
-                              Core.FunctionLambda v3 ->
-                                let ignore = Core.lambdaBody v3
-                                in True
-                              _ -> False
+                            Core.TermLambda v2 ->
+                              let ignore = Core.lambdaBody v2
+                              in True
                             _ -> False)) False arg))) True gatherArgs
               in (Logic.and argsNoFunc argsNoLambda)) (Variables.isFreeVariableInTerm funcName term)
-            Core.TermFunction v1 -> case v1 of
-              Core.FunctionElimination v2 -> case v2 of
-                Core.EliminationUnion v3 ->
-                  let cases_ = Core.caseStatementCases v3
-                      dflt = Core.caseStatementDefault v3
-                      branchesOk =
-                              Lists.foldl (\ok -> \field -> Logic.and ok (isTailRecursiveInTailPosition funcName (Core.fieldTerm field))) True cases_
-                      dfltOk = Maybes.maybe True (\d -> isTailRecursiveInTailPosition funcName d) dflt
-                      argsOk = Lists.foldl (\ok -> \arg -> Logic.and ok (Variables.isFreeVariableInTerm funcName arg)) True gatherArgs
-                  in (Logic.and (Logic.and branchesOk dfltOk) argsOk)
-                _ -> Variables.isFreeVariableInTerm funcName term
-              _ -> Variables.isFreeVariableInTerm funcName term
+            Core.TermCases v1 ->
+              let cases_ = Core.caseStatementCases v1
+                  dflt = Core.caseStatementDefault v1
+                  branchesOk =
+                          Lists.foldl (\ok -> \field -> Logic.and ok (isTailRecursiveInTailPosition funcName (Core.fieldTerm field))) True cases_
+                  dfltOk = Maybes.maybe True (\d -> isTailRecursiveInTailPosition funcName d) dflt
+                  argsOk = Lists.foldl (\ok -> \arg -> Logic.and ok (Variables.isFreeVariableInTerm funcName arg)) True gatherArgs
+              in (Logic.and (Logic.and branchesOk dfltOk) argsOk)
             _ -> Variables.isFreeVariableInTerm funcName term
-        Core.TermFunction v0 -> case v0 of
-          Core.FunctionLambda v1 -> isTailRecursiveInTailPosition funcName (Core.lambdaBody v1)
-          _ -> Variables.isFreeVariableInTerm funcName term
+        Core.TermLambda v0 -> isTailRecursiveInTailPosition funcName (Core.lambdaBody v0)
         Core.TermLet v0 ->
           let bindingsOk =
                   Lists.foldl (\ok -> \b -> Logic.and ok (Variables.isFreeVariableInTerm funcName (Core.bindingTerm b))) True (Core.letBindings v0)

@@ -31,25 +31,25 @@ avroEnvironment namedAdapters namespace elements =
 avroEnvironmentElements :: Phantoms.TTerm Environment.AvroEnvironment -> Phantoms.TTerm (M.Map Core.Name Core.Binding)
 avroEnvironmentElements x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.avro.environment.AvroEnvironment"),
-        Core.projectionField = (Core.Name "elements")})))),
+        Core.projectionField = (Core.Name "elements")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 avroEnvironmentNamedAdapters :: Phantoms.TTerm Environment.AvroEnvironment -> Phantoms.TTerm (M.Map Environment.AvroQualifiedName (Coders.Adapter Schema.Schema Core.Type Model.Value Core.Term))
 avroEnvironmentNamedAdapters x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.avro.environment.AvroEnvironment"),
-        Core.projectionField = (Core.Name "namedAdapters")})))),
+        Core.projectionField = (Core.Name "namedAdapters")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 avroEnvironmentNamespace :: Phantoms.TTerm Environment.AvroEnvironment -> Phantoms.TTerm (Maybe String)
 avroEnvironmentNamespace x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.avro.environment.AvroEnvironment"),
-        Core.projectionField = (Core.Name "namespace")})))),
+        Core.projectionField = (Core.Name "namespace")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 avroEnvironmentWithElements :: Phantoms.TTerm Environment.AvroEnvironment -> Phantoms.TTerm (M.Map Core.Name Core.Binding) -> Phantoms.TTerm Environment.AvroEnvironment
@@ -60,16 +60,16 @@ avroEnvironmentWithElements original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "namedAdapters"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.environment.AvroEnvironment"),
-              Core.projectionField = (Core.Name "namedAdapters")})))),
+              Core.projectionField = (Core.Name "namedAdapters")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "namespace"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.environment.AvroEnvironment"),
-              Core.projectionField = (Core.Name "namespace")})))),
+              Core.projectionField = (Core.Name "namespace")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "elements"),
@@ -86,16 +86,16 @@ avroEnvironmentWithNamedAdapters original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "namespace"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.environment.AvroEnvironment"),
-              Core.projectionField = (Core.Name "namespace")})))),
+              Core.projectionField = (Core.Name "namespace")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "elements"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.environment.AvroEnvironment"),
-              Core.projectionField = (Core.Name "elements")})))),
+              Core.projectionField = (Core.Name "elements")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 avroEnvironmentWithNamespace :: Phantoms.TTerm Environment.AvroEnvironment -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Environment.AvroEnvironment
@@ -106,9 +106,9 @@ avroEnvironmentWithNamespace original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "namedAdapters"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.environment.AvroEnvironment"),
-              Core.projectionField = (Core.Name "namedAdapters")})))),
+              Core.projectionField = (Core.Name "namedAdapters")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "namespace"),
@@ -116,9 +116,9 @@ avroEnvironmentWithNamespace original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "elements"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.environment.AvroEnvironment"),
-              Core.projectionField = (Core.Name "elements")})))),
+              Core.projectionField = (Core.Name "elements")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 avroForeignKey :: Phantoms.TTerm Core.Name -> Phantoms.TTerm (String -> Core.Name) -> Phantoms.TTerm Environment.AvroForeignKey
@@ -136,17 +136,17 @@ avroForeignKey typeName constructor =
 avroForeignKeyConstructor :: Phantoms.TTerm Environment.AvroForeignKey -> Phantoms.TTerm (String -> Core.Name)
 avroForeignKeyConstructor x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.avro.environment.AvroForeignKey"),
-        Core.projectionField = (Core.Name "constructor")})))),
+        Core.projectionField = (Core.Name "constructor")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 avroForeignKeyTypeName :: Phantoms.TTerm Environment.AvroForeignKey -> Phantoms.TTerm Core.Name
 avroForeignKeyTypeName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.avro.environment.AvroForeignKey"),
-        Core.projectionField = (Core.Name "typeName")})))),
+        Core.projectionField = (Core.Name "typeName")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 avroForeignKeyWithConstructor :: Phantoms.TTerm Environment.AvroForeignKey -> Phantoms.TTerm (String -> Core.Name) -> Phantoms.TTerm Environment.AvroForeignKey
@@ -157,9 +157,9 @@ avroForeignKeyWithConstructor original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "typeName"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.environment.AvroForeignKey"),
-              Core.projectionField = (Core.Name "typeName")})))),
+              Core.projectionField = (Core.Name "typeName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "constructor"),
@@ -176,9 +176,9 @@ avroForeignKeyWithTypeName original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "constructor"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.environment.AvroForeignKey"),
-              Core.projectionField = (Core.Name "constructor")})))),
+              Core.projectionField = (Core.Name "constructor")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 avroPrimaryKey :: Phantoms.TTerm Core.Name -> Phantoms.TTerm (String -> Core.Name) -> Phantoms.TTerm Environment.AvroPrimaryKey
@@ -196,17 +196,17 @@ avroPrimaryKey fieldName constructor =
 avroPrimaryKeyConstructor :: Phantoms.TTerm Environment.AvroPrimaryKey -> Phantoms.TTerm (String -> Core.Name)
 avroPrimaryKeyConstructor x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.avro.environment.AvroPrimaryKey"),
-        Core.projectionField = (Core.Name "constructor")})))),
+        Core.projectionField = (Core.Name "constructor")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 avroPrimaryKeyFieldName :: Phantoms.TTerm Environment.AvroPrimaryKey -> Phantoms.TTerm Core.Name
 avroPrimaryKeyFieldName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.avro.environment.AvroPrimaryKey"),
-        Core.projectionField = (Core.Name "fieldName")})))),
+        Core.projectionField = (Core.Name "fieldName")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 avroPrimaryKeyWithConstructor :: Phantoms.TTerm Environment.AvroPrimaryKey -> Phantoms.TTerm (String -> Core.Name) -> Phantoms.TTerm Environment.AvroPrimaryKey
@@ -217,9 +217,9 @@ avroPrimaryKeyWithConstructor original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "fieldName"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.environment.AvroPrimaryKey"),
-              Core.projectionField = (Core.Name "fieldName")})))),
+              Core.projectionField = (Core.Name "fieldName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "constructor"),
@@ -236,9 +236,9 @@ avroPrimaryKeyWithFieldName original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "constructor"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.environment.AvroPrimaryKey"),
-              Core.projectionField = (Core.Name "constructor")})))),
+              Core.projectionField = (Core.Name "constructor")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 avroQualifiedName :: Phantoms.TTerm (Maybe String) -> Phantoms.TTerm String -> Phantoms.TTerm Environment.AvroQualifiedName
@@ -256,17 +256,17 @@ avroQualifiedName namespace name =
 avroQualifiedNameName :: Phantoms.TTerm Environment.AvroQualifiedName -> Phantoms.TTerm String
 avroQualifiedNameName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.avro.environment.AvroQualifiedName"),
-        Core.projectionField = (Core.Name "name")})))),
+        Core.projectionField = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 avroQualifiedNameNamespace :: Phantoms.TTerm Environment.AvroQualifiedName -> Phantoms.TTerm (Maybe String)
 avroQualifiedNameNamespace x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.avro.environment.AvroQualifiedName"),
-        Core.projectionField = (Core.Name "namespace")})))),
+        Core.projectionField = (Core.Name "namespace")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 avroQualifiedNameWithName :: Phantoms.TTerm Environment.AvroQualifiedName -> Phantoms.TTerm String -> Phantoms.TTerm Environment.AvroQualifiedName
@@ -277,9 +277,9 @@ avroQualifiedNameWithName original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "namespace"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.environment.AvroQualifiedName"),
-              Core.projectionField = (Core.Name "namespace")})))),
+              Core.projectionField = (Core.Name "namespace")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
@@ -296,9 +296,9 @@ avroQualifiedNameWithNamespace original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.environment.AvroQualifiedName"),
-              Core.projectionField = (Core.Name "name")})))),
+              Core.projectionField = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 encodeEnvironment :: Phantoms.TTerm (M.Map Core.Name Core.Type) -> Phantoms.TTerm (M.Map Core.Name (Coders.Adapter Core.Type Schema.Schema Core.Term Model.Value)) -> Phantoms.TTerm Environment.EncodeEnvironment
@@ -316,17 +316,17 @@ encodeEnvironment typeMap emitted =
 encodeEnvironmentEmitted :: Phantoms.TTerm Environment.EncodeEnvironment -> Phantoms.TTerm (M.Map Core.Name (Coders.Adapter Core.Type Schema.Schema Core.Term Model.Value))
 encodeEnvironmentEmitted x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.avro.environment.EncodeEnvironment"),
-        Core.projectionField = (Core.Name "emitted")})))),
+        Core.projectionField = (Core.Name "emitted")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 encodeEnvironmentTypeMap :: Phantoms.TTerm Environment.EncodeEnvironment -> Phantoms.TTerm (M.Map Core.Name Core.Type)
 encodeEnvironmentTypeMap x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.avro.environment.EncodeEnvironment"),
-        Core.projectionField = (Core.Name "typeMap")})))),
+        Core.projectionField = (Core.Name "typeMap")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 encodeEnvironmentWithEmitted :: Phantoms.TTerm Environment.EncodeEnvironment -> Phantoms.TTerm (M.Map Core.Name (Coders.Adapter Core.Type Schema.Schema Core.Term Model.Value)) -> Phantoms.TTerm Environment.EncodeEnvironment
@@ -337,9 +337,9 @@ encodeEnvironmentWithEmitted original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "typeMap"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.environment.EncodeEnvironment"),
-              Core.projectionField = (Core.Name "typeMap")})))),
+              Core.projectionField = (Core.Name "typeMap")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "emitted"),
@@ -356,7 +356,7 @@ encodeEnvironmentWithTypeMap original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "emitted"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.environment.EncodeEnvironment"),
-              Core.projectionField = (Core.Name "emitted")})))),
+              Core.projectionField = (Core.Name "emitted")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))

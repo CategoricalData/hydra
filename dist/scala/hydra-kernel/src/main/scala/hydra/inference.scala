@@ -466,11 +466,11 @@ def inferTypeOfCaseStatement(fcx: hydra.context.Context)(cx: hydra.graph.Graph)(
                                             lazy val allElemConstraints: Map[hydra.core.Name, hydra.core.TypeVariableMetadata] = hydra.inference.mergeClassConstraints(caseElemConstraints)(dfltClassConstraints)
                                             hydra.lib.eithers.bind[hydra.errors.Error, hydra.typing.InferenceResult,
                                                hydra.typing.InferenceResult](hydra.inference.mapConstraints(fcx5)(cx)((subst: hydra.typing.TypeSubst) =>
-                                              hydra.inference.yieldWithConstraints(fcx5)(hydra.inference.buildTypeApplicationTerm(svars)(hydra.core.Term.function(hydra.core.Function.elimination(hydra.core.Elimination.union(hydra.core.CaseStatement(tname,
+                                              hydra.inference.yieldWithConstraints(fcx5)(hydra.inference.buildTypeApplicationTerm(svars)(hydra.core.Term.cases(hydra.core.CaseStatement(tname,
                                                  hydra.lib.maybes.map[hydra.typing.InferenceResult, hydra.core.Term]((x: hydra.typing.InferenceResult) => (x.term))(dfltResult),
                                                  hydra.lib.lists.zipWith[hydra.core.Name, hydra.core.Term,
                                                  hydra.core.Field]((n: hydra.core.Name) => (t: hydra.core.Term) => hydra.core.Field(n,
-                                                 t))(fnames)(iterms)))))))(hydra.core.Type.function(hydra.core.FunctionType(hydra.resolution.nominalApplication(tname)(hydra.lib.lists.map[hydra.core.Name,
+                                                 t))(fnames)(iterms)))))(hydra.core.Type.function(hydra.core.FunctionType(hydra.resolution.nominalApplication(tname)(hydra.lib.lists.map[hydra.core.Name,
                                                  hydra.core.Type]((x: hydra.core.Name) => hydra.core.Type.variable(x))(svars)),
                                                  cod)))(hydra.substitution.composeTypeSubstList(hydra.lib.lists.concat[hydra.typing.TypeSubst](Seq(hydra.lib.maybes.toList[hydra.typing.TypeSubst](hydra.lib.maybes.map[hydra.typing.InferenceResult,
                                                  hydra.typing.TypeSubst]((x: hydra.typing.InferenceResult) => (x.subst))(dfltResult)),
@@ -641,18 +641,6 @@ def inferTypeOfEither(fcx: hydra.context.Context)(cx: hydra.graph.Graph)(e: Eith
   }
 }))(e)
 
-def inferTypeOfElimination(fcx: hydra.context.Context)(cx: hydra.graph.Graph)(elm: hydra.core.Elimination): Either[hydra.errors.Error,
-   hydra.typing.InferenceResult] =
-  elm match
-  case hydra.core.Elimination.record(v_Elimination_record_p) => hydra.inference.inferTypeOfProjection(fcx)(cx)(v_Elimination_record_p)
-  case hydra.core.Elimination.union(v_Elimination_union_c) => hydra.inference.inferTypeOfCaseStatement(fcx)(cx)(v_Elimination_union_c)
-  case hydra.core.Elimination.wrap(v_Elimination_wrap_tname) => hydra.inference.inferTypeOfUnwrap(fcx)(cx)(v_Elimination_wrap_tname)
-
-def inferTypeOfFunction(fcx: hydra.context.Context)(cx: hydra.graph.Graph)(f: hydra.core.Function): Either[hydra.errors.Error, hydra.typing.InferenceResult] =
-  f match
-  case hydra.core.Function.elimination(v_Function_elimination_elm) => hydra.inference.inferTypeOfElimination(fcx)(cx)(v_Function_elimination_elm)
-  case hydra.core.Function.lambda(v_Function_lambda_l) => hydra.inference.inferTypeOfLambda(fcx)(cx)(v_Function_lambda_l)
-
 def inferTypeOfInjection(fcx: hydra.context.Context)(cx: hydra.graph.Graph)(injection: hydra.core.Injection): Either[hydra.errors.Error,
    hydra.typing.InferenceResult] =
   {
@@ -717,7 +705,7 @@ def inferTypeOfLambda(fcx: hydra.context.Context)(cx: hydra.graph.Graph)(lambda:
           {
             lazy val rdom: hydra.core.Type = hydra.substitution.substInType(isubst)(dom)
             {
-              lazy val rterm: hydra.core.Term = hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda(`var`, Some(rdom), iterm)))
+              lazy val rterm: hydra.core.Term = hydra.core.Term.lambda(hydra.core.Lambda(`var`, Some(rdom), iterm))
               {
                 lazy val rtype: hydra.core.Type = hydra.core.Type.function(hydra.core.FunctionType(rdom, icod))
                 {
@@ -1201,8 +1189,8 @@ def inferTypeOfProjection(fcx: hydra.context.Context)(cx: hydra.graph.Graph)(pro
           lazy val stype: hydra.core.Type = (schemaType.`type`)
           hydra.lib.eithers.bind[hydra.errors.Error, Seq[hydra.core.FieldType], hydra.typing.InferenceResult](hydra.extract.core.recordType(tname)(stype))((sfields: Seq[hydra.core.FieldType]) =>
             hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Type, hydra.typing.InferenceResult](hydra.resolution.findFieldType(fcx2)(fname)(sfields))((ftyp: hydra.core.Type) =>
-            Right(hydra.inference.`yield`(fcx2)(hydra.inference.buildTypeApplicationTerm(svars)(hydra.core.Term.function(hydra.core.Function.elimination(hydra.core.Elimination.record(hydra.core.Projection(tname,
-               fname))))))(hydra.core.Type.function(hydra.core.FunctionType(hydra.resolution.nominalApplication(tname)(hydra.lib.lists.map[hydra.core.Name,
+            Right(hydra.inference.`yield`(fcx2)(hydra.inference.buildTypeApplicationTerm(svars)(hydra.core.Term.project(hydra.core.Projection(tname,
+               fname))))(hydra.core.Type.function(hydra.core.FunctionType(hydra.resolution.nominalApplication(tname)(hydra.lib.lists.map[hydra.core.Name,
                hydra.core.Type]((x: hydra.core.Name) => hydra.core.Type.variable(x))(svars)), ftyp)))(hydra.substitution.idTypeSubst))))
         }
       }
@@ -1295,20 +1283,23 @@ def inferTypeOfTerm(fcx: hydra.context.Context)(cx: hydra.graph.Graph)(term: hyd
   term match
     case hydra.core.Term.annotated(v_Term_annotated_a) => hydra.inference.inferTypeOfAnnotatedTerm(fcx2)(cx)(v_Term_annotated_a)
     case hydra.core.Term.application(v_Term_application_a) => hydra.inference.inferTypeOfApplication(fcx2)(cx)(v_Term_application_a)
+    case hydra.core.Term.cases(v_Term_cases_c) => hydra.inference.inferTypeOfCaseStatement(fcx2)(cx)(v_Term_cases_c)
     case hydra.core.Term.either(v_Term_either_e) => hydra.inference.inferTypeOfEither(fcx2)(cx)(v_Term_either_e)
-    case hydra.core.Term.function(v_Term_function_f) => hydra.inference.inferTypeOfFunction(fcx2)(cx)(v_Term_function_f)
+    case hydra.core.Term.lambda(v_Term_lambda_l) => hydra.inference.inferTypeOfLambda(fcx2)(cx)(v_Term_lambda_l)
     case hydra.core.Term.let(v_Term_let_l) => hydra.inference.inferTypeOfLet(fcx2)(cx)(v_Term_let_l)
     case hydra.core.Term.list(v_Term_list_els) => hydra.inference.inferTypeOfList(fcx2)(cx)(v_Term_list_els)
     case hydra.core.Term.literal(v_Term_literal_l) => Right(hydra.inference.inferTypeOfLiteral(fcx2)(v_Term_literal_l))
     case hydra.core.Term.map(v_Term_map_m) => hydra.inference.inferTypeOfMap(fcx2)(cx)(v_Term_map_m)
     case hydra.core.Term.maybe(v_Term_maybe_m) => hydra.inference.inferTypeOfOptional(fcx2)(cx)(v_Term_maybe_m)
     case hydra.core.Term.pair(v_Term_pair_p) => hydra.inference.inferTypeOfPair(fcx2)(cx)(v_Term_pair_p)
+    case hydra.core.Term.project(v_Term_project_p) => hydra.inference.inferTypeOfProjection(fcx2)(cx)(v_Term_project_p)
     case hydra.core.Term.record(v_Term_record_r) => hydra.inference.inferTypeOfRecord(fcx2)(cx)(v_Term_record_r)
     case hydra.core.Term.set(v_Term_set_s) => hydra.inference.inferTypeOfSet(fcx2)(cx)(v_Term_set_s)
     case hydra.core.Term.typeApplication(v_Term_typeApplication_tt) => hydra.inference.inferTypeOfTypeApplication(fcx2)(cx)(v_Term_typeApplication_tt)
     case hydra.core.Term.typeLambda(v_Term_typeLambda_ta) => hydra.inference.inferTypeOfTypeLambda(fcx2)(cx)(v_Term_typeLambda_ta)
     case hydra.core.Term.union(v_Term_union_i) => hydra.inference.inferTypeOfInjection(fcx2)(cx)(v_Term_union_i)
     case hydra.core.Term.unit => Right(hydra.inference.inferTypeOfUnit(fcx2))
+    case hydra.core.Term.unwrap(v_Term_unwrap_tname) => hydra.inference.inferTypeOfUnwrap(fcx2)(cx)(v_Term_unwrap_tname)
     case hydra.core.Term.variable(v_Term_variable_name) => hydra.inference.inferTypeOfVariable(fcx2)(cx)(v_Term_variable_name)
     case hydra.core.Term.wrap(v_Term_wrap_w) => hydra.inference.inferTypeOfWrappedTerm(fcx2)(cx)(v_Term_wrap_w)
 }
@@ -1335,7 +1326,7 @@ def inferTypeOfUnwrap(fcx: hydra.context.Context)(cx: hydra.graph.Graph)(tname: 
       {
         lazy val stype: hydra.core.Type = (schemaType.`type`)
         hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Type, hydra.typing.InferenceResult](hydra.extract.core.wrappedType(tname)(stype))((wtyp: hydra.core.Type) =>
-          Right(hydra.inference.`yield`(fcx2)(hydra.inference.buildTypeApplicationTerm(svars)(hydra.core.Term.function(hydra.core.Function.elimination(hydra.core.Elimination.wrap(tname)))))(hydra.core.Type.function(hydra.core.FunctionType(hydra.resolution.nominalApplication(tname)(hydra.lib.lists.map[hydra.core.Name,
+          Right(hydra.inference.`yield`(fcx2)(hydra.inference.buildTypeApplicationTerm(svars)(hydra.core.Term.unwrap(tname)))(hydra.core.Type.function(hydra.core.FunctionType(hydra.resolution.nominalApplication(tname)(hydra.lib.lists.map[hydra.core.Name,
              hydra.core.Type]((x: hydra.core.Name) => hydra.core.Type.variable(x))(svars)), wtyp)))(hydra.substitution.idTypeSubst)))
       }
     }

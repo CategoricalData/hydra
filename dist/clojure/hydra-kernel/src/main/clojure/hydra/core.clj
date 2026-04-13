@@ -1,6 +1,6 @@
 (ns hydra.core)
 
-(declare hydra_core_elimination-variants hydra_core_float_type-variants hydra_core_float_value-variants hydra_core_function-variants hydra_core_integer_type-variants hydra_core_integer_value-variants hydra_core_literal-variants hydra_core_literal_type-variants hydra_core_term-variants hydra_core_type-variants)
+(declare hydra_core_float_type-variants hydra_core_float_value-variants hydra_core_integer_type-variants hydra_core_integer_value-variants hydra_core_literal-variants hydra_core_literal_type-variants hydra_core_term-variants hydra_core_type-variants)
 
 (defrecord hydra_core_name [value])
 (defn make-hydra_core_name [value] (->hydra_core_name value))
@@ -29,8 +29,6 @@
 (defrecord hydra_core_pair_type [first second])
 (defn make-hydra_core_pair_type [first second] (->hydra_core_pair_type first second))
 
-(def hydra_core_elimination-variants (list :record :union :wrap))
-
 (defrecord hydra_core_field [name term])
 (defn make-hydra_core_field [name term] (->hydra_core_field name term))
 
@@ -43,8 +41,6 @@
 
 (defrecord hydra_core_forall_type [parameter body])
 (defn make-hydra_core_forall_type [parameter body] (->hydra_core_forall_type parameter body))
-
-(def hydra_core_function-variants (list :elimination :lambda))
 
 (defrecord hydra_core_function_type [domain codomain])
 (defn make-hydra_core_function_type [domain codomain] (->hydra_core_function_type domain codomain))
@@ -75,7 +71,7 @@
 (defrecord hydra_core_record [type_name fields])
 (defn make-hydra_core_record [type_name fields] (->hydra_core_record type_name fields))
 
-(def hydra_core_term-variants (list :annotated :application :either :function :let :list :literal :map :maybe :pair :record :set :type_application :type_lambda :union :unit :variable :wrap))
+(def hydra_core_term-variants (list :annotated :application :cases :either :lambda :let :list :literal :map :maybe :pair :project :record :set :type_application :type_lambda :union :unit :unwrap :variable :wrap))
 
 (def hydra_core_type-variants (list :annotated :application :either :forall :function :list :literal :map :maybe :pair :record :set :union :unit :variable :void :wrap))
 

@@ -152,15 +152,13 @@ differentiateFunction :: Core.Term -> Core.Term
 differentiateFunction term =
     case term of
       Core.TermAnnotated v0 -> differentiateFunction (Core.annotatedTermBody v0)
-      Core.TermFunction v0 -> case v0 of
-        Core.FunctionLambda v1 ->
-          let paramName = Core.lambdaParameter v1
-              body = Core.lambdaBody v1
-          in (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-            Core.lambdaParameter = paramName,
-            Core.lambdaDomain = (Core.lambdaDomain v1),
-            Core.lambdaBody = (differentiateTerm paramName body)})))
-        Core.FunctionElimination _ -> term
+      Core.TermLambda v0 ->
+        let paramName = Core.lambdaParameter v0
+            body = Core.lambdaBody v0
+        in (Core.TermLambda (Core.Lambda {
+          Core.lambdaParameter = paramName,
+          Core.lambdaDomain = (Core.lambdaDomain v0),
+          Core.lambdaBody = (differentiateTerm paramName body)}))
       _ -> term
 
 -- | Differentiate a term with respect to a named variable
@@ -201,15 +199,16 @@ differentiateTerm dx term =
                 Core.applicationFunction = func,
                 Core.applicationArgument = arg})))})),
             Core.applicationArgument = (differentiateTerm dx arg)})
-      Core.TermFunction v0 -> case v0 of
-        Core.FunctionLambda v1 -> Logic.ifElse (Equality.equal (Core.lambdaParameter v1) dx) (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-          Core.lambdaParameter = (Core.lambdaParameter v1),
-          Core.lambdaDomain = (Core.lambdaDomain v1),
-          Core.lambdaBody = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 0.0)))}))) (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-          Core.lambdaParameter = (Core.lambdaParameter v1),
-          Core.lambdaDomain = (Core.lambdaDomain v1),
-          Core.lambdaBody = (differentiateTerm dx (Core.lambdaBody v1))})))
-        Core.FunctionElimination _ -> Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 0.0))
+      Core.TermLambda v0 -> Logic.ifElse (Equality.equal (Core.lambdaParameter v0) dx) (Core.TermLambda (Core.Lambda {
+        Core.lambdaParameter = (Core.lambdaParameter v0),
+        Core.lambdaDomain = (Core.lambdaDomain v0),
+        Core.lambdaBody = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 0.0)))})) (Core.TermLambda (Core.Lambda {
+        Core.lambdaParameter = (Core.lambdaParameter v0),
+        Core.lambdaDomain = (Core.lambdaDomain v0),
+        Core.lambdaBody = (differentiateTerm dx (Core.lambdaBody v0))}))
+      Core.TermCases _ -> Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 0.0))
+      Core.TermProject _ -> Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 0.0))
+      Core.TermUnwrap _ -> Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 0.0))
       Core.TermLet v0 -> Core.TermLet (Core.Let {
         Core.letBindings = (Lists.map (\b -> Core.Binding {
           Core.bindingName = (Core.bindingName b),
@@ -246,14 +245,14 @@ gradient typeName vars term =
 -- | Look up the derivative of a unary Float64 primitive
 primitiveDerivative :: Core.Name -> Maybe Core.Term
 primitiveDerivative name =
-    Logic.ifElse (Equality.equal name (Core.Name "hydra.lib.math.sin")) (Just (Core.TermVariable (Core.Name "hydra.lib.math.cos"))) (Logic.ifElse (Equality.equal name (Core.Name "hydra.lib.math.cos")) (Just (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+    Logic.ifElse (Equality.equal name (Core.Name "hydra.lib.math.sin")) (Just (Core.TermVariable (Core.Name "hydra.lib.math.cos"))) (Logic.ifElse (Equality.equal name (Core.Name "hydra.lib.math.cos")) (Just (Core.TermLambda (Core.Lambda {
       Core.lambdaParameter = (Core.Name "_x"),
       Core.lambdaDomain = Nothing,
       Core.lambdaBody = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.math.negateFloat64")),
         Core.applicationArgument = (Core.TermApplication (Core.Application {
           Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.math.sin")),
-          Core.applicationArgument = (Core.TermVariable (Core.Name "_x"))}))}))})))) (Logic.ifElse (Equality.equal name (Core.Name "hydra.lib.math.tan")) (Just (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+          Core.applicationArgument = (Core.TermVariable (Core.Name "_x"))}))}))}))) (Logic.ifElse (Equality.equal name (Core.Name "hydra.lib.math.tan")) (Just (Core.TermLambda (Core.Lambda {
       Core.lambdaParameter = (Core.Name "_x"),
       Core.lambdaDomain = Nothing,
       Core.lambdaBody = (Core.TermApplication (Core.Application {
@@ -262,14 +261,14 @@ primitiveDerivative name =
           Core.applicationArgument = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.math.cos")),
             Core.applicationArgument = (Core.TermVariable (Core.Name "_x"))}))})),
-        Core.applicationArgument = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 (-2.0))))}))})))) (Logic.ifElse (Equality.equal name (Core.Name "hydra.lib.math.exp")) (Just (Core.TermVariable (Core.Name "hydra.lib.math.exp"))) (Logic.ifElse (Equality.equal name (Core.Name "hydra.lib.math.log")) (Just (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+        Core.applicationArgument = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 (-2.0))))}))}))) (Logic.ifElse (Equality.equal name (Core.Name "hydra.lib.math.exp")) (Just (Core.TermVariable (Core.Name "hydra.lib.math.exp"))) (Logic.ifElse (Equality.equal name (Core.Name "hydra.lib.math.log")) (Just (Core.TermLambda (Core.Lambda {
       Core.lambdaParameter = (Core.Name "_x"),
       Core.lambdaDomain = Nothing,
       Core.lambdaBody = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermApplication (Core.Application {
           Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.math.pow")),
           Core.applicationArgument = (Core.TermVariable (Core.Name "_x"))})),
-        Core.applicationArgument = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 (-1.0))))}))})))) (Logic.ifElse (Equality.equal name (Core.Name "hydra.lib.math.sqrt")) (Just (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+        Core.applicationArgument = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 (-1.0))))}))}))) (Logic.ifElse (Equality.equal name (Core.Name "hydra.lib.math.sqrt")) (Just (Core.TermLambda (Core.Lambda {
       Core.lambdaParameter = (Core.Name "_x"),
       Core.lambdaDomain = Nothing,
       Core.lambdaBody = (Core.TermApplication (Core.Application {
@@ -282,7 +281,7 @@ primitiveDerivative name =
             Core.applicationArgument = (Core.TermApplication (Core.Application {
               Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.math.sqrt")),
               Core.applicationArgument = (Core.TermVariable (Core.Name "_x"))}))})),
-          Core.applicationArgument = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 (-1.0))))}))}))})))) (Logic.ifElse (Equality.equal name (Core.Name "hydra.lib.math.asin")) (Just (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+          Core.applicationArgument = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 (-1.0))))}))}))}))) (Logic.ifElse (Equality.equal name (Core.Name "hydra.lib.math.asin")) (Just (Core.TermLambda (Core.Lambda {
       Core.lambdaParameter = (Core.Name "_x"),
       Core.lambdaDomain = Nothing,
       Core.lambdaBody = (Core.TermApplication (Core.Application {
@@ -299,7 +298,7 @@ primitiveDerivative name =
                   Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.math.mulFloat64")),
                   Core.applicationArgument = (Core.TermVariable (Core.Name "_x"))})),
                 Core.applicationArgument = (Core.TermVariable (Core.Name "_x"))}))}))}))})),
-        Core.applicationArgument = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 (-1.0))))}))})))) (Logic.ifElse (Equality.equal name (Core.Name "hydra.lib.math.acos")) (Just (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+        Core.applicationArgument = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 (-1.0))))}))}))) (Logic.ifElse (Equality.equal name (Core.Name "hydra.lib.math.acos")) (Just (Core.TermLambda (Core.Lambda {
       Core.lambdaParameter = (Core.Name "_x"),
       Core.lambdaDomain = Nothing,
       Core.lambdaBody = (Core.TermApplication (Core.Application {
@@ -318,7 +317,7 @@ primitiveDerivative name =
                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.math.mulFloat64")),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "_x"))})),
                   Core.applicationArgument = (Core.TermVariable (Core.Name "_x"))}))}))}))})),
-          Core.applicationArgument = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 (-1.0))))}))}))})))) (Logic.ifElse (Equality.equal name (Core.Name "hydra.lib.math.atan")) (Just (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+          Core.applicationArgument = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 (-1.0))))}))}))}))) (Logic.ifElse (Equality.equal name (Core.Name "hydra.lib.math.atan")) (Just (Core.TermLambda (Core.Lambda {
       Core.lambdaParameter = (Core.Name "_x"),
       Core.lambdaDomain = Nothing,
       Core.lambdaBody = (Core.TermApplication (Core.Application {
@@ -333,7 +332,7 @@ primitiveDerivative name =
                 Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.math.mulFloat64")),
                 Core.applicationArgument = (Core.TermVariable (Core.Name "_x"))})),
               Core.applicationArgument = (Core.TermVariable (Core.Name "_x"))}))}))})),
-        Core.applicationArgument = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 (-1.0))))}))})))) (Logic.ifElse (Equality.equal name (Core.Name "hydra.lib.math.sinh")) (Just (Core.TermVariable (Core.Name "hydra.lib.math.cosh"))) (Logic.ifElse (Equality.equal name (Core.Name "hydra.lib.math.cosh")) (Just (Core.TermVariable (Core.Name "hydra.lib.math.sinh"))) (Logic.ifElse (Equality.equal name (Core.Name "hydra.lib.math.tanh")) (Just (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+        Core.applicationArgument = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 (-1.0))))}))}))) (Logic.ifElse (Equality.equal name (Core.Name "hydra.lib.math.sinh")) (Just (Core.TermVariable (Core.Name "hydra.lib.math.cosh"))) (Logic.ifElse (Equality.equal name (Core.Name "hydra.lib.math.cosh")) (Just (Core.TermVariable (Core.Name "hydra.lib.math.sinh"))) (Logic.ifElse (Equality.equal name (Core.Name "hydra.lib.math.tanh")) (Just (Core.TermLambda (Core.Lambda {
       Core.lambdaParameter = (Core.Name "_x"),
       Core.lambdaDomain = Nothing,
       Core.lambdaBody = (Core.TermApplication (Core.Application {
@@ -348,7 +347,7 @@ primitiveDerivative name =
               Core.applicationArgument = (Core.TermVariable (Core.Name "_x"))}))})),
           Core.applicationArgument = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.math.tanh")),
-            Core.applicationArgument = (Core.TermVariable (Core.Name "_x"))}))}))}))})))) (Logic.ifElse (Equality.equal name (Core.Name "hydra.lib.math.asinh")) (Just (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+            Core.applicationArgument = (Core.TermVariable (Core.Name "_x"))}))}))}))}))) (Logic.ifElse (Equality.equal name (Core.Name "hydra.lib.math.asinh")) (Just (Core.TermLambda (Core.Lambda {
       Core.lambdaParameter = (Core.Name "_x"),
       Core.lambdaDomain = Nothing,
       Core.lambdaBody = (Core.TermApplication (Core.Application {
@@ -365,7 +364,7 @@ primitiveDerivative name =
                     Core.applicationArgument = (Core.TermVariable (Core.Name "_x"))})),
                   Core.applicationArgument = (Core.TermVariable (Core.Name "_x"))}))})),
               Core.applicationArgument = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 1.0)))}))}))})),
-        Core.applicationArgument = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 (-1.0))))}))})))) (Logic.ifElse (Equality.equal name (Core.Name "hydra.lib.math.acosh")) (Just (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+        Core.applicationArgument = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 (-1.0))))}))}))) (Logic.ifElse (Equality.equal name (Core.Name "hydra.lib.math.acosh")) (Just (Core.TermLambda (Core.Lambda {
       Core.lambdaParameter = (Core.Name "_x"),
       Core.lambdaDomain = Nothing,
       Core.lambdaBody = (Core.TermApplication (Core.Application {
@@ -382,7 +381,7 @@ primitiveDerivative name =
                     Core.applicationArgument = (Core.TermVariable (Core.Name "_x"))})),
                   Core.applicationArgument = (Core.TermVariable (Core.Name "_x"))}))})),
               Core.applicationArgument = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 1.0)))}))}))})),
-        Core.applicationArgument = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 (-1.0))))}))})))) (Logic.ifElse (Equality.equal name (Core.Name "hydra.lib.math.atanh")) (Just (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+        Core.applicationArgument = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 (-1.0))))}))}))) (Logic.ifElse (Equality.equal name (Core.Name "hydra.lib.math.atanh")) (Just (Core.TermLambda (Core.Lambda {
       Core.lambdaParameter = (Core.Name "_x"),
       Core.lambdaDomain = Nothing,
       Core.lambdaBody = (Core.TermApplication (Core.Application {
@@ -397,22 +396,22 @@ primitiveDerivative name =
                 Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.math.mulFloat64")),
                 Core.applicationArgument = (Core.TermVariable (Core.Name "_x"))})),
               Core.applicationArgument = (Core.TermVariable (Core.Name "_x"))}))}))})),
-        Core.applicationArgument = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 (-1.0))))}))})))) (Logic.ifElse (Equality.equal name (Core.Name "hydra.lib.math.negate")) (Just (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+        Core.applicationArgument = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 (-1.0))))}))}))) (Logic.ifElse (Equality.equal name (Core.Name "hydra.lib.math.negate")) (Just (Core.TermLambda (Core.Lambda {
       Core.lambdaParameter = (Core.Name "_x"),
       Core.lambdaDomain = Nothing,
-      Core.lambdaBody = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 (-1.0))))})))) (Logic.ifElse (Equality.equal name (Core.Name "hydra.lib.math.abs")) (Just (Core.TermVariable (Core.Name "hydra.lib.math.signum"))) (Logic.ifElse (Equality.equal name (Core.Name "hydra.lib.math.ceiling")) (Just (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+      Core.lambdaBody = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 (-1.0))))}))) (Logic.ifElse (Equality.equal name (Core.Name "hydra.lib.math.abs")) (Just (Core.TermVariable (Core.Name "hydra.lib.math.signum"))) (Logic.ifElse (Equality.equal name (Core.Name "hydra.lib.math.ceiling")) (Just (Core.TermLambda (Core.Lambda {
       Core.lambdaParameter = (Core.Name "_x"),
       Core.lambdaDomain = Nothing,
-      Core.lambdaBody = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 0.0)))})))) (Logic.ifElse (Equality.equal name (Core.Name "hydra.lib.math.floor")) (Just (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+      Core.lambdaBody = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 0.0)))}))) (Logic.ifElse (Equality.equal name (Core.Name "hydra.lib.math.floor")) (Just (Core.TermLambda (Core.Lambda {
       Core.lambdaParameter = (Core.Name "_x"),
       Core.lambdaDomain = Nothing,
-      Core.lambdaBody = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 0.0)))})))) (Logic.ifElse (Equality.equal name (Core.Name "hydra.lib.math.round")) (Just (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+      Core.lambdaBody = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 0.0)))}))) (Logic.ifElse (Equality.equal name (Core.Name "hydra.lib.math.round")) (Just (Core.TermLambda (Core.Lambda {
       Core.lambdaParameter = (Core.Name "_x"),
       Core.lambdaDomain = Nothing,
-      Core.lambdaBody = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 0.0)))})))) (Logic.ifElse (Equality.equal name (Core.Name "hydra.lib.math.truncate")) (Just (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+      Core.lambdaBody = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 0.0)))}))) (Logic.ifElse (Equality.equal name (Core.Name "hydra.lib.math.truncate")) (Just (Core.TermLambda (Core.Lambda {
       Core.lambdaParameter = (Core.Name "_x"),
       Core.lambdaDomain = Nothing,
-      Core.lambdaBody = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 0.0)))})))) (Logic.ifElse (Equality.equal name (Core.Name "hydra.lib.math.signum")) (Just (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+      Core.lambdaBody = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 0.0)))}))) (Logic.ifElse (Equality.equal name (Core.Name "hydra.lib.math.signum")) (Just (Core.TermLambda (Core.Lambda {
       Core.lambdaParameter = (Core.Name "_x"),
       Core.lambdaDomain = Nothing,
-      Core.lambdaBody = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 0.0)))})))) Nothing)))))))))))))))))))))
+      Core.lambdaBody = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 0.0)))}))) Nothing)))))))))))))))))))))
