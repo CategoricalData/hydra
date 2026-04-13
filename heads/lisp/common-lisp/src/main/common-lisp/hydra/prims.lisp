@@ -102,78 +102,78 @@
 
 (defun tc-bigfloat ()
   (make-term_coder (list :literal (list :float (list :bigfloat nil)))
-    (lambda (cx) (lambda (g) (lambda (t_) (funcall (funcall (funcall hydra_extract_core_bigfloat cx) g) t_))))
+    (lambda (cx) (lambda (g) (lambda (t_) (funcall (funcall hydra_extract_core_bigfloat g) t_))))
     (lambda (cx) (declare (ignore cx)) (lambda (v) (list :right (list :literal (list :float (list :bigfloat (float v 1.0d0)))))))))
 
 (defun tc-bigint ()
   (make-term_coder (list :literal (list :integer (list :bigint nil)))
-    (lambda (cx) (lambda (g) (lambda (t_) (funcall (funcall (funcall hydra_extract_core_bigint cx) g) t_))))
+    (lambda (cx) (lambda (g) (lambda (t_) (funcall (funcall hydra_extract_core_bigint g) t_))))
     (lambda (cx) (declare (ignore cx)) (lambda (v) (list :right (list :literal (list :integer (list :bigint v))))))))
 
 (defun tc-boolean ()
   (make-term_coder (list :literal (list :boolean nil))
-    (lambda (cx) (lambda (g) (lambda (t_) (funcall (funcall (funcall hydra_extract_core_boolean cx) g) t_))))
+    (lambda (cx) (lambda (g) (lambda (t_) (funcall (funcall hydra_extract_core_boolean g) t_))))
     (lambda (cx) (declare (ignore cx)) (lambda (v) (list :right (list :literal (list :boolean v)))))))
 
 (defun tc-float32 ()
   (make-term_coder (list :literal (list :float (list :float32 nil)))
-    (lambda (cx) (lambda (g) (lambda (t_) (funcall (funcall (funcall hydra_extract_core_float32 cx) g) t_))))
+    (lambda (cx) (lambda (g) (lambda (t_) (funcall (funcall hydra_extract_core_float32 g) t_))))
     (lambda (cx) (declare (ignore cx)) (lambda (v) (list :right (list :literal (list :float (list :float32
       (float (float v 1.0f0) 1.0d0)))))))))
 
 (defun tc-float64 ()
   (make-term_coder (list :literal (list :float (list :float64 nil)))
-    (lambda (cx) (lambda (g) (lambda (t_) (funcall (funcall (funcall hydra_extract_core_float64 cx) g) t_))))
+    (lambda (cx) (lambda (g) (lambda (t_) (funcall (funcall hydra_extract_core_float64 g) t_))))
     (lambda (cx) (declare (ignore cx)) (lambda (v) (list :right (list :literal (list :float (list :float64 (float v 1.0d0)))))))))
 
 (defun tc-int8 ()
   (make-term_coder (list :literal (list :integer (list :int8 nil)))
-    (lambda (cx) (lambda (g) (lambda (t_) (funcall (funcall (funcall hydra_extract_core_int8 cx) g) t_))))
+    (lambda (cx) (lambda (g) (lambda (t_) (funcall (funcall hydra_extract_core_int8 g) t_))))
     (lambda (cx) (declare (ignore cx)) (lambda (v) (list :right (list :literal (list :integer (list :int8 v))))))))
 
 (defun tc-int16 ()
   (make-term_coder (list :literal (list :integer (list :int16 nil)))
-    (lambda (cx) (lambda (g) (lambda (t_) (funcall (funcall (funcall hydra_extract_core_int16 cx) g) t_))))
+    (lambda (cx) (lambda (g) (lambda (t_) (funcall (funcall hydra_extract_core_int16 g) t_))))
     (lambda (cx) (declare (ignore cx)) (lambda (v) (list :right (list :literal (list :integer (list :int16 v))))))))
 
 (defun tc-int32 ()
   (make-term_coder (list :literal (list :integer (list :int32 nil)))
-    (lambda (cx) (lambda (g) (lambda (t_) (funcall (funcall (funcall hydra_extract_core_int32 cx) g) t_))))
+    (lambda (cx) (lambda (g) (lambda (t_) (funcall (funcall hydra_extract_core_int32 g) t_))))
     (lambda (cx) (declare (ignore cx)) (lambda (v) (list :right (list :literal (list :integer (list :int32 v))))))))
 
 (defun tc-int64 ()
   (make-term_coder (list :literal (list :integer (list :int64 nil)))
-    (lambda (cx) (lambda (g) (lambda (t_) (funcall (funcall (funcall hydra_extract_core_int64 cx) g) t_))))
+    (lambda (cx) (lambda (g) (lambda (t_) (funcall (funcall hydra_extract_core_int64 g) t_))))
     (lambda (cx) (declare (ignore cx)) (lambda (v) (list :right (list :literal (list :integer (list :int64 v))))))))
 
 (defun tc-uint8 ()
   (make-term_coder (list :literal (list :integer (list :uint8 nil)))
-    (lambda (cx) (lambda (g) (lambda (t_) (funcall (funcall (funcall hydra_extract_core_uint8 cx) g) t_))))
+    (lambda (cx) (lambda (g) (lambda (t_) (funcall (funcall hydra_extract_core_uint8 g) t_))))
     (lambda (cx) (declare (ignore cx)) (lambda (v) (list :right (list :literal (list :integer (list :uint8 v))))))))
 
 (defun tc-uint16 ()
   (make-term_coder (list :literal (list :integer (list :uint16 nil)))
-    (lambda (cx) (lambda (g) (lambda (t_) (funcall (funcall (funcall hydra_extract_core_uint16 cx) g) t_))))
+    (lambda (cx) (lambda (g) (lambda (t_) (funcall (funcall hydra_extract_core_uint16 g) t_))))
     (lambda (cx) (declare (ignore cx)) (lambda (v) (list :right (list :literal (list :integer (list :uint16 v))))))))
 
 (defun tc-uint32 ()
   (make-term_coder (list :literal (list :integer (list :uint32 nil)))
-    (lambda (cx) (lambda (g) (lambda (t_) (funcall (funcall (funcall hydra_extract_core_uint32 cx) g) t_))))
+    (lambda (cx) (lambda (g) (lambda (t_) (funcall (funcall hydra_extract_core_uint32 g) t_))))
     (lambda (cx) (declare (ignore cx)) (lambda (v) (list :right (list :literal (list :integer (list :uint32 v))))))))
 
 (defun tc-uint64 ()
   (make-term_coder (list :literal (list :integer (list :uint64 nil)))
-    (lambda (cx) (lambda (g) (lambda (t_) (funcall (funcall (funcall hydra_extract_core_uint64 cx) g) t_))))
+    (lambda (cx) (lambda (g) (lambda (t_) (funcall (funcall hydra_extract_core_uint64 g) t_))))
     (lambda (cx) (declare (ignore cx)) (lambda (v) (list :right (list :literal (list :integer (list :uint64 v))))))))
 
 (defun tc-string ()
   (make-term_coder (list :literal (list :string nil))
-    (lambda (cx) (lambda (g) (lambda (t_) (funcall (funcall (funcall hydra_extract_core_string cx) g) t_))))
+    (lambda (cx) (lambda (g) (lambda (t_) (funcall (funcall hydra_extract_core_string g) t_))))
     (lambda (cx) (declare (ignore cx)) (lambda (v) (list :right (list :literal (list :string v)))))))
 
 (defun tc-binary ()
   (make-term_coder (list :literal (list :binary nil))
-    (lambda (cx) (lambda (g) (lambda (t_) (funcall (funcall (funcall hydra_extract_core_binary cx) g) t_))))
+    (lambda (cx) (lambda (g) (lambda (t_) (funcall (funcall hydra_extract_core_binary g) t_))))
     (lambda (cx) (declare (ignore cx)) (lambda (v) (list :right (list :literal (list :binary v)))))))
 
 ;; Container TermCoders
@@ -183,7 +183,7 @@
     (lambda (cx)
       (lambda (g)
         (lambda (t_)
-          (funcall (funcall (funcall (funcall hydra_extract_core_list_of cx)
+          (funcall (funcall (funcall hydra_extract_core_list_of
                                      (lambda (term) (funcall (funcall (funcall (term_coder-encode el-coder) cx) g) term)))
                             g) t_))))
     (lambda (cx)
@@ -202,7 +202,7 @@
     (lambda (cx)
       (lambda (g)
         (lambda (t_)
-          (funcall (funcall (funcall (funcall hydra_extract_core_set_of cx)
+          (funcall (funcall (funcall hydra_extract_core_set_of
                                      (lambda (term) (funcall (funcall (funcall (term_coder-encode el-coder) cx) g) term)))
                             g) t_))))
     (lambda (cx)
@@ -221,7 +221,7 @@
     (lambda (cx)
       (lambda (g)
         (lambda (t_)
-          (funcall (funcall (funcall (funcall (funcall hydra_extract_core_map cx)
+          (funcall (funcall (funcall (funcall hydra_extract_core_map
                                               (lambda (term) (funcall (funcall (funcall (term_coder-encode key-coder) cx) g) term)))
                                      (lambda (term) (funcall (funcall (funcall (term_coder-encode val-coder) cx) g) term)))
                             g) t_))))
@@ -244,7 +244,7 @@
     (lambda (cx)
       (lambda (g)
         (lambda (t_)
-          (funcall (funcall (funcall (funcall hydra_extract_core_maybe_term cx)
+          (funcall (funcall (funcall hydra_extract_core_maybe_term
                                      (lambda (term) (funcall (funcall (funcall (term_coder-encode el-coder) cx) g) term)))
                             g) t_))))
     (lambda (cx)
@@ -264,7 +264,7 @@
     (lambda (cx)
       (lambda (g)
         (lambda (t_)
-          (funcall (funcall (funcall (funcall (funcall hydra_extract_core_either_term cx)
+          (funcall (funcall (funcall (funcall hydra_extract_core_either_term
                                               (lambda (term) (funcall (funcall (funcall (term_coder-encode left-coder) cx) g) term)))
                                      (lambda (term) (funcall (funcall (funcall (term_coder-encode right-coder) cx) g) term)))
                             g) t_))))
@@ -281,7 +281,7 @@
     (lambda (cx)
       (lambda (g)
         (lambda (t_)
-          (funcall (funcall (funcall (funcall (funcall hydra_extract_core_pair cx)
+          (funcall (funcall (funcall (funcall hydra_extract_core_pair
                                               (lambda (term) (funcall (funcall (funcall (term_coder-encode first-coder) cx) g) term)))
                                      (lambda (term) (funcall (funcall (funcall (term_coder-encode second-coder) cx) g) term)))
                             g) t_))))
@@ -312,7 +312,7 @@
     (lambda (cx)
       (lambda (g)
         (lambda (t_)
-          (let ((r (funcall (funcall (funcall (funcall hydra_extract_core_unit_variant cx) "hydra.util.Comparison") g) t_)))
+          (let ((r (funcall (funcall (funcall hydra_extract_core_unit_variant "hydra.util.Comparison") g) t_)))
             (if (eq (first r) :left) r
                 (let ((variant-name (second r)))
                   (cond
@@ -386,7 +386,7 @@
     (lambda (cx)
       (lambda (g)
         (lambda (args)
-          (let ((check (funcall (funcall (funcall (funcall hydra_extract_core_n_args cx) pname) 1) args)))
+          (let ((check (funcall (funcall (funcall hydra_extract_core_n_args pname) 1) args)))
             (if (eq (first check) :left) check
                 (let ((r1 (funcall (funcall (funcall (term_coder-encode input1) cx) g) (first args))))
                   (if (eq (first r1) :left) (wrap-other-error cx r1)
@@ -399,7 +399,7 @@
     (lambda (cx)
       (lambda (g)
         (lambda (args)
-          (let ((check (funcall (funcall (funcall (funcall hydra_extract_core_n_args cx) pname) 2) args)))
+          (let ((check (funcall (funcall (funcall hydra_extract_core_n_args pname) 2) args)))
             (if (eq (first check) :left) check
                 (let ((r1 (funcall (funcall (funcall (term_coder-encode input1) cx) g) (first args))))
                   (if (eq (first r1) :left) (wrap-other-error cx r1)
@@ -414,7 +414,7 @@
     (lambda (cx)
       (lambda (g)
         (lambda (args)
-          (let ((check (funcall (funcall (funcall (funcall hydra_extract_core_n_args cx) pname) 3) args)))
+          (let ((check (funcall (funcall (funcall hydra_extract_core_n_args pname) 3) args)))
             (if (eq (first check) :left) check
                 (let ((r1 (funcall (funcall (funcall (term_coder-encode input1) cx) g) (first args))))
                   (if (eq (first r1) :left) (wrap-other-error cx r1)
