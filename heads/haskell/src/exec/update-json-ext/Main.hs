@@ -1,7 +1,9 @@
 module Main where
 
-import Hydra.Ext.Generation (writeModulesJson, writeExtManifestJson)
-import Hydra.Ext.Sources.All (hydraExtJsonModules, mainModules)
+import Hydra.Generation (writeModulesJson)
+import Hydra.ExtGeneration (writeExtManifestJson)
+import Hydra.Sources.Ext (hydraExtJsonModules)
+import Hydra.Sources.All (mainModules)
 import System.Exit (exitFailure)
 import Control.Exception (catch, SomeException)
 

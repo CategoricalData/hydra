@@ -23,9 +23,9 @@ This will:
 
 ## What it demonstrates
 
-- **SHACL shapes generation** from Hydra's type system via `hydra.ext.shacl.coder`
+- **SHACL shapes generation** from Hydra's type system via `hydra.shacl.coder`
 - **RDF encoding** of typed Hydra terms via the same coder's `encodeTerm`
-- **Serialization** to N-Triples via `hydra.ext.rdf.serde`
+- **Serialization** to N-Triples via `hydra.rdf.serde`
 - **Positive validation**: generated RDF conforms to generated shapes
 - **Negative validation**: hand-crafted invalid RDF is rejected, with specific constraint
   violations reported (missing required properties, wrong datatypes, etc.)

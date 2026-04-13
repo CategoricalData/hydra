@@ -27,7 +27,7 @@ import java.util.Set;
  *   --include-coders       Also load and generate ext coder modules
  *   --include-tests        Also load and generate kernel test modules
  *   --ext-json-dir <dir>   Directory containing ext JSON modules (for --include-coders)
- *   --kernel-only          Only generate kernel modules (exclude hydra.ext.*)
+ *   --kernel-only          Only generate kernel modules (exclude hydra.*)
  *   --types-only           Only generate type-defining modules
  * }</pre>
  */
@@ -82,7 +82,7 @@ public class Bootstrap {
             System.out.println("  --include-coders       Also load and generate ext coder modules");
             System.out.println("  --include-tests        Also load and generate kernel test modules");
             System.out.println("  --ext-json-dir <dir>   Directory containing ext JSON modules (for --include-coders)");
-            System.out.println("  --kernel-only          Only generate kernel modules (exclude hydra.ext.*)");
+            System.out.println("  --kernel-only          Only generate kernel modules (exclude hydra.*)");
             System.out.println("  --types-only           Only generate type-defining modules");
             System.exit(1);
         }
@@ -166,8 +166,24 @@ public class Bootstrap {
         List<Module> modsToGenerate = allMainMods;
         if (kernelOnly) {
             int before = modsToGenerate.size();
-            modsToGenerate = Generation.filterKernelModules(modsToGenerate);
-            allMainMods = Generation.filterKernelModules(allMainMods);
+            Set<String> kernelNsStrings = new HashSet<>();
+            for (Namespace ns : allKernelNamespaces) {
+                kernelNsStrings.add(ns.value);
+            }
+            List<Module> filteredGen = new ArrayList<>();
+            for (Module m : modsToGenerate) {
+                if (kernelNsStrings.contains(m.namespace.value)) {
+                    filteredGen.add(m);
+                }
+            }
+            modsToGenerate = filteredGen;
+            List<Module> filteredAll = new ArrayList<>();
+            for (Module m : allMainMods) {
+                if (kernelNsStrings.contains(m.namespace.value)) {
+                    filteredAll.add(m);
+                }
+            }
+            allMainMods = filteredAll;
             System.out.println("Filtering to kernel modules...");
             System.out.println("  Before: " + before + " modules");
             System.out.println("  After:  " + modsToGenerate.size() + " kernel modules");
@@ -188,7 +204,7 @@ public class Bootstrap {
         fullMods.addAll(coderMods);
 
         // Generate main modules
-        String outMain = outDir + File.separator + "src/gen-main";
+        String outMain = outDir + File.separator + "src/main";
         System.out.println("Mapping " + modsToGenerate.size() + " modules to " + targetCap + "...");
         System.out.println("  Universe: " + allMainMods.size() + " modules");
         System.out.println("  Output: " + outMain);
@@ -246,7 +262,7 @@ public class Bootstrap {
         // Optionally load and generate test modules
         long testFileCount = 0;
         if (includeTests) {
-            String testJsonDir = jsonDir.replace("gen-main/json", "gen-test/json");
+            String testJsonDir = jsonDir.replace("src/main/json", "src/test/json");
             System.out.println("Loading test modules from JSON...");
             System.out.println("  Source: " + testJsonDir);
 
@@ -267,7 +283,7 @@ public class Bootstrap {
             List<Module> allUniverse = new ArrayList<>(fullMods);
             allUniverse.addAll(testMods);
 
-            String outTest = outDir + File.separator + "src/gen-test";
+            String outTest = outDir + File.separator + "src/test";
             System.out.println("Mapping test modules to " + targetCap + "...");
             System.out.println("  Universe: " + allUniverse.size() + " modules");
             System.out.println("  Generating: " + testMods.size() + " test modules");

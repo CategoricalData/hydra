@@ -112,7 +112,7 @@ stack ghci --ghci-options='+RTS -K256M -A32M -RTS'
 ```
 
 ```haskell
-import Hydra.Ext.Generation
+import Hydra.Generation
 
 -- Generate Java for all main modules
 writeJava "../../dist/java/hydra-kernel/src/main/java" mainModules mainModules
@@ -124,7 +124,7 @@ writePython "../../dist/python/hydra-kernel/src/main/python" kernelModules kerne
 writeGraphql "/tmp/graphql" mainModules [myCustomModule]
 ```
 
-Module lists are Haskell values from `Hydra.Sources.All` and `Hydra.Ext.Sources.All`:
+Module lists are Haskell values from `Hydra.Sources.All` and `Hydra.Sources.All`:
 
 | Constant | Contents |
 |----------|----------|

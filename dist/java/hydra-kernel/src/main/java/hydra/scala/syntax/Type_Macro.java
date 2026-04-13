@@ -1,0 +1,41 @@
+// Note: this is an automatically generated file. Do not edit.
+
+package hydra.scala.syntax;
+
+import java.io.Serializable;
+
+public class Type_Macro implements Serializable, Comparable<Type_Macro> {
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.scala.syntax.Type_Macro");
+
+  public static final hydra.core.Name BODY = new hydra.core.Name("body");
+
+  public final hydra.scala.syntax.Data body;
+
+  public Type_Macro (hydra.scala.syntax.Data body) {
+    this.body = body;
+  }
+
+  @Override
+  public boolean equals(Object other) {
+    if (!(other instanceof Type_Macro)) {
+      return false;
+    }
+    Type_Macro o = (Type_Macro) other;
+    return java.util.Objects.equals(
+      this.body,
+      o.body);
+  }
+
+  @Override
+  public int hashCode() {
+    return 2 * java.util.Objects.hashCode(body);
+  }
+
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(Type_Macro other) {
+    return hydra.util.Comparing.compare(
+      body,
+      other.body);
+  }
+}

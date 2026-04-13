@@ -1,8 +1,8 @@
 module Main where
 
-import Hydra.Ext.Generation
-import qualified Hydra.Ext.Sources.Pg.Mapping as PgMapping
-import qualified Hydra.Ext.Sources.Pg.Model as PgModel
+import Hydra.ExtGeneration
+import qualified Hydra.Sources.Pg.Mapping as PgMapping
+import qualified Hydra.Sources.Pg.Model as PgModel
 
 main :: IO ()
 main = do
@@ -12,12 +12,12 @@ main = do
   let universe = mainModules ++ hydraExtModules
       typeModules = [PgMapping.module_, PgModel.module_]
 
-  putStrLn "Generating decoder source modules to dist/haskell/hydra-ext/src/main/haskell..."
-  writeDecoderSourceHaskell "../../dist/haskell/hydra-ext/src/main/haskell" universe typeModules
+  putStrLn "Generating decoder source modules to dist/haskell/hydra-pg/src/main/haskell..."
+  writeDecoderSourceHaskell "../../dist/haskell/hydra-pg/src/main/haskell" universe typeModules
 
   putStrLn ""
-  putStrLn "Generating encoder source modules to dist/haskell/hydra-ext/src/main/haskell..."
-  writeEncoderSourceHaskell "../../dist/haskell/hydra-ext/src/main/haskell" universe typeModules
+  putStrLn "Generating encoder source modules to dist/haskell/hydra-pg/src/main/haskell..."
+  writeEncoderSourceHaskell "../../dist/haskell/hydra-pg/src/main/haskell" universe typeModules
 
   putStrLn ""
   putStrLn "=== Done! ==="

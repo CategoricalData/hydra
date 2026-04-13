@@ -67,7 +67,20 @@ def _load_kernel_term_bindings() -> dict[hydra.core.Name, hydra.core.Binding]:
     old_limit = sys.getrecursionlimit()
     sys.setrecursionlimit(10000)
 
-    json_dir = "../../dist/json/hydra-kernel/src/main/json"
+    # Locate dist/json/hydra-kernel: either via HYDRA_JSON_DIR env var or by
+    # searching upward from CWD for a dist/json directory.
+    import os
+    json_dir = os.environ.get("HYDRA_JSON_DIR")
+    if not json_dir:
+        search = os.path.abspath(os.getcwd())
+        while search != "/":
+            candidate = os.path.join(search, "dist", "json", "hydra-kernel", "src", "main", "json")
+            if os.path.isdir(candidate):
+                json_dir = candidate
+                break
+            search = os.path.dirname(search)
+    if not json_dir:
+        json_dir = "../../dist/json/hydra-kernel/src/main/json"  # fallback
 
     # Load only the essential evaluator term modules (hydra.annotations
     # and their dependencies). Loading all 92 term modules from JSON is too slow.

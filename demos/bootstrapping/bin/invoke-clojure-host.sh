@@ -14,7 +14,7 @@ set -e
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 HYDRA_ROOT="$( cd "$SCRIPT_DIR/../../.." && pwd )"
-HYDRA_CLOJURE_DIR="$HYDRA_ROOT/packages/hydra-lisp/hydra-clojure"
+HYDRA_CLOJURE_DIR="$HYDRA_ROOT/heads/lisp/hydra-clojure"
 
 # Parse arguments (pass through to Clojure bootstrap)
 TARGET=""
@@ -55,10 +55,10 @@ echo ""
 # from ext JSON using the Haskell bootstrap-from-json.
 CODER_CHECK=""
 case "$TARGET" in
-    haskell)                            CODER_CHECK="$HYDRA_ROOT/dist/clojure/hydra-kernel/src/main/clojure/hydra/ext/haskell/coder.clj" ;;
-    java)                               CODER_CHECK="$HYDRA_ROOT/dist/clojure/hydra-kernel/src/main/clojure/hydra/ext/java/coder.clj" ;;
-    python)                             CODER_CHECK="$HYDRA_ROOT/dist/clojure/hydra-kernel/src/main/clojure/hydra/ext/python/coder.clj" ;;
-    clojure|scheme|common-lisp|emacs-lisp) CODER_CHECK="$HYDRA_ROOT/dist/clojure/hydra-kernel/src/main/clojure/hydra/ext/lisp/coder.clj" ;;
+    haskell)                            CODER_CHECK="$HYDRA_ROOT/dist/clojure/hydra-kernel/src/main/clojure/hydra/haskell/coder.clj" ;;
+    java)                               CODER_CHECK="$HYDRA_ROOT/dist/clojure/hydra-kernel/src/main/clojure/hydra/java/coder.clj" ;;
+    python)                             CODER_CHECK="$HYDRA_ROOT/dist/clojure/hydra-kernel/src/main/clojure/hydra/python/coder.clj" ;;
+    clojure|scheme|common-lisp|emacs-lisp) CODER_CHECK="$HYDRA_ROOT/dist/clojure/hydra-kernel/src/main/clojure/hydra/lisp/coder.clj" ;;
 esac
 
 if [ -n "$CODER_CHECK" ] && [ ! -f "$CODER_CHECK" ]; then

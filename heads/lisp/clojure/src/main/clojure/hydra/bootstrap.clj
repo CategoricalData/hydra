@@ -9,7 +9,7 @@
    Options:
      --output <dir>         Output base directory (default: /tmp/hydra-bootstrapping-demo)
      --include-tests        Also load and generate kernel test modules
-     --kernel-only          Only generate kernel modules (exclude hydra.ext.*)
+     --kernel-only          Only generate kernel modules (exclude hydra.*)
      --types-only           Only generate type-defining modules"
   (:require [hydra.lib.preload :as preload])
   (:gen-class))
@@ -70,27 +70,27 @@
   (case target
     "haskell"
     (do (load-coder-modules!
-          ["hydra.ext.haskell.ast" "hydra.ext.haskell.language"
-           "hydra.ext.haskell.operators" "hydra.ext.haskell.utils"
-           "hydra.ext.haskell.serde" "hydra.ext.haskell.coder"])
+          ["hydra.haskell.ast" "hydra.haskell.language"
+           "hydra.haskell.operators" "hydra.haskell.utils"
+           "hydra.haskell.serde" "hydra.haskell.coder"])
         {:coder @(rc 'hydra_ext_haskell_coder_module_to_haskell)
          :language @(rc 'hydra_ext_haskell_language_haskell_language)
          :flags [false false false false]
          :subdir "haskell"})
     "java"
     (do (load-coder-modules!
-          ["hydra.ext.java.syntax" "hydra.ext.java.language" "hydra.ext.java.names"
-           "hydra.ext.java.environment" "hydra.ext.java.utils"
-           "hydra.ext.java.serde" "hydra.ext.java.coder"])
+          ["hydra.java.syntax" "hydra.java.language" "hydra.java.names"
+           "hydra.java.environment" "hydra.java.utils"
+           "hydra.java.serde" "hydra.java.coder"])
         {:coder @(rc 'hydra_ext_java_coder_module_to_java)
          :language @(rc 'hydra_ext_java_language_java_language)
          :flags [false true false true]
          :subdir "java"})
     "python"
     (do (load-coder-modules!
-          ["hydra.ext.python.syntax" "hydra.ext.python.language" "hydra.ext.python.names"
-           "hydra.ext.python.environment" "hydra.ext.python.utils"
-           "hydra.ext.python.serde" "hydra.ext.python.coder"])
+          ["hydra.python.syntax" "hydra.python.language" "hydra.python.names"
+           "hydra.python.environment" "hydra.python.utils"
+           "hydra.python.serde" "hydra.python.coder"])
         (preload/install-coder-performance-patches!)
         {:coder @(rc 'hydra_ext_python_coder_module_to_python)
          :language @(rc 'hydra_ext_python_language_python_language)
@@ -98,8 +98,8 @@
          :subdir "python"})
     ("clojure" "scheme" "common-lisp" "emacs-lisp")
     (do (load-coder-modules!
-          ["hydra.ext.lisp.syntax" "hydra.ext.lisp.language"
-           "hydra.ext.lisp.serde" "hydra.ext.lisp.coder"])
+          ["hydra.lisp.syntax" "hydra.lisp.language"
+           "hydra.lisp.serde" "hydra.lisp.coder"])
         (let [module-to-lisp @(rc 'hydra_ext_lisp_coder_module_to_lisp)
               program-to-expr @(rc 'hydra_ext_lisp_serde_program_to_expr)
               lang @(rc 'hydra_ext_lisp_language_lisp_language)
@@ -160,7 +160,7 @@
       (println "Options:")
       (println "  --output <dir>         Output base directory")
       (println "  --include-tests        Also load and generate kernel test modules")
-      (println "  --kernel-only          Only generate kernel modules (exclude hydra.ext.*)")
+      (println "  --kernel-only          Only generate kernel modules (exclude hydra.*)")
       (println "  --types-only           Only generate type-defining modules")
       (System/exit 1))
 
@@ -214,7 +214,7 @@
                 mods-to-generate (cond->> all-main-mods
                                    (:kernel-only opts) (filterv (fn [m]
                                      (let [ns-str (ns-str-of m)]
-                                       (and (not (.startsWith ^String ns-str "hydra.ext."))
+                                       (and (not (.startsWith ^String ns-str "hydra."))
                                             (not (.startsWith ^String ns-str "hydra.json.yaml."))))))
                                    (:types-only opts) (filterv (fn [m]
                                      (some (ns-resolve (find-ns 'hydra.annotations) 'hydra_annotations_is_native_type) (:elements m)))))]

@@ -111,7 +111,7 @@
       (hydra-load-file path))))
 
 ;; Load test dependency modules (needed by serialization, sorting tests)
-(let ((ext-path (merge-pathnames "../../../dist/common-lisp/hydra-kernel/src/main/common-lisp/hydra/ext/haskell/operators.lisp"
+(let ((ext-path (merge-pathnames "../../../dist/common-lisp/hydra-kernel/src/main/common-lisp/hydra/haskell/operators.lisp"
                                  *hydra-cl-head*)))
   (when (probe-file ext-path)
     (hydra-load-file ext-path)))

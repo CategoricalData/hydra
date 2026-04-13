@@ -1,6 +1,6 @@
 module Main where
 
-import Hydra.Ext.Generation
+import Hydra.ExtGeneration
 
 main :: IO ()
 main = do

@@ -394,8 +394,8 @@ In a namespace rename from `hydra.foo` to `hydra.foo.bar`:
 - `dist/haskell/hydra-kernel/src/test/haskell/Hydra/Test/Foo/*.hs` (generated test files)
 
 **Extension packages (packages/hydra-pg, hydra-rdf, hydra-ext):**
-- `packages/hydra-*/src/main/haskell/Hydra/Ext/*/Coder.hs` (various coders)
-- `dist/haskell/hydra-*/src/main/haskell/Hydra/Ext/*/*.hs` (generated files)
+- `packages/hydra-*/src/main/haskell/Hydra/*/Coder.hs` (various coders)
+- `dist/haskell/hydra-*/src/main/haskell/Hydra/*/*.hs` (generated files)
 
 **heads/python:**
 - `heads/python/src/main/python/hydra/foo.py` → `heads/python/src/main/python/hydra/foo/bar.py`

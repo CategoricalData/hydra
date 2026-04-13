@@ -1,0 +1,19 @@
+-- Note: this is an automatically generated file. Do not edit.
+
+-- | Based on https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/source_context.proto
+
+module Hydra.Protobuf.SourceContext where
+
+import qualified Hydra.Core as Core
+import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+
+-- | `SourceContext` represents information about the source of a protobuf element, like the file in which it is defined.
+data SourceContext =
+  SourceContext {
+    -- | The path-qualified name of the .proto file that contained the associated protobuf element.  For example: `"google/protobuf/source_context.proto"`.
+    sourceContextFileName :: String}
+  deriving (Eq, Ord, Read, Show)
+
+_SourceContext = Core.Name "hydra.protobuf.sourceContext.SourceContext"
+
+_SourceContext_fileName = Core.Name "fileName"

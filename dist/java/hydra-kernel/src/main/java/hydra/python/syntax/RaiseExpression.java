@@ -1,0 +1,63 @@
+// Note: this is an automatically generated file. Do not edit.
+
+package hydra.python.syntax;
+
+import java.io.Serializable;
+
+public class RaiseExpression implements Serializable, Comparable<RaiseExpression> {
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.python.syntax.RaiseExpression");
+
+  public static final hydra.core.Name EXPRESSION = new hydra.core.Name("expression");
+
+  public static final hydra.core.Name FROM = new hydra.core.Name("from");
+
+  public final hydra.python.syntax.Expression expression;
+
+  public final hydra.util.Maybe<hydra.python.syntax.Expression> from;
+
+  public RaiseExpression (hydra.python.syntax.Expression expression, hydra.util.Maybe<hydra.python.syntax.Expression> from) {
+    this.expression = expression;
+    this.from = from;
+  }
+
+  @Override
+  public boolean equals(Object other) {
+    if (!(other instanceof RaiseExpression)) {
+      return false;
+    }
+    RaiseExpression o = (RaiseExpression) other;
+    return java.util.Objects.equals(
+      this.expression,
+      o.expression) && java.util.Objects.equals(
+      this.from,
+      o.from);
+  }
+
+  @Override
+  public int hashCode() {
+    return 2 * java.util.Objects.hashCode(expression) + 3 * java.util.Objects.hashCode(from);
+  }
+
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(RaiseExpression other) {
+    int cmp = 0;
+    cmp = hydra.util.Comparing.compare(
+      expression,
+      other.expression);
+    if (cmp != 0) {
+      return cmp;
+    }
+    return hydra.util.Comparing.compare(
+      from,
+      other.from);
+  }
+
+  public RaiseExpression withExpression(hydra.python.syntax.Expression expression) {
+    return new RaiseExpression(expression, from);
+  }
+
+  public RaiseExpression withFrom(hydra.util.Maybe<hydra.python.syntax.Expression> from) {
+    return new RaiseExpression(expression, from);
+  }
+}

@@ -86,7 +86,7 @@ haskellOperatorsDefinition :: String -> TTerm a -> TTermDefinition a
 haskellOperatorsDefinition = definitionInModule module_
 
 ns :: Namespace
-ns = Namespace "hydra.ext.haskell.operators"
+ns = Namespace "hydra.haskell.operators"
 
 module_ :: Module
 module_ = Module ns definitions

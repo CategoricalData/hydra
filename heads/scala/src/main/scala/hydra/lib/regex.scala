@@ -1,6 +1,6 @@
 package hydra.lib
 
-import java.util.regex.{Matcher, Pattern}
+import _root_.java.util.regex.{Matcher, Pattern}
 
 object regex:
   def matches(pattern: String)(input: String): Boolean =

@@ -1,0 +1,185 @@
+// Note: this is an automatically generated file. Do not edit.
+
+package hydra.yaml.model;
+
+import java.io.Serializable;
+
+/**
+ * A YAML node (value)
+ */
+public abstract class Node implements Serializable, Comparable<Node> {
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.yaml.model.Node");
+
+  public static final hydra.core.Name MAPPING = new hydra.core.Name("mapping");
+
+  public static final hydra.core.Name SCALAR = new hydra.core.Name("scalar");
+
+  public static final hydra.core.Name SEQUENCE = new hydra.core.Name("sequence");
+
+  private Node () {
+
+  }
+
+  public abstract <R> R accept(Visitor<R> visitor) ;
+
+  public interface Visitor<R> {
+    R visit(Mapping instance) ;
+
+    R visit(Scalar instance) ;
+
+    R visit(Sequence instance) ;
+  }
+
+  public interface PartialVisitor<R> extends Visitor<R> {
+    default R otherwise(Node instance) {
+      throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
+    }
+
+    default R visit(Mapping instance) {
+      return otherwise(instance);
+    }
+
+    default R visit(Scalar instance) {
+      return otherwise(instance);
+    }
+
+    default R visit(Sequence instance) {
+      return otherwise(instance);
+    }
+  }
+
+  /**
+   * A mapping from nodes to nodes
+   */
+  public static final class Mapping extends hydra.yaml.model.Node implements Serializable {
+    public final java.util.Map<hydra.yaml.model.Node, hydra.yaml.model.Node> value;
+
+    public Mapping (java.util.Map<hydra.yaml.model.Node, hydra.yaml.model.Node> value) {
+      this.value = value;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Mapping)) {
+        return false;
+      }
+      Mapping o = (Mapping) other;
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
+    }
+
+    @Override
+    public int hashCode() {
+      return 2 * java.util.Objects.hashCode(value);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Node other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Mapping o = (Mapping) other;
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
+    }
+
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+
+  /**
+   * A scalar value
+   */
+  public static final class Scalar extends hydra.yaml.model.Node implements Serializable {
+    public final hydra.yaml.model.Scalar value;
+
+    public Scalar (hydra.yaml.model.Scalar value) {
+      this.value = value;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Scalar)) {
+        return false;
+      }
+      Scalar o = (Scalar) other;
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
+    }
+
+    @Override
+    public int hashCode() {
+      return 2 * java.util.Objects.hashCode(value);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Node other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Scalar o = (Scalar) other;
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
+    }
+
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+
+  /**
+   * A sequence of nodes
+   */
+  public static final class Sequence extends hydra.yaml.model.Node implements Serializable {
+    public final java.util.List<hydra.yaml.model.Node> value;
+
+    public Sequence (java.util.List<hydra.yaml.model.Node> value) {
+      this.value = value;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Sequence)) {
+        return false;
+      }
+      Sequence o = (Sequence) other;
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
+    }
+
+    @Override
+    public int hashCode() {
+      return 2 * java.util.Objects.hashCode(value);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Node other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Sequence o = (Sequence) other;
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
+    }
+
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+}

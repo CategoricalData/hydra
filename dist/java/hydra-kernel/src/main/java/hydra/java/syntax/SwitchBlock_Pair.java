@@ -1,0 +1,63 @@
+// Note: this is an automatically generated file. Do not edit.
+
+package hydra.java.syntax;
+
+import java.io.Serializable;
+
+public class SwitchBlock_Pair implements Serializable, Comparable<SwitchBlock_Pair> {
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.java.syntax.SwitchBlock_Pair");
+
+  public static final hydra.core.Name STATEMENTS = new hydra.core.Name("statements");
+
+  public static final hydra.core.Name LABELS = new hydra.core.Name("labels");
+
+  public final java.util.List<hydra.java.syntax.SwitchBlockStatementGroup> statements;
+
+  public final java.util.List<hydra.java.syntax.SwitchLabel> labels;
+
+  public SwitchBlock_Pair (java.util.List<hydra.java.syntax.SwitchBlockStatementGroup> statements, java.util.List<hydra.java.syntax.SwitchLabel> labels) {
+    this.statements = statements;
+    this.labels = labels;
+  }
+
+  @Override
+  public boolean equals(Object other) {
+    if (!(other instanceof SwitchBlock_Pair)) {
+      return false;
+    }
+    SwitchBlock_Pair o = (SwitchBlock_Pair) other;
+    return java.util.Objects.equals(
+      this.statements,
+      o.statements) && java.util.Objects.equals(
+      this.labels,
+      o.labels);
+  }
+
+  @Override
+  public int hashCode() {
+    return 2 * java.util.Objects.hashCode(statements) + 3 * java.util.Objects.hashCode(labels);
+  }
+
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(SwitchBlock_Pair other) {
+    int cmp = 0;
+    cmp = hydra.util.Comparing.compare(
+      statements,
+      other.statements);
+    if (cmp != 0) {
+      return cmp;
+    }
+    return hydra.util.Comparing.compare(
+      labels,
+      other.labels);
+  }
+
+  public SwitchBlock_Pair withStatements(java.util.List<hydra.java.syntax.SwitchBlockStatementGroup> statements) {
+    return new SwitchBlock_Pair(statements, labels);
+  }
+
+  public SwitchBlock_Pair withLabels(java.util.List<hydra.java.syntax.SwitchLabel> labels) {
+    return new SwitchBlock_Pair(statements, labels);
+  }
+}

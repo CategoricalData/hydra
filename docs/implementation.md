@@ -73,7 +73,7 @@ The implementation follows a layered architecture:
 ┌──────────────────────────────────────────────────────────────┐
 │         Coders (Cross-Language Transformations)              │
 │  Transform Hydra modules between language implementations    │
-│  Location: heads/haskell/src/main/haskell/Hydra/Ext/     │
+│  Location: heads/haskell/src/main/haskell/Hydra/     │
 │  Enable: Write in Java, compile to Python (or vice versa)    │
 └──────────────────────────────────────────────────────────────┘
 ```
@@ -301,8 +301,8 @@ heads/haskell/src/main/haskell/Hydra/Dsl/         # Hand-written base DSLs
 heads/haskell/src/main/haskell/Hydra/Dsl/Meta/     # Hand-written meta DSL wrappers
 heads/haskell/src/main/haskell/Hydra/Dsl/Meta/Lib/ # Library DSLs (13 files)
 dist/haskell/hydra-kernel/src/main/haskell/Hydra/Dsl/      # Generated DSLs (from hydra.dsls)
-heads/haskell/src/main/haskell/Hydra/Ext/                    # Extension generation and sources
-dist/haskell/hydra-ext/src/main/haskell/Hydra/Ext/          # Generated extension modules
+heads/haskell/src/main/haskell/Hydra/                    # Extension generation and sources
+dist/haskell/hydra-ext/src/main/haskell/Hydra/          # Generated extension modules
 ```
 
 **See also:** [DSL guide](dsl-guide.md) - Comprehensive guide with examples and operator reference
@@ -838,7 +838,7 @@ to write Hydra code in their preferred language and compile it to any other supp
 ### Coder locations
 
 ```
-dist/haskell/hydra-ext/src/main/haskell/Hydra/Ext/
+dist/haskell/hydra-ext/src/main/haskell/Hydra/
 ├── Java/           # Full OOP with generics
 ├── Python/         # Dynamic with dataclasses
 ├── Cpp/            # Systems language with templates
@@ -1355,7 +1355,7 @@ implementing native functions in `Lib/`, registering primitives, and creating DS
 
 ### Code generators
 
-[`dist/haskell/hydra-ext/src/main/haskell/Hydra/Ext/`](https://github.com/CategoricalData/hydra/tree/main/dist/haskell/hydra-ext/src/main/haskell/Hydra/Ext)
+[`dist/haskell/hydra-ext/src/main/haskell/Hydra/`](https://github.com/CategoricalData/hydra/tree/main/dist/haskell/hydra-ext/src/main/haskell/Hydra/Ext)
 ```
 ├── Java/               # Java coder
 ├── Python/             # Python coder

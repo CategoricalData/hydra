@@ -7,8 +7,8 @@ infrastructure) to form a self-contained, buildable project.
 
 ## Structure
 
-- `src/gen-main/haskell/` -- Generated main modules (from JSON)
-- `src/gen-test/haskell/` -- Generated test modules (from JSON) and generation test specs
+- `src/main/haskell/` -- Generated main modules (from JSON)
+- `src/test/haskell/` -- Generated test modules (from JSON) and generation test specs
 - `src/main/haskell/`     -- Hand-written source files (primitives, DSL, etc.)
 - `src/test/haskell/`     -- Test harness (Spec.hs, GenerationSpec.hs)
 

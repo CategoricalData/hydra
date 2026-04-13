@@ -85,7 +85,7 @@ import qualified Hydra.Sources.Json.Model as JsonModel
 
 
 ns :: Namespace
-ns = Namespace "hydra.ext.org.json.decoding"
+ns = Namespace "hydra.json.decoding"
 
 module_ :: Module
 module_ = Module ns definitions

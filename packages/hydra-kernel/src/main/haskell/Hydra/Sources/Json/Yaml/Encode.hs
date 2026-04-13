@@ -37,7 +37,7 @@ import qualified Hydra.Dsl.Meta.Types                      as MetaTypes
 import qualified Hydra.Dsl.Typing                     as Typing
 import qualified Hydra.Dsl.Util                       as Util
 import qualified Hydra.Dsl.Meta.Variants                   as Variants
-import qualified Hydra.Dsl.Ext.Org.Yaml.Model                       as Yaml
+import qualified Hydra.Dsl.Yaml.Model                       as Yaml
 import qualified Hydra.Dsl.Prims                           as Prims
 import qualified Hydra.Dsl.Meta.Tabular                         as Tabular
 import qualified Hydra.Dsl.Terms                           as Terms
@@ -82,7 +82,7 @@ import qualified Data.Maybe                                as Y
 
 -- Additional imports
 import Hydra.Json.Model
-import qualified Hydra.Ext.Org.Yaml.Model as YM
+import qualified Hydra.Yaml.Model as YM
 import qualified Hydra.Sources.Json.Encode as JsonEncode
 import qualified Hydra.Sources.Yaml.Model as YamlModel
 

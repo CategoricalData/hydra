@@ -81,7 +81,7 @@ import qualified Data.Set                                  as S
 import qualified Data.Maybe                                as Y
 
 -- Additional imports
-import qualified Hydra.Ext.Haskell.Syntax as H
+import qualified Hydra.Haskell.Syntax as H
 import qualified Hydra.Sources.Haskell.Syntax as HaskellSyntax
 import qualified Hydra.Sources.Haskell.Language as HaskellLanguage
 import qualified Hydra.Sources.Kernel.Terms.Formatting as Formatting
@@ -93,7 +93,7 @@ haskellUtilsDefinition :: String -> TTerm a -> TTermDefinition a
 haskellUtilsDefinition = definitionInModule module_
 
 ns :: Namespace
-ns = Namespace "hydra.ext.haskell.utils"
+ns = Namespace "hydra.haskell.utils"
 
 module_ :: Module
 module_ = Module ns definitions

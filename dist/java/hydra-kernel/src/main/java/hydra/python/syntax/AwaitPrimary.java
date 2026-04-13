@@ -1,0 +1,63 @@
+// Note: this is an automatically generated file. Do not edit.
+
+package hydra.python.syntax;
+
+import java.io.Serializable;
+
+public class AwaitPrimary implements Serializable, Comparable<AwaitPrimary> {
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.python.syntax.AwaitPrimary");
+
+  public static final hydra.core.Name AWAIT = new hydra.core.Name("await");
+
+  public static final hydra.core.Name PRIMARY = new hydra.core.Name("primary");
+
+  public final Boolean await;
+
+  public final hydra.python.syntax.Primary primary;
+
+  public AwaitPrimary (Boolean await, hydra.python.syntax.Primary primary) {
+    this.await = await;
+    this.primary = primary;
+  }
+
+  @Override
+  public boolean equals(Object other) {
+    if (!(other instanceof AwaitPrimary)) {
+      return false;
+    }
+    AwaitPrimary o = (AwaitPrimary) other;
+    return java.util.Objects.equals(
+      this.await,
+      o.await) && java.util.Objects.equals(
+      this.primary,
+      o.primary);
+  }
+
+  @Override
+  public int hashCode() {
+    return 2 * java.util.Objects.hashCode(await) + 3 * java.util.Objects.hashCode(primary);
+  }
+
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(AwaitPrimary other) {
+    int cmp = 0;
+    cmp = hydra.util.Comparing.compare(
+      await,
+      other.await);
+    if (cmp != 0) {
+      return cmp;
+    }
+    return hydra.util.Comparing.compare(
+      primary,
+      other.primary);
+  }
+
+  public AwaitPrimary withAwait(Boolean await) {
+    return new AwaitPrimary(await, primary);
+  }
+
+  public AwaitPrimary withPrimary(hydra.python.syntax.Primary primary) {
+    return new AwaitPrimary(await, primary);
+  }
+}

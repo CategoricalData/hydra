@@ -180,7 +180,7 @@ fi
 if $NEED_PYTHON; then
     # Check for any usable Python 3.12+.
     # Look on PATH first, then in the hydra-python venvs (matching invoke-python-host.sh).
-    HYDRA_PYTHON_DIR="$HYDRA_ROOT/packages/hydra-python"
+    HYDRA_PYTHON_DIR="$HYDRA_ROOT/heads/python"
     PYTHON_CMD=""
     for candidate in pypy3 python3 python \
         "$HYDRA_PYTHON_DIR/.venv-pypy/bin/pypy3" \
@@ -554,7 +554,7 @@ run_tests_for_path() {
                 ;;
             python)
                 cd "$demo_dir"
-                HYDRA_BENCHMARK_OUTPUT="$bench_file" pytest src/test/ 2>&1
+                HYDRA_BENCHMARK_OUTPUT="$bench_file" HYDRA_JSON_DIR="$HYDRA_ROOT/dist/json/hydra-kernel/src/main/json" pytest src/test/ 2>&1
                 test_exit=$?
                 ;;
             clojure)
@@ -743,7 +743,7 @@ ENDJSON
                                 ;;
                             python)
                                 cd "$demo_dir"
-                                HYDRA_BENCHMARK_OUTPUT="$extra_bench" pytest src/test/ 2>&1
+                                HYDRA_BENCHMARK_OUTPUT="$extra_bench" HYDRA_JSON_DIR="$HYDRA_ROOT/dist/json/hydra-kernel/src/main/json" pytest src/test/ 2>&1
                                 test_exit=$?
                                 ;;
                             clojure)

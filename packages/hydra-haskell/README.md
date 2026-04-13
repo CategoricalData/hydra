@@ -191,7 +191,7 @@ stack ghci
 Then in GHCi:
 
 ```haskell
-import Hydra.Ext.Generation
+import Hydra.Generation
 
 -- Generate Python kernel
 -- Second arg: universe modules (for dependency resolution)

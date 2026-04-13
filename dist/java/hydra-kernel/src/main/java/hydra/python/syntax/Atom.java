@@ -1,0 +1,795 @@
+// Note: this is an automatically generated file. Do not edit.
+
+package hydra.python.syntax;
+
+import java.io.Serializable;
+
+public abstract class Atom implements Serializable, Comparable<Atom> {
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.python.syntax.Atom");
+
+  public static final hydra.core.Name NAME = new hydra.core.Name("name");
+
+  public static final hydra.core.Name TRUE = new hydra.core.Name("true");
+
+  public static final hydra.core.Name FALSE = new hydra.core.Name("false");
+
+  public static final hydra.core.Name NONE = new hydra.core.Name("none");
+
+  public static final hydra.core.Name STRING = new hydra.core.Name("string");
+
+  public static final hydra.core.Name NUMBER = new hydra.core.Name("number");
+
+  public static final hydra.core.Name TUPLE = new hydra.core.Name("tuple");
+
+  public static final hydra.core.Name GROUP = new hydra.core.Name("group");
+
+  public static final hydra.core.Name GENEXP = new hydra.core.Name("genexp");
+
+  public static final hydra.core.Name LIST = new hydra.core.Name("list");
+
+  public static final hydra.core.Name LISTCOMP = new hydra.core.Name("listcomp");
+
+  public static final hydra.core.Name DICT = new hydra.core.Name("dict");
+
+  public static final hydra.core.Name SET = new hydra.core.Name("set");
+
+  public static final hydra.core.Name DICTCOMP = new hydra.core.Name("dictcomp");
+
+  public static final hydra.core.Name SETCOMP = new hydra.core.Name("setcomp");
+
+  public static final hydra.core.Name ELLIPSIS = new hydra.core.Name("ellipsis");
+
+  private Atom () {
+
+  }
+
+  public abstract <R> R accept(Visitor<R> visitor) ;
+
+  public interface Visitor<R> {
+    R visit(Name instance) ;
+
+    R visit(True instance) ;
+
+    R visit(False instance) ;
+
+    R visit(None instance) ;
+
+    R visit(String_ instance) ;
+
+    R visit(Number_ instance) ;
+
+    R visit(Tuple instance) ;
+
+    R visit(Group instance) ;
+
+    R visit(Genexp instance) ;
+
+    R visit(List instance) ;
+
+    R visit(Listcomp instance) ;
+
+    R visit(Dict instance) ;
+
+    R visit(Set instance) ;
+
+    R visit(Dictcomp instance) ;
+
+    R visit(Setcomp instance) ;
+
+    R visit(Ellipsis instance) ;
+  }
+
+  public interface PartialVisitor<R> extends Visitor<R> {
+    default R otherwise(Atom instance) {
+      throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
+    }
+
+    default R visit(Name instance) {
+      return otherwise(instance);
+    }
+
+    default R visit(True instance) {
+      return otherwise(instance);
+    }
+
+    default R visit(False instance) {
+      return otherwise(instance);
+    }
+
+    default R visit(None instance) {
+      return otherwise(instance);
+    }
+
+    default R visit(String_ instance) {
+      return otherwise(instance);
+    }
+
+    default R visit(Number_ instance) {
+      return otherwise(instance);
+    }
+
+    default R visit(Tuple instance) {
+      return otherwise(instance);
+    }
+
+    default R visit(Group instance) {
+      return otherwise(instance);
+    }
+
+    default R visit(Genexp instance) {
+      return otherwise(instance);
+    }
+
+    default R visit(List instance) {
+      return otherwise(instance);
+    }
+
+    default R visit(Listcomp instance) {
+      return otherwise(instance);
+    }
+
+    default R visit(Dict instance) {
+      return otherwise(instance);
+    }
+
+    default R visit(Set instance) {
+      return otherwise(instance);
+    }
+
+    default R visit(Dictcomp instance) {
+      return otherwise(instance);
+    }
+
+    default R visit(Setcomp instance) {
+      return otherwise(instance);
+    }
+
+    default R visit(Ellipsis instance) {
+      return otherwise(instance);
+    }
+  }
+
+  public static final class Name extends hydra.python.syntax.Atom implements Serializable {
+    public final hydra.python.syntax.Name value;
+
+    public Name (hydra.python.syntax.Name value) {
+      this.value = value;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Name)) {
+        return false;
+      }
+      Name o = (Name) other;
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
+    }
+
+    @Override
+    public int hashCode() {
+      return 2 * java.util.Objects.hashCode(value);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Atom other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Name o = (Name) other;
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
+    }
+
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+
+  public static final class True extends hydra.python.syntax.Atom implements Serializable {
+    public True () {
+
+    }
+
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof True)) {
+        return false;
+      }
+      True o = (True) other;
+      return true;
+    }
+
+    @Override
+    public int hashCode() {
+      return 0;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Atom other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
+    }
+
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+
+  public static final class False extends hydra.python.syntax.Atom implements Serializable {
+    public False () {
+
+    }
+
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof False)) {
+        return false;
+      }
+      False o = (False) other;
+      return true;
+    }
+
+    @Override
+    public int hashCode() {
+      return 0;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Atom other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
+    }
+
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+
+  public static final class None extends hydra.python.syntax.Atom implements Serializable {
+    public None () {
+
+    }
+
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof None)) {
+        return false;
+      }
+      None o = (None) other;
+      return true;
+    }
+
+    @Override
+    public int hashCode() {
+      return 0;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Atom other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
+    }
+
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+
+  public static final class String_ extends hydra.python.syntax.Atom implements Serializable {
+    public final hydra.python.syntax.String_ value;
+
+    public String_ (hydra.python.syntax.String_ value) {
+      this.value = value;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof String_)) {
+        return false;
+      }
+      String_ o = (String_) other;
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
+    }
+
+    @Override
+    public int hashCode() {
+      return 2 * java.util.Objects.hashCode(value);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Atom other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      String_ o = (String_) other;
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
+    }
+
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+
+  public static final class Number_ extends hydra.python.syntax.Atom implements Serializable {
+    public final hydra.python.syntax.Number_ value;
+
+    public Number_ (hydra.python.syntax.Number_ value) {
+      this.value = value;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Number_)) {
+        return false;
+      }
+      Number_ o = (Number_) other;
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
+    }
+
+    @Override
+    public int hashCode() {
+      return 2 * java.util.Objects.hashCode(value);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Atom other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Number_ o = (Number_) other;
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
+    }
+
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+
+  public static final class Tuple extends hydra.python.syntax.Atom implements Serializable {
+    public final hydra.python.syntax.Tuple value;
+
+    public Tuple (hydra.python.syntax.Tuple value) {
+      this.value = value;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Tuple)) {
+        return false;
+      }
+      Tuple o = (Tuple) other;
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
+    }
+
+    @Override
+    public int hashCode() {
+      return 2 * java.util.Objects.hashCode(value);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Atom other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Tuple o = (Tuple) other;
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
+    }
+
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+
+  public static final class Group extends hydra.python.syntax.Atom implements Serializable {
+    public final hydra.python.syntax.Group value;
+
+    public Group (hydra.python.syntax.Group value) {
+      this.value = value;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Group)) {
+        return false;
+      }
+      Group o = (Group) other;
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
+    }
+
+    @Override
+    public int hashCode() {
+      return 2 * java.util.Objects.hashCode(value);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Atom other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Group o = (Group) other;
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
+    }
+
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+
+  public static final class Genexp extends hydra.python.syntax.Atom implements Serializable {
+    public final hydra.python.syntax.Genexp value;
+
+    public Genexp (hydra.python.syntax.Genexp value) {
+      this.value = value;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Genexp)) {
+        return false;
+      }
+      Genexp o = (Genexp) other;
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
+    }
+
+    @Override
+    public int hashCode() {
+      return 2 * java.util.Objects.hashCode(value);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Atom other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Genexp o = (Genexp) other;
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
+    }
+
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+
+  public static final class List extends hydra.python.syntax.Atom implements Serializable {
+    public final hydra.python.syntax.List value;
+
+    public List (hydra.python.syntax.List value) {
+      this.value = value;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof List)) {
+        return false;
+      }
+      List o = (List) other;
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
+    }
+
+    @Override
+    public int hashCode() {
+      return 2 * java.util.Objects.hashCode(value);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Atom other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      List o = (List) other;
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
+    }
+
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+
+  public static final class Listcomp extends hydra.python.syntax.Atom implements Serializable {
+    public final hydra.python.syntax.Listcomp value;
+
+    public Listcomp (hydra.python.syntax.Listcomp value) {
+      this.value = value;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Listcomp)) {
+        return false;
+      }
+      Listcomp o = (Listcomp) other;
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
+    }
+
+    @Override
+    public int hashCode() {
+      return 2 * java.util.Objects.hashCode(value);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Atom other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Listcomp o = (Listcomp) other;
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
+    }
+
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+
+  public static final class Dict extends hydra.python.syntax.Atom implements Serializable {
+    public final hydra.python.syntax.Dict value;
+
+    public Dict (hydra.python.syntax.Dict value) {
+      this.value = value;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Dict)) {
+        return false;
+      }
+      Dict o = (Dict) other;
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
+    }
+
+    @Override
+    public int hashCode() {
+      return 2 * java.util.Objects.hashCode(value);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Atom other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Dict o = (Dict) other;
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
+    }
+
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+
+  public static final class Set extends hydra.python.syntax.Atom implements Serializable {
+    public final hydra.python.syntax.Set value;
+
+    public Set (hydra.python.syntax.Set value) {
+      this.value = value;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Set)) {
+        return false;
+      }
+      Set o = (Set) other;
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
+    }
+
+    @Override
+    public int hashCode() {
+      return 2 * java.util.Objects.hashCode(value);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Atom other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Set o = (Set) other;
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
+    }
+
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+
+  public static final class Dictcomp extends hydra.python.syntax.Atom implements Serializable {
+    public final hydra.python.syntax.Dictcomp value;
+
+    public Dictcomp (hydra.python.syntax.Dictcomp value) {
+      this.value = value;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Dictcomp)) {
+        return false;
+      }
+      Dictcomp o = (Dictcomp) other;
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
+    }
+
+    @Override
+    public int hashCode() {
+      return 2 * java.util.Objects.hashCode(value);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Atom other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Dictcomp o = (Dictcomp) other;
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
+    }
+
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+
+  public static final class Setcomp extends hydra.python.syntax.Atom implements Serializable {
+    public final hydra.python.syntax.Setcomp value;
+
+    public Setcomp (hydra.python.syntax.Setcomp value) {
+      this.value = value;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Setcomp)) {
+        return false;
+      }
+      Setcomp o = (Setcomp) other;
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
+    }
+
+    @Override
+    public int hashCode() {
+      return 2 * java.util.Objects.hashCode(value);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Atom other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Setcomp o = (Setcomp) other;
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
+    }
+
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+
+  public static final class Ellipsis extends hydra.python.syntax.Atom implements Serializable {
+    public Ellipsis () {
+
+    }
+
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Ellipsis)) {
+        return false;
+      }
+      Ellipsis o = (Ellipsis) other;
+      return true;
+    }
+
+    @Override
+    public int hashCode() {
+      return 0;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Atom other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
+    }
+
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+}
