@@ -112,11 +112,11 @@ otherPairs = [
   (Formatting.ns, Formatting.allTests),
   (HoistingAll.ns, HoistingAll.allTests),
   (InferenceAll.ns, InferenceAll.allTests),
-  -- TODO: JsonParser temporarily excluded — polymorphic ParseResult type blocks code generation
+  -- TODO #336: JsonParser temporarily excluded — polymorphic ParseResult type blocks code generation
   -- (JsonParser.ns, JsonParser.allTests),
   (JsonRoundtrip.ns, JsonRoundtrip.allTests),
   (JsonWriter.ns, JsonWriter.allTests),
-  -- TODO: (Ordering.ns, Ordering.allTests) temporarily removed - needs investigation
+  -- TODO #336: (Ordering.ns, Ordering.allTests) temporarily removed - needs investigation
   (Reduction.ns, Reduction.allTests),
   (Rewriting.ns, Rewriting.allTests),
   (Serialization.ns, Serialization.allTests),
@@ -144,7 +144,7 @@ testSuiteModules =
    JsonRoundtrip.module_, JsonWriter.module_,
    Reduction.module_, Rewriting.module_, Serialization.module_, Sorting.module_,
    Strip.module_, Variables.module_,
-   -- TODO: Ordering.module_ temporarily removed - needs investigation
+   -- TODO #336: Ordering.module_ temporarily removed - needs investigation
    -- Checking tests (including sub-modules)
    CheckingAll.module_,
    CheckingAdvanced.module_, CheckingAlgebraicTypes.module_, CheckingCollections.module_,
