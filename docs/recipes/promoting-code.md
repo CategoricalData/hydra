@@ -97,10 +97,10 @@ if a promoted function has a bug, you can always revert to the staging version o
 
 ### 2. Create the source module file
 
-Create a new file in the appropriate location under `Hydra/Sources/` or `Hydra/Ext/Sources/`:
+Create a new file in the appropriate location under `Hydra/Sources/` or `Hydra/Sources/`:
 
 ```haskell
-module Hydra.Ext.Sources.Pg.Graphson.Coder where
+module Hydra.Sources.Pg.Graphson.Coder where
 ```
 
 ### 3. Add standard imports
@@ -126,7 +126,7 @@ The block has these sections:
    `Hydra.Sources.Kernel.Terms.*` modules for calling other promoted functions (Reduction, Rewriting, Inference, etc.)
 6. **Standard Haskell imports** — `Prelude hiding ((++))`, `Data.List as L`, `Data.Map as M`, `Data.Set as S`
 7. **Domain-specific imports** — generated phantom types for the types your module uses (e.g.,
-   `Hydra.Ext.Haskell.Ast as H`)
+   `Hydra.Haskell.Ast as H`)
 
 Not every module needs all of these — include only what you use.
 The `(++)` from `Phantoms` is for `TTerm String` concatenation; use `L.++` for regular list concatenation.
@@ -167,9 +167,9 @@ add the namespace containing that type to the type dependencies.
 Add the import and register the module:
 
 ```haskell
--- In Hydra/Ext/Sources/All.hs
+-- In Hydra/Sources/All.hs
 
-import qualified Hydra.Ext.Sources.Pg.Graphson.Coder as GraphsonCoder
+import qualified Hydra.Sources.Pg.Graphson.Coder as GraphsonCoder
 
 hydraExtModules :: [Module]
 hydraExtModules = [
@@ -188,8 +188,8 @@ Translate functions one at a time into the DSL, adding each to the module's `def
 3. Comment out the original staging function, keeping it as a reference
 4. Import and use the generated version in the staging module:
    ```haskell
-   -- In Hydra.Ext.Python.Coder
-   import qualified Hydra.Ext.Python.Coder as Generated
+   -- In Hydra.Python.Coder
+   import qualified Hydra.Python.Coder as Generated
 
    -- PROMOTED: now using generated version
    -- originalFunction :: ...
@@ -205,9 +205,9 @@ After promoting functions, regenerate the Haskell (or other language) code:
 
 ```haskell
 -- In GHCi (stack ghci)
-import Hydra.Ext.Sources.All
-import Hydra.Ext.Generation
-import qualified Hydra.Ext.Sources.YourModule as YourModule
+import Hydra.Sources.All
+import Hydra.Generation
+import qualified Hydra.Sources.YourModule as YourModule
 import qualified Data.List as L
 
 writeHaskell "src/gen-main/haskell" (mainModules `L.union` hydraExtModules) [YourModule.module_]
@@ -233,7 +233,7 @@ Once all functions are promoted and the staging module just re-exports from the 
 **Original raw Haskell:**
 
 ```haskell
--- Raw Haskell in Hydra.Ext.Pg.Graphson.Coder
+-- Raw Haskell in Hydra.Pg.Graphson.Coder
 
 doubleValueToJson :: G.DoubleValue -> Json.Value
 doubleValueToJson v = case v of
@@ -249,7 +249,7 @@ it uses GraphSON domain types which were defined using Hydra.
 **Promoted Hydra source:**
 
 ```haskell
--- Hydra source module in Hydra.Ext.Sources.Pg.Graphson.Coder
+-- Hydra source module in Hydra.Sources.Pg.Graphson.Coder
 
 doubleValueToJson :: TTermDefinition (G.DoubleValue -> JM.Value)
 doubleValueToJson = define "doubleValueToJson" $
@@ -660,17 +660,17 @@ remove them and replace `var "callback" @@ args` with direct calls like `otherFu
     consumers don't need changes:
 
     ```haskell
-    module Hydra.Ext.Java.Utils (
-      module Hydra.Ext.Java.Utils,
-      module Hydra.Ext.Java.Helpers,
-      module Hydra.Ext.Java.Utils,
+    module Hydra.Java.Utils (
+      module Hydra.Java.Utils,
+      module Hydra.Java.Helpers,
+      module Hydra.Java.Utils,
       ) where
 
     -- Import types from the generated Helpers module
-    import Hydra.Ext.Java.Helpers (Aliases(..))
+    import Hydra.Java.Helpers (Aliases(..))
 
     -- Import promoted functions from the generated Utils module
-    import Hydra.Ext.Java.Utils (
+    import Hydra.Java.Utils (
       addExpressions, fieldExpression, javaIdentifier,
       -- ... list all functions being swapped
       )
@@ -1045,7 +1045,7 @@ console output), the I/O must be separated out first. Only the pure logic can be
 
 The main body of this document covers promoting *term-level* code (functions, constants).
 Promoting a **type definition** is a
-different workflow: you add it to a Types module under `Hydra/Sources/Kernel/Types/` (or `Hydra/Ext/Sources/` for
+different workflow: you add it to a Types module under `Hydra/Sources/Kernel/Types/` (or `Hydra/Sources/` for
 extension types).
 
 ### Example: promoting `TestGenerator`

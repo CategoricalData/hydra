@@ -1,0 +1,153 @@
+{
+  "definitions": [
+    {
+      "type": {
+        "name": "hydra.datalog.syntax.Constant",
+        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.datalog.syntax.Relation",
+        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.datalog.syntax.Variable",
+        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.datalog.syntax.Program",
+        "type": {
+          "type": {"wrap": {"list": {"variable": "hydra.datalog.syntax.Program_Elmt"}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.datalog.syntax.Program_Elmt",
+        "type": {
+          "type": {
+            "union": [
+              {"name": "Fact", "type": {"variable": "hydra.datalog.syntax.Fact"}},
+              {"name": "Rule", "type": {"variable": "hydra.datalog.syntax.Rule"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.datalog.syntax.Fact",
+        "type": {
+          "type": {
+            "record": [
+              {
+                "name": "Relation",
+                "type": {"variable": "hydra.datalog.syntax.Relation"}},
+              {
+                "name": "ConstantList",
+                "type": {"variable": "hydra.datalog.syntax.ConstantList"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.datalog.syntax.Rule",
+        "type": {
+          "type": {
+            "record": [
+              {"name": "Atom", "type": {"variable": "hydra.datalog.syntax.Atom"}},
+              {
+                "name": "AtomList",
+                "type": {"variable": "hydra.datalog.syntax.AtomList"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.datalog.syntax.Atom",
+        "type": {
+          "type": {
+            "record": [
+              {
+                "name": "Relation",
+                "type": {"variable": "hydra.datalog.syntax.Relation"}},
+              {
+                "name": "TermList",
+                "type": {"variable": "hydra.datalog.syntax.TermList"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.datalog.syntax.AtomList",
+        "type": {
+          "type": {
+            "union": [
+              {"name": "single", "type": {"variable": "hydra.datalog.syntax.Atom"}},
+              {
+                "name": "multiple",
+                "type": {"variable": "hydra.datalog.syntax.AtomList_Multiple"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.datalog.syntax.AtomList_Multiple",
+        "type": {
+          "type": {
+            "record": [
+              {"name": "Atom", "type": {"variable": "hydra.datalog.syntax.Atom"}},
+              {
+                "name": "AtomList",
+                "type": {"variable": "hydra.datalog.syntax.AtomList"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.datalog.syntax.Term",
+        "type": {
+          "type": {
+            "union": [
+              {
+                "name": "Constant",
+                "type": {"variable": "hydra.datalog.syntax.Constant"}},
+              {
+                "name": "Variable",
+                "type": {"variable": "hydra.datalog.syntax.Variable"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.datalog.syntax.TermList",
+        "type": {
+          "type": {
+            "union": [
+              {"name": "single", "type": {"variable": "hydra.datalog.syntax.Term"}},
+              {
+                "name": "multiple",
+                "type": {"variable": "hydra.datalog.syntax.TermList_Multiple"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.datalog.syntax.TermList_Multiple",
+        "type": {
+          "type": {
+            "record": [
+              {"name": "Term", "type": {"variable": "hydra.datalog.syntax.Term"}},
+              {
+                "name": "TermList",
+                "type": {"variable": "hydra.datalog.syntax.TermList"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.datalog.syntax.ConstantList",
+        "type": {
+          "type": {
+            "union": [
+              {
+                "name": "single",
+                "type": {"variable": "hydra.datalog.syntax.Constant"}},
+              {
+                "name": "multiple",
+                "type": {"variable": "hydra.datalog.syntax.ConstantList_Multiple"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.datalog.syntax.ConstantList_Multiple",
+        "type": {
+          "type": {
+            "record": [
+              {
+                "name": "Constant",
+                "type": {"variable": "hydra.datalog.syntax.Constant"}},
+              {
+                "name": "ConstantList",
+                "type": {"variable": "hydra.datalog.syntax.ConstantList"}}]},
+          "variables": []}}}],
+  "description": "A basic Datalog model",
+  "namespace": "hydra.datalog.syntax",
+  "termDependencies": [],
+  "typeDependencies": []}

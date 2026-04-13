@@ -1,0 +1,41 @@
+// Note: this is an automatically generated file. Do not edit.
+
+package hydra.python.syntax;
+
+import java.io.Serializable;
+
+public class Keywords implements Serializable, Comparable<Keywords> {
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.python.syntax.Keywords");
+
+  public static final hydra.core.Name VALUE = new hydra.core.Name("value");
+
+  public final hydra.python.syntax.ParamNoDefault value;
+
+  public Keywords (hydra.python.syntax.ParamNoDefault value) {
+    this.value = value;
+  }
+
+  @Override
+  public boolean equals(Object other) {
+    if (!(other instanceof Keywords)) {
+      return false;
+    }
+    Keywords o = (Keywords) other;
+    return java.util.Objects.equals(
+      this.value,
+      o.value);
+  }
+
+  @Override
+  public int hashCode() {
+    return 2 * java.util.Objects.hashCode(value);
+  }
+
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(Keywords other) {
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
+  }
+}

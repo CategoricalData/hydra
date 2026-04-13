@@ -12,19 +12,19 @@ repositories {
 
 // Temporarily exclude generated files with stale visitor patterns pending full regeneration
 compileJava {
-    exclude '**/hydra/ext/lisp/Coder.java'
-    exclude '**/hydra/ext/scala/**'
+    exclude '**/hydra/lisp/Coder.java'
+    exclude '**/hydra/scala/**'
 }
 
 sourceSets {
     main {
         java {
-            srcDirs = ['src/gen-main/java', 'src/main/java']
+            srcDirs = ['src/main/java']
         }
     }
     test {
         java {
-            srcDirs = ['src/gen-test/java', 'src/test/java']
+            srcDirs = ['src/test/java']
         }
     }
 }

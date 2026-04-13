@@ -7,7 +7,7 @@ set -eo pipefail
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 HYDRA_ROOT="$( cd "$SCRIPT_DIR/../../.." && pwd )"
-HYDRA_SCALA_DIR="$HYDRA_ROOT/packages/hydra-scala"
+HYDRA_SCALA_DIR="$HYDRA_ROOT/heads/scala"
 
 # Parse arguments to find target (for coder module check)
 TARGET=""

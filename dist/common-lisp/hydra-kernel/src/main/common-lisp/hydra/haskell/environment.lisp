@@ -1,0 +1,7 @@
+(defpackage :hydra.haskell.environment
+(:use :cl)
+(:export :make-hydra_haskell_environment_haskell_module_metadata :hydra_haskell_environment_haskell_module_metadata? :hydra_haskell_environment_haskell_module_metadata-uses_byte_string :hydra_haskell_environment_haskell_module_metadata-uses_int :hydra_haskell_environment_haskell_module_metadata-uses_map :hydra_haskell_environment_haskell_module_metadata-uses_set))
+
+(in-package :hydra.haskell.environment)
+
+(cl:defstruct hydra_haskell_environment_haskell_module_metadata uses_byte_string uses_int uses_map uses_set)

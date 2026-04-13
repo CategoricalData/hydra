@@ -528,7 +528,7 @@ typeOfEither tx typeArgs et = -- Implementation similar to Checking.hs source
 
 Add case to main type checking function and follow similar patterns to inference.
 
-#### 8.3: Patch `dist/haskell/hydra-kernel/src/main/haskell/Hydra/Ext/Haskell/Coder.hs`
+#### 8.3: Patch `dist/haskell/hydra-kernel/src/main/haskell/Hydra/Haskell/Coder.hs`
 
 Add type encoding in `encodeType` function (after `Core.TypeApplication`, before `Core.TypeFunction`):
 
@@ -623,7 +623,7 @@ update their language definitions and regenerate code.
 
 #### 11.5.1: Update Python Language Definition
 
-**File:** `packages/hydra-python/src/main/haskell/Hydra/Ext/Sources/Python/Language.hs`
+**File:** `packages/hydra-python/src/main/haskell/Hydra/Sources/Python/Language.hs`
 
 Add the new term variant to the supported features:
 
@@ -677,8 +677,8 @@ This regenerates:
 
 Follow similar patterns for Java, Scala, etc.:
 
-- **Java:** Update `Hydra/Ext/Sources/Java/Language.hs`, regenerate with `WriteJava.hs`
-- **Scala:** Update `Hydra/Ext/Sources/Scala/Language.hs`, regenerate with `WriteScala.hs`
+- **Java:** Update `Hydra/Sources/Java/Language.hs`, regenerate with `WriteJava.hs`
+- **Scala:** Update `Hydra/Sources/Scala/Language.hs`, regenerate with `WriteScala.hs`
 
 Each language coder needs to know how to encode/decode the new types in the target language.
 
@@ -800,11 +800,11 @@ stack test
 | `No such field: either` | Term union missing the constructor in Core schema | Add to `packages/hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Types/Core.hs` |
 | `Variable not bound to type: hydra.inference.inferTypeOfX` | Function not registered in module exports | Add `toDefinition inferTypeOfXDef` to `definitions` list |
 | Using `cases _Either` on built-in types | Confusion between Hydra unions and Haskell types | Use library functions (`Eithers.either_`) for Haskell built-ins |
-| `unexpected type: either<...>` in codegen | Coder doesn't know how to encode the type | Manually patch `Hydra/Ext/Haskell/Coder.hs` |
+| `unexpected type: either<...>` in codegen | Coder doesn't know how to encode the type | Manually patch `Hydra/Haskell/Coder.hs` |
 | Type signature mismatch | Using wrong bind operations | Use `Eithers.bind` for Either binds, `<~` for pure lets |
 | Missing rewrite function cases | Forgot to add to all rewriting variants | Search for `_Term_maybe` in `Rewriting.hs` to find all functions needing updates |
 | Variants not updated | Missing from `Hydra.Variants` or `Hydra.Dsl.Mantle` | Add to `termVariant` function, `termVariants` list, and DSL helpers |
-| Language support missing | Constructor not in language definition | Add to `termVariants` in `Hydra/Ext/Sources/Python/Language.hs` (or other language) and regenerate |
+| Language support missing | Constructor not in language definition | Add to `termVariants` in `Hydra/Sources/Python/Language.hs` (or other language) and regenerate |
 
 ---
 
@@ -905,7 +905,7 @@ stack test
   - [ ] Add type checking function implementation
   - [ ] Add case to main checking function
 
-- [ ] `dist/haskell/hydra-kernel/src/main/haskell/Hydra/Ext/Haskell/Coder.hs`
+- [ ] `dist/haskell/hydra-kernel/src/main/haskell/Hydra/Haskell/Coder.hs`
   - [ ] Add `encodeType` case for new Type constructor
   - [ ] Add `encodeTerm` case for new Term constructor (if needed)
 
@@ -913,7 +913,7 @@ stack test
 
 ### Language Support Files (Optional)
 
-- [ ] `packages/hydra-python/src/main/haskell/Hydra/Ext/Sources/Python/Language.hs`
+- [ ] `packages/hydra-python/src/main/haskell/Hydra/Sources/Python/Language.hs`
   - [ ] Add to `termVariants` list
   - [ ] Add to `typeVariants` list (if applicable)
 
@@ -925,11 +925,11 @@ stack test
   - [ ] Compile Python modules
 
 - [ ] Java (if needed)
-  - [ ] Update `Hydra/Ext/Sources/Java/Language.hs`
+  - [ ] Update `Hydra/Sources/Java/Language.hs`
   - [ ] Regenerate Java code
 
 - [ ] Scala (if needed)
-  - [ ] Update `Hydra/Ext/Sources/Scala/Language.hs`
+  - [ ] Update `Hydra/Sources/Scala/Language.hs`
   - [ ] Regenerate Scala code
 
 ### Test Files (Always Modified)

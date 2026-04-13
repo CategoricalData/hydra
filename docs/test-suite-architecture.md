@@ -384,7 +384,7 @@ The same test modules can be generated for other languages:
 ```haskell
 -- From packages/hydra-haskell
 import Hydra.Sources.All
-import Hydra.Ext.Generation
+import Hydra.Generation
 
 -- Set up the universe
 let allModules = mainModules ++ testModules
@@ -412,7 +412,7 @@ project (Core.name "Person") (Core.name "firstName")
 
 ### 2. Keep the Common Test Suite Language-Agnostic
 
-The common test suite (`hydra.test.*`) must not depend on any `hydra.ext.*` module.
+The common test suite (`hydra.test.*`) must not depend on any `hydra.<domain>.*` module.
 Every test runner — Haskell, Java, Python, and future implementations — must be able
 to run the common tests without shipping language-specific extension modules. If a
 test needs data values that happen to exist in an extension module (e.g., operator

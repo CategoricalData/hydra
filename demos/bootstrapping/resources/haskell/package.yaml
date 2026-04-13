@@ -31,14 +31,12 @@ dependencies:
 library:
   source-dirs:
     - src/main/haskell
-    - src/gen-main/haskell
 
 tests:
   hydra-test:
     main: Spec.hs
     source-dirs:
       - src/test/haskell
-      - src/gen-test/haskell
     dependencies:
       - hydra
       - hspec                      >= 2.11.0 && < 2.12

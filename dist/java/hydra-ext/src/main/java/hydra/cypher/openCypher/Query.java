@@ -1,0 +1,123 @@
+// Note: this is an automatically generated file. Do not edit.
+
+package hydra.cypher.openCypher;
+
+import java.io.Serializable;
+
+public abstract class Query implements Serializable, Comparable<Query> {
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.cypher.openCypher.Query");
+
+  public static final hydra.core.Name REGULAR = new hydra.core.Name("regular");
+
+  public static final hydra.core.Name STANDALONE = new hydra.core.Name("standalone");
+
+  private Query () {
+
+  }
+
+  public abstract <R> R accept(Visitor<R> visitor) ;
+
+  public interface Visitor<R> {
+    R visit(Regular instance) ;
+
+    R visit(Standalone instance) ;
+  }
+
+  public interface PartialVisitor<R> extends Visitor<R> {
+    default R otherwise(Query instance) {
+      throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
+    }
+
+    default R visit(Regular instance) {
+      return otherwise(instance);
+    }
+
+    default R visit(Standalone instance) {
+      return otherwise(instance);
+    }
+  }
+
+  public static final class Regular extends hydra.cypher.openCypher.Query implements Serializable {
+    public final hydra.cypher.openCypher.RegularQuery value;
+
+    public Regular (hydra.cypher.openCypher.RegularQuery value) {
+      this.value = value;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Regular)) {
+        return false;
+      }
+      Regular o = (Regular) other;
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
+    }
+
+    @Override
+    public int hashCode() {
+      return 2 * java.util.Objects.hashCode(value);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Query other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Regular o = (Regular) other;
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
+    }
+
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+
+  public static final class Standalone extends hydra.cypher.openCypher.Query implements Serializable {
+    public final hydra.cypher.openCypher.StandaloneCall value;
+
+    public Standalone (hydra.cypher.openCypher.StandaloneCall value) {
+      this.value = value;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Standalone)) {
+        return false;
+      }
+      Standalone o = (Standalone) other;
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
+    }
+
+    @Override
+    public int hashCode() {
+      return 2 * java.util.Objects.hashCode(value);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Query other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Standalone o = (Standalone) other;
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
+    }
+
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+}

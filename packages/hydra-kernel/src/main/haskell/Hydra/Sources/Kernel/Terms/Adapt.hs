@@ -114,7 +114,7 @@ module_ = Module ns definitions
       toDefinition literalTypeSupported,
       -- TODO: the prepare* functions below duplicate logic already in adaptFloatType, adaptIntegerType,
       -- adaptLiteralType, etc. They should be simplified or eliminated in favor of those functions.
-      -- They were moved here from hydra.ext.scala.prepare as part of the coder standardization effort.
+      -- They were moved here from hydra.scala.prepare as part of the coder standardization effort.
       toDefinition prepareFloatType,
       toDefinition prepareIntegerType,
       toDefinition prepareLiteralType,

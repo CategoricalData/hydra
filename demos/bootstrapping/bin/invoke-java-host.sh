@@ -12,7 +12,7 @@ set -eo pipefail
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 HYDRA_ROOT="$( cd "$SCRIPT_DIR/../../.." && pwd )"
-HYDRA_JAVA_DIR="$HYDRA_ROOT/packages/hydra-java"
+HYDRA_JAVA_DIR="$HYDRA_ROOT/heads/java"
 
 # Warn if running an x86_64 JDK under Rosetta on Apple Silicon (causes ~20x slowdown)
 if [ "$(uname -s)" = "Darwin" ] && [ "$(uname -m)" = "arm64" ]; then
@@ -40,7 +40,7 @@ echo ""
 
 # Build classpath
 GRADLE_CACHE="$HOME/.gradle/caches/modules-2/files-2.1"
-JAVA_CP="$HYDRA_JAVA_DIR/build/classes/java/main"
+JAVA_CP="$HYDRA_ROOT/packages/hydra-java/build/classes/java/main"
 JAVA_CP="$JAVA_CP:$(find $GRADLE_CACHE -name 'json-io-4.14.1.jar' | head -1)"
 JAVA_CP="$JAVA_CP:$(find $GRADLE_CACHE -name 'commons-text-1.10.0.jar' | head -1)"
 JAVA_CP="$JAVA_CP:$(find $GRADLE_CACHE -name 'commons-lang3-3.12.0.jar' | head -1)"

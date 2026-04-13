@@ -1,0 +1,63 @@
+// Note: this is an automatically generated file. Do not edit.
+
+package hydra.scala.syntax;
+
+import java.io.Serializable;
+
+public class Type_TypedParam implements Serializable, Comparable<Type_TypedParam> {
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.scala.syntax.Type_TypedParam");
+
+  public static final hydra.core.Name NAME = new hydra.core.Name("name");
+
+  public static final hydra.core.Name TYP = new hydra.core.Name("typ");
+
+  public final hydra.scala.syntax.Name name;
+
+  public final hydra.scala.syntax.Type typ;
+
+  public Type_TypedParam (hydra.scala.syntax.Name name, hydra.scala.syntax.Type typ) {
+    this.name = name;
+    this.typ = typ;
+  }
+
+  @Override
+  public boolean equals(Object other) {
+    if (!(other instanceof Type_TypedParam)) {
+      return false;
+    }
+    Type_TypedParam o = (Type_TypedParam) other;
+    return java.util.Objects.equals(
+      this.name,
+      o.name) && java.util.Objects.equals(
+      this.typ,
+      o.typ);
+  }
+
+  @Override
+  public int hashCode() {
+    return 2 * java.util.Objects.hashCode(name) + 3 * java.util.Objects.hashCode(typ);
+  }
+
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(Type_TypedParam other) {
+    int cmp = 0;
+    cmp = hydra.util.Comparing.compare(
+      name,
+      other.name);
+    if (cmp != 0) {
+      return cmp;
+    }
+    return hydra.util.Comparing.compare(
+      typ,
+      other.typ);
+  }
+
+  public Type_TypedParam withName(hydra.scala.syntax.Name name) {
+    return new Type_TypedParam(name, typ);
+  }
+
+  public Type_TypedParam withTyp(hydra.scala.syntax.Type typ) {
+    return new Type_TypedParam(name, typ);
+  }
+}

@@ -225,8 +225,8 @@ def strip_all_term_types(modules):
 
 
 def filter_kernel_modules(modules):
-    """Filter modules to only kernel modules (exclude hydra.ext.* namespaces)."""
-    return [m for m in modules if not m.namespace.value.startswith("hydra.ext.") and not m.namespace.value.startswith("hydra.json.yaml.")]
+    """Filter modules to only kernel modules (exclude hydra.* namespaces)."""
+    return [m for m in modules if not m.namespace.value.startswith("hydra.") and not m.namespace.value.startswith("hydra.json.yaml.")]
 
 
 def filter_type_modules(modules):
@@ -238,8 +238,8 @@ def filter_type_modules(modules):
 
 def write_java(base_path, universe, mods):
     """Generate Java source files from modules."""
-    from hydra.ext.java.coder import module_to_java
-    from hydra.ext.java.language import java_language
+    from hydra.java.coder import module_to_java
+    from hydra.java.language import java_language
     generate_sources(
         module_to_java, java_language(),
         False, True, False, True,
@@ -248,8 +248,8 @@ def write_java(base_path, universe, mods):
 
 def write_python(base_path, universe, mods):
     """Generate Python source files from modules."""
-    from hydra.ext.python.coder import module_to_python
-    from hydra.ext.python.language import python_language
+    from hydra.python.coder import module_to_python
+    from hydra.python.language import python_language
     generate_sources(
         module_to_python, python_language(),
         False, True, True, False,
@@ -258,8 +258,8 @@ def write_python(base_path, universe, mods):
 
 def write_haskell(base_path, universe, mods):
     """Generate Haskell source files from modules."""
-    from hydra.ext.haskell.coder import module_to_haskell
-    from hydra.ext.haskell.language import haskell_language
+    from hydra.haskell.coder import module_to_haskell
+    from hydra.haskell.language import haskell_language
     generate_sources(
         module_to_haskell, haskell_language(),
         False, False, False, False,
@@ -268,8 +268,8 @@ def write_haskell(base_path, universe, mods):
 
 def write_scala(base_path, universe, mods):
     """Generate Scala source files from modules."""
-    from hydra.ext.scala.coder import module_to_scala
-    from hydra.ext.scala.language import scala_language
+    from hydra.scala.coder import module_to_scala
+    from hydra.scala.language import scala_language
     generate_sources(
         module_to_scala, scala_language(),
         False, True, False, False,
@@ -278,10 +278,10 @@ def write_scala(base_path, universe, mods):
 
 def write_lisp_dialect(base_path, dialect_name, ext, universe, mods):
     """Generate source files for a Lisp dialect (Clojure, Scheme, Common Lisp, or Emacs Lisp)."""
-    from hydra.ext.lisp.coder import module_to_lisp
-    from hydra.ext.lisp.language import lisp_language
-    from hydra.ext.lisp.serde import program_to_expr
-    from hydra.ext.lisp.syntax import Dialect
+    from hydra.lisp.coder import module_to_lisp
+    from hydra.lisp.language import lisp_language
+    from hydra.lisp.serde import program_to_expr
+    from hydra.lisp.syntax import Dialect
     from hydra.serialization import print_expr, parenthesize
     from hydra.names import namespace_to_file_path
     from hydra.packaging import FileExtension, Namespace

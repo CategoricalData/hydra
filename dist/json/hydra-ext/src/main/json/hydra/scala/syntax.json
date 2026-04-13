@@ -1,0 +1,1931 @@
+{
+  "definitions": [
+    {
+      "type": {
+        "name": "hydra.scala.syntax.PredefString",
+        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.ScalaSymbol",
+        "type": {
+          "type": {"record": [{"name": "name", "type": {"literal": {"string": {}}}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Tree",
+        "type": {
+          "type": {
+            "union": [
+              {"name": "ref", "type": {"variable": "hydra.scala.syntax.Ref"}},
+              {"name": "stat", "type": {"variable": "hydra.scala.syntax.Stat"}},
+              {"name": "type", "type": {"variable": "hydra.scala.syntax.Type"}},
+              {
+                "name": "bounds",
+                "type": {"variable": "hydra.scala.syntax.TypeBounds"}},
+              {"name": "pat", "type": {"variable": "hydra.scala.syntax.Pat"}},
+              {"name": "member", "type": {"variable": "hydra.scala.syntax.Member"}},
+              {"name": "ctor", "type": {"variable": "hydra.scala.syntax.Ctor"}},
+              {
+                "name": "template",
+                "type": {"variable": "hydra.scala.syntax.Template"}},
+              {"name": "mod", "type": {"variable": "hydra.scala.syntax.Mod"}},
+              {
+                "name": "enumerator",
+                "type": {"variable": "hydra.scala.syntax.Enumerator"}},
+              {
+                "name": "importer",
+                "type": {"variable": "hydra.scala.syntax.Importer"}},
+              {
+                "name": "importee",
+                "type": {"variable": "hydra.scala.syntax.Importee"}},
+              {
+                "name": "caseTree",
+                "type": {"variable": "hydra.scala.syntax.CaseTree"}},
+              {"name": "source", "type": {"variable": "hydra.scala.syntax.Source"}},
+              {"name": "quasi", "type": {"variable": "hydra.scala.syntax.Quasi"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Ref",
+        "type": {
+          "type": {
+            "union": [
+              {"name": "name", "type": {"variable": "hydra.scala.syntax.Name"}},
+              {"name": "init", "type": {"variable": "hydra.scala.syntax.Init"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Stat",
+        "type": {
+          "type": {
+            "union": [
+              {"name": "term", "type": {"variable": "hydra.scala.syntax.Data"}},
+              {"name": "decl", "type": {"variable": "hydra.scala.syntax.Decl"}},
+              {"name": "defn", "type": {"variable": "hydra.scala.syntax.Defn"}},
+              {
+                "name": "importExport",
+                "type": {"variable": "hydra.scala.syntax.ImportExportStat"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Name",
+        "type": {
+          "type": {
+            "union": [
+              {"name": "value", "type": {"literal": {"string": {}}}},
+              {"name": "anonymous", "type": {"unit": {}}},
+              {
+                "name": "indeterminate",
+                "type": {"variable": "hydra.scala.syntax.PredefString"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Lit",
+        "type": {
+          "type": {
+            "union": [
+              {"name": "null", "type": {"unit": {}}},
+              {"name": "int", "type": {"literal": {"integer": {"int32": {}}}}},
+              {"name": "double", "type": {"literal": {"float": {"float64": {}}}}},
+              {"name": "float", "type": {"literal": {"float": {"float32": {}}}}},
+              {"name": "byte", "type": {"literal": {"integer": {"int8": {}}}}},
+              {"name": "short", "type": {"literal": {"integer": {"int16": {}}}}},
+              {"name": "char", "type": {"literal": {"integer": {"uint16": {}}}}},
+              {"name": "long", "type": {"literal": {"integer": {"int64": {}}}}},
+              {"name": "boolean", "type": {"literal": {"boolean": {}}}},
+              {"name": "unit", "type": {"unit": {}}},
+              {"name": "string", "type": {"literal": {"string": {}}}},
+              {
+                "name": "bytes",
+                "type": {"list": {"literal": {"integer": {"int32": {}}}}}},
+              {
+                "name": "symbol",
+                "type": {"variable": "hydra.scala.syntax.ScalaSymbol"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Data",
+        "type": {
+          "type": {
+            "union": [
+              {"name": "lit", "type": {"variable": "hydra.scala.syntax.Lit"}},
+              {"name": "ref", "type": {"variable": "hydra.scala.syntax.Data_Ref"}},
+              {
+                "name": "interpolate",
+                "type": {"variable": "hydra.scala.syntax.Data_Interpolate"}},
+              {"name": "xml", "type": {"variable": "hydra.scala.syntax.Data_Xml"}},
+              {
+                "name": "apply",
+                "type": {"variable": "hydra.scala.syntax.Data_Apply"}},
+              {
+                "name": "applyUsing",
+                "type": {"variable": "hydra.scala.syntax.Data_ApplyUsing"}},
+              {
+                "name": "applyType",
+                "type": {"variable": "hydra.scala.syntax.Data_ApplyType"}},
+              {
+                "name": "assign",
+                "type": {"variable": "hydra.scala.syntax.Data_Assign"}},
+              {
+                "name": "return",
+                "type": {"variable": "hydra.scala.syntax.Data_Return"}},
+              {
+                "name": "throw",
+                "type": {"variable": "hydra.scala.syntax.Data_Throw"}},
+              {
+                "name": "ascribe",
+                "type": {"variable": "hydra.scala.syntax.Data_Ascribe"}},
+              {
+                "name": "annotate",
+                "type": {"variable": "hydra.scala.syntax.Data_Annotate"}},
+              {
+                "name": "tuple",
+                "type": {"variable": "hydra.scala.syntax.Data_Tuple"}},
+              {
+                "name": "block",
+                "type": {"variable": "hydra.scala.syntax.Data_Block"}},
+              {
+                "name": "endMarker",
+                "type": {"variable": "hydra.scala.syntax.Data_EndMarker"}},
+              {"name": "if", "type": {"variable": "hydra.scala.syntax.Data_If"}},
+              {
+                "name": "quotedMacroExpr",
+                "type": {"variable": "hydra.scala.syntax.Data_QuotedMacroExpr"}},
+              {
+                "name": "quotedMacroType",
+                "type": {"variable": "hydra.scala.syntax.Data_QuotedMacroType"}},
+              {
+                "name": "splicedMacroExpr",
+                "type": {"variable": "hydra.scala.syntax.Data_SplicedMacroExpr"}},
+              {
+                "name": "match",
+                "type": {"variable": "hydra.scala.syntax.Data_Match"}},
+              {"name": "try", "type": {"variable": "hydra.scala.syntax.Data_Try"}},
+              {
+                "name": "tryWithHandler",
+                "type": {"variable": "hydra.scala.syntax.Data_TryWithHandler"}},
+              {
+                "name": "functionData",
+                "type": {"variable": "hydra.scala.syntax.Data_FunctionData"}},
+              {
+                "name": "polyFunction",
+                "type": {"variable": "hydra.scala.syntax.Data_PolyFunction"}},
+              {
+                "name": "partialFunction",
+                "type": {"variable": "hydra.scala.syntax.Data_PartialFunction"}},
+              {
+                "name": "while",
+                "type": {"variable": "hydra.scala.syntax.Data_While"}},
+              {"name": "do", "type": {"variable": "hydra.scala.syntax.Data_Do"}},
+              {"name": "for", "type": {"variable": "hydra.scala.syntax.Data_For"}},
+              {
+                "name": "forYield",
+                "type": {"variable": "hydra.scala.syntax.Data_ForYield"}},
+              {"name": "new", "type": {"variable": "hydra.scala.syntax.Data_New"}},
+              {
+                "name": "newAnonymous",
+                "type": {"variable": "hydra.scala.syntax.Data_NewAnonymous"}},
+              {"name": "placeholder", "type": {"unit": {}}},
+              {"name": "eta", "type": {"variable": "hydra.scala.syntax.Data_Eta"}},
+              {
+                "name": "repeated",
+                "type": {"variable": "hydra.scala.syntax.Data_Repeated"}},
+              {
+                "name": "param",
+                "type": {"variable": "hydra.scala.syntax.Data_Param"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Data_Ref",
+        "type": {
+          "type": {
+            "union": [
+              {"name": "this", "type": {"variable": "hydra.scala.syntax.Data_This"}},
+              {
+                "name": "super",
+                "type": {"variable": "hydra.scala.syntax.Data_Super"}},
+              {"name": "name", "type": {"variable": "hydra.scala.syntax.Data_Name"}},
+              {
+                "name": "anonymous",
+                "type": {"variable": "hydra.scala.syntax.Data_Anonymous"}},
+              {
+                "name": "select",
+                "type": {"variable": "hydra.scala.syntax.Data_Select"}},
+              {
+                "name": "applyUnary",
+                "type": {"variable": "hydra.scala.syntax.Data_ApplyUnary"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Data_This",
+        "type": {"type": {"wrap": {"unit": {}}}, "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Data_Super",
+        "type": {
+          "type": {
+            "record": [
+              {"name": "thisp", "type": {"variable": "hydra.scala.syntax.Name"}},
+              {"name": "superp", "type": {"variable": "hydra.scala.syntax.Name"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Data_Name",
+        "type": {
+          "type": {
+            "record": [
+              {
+                "name": "value",
+                "type": {"variable": "hydra.scala.syntax.PredefString"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Data_Anonymous",
+        "type": {"type": {"wrap": {"unit": {}}}, "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Data_Select",
+        "type": {
+          "type": {
+            "record": [
+              {"name": "qual", "type": {"variable": "hydra.scala.syntax.Data"}},
+              {"name": "name", "type": {"variable": "hydra.scala.syntax.Data_Name"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Data_Interpolate",
+        "type": {
+          "type": {
+            "record": [
+              {
+                "name": "prefix",
+                "type": {"variable": "hydra.scala.syntax.Data_Name"}},
+              {
+                "name": "parts",
+                "type": {"list": {"variable": "hydra.scala.syntax.Lit"}}},
+              {
+                "name": "args",
+                "type": {"list": {"variable": "hydra.scala.syntax.Data"}}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Data_Xml",
+        "type": {
+          "type": {
+            "record": [
+              {
+                "name": "parts",
+                "type": {"list": {"variable": "hydra.scala.syntax.Lit"}}},
+              {
+                "name": "args",
+                "type": {"list": {"variable": "hydra.scala.syntax.Data"}}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Data_Apply",
+        "type": {
+          "type": {
+            "record": [
+              {"name": "fun", "type": {"variable": "hydra.scala.syntax.Data"}},
+              {
+                "name": "args",
+                "type": {"list": {"variable": "hydra.scala.syntax.Data"}}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Data_ApplyUsing",
+        "type": {
+          "type": {
+            "record": [
+              {"name": "fun", "type": {"variable": "hydra.scala.syntax.Data"}},
+              {
+                "name": "targs",
+                "type": {"list": {"variable": "hydra.scala.syntax.Data"}}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Data_ApplyType",
+        "type": {
+          "type": {
+            "record": [
+              {"name": "lhs", "type": {"variable": "hydra.scala.syntax.Data"}},
+              {"name": "op", "type": {"variable": "hydra.scala.syntax.Data_Name"}},
+              {
+                "name": "targs",
+                "type": {"list": {"variable": "hydra.scala.syntax.Type"}}},
+              {
+                "name": "args",
+                "type": {"list": {"variable": "hydra.scala.syntax.Data"}}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Data_ApplyInfix",
+        "type": {
+          "type": {
+            "record": [
+              {"name": "lhs", "type": {"variable": "hydra.scala.syntax.Data"}},
+              {"name": "op", "type": {"variable": "hydra.scala.syntax.Data_Name"}},
+              {
+                "name": "targs",
+                "type": {"list": {"variable": "hydra.scala.syntax.Type"}}},
+              {
+                "name": "args",
+                "type": {"list": {"variable": "hydra.scala.syntax.Data"}}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Data_ApplyUnary",
+        "type": {
+          "type": {
+            "record": [
+              {"name": "op", "type": {"variable": "hydra.scala.syntax.Data_Name"}},
+              {"name": "arg", "type": {"variable": "hydra.scala.syntax.Data"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Data_Assign",
+        "type": {
+          "type": {
+            "record": [
+              {"name": "lhs", "type": {"variable": "hydra.scala.syntax.Data"}},
+              {"name": "rhs", "type": {"variable": "hydra.scala.syntax.Data"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Data_Return",
+        "type": {
+          "type": {
+            "record": [{"name": "expr", "type": {"variable": "hydra.scala.syntax.Data"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Data_Throw",
+        "type": {
+          "type": {
+            "record": [{"name": "expr", "type": {"variable": "hydra.scala.syntax.Data"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Data_Ascribe",
+        "type": {
+          "type": {
+            "record": [
+              {"name": "expr", "type": {"variable": "hydra.scala.syntax.Data"}},
+              {"name": "tpe", "type": {"variable": "hydra.scala.syntax.Type"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Data_Annotate",
+        "type": {
+          "type": {
+            "record": [
+              {"name": "expr", "type": {"variable": "hydra.scala.syntax.Data"}},
+              {
+                "name": "annots",
+                "type": {"list": {"variable": "hydra.scala.syntax.Mod_Annot"}}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Data_Tuple",
+        "type": {
+          "type": {
+            "record": [
+              {
+                "name": "args",
+                "type": {"list": {"variable": "hydra.scala.syntax.Data"}}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Data_Block",
+        "type": {
+          "type": {
+            "record": [
+              {
+                "name": "stats",
+                "type": {"list": {"variable": "hydra.scala.syntax.Stat"}}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Data_EndMarker",
+        "type": {
+          "type": {
+            "record": [
+              {"name": "name", "type": {"variable": "hydra.scala.syntax.Data_Name"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Data_If",
+        "type": {
+          "type": {
+            "record": [
+              {"name": "cond", "type": {"variable": "hydra.scala.syntax.Data"}},
+              {"name": "thenp", "type": {"variable": "hydra.scala.syntax.Data"}},
+              {"name": "elsep", "type": {"variable": "hydra.scala.syntax.Data"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Data_QuotedMacroExpr",
+        "type": {
+          "type": {
+            "record": [{"name": "body", "type": {"variable": "hydra.scala.syntax.Data"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Data_QuotedMacroType",
+        "type": {
+          "type": {
+            "record": [{"name": "tpe", "type": {"variable": "hydra.scala.syntax.Type"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Data_SplicedMacroExpr",
+        "type": {
+          "type": {
+            "record": [{"name": "body", "type": {"variable": "hydra.scala.syntax.Data"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Data_Match",
+        "type": {
+          "type": {
+            "record": [
+              {"name": "expr", "type": {"variable": "hydra.scala.syntax.Data"}},
+              {
+                "name": "cases",
+                "type": {"list": {"variable": "hydra.scala.syntax.Case"}}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Data_Try",
+        "type": {
+          "type": {
+            "record": [
+              {"name": "expr", "type": {"variable": "hydra.scala.syntax.Data"}},
+              {
+                "name": "catchp",
+                "type": {"list": {"variable": "hydra.scala.syntax.Case"}}},
+              {
+                "name": "finallyp",
+                "type": {"maybe": {"variable": "hydra.scala.syntax.Data"}}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Data_TryWithHandler",
+        "type": {
+          "type": {
+            "record": [
+              {"name": "expr", "type": {"variable": "hydra.scala.syntax.Data"}},
+              {"name": "catchp", "type": {"variable": "hydra.scala.syntax.Data"}},
+              {
+                "name": "finallyp",
+                "type": {"maybe": {"variable": "hydra.scala.syntax.Data"}}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Data_FunctionData",
+        "type": {
+          "type": {
+            "union": [
+              {
+                "name": "contextFunction",
+                "type": {"variable": "hydra.scala.syntax.Data_ContextFunction"}},
+              {
+                "name": "function",
+                "type": {"variable": "hydra.scala.syntax.Data_Function"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Data_ContextFunction",
+        "type": {
+          "type": {
+            "record": [
+              {
+                "name": "params",
+                "type": {"list": {"variable": "hydra.scala.syntax.Data_Param"}}},
+              {"name": "body", "type": {"variable": "hydra.scala.syntax.Data"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Data_Function",
+        "type": {
+          "type": {
+            "record": [
+              {
+                "name": "params",
+                "type": {"list": {"variable": "hydra.scala.syntax.Data_Param"}}},
+              {"name": "body", "type": {"variable": "hydra.scala.syntax.Data"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Data_PolyFunction",
+        "type": {
+          "type": {
+            "record": [
+              {
+                "name": "tparams",
+                "type": {"list": {"variable": "hydra.scala.syntax.Type_Param"}}},
+              {"name": "body", "type": {"variable": "hydra.scala.syntax.Data"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Data_PartialFunction",
+        "type": {
+          "type": {
+            "record": [
+              {
+                "name": "cases",
+                "type": {"list": {"variable": "hydra.scala.syntax.Case"}}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Data_While",
+        "type": {
+          "type": {
+            "record": [
+              {"name": "expr", "type": {"variable": "hydra.scala.syntax.Data"}},
+              {"name": "body", "type": {"variable": "hydra.scala.syntax.Data"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Data_Do",
+        "type": {
+          "type": {
+            "record": [
+              {"name": "body", "type": {"variable": "hydra.scala.syntax.Data"}},
+              {"name": "expr", "type": {"variable": "hydra.scala.syntax.Data"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Data_For",
+        "type": {
+          "type": {
+            "record": [
+              {
+                "name": "enums",
+                "type": {"list": {"variable": "hydra.scala.syntax.Enumerator"}}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Data_ForYield",
+        "type": {
+          "type": {
+            "record": [
+              {
+                "name": "enums",
+                "type": {"list": {"variable": "hydra.scala.syntax.Enumerator"}}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Data_New",
+        "type": {
+          "type": {
+            "record": [{"name": "init", "type": {"variable": "hydra.scala.syntax.Init"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Data_NewAnonymous",
+        "type": {
+          "type": {
+            "record": [
+              {"name": "templ", "type": {"variable": "hydra.scala.syntax.Template"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Data_Eta",
+        "type": {
+          "type": {
+            "record": [{"name": "expr", "type": {"variable": "hydra.scala.syntax.Data"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Data_Repeated",
+        "type": {
+          "type": {
+            "record": [{"name": "expr", "type": {"variable": "hydra.scala.syntax.Data"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Data_Param",
+        "type": {
+          "type": {
+            "record": [
+              {
+                "name": "mods",
+                "type": {"list": {"variable": "hydra.scala.syntax.Mod"}}},
+              {"name": "name", "type": {"variable": "hydra.scala.syntax.Name"}},
+              {
+                "name": "decltpe",
+                "type": {"maybe": {"variable": "hydra.scala.syntax.Type"}}},
+              {
+                "name": "default",
+                "type": {"maybe": {"variable": "hydra.scala.syntax.Data"}}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Type",
+        "type": {
+          "type": {
+            "union": [
+              {"name": "ref", "type": {"variable": "hydra.scala.syntax.Type_Ref"}},
+              {
+                "name": "anonymousName",
+                "type": {"variable": "hydra.scala.syntax.Type_AnonymousName"}},
+              {
+                "name": "apply",
+                "type": {"variable": "hydra.scala.syntax.Type_Apply"}},
+              {
+                "name": "applyInfix",
+                "type": {"variable": "hydra.scala.syntax.Type_ApplyInfix"}},
+              {
+                "name": "functionType",
+                "type": {"variable": "hydra.scala.syntax.Type_FunctionType"}},
+              {
+                "name": "polyFunction",
+                "type": {"variable": "hydra.scala.syntax.Type_PolyFunction"}},
+              {
+                "name": "implicitFunction",
+                "type": {"variable": "hydra.scala.syntax.Type_ImplicitFunction"}},
+              {
+                "name": "tuple",
+                "type": {"variable": "hydra.scala.syntax.Type_Tuple"}},
+              {"name": "with", "type": {"variable": "hydra.scala.syntax.Type_With"}},
+              {"name": "and", "type": {"variable": "hydra.scala.syntax.Type_And"}},
+              {"name": "or", "type": {"variable": "hydra.scala.syntax.Type_Or"}},
+              {
+                "name": "refine",
+                "type": {"variable": "hydra.scala.syntax.Type_Refine"}},
+              {
+                "name": "existential",
+                "type": {"variable": "hydra.scala.syntax.Type_Existential"}},
+              {
+                "name": "annotate",
+                "type": {"variable": "hydra.scala.syntax.Type_Annotate"}},
+              {
+                "name": "lambda",
+                "type": {"variable": "hydra.scala.syntax.Type_Lambda"}},
+              {
+                "name": "macro",
+                "type": {"variable": "hydra.scala.syntax.Type_Macro"}},
+              {
+                "name": "method",
+                "type": {"variable": "hydra.scala.syntax.Type_Method"}},
+              {
+                "name": "placeholder",
+                "type": {"variable": "hydra.scala.syntax.Type_Placeholder"}},
+              {
+                "name": "byName",
+                "type": {"variable": "hydra.scala.syntax.Type_ByName"}},
+              {
+                "name": "repeated",
+                "type": {"variable": "hydra.scala.syntax.Type_Repeated"}},
+              {"name": "var", "type": {"variable": "hydra.scala.syntax.Type_Var"}},
+              {
+                "name": "typedParam",
+                "type": {"variable": "hydra.scala.syntax.Type_TypedParam"}},
+              {
+                "name": "match",
+                "type": {"variable": "hydra.scala.syntax.Type_Match"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Type_Ref",
+        "type": {
+          "type": {
+            "union": [
+              {"name": "name", "type": {"variable": "hydra.scala.syntax.Type_Name"}},
+              {
+                "name": "select",
+                "type": {"variable": "hydra.scala.syntax.Type_Select"}},
+              {
+                "name": "project",
+                "type": {"variable": "hydra.scala.syntax.Type_Project"}},
+              {
+                "name": "singleton",
+                "type": {"variable": "hydra.scala.syntax.Type_Singleton"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Type_Name",
+        "type": {
+          "type": {"record": [{"name": "value", "type": {"literal": {"string": {}}}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Type_AnonymousName",
+        "type": {"type": {"wrap": {"unit": {}}}, "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Type_Select",
+        "type": {
+          "type": {
+            "record": [
+              {"name": "qual", "type": {"variable": "hydra.scala.syntax.Data_Ref"}},
+              {"name": "name", "type": {"variable": "hydra.scala.syntax.Type_Name"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Type_Project",
+        "type": {
+          "type": {
+            "record": [
+              {"name": "qual", "type": {"variable": "hydra.scala.syntax.Type"}},
+              {"name": "name", "type": {"variable": "hydra.scala.syntax.Type_Name"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Type_Singleton",
+        "type": {
+          "type": {
+            "record": [{"name": "ref", "type": {"variable": "hydra.scala.syntax.Data_Ref"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Type_Apply",
+        "type": {
+          "type": {
+            "record": [
+              {"name": "tpe", "type": {"variable": "hydra.scala.syntax.Type"}},
+              {
+                "name": "args",
+                "type": {"list": {"variable": "hydra.scala.syntax.Type"}}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Type_ApplyInfix",
+        "type": {
+          "type": {
+            "record": [
+              {"name": "lhs", "type": {"variable": "hydra.scala.syntax.Type"}},
+              {"name": "op", "type": {"variable": "hydra.scala.syntax.Type_Name"}},
+              {"name": "rhs", "type": {"variable": "hydra.scala.syntax.Type"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Type_FunctionType",
+        "type": {
+          "type": {
+            "union": [
+              {
+                "name": "function",
+                "type": {"variable": "hydra.scala.syntax.Type_Function"}},
+              {
+                "name": "contextFunction",
+                "type": {"variable": "hydra.scala.syntax.Type_ContextFunction"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Type_Function",
+        "type": {
+          "type": {
+            "record": [
+              {
+                "name": "params",
+                "type": {"list": {"variable": "hydra.scala.syntax.Type"}}},
+              {"name": "res", "type": {"variable": "hydra.scala.syntax.Type"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Type_PolyFunction",
+        "type": {
+          "type": {
+            "record": [
+              {
+                "name": "tparams",
+                "type": {"list": {"variable": "hydra.scala.syntax.Type_Param"}}},
+              {"name": "tpe", "type": {"variable": "hydra.scala.syntax.Type"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Type_ContextFunction",
+        "type": {
+          "type": {
+            "record": [
+              {
+                "name": "params",
+                "type": {"list": {"variable": "hydra.scala.syntax.Type"}}},
+              {"name": "res", "type": {"variable": "hydra.scala.syntax.Type"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Type_ImplicitFunction",
+        "type": {
+          "type": {
+            "record": [
+              {
+                "name": "params",
+                "type": {"list": {"variable": "hydra.scala.syntax.Type"}}},
+              {"name": "res", "type": {"variable": "hydra.scala.syntax.Type"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Type_Tuple",
+        "type": {
+          "type": {
+            "record": [
+              {
+                "name": "args",
+                "type": {"list": {"variable": "hydra.scala.syntax.Type"}}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Type_With",
+        "type": {
+          "type": {
+            "record": [
+              {"name": "lhs", "type": {"variable": "hydra.scala.syntax.Type"}},
+              {"name": "rhs", "type": {"variable": "hydra.scala.syntax.Type"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Type_And",
+        "type": {
+          "type": {
+            "record": [
+              {"name": "lhs", "type": {"variable": "hydra.scala.syntax.Type"}},
+              {"name": "rhs", "type": {"variable": "hydra.scala.syntax.Type"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Type_Or",
+        "type": {
+          "type": {
+            "record": [
+              {"name": "lhs", "type": {"variable": "hydra.scala.syntax.Type"}},
+              {"name": "rhs", "type": {"variable": "hydra.scala.syntax.Type"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Type_Refine",
+        "type": {
+          "type": {
+            "record": [
+              {
+                "name": "tpe",
+                "type": {"maybe": {"variable": "hydra.scala.syntax.Type"}}},
+              {
+                "name": "stats",
+                "type": {"list": {"variable": "hydra.scala.syntax.Stat"}}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Type_Existential",
+        "type": {
+          "type": {
+            "record": [
+              {"name": "tpe", "type": {"variable": "hydra.scala.syntax.Type"}},
+              {
+                "name": "stats",
+                "type": {"list": {"variable": "hydra.scala.syntax.Stat"}}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Type_Annotate",
+        "type": {
+          "type": {
+            "record": [
+              {"name": "tpe", "type": {"variable": "hydra.scala.syntax.Type"}},
+              {
+                "name": "annots",
+                "type": {"list": {"variable": "hydra.scala.syntax.Mod_Annot"}}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Type_Lambda",
+        "type": {
+          "type": {
+            "record": [
+              {
+                "name": "tparams",
+                "type": {"list": {"variable": "hydra.scala.syntax.Type_Param"}}},
+              {"name": "tpe", "type": {"variable": "hydra.scala.syntax.Type"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Type_Macro",
+        "type": {
+          "type": {
+            "record": [{"name": "body", "type": {"variable": "hydra.scala.syntax.Data"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Type_Method",
+        "type": {
+          "type": {
+            "record": [
+              {
+                "name": "paramss",
+                "type": {"list": {"list": {"variable": "hydra.scala.syntax.Data_Param"}}}},
+              {"name": "tpe", "type": {"variable": "hydra.scala.syntax.Type"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Type_Placeholder",
+        "type": {
+          "type": {
+            "record": [
+              {
+                "name": "bounds",
+                "type": {"variable": "hydra.scala.syntax.TypeBounds"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.TypeBounds",
+        "type": {
+          "type": {
+            "record": [
+              {
+                "name": "lo",
+                "type": {"maybe": {"variable": "hydra.scala.syntax.Type"}}},
+              {
+                "name": "hi",
+                "type": {"maybe": {"variable": "hydra.scala.syntax.Type"}}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Type_ByName",
+        "type": {
+          "type": {
+            "record": [{"name": "tpe", "type": {"variable": "hydra.scala.syntax.Type"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Type_Repeated",
+        "type": {
+          "type": {
+            "record": [{"name": "tpe", "type": {"variable": "hydra.scala.syntax.Type"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Type_Var",
+        "type": {
+          "type": {
+            "record": [
+              {"name": "name", "type": {"variable": "hydra.scala.syntax.Type_Name"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Type_TypedParam",
+        "type": {
+          "type": {
+            "record": [
+              {"name": "name", "type": {"variable": "hydra.scala.syntax.Name"}},
+              {"name": "typ", "type": {"variable": "hydra.scala.syntax.Type"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Type_Param",
+        "type": {
+          "type": {
+            "record": [
+              {
+                "name": "mods",
+                "type": {"list": {"variable": "hydra.scala.syntax.Mod"}}},
+              {"name": "name", "type": {"variable": "hydra.scala.syntax.Name"}},
+              {
+                "name": "tparams",
+                "type": {"list": {"variable": "hydra.scala.syntax.Type_Param"}}},
+              {
+                "name": "tbounds",
+                "type": {"list": {"variable": "hydra.scala.syntax.TypeBounds"}}},
+              {
+                "name": "vbounds",
+                "type": {"list": {"variable": "hydra.scala.syntax.Type"}}},
+              {
+                "name": "cbounds",
+                "type": {"list": {"variable": "hydra.scala.syntax.Type"}}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Type_Match",
+        "type": {
+          "type": {
+            "record": [
+              {"name": "tpe", "type": {"variable": "hydra.scala.syntax.Type"}},
+              {
+                "name": "cases",
+                "type": {"list": {"variable": "hydra.scala.syntax.TypeCase"}}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Pat",
+        "type": {
+          "type": {
+            "union": [
+              {"name": "var", "type": {"variable": "hydra.scala.syntax.Pat_Var"}},
+              {"name": "wildcard", "type": {"unit": {}}},
+              {"name": "seqWildcard", "type": {"unit": {}}},
+              {"name": "bind", "type": {"variable": "hydra.scala.syntax.Pat_Bind"}},
+              {
+                "name": "alternative",
+                "type": {"variable": "hydra.scala.syntax.Pat_Alternative"}},
+              {
+                "name": "tuple",
+                "type": {"variable": "hydra.scala.syntax.Pat_Tuple"}},
+              {
+                "name": "repeated",
+                "type": {"variable": "hydra.scala.syntax.Pat_Repeated"}},
+              {
+                "name": "extract",
+                "type": {"variable": "hydra.scala.syntax.Pat_Extract"}},
+              {
+                "name": "extractInfix",
+                "type": {"variable": "hydra.scala.syntax.Pat_ExtractInfix"}},
+              {
+                "name": "interpolate",
+                "type": {"variable": "hydra.scala.syntax.Pat_Interpolate"}},
+              {"name": "xml", "type": {"variable": "hydra.scala.syntax.Pat_Xml"}},
+              {
+                "name": "typed",
+                "type": {"variable": "hydra.scala.syntax.Pat_Typed"}},
+              {
+                "name": "macro",
+                "type": {"variable": "hydra.scala.syntax.Pat_Macro"}},
+              {
+                "name": "given",
+                "type": {"variable": "hydra.scala.syntax.Pat_Given"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Pat_Var",
+        "type": {
+          "type": {
+            "record": [
+              {"name": "name", "type": {"variable": "hydra.scala.syntax.Data_Name"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Pat_Bind",
+        "type": {
+          "type": {
+            "record": [
+              {"name": "lhs", "type": {"variable": "hydra.scala.syntax.Pat"}},
+              {"name": "rhs", "type": {"variable": "hydra.scala.syntax.Pat"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Pat_Alternative",
+        "type": {
+          "type": {
+            "record": [
+              {"name": "lhs", "type": {"variable": "hydra.scala.syntax.Pat"}},
+              {"name": "rhs", "type": {"variable": "hydra.scala.syntax.Pat"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Pat_Tuple",
+        "type": {
+          "type": {
+            "record": [
+              {
+                "name": "args",
+                "type": {"list": {"variable": "hydra.scala.syntax.Pat"}}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Pat_Repeated",
+        "type": {
+          "type": {
+            "record": [
+              {"name": "name", "type": {"variable": "hydra.scala.syntax.Data_Name"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Pat_Extract",
+        "type": {
+          "type": {
+            "record": [
+              {"name": "fun", "type": {"variable": "hydra.scala.syntax.Data"}},
+              {
+                "name": "args",
+                "type": {"list": {"variable": "hydra.scala.syntax.Pat"}}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Pat_ExtractInfix",
+        "type": {
+          "type": {
+            "record": [
+              {"name": "lhs", "type": {"variable": "hydra.scala.syntax.Pat"}},
+              {"name": "op", "type": {"variable": "hydra.scala.syntax.Data_Name"}},
+              {
+                "name": "rhs",
+                "type": {"list": {"variable": "hydra.scala.syntax.Pat"}}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Pat_Interpolate",
+        "type": {
+          "type": {
+            "record": [
+              {
+                "name": "prefix",
+                "type": {"variable": "hydra.scala.syntax.Data_Name"}},
+              {
+                "name": "parts",
+                "type": {"list": {"variable": "hydra.scala.syntax.Lit"}}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Pat_Xml",
+        "type": {
+          "type": {
+            "record": [
+              {
+                "name": "parts",
+                "type": {"list": {"variable": "hydra.scala.syntax.Lit"}}},
+              {
+                "name": "args",
+                "type": {"list": {"variable": "hydra.scala.syntax.Pat"}}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Pat_Typed",
+        "type": {
+          "type": {
+            "record": [
+              {"name": "lhs", "type": {"variable": "hydra.scala.syntax.Pat"}},
+              {"name": "rhs", "type": {"variable": "hydra.scala.syntax.Type"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Pat_Macro",
+        "type": {
+          "type": {
+            "record": [{"name": "body", "type": {"variable": "hydra.scala.syntax.Data"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Pat_Given",
+        "type": {
+          "type": {
+            "record": [{"name": "tpe", "type": {"variable": "hydra.scala.syntax.Type"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Member",
+        "type": {
+          "type": {
+            "union": [
+              {
+                "name": "term",
+                "type": {"variable": "hydra.scala.syntax.Member_Data"}},
+              {
+                "name": "type",
+                "type": {"variable": "hydra.scala.syntax.Member_Type"}},
+              {
+                "name": "termParam",
+                "type": {"variable": "hydra.scala.syntax.Data_Param"}},
+              {
+                "name": "typeParam",
+                "type": {"variable": "hydra.scala.syntax.Type_Param"}},
+              {"name": "self", "type": {"variable": "hydra.scala.syntax.Self"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Member_Data",
+        "type": {
+          "type": {
+            "union": [
+              {"name": "pkg", "type": {"variable": "hydra.scala.syntax.Pkg"}},
+              {
+                "name": "object",
+                "type": {"variable": "hydra.scala.syntax.Pkg_Object"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Member_Type",
+        "type": {
+          "type": {
+            "record": [
+              {"name": "name", "type": {"variable": "hydra.scala.syntax.Type_Name"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Decl",
+        "type": {
+          "type": {
+            "union": [
+              {"name": "val", "type": {"variable": "hydra.scala.syntax.Decl_Val"}},
+              {"name": "var", "type": {"variable": "hydra.scala.syntax.Decl_Var"}},
+              {"name": "def", "type": {"variable": "hydra.scala.syntax.Decl_Def"}},
+              {"name": "type", "type": {"variable": "hydra.scala.syntax.Decl_Type"}},
+              {
+                "name": "given",
+                "type": {"variable": "hydra.scala.syntax.Decl_Given"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Decl_Val",
+        "type": {
+          "type": {
+            "record": [
+              {
+                "name": "mods",
+                "type": {"list": {"variable": "hydra.scala.syntax.Mod"}}},
+              {
+                "name": "pats",
+                "type": {"list": {"variable": "hydra.scala.syntax.Pat"}}},
+              {"name": "decltpe", "type": {"variable": "hydra.scala.syntax.Type"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Decl_Var",
+        "type": {
+          "type": {
+            "record": [
+              {
+                "name": "mods",
+                "type": {"list": {"variable": "hydra.scala.syntax.Mod"}}},
+              {
+                "name": "pats",
+                "type": {"list": {"variable": "hydra.scala.syntax.Pat"}}},
+              {"name": "decltpe", "type": {"variable": "hydra.scala.syntax.Type"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Decl_Def",
+        "type": {
+          "type": {
+            "record": [
+              {
+                "name": "mods",
+                "type": {"list": {"variable": "hydra.scala.syntax.Mod"}}},
+              {"name": "name", "type": {"variable": "hydra.scala.syntax.Data_Name"}},
+              {
+                "name": "tparams",
+                "type": {"list": {"variable": "hydra.scala.syntax.Type_Param"}}},
+              {
+                "name": "paramss",
+                "type": {"list": {"list": {"variable": "hydra.scala.syntax.Data_Param"}}}},
+              {"name": "decltpe", "type": {"variable": "hydra.scala.syntax.Type"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Decl_Type",
+        "type": {
+          "type": {
+            "record": [
+              {
+                "name": "mods",
+                "type": {"list": {"variable": "hydra.scala.syntax.Mod"}}},
+              {"name": "name", "type": {"variable": "hydra.scala.syntax.Type_Name"}},
+              {
+                "name": "tparams",
+                "type": {"list": {"variable": "hydra.scala.syntax.Type_Param"}}},
+              {
+                "name": "bounds",
+                "type": {"variable": "hydra.scala.syntax.TypeBounds"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Decl_Given",
+        "type": {
+          "type": {
+            "record": [
+              {
+                "name": "mods",
+                "type": {"list": {"variable": "hydra.scala.syntax.Mod"}}},
+              {"name": "name", "type": {"variable": "hydra.scala.syntax.Data_Name"}},
+              {
+                "name": "tparams",
+                "type": {"list": {"variable": "hydra.scala.syntax.Type_Param"}}},
+              {
+                "name": "sparams",
+                "type": {"list": {"list": {"variable": "hydra.scala.syntax.Data_Param"}}}},
+              {"name": "decltpe", "type": {"variable": "hydra.scala.syntax.Type"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Defn",
+        "type": {
+          "type": {
+            "union": [
+              {"name": "val", "type": {"variable": "hydra.scala.syntax.Defn_Val"}},
+              {"name": "var", "type": {"variable": "hydra.scala.syntax.Defn_Var"}},
+              {
+                "name": "given",
+                "type": {"variable": "hydra.scala.syntax.Defn_Given"}},
+              {"name": "enum", "type": {"variable": "hydra.scala.syntax.Defn_Enum"}},
+              {
+                "name": "enumCase",
+                "type": {"variable": "hydra.scala.syntax.Defn_EnumCase"}},
+              {
+                "name": "repeatedEnumCase",
+                "type": {"variable": "hydra.scala.syntax.Defn_RepeatedEnumCase"}},
+              {
+                "name": "givenAlias",
+                "type": {"variable": "hydra.scala.syntax.Defn_GivenAlias"}},
+              {
+                "name": "extensionGroup",
+                "type": {"variable": "hydra.scala.syntax.Defn_ExtensionGroup"}},
+              {"name": "def", "type": {"variable": "hydra.scala.syntax.Defn_Def"}},
+              {
+                "name": "macro",
+                "type": {"variable": "hydra.scala.syntax.Defn_Macro"}},
+              {"name": "type", "type": {"variable": "hydra.scala.syntax.Defn_Type"}},
+              {
+                "name": "class",
+                "type": {"variable": "hydra.scala.syntax.Defn_Class"}},
+              {
+                "name": "trait",
+                "type": {"variable": "hydra.scala.syntax.Defn_Trait"}},
+              {
+                "name": "object",
+                "type": {"variable": "hydra.scala.syntax.Defn_Object"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Defn_Val",
+        "type": {
+          "type": {
+            "record": [
+              {
+                "name": "mods",
+                "type": {"list": {"variable": "hydra.scala.syntax.Mod"}}},
+              {
+                "name": "pats",
+                "type": {"list": {"variable": "hydra.scala.syntax.Pat"}}},
+              {
+                "name": "decltpe",
+                "type": {"maybe": {"variable": "hydra.scala.syntax.Type"}}},
+              {"name": "rhs", "type": {"variable": "hydra.scala.syntax.Data"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Defn_Var",
+        "type": {
+          "type": {
+            "record": [
+              {
+                "name": "mods",
+                "type": {"list": {"variable": "hydra.scala.syntax.Mod"}}},
+              {
+                "name": "pats",
+                "type": {"list": {"variable": "hydra.scala.syntax.Pat"}}},
+              {"name": "decltpe", "type": {"variable": "hydra.scala.syntax.Type"}},
+              {
+                "name": "rhs",
+                "type": {"maybe": {"variable": "hydra.scala.syntax.Data"}}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Defn_Given",
+        "type": {
+          "type": {
+            "record": [
+              {
+                "name": "mods",
+                "type": {"list": {"variable": "hydra.scala.syntax.Mod"}}},
+              {"name": "name", "type": {"variable": "hydra.scala.syntax.Name"}},
+              {
+                "name": "tparams",
+                "type": {"list": {"list": {"variable": "hydra.scala.syntax.Type_Param"}}}},
+              {
+                "name": "sparams",
+                "type": {"list": {"list": {"variable": "hydra.scala.syntax.Data_Param"}}}},
+              {"name": "templ", "type": {"variable": "hydra.scala.syntax.Template"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Defn_Enum",
+        "type": {
+          "type": {
+            "record": [
+              {
+                "name": "mods",
+                "type": {"list": {"variable": "hydra.scala.syntax.Mod"}}},
+              {"name": "name", "type": {"variable": "hydra.scala.syntax.Type_Name"}},
+              {
+                "name": "tparams",
+                "type": {"list": {"variable": "hydra.scala.syntax.Type_Param"}}},
+              {
+                "name": "ctor",
+                "type": {"variable": "hydra.scala.syntax.Ctor_Primary"}},
+              {
+                "name": "template",
+                "type": {"variable": "hydra.scala.syntax.Template"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Defn_EnumCase",
+        "type": {
+          "type": {
+            "record": [
+              {
+                "name": "mods",
+                "type": {"list": {"variable": "hydra.scala.syntax.Mod"}}},
+              {"name": "name", "type": {"variable": "hydra.scala.syntax.Data_Name"}},
+              {
+                "name": "tparams",
+                "type": {"list": {"variable": "hydra.scala.syntax.Type_Param"}}},
+              {
+                "name": "ctor",
+                "type": {"variable": "hydra.scala.syntax.Ctor_Primary"}},
+              {
+                "name": "inits",
+                "type": {"list": {"variable": "hydra.scala.syntax.Init"}}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Defn_RepeatedEnumCase",
+        "type": {
+          "type": {
+            "record": [
+              {
+                "name": "mods",
+                "type": {"list": {"variable": "hydra.scala.syntax.Mod"}}},
+              {
+                "name": "cases",
+                "type": {"list": {"variable": "hydra.scala.syntax.Data_Name"}}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Defn_GivenAlias",
+        "type": {
+          "type": {
+            "record": [
+              {
+                "name": "mods",
+                "type": {"list": {"variable": "hydra.scala.syntax.Mod"}}},
+              {"name": "name", "type": {"variable": "hydra.scala.syntax.Name"}},
+              {
+                "name": "tparams",
+                "type": {"list": {"list": {"variable": "hydra.scala.syntax.Type_Param"}}}},
+              {
+                "name": "sparams",
+                "type": {"list": {"list": {"variable": "hydra.scala.syntax.Data_Param"}}}},
+              {"name": "decltpe", "type": {"variable": "hydra.scala.syntax.Type"}},
+              {"name": "body", "type": {"variable": "hydra.scala.syntax.Data"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Defn_ExtensionGroup",
+        "type": {
+          "type": {
+            "record": [
+              {
+                "name": "tparams",
+                "type": {"list": {"variable": "hydra.scala.syntax.Type_Param"}}},
+              {
+                "name": "parmss",
+                "type": {"list": {"list": {"variable": "hydra.scala.syntax.Data_Param"}}}},
+              {"name": "body", "type": {"variable": "hydra.scala.syntax.Stat"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Defn_Def",
+        "type": {
+          "type": {
+            "record": [
+              {
+                "name": "mods",
+                "type": {"list": {"variable": "hydra.scala.syntax.Mod"}}},
+              {"name": "name", "type": {"variable": "hydra.scala.syntax.Data_Name"}},
+              {
+                "name": "tparams",
+                "type": {"list": {"variable": "hydra.scala.syntax.Type_Param"}}},
+              {
+                "name": "paramss",
+                "type": {"list": {"list": {"variable": "hydra.scala.syntax.Data_Param"}}}},
+              {
+                "name": "decltpe",
+                "type": {"maybe": {"variable": "hydra.scala.syntax.Type"}}},
+              {"name": "body", "type": {"variable": "hydra.scala.syntax.Data"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Defn_Macro",
+        "type": {
+          "type": {
+            "record": [
+              {
+                "name": "mods",
+                "type": {"list": {"variable": "hydra.scala.syntax.Mod"}}},
+              {"name": "name", "type": {"variable": "hydra.scala.syntax.Data_Name"}},
+              {
+                "name": "tparams",
+                "type": {"list": {"variable": "hydra.scala.syntax.Type_Param"}}},
+              {
+                "name": "paramss",
+                "type": {"list": {"list": {"variable": "hydra.scala.syntax.Data_Param"}}}},
+              {
+                "name": "decltpe",
+                "type": {"maybe": {"variable": "hydra.scala.syntax.Type"}}},
+              {"name": "body", "type": {"variable": "hydra.scala.syntax.Data"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Defn_Type",
+        "type": {
+          "type": {
+            "record": [
+              {
+                "name": "mods",
+                "type": {"list": {"variable": "hydra.scala.syntax.Mod"}}},
+              {"name": "name", "type": {"variable": "hydra.scala.syntax.Type_Name"}},
+              {
+                "name": "tparams",
+                "type": {"list": {"variable": "hydra.scala.syntax.Type_Param"}}},
+              {"name": "body", "type": {"variable": "hydra.scala.syntax.Type"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Defn_Class",
+        "type": {
+          "type": {
+            "record": [
+              {
+                "name": "mods",
+                "type": {"list": {"variable": "hydra.scala.syntax.Mod"}}},
+              {"name": "name", "type": {"variable": "hydra.scala.syntax.Type_Name"}},
+              {
+                "name": "tparams",
+                "type": {"list": {"variable": "hydra.scala.syntax.Type_Param"}}},
+              {
+                "name": "ctor",
+                "type": {"variable": "hydra.scala.syntax.Ctor_Primary"}},
+              {
+                "name": "template",
+                "type": {"variable": "hydra.scala.syntax.Template"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Defn_Trait",
+        "type": {
+          "type": {
+            "record": [
+              {
+                "name": "mods",
+                "type": {"list": {"variable": "hydra.scala.syntax.Mod"}}},
+              {"name": "name", "type": {"variable": "hydra.scala.syntax.Type_Name"}},
+              {
+                "name": "tparams",
+                "type": {"list": {"variable": "hydra.scala.syntax.Type_Param"}}},
+              {
+                "name": "ctor",
+                "type": {"variable": "hydra.scala.syntax.Ctor_Primary"}},
+              {
+                "name": "template",
+                "type": {"variable": "hydra.scala.syntax.Template"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Defn_Object",
+        "type": {
+          "type": {
+            "record": [
+              {"name": "name", "type": {"variable": "hydra.scala.syntax.Data_Name"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Pkg",
+        "type": {
+          "type": {
+            "record": [
+              {"name": "name", "type": {"variable": "hydra.scala.syntax.Data_Name"}},
+              {"name": "ref", "type": {"variable": "hydra.scala.syntax.Data_Ref"}},
+              {
+                "name": "stats",
+                "type": {"list": {"variable": "hydra.scala.syntax.Stat"}}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Pkg_Object",
+        "type": {
+          "type": {
+            "record": [
+              {
+                "name": "mods",
+                "type": {"list": {"variable": "hydra.scala.syntax.Mod"}}},
+              {"name": "name", "type": {"variable": "hydra.scala.syntax.Data_Name"}},
+              {
+                "name": "template",
+                "type": {"variable": "hydra.scala.syntax.Template"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Ctor",
+        "type": {
+          "type": {
+            "union": [
+              {
+                "name": "primary",
+                "type": {"variable": "hydra.scala.syntax.Ctor_Primary"}},
+              {
+                "name": "secondary",
+                "type": {"variable": "hydra.scala.syntax.Ctor_Secondary"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Ctor_Primary",
+        "type": {
+          "type": {
+            "record": [
+              {
+                "name": "mods",
+                "type": {"list": {"variable": "hydra.scala.syntax.Mod"}}},
+              {"name": "name", "type": {"variable": "hydra.scala.syntax.Name"}},
+              {
+                "name": "paramss",
+                "type": {"list": {"list": {"variable": "hydra.scala.syntax.Data_Param"}}}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Ctor_Secondary",
+        "type": {
+          "type": {
+            "record": [
+              {
+                "name": "mods",
+                "type": {"list": {"variable": "hydra.scala.syntax.Mod"}}},
+              {"name": "name", "type": {"variable": "hydra.scala.syntax.Name"}},
+              {
+                "name": "paramss",
+                "type": {"list": {"list": {"variable": "hydra.scala.syntax.Data_Param"}}}},
+              {"name": "init", "type": {"variable": "hydra.scala.syntax.Init"}},
+              {
+                "name": "stats",
+                "type": {"list": {"variable": "hydra.scala.syntax.Stat"}}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Init",
+        "type": {
+          "type": {
+            "record": [
+              {"name": "tpe", "type": {"variable": "hydra.scala.syntax.Type"}},
+              {"name": "name", "type": {"variable": "hydra.scala.syntax.Name"}},
+              {
+                "name": "argss",
+                "type": {"list": {"list": {"variable": "hydra.scala.syntax.Data"}}}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Self",
+        "type": {"type": {"wrap": {"unit": {}}}, "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Template",
+        "type": {
+          "type": {
+            "record": [
+              {
+                "name": "early",
+                "type": {"list": {"variable": "hydra.scala.syntax.Stat"}}},
+              {
+                "name": "inits",
+                "type": {"list": {"variable": "hydra.scala.syntax.Init"}}},
+              {"name": "self", "type": {"variable": "hydra.scala.syntax.Self"}},
+              {
+                "name": "stats",
+                "type": {"list": {"variable": "hydra.scala.syntax.Stat"}}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Mod",
+        "type": {
+          "type": {
+            "union": [
+              {
+                "name": "annot",
+                "type": {"variable": "hydra.scala.syntax.Mod_Annot"}},
+              {
+                "name": "private",
+                "type": {"variable": "hydra.scala.syntax.Mod_Private"}},
+              {
+                "name": "protected",
+                "type": {"variable": "hydra.scala.syntax.Mod_Protected"}},
+              {"name": "implicit", "type": {"unit": {}}},
+              {"name": "final", "type": {"unit": {}}},
+              {"name": "sealed", "type": {"unit": {}}},
+              {"name": "open", "type": {"unit": {}}},
+              {"name": "super", "type": {"unit": {}}},
+              {"name": "override", "type": {"unit": {}}},
+              {"name": "case", "type": {"unit": {}}},
+              {"name": "abstract", "type": {"unit": {}}},
+              {"name": "covariant", "type": {"unit": {}}},
+              {"name": "contravariant", "type": {"unit": {}}},
+              {"name": "lazy", "type": {"unit": {}}},
+              {"name": "valParam", "type": {"unit": {}}},
+              {"name": "varParam", "type": {"unit": {}}},
+              {"name": "infix", "type": {"unit": {}}},
+              {"name": "inline", "type": {"unit": {}}},
+              {"name": "using", "type": {"unit": {}}},
+              {"name": "opaque", "type": {"unit": {}}},
+              {"name": "transparent", "type": {"unit": {}}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Mod_Annot",
+        "type": {
+          "type": {
+            "record": [{"name": "init", "type": {"variable": "hydra.scala.syntax.Init"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Mod_Private",
+        "type": {
+          "type": {
+            "record": [{"name": "within", "type": {"variable": "hydra.scala.syntax.Ref"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Mod_Protected",
+        "type": {
+          "type": {
+            "record": [{"name": "within", "type": {"variable": "hydra.scala.syntax.Ref"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Enumerator",
+        "type": {
+          "type": {
+            "union": [
+              {
+                "name": "generator",
+                "type": {"variable": "hydra.scala.syntax.Enumerator_Generator"}},
+              {
+                "name": "caseGenerator",
+                "type": {"variable": "hydra.scala.syntax.Enumerator_CaseGenerator"}},
+              {
+                "name": "val",
+                "type": {"variable": "hydra.scala.syntax.Enumerator_Val"}},
+              {
+                "name": "guard",
+                "type": {"variable": "hydra.scala.syntax.Enumerator_Guard"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Enumerator_Generator",
+        "type": {
+          "type": {
+            "record": [
+              {"name": "pat", "type": {"variable": "hydra.scala.syntax.Pat"}},
+              {"name": "rhs", "type": {"variable": "hydra.scala.syntax.Data"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Enumerator_CaseGenerator",
+        "type": {
+          "type": {
+            "record": [
+              {"name": "pat", "type": {"variable": "hydra.scala.syntax.Pat"}},
+              {"name": "rhs", "type": {"variable": "hydra.scala.syntax.Data"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Enumerator_Val",
+        "type": {
+          "type": {
+            "record": [
+              {"name": "pat", "type": {"variable": "hydra.scala.syntax.Pat"}},
+              {"name": "rhs", "type": {"variable": "hydra.scala.syntax.Data"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Enumerator_Guard",
+        "type": {
+          "type": {
+            "record": [{"name": "cond", "type": {"variable": "hydra.scala.syntax.Data"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.ImportExportStat",
+        "type": {
+          "type": {
+            "union": [
+              {"name": "import", "type": {"variable": "hydra.scala.syntax.Import"}},
+              {"name": "export", "type": {"variable": "hydra.scala.syntax.Export"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Import",
+        "type": {
+          "type": {
+            "record": [
+              {
+                "name": "importers",
+                "type": {"list": {"variable": "hydra.scala.syntax.Importer"}}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Export",
+        "type": {
+          "type": {
+            "record": [
+              {
+                "name": "importers",
+                "type": {"list": {"variable": "hydra.scala.syntax.Importer"}}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Importer",
+        "type": {
+          "type": {
+            "record": [
+              {"name": "ref", "type": {"variable": "hydra.scala.syntax.Data_Ref"}},
+              {
+                "name": "importees",
+                "type": {"list": {"variable": "hydra.scala.syntax.Importee"}}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Importee",
+        "type": {
+          "type": {
+            "union": [
+              {"name": "wildcard", "type": {"unit": {}}},
+              {
+                "name": "given",
+                "type": {"variable": "hydra.scala.syntax.Importee_Given"}},
+              {"name": "givenAll", "type": {"unit": {}}},
+              {
+                "name": "name",
+                "type": {"variable": "hydra.scala.syntax.Importee_Name"}},
+              {
+                "name": "rename",
+                "type": {"variable": "hydra.scala.syntax.Importee_Rename"}},
+              {
+                "name": "unimport",
+                "type": {"variable": "hydra.scala.syntax.Importee_Unimport"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Importee_Given",
+        "type": {
+          "type": {
+            "record": [{"name": "tpe", "type": {"variable": "hydra.scala.syntax.Type"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Importee_Name",
+        "type": {
+          "type": {
+            "record": [{"name": "name", "type": {"variable": "hydra.scala.syntax.Name"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Importee_Rename",
+        "type": {
+          "type": {
+            "record": [
+              {"name": "name", "type": {"variable": "hydra.scala.syntax.Name"}},
+              {"name": "rename", "type": {"variable": "hydra.scala.syntax.Name"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Importee_Unimport",
+        "type": {
+          "type": {
+            "record": [{"name": "name", "type": {"variable": "hydra.scala.syntax.Name"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.CaseTree",
+        "type": {
+          "type": {
+            "union": [
+              {"name": "case", "type": {"variable": "hydra.scala.syntax.Case"}},
+              {
+                "name": "typeCase",
+                "type": {"variable": "hydra.scala.syntax.TypeCase"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Case",
+        "type": {
+          "type": {
+            "record": [
+              {"name": "pat", "type": {"variable": "hydra.scala.syntax.Pat"}},
+              {
+                "name": "cond",
+                "type": {"maybe": {"variable": "hydra.scala.syntax.Data"}}},
+              {"name": "body", "type": {"variable": "hydra.scala.syntax.Data"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.TypeCase",
+        "type": {
+          "type": {
+            "record": [
+              {"name": "pat", "type": {"variable": "hydra.scala.syntax.Type"}},
+              {"name": "body", "type": {"variable": "hydra.scala.syntax.Type"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Source",
+        "type": {
+          "type": {
+            "record": [
+              {
+                "name": "stats",
+                "type": {"list": {"variable": "hydra.scala.syntax.Stat"}}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.scala.syntax.Quasi",
+        "type": {"type": {"wrap": {"unit": {}}}, "variables": []}}}],
+  "description": "A Scala syntax model based on Scalameta (https://scalameta.org)",
+  "namespace": "hydra.scala.syntax",
+  "termDependencies": ["hydra.core"],
+  "typeDependencies": ["hydra.core"]}

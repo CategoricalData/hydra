@@ -1,0 +1,266 @@
+// Note: this is an automatically generated file. Do not edit.
+
+package hydra.java.syntax;
+
+import java.io.Serializable;
+
+public abstract class MethodInvocation_Variant implements Serializable, Comparable<MethodInvocation_Variant> {
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.java.syntax.MethodInvocation_Variant");
+
+  public static final hydra.core.Name TYPE = new hydra.core.Name("type");
+
+  public static final hydra.core.Name EXPRESSION = new hydra.core.Name("expression");
+
+  public static final hydra.core.Name PRIMARY = new hydra.core.Name("primary");
+
+  public static final hydra.core.Name SUPER = new hydra.core.Name("super");
+
+  public static final hydra.core.Name TYPE_SUPER = new hydra.core.Name("typeSuper");
+
+  private MethodInvocation_Variant () {
+
+  }
+
+  public abstract <R> R accept(Visitor<R> visitor) ;
+
+  public interface Visitor<R> {
+    R visit(Type instance) ;
+
+    R visit(Expression instance) ;
+
+    R visit(Primary instance) ;
+
+    R visit(Super instance) ;
+
+    R visit(TypeSuper instance) ;
+  }
+
+  public interface PartialVisitor<R> extends Visitor<R> {
+    default R otherwise(MethodInvocation_Variant instance) {
+      throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
+    }
+
+    default R visit(Type instance) {
+      return otherwise(instance);
+    }
+
+    default R visit(Expression instance) {
+      return otherwise(instance);
+    }
+
+    default R visit(Primary instance) {
+      return otherwise(instance);
+    }
+
+    default R visit(Super instance) {
+      return otherwise(instance);
+    }
+
+    default R visit(TypeSuper instance) {
+      return otherwise(instance);
+    }
+  }
+
+  public static final class Type extends hydra.java.syntax.MethodInvocation_Variant implements Serializable {
+    public final hydra.java.syntax.TypeName value;
+
+    public Type (hydra.java.syntax.TypeName value) {
+      this.value = value;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Type)) {
+        return false;
+      }
+      Type o = (Type) other;
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
+    }
+
+    @Override
+    public int hashCode() {
+      return 2 * java.util.Objects.hashCode(value);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(MethodInvocation_Variant other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Type o = (Type) other;
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
+    }
+
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+
+  public static final class Expression extends hydra.java.syntax.MethodInvocation_Variant implements Serializable {
+    public final hydra.java.syntax.ExpressionName value;
+
+    public Expression (hydra.java.syntax.ExpressionName value) {
+      this.value = value;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Expression)) {
+        return false;
+      }
+      Expression o = (Expression) other;
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
+    }
+
+    @Override
+    public int hashCode() {
+      return 2 * java.util.Objects.hashCode(value);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(MethodInvocation_Variant other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Expression o = (Expression) other;
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
+    }
+
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+
+  public static final class Primary extends hydra.java.syntax.MethodInvocation_Variant implements Serializable {
+    public final hydra.java.syntax.Primary value;
+
+    public Primary (hydra.java.syntax.Primary value) {
+      this.value = value;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Primary)) {
+        return false;
+      }
+      Primary o = (Primary) other;
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
+    }
+
+    @Override
+    public int hashCode() {
+      return 2 * java.util.Objects.hashCode(value);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(MethodInvocation_Variant other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Primary o = (Primary) other;
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
+    }
+
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+
+  public static final class Super extends hydra.java.syntax.MethodInvocation_Variant implements Serializable {
+    public Super () {
+
+    }
+
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Super)) {
+        return false;
+      }
+      Super o = (Super) other;
+      return true;
+    }
+
+    @Override
+    public int hashCode() {
+      return 0;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(MethodInvocation_Variant other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
+    }
+
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+
+  public static final class TypeSuper extends hydra.java.syntax.MethodInvocation_Variant implements Serializable {
+    public final hydra.java.syntax.TypeName value;
+
+    public TypeSuper (hydra.java.syntax.TypeName value) {
+      this.value = value;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof TypeSuper)) {
+        return false;
+      }
+      TypeSuper o = (TypeSuper) other;
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
+    }
+
+    @Override
+    public int hashCode() {
+      return 2 * java.util.Objects.hashCode(value);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(MethodInvocation_Variant other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      TypeSuper o = (TypeSuper) other;
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
+    }
+
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+}

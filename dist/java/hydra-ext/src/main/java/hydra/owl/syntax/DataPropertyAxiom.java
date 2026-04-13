@@ -1,0 +1,323 @@
+// Note: this is an automatically generated file. Do not edit.
+
+package hydra.owl.syntax;
+
+import java.io.Serializable;
+
+public abstract class DataPropertyAxiom implements Serializable, Comparable<DataPropertyAxiom> {
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.owl.syntax.DataPropertyAxiom");
+
+  public static final hydra.core.Name DATA_PROPERTY_AXIOM = new hydra.core.Name("dataPropertyAxiom");
+
+  public static final hydra.core.Name DATA_PROPERTY_RANGE = new hydra.core.Name("dataPropertyRange");
+
+  public static final hydra.core.Name DISJOINT_DATA_PROPERTIES = new hydra.core.Name("disjointDataProperties");
+
+  public static final hydra.core.Name EQUIVALENT_DATA_PROPERTIES = new hydra.core.Name("equivalentDataProperties");
+
+  public static final hydra.core.Name FUNCTIONAL_DATA_PROPERTY = new hydra.core.Name("functionalDataProperty");
+
+  public static final hydra.core.Name SUB_DATA_PROPERTY_OF = new hydra.core.Name("subDataPropertyOf");
+
+  private DataPropertyAxiom () {
+
+  }
+
+  public abstract <R> R accept(Visitor<R> visitor) ;
+
+  public interface Visitor<R> {
+    R visit(DataPropertyAxiom_ instance) ;
+
+    R visit(DataPropertyRange instance) ;
+
+    R visit(DisjointDataProperties instance) ;
+
+    R visit(EquivalentDataProperties instance) ;
+
+    R visit(FunctionalDataProperty instance) ;
+
+    R visit(SubDataPropertyOf instance) ;
+  }
+
+  public interface PartialVisitor<R> extends Visitor<R> {
+    default R otherwise(DataPropertyAxiom instance) {
+      throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
+    }
+
+    default R visit(DataPropertyAxiom_ instance) {
+      return otherwise(instance);
+    }
+
+    default R visit(DataPropertyRange instance) {
+      return otherwise(instance);
+    }
+
+    default R visit(DisjointDataProperties instance) {
+      return otherwise(instance);
+    }
+
+    default R visit(EquivalentDataProperties instance) {
+      return otherwise(instance);
+    }
+
+    default R visit(FunctionalDataProperty instance) {
+      return otherwise(instance);
+    }
+
+    default R visit(SubDataPropertyOf instance) {
+      return otherwise(instance);
+    }
+  }
+
+  public static final class DataPropertyAxiom_ extends hydra.owl.syntax.DataPropertyAxiom implements Serializable {
+    public final hydra.owl.syntax.DataPropertyAxiom value;
+
+    public DataPropertyAxiom_ (hydra.owl.syntax.DataPropertyAxiom value) {
+      this.value = value;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof DataPropertyAxiom_)) {
+        return false;
+      }
+      DataPropertyAxiom_ o = (DataPropertyAxiom_) other;
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
+    }
+
+    @Override
+    public int hashCode() {
+      return 2 * java.util.Objects.hashCode(value);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(DataPropertyAxiom other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      DataPropertyAxiom_ o = (DataPropertyAxiom_) other;
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
+    }
+
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+
+  public static final class DataPropertyRange extends hydra.owl.syntax.DataPropertyAxiom implements Serializable {
+    public final hydra.owl.syntax.DataPropertyRange value;
+
+    public DataPropertyRange (hydra.owl.syntax.DataPropertyRange value) {
+      this.value = value;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof DataPropertyRange)) {
+        return false;
+      }
+      DataPropertyRange o = (DataPropertyRange) other;
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
+    }
+
+    @Override
+    public int hashCode() {
+      return 2 * java.util.Objects.hashCode(value);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(DataPropertyAxiom other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      DataPropertyRange o = (DataPropertyRange) other;
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
+    }
+
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+
+  public static final class DisjointDataProperties extends hydra.owl.syntax.DataPropertyAxiom implements Serializable {
+    public final hydra.owl.syntax.DisjointDataProperties value;
+
+    public DisjointDataProperties (hydra.owl.syntax.DisjointDataProperties value) {
+      this.value = value;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof DisjointDataProperties)) {
+        return false;
+      }
+      DisjointDataProperties o = (DisjointDataProperties) other;
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
+    }
+
+    @Override
+    public int hashCode() {
+      return 2 * java.util.Objects.hashCode(value);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(DataPropertyAxiom other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      DisjointDataProperties o = (DisjointDataProperties) other;
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
+    }
+
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+
+  public static final class EquivalentDataProperties extends hydra.owl.syntax.DataPropertyAxiom implements Serializable {
+    public final hydra.owl.syntax.EquivalentDataProperties value;
+
+    public EquivalentDataProperties (hydra.owl.syntax.EquivalentDataProperties value) {
+      this.value = value;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof EquivalentDataProperties)) {
+        return false;
+      }
+      EquivalentDataProperties o = (EquivalentDataProperties) other;
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
+    }
+
+    @Override
+    public int hashCode() {
+      return 2 * java.util.Objects.hashCode(value);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(DataPropertyAxiom other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      EquivalentDataProperties o = (EquivalentDataProperties) other;
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
+    }
+
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+
+  public static final class FunctionalDataProperty extends hydra.owl.syntax.DataPropertyAxiom implements Serializable {
+    public final hydra.owl.syntax.FunctionalDataProperty value;
+
+    public FunctionalDataProperty (hydra.owl.syntax.FunctionalDataProperty value) {
+      this.value = value;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof FunctionalDataProperty)) {
+        return false;
+      }
+      FunctionalDataProperty o = (FunctionalDataProperty) other;
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
+    }
+
+    @Override
+    public int hashCode() {
+      return 2 * java.util.Objects.hashCode(value);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(DataPropertyAxiom other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      FunctionalDataProperty o = (FunctionalDataProperty) other;
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
+    }
+
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+
+  public static final class SubDataPropertyOf extends hydra.owl.syntax.DataPropertyAxiom implements Serializable {
+    public final hydra.owl.syntax.SubDataPropertyOf value;
+
+    public SubDataPropertyOf (hydra.owl.syntax.SubDataPropertyOf value) {
+      this.value = value;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof SubDataPropertyOf)) {
+        return false;
+      }
+      SubDataPropertyOf o = (SubDataPropertyOf) other;
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
+    }
+
+    @Override
+    public int hashCode() {
+      return 2 * java.util.Objects.hashCode(value);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(DataPropertyAxiom other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      SubDataPropertyOf o = (SubDataPropertyOf) other;
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
+    }
+
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+}

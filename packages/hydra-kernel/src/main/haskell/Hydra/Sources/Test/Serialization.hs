@@ -91,7 +91,7 @@ bracketListExpr style exprs = Serialization.bracketList @@ asTerm style @@ list 
 inlineBlockStyle :: TTermDefinition BlockStyle
 inlineBlockStyle = Serialization.inlineStyle
 
--- Test operators defined locally to avoid a dependency on hydra.ext.haskell.operators
+-- Test operators defined locally to avoid a dependency on hydra.haskell.operators
 arrowOp :: TTermDefinition Op
 arrowOp = define "arrowOp" $
   Serialization.op @@ string "->" @@ (Math.negate $ int32 1) @@ Ast.associativityRight

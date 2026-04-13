@@ -43,6 +43,9 @@ mkdir -p "$OUTPUT_DIR/src/main/haskell"
 # Base: the Haskell head's hand-written runtime (Hydra.Generation, Hydra.Kernel,
 # Hydra.Lib.*, Hydra.Dsl.*, Hydra.Haskell.Generation, Hydra.Module.*, Hydra.Tools.*, ...)
 cp -r "$HYDRA_HASKELL_HEAD_DIR/src/main/haskell/Hydra" "$OUTPUT_DIR/src/main/haskell/"
+# Remove ext-related sources not needed for the bootstrap target
+rm -f "$OUTPUT_DIR/src/main/haskell/Hydra/ExtGeneration.hs"
+rm -f "$OUTPUT_DIR/src/main/haskell/Hydra/Sources/Ext.hs"
 # Overlay kernel DSL sources (Hydra.Sources.Kernel.*, Hydra.Sources.Decode.*, Hydra.Sources.Encode.*, ...)
 if [ -d "$HYDRA_KERNEL_DIR/src/main/haskell/Hydra" ]; then
     cp -r "$HYDRA_KERNEL_DIR/src/main/haskell/Hydra/." "$OUTPUT_DIR/src/main/haskell/Hydra/"
@@ -52,27 +55,12 @@ if [ -d "$HYDRA_HASKELL_DIR/src/main/haskell/Hydra" ]; then
     cp -r "$HYDRA_HASKELL_DIR/src/main/haskell/Hydra/." "$OUTPUT_DIR/src/main/haskell/Hydra/"
 fi
 
-# Copy ext modules from baseline, replacing any generated versions.
-# Hand-written Sources modules (e.g. Templates.hs, Annotations.hs) import generated
-# modules like Hydra.Sources.Decode.Core and Hydra.Sources.Encode.Core, and
-# Staging/Yaml/Coder.hs imports Hydra.Ext.Org.Yaml.Model — all of which live in
-# dist. Copying the full baseline dist ext tree ensures these are available.
+# Copy ext modules from baseline. Hand-written Sources modules import generated
+# modules like Hydra.Sources.Decode.Core and Hydra.Sources.Encode.Core which live in dist.
 echo "  Copying ext modules from baseline..."
 HS_GEN="$OUTPUT_DIR/src/main/haskell"
 HS_KERNEL_BASELINE="$HYDRA_ROOT/dist/haskell/hydra-kernel/src/main/haskell"
 HS_HASKELL_BASELINE="$HYDRA_ROOT/dist/haskell/hydra-haskell/src/main/haskell"
-# Ext/Org modules live in hydra-kernel's dist; Ext/Haskell lives in hydra-haskell's.
-if [ -d "$HS_KERNEL_BASELINE/Hydra/Ext" ]; then
-    mkdir -p "$HS_GEN/Hydra/Ext"
-    rm -rf "$HS_GEN/Hydra/Ext"
-    cp -r "$HS_KERNEL_BASELINE/Hydra/Ext" "$HS_GEN/Hydra/"
-    echo "    Copied Hydra/Ext (Org) from hydra-kernel baseline"
-fi
-if [ -d "$HS_HASKELL_BASELINE/Hydra/Ext" ]; then
-    mkdir -p "$HS_GEN/Hydra/Ext"
-    cp -r "$HS_HASKELL_BASELINE/Hydra/Ext/." "$HS_GEN/Hydra/Ext/"
-    echo "    Copied Hydra/Ext (Haskell) from hydra-haskell baseline"
-fi
 # Copy Sources/Decode and Sources/Encode (generated DSL source modules imported by
 # hand-written Sources modules like Templates.hs and Annotations.hs)
 for src_dir in Decode Encode; do
@@ -84,14 +72,14 @@ for src_dir in Decode Encode; do
     fi
 done
 # Copy generated DSL modules (Hydra.Dsl.Core, Hydra.Dsl.Graph, etc.) imported by
-# hand-written Hydra.Dsl.Meta.* modules
+# hand-written Hydra.Dsl.Meta.* modules. Overlay on top of heads/haskell Dsl
+# (not replacing it) so hand-written Dsl files like Hydra.Dsl.Terms are preserved.
 if [ -d "$HS_KERNEL_BASELINE/Hydra/Dsl" ]; then
-    mkdir -p "$HS_GEN/Hydra"
-    rm -rf "$HS_GEN/Hydra/Dsl"
-    cp -r "$HS_KERNEL_BASELINE/Hydra/Dsl" "$HS_GEN/Hydra/"
-    echo "    Copied Hydra/Dsl from hydra-kernel baseline"
+    mkdir -p "$HS_GEN/Hydra/Dsl"
+    cp -r "$HS_KERNEL_BASELINE/Hydra/Dsl/." "$HS_GEN/Hydra/Dsl/"
+    echo "    Overlaid Hydra/Dsl from hydra-kernel baseline"
 fi
-# Overlay Haskell-coder Dsl wrappers (Hydra.Dsl.Ext.Haskell.*) from hydra-haskell
+# Overlay Haskell-coder Dsl wrappers from hydra-haskell
 if [ -d "$HS_HASKELL_BASELINE/Hydra/Dsl" ]; then
     cp -r "$HS_HASKELL_BASELINE/Hydra/Dsl/." "$HS_GEN/Hydra/Dsl/"
     echo "    Overlaid Hydra/Dsl (Haskell coder wrappers) from hydra-haskell baseline"

@@ -6,7 +6,7 @@ package hydra.json.yaml;
  * YAML-to-JSON decoding. Converts YAML Nodes to JSON Values (may fail for non-JSON YAML), and YAML Nodes to Hydra Terms via JSON.
  */
 public interface Decode {
-  static hydra.util.Either<String, hydra.core.Term> fromYaml(java.util.Map<hydra.core.Name, hydra.core.Type> types, hydra.core.Name tname, hydra.core.Type typ, hydra.ext.org.yaml.model.Node node) {
+  static hydra.util.Either<String, hydra.core.Term> fromYaml(java.util.Map<hydra.core.Name, hydra.core.Type> types, hydra.core.Name tname, hydra.core.Type typ, hydra.yaml.model.Node node) {
     hydra.util.Either<String, hydra.json.model.Value> jsonResult = hydra.json.yaml.Decode.yamlToJson(node);
     return hydra.lib.eithers.Either.apply(
       (java.util.function.Function<String, hydra.util.Either<String, hydra.core.Term>>) (err -> hydra.util.Either.<String, hydra.core.Term>left(err)),
@@ -18,34 +18,34 @@ public interface Decode {
       jsonResult);
   }
 
-  static hydra.util.Either<String, hydra.json.model.Value> yamlToJson(hydra.ext.org.yaml.model.Node node) {
-    return (node).accept(new hydra.ext.org.yaml.model.Node.PartialVisitor<>() {
+  static hydra.util.Either<String, hydra.json.model.Value> yamlToJson(hydra.yaml.model.Node node) {
+    return (node).accept(new hydra.yaml.model.Node.PartialVisitor<>() {
       @Override
-      public hydra.util.Either<String, hydra.json.model.Value> visit(hydra.ext.org.yaml.model.Node.Mapping m) {
-        java.util.function.Function<hydra.util.Pair<hydra.ext.org.yaml.model.Node, hydra.ext.org.yaml.model.Node>, hydra.util.Either<String, hydra.util.Pair<String, hydra.json.model.Value>>> convertEntry = (java.util.function.Function<hydra.util.Pair<hydra.ext.org.yaml.model.Node, hydra.ext.org.yaml.model.Node>, hydra.util.Either<String, hydra.util.Pair<String, hydra.json.model.Value>>>) (kv -> {
-          hydra.util.Lazy<hydra.ext.org.yaml.model.Node> keyNode = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(kv));
-          hydra.util.Lazy<hydra.util.Either<String, String>> keyResult = new hydra.util.Lazy<>(() -> keyNode.get().accept(new hydra.ext.org.yaml.model.Node.PartialVisitor<>() {
+      public hydra.util.Either<String, hydra.json.model.Value> visit(hydra.yaml.model.Node.Mapping m) {
+        java.util.function.Function<hydra.util.Pair<hydra.yaml.model.Node, hydra.yaml.model.Node>, hydra.util.Either<String, hydra.util.Pair<String, hydra.json.model.Value>>> convertEntry = (java.util.function.Function<hydra.util.Pair<hydra.yaml.model.Node, hydra.yaml.model.Node>, hydra.util.Either<String, hydra.util.Pair<String, hydra.json.model.Value>>>) (kv -> {
+          hydra.util.Lazy<hydra.yaml.model.Node> keyNode = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(kv));
+          hydra.util.Lazy<hydra.util.Either<String, String>> keyResult = new hydra.util.Lazy<>(() -> keyNode.get().accept(new hydra.yaml.model.Node.PartialVisitor<>() {
             @Override
-            public hydra.util.Either<String, String> otherwise(hydra.ext.org.yaml.model.Node instance) {
+            public hydra.util.Either<String, String> otherwise(hydra.yaml.model.Node instance) {
               return hydra.util.Either.<String, String>left("non-scalar YAML mapping key");
             }
 
             @Override
-            public hydra.util.Either<String, String> visit(hydra.ext.org.yaml.model.Node.Scalar s) {
-              return (s).value.accept(new hydra.ext.org.yaml.model.Scalar.PartialVisitor<>() {
+            public hydra.util.Either<String, String> visit(hydra.yaml.model.Node.Scalar s) {
+              return (s).value.accept(new hydra.yaml.model.Scalar.PartialVisitor<>() {
                 @Override
-                public hydra.util.Either<String, String> otherwise(hydra.ext.org.yaml.model.Scalar instance) {
+                public hydra.util.Either<String, String> otherwise(hydra.yaml.model.Scalar instance) {
                   return hydra.util.Either.<String, String>left("non-string YAML mapping key");
                 }
 
                 @Override
-                public hydra.util.Either<String, String> visit(hydra.ext.org.yaml.model.Scalar.Str str) {
+                public hydra.util.Either<String, String> visit(hydra.yaml.model.Scalar.Str str) {
                   return hydra.util.Either.<String, String>right((str).value);
                 }
               });
             }
           }));
-          hydra.util.Lazy<hydra.ext.org.yaml.model.Node> valNode = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(kv));
+          hydra.util.Lazy<hydra.yaml.model.Node> valNode = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(kv));
           return hydra.lib.eithers.Either.apply(
             (java.util.function.Function<String, hydra.util.Either<String, hydra.util.Pair<String, hydra.json.model.Value>>>) (err -> hydra.util.Either.<String, hydra.util.Pair<String, hydra.json.model.Value>>left(err)),
             (java.util.function.Function<String, hydra.util.Either<String, hydra.util.Pair<String, hydra.json.model.Value>>>) (key -> {
@@ -65,39 +65,39 @@ public interface Decode {
       }
 
       @Override
-      public hydra.util.Either<String, hydra.json.model.Value> visit(hydra.ext.org.yaml.model.Node.Scalar s) {
-        return (s).value.accept(new hydra.ext.org.yaml.model.Scalar.PartialVisitor<>() {
+      public hydra.util.Either<String, hydra.json.model.Value> visit(hydra.yaml.model.Node.Scalar s) {
+        return (s).value.accept(new hydra.yaml.model.Scalar.PartialVisitor<>() {
           @Override
-          public hydra.util.Either<String, hydra.json.model.Value> visit(hydra.ext.org.yaml.model.Scalar.Bool b) {
+          public hydra.util.Either<String, hydra.json.model.Value> visit(hydra.yaml.model.Scalar.Bool b) {
             return hydra.util.Either.<String, hydra.json.model.Value>right(new hydra.json.model.Value.Boolean_((b).value));
           }
 
           @Override
-          public hydra.util.Either<String, hydra.json.model.Value> visit(hydra.ext.org.yaml.model.Scalar.Float_ f) {
+          public hydra.util.Either<String, hydra.json.model.Value> visit(hydra.yaml.model.Scalar.Float_ f) {
             return hydra.util.Either.<String, hydra.json.model.Value>right(new hydra.json.model.Value.Number_((f).value));
           }
 
           @Override
-          public hydra.util.Either<String, hydra.json.model.Value> visit(hydra.ext.org.yaml.model.Scalar.Int i) {
+          public hydra.util.Either<String, hydra.json.model.Value> visit(hydra.yaml.model.Scalar.Int i) {
             return hydra.util.Either.<String, hydra.json.model.Value>right(new hydra.json.model.Value.Number_(hydra.lib.literals.BigintToBigfloat.apply((i).value)));
           }
 
           @Override
-          public hydra.util.Either<String, hydra.json.model.Value> visit(hydra.ext.org.yaml.model.Scalar.Null ignored) {
+          public hydra.util.Either<String, hydra.json.model.Value> visit(hydra.yaml.model.Scalar.Null ignored) {
             return hydra.util.Either.<String, hydra.json.model.Value>right(new hydra.json.model.Value.Null());
           }
 
           @Override
-          public hydra.util.Either<String, hydra.json.model.Value> visit(hydra.ext.org.yaml.model.Scalar.Str str) {
+          public hydra.util.Either<String, hydra.json.model.Value> visit(hydra.yaml.model.Scalar.Str str) {
             return hydra.util.Either.<String, hydra.json.model.Value>right(new hydra.json.model.Value.String_((str).value));
           }
         });
       }
 
       @Override
-      public hydra.util.Either<String, hydra.json.model.Value> visit(hydra.ext.org.yaml.model.Node.Sequence nodes) {
+      public hydra.util.Either<String, hydra.json.model.Value> visit(hydra.yaml.model.Node.Sequence nodes) {
         hydra.util.Lazy<hydra.util.Either<String, java.util.List<hydra.json.model.Value>>> results = new hydra.util.Lazy<>(() -> hydra.lib.eithers.MapList.apply(
-          (java.util.function.Function<hydra.ext.org.yaml.model.Node, hydra.util.Either<String, hydra.json.model.Value>>) (n -> hydra.json.yaml.Decode.yamlToJson(n)),
+          (java.util.function.Function<hydra.yaml.model.Node, hydra.util.Either<String, hydra.json.model.Value>>) (n -> hydra.json.yaml.Decode.yamlToJson(n)),
           (nodes).value));
         return hydra.lib.eithers.Map.apply(
           (java.util.function.Function<java.util.List<hydra.json.model.Value>, hydra.json.model.Value>) (vs -> new hydra.json.model.Value.Array(vs)),

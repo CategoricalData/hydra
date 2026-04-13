@@ -10,7 +10,7 @@ Options:
     --include-coders       Also load and generate ext coder modules
     --include-tests        Also load and generate kernel test modules
     --ext-json-dir <dir>   Directory containing ext JSON modules (for --include-coders)
-    --kernel-only          Only generate kernel modules (exclude hydra.ext.*)
+    --kernel-only          Only generate kernel modules (exclude hydra.*)
     --types-only           Only generate type-defining modules
 """
 
@@ -79,7 +79,7 @@ def main():
     parser.add_argument("--types-only", action="store_true",
                         help="Only generate type-defining modules")
     parser.add_argument("--kernel-only", action="store_true",
-                        help="Only generate kernel modules (exclude hydra.ext.*)")
+                        help="Only generate kernel modules (exclude hydra.*)")
     args = parser.parse_args()
 
     if args.include_coders and not args.ext_json_dir:
@@ -143,8 +143,9 @@ def main():
     mods_to_generate = all_main_mods
     if args.kernel_only:
         before = len(mods_to_generate)
-        mods_to_generate = filter_kernel_modules(mods_to_generate)
-        all_main_mods = filter_kernel_modules(all_main_mods)
+        kernel_ns_strings = {ns.value for ns in all_kernel_namespaces}
+        mods_to_generate = [m for m in mods_to_generate if m.namespace.value in kernel_ns_strings]
+        all_main_mods = [m for m in all_main_mods if m.namespace.value in kernel_ns_strings]
         print("Filtering to kernel modules...", flush=True)
         print(f"  Before: {before} modules", flush=True)
         print(f"  After:  {len(mods_to_generate)} kernel modules", flush=True)
@@ -161,7 +162,7 @@ def main():
     full_mods = main_mods + coder_mods
 
     # Generate main modules
-    out_main = os.path.join(out_dir, "src/gen-main")
+    out_main = os.path.join(out_dir, "src/main")
     print(f"Mapping {len(mods_to_generate)} modules to {target_cap}...", flush=True)
     print(f"  Universe: {len(all_main_mods)} modules", flush=True)
     print(f"  Output: {out_main}", flush=True)
@@ -195,7 +196,7 @@ def main():
     ext = {"java": ".java", "python": ".py", "haskell": ".hs", "scala": ".scala",
            "clojure": ".clj", "scheme": ".scm", "common-lisp": ".lisp",
            "emacs-lisp": ".el"}[args.target]
-    main_file_count = _count_files(os.path.join(out_dir, "src/gen-main"), ext)
+    main_file_count = _count_files(os.path.join(out_dir, "src/main"), ext)
 
     print(f"  Generated {main_file_count} files.", flush=True)
     print(f"  Time: {_format_time(step_time)}", flush=True)
@@ -204,7 +205,7 @@ def main():
     # Optionally load and generate test modules
     test_file_count = 0
     if args.include_tests:
-        test_json_dir = args.json_dir.replace("gen-main/json", "gen-test/json")
+        test_json_dir = args.json_dir.replace("src/main/json", "src/test/json")
         print("Loading test modules from JSON...", flush=True)
         print(f"  Source: {test_json_dir}", flush=True)
         step_start = time.time()
@@ -217,23 +218,23 @@ def main():
         print(flush=True)
 
         all_universe = full_mods + test_mods
-        out_test = os.path.join(out_dir, "src/gen-test")
+        out_test = os.path.join(out_dir, "src/test")
 
         # When --kernel-only is active, ext modules are excluded from the main
         # generation targets. But test modules may depend on ext modules (e.g.
-        # hydra.test.serialization depends on hydra.ext.haskell.operators).
+        # hydra.test.serialization depends on hydra.haskell.operators).
         # Generate those ext modules to outMain so test code can reference them.
         if args.kernel_only:
             test_ext_deps = set()
             for m in test_mods:
                 for ns in m.term_dependencies:
-                    if ns.value.startswith("hydra.ext."):
+                    if ns.value.startswith("hydra."):
                         test_ext_deps.add(ns.value)
             if test_ext_deps:
                 ext_mods_for_tests = [m for m in full_mods if m.namespace.value in test_ext_deps]
                 if ext_mods_for_tests:
                     print(f"Generating {len(ext_mods_for_tests)} ext module(s) needed by tests...", flush=True)
-                    out_main_sub = os.path.join(out_dir, "src/gen-main")
+                    out_main_sub = os.path.join(out_dir, "src/main")
                     if args.target == "haskell":
                         write_haskell(os.path.join(out_main_sub, "haskell"), all_universe, ext_mods_for_tests)
                     elif args.target == "java":
@@ -272,7 +273,7 @@ def main():
                                all_universe, test_mods)
 
         step_time = time.time() - step_start
-        test_file_count = _count_files(os.path.join(out_dir, "src/gen-test"), ext)
+        test_file_count = _count_files(os.path.join(out_dir, "src/test"), ext)
 
         print(f"  Generated {test_file_count} test files.", flush=True)
         print(f"  Time: {_format_time(step_time)}", flush=True)

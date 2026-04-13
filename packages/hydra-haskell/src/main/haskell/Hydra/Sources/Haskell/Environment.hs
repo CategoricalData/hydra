@@ -12,7 +12,7 @@ import qualified Hydra.Dsl.Types as T
 
 
 ns :: Namespace
-ns = Namespace "hydra.ext.haskell.environment"
+ns = Namespace "hydra.haskell.environment"
 
 define :: String -> Type -> Binding
 define = defineType ns
