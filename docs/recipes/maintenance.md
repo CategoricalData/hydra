@@ -212,6 +212,88 @@ include "delete orphan files" as a step in their workflows.
 This recipe covers the broader audit — finding orphans that were missed during those workflows
 or that accumulated across multiple changes.
 
+### Stale generated content from cached Haskell binaries
+
+A particularly insidious class of staleness has nothing to do with orphan files —
+the generated content itself is wrong because the executables that produced it were
+linked against an out-of-date kernel.
+
+The Haskell sync executables (`update-haskell-kernel`, `update-json-kernel`, `update-json-test`,
+`bootstrap-from-json`, etc.) are compiled by Stack and cached under
+`heads/haskell/.stack-work/install/`.
+Each binary has constants, type names, namespace strings, and serialized term fragments
+**baked in at link time** from whatever the kernel looked like when the binary was built.
+If you rename a kernel namespace, regenerate `dist/haskell/hydra-kernel/`, then run a generation
+exec without rebuilding it first, the exec emits the **old** namespace string into the JSON
+output — even though the kernel sources on disk are correct.
+
+`sync-haskell.sh` does call `stack build` between phases, so in principle Stack should
+recompile any exec whose dependencies have changed. In practice this is unreliable:
+
+- Stack tracks dependencies by file mtime within `package.yaml`'s `source-dirs`.
+- After a regeneration, the `dist/haskell/hydra-kernel/...` files are rewritten with
+  new mtimes — but if the **content** is unchanged, Stack may consider the dependent
+  exec still up-to-date and skip recompilation.
+- Conversely, if a regeneration changes content but the exec wasn't recompiled because
+  Stack misjudged the dependency graph, the next exec invocation runs against the
+  old in-memory kernel.
+
+The result: **`sync-all` can run successfully and still leave stale string literals
+in `dist/json/`** (or, transitively, in any language target that copies content via
+`bootstrap-from-json`).
+
+#### Detecting the problem
+
+Stale binary cache shows up as:
+
+- A specific text pattern (an old namespace, an old type name, a removed function name)
+  appearing in `dist/json/` or in language-target outputs **after** sync-all completes.
+- The same pattern absent from all hand-written sources (`packages/`, `heads/`, `dist/haskell/`).
+- Mtimes on the offending dist files showing they were rewritten by the recent sync,
+  even though the content is wrong.
+
+A useful audit:
+
+```bash
+# Find string patterns that should no longer exist after a recent rename.
+grep -rln "hydra.module" dist/ packages/hydra-ext/src/main/haskell/
+```
+
+If the only matches are under `dist/`, the cache is stale.
+
+#### Fixing it
+
+The reliable cure is a clean rebuild:
+
+```bash
+# Remove leftover .stack-work directories from before #290 (one-time)
+rm -rf packages/hydra-*/.stack-work
+
+# Wipe the active install snapshot to force a fresh build
+rm -rf heads/haskell/.stack-work/install
+
+# Re-sync everything
+bin/sync-all.sh --targets all
+```
+
+The first `rm -rf` only matters if you have leftover per-package `.stack-work` dirs
+from before the #290 packaging restructure. The second is the important one: removing
+`heads/haskell/.stack-work/install` drops all cached binaries so Stack must recompile
+from source. A full rebuild from cold cache takes 30–60 minutes.
+
+#### When to suspect this hazard
+
+After any of:
+- A namespace rename across the kernel (e.g., #290's `hydra.module` → `hydra.packaging`).
+- An ext-prefix removal (#331).
+- A type rename in `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Types/`.
+- A move of a primitive between libraries.
+- Any structural change to the bootstrap graph.
+
+If in doubt after such a change, do the clean rebuild before trusting `sync-all` output.
+A few unnecessary recompilations are cheaper than a silent JSON kernel that propagates
+stale strings into every downstream language.
+
 ---
 
 ## Checking coding style
