@@ -316,44 +316,44 @@
              fixed)))))
 
 (defun hydra-load-file (path)
-  "Load a generated Lisp file, skipping invalid directives.
-   Uses multi-pass approach to handle forward references: tries each form,
-   then retries failed ones up to 3 times (handles _NAME constants defined after
-   the types that use them, and other ordering dependencies).
+  "Load a generated Lisp file. Defers forms that fail due to forward references
+   and retries them after subsequent definitions have been installed (up to 10
+   passes). If any form still fails after the final pass, signals an error
+   identifying the file, the last error, and the offending form.
    Suppresses style-warnings from generated code (unused variables, etc.)."
   (handler-bind ((style-warning #'muffle-warning))
   (with-open-file (in path :direction :input)
     (let ((*package* (find-package :cl-user))
           (*readtable* (copy-readtable))
           (*read-default-float-format* 'double-float)
-          (failed-forms nil))
-      ;; Read all forms
-      (handler-case
-        (loop
-          (let ((form (read in nil :eof)))
-            (when (eq form :eof) (return))
-            (unless (hydra-skip-form-p form)
-              (handler-case
-                (eval (hydra-transform-form form))
-                (error (e)
-                  (declare (ignore e))
-                  (push form failed-forms))))))
-        (error (e)
-          (format t "Error reading ~A: ~A~%" path e)))
-      ;; Retry failed forms up to 10 times (for cascading dependencies)
-      (setf failed-forms (nreverse failed-forms))
-      (dotimes (pass 10)
-        (when (null failed-forms) (return))
-        (let ((still-failed nil))
-          (dolist (form failed-forms)
+          (pending nil))  ; list of (form . last-error) pairs
+      ;; Read all forms, evaluating each; defer those that fail.
+      (loop
+        (let ((form (read in nil :eof)))
+          (when (eq form :eof) (return))
+          (unless (hydra-skip-form-p form)
             (handler-case
               (eval (hydra-transform-form form))
               (error (e)
-                (declare (ignore e))
-                (push form still-failed))))
-          (setf failed-forms (nreverse still-failed))
+                (push (cons form e) pending))))))
+      (setf pending (nreverse pending))
+      ;; Retry deferred forms up to 10 times to resolve forward references.
+      (dotimes (pass 10)
+        (when (null pending) (return))
+        (let ((still-pending nil))
+          (dolist (entry pending)
+            (handler-case
+              (eval (hydra-transform-form (car entry)))
+              (error (e)
+                (push (cons (car entry) e) still-pending))))
+          (setf pending (nreverse still-pending))
           ;; Set function bindings for newly defined HYDRA_ variables
-          (hydra-set-function-bindings)))))))
+          (hydra-set-function-bindings)))
+      ;; Fail loudly if anything remains unresolved.
+      (when pending
+        (let ((entry (first pending)))
+          (error "hydra-load-file: ~A: ~A unresolved form(s) after 10 retries.~%First failure: ~A~%Form: ~S"
+                 path (length pending) (cdr entry) (car entry))))))))
 
 (defun collect-lisp-files (dir &optional prefix)
   "Collect all .lisp files from DIR recursively, returning relative paths."
@@ -410,19 +410,21 @@
                      "inference.lisp" "checking.lisp" "serialization.lisp" "reduction.lisp"
                      "json/coder.lisp" "json/parser.lisp" "json/writer.lisp"
                      "json/encode.lisp" "json/decode.lisp" "json/bootstrap.lisp"
-                     ;; Ext coder modules (dependency order: syntax, environment, names, utils, serde, language, testing, coder)
-                     "ext/haskell/syntax.lisp" "ext/haskell/language.lisp" "ext/haskell/utils.lisp"
-                     "ext/haskell/serde.lisp" "ext/haskell/testing.lisp" "ext/haskell/coder.lisp"
-                     "ext/java/syntax.lisp" "ext/java/environment.lisp" "ext/java/language.lisp"
-                     "ext/java/utils.lisp" "ext/java/serde.lisp" "ext/java/testing.lisp" "ext/java/coder.lisp"
-                     "ext/python/syntax.lisp" "ext/python/environment.lisp" "ext/python/language.lisp"
-                     "ext/python/names.lisp" "ext/python/utils.lisp" "ext/python/serde.lisp"
-                     "ext/python/testing.lisp" "ext/python/coder.lisp"
-                     "ext/scala/syntax.lisp" "ext/scala/language.lisp" "ext/scala/utils.lisp"
-                     "ext/scala/serde.lisp" "ext/scala/coder.lisp"
-                     "ext/lisp/syntax.lisp" "ext/lisp/language.lisp"
-                     "ext/lisp/serde.lisp" "ext/lisp/coder.lisp"
-                     "ext/org/json/decoding.lisp"))
+                     ;; Language-specific coder modules (dependency order: syntax, environment, names, utils, serde, language, testing, coder)
+                     "haskell/syntax.lisp" "haskell/language.lisp" "haskell/operators.lisp"
+                     "haskell/environment.lisp" "haskell/utils.lisp"
+                     "haskell/serde.lisp" "haskell/testing.lisp" "haskell/coder.lisp"
+                     "java/syntax.lisp" "java/environment.lisp" "java/names.lisp"
+                     "java/language.lisp"
+                     "java/utils.lisp" "java/serde.lisp" "java/testing.lisp" "java/coder.lisp"
+                     "python/syntax.lisp" "python/environment.lisp" "python/language.lisp"
+                     "python/names.lisp" "python/utils.lisp" "python/serde.lisp"
+                     "python/testing.lisp" "python/coder.lisp"
+                     "scala/syntax.lisp" "scala/language.lisp" "scala/utils.lisp"
+                     "scala/serde.lisp" "scala/coder.lisp"
+                     "lisp/syntax.lisp" "lisp/language.lisp"
+                     "lisp/serde.lisp" "lisp/coder.lisp"
+                     "org/json/decoding.lisp"))
          ;; Collect ALL .lisp files from gen-main
          (all-files (collect-lisp-files base))
          ;; Build ordered list: priority first, then remaining

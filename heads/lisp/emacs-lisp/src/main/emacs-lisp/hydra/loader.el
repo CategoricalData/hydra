@@ -331,39 +331,44 @@
 (defun hydra-load-file (path &optional pre-transformed)
   "Load a generated Emacs Lisp file with transformations.
 If PRE-TRANSFORMED is non-nil, skip the Lisp-1→Lisp-2 transformation
-\(forms are already transformed, e.g. from a cache file)."
+\(forms are already transformed, e.g. from a cache file).
+Signals an error if any form remains unresolved after 10 retry passes."
   (with-temp-buffer
     (set-buffer-multibyte t)
     (let ((coding-system-for-read 'utf-8-unix))
       (insert-file-contents path))
     (goto-char (point-min))
-    (let ((failed-forms nil))
-      ;; Read and eval all forms
+    (let ((pending nil)  ; list of (form . last-error) pairs
+          (last-error nil))
+      ;; Read and eval all forms; defer failures.
       (condition-case nil
           (while t
             (let ((form (read (current-buffer))))
               (unless (hydra-skip-form-p form)
                 (let ((evform (if pre-transformed form (hydra-transform-form form))))
-                  (condition-case _err
+                  (condition-case err
                       (eval evform t)
                     (error
-                     (push evform failed-forms)))))))
+                     (push (cons evform err) pending)))))))
         (end-of-file nil))
-      ;; Retry failed forms
-      (setq failed-forms (nreverse failed-forms))
+      ;; Retry deferred forms up to 10 times.
+      (setq pending (nreverse pending))
       (let ((pass 0))
-        (while (and failed-forms (< pass 10))
-          (let ((still-failed nil))
-            (dolist (form failed-forms)
+        (while (and pending (< pass 10))
+          (let ((still-pending nil))
+            (dolist (entry pending)
               (condition-case err
-                  (eval form t)
+                  (eval (car entry) t)
                 (error
-                 (when (= pass 9)
-                   (message "LOAD ERROR after 10 retries: %s" (error-message-string err)))
-                 (push form still-failed))))
-            (setq failed-forms (nreverse still-failed))
+                 (setq last-error err)
+                 (push (cons (car entry) err) still-pending))))
+            (setq pending (nreverse still-pending))
             (hydra-set-function-bindings))
-          (setq pass (1+ pass)))))))
+          (setq pass (1+ pass))))
+      ;; Fail loudly if anything remains unresolved.
+      (when pending
+        (error "hydra-load-file: %s: %d unresolved form(s) after 10 retries. First failure: %s"
+               path (length pending) (error-message-string last-error))))))
 
 ;; ============================================================================
 ;; Module loading
@@ -413,20 +418,20 @@ If PRE-TRANSFORMED is non-nil, skip the Lisp-1→Lisp-2 transformation
     "inference.el" "checking.el" "serialization.el" "reduction.el"
     "json/parser.el" "json/writer.el"
     "json/encode.el" "json/decode.el" "json/bootstrap.el"
-    ;; Ext modules: load utils/syntax/language/serde before coders
-    "ext/haskell/syntax.el" "ext/haskell/language.el"
-    "ext/haskell/operators.el" "ext/haskell/environment.el" "ext/haskell/utils.el"
-    "ext/haskell/serde.el" "ext/haskell/coder.el"
-    "ext/java/syntax.el" "ext/java/language.el" "ext/java/names.el"
-    "ext/java/environment.el" "ext/java/utils.el"
-    "ext/java/serde.el" "ext/java/coder.el"
-    "ext/lisp/syntax.el" "ext/lisp/language.el"
-    "ext/lisp/serde.el" "ext/lisp/coder.el"
-    "ext/python/syntax.el" "ext/python/language.el" "ext/python/names.el"
-    "ext/python/environment.el" "ext/python/utils.el"
-    "ext/python/serde.el" "ext/python/coder.el"
-    "ext/scala/syntax.el" "ext/scala/language.el"
-    "ext/scala/utils.el" "ext/scala/serde.el" "ext/scala/coder.el")
+    ;; Language-specific modules: load utils/syntax/language/serde before coders
+    "haskell/syntax.el" "haskell/language.el"
+    "haskell/operators.el" "haskell/environment.el" "haskell/utils.el"
+    "haskell/serde.el" "haskell/coder.el"
+    "java/syntax.el" "java/language.el" "java/names.el"
+    "java/environment.el" "java/utils.el"
+    "java/serde.el" "java/coder.el"
+    "lisp/syntax.el" "lisp/language.el"
+    "lisp/serde.el" "lisp/coder.el"
+    "python/syntax.el" "python/language.el" "python/names.el"
+    "python/environment.el" "python/utils.el"
+    "python/serde.el" "python/coder.el"
+    "scala/syntax.el" "scala/language.el"
+    "scala/utils.el" "scala/serde.el" "scala/coder.el")
   "Priority ordering for gen-main module loading.")
 
 (defun hydra-load-gen-main ()
