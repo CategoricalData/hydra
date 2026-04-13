@@ -55,13 +55,17 @@ case "$DIALECT" in
           | grep -v "^run-tests.el: Warning:"
         ;;
     scheme)
-        cd "$HEAD_DIR"
         GEN_MAIN="$HYDRA_ROOT/dist/scheme/hydra-kernel/src/main/scheme"
         GEN_TEST="$HYDRA_ROOT/dist/scheme/hydra-kernel/src/test/scheme"
+        # Run from GEN_TEST so that guile's (include "annotation_bindings.scm")
+        # inside the (define-library (hydra test test_graph) ...) body resolves
+        # to "hydra/test/annotation_bindings.scm" relative to CWD — i.e. the copy
+        # placed by sync-lisp.sh alongside the generated test_graph.scm.
+        cd "$GEN_TEST"
         if command -v guile > /dev/null 2>&1; then
-            guile --no-auto-compile -L "$GEN_MAIN" -L "$GEN_TEST" -L src/main/scheme -s run-tests.scm 2>/dev/null
+            guile --no-auto-compile -L "$GEN_MAIN" -L "$GEN_TEST" -L "$HEAD_DIR/src/main/scheme" -s "$HEAD_DIR/run-tests.scm"
         elif command -v chibi-scheme > /dev/null 2>&1; then
-            chibi-scheme -I "$GEN_MAIN" -I "$GEN_TEST" -I src/main/scheme run-tests.scm 2>/dev/null
+            chibi-scheme -I "$GEN_MAIN" -I "$GEN_TEST" -I "$HEAD_DIR/src/main/scheme" "$HEAD_DIR/run-tests.scm"
         else
             echo "Error: No Scheme implementation found. Install guile or chibi-scheme." >&2
             exit 1

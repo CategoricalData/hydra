@@ -12,7 +12,7 @@ object regex:
 
   def findAll(pattern: String)(input: String): Seq[String] =
     val m = Pattern.compile(pattern).matcher(input)
-    val results = scala.collection.mutable.ArrayBuffer[String]()
+    val results = _root_.scala.collection.mutable.ArrayBuffer[String]()
     while m.find() do results += m.group()
     results.toSeq
 
