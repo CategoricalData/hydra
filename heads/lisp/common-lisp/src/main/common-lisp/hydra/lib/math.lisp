@@ -248,7 +248,15 @@
 (defvar hydra_lib_math_pow
   (lambda (base)
     (lambda (exp-val)
-      (expt (float base 1.0d0) (float exp-val 1.0d0)))))
+      (let ((b (float base 1.0d0)) (e (float exp-val 1.0d0)))
+        (cond
+          ((and (zerop b) (zerop e)) 1.0d0)
+          ((and (zerop b) (< e 0.0d0)) +hydra-pos-inf+)
+          (t
+           (handler-case
+             (let ((r (expt b e)))
+               (if (complexp r) +hydra-nan+ r))
+             (arithmetic-error () +hydra-nan+))))))))
 
 ;; pred :: Int -> Int
 (defvar hydra_lib_math_pred

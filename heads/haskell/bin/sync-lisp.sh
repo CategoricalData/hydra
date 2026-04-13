@@ -213,7 +213,7 @@ if [ -f "$CL_TESTGRAPH" ]; then
     sed -i '' '/^(cl:defvar hydra_test_test_graph_test_graph hydra_lexical_empty_graph)/d' "$CL_TESTGRAPH"
     cat >> "$CL_TESTGRAPH" << 'CLEOF'
 
-(cl:defvar hydra_test_test_graph_test_context (cl:list (cl:cons :functions cl:nil) (cl:cons :annotations cl:nil) (cl:cons :variable_types cl:nil)))
+(cl:defvar hydra_test_test_graph_test_context (make-hydra_context_context (cl:list) (cl:list) hydra_lib_maps_empty))
 
 (cl:defvar hydra_test_test_graph_test_graph
   (cl:let* ((std-prims (standard-library))
@@ -224,7 +224,15 @@ if [ -f "$CL_TESTGRAPH" ]; then
             (schema-types (hydra_lib_maps_from_list (cl:append kernel-schemas test-schemas)))
             (prim-map (hydra_lib_maps_from_list (cl:mapcar (cl:lambda (p) (cl:list (cl:car p) (cl:cdr p))) std-prims)))
             (bound-terms (hydra_lib_maps_from_list (cl:append (annotation-bindings) (hydra_lib_maps_to_list hydra_test_test_graph_test_terms)))))
-    (cl:list (cl:cons :bound_terms bound-terms) (cl:cons :bound_types cl:nil) (cl:cons :class_constraints cl:nil) (cl:cons :lambda_variables cl:nil) (cl:cons :metadata cl:nil) (cl:cons :primitives prim-map) (cl:cons :schema_types schema-types) (cl:cons :type_variables cl:nil))))
+    (make-hydra_graph_graph
+      bound-terms
+      hydra_lib_maps_empty
+      hydra_lib_maps_empty
+      hydra_lib_sets_empty
+      hydra_lib_maps_empty
+      prim-map
+      schema-types
+      hydra_lib_sets_empty)))
 CLEOF
 fi
 
