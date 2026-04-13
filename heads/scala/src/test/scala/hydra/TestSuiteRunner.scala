@@ -103,7 +103,7 @@ object TestSuiteRunner {
    * Add term-level bindings for annotation and rewriting functions needed by tests.
    * These are hand-written because the generated source modules exceed method size limits.
    */
-  private def addAnnotationsBindings(boundTerms: scala.collection.mutable.Map[String, Term]): Unit = {
+  private def addAnnotationsBindings(boundTerms: _root_.scala.collection.mutable.Map[String, Term]): Unit = {
     // hydra.rewriting.deannotateTerm
     boundTerms += ("hydra.rewriting.deannotateTerm" ->
       lambda("t",
@@ -231,7 +231,7 @@ object TestSuiteRunner {
   /**
    * Add term-level binding for hydra.lexical.emptyGraph.
    */
-  private def addConstantBindings(boundTerms: scala.collection.mutable.Map[String, Term]): Unit = {
+  private def addConstantBindings(boundTerms: _root_.scala.collection.mutable.Map[String, Term]): Unit = {
     boundTerms += ("hydra.lexical.emptyGraph" ->
       record("hydra.graph.Graph",
         field("boundTerms", Term.map(Map.empty)),
@@ -378,7 +378,7 @@ object TestSuiteRunner {
     }
 
     // Bound terms
-    val boundTerms = scala.collection.mutable.Map.empty[hydra.core.Name, hydra.core.Term]
+    val boundTerms = _root_.scala.collection.mutable.Map.empty[hydra.core.Name, hydra.core.Term]
 
     // Primitives are resolved via graphPrimitives, not boundTerms.
     // No need to bridge them as term bindings.

@@ -139,11 +139,9 @@ if [ -f "$SCHEME_TESTGRAPH" ]; then
     cat >> "$SCHEME_TESTGRAPH" << 'SCMEOF'
 ;; Include annotation term-level bindings (shared with test runner).
 SCMEOF
-    # Insert include with relative path from test_graph.scm to annotation_bindings.scm
-    # test_graph.scm is at dist/scheme/hydra-kernel/src/test/scheme/hydra/test/
-    # annotation_bindings.scm is at heads/lisp/scheme/src/test/scheme/hydra/
-    ANN_BINDINGS_PATH="../../../../../../../../heads/lisp/scheme/src/test/scheme/hydra/annotation_bindings.scm"
-    echo "(include \"$ANN_BINDINGS_PATH\")" >> "$SCHEME_TESTGRAPH"
+    # Include the annotation_bindings.scm that was just copied alongside this file
+    # (see the `cp` above that places it next to test_graph.scm in the same directory).
+    echo '(include "annotation_bindings.scm")' >> "$SCHEME_TESTGRAPH"
     cat >> "$SCHEME_TESTGRAPH" << 'SCMEOF'
 
 (define hydra_test_test_graph_test_context (make-hydra_context_context (list) (list) hydra_lib_maps_empty))

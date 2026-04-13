@@ -124,9 +124,9 @@ import _root_.java.io.File
   var modsToGenerate = allMainMods
   if kernelOnly then
     val before = modsToGenerate.size
-    val kernelNsStrings = allKernelNamespaces.map(_.value).toSet
-    modsToGenerate = modsToGenerate.filter(m => kernelNsStrings.contains(m.namespace.value))
-    allMainMods = allMainMods.filter(m => kernelNsStrings.contains(m.namespace.value))
+    val kernelNsStrings = allKernelNamespaces.toSet
+    modsToGenerate = modsToGenerate.filter(m => kernelNsStrings.contains(m.namespace))
+    allMainMods = allMainMods.filter(m => kernelNsStrings.contains(m.namespace))
     println(s"Filtering to kernel modules... $before -> ${modsToGenerate.size}")
     println()
 
