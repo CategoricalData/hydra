@@ -33,8 +33,8 @@ import qualified Hydra.Dsl.Meta.Types        as MetaTypes
 import qualified Hydra.Dsl.Packaging       as Packaging
 import qualified Hydra.Dsl.Parsing      as Parsing
 import           Hydra.Dsl.Meta.Phantoms     as Phantoms hiding (
-  binding, elimination, field, fields, fieldType, floatType, floatValue, function, injection, integerType,
-  integerValue, lambda, literal, literalType, term, type_, typeScheme)
+  binding, field, fields, fieldType, floatType, floatValue, injection, integerType,
+  integerValue, lambda, literal, literalType, project, term, type_, typeScheme)
 import qualified Hydra.Dsl.Prims             as Prims
 import qualified Hydra.Dsl.Meta.Tabular           as Tabular
 import qualified Hydra.Dsl.Meta.Testing      as Testing
@@ -66,13 +66,12 @@ module_ = Module ns definitions
    definitions = [
      toDefinition readTerm, -- TODO: move this to hydra.read.core
      toDefinition binding,
-     toDefinition elimination,
+     toDefinition caseStatement,
      toDefinition field,
      toDefinition fieldType,
      toDefinition fields,
      toDefinition floatValue,
      toDefinition floatType,
-     toDefinition function,
      toDefinition injection,
      toDefinition integerValue,
      toDefinition integerType,
@@ -86,6 +85,7 @@ module_ = Module ns definitions
      toDefinition set_,
      toDefinition literal,
      toDefinition literalType,
+     toDefinition projection,
      toDefinition term,
      toDefinition type_,
      toDefinition typeScheme]
@@ -114,38 +114,36 @@ binding = define "binding" $
     string " = ",
     term @@ var "t"]
       
-elimination :: TTermDefinition (Elimination -> String)
-elimination = define "elimination" $
-  doc "Show an elimination as a string" $
-  "elm" ~>
-  cases _Elimination (var "elm") Nothing [
-    _Elimination_record>>: "proj" ~>
-      "tname" <~ unwrap _Name @@ (Core.projectionTypeName $ var "proj") $
-      "fname" <~ unwrap _Name @@ (Core.projectionField $ var "proj") $
-      Strings.cat $ list [
-        string "project(",
-        var "tname",
-        string "){",
-        var "fname",
-        string "}"],
-    _Elimination_union>>: "cs" ~>
-      "tname" <~ unwrap _Name @@ (Core.caseStatementTypeName $ var "cs") $
-      "mdef" <~ Core.caseStatementDefault (var "cs") $
-      "cases" <~ Core.caseStatementCases (var "cs") $
-      "defaultField" <~ Maybes.maybe
-        (list ([] :: [TTerm Field]))
-        ("d" ~> list [Core.field (Core.name $ string "[default]") (var "d")])
-        (var "mdef") $
-      "allFields" <~ Lists.concat (list [var "cases", var "defaultField"]) $
-      Strings.cat $ list [
-        string "case(",
-        var "tname",
-        string ")",
-        fields @@ var "allFields"],
-    _Elimination_wrap>>: "tname" ~> Strings.cat $ list [
-      string "unwrap(",
-      unwrap _Name @@ var "tname",
-      string ")"]]
+caseStatement :: TTermDefinition (CaseStatement -> String)
+caseStatement = define "caseStatement" $
+  doc "Show a case statement as a string" $
+  "cs" ~>
+  "tname" <~ unwrap _Name @@ (Core.caseStatementTypeName $ var "cs") $
+  "mdef" <~ Core.caseStatementDefault (var "cs") $
+  "csCases" <~ Core.caseStatementCases (var "cs") $
+  "defaultField" <~ Maybes.maybe
+    (list ([] :: [TTerm Field]))
+    ("d" ~> list [Core.field (Core.name $ string "[default]") (var "d")])
+    (var "mdef") $
+  "allFields" <~ Lists.concat (list [var "csCases", var "defaultField"]) $
+  Strings.cat $ list [
+    string "case(",
+    var "tname",
+    string ")",
+    fields @@ var "allFields"]
+
+projection :: TTermDefinition (Projection -> String)
+projection = define "projection" $
+  doc "Show a projection as a string" $
+  "proj" ~>
+  "tname" <~ unwrap _Name @@ (Core.projectionTypeName $ var "proj") $
+  "fname" <~ unwrap _Name @@ (Core.projectionField $ var "proj") $
+  Strings.cat $ list [
+    string "project(",
+    var "tname",
+    string "){",
+    var "fname",
+    string "}"]
 
 field :: TTermDefinition (Field -> String)
 field = define "field" $
@@ -189,13 +187,6 @@ floatType = define "floatType" $
     _FloatType_bigfloat>>: constant $ string "bigfloat",
     _FloatType_float32>>: constant $ string "float32",
     _FloatType_float64>>: constant $ string "float64"]
-
-function :: TTermDefinition (Function -> String)
-function = define "function" $
-  doc "Show a function as a string" $
-  "f" ~> cases _Function (var "f") Nothing [
-    _Function_elimination>>: elimination,
-    _Function_lambda>>: lambda]
 
 injection :: TTermDefinition (Injection -> String)
 injection = define "injection" $
@@ -366,6 +357,7 @@ term = define "term" $
         string "(",
         Strings.intercalate (string " @ ") (var "termStrs"),
         string ")"],
+    _Term_cases>>: caseStatement,
     _Term_either>>: "e" ~> Eithers.either_
       ("l" ~> Strings.cat $ list [
         string "left(",
@@ -376,7 +368,7 @@ term = define "term" $
         term @@ var "r",
         string ")"])
       (var "e"),
-    _Term_function>>: function,
+    _Term_lambda>>: lambda,
     _Term_let>>: "l" ~> let_ @@ var "l",
     _Term_list>>: "els" ~>
       "termStrs" <~ Lists.map term (var "els") $
@@ -407,6 +399,7 @@ term = define "term" $
       string ", ",
       term @@ (Pairs.second $ var "p"),
       string ")"],
+    _Term_project>>: projection,
     _Term_record>>: "rec" ~>
       "tname" <~ unwrap _Name @@ (Core.recordTypeName $ var "rec") $
       "flds" <~ Core.recordFields (var "rec") $
@@ -438,6 +431,10 @@ term = define "term" $
         string "⟩"],
     _Term_union>>: injection,
     _Term_unit>>: constant $ string "unit",
+    _Term_unwrap>>: "tname" ~> Strings.cat $ list [
+      string "unwrap(",
+      unwrap _Name @@ var "tname",
+      string ")"],
     _Term_variable>>: "name" ~> unwrap _Name @@ var "name",
     _Term_wrap>>: "wt" ~>
       "tname" <~ unwrap _Name @@ (Core.wrappedTermTypeName $ var "wt") $

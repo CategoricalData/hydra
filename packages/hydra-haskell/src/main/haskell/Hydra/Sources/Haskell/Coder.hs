@@ -128,9 +128,12 @@ module_ = Module ns definitions
       toDefinition constructModule,
       toDefinition emptyMetadata,
       toDefinition encodeCaseExpression,
-      toDefinition encodeFunction,
+      toDefinition encodeLambdaTerm,
       toDefinition encodeLiteral,
+      toDefinition encodeProjection,
+      toDefinition encodeStandaloneCases,
       toDefinition encodeTerm,
+      toDefinition encodeUnwrap,
       toDefinition encodeType,
       toDefinition encodeTypeWithClassAssertions,
       toDefinition extendMetaForTerm,
@@ -336,29 +339,37 @@ encodeCaseExpression = haskellCoderDefinition "encodeCaseExpression" $
       H._CaseExpression_case>>: var "scrutinee",
       H._CaseExpression_alternatives>>: Lists.concat2 (var "ecases") (var "dcases")]
 
-encodeFunction :: TTermDefinition (Int -> HaskellNamespaces -> Function -> Context -> Graph -> Either Error H.Expression)
-encodeFunction = haskellCoderDefinition "encodeFunction" $
-  doc "Encode a Hydra function as a Haskell expression" $
-  "depth" ~> "namespaces" ~> "fun" ~> "cx" ~> "g" ~>
-    cases _Function (var "fun") Nothing [
-      _Function_elimination>>: "e" ~>
-        cases _Elimination (var "e") Nothing [
-          _Elimination_wrap>>: "name" ~>
-            right $ inject H._Expression H._Expression_variable $ HaskellUtils.elementReference @@ var "namespaces" @@
-              (Names.qname @@ (Maybes.fromJust $ Names.namespaceOf @@ var "name") @@ (HaskellUtils.newtypeAccessorName @@ var "name")),
-          _Elimination_record>>: "proj" ~> lets [
-            "dn">: Core.projectionTypeName $ var "proj",
-            "fname">: Core.projectionField $ var "proj"] $
-            right $ inject H._Expression H._Expression_variable $ HaskellUtils.recordFieldReference @@ var "namespaces" @@ var "dn" @@ var "fname",
-          _Elimination_union>>: "stmt" ~>
-            -- When used standalone (not applied to an argument), wrap in a lambda
-            Eithers.map (HaskellUtils.hslambda @@ (HaskellUtils.rawName @@ string "x"))
-              (encodeCaseExpression @@ var "depth" @@ var "namespaces" @@ var "stmt" @@ (HaskellUtils.hsvar @@ string "x") @@ var "cx" @@ var "g")],
-      _Function_lambda>>: "lam" ~> lets [
-        "v">: Core.lambdaParameter $ var "lam",
-        "body">: Core.lambdaBody $ var "lam"] $
-        "hbody" <<~ encodeTerm @@ var "depth" @@ var "namespaces" @@ var "body" @@ var "cx" @@ var "g" $
-          right $ HaskellUtils.hslambda @@ (HaskellUtils.elementReference @@ var "namespaces" @@ var "v") @@ var "hbody"]
+encodeUnwrap :: TTermDefinition (HaskellNamespaces -> Name -> Either Error H.Expression)
+encodeUnwrap = haskellCoderDefinition "encodeUnwrap" $
+  doc "Encode an unwrap term as a Haskell expression" $
+  "namespaces" ~> "name" ~>
+  right $ inject H._Expression H._Expression_variable $ HaskellUtils.elementReference @@ var "namespaces" @@
+    (Names.qname @@ (Maybes.fromJust $ Names.namespaceOf @@ var "name") @@ (HaskellUtils.newtypeAccessorName @@ var "name"))
+
+encodeProjection :: TTermDefinition (HaskellNamespaces -> Projection -> Either Error H.Expression)
+encodeProjection = haskellCoderDefinition "encodeProjection" $
+  doc "Encode a record projection as a Haskell expression" $
+  "namespaces" ~> "proj" ~> lets [
+    "dn">: Core.projectionTypeName $ var "proj",
+    "fname">: Core.projectionField $ var "proj"] $
+    right $ inject H._Expression H._Expression_variable $ HaskellUtils.recordFieldReference @@ var "namespaces" @@ var "dn" @@ var "fname"
+
+encodeLambdaTerm :: TTermDefinition (Int -> HaskellNamespaces -> Lambda -> Context -> Graph -> Either Error H.Expression)
+encodeLambdaTerm = haskellCoderDefinition "encodeLambdaTerm" $
+  doc "Encode a Hydra lambda as a Haskell expression" $
+  "depth" ~> "namespaces" ~> "lam" ~> "cx" ~> "g" ~> lets [
+    "v">: Core.lambdaParameter $ var "lam",
+    "body">: Core.lambdaBody $ var "lam"] $
+    "hbody" <<~ encodeTerm @@ var "depth" @@ var "namespaces" @@ var "body" @@ var "cx" @@ var "g" $
+      right $ HaskellUtils.hslambda @@ (HaskellUtils.elementReference @@ var "namespaces" @@ var "v") @@ var "hbody"
+
+encodeStandaloneCases :: TTermDefinition (Int -> HaskellNamespaces -> CaseStatement -> Context -> Graph -> Either Error H.Expression)
+encodeStandaloneCases = haskellCoderDefinition "encodeStandaloneCases" $
+  doc "Encode a standalone (un-applied) case statement as a Haskell lambda over a case expression" $
+  "depth" ~> "namespaces" ~> "stmt" ~> "cx" ~> "g" ~>
+  -- When used standalone (not applied to an argument), wrap in a lambda
+  Eithers.map (HaskellUtils.hslambda @@ (HaskellUtils.rawName @@ string "x"))
+    (encodeCaseExpression @@ var "depth" @@ var "namespaces" @@ var "stmt" @@ (HaskellUtils.hsvar @@ string "x") @@ var "cx" @@ var "g")
 
 encodeLiteral :: TTermDefinition (Literal -> Context -> Either Error H.Expression)
 encodeLiteral = haskellCoderDefinition "encodeLiteral" $
@@ -438,21 +449,11 @@ encodeTerm = haskellCoderDefinition "encodeTerm" $
             "hfun" <<~ var "encode" @@ var "fun" $
               "harg" <<~ var "encode" @@ var "arg" $
                 right $ HaskellUtils.hsapp @@ var "hfun" @@ var "harg") [
-          _Term_function>>: "f" ~>
-            cases _Function (var "f")
-              (Just $
-                "hfun" <<~ var "encode" @@ var "fun" $
-                  "harg" <<~ var "encode" @@ var "arg" $
-                    right $ HaskellUtils.hsapp @@ var "hfun" @@ var "harg") [
-              _Function_elimination>>: "e" ~>
-                cases _Elimination (var "e")
-                  (Just $
-                    "hfun" <<~ var "encode" @@ var "fun" $
-                      "harg" <<~ var "encode" @@ var "arg" $
-                        right $ HaskellUtils.hsapp @@ var "hfun" @@ var "harg") [
-                  _Elimination_union>>: "stmt" ~>
-                    "harg" <<~ var "encode" @@ var "arg" $
-                      encodeCaseExpression @@ var "depth" @@ var "namespaces" @@ var "stmt" @@ var "harg" @@ var "cx" @@ var "g"]]],
+          _Term_cases>>: "stmt" ~>
+            "harg" <<~ var "encode" @@ var "arg" $
+              encodeCaseExpression @@ var "depth" @@ var "namespaces" @@ var "stmt" @@ var "harg" @@ var "cx" @@ var "g"],
+      _Term_cases>>: "stmt" ~>
+        encodeStandaloneCases @@ var "depth" @@ var "namespaces" @@ var "stmt" @@ var "cx" @@ var "g",
       _Term_either>>: "e" ~> Eithers.either_
           ("l" ~>
             "hl" <<~ var "encode" @@ var "l" $
@@ -461,8 +462,12 @@ encodeTerm = haskellCoderDefinition "encodeTerm" $
             "hr" <<~ var "encode" @@ var "r" $
               right $ HaskellUtils.hsapp @@ (HaskellUtils.hsvar @@ string "Right") @@ var "hr")
           (var "e"),
-      _Term_function>>: "f" ~>
-        encodeFunction @@ var "depth" @@ var "namespaces" @@ var "f" @@ var "cx" @@ var "g",
+      _Term_lambda>>: "lam" ~>
+        encodeLambdaTerm @@ var "depth" @@ var "namespaces" @@ var "lam" @@ var "cx" @@ var "g",
+      _Term_project>>: "proj" ~>
+        encodeProjection @@ var "namespaces" @@ var "proj",
+      _Term_unwrap>>: "name" ~>
+        encodeUnwrap @@ var "namespaces" @@ var "name",
       _Term_let>>: "letTerm" ~> lets [
         "collectBindings">: "lt" ~>
           "bs" <~ Core.letBindings (var "lt") $

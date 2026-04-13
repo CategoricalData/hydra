@@ -126,12 +126,8 @@ def isTrivialTerm(t: hydra.core.Term): Boolean =
     {
       lazy val arg: hydra.core.Term = (v_Term_application_app.argument)
       fun match
-        case hydra.core.Term.function(v_Term_function_f) => v_Term_function_f match
-          case hydra.core.Function.elimination(v_Function_elimination_e) => v_Function_elimination_e match
-            case hydra.core.Elimination.record(v_Elimination_record__) => hydra.predicates.isTrivialTerm(arg)
-            case hydra.core.Elimination.wrap(v_Elimination_wrap__) => hydra.predicates.isTrivialTerm(arg)
-            case _ => false
-          case _ => false
+        case hydra.core.Term.project(v_Term_project__) => hydra.predicates.isTrivialTerm(arg)
+        case hydra.core.Term.unwrap(v_Term_unwrap__) => hydra.predicates.isTrivialTerm(arg)
         case _ => false
     }
   }

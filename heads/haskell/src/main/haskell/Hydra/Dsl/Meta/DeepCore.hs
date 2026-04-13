@@ -36,7 +36,7 @@ cases tname arg dflt fields = match tname dflt fields @@@ arg
 
 -- | Create a union case statement with optional default case
 match :: Name -> TTerm (Maybe Term) -> [TTerm Field] -> TTerm Term
-match tname dflt fields = Core.termFunction $ Core.functionElimination $ Core.eliminationUnion $
+match tname dflt fields = Core.termCases $
   Core.caseStatement
     (Core.nameLift tname)
     dflt
@@ -52,11 +52,11 @@ field fname body = Core.field (Core.nameLift fname) body
 
 -- | Create a lambda term with a variable name and body
 lambda :: String -> TTerm Term -> TTerm Term
-lambda v body = Core.termFunction $ Core.functionLambda $ Core.lambda (Core.name (P.string v)) P.nothing $ body
+lambda v body = Core.termLambda $ Core.lambda (Core.name (P.string v)) P.nothing $ body
 
 -- | Create a lambda term with a dynamic parameter name, optional domain, and body
 lambdaTyped :: TTerm Name -> TTerm (Maybe Type) -> TTerm Term -> TTerm Term
-lambdaTyped name domain body = Core.termFunction $ Core.functionLambda $ Core.lambda name domain body
+lambdaTyped name domain body = Core.termLambda $ Core.lambda name domain body
 
 constant :: TTerm Term -> TTerm Term
 constant = lambda ignoredVariable
@@ -78,7 +78,7 @@ primitiveEncoded name = Core.termVariable $ P.encodedName name
 
 -- | Create a record field projection
 project :: Name -> Name -> TTerm Term
-project tname fname = Core.termFunction $ Core.functionElimination $ Core.eliminationRecord $
+project tname fname = Core.termProject $
   Core.projection (Core.nameLift tname) (Core.nameLift fname)
 
 unwrap :: Name -> TTerm Term
@@ -86,7 +86,7 @@ unwrap name = unwrapDynamic (Core.nameLift name)
 
 -- | Create an unwrap elimination for a wrapped type
 unwrapDynamic :: TTerm Name -> TTerm Term
-unwrapDynamic tname = Core.termFunction $ Core.functionElimination $ Core.eliminationWrap tname
+unwrapDynamic tname = Core.termUnwrap tname
 
 --------------------------------------------------------------------------------
 -- Literals and basic terms

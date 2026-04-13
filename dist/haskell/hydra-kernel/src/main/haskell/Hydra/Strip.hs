@@ -135,13 +135,10 @@ removeTypesFromTerm term =
                               Core.bindingTerm = (Core.bindingTerm b),
                               Core.bindingType = Nothing}
                 in case rewritten of
-                  Core.TermFunction v0 -> case v0 of
-                    Core.FunctionElimination v1 -> Core.TermFunction (Core.FunctionElimination v1)
-                    Core.FunctionLambda v1 -> Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                      Core.lambdaParameter = (Core.lambdaParameter v1),
-                      Core.lambdaDomain = Nothing,
-                      Core.lambdaBody = (Core.lambdaBody v1)}))
-                    _ -> Core.TermFunction v0
+                  Core.TermLambda v0 -> Core.TermLambda (Core.Lambda {
+                    Core.lambdaParameter = (Core.lambdaParameter v0),
+                    Core.lambdaDomain = Nothing,
+                    Core.lambdaBody = (Core.lambdaBody v0)})
                   Core.TermLet v0 -> Core.TermLet (Core.Let {
                     Core.letBindings = (Lists.map stripBinding (Core.letBindings v0)),
                     Core.letBody = (Core.letBody v0)})

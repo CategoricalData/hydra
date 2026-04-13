@@ -75,28 +75,26 @@
                                                                   "function": {
                                                                     "application": {
                                                                       "argument": {
-                                                                        "function": {
-                                                                          "lambda": {
-                                                                            "body": {
-                                                                              "application": {
-                                                                                "argument": {"variable": "s"},
-                                                                                "function": {"variable": "hydra.lib.strings.length"}}},
-                                                                            "domain": {"literal": {"string": {}}},
-                                                                            "parameter": "s"}}},
+                                                                        "lambda": {
+                                                                          "body": {
+                                                                            "application": {
+                                                                              "argument": {"variable": "s"},
+                                                                              "function": {"variable": "hydra.lib.strings.length"}}},
+                                                                          "domain": {"literal": {"string": {}}},
+                                                                          "parameter": "s"}},
                                                                       "function": {
                                                                         "application": {
                                                                           "argument": {
-                                                                            "function": {
-                                                                              "lambda": {
-                                                                                "body": {
-                                                                                  "application": {
-                                                                                    "argument": {"literal": {"integer": {"int32": 2}}},
-                                                                                    "function": {
-                                                                                      "application": {
-                                                                                        "argument": {"variable": "x"},
-                                                                                        "function": {"variable": "hydra.lib.math.mul"}}}}},
-                                                                                "domain": {"literal": {"integer": {"int32": {}}}},
-                                                                                "parameter": "x"}}},
+                                                                            "lambda": {
+                                                                              "body": {
+                                                                                "application": {
+                                                                                  "argument": {"literal": {"integer": {"int32": 2}}},
+                                                                                  "function": {
+                                                                                    "application": {
+                                                                                      "argument": {"variable": "x"},
+                                                                                      "function": {"variable": "hydra.lib.math.mul"}}}}},
+                                                                              "domain": {"literal": {"integer": {"int32": {}}}},
+                                                                              "parameter": "x"}},
                                                                           "function": {
                                                                             "typeApplication": {
                                                                               "body": {
@@ -111,47 +109,46 @@
                                                                                   "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                               "type": {"literal": {"integer": {"int32": {}}}}}}}}}}}},
                                                               "function": {
-                                                                "function": {
-                                                                  "lambda": {
-                                                                    "body": {
-                                                                      "application": {
-                                                                        "argument": {
-                                                                          "list": [
-                                                                            {"literal": {"string": "("}},
-                                                                            {
-                                                                              "application": {
-                                                                                "argument": {
-                                                                                  "application": {
-                                                                                    "argument": {"variable": "p"},
-                                                                                    "function": {
-                                                                                      "typeApplication": {
-                                                                                        "body": {
-                                                                                          "typeApplication": {
-                                                                                            "body": {"variable": "hydra.lib.pairs.first"},
-                                                                                            "type": {"literal": {"integer": {"int32": {}}}}}},
-                                                                                        "type": {"literal": {"integer": {"int32": {}}}}}}}},
-                                                                                "function": {"variable": "hydra.lib.literals.showInt32"}}},
-                                                                            {"literal": {"string": ", "}},
-                                                                            {
-                                                                              "application": {
-                                                                                "argument": {
-                                                                                  "application": {
-                                                                                    "argument": {"variable": "p"},
-                                                                                    "function": {
-                                                                                      "typeApplication": {
-                                                                                        "body": {
-                                                                                          "typeApplication": {
-                                                                                            "body": {"variable": "hydra.lib.pairs.second"},
-                                                                                            "type": {"literal": {"integer": {"int32": {}}}}}},
-                                                                                        "type": {"literal": {"integer": {"int32": {}}}}}}}},
-                                                                                "function": {"variable": "hydra.lib.literals.showInt32"}}},
-                                                                            {"literal": {"string": ")"}}]},
-                                                                        "function": {"variable": "hydra.lib.strings.cat"}}},
-                                                                    "domain": {
-                                                                      "pair": {
-                                                                        "first": {"literal": {"integer": {"int32": {}}}},
-                                                                        "second": {"literal": {"integer": {"int32": {}}}}}},
-                                                                    "parameter": "p"}}}}}},
+                                                                "lambda": {
+                                                                  "body": {
+                                                                    "application": {
+                                                                      "argument": {
+                                                                        "list": [
+                                                                          {"literal": {"string": "("}},
+                                                                          {
+                                                                            "application": {
+                                                                              "argument": {
+                                                                                "application": {
+                                                                                  "argument": {"variable": "p"},
+                                                                                  "function": {
+                                                                                    "typeApplication": {
+                                                                                      "body": {
+                                                                                        "typeApplication": {
+                                                                                          "body": {"variable": "hydra.lib.pairs.first"},
+                                                                                          "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                                      "type": {"literal": {"integer": {"int32": {}}}}}}}},
+                                                                              "function": {"variable": "hydra.lib.literals.showInt32"}}},
+                                                                          {"literal": {"string": ", "}},
+                                                                          {
+                                                                            "application": {
+                                                                              "argument": {
+                                                                                "application": {
+                                                                                  "argument": {"variable": "p"},
+                                                                                  "function": {
+                                                                                    "typeApplication": {
+                                                                                      "body": {
+                                                                                        "typeApplication": {
+                                                                                          "body": {"variable": "hydra.lib.pairs.second"},
+                                                                                          "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                                      "type": {"literal": {"integer": {"int32": {}}}}}}}},
+                                                                              "function": {"variable": "hydra.lib.literals.showInt32"}}},
+                                                                          {"literal": {"string": ")"}}]},
+                                                                      "function": {"variable": "hydra.lib.strings.cat"}}},
+                                                                  "domain": {
+                                                                    "pair": {
+                                                                      "first": {"literal": {"integer": {"int32": {}}}},
+                                                                      "second": {"literal": {"integer": {"int32": {}}}}}},
+                                                                  "parameter": "p"}}}}},
                                                         {
                                                           "name": "expected",
                                                           "term": {
@@ -167,47 +164,46 @@
                                                                       "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                   "type": {"literal": {"integer": {"int32": {}}}}}},
                                                               "function": {
-                                                                "function": {
-                                                                  "lambda": {
-                                                                    "body": {
-                                                                      "application": {
-                                                                        "argument": {
-                                                                          "list": [
-                                                                            {"literal": {"string": "("}},
-                                                                            {
-                                                                              "application": {
-                                                                                "argument": {
-                                                                                  "application": {
-                                                                                    "argument": {"variable": "p"},
-                                                                                    "function": {
-                                                                                      "typeApplication": {
-                                                                                        "body": {
-                                                                                          "typeApplication": {
-                                                                                            "body": {"variable": "hydra.lib.pairs.first"},
-                                                                                            "type": {"literal": {"integer": {"int32": {}}}}}},
-                                                                                        "type": {"literal": {"integer": {"int32": {}}}}}}}},
-                                                                                "function": {"variable": "hydra.lib.literals.showInt32"}}},
-                                                                            {"literal": {"string": ", "}},
-                                                                            {
-                                                                              "application": {
-                                                                                "argument": {
-                                                                                  "application": {
-                                                                                    "argument": {"variable": "p"},
-                                                                                    "function": {
-                                                                                      "typeApplication": {
-                                                                                        "body": {
-                                                                                          "typeApplication": {
-                                                                                            "body": {"variable": "hydra.lib.pairs.second"},
-                                                                                            "type": {"literal": {"integer": {"int32": {}}}}}},
-                                                                                        "type": {"literal": {"integer": {"int32": {}}}}}}}},
-                                                                                "function": {"variable": "hydra.lib.literals.showInt32"}}},
-                                                                            {"literal": {"string": ")"}}]},
-                                                                        "function": {"variable": "hydra.lib.strings.cat"}}},
-                                                                    "domain": {
-                                                                      "pair": {
-                                                                        "first": {"literal": {"integer": {"int32": {}}}},
-                                                                        "second": {"literal": {"integer": {"int32": {}}}}}},
-                                                                    "parameter": "p"}}}}}}],
+                                                                "lambda": {
+                                                                  "body": {
+                                                                    "application": {
+                                                                      "argument": {
+                                                                        "list": [
+                                                                          {"literal": {"string": "("}},
+                                                                          {
+                                                                            "application": {
+                                                                              "argument": {
+                                                                                "application": {
+                                                                                  "argument": {"variable": "p"},
+                                                                                  "function": {
+                                                                                    "typeApplication": {
+                                                                                      "body": {
+                                                                                        "typeApplication": {
+                                                                                          "body": {"variable": "hydra.lib.pairs.first"},
+                                                                                          "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                                      "type": {"literal": {"integer": {"int32": {}}}}}}}},
+                                                                              "function": {"variable": "hydra.lib.literals.showInt32"}}},
+                                                                          {"literal": {"string": ", "}},
+                                                                          {
+                                                                            "application": {
+                                                                              "argument": {
+                                                                                "application": {
+                                                                                  "argument": {"variable": "p"},
+                                                                                  "function": {
+                                                                                    "typeApplication": {
+                                                                                      "body": {
+                                                                                        "typeApplication": {
+                                                                                          "body": {"variable": "hydra.lib.pairs.second"},
+                                                                                          "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                                      "type": {"literal": {"integer": {"int32": {}}}}}}}},
+                                                                              "function": {"variable": "hydra.lib.literals.showInt32"}}},
+                                                                          {"literal": {"string": ")"}}]},
+                                                                      "function": {"variable": "hydra.lib.strings.cat"}}},
+                                                                  "domain": {
+                                                                    "pair": {
+                                                                      "first": {"literal": {"integer": {"int32": {}}}},
+                                                                      "second": {"literal": {"integer": {"int32": {}}}}}},
+                                                                  "parameter": "p"}}}}}],
                                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                                 "typeName": "hydra.testing.TestCase"}}},
                                           {
@@ -251,28 +247,26 @@
                                                                   "function": {
                                                                     "application": {
                                                                       "argument": {
-                                                                        "function": {
-                                                                          "lambda": {
-                                                                            "body": {
-                                                                              "application": {
-                                                                                "argument": {"variable": "s"},
-                                                                                "function": {"variable": "hydra.lib.strings.length"}}},
-                                                                            "domain": {"literal": {"string": {}}},
-                                                                            "parameter": "s"}}},
+                                                                        "lambda": {
+                                                                          "body": {
+                                                                            "application": {
+                                                                              "argument": {"variable": "s"},
+                                                                              "function": {"variable": "hydra.lib.strings.length"}}},
+                                                                          "domain": {"literal": {"string": {}}},
+                                                                          "parameter": "s"}},
                                                                       "function": {
                                                                         "application": {
                                                                           "argument": {
-                                                                            "function": {
-                                                                              "lambda": {
-                                                                                "body": {
-                                                                                  "application": {
-                                                                                    "argument": {"literal": {"integer": {"int32": 2}}},
-                                                                                    "function": {
-                                                                                      "application": {
-                                                                                        "argument": {"variable": "x"},
-                                                                                        "function": {"variable": "hydra.lib.math.mul"}}}}},
-                                                                                "domain": {"literal": {"integer": {"int32": {}}}},
-                                                                                "parameter": "x"}}},
+                                                                            "lambda": {
+                                                                              "body": {
+                                                                                "application": {
+                                                                                  "argument": {"literal": {"integer": {"int32": 2}}},
+                                                                                  "function": {
+                                                                                    "application": {
+                                                                                      "argument": {"variable": "x"},
+                                                                                      "function": {"variable": "hydra.lib.math.mul"}}}}},
+                                                                              "domain": {"literal": {"integer": {"int32": {}}}},
+                                                                              "parameter": "x"}},
                                                                           "function": {
                                                                             "typeApplication": {
                                                                               "body": {
@@ -287,47 +281,46 @@
                                                                                   "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                               "type": {"literal": {"integer": {"int32": {}}}}}}}}}}}},
                                                               "function": {
-                                                                "function": {
-                                                                  "lambda": {
-                                                                    "body": {
-                                                                      "application": {
-                                                                        "argument": {
-                                                                          "list": [
-                                                                            {"literal": {"string": "("}},
-                                                                            {
-                                                                              "application": {
-                                                                                "argument": {
-                                                                                  "application": {
-                                                                                    "argument": {"variable": "p"},
-                                                                                    "function": {
-                                                                                      "typeApplication": {
-                                                                                        "body": {
-                                                                                          "typeApplication": {
-                                                                                            "body": {"variable": "hydra.lib.pairs.first"},
-                                                                                            "type": {"literal": {"integer": {"int32": {}}}}}},
-                                                                                        "type": {"literal": {"integer": {"int32": {}}}}}}}},
-                                                                                "function": {"variable": "hydra.lib.literals.showInt32"}}},
-                                                                            {"literal": {"string": ", "}},
-                                                                            {
-                                                                              "application": {
-                                                                                "argument": {
-                                                                                  "application": {
-                                                                                    "argument": {"variable": "p"},
-                                                                                    "function": {
-                                                                                      "typeApplication": {
-                                                                                        "body": {
-                                                                                          "typeApplication": {
-                                                                                            "body": {"variable": "hydra.lib.pairs.second"},
-                                                                                            "type": {"literal": {"integer": {"int32": {}}}}}},
-                                                                                        "type": {"literal": {"integer": {"int32": {}}}}}}}},
-                                                                                "function": {"variable": "hydra.lib.literals.showInt32"}}},
-                                                                            {"literal": {"string": ")"}}]},
-                                                                        "function": {"variable": "hydra.lib.strings.cat"}}},
-                                                                    "domain": {
-                                                                      "pair": {
-                                                                        "first": {"literal": {"integer": {"int32": {}}}},
-                                                                        "second": {"literal": {"integer": {"int32": {}}}}}},
-                                                                    "parameter": "p"}}}}}},
+                                                                "lambda": {
+                                                                  "body": {
+                                                                    "application": {
+                                                                      "argument": {
+                                                                        "list": [
+                                                                          {"literal": {"string": "("}},
+                                                                          {
+                                                                            "application": {
+                                                                              "argument": {
+                                                                                "application": {
+                                                                                  "argument": {"variable": "p"},
+                                                                                  "function": {
+                                                                                    "typeApplication": {
+                                                                                      "body": {
+                                                                                        "typeApplication": {
+                                                                                          "body": {"variable": "hydra.lib.pairs.first"},
+                                                                                          "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                                      "type": {"literal": {"integer": {"int32": {}}}}}}}},
+                                                                              "function": {"variable": "hydra.lib.literals.showInt32"}}},
+                                                                          {"literal": {"string": ", "}},
+                                                                          {
+                                                                            "application": {
+                                                                              "argument": {
+                                                                                "application": {
+                                                                                  "argument": {"variable": "p"},
+                                                                                  "function": {
+                                                                                    "typeApplication": {
+                                                                                      "body": {
+                                                                                        "typeApplication": {
+                                                                                          "body": {"variable": "hydra.lib.pairs.second"},
+                                                                                          "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                                      "type": {"literal": {"integer": {"int32": {}}}}}}}},
+                                                                              "function": {"variable": "hydra.lib.literals.showInt32"}}},
+                                                                          {"literal": {"string": ")"}}]},
+                                                                      "function": {"variable": "hydra.lib.strings.cat"}}},
+                                                                  "domain": {
+                                                                    "pair": {
+                                                                      "first": {"literal": {"integer": {"int32": {}}}},
+                                                                      "second": {"literal": {"integer": {"int32": {}}}}}},
+                                                                  "parameter": "p"}}}}},
                                                         {
                                                           "name": "expected",
                                                           "term": {
@@ -343,47 +336,46 @@
                                                                       "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                   "type": {"literal": {"integer": {"int32": {}}}}}},
                                                               "function": {
-                                                                "function": {
-                                                                  "lambda": {
-                                                                    "body": {
-                                                                      "application": {
-                                                                        "argument": {
-                                                                          "list": [
-                                                                            {"literal": {"string": "("}},
-                                                                            {
-                                                                              "application": {
-                                                                                "argument": {
-                                                                                  "application": {
-                                                                                    "argument": {"variable": "p"},
-                                                                                    "function": {
-                                                                                      "typeApplication": {
-                                                                                        "body": {
-                                                                                          "typeApplication": {
-                                                                                            "body": {"variable": "hydra.lib.pairs.first"},
-                                                                                            "type": {"literal": {"integer": {"int32": {}}}}}},
-                                                                                        "type": {"literal": {"integer": {"int32": {}}}}}}}},
-                                                                                "function": {"variable": "hydra.lib.literals.showInt32"}}},
-                                                                            {"literal": {"string": ", "}},
-                                                                            {
-                                                                              "application": {
-                                                                                "argument": {
-                                                                                  "application": {
-                                                                                    "argument": {"variable": "p"},
-                                                                                    "function": {
-                                                                                      "typeApplication": {
-                                                                                        "body": {
-                                                                                          "typeApplication": {
-                                                                                            "body": {"variable": "hydra.lib.pairs.second"},
-                                                                                            "type": {"literal": {"integer": {"int32": {}}}}}},
-                                                                                        "type": {"literal": {"integer": {"int32": {}}}}}}}},
-                                                                                "function": {"variable": "hydra.lib.literals.showInt32"}}},
-                                                                            {"literal": {"string": ")"}}]},
-                                                                        "function": {"variable": "hydra.lib.strings.cat"}}},
-                                                                    "domain": {
-                                                                      "pair": {
-                                                                        "first": {"literal": {"integer": {"int32": {}}}},
-                                                                        "second": {"literal": {"integer": {"int32": {}}}}}},
-                                                                    "parameter": "p"}}}}}}],
+                                                                "lambda": {
+                                                                  "body": {
+                                                                    "application": {
+                                                                      "argument": {
+                                                                        "list": [
+                                                                          {"literal": {"string": "("}},
+                                                                          {
+                                                                            "application": {
+                                                                              "argument": {
+                                                                                "application": {
+                                                                                  "argument": {"variable": "p"},
+                                                                                  "function": {
+                                                                                    "typeApplication": {
+                                                                                      "body": {
+                                                                                        "typeApplication": {
+                                                                                          "body": {"variable": "hydra.lib.pairs.first"},
+                                                                                          "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                                      "type": {"literal": {"integer": {"int32": {}}}}}}}},
+                                                                              "function": {"variable": "hydra.lib.literals.showInt32"}}},
+                                                                          {"literal": {"string": ", "}},
+                                                                          {
+                                                                            "application": {
+                                                                              "argument": {
+                                                                                "application": {
+                                                                                  "argument": {"variable": "p"},
+                                                                                  "function": {
+                                                                                    "typeApplication": {
+                                                                                      "body": {
+                                                                                        "typeApplication": {
+                                                                                          "body": {"variable": "hydra.lib.pairs.second"},
+                                                                                          "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                                      "type": {"literal": {"integer": {"int32": {}}}}}}}},
+                                                                              "function": {"variable": "hydra.lib.literals.showInt32"}}},
+                                                                          {"literal": {"string": ")"}}]},
+                                                                      "function": {"variable": "hydra.lib.strings.cat"}}},
+                                                                  "domain": {
+                                                                    "pair": {
+                                                                      "first": {"literal": {"integer": {"int32": {}}}},
+                                                                      "second": {"literal": {"integer": {"int32": {}}}}}},
+                                                                  "parameter": "p"}}}}}],
                                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                                 "typeName": "hydra.testing.TestCase"}}},
                                           {
@@ -453,28 +445,26 @@
                                                                           "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                       "type": {"literal": {"string": {}}}}}}},
                                                               "function": {
-                                                                "function": {
-                                                                  "lambda": {
-                                                                    "body": {
-                                                                      "application": {
-                                                                        "argument": {"variable": "n"},
-                                                                        "function": {"variable": "hydra.lib.literals.showInt32"}}},
-                                                                    "domain": {"literal": {"integer": {"int32": {}}}},
-                                                                    "parameter": "n"}}}}}},
+                                                                "lambda": {
+                                                                  "body": {
+                                                                    "application": {
+                                                                      "argument": {"variable": "n"},
+                                                                      "function": {"variable": "hydra.lib.literals.showInt32"}}},
+                                                                  "domain": {"literal": {"integer": {"int32": {}}}},
+                                                                  "parameter": "n"}}}}},
                                                         {
                                                           "name": "expected",
                                                           "term": {
                                                             "application": {
                                                               "argument": {"literal": {"integer": {"int32": 42}}},
                                                               "function": {
-                                                                "function": {
-                                                                  "lambda": {
-                                                                    "body": {
-                                                                      "application": {
-                                                                        "argument": {"variable": "n"},
-                                                                        "function": {"variable": "hydra.lib.literals.showInt32"}}},
-                                                                    "domain": {"literal": {"integer": {"int32": {}}}},
-                                                                    "parameter": "n"}}}}}}],
+                                                                "lambda": {
+                                                                  "body": {
+                                                                    "application": {
+                                                                      "argument": {"variable": "n"},
+                                                                      "function": {"variable": "hydra.lib.literals.showInt32"}}},
+                                                                  "domain": {"literal": {"integer": {"int32": {}}}},
+                                                                  "parameter": "n"}}}}}],
                                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                                 "typeName": "hydra.testing.TestCase"}}},
                                           {
@@ -523,28 +513,26 @@
                                                                           "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                       "type": {"literal": {"string": {}}}}}}},
                                                               "function": {
-                                                                "function": {
-                                                                  "lambda": {
-                                                                    "body": {
-                                                                      "application": {
-                                                                        "argument": {"variable": "n"},
-                                                                        "function": {"variable": "hydra.lib.literals.showInt32"}}},
-                                                                    "domain": {"literal": {"integer": {"int32": {}}}},
-                                                                    "parameter": "n"}}}}}},
+                                                                "lambda": {
+                                                                  "body": {
+                                                                    "application": {
+                                                                      "argument": {"variable": "n"},
+                                                                      "function": {"variable": "hydra.lib.literals.showInt32"}}},
+                                                                  "domain": {"literal": {"integer": {"int32": {}}}},
+                                                                  "parameter": "n"}}}}},
                                                         {
                                                           "name": "expected",
                                                           "term": {
                                                             "application": {
                                                               "argument": {"literal": {"integer": {"int32": 0}}},
                                                               "function": {
-                                                                "function": {
-                                                                  "lambda": {
-                                                                    "body": {
-                                                                      "application": {
-                                                                        "argument": {"variable": "n"},
-                                                                        "function": {"variable": "hydra.lib.literals.showInt32"}}},
-                                                                    "domain": {"literal": {"integer": {"int32": {}}}},
-                                                                    "parameter": "n"}}}}}}],
+                                                                "lambda": {
+                                                                  "body": {
+                                                                    "application": {
+                                                                      "argument": {"variable": "n"},
+                                                                      "function": {"variable": "hydra.lib.literals.showInt32"}}},
+                                                                  "domain": {"literal": {"integer": {"int32": {}}}},
+                                                                  "parameter": "n"}}}}}],
                                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                                 "typeName": "hydra.testing.TestCase"}}},
                                           {
@@ -593,28 +581,26 @@
                                                                           "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                       "type": {"literal": {"string": {}}}}}}},
                                                               "function": {
-                                                                "function": {
-                                                                  "lambda": {
-                                                                    "body": {
-                                                                      "application": {
-                                                                        "argument": {"variable": "n"},
-                                                                        "function": {"variable": "hydra.lib.literals.showInt32"}}},
-                                                                    "domain": {"literal": {"integer": {"int32": {}}}},
-                                                                    "parameter": "n"}}}}}},
+                                                                "lambda": {
+                                                                  "body": {
+                                                                    "application": {
+                                                                      "argument": {"variable": "n"},
+                                                                      "function": {"variable": "hydra.lib.literals.showInt32"}}},
+                                                                  "domain": {"literal": {"integer": {"int32": {}}}},
+                                                                  "parameter": "n"}}}}},
                                                         {
                                                           "name": "expected",
                                                           "term": {
                                                             "application": {
                                                               "argument": {"literal": {"integer": {"int32": -5}}},
                                                               "function": {
-                                                                "function": {
-                                                                  "lambda": {
-                                                                    "body": {
-                                                                      "application": {
-                                                                        "argument": {"variable": "n"},
-                                                                        "function": {"variable": "hydra.lib.literals.showInt32"}}},
-                                                                    "domain": {"literal": {"integer": {"int32": {}}}},
-                                                                    "parameter": "n"}}}}}}],
+                                                                "lambda": {
+                                                                  "body": {
+                                                                    "application": {
+                                                                      "argument": {"variable": "n"},
+                                                                      "function": {"variable": "hydra.lib.literals.showInt32"}}},
+                                                                  "domain": {"literal": {"integer": {"int32": {}}}},
+                                                                  "parameter": "n"}}}}}],
                                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                                 "typeName": "hydra.testing.TestCase"}}},
                                           {
@@ -684,22 +670,20 @@
                                                                           "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                       "type": {"literal": {"string": {}}}}}}},
                                                               "function": {
-                                                                "function": {
-                                                                  "lambda": {
-                                                                    "body": {"variable": "s"},
-                                                                    "domain": {"literal": {"string": {}}},
-                                                                    "parameter": "s"}}}}}},
+                                                                "lambda": {
+                                                                  "body": {"variable": "s"},
+                                                                  "domain": {"literal": {"string": {}}},
+                                                                  "parameter": "s"}}}}},
                                                         {
                                                           "name": "expected",
                                                           "term": {
                                                             "application": {
                                                               "argument": {"literal": {"string": "hello"}},
                                                               "function": {
-                                                                "function": {
-                                                                  "lambda": {
-                                                                    "body": {"variable": "s"},
-                                                                    "domain": {"literal": {"string": {}}},
-                                                                    "parameter": "s"}}}}}}],
+                                                                "lambda": {
+                                                                  "body": {"variable": "s"},
+                                                                  "domain": {"literal": {"string": {}}},
+                                                                  "parameter": "s"}}}}}],
                                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                                 "typeName": "hydra.testing.TestCase"}}},
                                           {
@@ -748,22 +732,20 @@
                                                                           "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                       "type": {"literal": {"string": {}}}}}}},
                                                               "function": {
-                                                                "function": {
-                                                                  "lambda": {
-                                                                    "body": {"variable": "s"},
-                                                                    "domain": {"literal": {"string": {}}},
-                                                                    "parameter": "s"}}}}}},
+                                                                "lambda": {
+                                                                  "body": {"variable": "s"},
+                                                                  "domain": {"literal": {"string": {}}},
+                                                                  "parameter": "s"}}}}},
                                                         {
                                                           "name": "expected",
                                                           "term": {
                                                             "application": {
                                                               "argument": {"literal": {"string": ""}},
                                                               "function": {
-                                                                "function": {
-                                                                  "lambda": {
-                                                                    "body": {"variable": "s"},
-                                                                    "domain": {"literal": {"string": {}}},
-                                                                    "parameter": "s"}}}}}}],
+                                                                "lambda": {
+                                                                  "body": {"variable": "s"},
+                                                                  "domain": {"literal": {"string": {}}},
+                                                                  "parameter": "s"}}}}}],
                                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                                 "typeName": "hydra.testing.TestCase"}}},
                                           {
@@ -812,22 +794,20 @@
                                                                           "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                       "type": {"literal": {"string": {}}}}}}},
                                                               "function": {
-                                                                "function": {
-                                                                  "lambda": {
-                                                                    "body": {"variable": "s"},
-                                                                    "domain": {"literal": {"string": {}}},
-                                                                    "parameter": "s"}}}}}},
+                                                                "lambda": {
+                                                                  "body": {"variable": "s"},
+                                                                  "domain": {"literal": {"string": {}}},
+                                                                  "parameter": "s"}}}}},
                                                         {
                                                           "name": "expected",
                                                           "term": {
                                                             "application": {
                                                               "argument": {"literal": {"string": "testing"}},
                                                               "function": {
-                                                                "function": {
-                                                                  "lambda": {
-                                                                    "body": {"variable": "s"},
-                                                                    "domain": {"literal": {"string": {}}},
-                                                                    "parameter": "s"}}}}}}],
+                                                                "lambda": {
+                                                                  "body": {"variable": "s"},
+                                                                  "domain": {"literal": {"string": {}}},
+                                                                  "parameter": "s"}}}}}],
                                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                                 "typeName": "hydra.testing.TestCase"}}},
                                           {

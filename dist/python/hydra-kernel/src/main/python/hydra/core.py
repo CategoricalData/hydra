@@ -107,28 +107,6 @@ class PairType:
     FIRST = Name("first")
     SECOND = Name("second")
 
-class EliminationRecord(Node["Projection"]):
-    r"""Eliminates a record by projecting a given field"""
-
-class EliminationUnion(Node["CaseStatement"]):
-    r"""Eliminates a union term by matching over the fields of the union. This is a case statement."""
-
-class EliminationWrap(Node["Name"]):
-    r"""Unwrap a wrapped term"""
-
-class _EliminationMeta(type):
-    def __getitem__(cls, item):
-        return object
-
-# A corresponding elimination for an introduction term.
-class Elimination(metaclass=_EliminationMeta):
-    r"""EliminationRecord | EliminationUnion | EliminationWrap"""
-
-    TYPE_ = Name("hydra.core.Elimination")
-    RECORD = Name("record")
-    UNION = Name("union")
-    WRAP = Name("wrap")
-
 @dataclass(frozen=True)
 class Field:
     r"""A name/term pair."""
@@ -197,24 +175,6 @@ class ForallType:
     TYPE_ = Name("hydra.core.ForallType")
     PARAMETER = Name("parameter")
     BODY = Name("body")
-
-class FunctionElimination(Node["Elimination"]):
-    r"""An elimination for any of a few term variants"""
-
-class FunctionLambda(Node["Lambda"]):
-    r"""A function abstraction (lambda)"""
-
-class _FunctionMeta(type):
-    def __getitem__(cls, item):
-        return object
-
-# A function.
-class Function(metaclass=_FunctionMeta):
-    r"""FunctionElimination | FunctionLambda"""
-
-    TYPE_ = Name("hydra.core.Function")
-    ELIMINATION = Name("elimination")
-    LAMBDA = Name("lambda")
 
 @dataclass(frozen=True)
 class FunctionType:
@@ -457,11 +417,14 @@ class TermAnnotated(Node["AnnotatedTerm"]):
 class TermApplication(Node["Application"]):
     r"""A function application"""
 
+class TermCases(Node["CaseStatement"]):
+    r"""A union elimination; a case statement"""
+
 class TermEither(Node["Either[Term, Term]"]):
     r"""An either value"""
 
-class TermFunction(Node["Function"]):
-    r"""A function term"""
+class TermLambda(Node["Lambda"]):
+    r"""A function abstraction (lambda)"""
 
 class TermLet(Node["Let"]):
     r"""A 'let' term, which binds variables to terms"""
@@ -480,6 +443,9 @@ class TermMaybe(Node["Maybe[Term]"]):
 
 class TermPair(Node["tuple[Term, Term]"]):
     r"""A pair (2-tuple)"""
+
+class TermProject(Node["Projection"]):
+    r"""A record elimination; a projection"""
 
 class TermRecord(Node["Record"]):
     r"""A record term"""
@@ -505,6 +471,9 @@ class TermUnit:
     def __hash__(self):
         return hash("TermUnit")
 
+class TermUnwrap(Node["Name"]):
+    r"""An unwrap elimination; the inverse of a wrap"""
+
 class TermVariable(Node["Name"]):
     r"""A variable reference"""
 
@@ -517,25 +486,28 @@ class _TermMeta(type):
 
 # A data term.
 class Term(metaclass=_TermMeta):
-    r"""TermAnnotated | TermApplication | TermEither | TermFunction | TermLet | TermList | TermLiteral | TermMap | TermMaybe | TermPair | TermRecord | TermSet | TermTypeApplication | TermTypeLambda | TermUnion | TermUnit | TermVariable | TermWrap"""
+    r"""TermAnnotated | TermApplication | TermCases | TermEither | TermLambda | TermLet | TermList | TermLiteral | TermMap | TermMaybe | TermPair | TermProject | TermRecord | TermSet | TermTypeApplication | TermTypeLambda | TermUnion | TermUnit | TermUnwrap | TermVariable | TermWrap"""
 
     TYPE_ = Name("hydra.core.Term")
     ANNOTATED = Name("annotated")
     APPLICATION = Name("application")
+    CASES = Name("cases")
     EITHER = Name("either")
-    FUNCTION = Name("function")
+    LAMBDA = Name("lambda")
     LET = Name("let")
     LIST = Name("list")
     LITERAL = Name("literal")
     MAP = Name("map")
     MAYBE = Name("maybe")
     PAIR = Name("pair")
+    PROJECT = Name("project")
     RECORD = Name("record")
     SET = Name("set")
     TYPE_APPLICATION = Name("typeApplication")
     TYPE_LAMBDA = Name("typeLambda")
     UNION = Name("union")
     UNIT = Name("unit")
+    UNWRAP = Name("unwrap")
     VARIABLE = Name("variable")
     WRAP = Name("wrap")
 

@@ -58,7 +58,12 @@ cppLanguage =
         Sets.fromList [
           Variants.TermVariantApplication,
           Variants.TermVariantEither,
-          Variants.TermVariantFunction,
+          Variants.TermVariantCases,
+          Variants.TermVariantLambda,
+          Variants.TermVariantProject,
+          Variants.TermVariantUnwrap,
+          Variants.TermVariantTypeApplication,
+          Variants.TermVariantTypeLambda,
           Variants.TermVariantLet,
           Variants.TermVariantList,
           Variants.TermVariantLiteral,

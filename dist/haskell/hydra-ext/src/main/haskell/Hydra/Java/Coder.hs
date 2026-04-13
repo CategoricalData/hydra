@@ -126,20 +126,16 @@ applyOvergenSubstToTermAnnotations_go subst cx term =
       Core.TermApplication v0 -> Core.TermApplication (Core.Application {
         Core.applicationFunction = (applyOvergenSubstToTermAnnotations_go subst cx (Core.applicationFunction v0)),
         Core.applicationArgument = (applyOvergenSubstToTermAnnotations_go subst cx (Core.applicationArgument v0))})
-      Core.TermFunction v0 -> case v0 of
-        Core.FunctionLambda v1 -> Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-          Core.lambdaParameter = (Core.lambdaParameter v1),
-          Core.lambdaDomain = (Maybes.map (\d -> substituteTypeVarsWithTypes subst d) (Core.lambdaDomain v1)),
-          Core.lambdaBody = (applyOvergenSubstToTermAnnotations_go subst cx (Core.lambdaBody v1))}))
-        Core.FunctionElimination v1 -> case v1 of
-          Core.EliminationUnion v2 -> Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
-            Core.caseStatementTypeName = (Core.caseStatementTypeName v2),
-            Core.caseStatementDefault = (Maybes.map (\d -> applyOvergenSubstToTermAnnotations_go subst cx d) (Core.caseStatementDefault v2)),
-            Core.caseStatementCases = (Lists.map (\fld -> Core.Field {
-              Core.fieldName = (Core.fieldName fld),
-              Core.fieldTerm = (applyOvergenSubstToTermAnnotations_go subst cx (Core.fieldTerm fld))}) (Core.caseStatementCases v2))})))
-          _ -> term
-        _ -> term
+      Core.TermLambda v0 -> Core.TermLambda (Core.Lambda {
+        Core.lambdaParameter = (Core.lambdaParameter v0),
+        Core.lambdaDomain = (Maybes.map (\d -> substituteTypeVarsWithTypes subst d) (Core.lambdaDomain v0)),
+        Core.lambdaBody = (applyOvergenSubstToTermAnnotations_go subst cx (Core.lambdaBody v0))})
+      Core.TermCases v0 -> Core.TermCases (Core.CaseStatement {
+        Core.caseStatementTypeName = (Core.caseStatementTypeName v0),
+        Core.caseStatementDefault = (Maybes.map (\d -> applyOvergenSubstToTermAnnotations_go subst cx d) (Core.caseStatementDefault v0)),
+        Core.caseStatementCases = (Lists.map (\fld -> Core.Field {
+          Core.fieldName = (Core.fieldName fld),
+          Core.fieldTerm = (applyOvergenSubstToTermAnnotations_go subst cx (Core.fieldTerm fld))}) (Core.caseStatementCases v0))})
       Core.TermLet v0 -> Core.TermLet (Core.Let {
         Core.letBindings = (Lists.map (\b -> Core.Binding {
           Core.bindingName = (Core.bindingName b),
@@ -253,7 +249,10 @@ augmentVariantClass aliases tparams elName cd =
 bindingIsFunctionType :: Core.Binding -> Bool
 bindingIsFunctionType b =
     Maybes.maybe (case (Strip.deannotateTerm (Core.bindingTerm b)) of
-      Core.TermFunction _ -> True
+      Core.TermLambda _ -> True
+      Core.TermProject _ -> True
+      Core.TermCases _ -> True
+      Core.TermUnwrap _ -> True
       _ -> False) (\ts -> case (Strip.deannotateType (Core.typeSchemeType ts)) of
       Core.TypeFunction _ -> True
       Core.TypeForall v0 -> case (Strip.deannotateType (Core.forallTypeBody v0)) of
@@ -358,24 +357,18 @@ buildSubstFromAnnotations_go schemeVarSet g term =
             bodySubst = buildSubstFromAnnotations_go schemeVarSet g body
             annSubst =
                     Maybes.cases (Maps.lookup Constants.key_type anns) Maps.empty (\typeTerm -> Eithers.either (\_ -> Maps.empty) (\annType -> case (Strip.deannotateTerm body) of
-                      Core.TermFunction v1 -> case v1 of
-                        Core.FunctionLambda v2 -> Maybes.cases (Core.lambdaDomain v2) Maps.empty (\dom -> case (Strip.deannotateType annType) of
-                          Core.TypeFunction v3 -> buildTypeVarSubst schemeVarSet (Core.functionTypeDomain v3) dom
-                          _ -> Maps.empty)
-                        _ -> Maps.empty
+                      Core.TermLambda v1 -> Maybes.cases (Core.lambdaDomain v1) Maps.empty (\dom -> case (Strip.deannotateType annType) of
+                        Core.TypeFunction v2 -> buildTypeVarSubst schemeVarSet (Core.functionTypeDomain v2) dom
+                        _ -> Maps.empty)
                       _ -> Maps.empty) (Core_.type_ g typeTerm))
         in (Maps.union annSubst bodySubst)
       Core.TermApplication v0 -> Maps.union (buildSubstFromAnnotations_go schemeVarSet g (Core.applicationFunction v0)) (buildSubstFromAnnotations_go schemeVarSet g (Core.applicationArgument v0))
-      Core.TermFunction v0 -> case v0 of
-        Core.FunctionLambda v1 -> buildSubstFromAnnotations_go schemeVarSet g (Core.lambdaBody v1)
-        Core.FunctionElimination v1 -> case v1 of
-          Core.EliminationUnion v2 ->
-            let defSubst = Maybes.cases (Core.caseStatementDefault v2) Maps.empty (\d -> buildSubstFromAnnotations_go schemeVarSet g d)
-                caseSubsts =
-                        Lists.foldl (\acc -> \fld -> Maps.union acc (buildSubstFromAnnotations_go schemeVarSet g (Core.fieldTerm fld))) Maps.empty (Core.caseStatementCases v2)
-            in (Maps.union defSubst caseSubsts)
-          _ -> Maps.empty
-        _ -> Maps.empty
+      Core.TermLambda v0 -> buildSubstFromAnnotations_go schemeVarSet g (Core.lambdaBody v0)
+      Core.TermCases v0 ->
+        let defSubst = Maybes.cases (Core.caseStatementDefault v0) Maps.empty (\d -> buildSubstFromAnnotations_go schemeVarSet g d)
+            caseSubsts =
+                    Lists.foldl (\acc -> \fld -> Maps.union acc (buildSubstFromAnnotations_go schemeVarSet g (Core.fieldTerm fld))) Maps.empty (Core.caseStatementCases v0)
+        in (Maps.union defSubst caseSubsts)
       Core.TermLet v0 ->
         let bindingSubst =
                 Lists.foldl (\acc -> \b -> Maps.union acc (buildSubstFromAnnotations_go schemeVarSet g (Core.bindingTerm b))) Maps.empty (Core.letBindings v0)
@@ -493,9 +486,7 @@ classifyDataTerm ts term =
 classifyDataTerm_countLambdaParams :: Core.Term -> Int
 classifyDataTerm_countLambdaParams t =
     case (Strip.deannotateTerm t) of
-      Core.TermFunction v0 -> case v0 of
-        Core.FunctionLambda v1 -> Math.add 1 (classifyDataTerm_countLambdaParams (Core.lambdaBody v1))
-        _ -> 0
+      Core.TermLambda v0 -> Math.add 1 (classifyDataTerm_countLambdaParams (Core.lambdaBody v0))
       Core.TermLet v0 -> classifyDataTerm_countLambdaParams (Core.letBody v0)
       _ -> 0
 
@@ -531,11 +522,9 @@ collectForallParams t =
 collectLambdaDomains :: Core.Term -> ([Core.Type], Core.Term)
 collectLambdaDomains t =
     case (Strip.deannotateTerm t) of
-      Core.TermFunction v0 -> case v0 of
-        Core.FunctionLambda v1 -> Maybes.cases (Core.lambdaDomain v1) ([], t) (\dom ->
-          let rest = collectLambdaDomains (Core.lambdaBody v1)
-          in (Lists.cons dom (Pairs.first rest), (Pairs.second rest)))
-        _ -> ([], t)
+      Core.TermLambda v0 -> Maybes.cases (Core.lambdaDomain v0) ([], t) (\dom ->
+        let rest = collectLambdaDomains (Core.lambdaBody v0)
+        in (Lists.cons dom (Pairs.first rest), (Pairs.second rest)))
       _ -> ([], t)
 
 collectTypeApps :: Core.Term -> [Core.Type] -> (Core.Term, [Core.Type])
@@ -1012,11 +1001,15 @@ encodeApplication_fallback env aliases gr typeApps lhs rhs cx g =
       Core.TypeFunction v0 ->
         let dom = Core.functionTypeDomain v0
             cod = Core.functionTypeCodomain v0
+            defaultExpr =
+                    Eithers.bind (encodeTerm env lhs cx g) (\jfun -> Eithers.bind (encodeTerm env rhs cx g) (\jarg -> Right (applyJavaArg jfun jarg)))
+            elimBranch =
+                    Eithers.bind (encodeTerm env rhs cx g) (\jarg -> Eithers.bind (Logic.ifElse (Logic.not (Lists.null (javaTypeArgumentsForType dom))) (Right dom) (Eithers.bind (Eithers.bimap (\_de -> Errors.ErrorOther (Errors.OtherError (Errors.unDecodingError _de))) (\_a -> _a) (Annotations.getType g (Annotations.termAnnotationInternal rhs))) (\mrt -> Maybes.cases mrt (Eithers.bind (Checking.typeOfTerm cx g rhs) (\rt -> Right (Logic.ifElse (Logic.not (Lists.null (javaTypeArgumentsForType rt))) rt dom))) (\rt -> Right (Logic.ifElse (Logic.not (Lists.null (javaTypeArgumentsForType rt))) rt dom))))) (\enrichedDom -> encodeElimination env (Just jarg) enrichedDom cod (Strip.deannotateTerm lhs) cx g))
         in case (Strip.deannotateTerm lhs) of
-          Core.TermFunction v1 -> case v1 of
-            Core.FunctionElimination v2 -> Eithers.bind (encodeTerm env rhs cx g) (\jarg -> Eithers.bind (Logic.ifElse (Logic.not (Lists.null (javaTypeArgumentsForType dom))) (Right dom) (Eithers.bind (Eithers.bimap (\_de -> Errors.ErrorOther (Errors.OtherError (Errors.unDecodingError _de))) (\_a -> _a) (Annotations.getType g (Annotations.termAnnotationInternal rhs))) (\mrt -> Maybes.cases mrt (Eithers.bind (Checking.typeOfTerm cx g rhs) (\rt -> Right (Logic.ifElse (Logic.not (Lists.null (javaTypeArgumentsForType rt))) rt dom))) (\rt -> Right (Logic.ifElse (Logic.not (Lists.null (javaTypeArgumentsForType rt))) rt dom))))) (\enrichedDom -> encodeElimination env (Just jarg) enrichedDom cod v2 cx g))
-            _ -> Eithers.bind (encodeTerm env lhs cx g) (\jfun -> Eithers.bind (encodeTerm env rhs cx g) (\jarg -> Right (applyJavaArg jfun jarg)))
-          _ -> Eithers.bind (encodeTerm env lhs cx g) (\jfun -> Eithers.bind (encodeTerm env rhs cx g) (\jarg -> Right (applyJavaArg jfun jarg)))
+          Core.TermProject _ -> elimBranch
+          Core.TermCases _ -> elimBranch
+          Core.TermUnwrap _ -> elimBranch
+          _ -> defaultExpr
       _ -> Eithers.bind (encodeTerm env lhs cx g) (\jfun -> Eithers.bind (encodeTerm env rhs cx g) (\jarg -> Right (applyJavaArg jfun jarg)))))
 
 encodeDefinitions :: Packaging.Module -> [Packaging.Definition] -> Context.Context -> Graph.Graph -> Either Errors.Error (M.Map Core.Name Syntax.CompilationUnit)
@@ -1038,12 +1031,12 @@ encodeDefinitions mod defs cx g =
       in (Eithers.bind (Eithers.mapList (\td -> encodeTypeDefinition pkg aliases td cx g) nonTypedefDefs) (\typeUnits -> Eithers.bind (Logic.ifElse (Lists.null termDefs) (Right []) (Eithers.bind (Eithers.mapList (\td -> encodeTermDefinition env td cx g) termDefs) (\dataMembers -> Right [
         constructElementsInterface mod dataMembers]))) (\termUnits -> Right (Maps.fromList (Lists.concat2 typeUnits termUnits)))))
 
-encodeElimination :: Environment_.JavaEnvironment -> Maybe Syntax.Expression -> Core.Type -> Core.Type -> Core.Elimination -> Context.Context -> Graph.Graph -> Either Errors.Error Syntax.Expression
-encodeElimination env marg dom cod elm cx g =
+encodeElimination :: Environment_.JavaEnvironment -> Maybe Syntax.Expression -> Core.Type -> Core.Type -> Core.Term -> Context.Context -> Graph.Graph -> Either Errors.Error Syntax.Expression
+encodeElimination env marg dom cod elimTerm cx g =
 
       let aliases = Environment_.javaEnvironmentAliases env
-      in case elm of
-        Core.EliminationRecord v0 ->
+      in case (Strip.deannotateTerm elimTerm) of
+        Core.TermProject v0 ->
           let fname = Core.projectionField v0
           in (Eithers.bind (encodeType aliases Sets.empty dom cx g) (\jdom0 -> Eithers.bind (Utils.javaTypeToJavaReferenceType jdom0 cx) (\jdomr -> Maybes.cases marg (
             let projVar = Core.Name "projected"
@@ -1054,19 +1047,19 @@ encodeElimination env marg dom cod elm cx g =
             in (Right (Utils.javaFieldAccessToJavaExpression (Syntax.FieldAccess {
               Syntax.fieldAccessQualifier = qual,
               Syntax.fieldAccessIdentifier = (Utils.javaIdentifier (Core.unName fname))})))))))
-        Core.EliminationUnion v0 ->
+        Core.TermCases v0 ->
           let tname = Core.caseStatementTypeName v0
               def_ = Core.caseStatementDefault v0
               fields = Core.caseStatementCases v0
           in (Maybes.cases marg (
             let uVar = Core.Name "u"
                 typedLambda =
-                        Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                        Core.TermLambda (Core.Lambda {
                           Core.lambdaParameter = uVar,
                           Core.lambdaDomain = (Just dom),
                           Core.lambdaBody = (Core.TermApplication (Core.Application {
-                            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination elm)),
-                            Core.applicationArgument = (Core.TermVariable uVar)}))}))
+                            Core.applicationFunction = elimTerm,
+                            Core.applicationArgument = (Core.TermVariable uVar)}))})
             in (encodeTerm env typedLambda cx g)) (\jarg ->
             let prim = Utils.javaExpressionToJavaPrimary jarg
                 consId = innerClassRef aliases tname Names.partialVisitorName
@@ -1080,7 +1073,7 @@ encodeElimination env marg dom cod elm cx g =
                     visitor = Utils.javaConstructorCall (Utils.javaConstructorName consId (Just targs)) [] (Just body)
                 in (Right (Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocation (Just (Right prim)) (Syntax.Identifier Names.acceptMethodName) [
                   visitor]))))))))))))
-        Core.EliminationWrap _ ->
+        Core.TermUnwrap _ ->
           let withArg =
                   \ja -> Utils.javaFieldAccessToJavaExpression (Syntax.FieldAccess {
                     Syntax.fieldAccessQualifier = (Syntax.FieldAccess_QualifierPrimary (Utils.javaExpressionToJavaPrimary ja)),
@@ -1091,60 +1084,58 @@ encodeElimination env marg dom cod elm cx g =
             in (Utils.javaLambda wVar (withArg wArg))) (\jarg -> withArg jarg)))
         _ -> Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "unexpected " (Strings.cat2 "elimination case" (Strings.cat2 " in " "encodeElimination")))))
 
-encodeFunction :: Environment_.JavaEnvironment -> Core.Type -> Core.Type -> Core.Function -> Context.Context -> Graph.Graph -> Either Errors.Error Syntax.Expression
-encodeFunction env dom cod fun cx g =
+encodeFunction :: Environment_.JavaEnvironment -> Core.Type -> Core.Type -> Core.Term -> Context.Context -> Graph.Graph -> Either Errors.Error Syntax.Expression
+encodeFunction env dom cod funTerm cx g =
 
       let aliases = Environment_.javaEnvironmentAliases env
-      in case fun of
-        Core.FunctionElimination v0 -> encodeElimination env Nothing dom cod v0 cx g
-        Core.FunctionLambda v0 -> withLambda env v0 (\env2 ->
+          encodeLambdaFallback =
+                  \env2 -> \lam ->
+                    let lambdaVar = Core.lambdaParameter lam
+                        body = Core.lambdaBody lam
+                    in (Eithers.bind (analyzeJavaFunction env2 body cx g) (\fs ->
+                      let bindings = Typing.functionStructureBindings fs
+                          innerBody = Typing.functionStructureBody fs
+                          env3 = Typing.functionStructureEnvironment fs
+                      in (Eithers.bind (bindingsToStatements env3 bindings cx g) (\bindResult ->
+                        let bindingStmts = Pairs.first bindResult
+                            env4 = Pairs.second bindResult
+                        in (Eithers.bind (encodeTerm env4 innerBody cx g) (\jbody ->
+                          let lam1 =
+                                  Logic.ifElse (Lists.null bindings) (Utils.javaLambda lambdaVar jbody) (
+                                    let returnSt = Syntax.BlockStatementStatement (Utils.javaReturnStatement (Just jbody))
+                                    in (Utils.javaLambdaFromBlock lambdaVar (Syntax.Block (Lists.concat2 bindingStmts [
+                                      returnSt]))))
+                          in (applyCastIfSafe aliases (Core.TypeFunction (Core.FunctionType {
+                            Core.functionTypeDomain = dom,
+                            Core.functionTypeCodomain = cod})) lam1 cx g)))))))
+      in case (Strip.deannotateTerm funTerm) of
+        Core.TermProject _ -> encodeElimination env Nothing dom cod (Strip.deannotateTerm funTerm) cx g
+        Core.TermCases _ -> encodeElimination env Nothing dom cod (Strip.deannotateTerm funTerm) cx g
+        Core.TermUnwrap _ -> encodeElimination env Nothing dom cod (Strip.deannotateTerm funTerm) cx g
+        Core.TermLambda v0 -> withLambda env v0 (\env2 ->
           let lambdaVar = Core.lambdaParameter v0
               body = Core.lambdaBody v0
           in case (Strip.deannotateTerm body) of
-            Core.TermFunction v1 -> case v1 of
-              Core.FunctionLambda v2 -> case (Strip.deannotateType cod) of
-                Core.TypeFunction v3 ->
-                  let dom2 = Core.functionTypeDomain v3
-                      cod2 = Core.functionTypeCodomain v3
-                  in (Eithers.bind (encodeFunction env2 dom2 cod2 (Core.FunctionLambda v2) cx g) (\innerJavaLambda ->
-                    let lam1 = Utils.javaLambda lambdaVar innerJavaLambda
-                    in (applyCastIfSafe aliases (Core.TypeFunction (Core.FunctionType {
-                      Core.functionTypeDomain = dom,
-                      Core.functionTypeCodomain = cod})) lam1 cx g)))
-                _ -> Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "expected function type for lambda body, but got: " (Core___.type_ cod))))
-              _ -> Eithers.bind (analyzeJavaFunction env2 body cx g) (\fs ->
-                let bindings = Typing.functionStructureBindings fs
-                    innerBody = Typing.functionStructureBody fs
-                    env3 = Typing.functionStructureEnvironment fs
-                in (Eithers.bind (bindingsToStatements env3 bindings cx g) (\bindResult ->
-                  let bindingStmts = Pairs.first bindResult
-                      env4 = Pairs.second bindResult
-                  in (Eithers.bind (encodeTerm env4 innerBody cx g) (\jbody ->
-                    let lam1 =
-                            Logic.ifElse (Lists.null bindings) (Utils.javaLambda lambdaVar jbody) (
-                              let returnSt = Syntax.BlockStatementStatement (Utils.javaReturnStatement (Just jbody))
-                              in (Utils.javaLambdaFromBlock lambdaVar (Syntax.Block (Lists.concat2 bindingStmts [
-                                returnSt]))))
-                    in (applyCastIfSafe aliases (Core.TypeFunction (Core.FunctionType {
-                      Core.functionTypeDomain = dom,
-                      Core.functionTypeCodomain = cod})) lam1 cx g))))))
-            _ -> Eithers.bind (analyzeJavaFunction env2 body cx g) (\fs ->
-              let bindings = Typing.functionStructureBindings fs
-                  innerBody = Typing.functionStructureBody fs
-                  env3 = Typing.functionStructureEnvironment fs
-              in (Eithers.bind (bindingsToStatements env3 bindings cx g) (\bindResult ->
-                let bindingStmts = Pairs.first bindResult
-                    env4 = Pairs.second bindResult
-                in (Eithers.bind (encodeTerm env4 innerBody cx g) (\jbody ->
-                  let lam1 =
-                          Logic.ifElse (Lists.null bindings) (Utils.javaLambda lambdaVar jbody) (
-                            let returnSt = Syntax.BlockStatementStatement (Utils.javaReturnStatement (Just jbody))
-                            in (Utils.javaLambdaFromBlock lambdaVar (Syntax.Block (Lists.concat2 bindingStmts [
-                              returnSt]))))
+            Core.TermLambda v1 -> case (Strip.deannotateType cod) of
+              Core.TypeFunction v2 ->
+                let dom2 = Core.functionTypeDomain v2
+                    cod2 = Core.functionTypeCodomain v2
+                in (Eithers.bind (encodeFunction env2 dom2 cod2 (Core.TermLambda v1) cx g) (\innerJavaLambda ->
+                  let lam1 = Utils.javaLambda lambdaVar innerJavaLambda
                   in (applyCastIfSafe aliases (Core.TypeFunction (Core.FunctionType {
                     Core.functionTypeDomain = dom,
-                    Core.functionTypeCodomain = cod})) lam1 cx g)))))))
-        _ -> Right (encodeLiteral (Core.LiteralString (Strings.cat2 "Unimplemented function variant: " (Core___.function fun))))
+                    Core.functionTypeCodomain = cod})) lam1 cx g)))
+              _ -> Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "expected function type for lambda body, but got: " (Core___.type_ cod))))
+            _ -> encodeLambdaFallback env2 v0)
+        _ -> Right (encodeLiteral (Core.LiteralString (Strings.cat2 "Unimplemented function variant: " (Core___.term funTerm))))
+
+encodeFunctionFormTerm :: Environment_.JavaEnvironment -> [M.Map Core.Name Core.Term] -> Core.Term -> Context.Context -> Graph.Graph -> Either Errors.Error Syntax.Expression
+encodeFunctionFormTerm env anns term cx g =
+
+      let combinedAnns = Lists.foldl (\acc -> \m -> Maps.union acc m) Maps.empty anns
+      in (Eithers.bind (Eithers.bimap (\_de -> Errors.ErrorOther (Errors.OtherError (Errors.unDecodingError _de))) (\_a -> _a) (Annotations.getType g combinedAnns)) (\mt -> Eithers.bind (Maybes.cases mt (Maybes.cases (tryInferFunctionType term) (Checking.typeOfTerm cx g term) (\inferredType -> Right inferredType)) (\t -> Right t)) (\typ -> case (Strip.deannotateType typ) of
+        Core.TypeFunction v0 -> encodeFunction env (Core.functionTypeDomain v0) (Core.functionTypeCodomain v0) term cx g
+        _ -> encodeNullaryConstant env typ term cx g)))
 
 encodeFunctionPrimitiveByName :: Environment_.JavaEnvironment -> Core.Type -> Core.Type -> Core.Name -> t0 -> Graph.Graph -> Either Errors.Error Syntax.Expression
 encodeFunctionPrimitiveByName env dom cod name cx g =
@@ -1272,9 +1263,9 @@ encodeLiteral_primCast :: Syntax.PrimitiveType -> Syntax.Expression -> Syntax.Ex
 encodeLiteral_primCast pt expr =
     Utils.javaCastExpressionToJavaExpression (Utils.javaCastPrimitive pt (Utils.javaExpressionToJavaUnaryExpression expr))
 
-encodeNullaryConstant :: t0 -> t1 -> Core.Function -> t2 -> t3 -> Either Errors.Error t4
-encodeNullaryConstant env typ fun cx g =
-    Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "unexpected " (Strings.cat2 "nullary function" (Strings.cat2 " in " (Core___.function fun))))))
+encodeNullaryConstant :: t0 -> t1 -> Core.Term -> t2 -> t3 -> Either Errors.Error t4
+encodeNullaryConstant env typ funTerm cx g =
+    Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "unexpected " (Strings.cat2 "nullary function" (Strings.cat2 " in " (Core___.term funTerm))))))
 
 encodeNullaryConstant_typeArgsFromReturnType :: Environment_.Aliases -> Core.Type -> t0 -> Graph.Graph -> Either Errors.Error [Syntax.TypeArgument]
 encodeNullaryConstant_typeArgsFromReturnType aliases t cx g =
@@ -1436,11 +1427,10 @@ encodeTermInternal env anns tyapps term cx g0 =
                           expr])) (\targs -> Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocationStaticWithTypeArgs (Syntax.Identifier "hydra.util.Either") (Syntax.Identifier methodName) targs [
                           expr]))
             in (Eithers.either (\term1 -> Eithers.bind (Maybes.cases branchTypes (encode term1) (\bt -> encodeWithType (Pairs.first bt) term1)) (\expr -> Right (eitherCall "left" expr))) (\term1 -> Eithers.bind (Maybes.cases branchTypes (encode term1) (\bt -> encodeWithType (Pairs.second bt) term1)) (\expr -> Right (eitherCall "right" expr))) v0))))
-        Core.TermFunction v0 ->
-          let combinedAnns = Lists.foldl (\acc -> \m -> Maps.union acc m) Maps.empty anns
-          in (Eithers.bind (Eithers.bimap (\_de -> Errors.ErrorOther (Errors.OtherError (Errors.unDecodingError _de))) (\_a -> _a) (Annotations.getType g combinedAnns)) (\mt -> Eithers.bind (Maybes.cases mt (Maybes.cases (tryInferFunctionType v0) (Checking.typeOfTerm cx g term) (\inferredType -> Right inferredType)) (\t -> Right t)) (\typ -> case (Strip.deannotateType typ) of
-            Core.TypeFunction v1 -> encodeFunction env (Core.functionTypeDomain v1) (Core.functionTypeCodomain v1) v0 cx g
-            _ -> encodeNullaryConstant env typ v0 cx g)))
+        Core.TermLambda _ -> encodeFunctionFormTerm env anns term cx g
+        Core.TermProject _ -> encodeFunctionFormTerm env anns term cx g
+        Core.TermCases _ -> encodeFunctionFormTerm env anns term cx g
+        Core.TermUnwrap _ -> encodeFunctionFormTerm env anns term cx g
         Core.TermLet v0 ->
           let bindings = Core.letBindings v0
               body = Core.letBody v0
@@ -1637,68 +1627,60 @@ encodeTermTCO env0 funcName paramNames tcoVarRenames tcoDepth term cx g =
           in (Logic.ifElse (Equality.equal (Lists.length args2) 1) (
             let arg = Lists.head args2
             in case (Strip.deannotateAndDetypeTerm body2) of
-              Core.TermFunction v0 -> case v0 of
-                Core.FunctionElimination v1 -> case v1 of
-                  Core.EliminationUnion v2 ->
-                    let aliases = Environment_.javaEnvironmentAliases env
-                        tname = Core.caseStatementTypeName v2
-                        dflt = Core.caseStatementDefault v2
-                        cases_ = Core.caseStatementCases v2
-                    in (Eithers.bind (domTypeArgs aliases (Resolution.nominalApplication tname []) cx g) (\domArgs -> Eithers.bind (encodeTerm env arg cx g) (\jArgRaw ->
-                      let depthSuffix = Logic.ifElse (Equality.equal tcoDepth 0) "" (Literals.showInt32 tcoDepth)
-                          matchVarId =
-                                  Utils.javaIdentifier (Strings.cat [
-                                    "_tco_match_",
-                                    (Formatting.decapitalize (Names_.localNameOf tname)),
-                                    depthSuffix])
-                          matchDecl = Utils.varDeclarationStatement matchVarId jArgRaw
-                          jArg = Utils.javaIdentifierToJavaExpression matchVarId
-                      in (Eithers.bind (Eithers.mapList (\field ->
-                        let fieldName = Core.fieldName field
-                            variantRefType =
-                                    Utils.nameToJavaReferenceType aliases True domArgs tname (Just (Formatting.capitalize (Core.unName fieldName)))
-                        in case (Strip.deannotateTerm (Core.fieldTerm field)) of
-                          Core.TermFunction v3 -> case v3 of
-                            Core.FunctionLambda v4 -> withLambda env v4 (\env2 ->
-                              let lambdaParam = Core.lambdaParameter v4
-                                  branchBody = Core.lambdaBody v4
-                                  env3 = insertBranchVar lambdaParam env2
-                                  varId = Utils.variableToJavaIdentifier lambdaParam
-                                  castExpr =
-                                          Utils.javaCastExpressionToJavaExpression (Utils.javaCastExpression variantRefType (Utils.javaExpressionToJavaUnaryExpression jArg))
-                                  localDecl = Utils.varDeclarationStatement varId castExpr
-                                  isBranchTailCall = Analysis.isTailRecursiveInTailPosition funcName branchBody
-                              in (Eithers.bind (Logic.ifElse isBranchTailCall (encodeTermTCO env3 funcName paramNames tcoVarRenames (Math.add tcoDepth 1) branchBody cx g) (Eithers.bind (analyzeJavaFunction env3 branchBody cx g) (\fs ->
-                                let bindings = Typing.functionStructureBindings fs
-                                    innerBody = Typing.functionStructureBody fs
-                                    env4 = Typing.functionStructureEnvironment fs
-                                in (Eithers.bind (bindingsToStatements env4 bindings cx g) (\bindResult ->
-                                  let bindingStmts = Pairs.first bindResult
-                                      env5 = Pairs.second bindResult
-                                  in (Eithers.bind (encodeTerm env5 innerBody cx g) (\jret ->
-                                    let returnStmt = Syntax.BlockStatementStatement (Utils.javaReturnStatement (Just jret))
-                                    in (Right (Lists.concat2 bindingStmts [
-                                      returnStmt]))))))))) (\bodyStmts ->
-                                let relExpr =
-                                        Utils.javaInstanceOf (Utils.javaUnaryExpressionToJavaRelationalExpression (Utils.javaExpressionToJavaUnaryExpression jArg)) variantRefType
-                                    condExpr = Utils.javaRelationalExpressionToJavaExpression relExpr
-                                    blockStmts = Lists.cons localDecl bodyStmts
-                                    ifBody = Syntax.StatementWithoutTrailing (Syntax.StatementWithoutTrailingSubstatementBlock (Syntax.Block blockStmts))
-                                in (Right (Syntax.BlockStatementStatement (Syntax.StatementIfThen (Syntax.IfThenStatement {
-                                  Syntax.ifThenStatementExpression = condExpr,
-                                  Syntax.ifThenStatementStatement = ifBody})))))))
-                            _ -> Left (Errors.ErrorOther (Errors.OtherError "TCO: case branch is not a lambda"))
-                          _ -> Left (Errors.ErrorOther (Errors.OtherError "TCO: case branch is not a lambda"))) cases_) (\ifBlocks -> Eithers.bind (Maybes.cases dflt (Right [
-                        Syntax.BlockStatementStatement (Utils.javaReturnStatement (Just jArg))]) (\d -> Eithers.bind (encodeTerm env d cx g) (\dExpr -> Right [
-                        Syntax.BlockStatementStatement (Utils.javaReturnStatement (Just dExpr))]))) (\defaultStmt -> Right (Lists.concat [
-                        [
-                          matchDecl],
-                        ifBlocks,
-                        defaultStmt])))))))
-                  _ -> Eithers.bind (encodeTerm env term cx g) (\expr -> Right [
-                    Syntax.BlockStatementStatement (Utils.javaReturnStatement (Just expr))])
-                _ -> Eithers.bind (encodeTerm env term cx g) (\expr -> Right [
-                  Syntax.BlockStatementStatement (Utils.javaReturnStatement (Just expr))])
+              Core.TermCases v0 ->
+                let aliases = Environment_.javaEnvironmentAliases env
+                    tname = Core.caseStatementTypeName v0
+                    dflt = Core.caseStatementDefault v0
+                    cases_ = Core.caseStatementCases v0
+                in (Eithers.bind (domTypeArgs aliases (Resolution.nominalApplication tname []) cx g) (\domArgs -> Eithers.bind (encodeTerm env arg cx g) (\jArgRaw ->
+                  let depthSuffix = Logic.ifElse (Equality.equal tcoDepth 0) "" (Literals.showInt32 tcoDepth)
+                      matchVarId =
+                              Utils.javaIdentifier (Strings.cat [
+                                "_tco_match_",
+                                (Formatting.decapitalize (Names_.localNameOf tname)),
+                                depthSuffix])
+                      matchDecl = Utils.varDeclarationStatement matchVarId jArgRaw
+                      jArg = Utils.javaIdentifierToJavaExpression matchVarId
+                  in (Eithers.bind (Eithers.mapList (\field ->
+                    let fieldName = Core.fieldName field
+                        variantRefType =
+                                Utils.nameToJavaReferenceType aliases True domArgs tname (Just (Formatting.capitalize (Core.unName fieldName)))
+                    in case (Strip.deannotateTerm (Core.fieldTerm field)) of
+                      Core.TermLambda v1 -> withLambda env v1 (\env2 ->
+                        let lambdaParam = Core.lambdaParameter v1
+                            branchBody = Core.lambdaBody v1
+                            env3 = insertBranchVar lambdaParam env2
+                            varId = Utils.variableToJavaIdentifier lambdaParam
+                            castExpr =
+                                    Utils.javaCastExpressionToJavaExpression (Utils.javaCastExpression variantRefType (Utils.javaExpressionToJavaUnaryExpression jArg))
+                            localDecl = Utils.varDeclarationStatement varId castExpr
+                            isBranchTailCall = Analysis.isTailRecursiveInTailPosition funcName branchBody
+                        in (Eithers.bind (Logic.ifElse isBranchTailCall (encodeTermTCO env3 funcName paramNames tcoVarRenames (Math.add tcoDepth 1) branchBody cx g) (Eithers.bind (analyzeJavaFunction env3 branchBody cx g) (\fs ->
+                          let bindings = Typing.functionStructureBindings fs
+                              innerBody = Typing.functionStructureBody fs
+                              env4 = Typing.functionStructureEnvironment fs
+                          in (Eithers.bind (bindingsToStatements env4 bindings cx g) (\bindResult ->
+                            let bindingStmts = Pairs.first bindResult
+                                env5 = Pairs.second bindResult
+                            in (Eithers.bind (encodeTerm env5 innerBody cx g) (\jret ->
+                              let returnStmt = Syntax.BlockStatementStatement (Utils.javaReturnStatement (Just jret))
+                              in (Right (Lists.concat2 bindingStmts [
+                                returnStmt]))))))))) (\bodyStmts ->
+                          let relExpr =
+                                  Utils.javaInstanceOf (Utils.javaUnaryExpressionToJavaRelationalExpression (Utils.javaExpressionToJavaUnaryExpression jArg)) variantRefType
+                              condExpr = Utils.javaRelationalExpressionToJavaExpression relExpr
+                              blockStmts = Lists.cons localDecl bodyStmts
+                              ifBody = Syntax.StatementWithoutTrailing (Syntax.StatementWithoutTrailingSubstatementBlock (Syntax.Block blockStmts))
+                          in (Right (Syntax.BlockStatementStatement (Syntax.StatementIfThen (Syntax.IfThenStatement {
+                            Syntax.ifThenStatementExpression = condExpr,
+                            Syntax.ifThenStatementStatement = ifBody})))))))
+                      _ -> Left (Errors.ErrorOther (Errors.OtherError "TCO: case branch is not a lambda"))) cases_) (\ifBlocks -> Eithers.bind (Maybes.cases dflt (Right [
+                    Syntax.BlockStatementStatement (Utils.javaReturnStatement (Just jArg))]) (\d -> Eithers.bind (encodeTerm env d cx g) (\dExpr -> Right [
+                    Syntax.BlockStatementStatement (Utils.javaReturnStatement (Just dExpr))]))) (\defaultStmt -> Right (Lists.concat [
+                    [
+                      matchDecl],
+                    ifBlocks,
+                    defaultStmt])))))))
               _ -> Eithers.bind (encodeTerm env term cx g) (\expr -> Right [
                 Syntax.BlockStatementStatement (Utils.javaReturnStatement (Just expr))])) (Eithers.bind (encodeTerm env term cx g) (\expr -> Right [
             Syntax.BlockStatementStatement (Utils.javaReturnStatement (Just expr))])))))
@@ -2358,13 +2340,11 @@ propagateType typ term =
 
       let setTypeAnn = \t -> Annotations.setTermAnnotation Constants.key_type (Just (Core__.type_ typ)) t
       in case (Strip.deannotateTerm term) of
-        Core.TermFunction v0 -> case v0 of
-          Core.FunctionLambda _ ->
-            let annotated = setTypeAnn term
-            in case (Strip.deannotateType typ) of
-              Core.TypeFunction v2 -> propagateType_propagateIntoLambda (Core.functionTypeCodomain v2) annotated
-              _ -> annotated
-          _ -> setTypeAnn term
+        Core.TermLambda _ ->
+          let annotated = setTypeAnn term
+          in case (Strip.deannotateType typ) of
+            Core.TypeFunction v1 -> propagateType_propagateIntoLambda (Core.functionTypeCodomain v1) annotated
+            _ -> annotated
         Core.TermLet v0 ->
           let propagatedBindings =
                   Lists.map (\b -> Maybes.maybe b (\ts -> Core.Binding {
@@ -2377,17 +2357,13 @@ propagateType typ term =
               arg = Core.applicationArgument v0
               annotatedFun =
                       case (Strip.deannotateTerm fun) of
-                        Core.TermFunction v1 -> case v1 of
-                          Core.FunctionElimination v2 -> case v2 of
-                            Core.EliminationUnion v3 ->
-                              let dom = Resolution.nominalApplication (Core.caseStatementTypeName v3) []
-                                  ft =
-                                          Core.TypeFunction (Core.FunctionType {
-                                            Core.functionTypeDomain = dom,
-                                            Core.functionTypeCodomain = typ})
-                              in (Annotations.setTermAnnotation Constants.key_type (Just (Core__.type_ ft)) fun)
-                            _ -> fun
-                          _ -> fun
+                        Core.TermCases v1 ->
+                          let dom = Resolution.nominalApplication (Core.caseStatementTypeName v1) []
+                              ft =
+                                      Core.TypeFunction (Core.FunctionType {
+                                        Core.functionTypeDomain = dom,
+                                        Core.functionTypeCodomain = typ})
+                          in (Annotations.setTermAnnotation Constants.key_type (Just (Core__.type_ ft)) fun)
                         _ -> fun
           in (setTypeAnn (Core.TermApplication (Core.Application {
             Core.applicationFunction = annotatedFun,
@@ -2400,12 +2376,10 @@ propagateType_propagateIntoLambda cod t =
       Core.TermAnnotated v0 -> Core.TermAnnotated (Core.AnnotatedTerm {
         Core.annotatedTermBody = (propagateType_propagateIntoLambda cod (Core.annotatedTermBody v0)),
         Core.annotatedTermAnnotation = (Core.annotatedTermAnnotation v0)})
-      Core.TermFunction v0 -> case v0 of
-        Core.FunctionLambda v1 -> Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-          Core.lambdaParameter = (Core.lambdaParameter v1),
-          Core.lambdaDomain = (Core.lambdaDomain v1),
-          Core.lambdaBody = (propagateType cod (Core.lambdaBody v1))}))
-        _ -> t
+      Core.TermLambda v0 -> Core.TermLambda (Core.Lambda {
+        Core.lambdaParameter = (Core.lambdaParameter v0),
+        Core.lambdaDomain = (Core.lambdaDomain v0),
+        Core.lambdaBody = (propagateType cod (Core.lambdaBody v0))})
       _ -> t
 
 propagateType_rebuildLet :: Core.Term -> [Core.Binding] -> Core.Term -> Core.Term
@@ -2442,17 +2416,13 @@ propagateTypesInAppChain fixedCod resultType t =
               rhs = Core.applicationArgument v0
               annotatedLhs =
                       case (Strip.deannotateTerm lhs) of
-                        Core.TermFunction v1 -> case v1 of
-                          Core.FunctionElimination v2 -> case v2 of
-                            Core.EliminationUnion v3 ->
-                              let dom = Resolution.nominalApplication (Core.caseStatementTypeName v3) []
-                                  ft =
-                                          Core.TypeFunction (Core.FunctionType {
-                                            Core.functionTypeDomain = dom,
-                                            Core.functionTypeCodomain = fixedCod})
-                              in (Annotations.setTermAnnotation Constants.key_type (Just (Core__.type_ ft)) lhs)
-                            _ -> lhs
-                          _ -> lhs
+                        Core.TermCases v1 ->
+                          let dom = Resolution.nominalApplication (Core.caseStatementTypeName v1) []
+                              ft =
+                                      Core.TypeFunction (Core.FunctionType {
+                                        Core.functionTypeDomain = dom,
+                                        Core.functionTypeCodomain = fixedCod})
+                          in (Annotations.setTermAnnotation Constants.key_type (Just (Core__.type_ ft)) lhs)
                         _ -> lhs
           in (Annotations.setTermAnnotation Constants.key_type (Just (Core__.type_ resultType)) (Core.TermApplication (Core.Application {
             Core.applicationFunction = annotatedLhs,
@@ -2816,14 +2786,14 @@ toDeclStatement envExt aliasesExt gExt recursiveVars thunkedVars flatBindings na
                         supplierLambda] Nothing
           in (Right (Utils.variableDeclarationStatement aliasesExt lazyType id lazyExpr)))) (Right (Utils.variableDeclarationStatement aliasesExt jtype id rhs))))))))
 
-tryInferFunctionType :: Core.Function -> Maybe Core.Type
-tryInferFunctionType fun =
-    case fun of
-      Core.FunctionLambda v0 -> Maybes.bind (Core.lambdaDomain v0) (\dom ->
+tryInferFunctionType :: Core.Term -> Maybe Core.Type
+tryInferFunctionType funTerm =
+    case (Strip.deannotateTerm funTerm) of
+      Core.TermLambda v0 -> Maybes.bind (Core.lambdaDomain v0) (\dom ->
         let mCod =
                 case (Core.lambdaBody v0) of
                   Core.TermAnnotated v1 -> Maybes.bind (Maps.lookup Constants.key_type (Core.annotatedTermAnnotation v1)) (\typeTerm -> decodeTypeFromTerm typeTerm)
-                  Core.TermFunction v1 -> tryInferFunctionType v1
+                  Core.TermLambda _ -> tryInferFunctionType (Core.lambdaBody v0)
                   _ -> Nothing
         in (Maybes.map (\cod -> Core.TypeFunction (Core.FunctionType {
           Core.functionTypeDomain = dom,
@@ -2927,26 +2897,24 @@ visitBranch env aliases dom tname jcod targs field cx g =
                 Utils.overrideAnnotation]
           result = Syntax.ResultType (Syntax.UnannType jcod)
       in case (Strip.deannotateTerm (Core.fieldTerm field)) of
-        Core.TermFunction v0 -> case v0 of
-          Core.FunctionLambda v1 -> withLambda env v1 (\env2 ->
-            let lambdaParam = Core.lambdaParameter v1
-                body = Core.lambdaBody v1
-                env3 = insertBranchVar lambdaParam env2
-            in (Eithers.bind (analyzeJavaFunction env3 body cx g) (\fs ->
-              let bindings = Typing.functionStructureBindings fs
-                  innerBody = Typing.functionStructureBody fs
-                  env4 = Typing.functionStructureEnvironment fs
-              in (Eithers.bind (bindingsToStatements env4 bindings cx g) (\bindResult ->
-                let bindingStmts = Pairs.first bindResult
-                    env5 = Pairs.second bindResult
-                in (Eithers.bind (encodeTerm env5 innerBody cx g) (\jret ->
-                  let param = Utils.javaTypeToJavaFormalParameter jdom lambdaParam
-                      returnStmt = Syntax.BlockStatementStatement (Utils.javaReturnStatement (Just jret))
-                      allStmts = Lists.concat2 bindingStmts [
-                            returnStmt]
-                  in (Right (noComment (Utils.methodDeclaration mods [] anns Names.visitMethodName [
-                    param] result (Just allStmts)))))))))))
-          _ -> Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "visitBranch: field term is not a lambda: " (Core___.term (Core.fieldTerm field)))))
+        Core.TermLambda v0 -> withLambda env v0 (\env2 ->
+          let lambdaParam = Core.lambdaParameter v0
+              body = Core.lambdaBody v0
+              env3 = insertBranchVar lambdaParam env2
+          in (Eithers.bind (analyzeJavaFunction env3 body cx g) (\fs ->
+            let bindings = Typing.functionStructureBindings fs
+                innerBody = Typing.functionStructureBody fs
+                env4 = Typing.functionStructureEnvironment fs
+            in (Eithers.bind (bindingsToStatements env4 bindings cx g) (\bindResult ->
+              let bindingStmts = Pairs.first bindResult
+                  env5 = Pairs.second bindResult
+              in (Eithers.bind (encodeTerm env5 innerBody cx g) (\jret ->
+                let param = Utils.javaTypeToJavaFormalParameter jdom lambdaParam
+                    returnStmt = Syntax.BlockStatementStatement (Utils.javaReturnStatement (Just jret))
+                    allStmts = Lists.concat2 bindingStmts [
+                          returnStmt]
+                in (Right (noComment (Utils.methodDeclaration mods [] anns Names.visitMethodName [
+                  param] result (Just allStmts)))))))))))
         _ -> Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "visitBranch: field term is not a lambda: " (Core___.term (Core.fieldTerm field)))))
 
 withLambda :: Environment_.JavaEnvironment -> Core.Lambda -> (Environment_.JavaEnvironment -> t0) -> t0

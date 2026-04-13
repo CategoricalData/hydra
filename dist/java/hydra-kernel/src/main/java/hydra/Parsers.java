@@ -114,12 +114,12 @@ public interface Parsers {
   }
 
   static hydra.parsing.Parser<java.lang.Void> eof() {
-    return new hydra.parsing.Parser((java.util.function.Function<String, hydra.parsing.ParseResult<java.lang.Void>>) (input -> hydra.lib.logic.IfElse.lazy(
+    return (hydra.parsing.Parser<java.lang.Void>) (new hydra.parsing.Parser((java.util.function.Function<String, hydra.parsing.ParseResult<java.lang.Void>>) (input -> hydra.lib.logic.IfElse.lazy(
       hydra.lib.equality.Equal.apply(
         input,
         ""),
       () -> (hydra.parsing.ParseResult<java.lang.Void>) (new hydra.parsing.ParseResult.Success((hydra.parsing.ParseSuccess<java.lang.Void>) (new hydra.parsing.ParseSuccess<java.lang.Void>(null, "")))),
-      () -> (hydra.parsing.ParseResult<java.lang.Void>) (new hydra.parsing.ParseResult.Failure(new hydra.parsing.ParseError("expected end of input", input))))));
+      () -> (hydra.parsing.ParseResult<java.lang.Void>) (new hydra.parsing.ParseResult.Failure(new hydra.parsing.ParseError("expected end of input", input)))))));
   }
 
   static <T0> hydra.parsing.Parser<T0> fail(String msg) {

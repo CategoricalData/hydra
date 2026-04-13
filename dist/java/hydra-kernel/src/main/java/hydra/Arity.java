@@ -6,22 +6,6 @@ package hydra;
  * Functions dealing with arguments and arity.
  */
 public interface Arity {
-  static Integer functionArity(hydra.core.Function v1) {
-    return (v1).accept(new hydra.core.Function.PartialVisitor<>() {
-      @Override
-      public Integer visit(hydra.core.Function.Elimination ignored) {
-        return 1;
-      }
-
-      @Override
-      public Integer visit(hydra.core.Function.Lambda arg_) {
-        return hydra.lib.math.Add.apply(
-          1,
-          hydra.Arity.termArity((arg_).value.body));
-      }
-    });
-  }
-
   static Integer primitiveArity(hydra.graph.Primitive arg_) {
     return hydra.Arity.typeArity((arg_).type.type);
   }
@@ -41,8 +25,25 @@ public interface Arity {
       }
 
       @Override
-      public Integer visit(hydra.core.Term.Function v12) {
-        return hydra.Arity.functionArity((v12).value);
+      public Integer visit(hydra.core.Term.Cases ignored) {
+        return 1;
+      }
+
+      @Override
+      public Integer visit(hydra.core.Term.Lambda arg_) {
+        return hydra.lib.math.Add.apply(
+          1,
+          hydra.Arity.termArity((arg_).value.body));
+      }
+
+      @Override
+      public Integer visit(hydra.core.Term.Project ignored) {
+        return 1;
+      }
+
+      @Override
+      public Integer visit(hydra.core.Term.Unwrap ignored) {
+        return 1;
       }
     });
   }

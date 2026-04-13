@@ -24,17 +24,17 @@ annotatedApplication annot terms =
 annotatedApplicationAnnot :: Phantoms.TTerm Syntax.AnnotatedApplication -> Phantoms.TTerm Syntax.QualidAnnotated
 annotatedApplicationAnnot x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.AnnotatedApplication"),
-        Core.projectionField = (Core.Name "annot")})))),
+        Core.projectionField = (Core.Name "annot")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 annotatedApplicationTerms :: Phantoms.TTerm Syntax.AnnotatedApplication -> Phantoms.TTerm [Syntax.Term1]
 annotatedApplicationTerms x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.AnnotatedApplication"),
-        Core.projectionField = (Core.Name "terms")})))),
+        Core.projectionField = (Core.Name "terms")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 annotatedApplicationWithAnnot :: Phantoms.TTerm Syntax.AnnotatedApplication -> Phantoms.TTerm Syntax.QualidAnnotated -> Phantoms.TTerm Syntax.AnnotatedApplication
@@ -48,9 +48,9 @@ annotatedApplicationWithAnnot original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "terms"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.AnnotatedApplication"),
-              Core.projectionField = (Core.Name "terms")})))),
+              Core.projectionField = (Core.Name "terms")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 annotatedApplicationWithTerms :: Phantoms.TTerm Syntax.AnnotatedApplication -> Phantoms.TTerm [Syntax.Term1] -> Phantoms.TTerm Syntax.AnnotatedApplication
@@ -61,9 +61,9 @@ annotatedApplicationWithTerms original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "annot"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.AnnotatedApplication"),
-              Core.projectionField = (Core.Name "annot")})))),
+              Core.projectionField = (Core.Name "annot")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "terms"),
@@ -175,25 +175,25 @@ caseItem term as in_ =
 caseItemAs :: Phantoms.TTerm Syntax.CaseItem -> Phantoms.TTerm (Maybe Syntax.Name)
 caseItemAs x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.CaseItem"),
-        Core.projectionField = (Core.Name "as")})))),
+        Core.projectionField = (Core.Name "as")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 caseItemIn :: Phantoms.TTerm Syntax.CaseItem -> Phantoms.TTerm (Maybe Syntax.Pattern)
 caseItemIn x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.CaseItem"),
-        Core.projectionField = (Core.Name "in")})))),
+        Core.projectionField = (Core.Name "in")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 caseItemTerm :: Phantoms.TTerm Syntax.CaseItem -> Phantoms.TTerm Syntax.Term100
 caseItemTerm x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.CaseItem"),
-        Core.projectionField = (Core.Name "term")})))),
+        Core.projectionField = (Core.Name "term")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 caseItemWithAs :: Phantoms.TTerm Syntax.CaseItem -> Phantoms.TTerm (Maybe Syntax.Name) -> Phantoms.TTerm Syntax.CaseItem
@@ -204,9 +204,9 @@ caseItemWithAs original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "term"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.CaseItem"),
-              Core.projectionField = (Core.Name "term")})))),
+              Core.projectionField = (Core.Name "term")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "as"),
@@ -214,9 +214,9 @@ caseItemWithAs original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "in"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.CaseItem"),
-              Core.projectionField = (Core.Name "in")})))),
+              Core.projectionField = (Core.Name "in")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 caseItemWithIn :: Phantoms.TTerm Syntax.CaseItem -> Phantoms.TTerm (Maybe Syntax.Pattern) -> Phantoms.TTerm Syntax.CaseItem
@@ -227,16 +227,16 @@ caseItemWithIn original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "term"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.CaseItem"),
-              Core.projectionField = (Core.Name "term")})))),
+              Core.projectionField = (Core.Name "term")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "as"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.CaseItem"),
-              Core.projectionField = (Core.Name "as")})))),
+              Core.projectionField = (Core.Name "as")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "in"),
@@ -253,16 +253,16 @@ caseItemWithTerm original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "as"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.CaseItem"),
-              Core.projectionField = (Core.Name "as")})))),
+              Core.projectionField = (Core.Name "as")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "in"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.CaseItem"),
-              Core.projectionField = (Core.Name "in")})))),
+              Core.projectionField = (Core.Name "in")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 cofix :: Phantoms.TTerm Syntax.CofixBody -> Phantoms.TTerm (Maybe Syntax.CofixQual) -> Phantoms.TTerm Syntax.Cofix
@@ -280,41 +280,41 @@ cofix body qual =
 cofixBody :: Phantoms.TTerm Syntax.Cofix -> Phantoms.TTerm Syntax.CofixBody
 cofixBody x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Cofix"),
-        Core.projectionField = (Core.Name "body")})))),
+        Core.projectionField = (Core.Name "body")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 cofixBodyBinders :: Phantoms.TTerm Syntax.CofixBody -> Phantoms.TTerm [Syntax.Binder]
 cofixBodyBinders x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.CofixBody"),
-        Core.projectionField = (Core.Name "binders")})))),
+        Core.projectionField = (Core.Name "binders")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 cofixBodyIdent :: Phantoms.TTerm Syntax.CofixBody -> Phantoms.TTerm Syntax.Ident
 cofixBodyIdent x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.CofixBody"),
-        Core.projectionField = (Core.Name "ident")})))),
+        Core.projectionField = (Core.Name "ident")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 cofixBodyTerm :: Phantoms.TTerm Syntax.CofixBody -> Phantoms.TTerm Syntax.Term
 cofixBodyTerm x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.CofixBody"),
-        Core.projectionField = (Core.Name "term")})))),
+        Core.projectionField = (Core.Name "term")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 cofixBodyType :: Phantoms.TTerm Syntax.CofixBody -> Phantoms.TTerm (Maybe Syntax.Type)
 cofixBodyType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.CofixBody"),
-        Core.projectionField = (Core.Name "type")})))),
+        Core.projectionField = (Core.Name "type")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 cofixBodyWithBinders :: Phantoms.TTerm Syntax.CofixBody -> Phantoms.TTerm [Syntax.Binder] -> Phantoms.TTerm Syntax.CofixBody
@@ -325,9 +325,9 @@ cofixBodyWithBinders original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "ident"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.CofixBody"),
-              Core.projectionField = (Core.Name "ident")})))),
+              Core.projectionField = (Core.Name "ident")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "binders"),
@@ -335,16 +335,16 @@ cofixBodyWithBinders original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.CofixBody"),
-              Core.projectionField = (Core.Name "type")})))),
+              Core.projectionField = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "term"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.CofixBody"),
-              Core.projectionField = (Core.Name "term")})))),
+              Core.projectionField = (Core.Name "term")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 cofixBodyWithIdent :: Phantoms.TTerm Syntax.CofixBody -> Phantoms.TTerm Syntax.Ident -> Phantoms.TTerm Syntax.CofixBody
@@ -358,23 +358,23 @@ cofixBodyWithIdent original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "binders"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.CofixBody"),
-              Core.projectionField = (Core.Name "binders")})))),
+              Core.projectionField = (Core.Name "binders")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.CofixBody"),
-              Core.projectionField = (Core.Name "type")})))),
+              Core.projectionField = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "term"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.CofixBody"),
-              Core.projectionField = (Core.Name "term")})))),
+              Core.projectionField = (Core.Name "term")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 cofixBodyWithTerm :: Phantoms.TTerm Syntax.CofixBody -> Phantoms.TTerm Syntax.Term -> Phantoms.TTerm Syntax.CofixBody
@@ -385,23 +385,23 @@ cofixBodyWithTerm original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "ident"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.CofixBody"),
-              Core.projectionField = (Core.Name "ident")})))),
+              Core.projectionField = (Core.Name "ident")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "binders"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.CofixBody"),
-              Core.projectionField = (Core.Name "binders")})))),
+              Core.projectionField = (Core.Name "binders")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.CofixBody"),
-              Core.projectionField = (Core.Name "type")})))),
+              Core.projectionField = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "term"),
@@ -415,16 +415,16 @@ cofixBodyWithType original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "ident"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.CofixBody"),
-              Core.projectionField = (Core.Name "ident")})))),
+              Core.projectionField = (Core.Name "ident")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "binders"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.CofixBody"),
-              Core.projectionField = (Core.Name "binders")})))),
+              Core.projectionField = (Core.Name "binders")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
@@ -432,9 +432,9 @@ cofixBodyWithType original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "term"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.CofixBody"),
-              Core.projectionField = (Core.Name "term")})))),
+              Core.projectionField = (Core.Name "term")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 cofixBody_ :: Phantoms.TTerm Syntax.Ident -> Phantoms.TTerm [Syntax.Binder] -> Phantoms.TTerm (Maybe Syntax.Type) -> Phantoms.TTerm Syntax.Term -> Phantoms.TTerm Syntax.CofixBody
@@ -458,9 +458,9 @@ cofixBody_ ident binders type_ term =
 cofixQual :: Phantoms.TTerm Syntax.Cofix -> Phantoms.TTerm (Maybe Syntax.CofixQual)
 cofixQual x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Cofix"),
-        Core.projectionField = (Core.Name "qual")})))),
+        Core.projectionField = (Core.Name "qual")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 cofixQualIn :: Phantoms.TTerm Syntax.Term -> Phantoms.TTerm Syntax.CofixQual
@@ -502,17 +502,17 @@ cofixWithBody original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "qual"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Cofix"),
-              Core.projectionField = (Core.Name "qual")})))),
+              Core.projectionField = (Core.Name "qual")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 cofixWithFor :: Phantoms.TTerm Syntax.CofixWith -> Phantoms.TTerm (Maybe Syntax.Ident)
 cofixWithFor x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.CofixWith"),
-        Core.projectionField = (Core.Name "for")})))),
+        Core.projectionField = (Core.Name "for")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 cofixWithQual :: Phantoms.TTerm Syntax.Cofix -> Phantoms.TTerm (Maybe Syntax.CofixQual) -> Phantoms.TTerm Syntax.Cofix
@@ -523,9 +523,9 @@ cofixWithQual original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Cofix"),
-              Core.projectionField = (Core.Name "body")})))),
+              Core.projectionField = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "qual"),
@@ -534,9 +534,9 @@ cofixWithQual original newVal =
 cofixWithWith :: Phantoms.TTerm Syntax.CofixWith -> Phantoms.TTerm [Syntax.CofixBody]
 cofixWithWith x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.CofixWith"),
-        Core.projectionField = (Core.Name "with")})))),
+        Core.projectionField = (Core.Name "with")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 cofixWithWithFor :: Phantoms.TTerm Syntax.CofixWith -> Phantoms.TTerm (Maybe Syntax.Ident) -> Phantoms.TTerm Syntax.CofixWith
@@ -547,9 +547,9 @@ cofixWithWithFor original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "with"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.CofixWith"),
-              Core.projectionField = (Core.Name "with")})))),
+              Core.projectionField = (Core.Name "with")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "for"),
@@ -566,9 +566,9 @@ cofixWithWithWith original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "for"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.CofixWith"),
-              Core.projectionField = (Core.Name "for")})))),
+              Core.projectionField = (Core.Name "for")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 comment :: Phantoms.TTerm String -> Phantoms.TTerm Syntax.Comment
@@ -595,25 +595,25 @@ constructor name binders type_ =
 constructorBinders :: Phantoms.TTerm Syntax.Constructor -> Phantoms.TTerm [Syntax.Binder]
 constructorBinders x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Constructor"),
-        Core.projectionField = (Core.Name "binders")})))),
+        Core.projectionField = (Core.Name "binders")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 constructorName :: Phantoms.TTerm Syntax.Constructor -> Phantoms.TTerm Syntax.Ident
 constructorName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Constructor"),
-        Core.projectionField = (Core.Name "name")})))),
+        Core.projectionField = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 constructorType :: Phantoms.TTerm Syntax.Constructor -> Phantoms.TTerm (Maybe Syntax.Type)
 constructorType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Constructor"),
-        Core.projectionField = (Core.Name "type")})))),
+        Core.projectionField = (Core.Name "type")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 constructorWithBinders :: Phantoms.TTerm Syntax.Constructor -> Phantoms.TTerm [Syntax.Binder] -> Phantoms.TTerm Syntax.Constructor
@@ -624,9 +624,9 @@ constructorWithBinders original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Constructor"),
-              Core.projectionField = (Core.Name "name")})))),
+              Core.projectionField = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "binders"),
@@ -634,9 +634,9 @@ constructorWithBinders original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Constructor"),
-              Core.projectionField = (Core.Name "type")})))),
+              Core.projectionField = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 constructorWithName :: Phantoms.TTerm Syntax.Constructor -> Phantoms.TTerm Syntax.Ident -> Phantoms.TTerm Syntax.Constructor
@@ -650,16 +650,16 @@ constructorWithName original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "binders"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Constructor"),
-              Core.projectionField = (Core.Name "binders")})))),
+              Core.projectionField = (Core.Name "binders")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Constructor"),
-              Core.projectionField = (Core.Name "type")})))),
+              Core.projectionField = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 constructorWithType :: Phantoms.TTerm Syntax.Constructor -> Phantoms.TTerm (Maybe Syntax.Type) -> Phantoms.TTerm Syntax.Constructor
@@ -670,16 +670,16 @@ constructorWithType original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Constructor"),
-              Core.projectionField = (Core.Name "name")})))),
+              Core.projectionField = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "binders"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Constructor"),
-              Core.projectionField = (Core.Name "binders")})))),
+              Core.projectionField = (Core.Name "binders")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
@@ -709,41 +709,41 @@ definition locality name binders type_ body =
 definitionBinders :: Phantoms.TTerm Syntax.Definition -> Phantoms.TTerm [Syntax.Binder]
 definitionBinders x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Definition"),
-        Core.projectionField = (Core.Name "binders")})))),
+        Core.projectionField = (Core.Name "binders")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 definitionBody :: Phantoms.TTerm Syntax.Definition -> Phantoms.TTerm Syntax.Term
 definitionBody x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Definition"),
-        Core.projectionField = (Core.Name "body")})))),
+        Core.projectionField = (Core.Name "body")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 definitionLocality :: Phantoms.TTerm Syntax.Definition -> Phantoms.TTerm (Maybe Syntax.Locality)
 definitionLocality x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Definition"),
-        Core.projectionField = (Core.Name "locality")})))),
+        Core.projectionField = (Core.Name "locality")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 definitionName :: Phantoms.TTerm Syntax.Definition -> Phantoms.TTerm Syntax.Ident
 definitionName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Definition"),
-        Core.projectionField = (Core.Name "name")})))),
+        Core.projectionField = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 definitionType :: Phantoms.TTerm Syntax.Definition -> Phantoms.TTerm (Maybe Syntax.Type)
 definitionType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Definition"),
-        Core.projectionField = (Core.Name "type")})))),
+        Core.projectionField = (Core.Name "type")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 definitionWithBinders :: Phantoms.TTerm Syntax.Definition -> Phantoms.TTerm [Syntax.Binder] -> Phantoms.TTerm Syntax.Definition
@@ -754,16 +754,16 @@ definitionWithBinders original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "locality"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Definition"),
-              Core.projectionField = (Core.Name "locality")})))),
+              Core.projectionField = (Core.Name "locality")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Definition"),
-              Core.projectionField = (Core.Name "name")})))),
+              Core.projectionField = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "binders"),
@@ -771,16 +771,16 @@ definitionWithBinders original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Definition"),
-              Core.projectionField = (Core.Name "type")})))),
+              Core.projectionField = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Definition"),
-              Core.projectionField = (Core.Name "body")})))),
+              Core.projectionField = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 definitionWithBody :: Phantoms.TTerm Syntax.Definition -> Phantoms.TTerm Syntax.Term -> Phantoms.TTerm Syntax.Definition
@@ -791,30 +791,30 @@ definitionWithBody original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "locality"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Definition"),
-              Core.projectionField = (Core.Name "locality")})))),
+              Core.projectionField = (Core.Name "locality")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Definition"),
-              Core.projectionField = (Core.Name "name")})))),
+              Core.projectionField = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "binders"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Definition"),
-              Core.projectionField = (Core.Name "binders")})))),
+              Core.projectionField = (Core.Name "binders")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Definition"),
-              Core.projectionField = (Core.Name "type")})))),
+              Core.projectionField = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
@@ -831,30 +831,30 @@ definitionWithLocality original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Definition"),
-              Core.projectionField = (Core.Name "name")})))),
+              Core.projectionField = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "binders"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Definition"),
-              Core.projectionField = (Core.Name "binders")})))),
+              Core.projectionField = (Core.Name "binders")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Definition"),
-              Core.projectionField = (Core.Name "type")})))),
+              Core.projectionField = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Definition"),
-              Core.projectionField = (Core.Name "body")})))),
+              Core.projectionField = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 definitionWithName :: Phantoms.TTerm Syntax.Definition -> Phantoms.TTerm Syntax.Ident -> Phantoms.TTerm Syntax.Definition
@@ -865,9 +865,9 @@ definitionWithName original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "locality"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Definition"),
-              Core.projectionField = (Core.Name "locality")})))),
+              Core.projectionField = (Core.Name "locality")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
@@ -875,23 +875,23 @@ definitionWithName original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "binders"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Definition"),
-              Core.projectionField = (Core.Name "binders")})))),
+              Core.projectionField = (Core.Name "binders")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Definition"),
-              Core.projectionField = (Core.Name "type")})))),
+              Core.projectionField = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Definition"),
-              Core.projectionField = (Core.Name "body")})))),
+              Core.projectionField = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 definitionWithType :: Phantoms.TTerm Syntax.Definition -> Phantoms.TTerm (Maybe Syntax.Type) -> Phantoms.TTerm Syntax.Definition
@@ -902,23 +902,23 @@ definitionWithType original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "locality"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Definition"),
-              Core.projectionField = (Core.Name "locality")})))),
+              Core.projectionField = (Core.Name "locality")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Definition"),
-              Core.projectionField = (Core.Name "name")})))),
+              Core.projectionField = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "binders"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Definition"),
-              Core.projectionField = (Core.Name "binders")})))),
+              Core.projectionField = (Core.Name "binders")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
@@ -926,9 +926,9 @@ definitionWithType original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Definition"),
-              Core.projectionField = (Core.Name "body")})))),
+              Core.projectionField = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 document :: Phantoms.TTerm [Syntax.Sentence] -> Phantoms.TTerm Syntax.Document
@@ -943,9 +943,9 @@ document sentences =
 documentSentences :: Phantoms.TTerm Syntax.Document -> Phantoms.TTerm [Syntax.Sentence]
 documentSentences x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Document"),
-        Core.projectionField = (Core.Name "sentences")})))),
+        Core.projectionField = (Core.Name "sentences")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 documentWithSentences :: Phantoms.TTerm Syntax.Document -> Phantoms.TTerm [Syntax.Sentence] -> Phantoms.TTerm Syntax.Document
@@ -972,17 +972,17 @@ equation pattern term =
 equationPattern :: Phantoms.TTerm Syntax.Equation -> Phantoms.TTerm [[Syntax.Pattern]]
 equationPattern x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Equation"),
-        Core.projectionField = (Core.Name "pattern")})))),
+        Core.projectionField = (Core.Name "pattern")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 equationTerm :: Phantoms.TTerm Syntax.Equation -> Phantoms.TTerm Syntax.Term
 equationTerm x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Equation"),
-        Core.projectionField = (Core.Name "term")})))),
+        Core.projectionField = (Core.Name "term")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 equationWithPattern :: Phantoms.TTerm Syntax.Equation -> Phantoms.TTerm [[Syntax.Pattern]] -> Phantoms.TTerm Syntax.Equation
@@ -996,9 +996,9 @@ equationWithPattern original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "term"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Equation"),
-              Core.projectionField = (Core.Name "term")})))),
+              Core.projectionField = (Core.Name "term")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 equationWithTerm :: Phantoms.TTerm Syntax.Equation -> Phantoms.TTerm Syntax.Term -> Phantoms.TTerm Syntax.Equation
@@ -1009,9 +1009,9 @@ equationWithTerm original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "pattern"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Equation"),
-              Core.projectionField = (Core.Name "pattern")})))),
+              Core.projectionField = (Core.Name "pattern")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "term"),
@@ -1032,17 +1032,17 @@ existentialVariable ident variant =
 existentialVariableIdent :: Phantoms.TTerm Syntax.ExistentialVariable -> Phantoms.TTerm Syntax.Ident
 existentialVariableIdent x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.ExistentialVariable"),
-        Core.projectionField = (Core.Name "ident")})))),
+        Core.projectionField = (Core.Name "ident")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 existentialVariableVariant :: Phantoms.TTerm Syntax.ExistentialVariable -> Phantoms.TTerm Syntax.ExistentialVariableVariant
 existentialVariableVariant x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.ExistentialVariable"),
-        Core.projectionField = (Core.Name "variant")})))),
+        Core.projectionField = (Core.Name "variant")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 existentialVariableVariantInside1 :: Phantoms.TTerm Syntax.ExistentialVariableVariant
@@ -1088,9 +1088,9 @@ existentialVariableWithIdent original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "variant"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.ExistentialVariable"),
-              Core.projectionField = (Core.Name "variant")})))),
+              Core.projectionField = (Core.Name "variant")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 existentialVariableWithVariant :: Phantoms.TTerm Syntax.ExistentialVariable -> Phantoms.TTerm Syntax.ExistentialVariableVariant -> Phantoms.TTerm Syntax.ExistentialVariable
@@ -1101,9 +1101,9 @@ existentialVariableWithVariant original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "ident"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.ExistentialVariable"),
-              Core.projectionField = (Core.Name "ident")})))),
+              Core.projectionField = (Core.Name "ident")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "variant"),
@@ -1157,25 +1157,25 @@ fixAnnot_Measure term ident term2 =
 fixAnnot_MeasureIdent :: Phantoms.TTerm Syntax.FixAnnot_Measure -> Phantoms.TTerm (Maybe Syntax.Ident)
 fixAnnot_MeasureIdent x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixAnnot_Measure"),
-        Core.projectionField = (Core.Name "ident")})))),
+        Core.projectionField = (Core.Name "ident")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 fixAnnot_MeasureTerm :: Phantoms.TTerm Syntax.FixAnnot_Measure -> Phantoms.TTerm Syntax.OneTerm
 fixAnnot_MeasureTerm x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixAnnot_Measure"),
-        Core.projectionField = (Core.Name "term")})))),
+        Core.projectionField = (Core.Name "term")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 fixAnnot_MeasureTerm2 :: Phantoms.TTerm Syntax.FixAnnot_Measure -> Phantoms.TTerm (Maybe Syntax.OneTerm)
 fixAnnot_MeasureTerm2 x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixAnnot_Measure"),
-        Core.projectionField = (Core.Name "term2")})))),
+        Core.projectionField = (Core.Name "term2")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 fixAnnot_MeasureWithIdent :: Phantoms.TTerm Syntax.FixAnnot_Measure -> Phantoms.TTerm (Maybe Syntax.Ident) -> Phantoms.TTerm Syntax.FixAnnot_Measure
@@ -1186,9 +1186,9 @@ fixAnnot_MeasureWithIdent original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "term"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixAnnot_Measure"),
-              Core.projectionField = (Core.Name "term")})))),
+              Core.projectionField = (Core.Name "term")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "ident"),
@@ -1196,9 +1196,9 @@ fixAnnot_MeasureWithIdent original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "term2"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixAnnot_Measure"),
-              Core.projectionField = (Core.Name "term2")})))),
+              Core.projectionField = (Core.Name "term2")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 fixAnnot_MeasureWithTerm :: Phantoms.TTerm Syntax.FixAnnot_Measure -> Phantoms.TTerm Syntax.OneTerm -> Phantoms.TTerm Syntax.FixAnnot_Measure
@@ -1212,16 +1212,16 @@ fixAnnot_MeasureWithTerm original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "ident"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixAnnot_Measure"),
-              Core.projectionField = (Core.Name "ident")})))),
+              Core.projectionField = (Core.Name "ident")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "term2"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixAnnot_Measure"),
-              Core.projectionField = (Core.Name "term2")})))),
+              Core.projectionField = (Core.Name "term2")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 fixAnnot_MeasureWithTerm2 :: Phantoms.TTerm Syntax.FixAnnot_Measure -> Phantoms.TTerm (Maybe Syntax.OneTerm) -> Phantoms.TTerm Syntax.FixAnnot_Measure
@@ -1232,16 +1232,16 @@ fixAnnot_MeasureWithTerm2 original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "term"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixAnnot_Measure"),
-              Core.projectionField = (Core.Name "term")})))),
+              Core.projectionField = (Core.Name "term")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "ident"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixAnnot_Measure"),
-              Core.projectionField = (Core.Name "ident")})))),
+              Core.projectionField = (Core.Name "ident")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "term2"),
@@ -1262,17 +1262,17 @@ fixAnnot_Wf term ident =
 fixAnnot_WfIdent :: Phantoms.TTerm Syntax.FixAnnot_Wf -> Phantoms.TTerm Syntax.Ident
 fixAnnot_WfIdent x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixAnnot_Wf"),
-        Core.projectionField = (Core.Name "ident")})))),
+        Core.projectionField = (Core.Name "ident")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 fixAnnot_WfTerm :: Phantoms.TTerm Syntax.FixAnnot_Wf -> Phantoms.TTerm Syntax.OneTerm
 fixAnnot_WfTerm x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixAnnot_Wf"),
-        Core.projectionField = (Core.Name "term")})))),
+        Core.projectionField = (Core.Name "term")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 fixAnnot_WfWithIdent :: Phantoms.TTerm Syntax.FixAnnot_Wf -> Phantoms.TTerm Syntax.Ident -> Phantoms.TTerm Syntax.FixAnnot_Wf
@@ -1283,9 +1283,9 @@ fixAnnot_WfWithIdent original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "term"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixAnnot_Wf"),
-              Core.projectionField = (Core.Name "term")})))),
+              Core.projectionField = (Core.Name "term")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "ident"),
@@ -1302,9 +1302,9 @@ fixAnnot_WfWithTerm original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "ident"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixAnnot_Wf"),
-              Core.projectionField = (Core.Name "ident")})))),
+              Core.projectionField = (Core.Name "ident")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 fixDecl :: Phantoms.TTerm Syntax.Fix_Decl -> Phantoms.TTerm Syntax.Fix
@@ -1338,17 +1338,17 @@ fixWith decls for =
 fixWithDecls :: Phantoms.TTerm Syntax.FixWith -> Phantoms.TTerm [Syntax.Fix_Decl]
 fixWithDecls x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixWith"),
-        Core.projectionField = (Core.Name "decls")})))),
+        Core.projectionField = (Core.Name "decls")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 fixWithFor :: Phantoms.TTerm Syntax.FixWith -> Phantoms.TTerm (Maybe Syntax.Ident)
 fixWithFor x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixWith"),
-        Core.projectionField = (Core.Name "for")})))),
+        Core.projectionField = (Core.Name "for")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 fixWithWithDecls :: Phantoms.TTerm Syntax.FixWith -> Phantoms.TTerm [Syntax.Fix_Decl] -> Phantoms.TTerm Syntax.FixWith
@@ -1362,9 +1362,9 @@ fixWithWithDecls original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "for"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixWith"),
-              Core.projectionField = (Core.Name "for")})))),
+              Core.projectionField = (Core.Name "for")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 fixWithWithFor :: Phantoms.TTerm Syntax.FixWith -> Phantoms.TTerm (Maybe Syntax.Ident) -> Phantoms.TTerm Syntax.FixWith
@@ -1375,9 +1375,9 @@ fixWithWithFor original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "decls"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixWith"),
-              Core.projectionField = (Core.Name "decls")})))),
+              Core.projectionField = (Core.Name "decls")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "for"),
@@ -1407,41 +1407,41 @@ fix_Decl ident binders annot type_ term =
 fix_DeclAnnot :: Phantoms.TTerm Syntax.Fix_Decl -> Phantoms.TTerm (Maybe Syntax.FixAnnot)
 fix_DeclAnnot x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Fix_Decl"),
-        Core.projectionField = (Core.Name "annot")})))),
+        Core.projectionField = (Core.Name "annot")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 fix_DeclBinders :: Phantoms.TTerm Syntax.Fix_Decl -> Phantoms.TTerm [Syntax.Binder]
 fix_DeclBinders x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Fix_Decl"),
-        Core.projectionField = (Core.Name "binders")})))),
+        Core.projectionField = (Core.Name "binders")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 fix_DeclIdent :: Phantoms.TTerm Syntax.Fix_Decl -> Phantoms.TTerm Syntax.Ident
 fix_DeclIdent x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Fix_Decl"),
-        Core.projectionField = (Core.Name "ident")})))),
+        Core.projectionField = (Core.Name "ident")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 fix_DeclTerm :: Phantoms.TTerm Syntax.Fix_Decl -> Phantoms.TTerm Syntax.Term
 fix_DeclTerm x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Fix_Decl"),
-        Core.projectionField = (Core.Name "term")})))),
+        Core.projectionField = (Core.Name "term")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 fix_DeclType :: Phantoms.TTerm Syntax.Fix_Decl -> Phantoms.TTerm (Maybe Syntax.Type)
 fix_DeclType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Fix_Decl"),
-        Core.projectionField = (Core.Name "type")})))),
+        Core.projectionField = (Core.Name "type")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 fix_DeclWithAnnot :: Phantoms.TTerm Syntax.Fix_Decl -> Phantoms.TTerm (Maybe Syntax.FixAnnot) -> Phantoms.TTerm Syntax.Fix_Decl
@@ -1452,16 +1452,16 @@ fix_DeclWithAnnot original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "ident"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Fix_Decl"),
-              Core.projectionField = (Core.Name "ident")})))),
+              Core.projectionField = (Core.Name "ident")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "binders"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Fix_Decl"),
-              Core.projectionField = (Core.Name "binders")})))),
+              Core.projectionField = (Core.Name "binders")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "annot"),
@@ -1469,16 +1469,16 @@ fix_DeclWithAnnot original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Fix_Decl"),
-              Core.projectionField = (Core.Name "type")})))),
+              Core.projectionField = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "term"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Fix_Decl"),
-              Core.projectionField = (Core.Name "term")})))),
+              Core.projectionField = (Core.Name "term")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 fix_DeclWithBinders :: Phantoms.TTerm Syntax.Fix_Decl -> Phantoms.TTerm [Syntax.Binder] -> Phantoms.TTerm Syntax.Fix_Decl
@@ -1489,9 +1489,9 @@ fix_DeclWithBinders original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "ident"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Fix_Decl"),
-              Core.projectionField = (Core.Name "ident")})))),
+              Core.projectionField = (Core.Name "ident")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "binders"),
@@ -1499,23 +1499,23 @@ fix_DeclWithBinders original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "annot"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Fix_Decl"),
-              Core.projectionField = (Core.Name "annot")})))),
+              Core.projectionField = (Core.Name "annot")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Fix_Decl"),
-              Core.projectionField = (Core.Name "type")})))),
+              Core.projectionField = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "term"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Fix_Decl"),
-              Core.projectionField = (Core.Name "term")})))),
+              Core.projectionField = (Core.Name "term")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 fix_DeclWithIdent :: Phantoms.TTerm Syntax.Fix_Decl -> Phantoms.TTerm Syntax.Ident -> Phantoms.TTerm Syntax.Fix_Decl
@@ -1529,30 +1529,30 @@ fix_DeclWithIdent original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "binders"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Fix_Decl"),
-              Core.projectionField = (Core.Name "binders")})))),
+              Core.projectionField = (Core.Name "binders")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "annot"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Fix_Decl"),
-              Core.projectionField = (Core.Name "annot")})))),
+              Core.projectionField = (Core.Name "annot")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Fix_Decl"),
-              Core.projectionField = (Core.Name "type")})))),
+              Core.projectionField = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "term"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Fix_Decl"),
-              Core.projectionField = (Core.Name "term")})))),
+              Core.projectionField = (Core.Name "term")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 fix_DeclWithTerm :: Phantoms.TTerm Syntax.Fix_Decl -> Phantoms.TTerm Syntax.Term -> Phantoms.TTerm Syntax.Fix_Decl
@@ -1563,30 +1563,30 @@ fix_DeclWithTerm original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "ident"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Fix_Decl"),
-              Core.projectionField = (Core.Name "ident")})))),
+              Core.projectionField = (Core.Name "ident")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "binders"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Fix_Decl"),
-              Core.projectionField = (Core.Name "binders")})))),
+              Core.projectionField = (Core.Name "binders")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "annot"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Fix_Decl"),
-              Core.projectionField = (Core.Name "annot")})))),
+              Core.projectionField = (Core.Name "annot")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Fix_Decl"),
-              Core.projectionField = (Core.Name "type")})))),
+              Core.projectionField = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "term"),
@@ -1600,23 +1600,23 @@ fix_DeclWithType original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "ident"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Fix_Decl"),
-              Core.projectionField = (Core.Name "ident")})))),
+              Core.projectionField = (Core.Name "ident")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "binders"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Fix_Decl"),
-              Core.projectionField = (Core.Name "binders")})))),
+              Core.projectionField = (Core.Name "binders")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "annot"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Fix_Decl"),
-              Core.projectionField = (Core.Name "annot")})))),
+              Core.projectionField = (Core.Name "annot")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
@@ -1624,9 +1624,9 @@ fix_DeclWithType original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "term"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Fix_Decl"),
-              Core.projectionField = (Core.Name "term")})))),
+              Core.projectionField = (Core.Name "term")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 fix_QualIn :: Phantoms.TTerm Syntax.Term -> Phantoms.TTerm Syntax.Fix_Qual
@@ -1675,57 +1675,57 @@ fixpointDefinition locality name binders annot type_ body with =
 fixpointDefinitionAnnot :: Phantoms.TTerm Syntax.FixpointDefinition -> Phantoms.TTerm (Maybe Syntax.FixAnnot)
 fixpointDefinitionAnnot x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-        Core.projectionField = (Core.Name "annot")})))),
+        Core.projectionField = (Core.Name "annot")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 fixpointDefinitionBinders :: Phantoms.TTerm Syntax.FixpointDefinition -> Phantoms.TTerm [Syntax.Binder]
 fixpointDefinitionBinders x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-        Core.projectionField = (Core.Name "binders")})))),
+        Core.projectionField = (Core.Name "binders")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 fixpointDefinitionBody :: Phantoms.TTerm Syntax.FixpointDefinition -> Phantoms.TTerm Syntax.Term
 fixpointDefinitionBody x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-        Core.projectionField = (Core.Name "body")})))),
+        Core.projectionField = (Core.Name "body")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 fixpointDefinitionLocality :: Phantoms.TTerm Syntax.FixpointDefinition -> Phantoms.TTerm (Maybe Syntax.Locality)
 fixpointDefinitionLocality x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-        Core.projectionField = (Core.Name "locality")})))),
+        Core.projectionField = (Core.Name "locality")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 fixpointDefinitionName :: Phantoms.TTerm Syntax.FixpointDefinition -> Phantoms.TTerm Syntax.Ident
 fixpointDefinitionName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-        Core.projectionField = (Core.Name "name")})))),
+        Core.projectionField = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 fixpointDefinitionType :: Phantoms.TTerm Syntax.FixpointDefinition -> Phantoms.TTerm (Maybe Syntax.Type)
 fixpointDefinitionType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-        Core.projectionField = (Core.Name "type")})))),
+        Core.projectionField = (Core.Name "type")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 fixpointDefinitionWith :: Phantoms.TTerm Syntax.FixpointDefinition -> Phantoms.TTerm [Syntax.Fix_Decl]
 fixpointDefinitionWith x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-        Core.projectionField = (Core.Name "with")})))),
+        Core.projectionField = (Core.Name "with")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 fixpointDefinitionWithAnnot :: Phantoms.TTerm Syntax.FixpointDefinition -> Phantoms.TTerm (Maybe Syntax.FixAnnot) -> Phantoms.TTerm Syntax.FixpointDefinition
@@ -1736,23 +1736,23 @@ fixpointDefinitionWithAnnot original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "locality"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-              Core.projectionField = (Core.Name "locality")})))),
+              Core.projectionField = (Core.Name "locality")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-              Core.projectionField = (Core.Name "name")})))),
+              Core.projectionField = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "binders"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-              Core.projectionField = (Core.Name "binders")})))),
+              Core.projectionField = (Core.Name "binders")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "annot"),
@@ -1760,23 +1760,23 @@ fixpointDefinitionWithAnnot original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-              Core.projectionField = (Core.Name "type")})))),
+              Core.projectionField = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-              Core.projectionField = (Core.Name "body")})))),
+              Core.projectionField = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "with"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-              Core.projectionField = (Core.Name "with")})))),
+              Core.projectionField = (Core.Name "with")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 fixpointDefinitionWithBinders :: Phantoms.TTerm Syntax.FixpointDefinition -> Phantoms.TTerm [Syntax.Binder] -> Phantoms.TTerm Syntax.FixpointDefinition
@@ -1787,16 +1787,16 @@ fixpointDefinitionWithBinders original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "locality"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-              Core.projectionField = (Core.Name "locality")})))),
+              Core.projectionField = (Core.Name "locality")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-              Core.projectionField = (Core.Name "name")})))),
+              Core.projectionField = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "binders"),
@@ -1804,30 +1804,30 @@ fixpointDefinitionWithBinders original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "annot"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-              Core.projectionField = (Core.Name "annot")})))),
+              Core.projectionField = (Core.Name "annot")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-              Core.projectionField = (Core.Name "type")})))),
+              Core.projectionField = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-              Core.projectionField = (Core.Name "body")})))),
+              Core.projectionField = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "with"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-              Core.projectionField = (Core.Name "with")})))),
+              Core.projectionField = (Core.Name "with")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 fixpointDefinitionWithBody :: Phantoms.TTerm Syntax.FixpointDefinition -> Phantoms.TTerm Syntax.Term -> Phantoms.TTerm Syntax.FixpointDefinition
@@ -1838,37 +1838,37 @@ fixpointDefinitionWithBody original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "locality"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-              Core.projectionField = (Core.Name "locality")})))),
+              Core.projectionField = (Core.Name "locality")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-              Core.projectionField = (Core.Name "name")})))),
+              Core.projectionField = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "binders"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-              Core.projectionField = (Core.Name "binders")})))),
+              Core.projectionField = (Core.Name "binders")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "annot"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-              Core.projectionField = (Core.Name "annot")})))),
+              Core.projectionField = (Core.Name "annot")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-              Core.projectionField = (Core.Name "type")})))),
+              Core.projectionField = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
@@ -1876,9 +1876,9 @@ fixpointDefinitionWithBody original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "with"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-              Core.projectionField = (Core.Name "with")})))),
+              Core.projectionField = (Core.Name "with")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 fixpointDefinitionWithLocality :: Phantoms.TTerm Syntax.FixpointDefinition -> Phantoms.TTerm (Maybe Syntax.Locality) -> Phantoms.TTerm Syntax.FixpointDefinition
@@ -1892,44 +1892,44 @@ fixpointDefinitionWithLocality original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-              Core.projectionField = (Core.Name "name")})))),
+              Core.projectionField = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "binders"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-              Core.projectionField = (Core.Name "binders")})))),
+              Core.projectionField = (Core.Name "binders")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "annot"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-              Core.projectionField = (Core.Name "annot")})))),
+              Core.projectionField = (Core.Name "annot")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-              Core.projectionField = (Core.Name "type")})))),
+              Core.projectionField = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-              Core.projectionField = (Core.Name "body")})))),
+              Core.projectionField = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "with"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-              Core.projectionField = (Core.Name "with")})))),
+              Core.projectionField = (Core.Name "with")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 fixpointDefinitionWithName :: Phantoms.TTerm Syntax.FixpointDefinition -> Phantoms.TTerm Syntax.Ident -> Phantoms.TTerm Syntax.FixpointDefinition
@@ -1940,9 +1940,9 @@ fixpointDefinitionWithName original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "locality"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-              Core.projectionField = (Core.Name "locality")})))),
+              Core.projectionField = (Core.Name "locality")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
@@ -1950,37 +1950,37 @@ fixpointDefinitionWithName original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "binders"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-              Core.projectionField = (Core.Name "binders")})))),
+              Core.projectionField = (Core.Name "binders")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "annot"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-              Core.projectionField = (Core.Name "annot")})))),
+              Core.projectionField = (Core.Name "annot")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-              Core.projectionField = (Core.Name "type")})))),
+              Core.projectionField = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-              Core.projectionField = (Core.Name "body")})))),
+              Core.projectionField = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "with"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-              Core.projectionField = (Core.Name "with")})))),
+              Core.projectionField = (Core.Name "with")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 fixpointDefinitionWithType :: Phantoms.TTerm Syntax.FixpointDefinition -> Phantoms.TTerm (Maybe Syntax.Type) -> Phantoms.TTerm Syntax.FixpointDefinition
@@ -1991,30 +1991,30 @@ fixpointDefinitionWithType original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "locality"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-              Core.projectionField = (Core.Name "locality")})))),
+              Core.projectionField = (Core.Name "locality")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-              Core.projectionField = (Core.Name "name")})))),
+              Core.projectionField = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "binders"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-              Core.projectionField = (Core.Name "binders")})))),
+              Core.projectionField = (Core.Name "binders")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "annot"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-              Core.projectionField = (Core.Name "annot")})))),
+              Core.projectionField = (Core.Name "annot")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
@@ -2022,16 +2022,16 @@ fixpointDefinitionWithType original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-              Core.projectionField = (Core.Name "body")})))),
+              Core.projectionField = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "with"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-              Core.projectionField = (Core.Name "with")})))),
+              Core.projectionField = (Core.Name "with")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 fixpointDefinitionWithWith :: Phantoms.TTerm Syntax.FixpointDefinition -> Phantoms.TTerm [Syntax.Fix_Decl] -> Phantoms.TTerm Syntax.FixpointDefinition
@@ -2042,44 +2042,44 @@ fixpointDefinitionWithWith original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "locality"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-              Core.projectionField = (Core.Name "locality")})))),
+              Core.projectionField = (Core.Name "locality")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-              Core.projectionField = (Core.Name "name")})))),
+              Core.projectionField = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "binders"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-              Core.projectionField = (Core.Name "binders")})))),
+              Core.projectionField = (Core.Name "binders")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "annot"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-              Core.projectionField = (Core.Name "annot")})))),
+              Core.projectionField = (Core.Name "annot")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-              Core.projectionField = (Core.Name "type")})))),
+              Core.projectionField = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-              Core.projectionField = (Core.Name "body")})))),
+              Core.projectionField = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "with"),
@@ -2100,9 +2100,9 @@ forall_ binders type_ =
 forallBinders :: Phantoms.TTerm Syntax.Forall -> Phantoms.TTerm Syntax.OpenBinders
 forallBinders x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Forall"),
-        Core.projectionField = (Core.Name "binders")})))),
+        Core.projectionField = (Core.Name "binders")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 forallOrFunForall :: Phantoms.TTerm Syntax.Forall -> Phantoms.TTerm Syntax.ForallOrFun
@@ -2124,9 +2124,9 @@ forallOrFunFun x =
 forallType :: Phantoms.TTerm Syntax.Forall -> Phantoms.TTerm Syntax.Type
 forallType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Forall"),
-        Core.projectionField = (Core.Name "type")})))),
+        Core.projectionField = (Core.Name "type")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 forallWithBinders :: Phantoms.TTerm Syntax.Forall -> Phantoms.TTerm Syntax.OpenBinders -> Phantoms.TTerm Syntax.Forall
@@ -2140,9 +2140,9 @@ forallWithBinders original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Forall"),
-              Core.projectionField = (Core.Name "type")})))),
+              Core.projectionField = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 forallWithType :: Phantoms.TTerm Syntax.Forall -> Phantoms.TTerm Syntax.Type -> Phantoms.TTerm Syntax.Forall
@@ -2153,9 +2153,9 @@ forallWithType original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "binders"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Forall"),
-              Core.projectionField = (Core.Name "binders")})))),
+              Core.projectionField = (Core.Name "binders")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
@@ -2176,17 +2176,17 @@ fun binders body =
 funBinders :: Phantoms.TTerm Syntax.Fun -> Phantoms.TTerm Syntax.OpenBinders
 funBinders x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Fun"),
-        Core.projectionField = (Core.Name "binders")})))),
+        Core.projectionField = (Core.Name "binders")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 funBody :: Phantoms.TTerm Syntax.Fun -> Phantoms.TTerm Syntax.Term
 funBody x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Fun"),
-        Core.projectionField = (Core.Name "body")})))),
+        Core.projectionField = (Core.Name "body")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 funWithBinders :: Phantoms.TTerm Syntax.Fun -> Phantoms.TTerm Syntax.OpenBinders -> Phantoms.TTerm Syntax.Fun
@@ -2200,9 +2200,9 @@ funWithBinders original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Fun"),
-              Core.projectionField = (Core.Name "body")})))),
+              Core.projectionField = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 funWithBody :: Phantoms.TTerm Syntax.Fun -> Phantoms.TTerm Syntax.Term -> Phantoms.TTerm Syntax.Fun
@@ -2213,9 +2213,9 @@ funWithBody original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "binders"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Fun"),
-              Core.projectionField = (Core.Name "binders")})))),
+              Core.projectionField = (Core.Name "binders")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
@@ -2266,17 +2266,17 @@ identArg ident term =
 identArgIdent :: Phantoms.TTerm Syntax.IdentArg -> Phantoms.TTerm Syntax.Ident
 identArgIdent x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.IdentArg"),
-        Core.projectionField = (Core.Name "ident")})))),
+        Core.projectionField = (Core.Name "ident")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 identArgTerm :: Phantoms.TTerm Syntax.IdentArg -> Phantoms.TTerm Syntax.Term
 identArgTerm x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.IdentArg"),
-        Core.projectionField = (Core.Name "term")})))),
+        Core.projectionField = (Core.Name "term")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 identArgWithIdent :: Phantoms.TTerm Syntax.IdentArg -> Phantoms.TTerm Syntax.Ident -> Phantoms.TTerm Syntax.IdentArg
@@ -2290,9 +2290,9 @@ identArgWithIdent original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "term"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.IdentArg"),
-              Core.projectionField = (Core.Name "term")})))),
+              Core.projectionField = (Core.Name "term")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 identArgWithTerm :: Phantoms.TTerm Syntax.IdentArg -> Phantoms.TTerm Syntax.Term -> Phantoms.TTerm Syntax.IdentArg
@@ -2303,9 +2303,9 @@ identArgWithTerm original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "ident"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.IdentArg"),
-              Core.projectionField = (Core.Name "ident")})))),
+              Core.projectionField = (Core.Name "ident")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "term"),
@@ -2332,33 +2332,33 @@ if_ condition returnAs then_ else_ =
 ifCondition :: Phantoms.TTerm Syntax.If -> Phantoms.TTerm Syntax.Term
 ifCondition x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.If"),
-        Core.projectionField = (Core.Name "condition")})))),
+        Core.projectionField = (Core.Name "condition")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 ifElse :: Phantoms.TTerm Syntax.If -> Phantoms.TTerm Syntax.Term
 ifElse x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.If"),
-        Core.projectionField = (Core.Name "else")})))),
+        Core.projectionField = (Core.Name "else")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 ifReturnAs :: Phantoms.TTerm Syntax.If -> Phantoms.TTerm (Maybe Syntax.ReturnAs)
 ifReturnAs x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.If"),
-        Core.projectionField = (Core.Name "returnAs")})))),
+        Core.projectionField = (Core.Name "returnAs")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 ifThen :: Phantoms.TTerm Syntax.If -> Phantoms.TTerm Syntax.Term
 ifThen x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.If"),
-        Core.projectionField = (Core.Name "then")})))),
+        Core.projectionField = (Core.Name "then")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 ifWithCondition :: Phantoms.TTerm Syntax.If -> Phantoms.TTerm Syntax.Term -> Phantoms.TTerm Syntax.If
@@ -2372,23 +2372,23 @@ ifWithCondition original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "returnAs"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.If"),
-              Core.projectionField = (Core.Name "returnAs")})))),
+              Core.projectionField = (Core.Name "returnAs")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "then"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.If"),
-              Core.projectionField = (Core.Name "then")})))),
+              Core.projectionField = (Core.Name "then")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "else"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.If"),
-              Core.projectionField = (Core.Name "else")})))),
+              Core.projectionField = (Core.Name "else")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 ifWithElse :: Phantoms.TTerm Syntax.If -> Phantoms.TTerm Syntax.Term -> Phantoms.TTerm Syntax.If
@@ -2399,23 +2399,23 @@ ifWithElse original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "condition"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.If"),
-              Core.projectionField = (Core.Name "condition")})))),
+              Core.projectionField = (Core.Name "condition")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "returnAs"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.If"),
-              Core.projectionField = (Core.Name "returnAs")})))),
+              Core.projectionField = (Core.Name "returnAs")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "then"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.If"),
-              Core.projectionField = (Core.Name "then")})))),
+              Core.projectionField = (Core.Name "then")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "else"),
@@ -2429,9 +2429,9 @@ ifWithReturnAs original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "condition"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.If"),
-              Core.projectionField = (Core.Name "condition")})))),
+              Core.projectionField = (Core.Name "condition")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "returnAs"),
@@ -2439,16 +2439,16 @@ ifWithReturnAs original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "then"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.If"),
-              Core.projectionField = (Core.Name "then")})))),
+              Core.projectionField = (Core.Name "then")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "else"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.If"),
-              Core.projectionField = (Core.Name "else")})))),
+              Core.projectionField = (Core.Name "else")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 ifWithThen :: Phantoms.TTerm Syntax.If -> Phantoms.TTerm Syntax.Term -> Phantoms.TTerm Syntax.If
@@ -2459,16 +2459,16 @@ ifWithThen original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "condition"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.If"),
-              Core.projectionField = (Core.Name "condition")})))),
+              Core.projectionField = (Core.Name "condition")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "returnAs"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.If"),
-              Core.projectionField = (Core.Name "returnAs")})))),
+              Core.projectionField = (Core.Name "returnAs")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "then"),
@@ -2476,9 +2476,9 @@ ifWithThen original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "else"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.If"),
-              Core.projectionField = (Core.Name "else")})))),
+              Core.projectionField = (Core.Name "else")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 implicitBindersMaximallyInserted :: Phantoms.TTerm Syntax.TypeBinders -> Phantoms.TTerm Syntax.ImplicitBinders
@@ -2534,33 +2534,33 @@ inductiveBody name binders type_ constructors =
 inductiveBodyBinders :: Phantoms.TTerm Syntax.InductiveBody -> Phantoms.TTerm [Syntax.Binder]
 inductiveBodyBinders x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.InductiveBody"),
-        Core.projectionField = (Core.Name "binders")})))),
+        Core.projectionField = (Core.Name "binders")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 inductiveBodyConstructors :: Phantoms.TTerm Syntax.InductiveBody -> Phantoms.TTerm [Syntax.Constructor]
 inductiveBodyConstructors x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.InductiveBody"),
-        Core.projectionField = (Core.Name "constructors")})))),
+        Core.projectionField = (Core.Name "constructors")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 inductiveBodyName :: Phantoms.TTerm Syntax.InductiveBody -> Phantoms.TTerm Syntax.Ident
 inductiveBodyName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.InductiveBody"),
-        Core.projectionField = (Core.Name "name")})))),
+        Core.projectionField = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 inductiveBodyType :: Phantoms.TTerm Syntax.InductiveBody -> Phantoms.TTerm (Maybe Syntax.Type)
 inductiveBodyType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.InductiveBody"),
-        Core.projectionField = (Core.Name "type")})))),
+        Core.projectionField = (Core.Name "type")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 inductiveBodyWithBinders :: Phantoms.TTerm Syntax.InductiveBody -> Phantoms.TTerm [Syntax.Binder] -> Phantoms.TTerm Syntax.InductiveBody
@@ -2571,9 +2571,9 @@ inductiveBodyWithBinders original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.InductiveBody"),
-              Core.projectionField = (Core.Name "name")})))),
+              Core.projectionField = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "binders"),
@@ -2581,16 +2581,16 @@ inductiveBodyWithBinders original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.InductiveBody"),
-              Core.projectionField = (Core.Name "type")})))),
+              Core.projectionField = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "constructors"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.InductiveBody"),
-              Core.projectionField = (Core.Name "constructors")})))),
+              Core.projectionField = (Core.Name "constructors")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 inductiveBodyWithConstructors :: Phantoms.TTerm Syntax.InductiveBody -> Phantoms.TTerm [Syntax.Constructor] -> Phantoms.TTerm Syntax.InductiveBody
@@ -2601,23 +2601,23 @@ inductiveBodyWithConstructors original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.InductiveBody"),
-              Core.projectionField = (Core.Name "name")})))),
+              Core.projectionField = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "binders"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.InductiveBody"),
-              Core.projectionField = (Core.Name "binders")})))),
+              Core.projectionField = (Core.Name "binders")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.InductiveBody"),
-              Core.projectionField = (Core.Name "type")})))),
+              Core.projectionField = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "constructors"),
@@ -2634,23 +2634,23 @@ inductiveBodyWithName original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "binders"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.InductiveBody"),
-              Core.projectionField = (Core.Name "binders")})))),
+              Core.projectionField = (Core.Name "binders")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.InductiveBody"),
-              Core.projectionField = (Core.Name "type")})))),
+              Core.projectionField = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "constructors"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.InductiveBody"),
-              Core.projectionField = (Core.Name "constructors")})))),
+              Core.projectionField = (Core.Name "constructors")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 inductiveBodyWithType :: Phantoms.TTerm Syntax.InductiveBody -> Phantoms.TTerm (Maybe Syntax.Type) -> Phantoms.TTerm Syntax.InductiveBody
@@ -2661,16 +2661,16 @@ inductiveBodyWithType original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.InductiveBody"),
-              Core.projectionField = (Core.Name "name")})))),
+              Core.projectionField = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "binders"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.InductiveBody"),
-              Core.projectionField = (Core.Name "binders")})))),
+              Core.projectionField = (Core.Name "binders")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
@@ -2678,9 +2678,9 @@ inductiveBodyWithType original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "constructors"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.InductiveBody"),
-              Core.projectionField = (Core.Name "constructors")})))),
+              Core.projectionField = (Core.Name "constructors")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 inductiveDefinition :: Phantoms.TTerm (Maybe Syntax.Locality) -> Phantoms.TTerm Bool -> Phantoms.TTerm [Syntax.InductiveBody] -> Phantoms.TTerm Syntax.InductiveDefinition
@@ -2701,25 +2701,25 @@ inductiveDefinition locality coinductive bodies =
 inductiveDefinitionBodies :: Phantoms.TTerm Syntax.InductiveDefinition -> Phantoms.TTerm [Syntax.InductiveBody]
 inductiveDefinitionBodies x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.InductiveDefinition"),
-        Core.projectionField = (Core.Name "bodies")})))),
+        Core.projectionField = (Core.Name "bodies")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 inductiveDefinitionCoinductive :: Phantoms.TTerm Syntax.InductiveDefinition -> Phantoms.TTerm Bool
 inductiveDefinitionCoinductive x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.InductiveDefinition"),
-        Core.projectionField = (Core.Name "coinductive")})))),
+        Core.projectionField = (Core.Name "coinductive")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 inductiveDefinitionLocality :: Phantoms.TTerm Syntax.InductiveDefinition -> Phantoms.TTerm (Maybe Syntax.Locality)
 inductiveDefinitionLocality x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.InductiveDefinition"),
-        Core.projectionField = (Core.Name "locality")})))),
+        Core.projectionField = (Core.Name "locality")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 inductiveDefinitionWithBodies :: Phantoms.TTerm Syntax.InductiveDefinition -> Phantoms.TTerm [Syntax.InductiveBody] -> Phantoms.TTerm Syntax.InductiveDefinition
@@ -2730,16 +2730,16 @@ inductiveDefinitionWithBodies original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "locality"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.InductiveDefinition"),
-              Core.projectionField = (Core.Name "locality")})))),
+              Core.projectionField = (Core.Name "locality")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "coinductive"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.InductiveDefinition"),
-              Core.projectionField = (Core.Name "coinductive")})))),
+              Core.projectionField = (Core.Name "coinductive")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "bodies"),
@@ -2753,9 +2753,9 @@ inductiveDefinitionWithCoinductive original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "locality"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.InductiveDefinition"),
-              Core.projectionField = (Core.Name "locality")})))),
+              Core.projectionField = (Core.Name "locality")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "coinductive"),
@@ -2763,9 +2763,9 @@ inductiveDefinitionWithCoinductive original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "bodies"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.InductiveDefinition"),
-              Core.projectionField = (Core.Name "bodies")})))),
+              Core.projectionField = (Core.Name "bodies")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 inductiveDefinitionWithLocality :: Phantoms.TTerm Syntax.InductiveDefinition -> Phantoms.TTerm (Maybe Syntax.Locality) -> Phantoms.TTerm Syntax.InductiveDefinition
@@ -2779,16 +2779,16 @@ inductiveDefinitionWithLocality original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "coinductive"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.InductiveDefinition"),
-              Core.projectionField = (Core.Name "coinductive")})))),
+              Core.projectionField = (Core.Name "coinductive")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "bodies"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.InductiveDefinition"),
-              Core.projectionField = (Core.Name "bodies")})))),
+              Core.projectionField = (Core.Name "bodies")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 let_ :: Phantoms.TTerm Syntax.LetBindings -> Phantoms.TTerm Syntax.Term -> Phantoms.TTerm Syntax.Let
@@ -2821,25 +2821,25 @@ letBinder name type_ term =
 letBinderName :: Phantoms.TTerm Syntax.LetBinder -> Phantoms.TTerm Syntax.Name
 letBinderName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetBinder"),
-        Core.projectionField = (Core.Name "name")})))),
+        Core.projectionField = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 letBinderTerm :: Phantoms.TTerm Syntax.LetBinder -> Phantoms.TTerm Syntax.Term
 letBinderTerm x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetBinder"),
-        Core.projectionField = (Core.Name "term")})))),
+        Core.projectionField = (Core.Name "term")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 letBinderType :: Phantoms.TTerm Syntax.LetBinder -> Phantoms.TTerm (Maybe Syntax.Type)
 letBinderType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetBinder"),
-        Core.projectionField = (Core.Name "type")})))),
+        Core.projectionField = (Core.Name "type")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 letBinderWithName :: Phantoms.TTerm Syntax.LetBinder -> Phantoms.TTerm Syntax.Name -> Phantoms.TTerm Syntax.LetBinder
@@ -2853,16 +2853,16 @@ letBinderWithName original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetBinder"),
-              Core.projectionField = (Core.Name "type")})))),
+              Core.projectionField = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "term"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetBinder"),
-              Core.projectionField = (Core.Name "term")})))),
+              Core.projectionField = (Core.Name "term")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 letBinderWithTerm :: Phantoms.TTerm Syntax.LetBinder -> Phantoms.TTerm Syntax.Term -> Phantoms.TTerm Syntax.LetBinder
@@ -2873,16 +2873,16 @@ letBinderWithTerm original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetBinder"),
-              Core.projectionField = (Core.Name "name")})))),
+              Core.projectionField = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetBinder"),
-              Core.projectionField = (Core.Name "type")})))),
+              Core.projectionField = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "term"),
@@ -2896,9 +2896,9 @@ letBinderWithType original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetBinder"),
-              Core.projectionField = (Core.Name "name")})))),
+              Core.projectionField = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
@@ -2906,17 +2906,17 @@ letBinderWithType original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "term"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetBinder"),
-              Core.projectionField = (Core.Name "term")})))),
+              Core.projectionField = (Core.Name "term")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 letBindings :: Phantoms.TTerm Syntax.Let -> Phantoms.TTerm Syntax.LetBindings
 letBindings x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Let"),
-        Core.projectionField = (Core.Name "bindings")})))),
+        Core.projectionField = (Core.Name "bindings")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 letBindingsDestructuring :: Phantoms.TTerm Syntax.LetDestructuring -> Phantoms.TTerm Syntax.LetBindings
@@ -2977,25 +2977,25 @@ letDestructuring_Variant1 names returnAs term =
 letDestructuring_Variant1Names :: Phantoms.TTerm Syntax.LetDestructuring_Variant1 -> Phantoms.TTerm [Syntax.Name]
 letDestructuring_Variant1Names x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetDestructuring_Variant1"),
-        Core.projectionField = (Core.Name "names")})))),
+        Core.projectionField = (Core.Name "names")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 letDestructuring_Variant1ReturnAs :: Phantoms.TTerm Syntax.LetDestructuring_Variant1 -> Phantoms.TTerm (Maybe Syntax.ReturnAs)
 letDestructuring_Variant1ReturnAs x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetDestructuring_Variant1"),
-        Core.projectionField = (Core.Name "returnAs")})))),
+        Core.projectionField = (Core.Name "returnAs")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 letDestructuring_Variant1Term :: Phantoms.TTerm Syntax.LetDestructuring_Variant1 -> Phantoms.TTerm Syntax.Term
 letDestructuring_Variant1Term x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetDestructuring_Variant1"),
-        Core.projectionField = (Core.Name "term")})))),
+        Core.projectionField = (Core.Name "term")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 letDestructuring_Variant1WithNames :: Phantoms.TTerm Syntax.LetDestructuring_Variant1 -> Phantoms.TTerm [Syntax.Name] -> Phantoms.TTerm Syntax.LetDestructuring_Variant1
@@ -3009,16 +3009,16 @@ letDestructuring_Variant1WithNames original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "returnAs"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetDestructuring_Variant1"),
-              Core.projectionField = (Core.Name "returnAs")})))),
+              Core.projectionField = (Core.Name "returnAs")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "term"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetDestructuring_Variant1"),
-              Core.projectionField = (Core.Name "term")})))),
+              Core.projectionField = (Core.Name "term")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 letDestructuring_Variant1WithReturnAs :: Phantoms.TTerm Syntax.LetDestructuring_Variant1 -> Phantoms.TTerm (Maybe Syntax.ReturnAs) -> Phantoms.TTerm Syntax.LetDestructuring_Variant1
@@ -3029,9 +3029,9 @@ letDestructuring_Variant1WithReturnAs original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "names"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetDestructuring_Variant1"),
-              Core.projectionField = (Core.Name "names")})))),
+              Core.projectionField = (Core.Name "names")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "returnAs"),
@@ -3039,9 +3039,9 @@ letDestructuring_Variant1WithReturnAs original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "term"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetDestructuring_Variant1"),
-              Core.projectionField = (Core.Name "term")})))),
+              Core.projectionField = (Core.Name "term")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 letDestructuring_Variant1WithTerm :: Phantoms.TTerm Syntax.LetDestructuring_Variant1 -> Phantoms.TTerm Syntax.Term -> Phantoms.TTerm Syntax.LetDestructuring_Variant1
@@ -3052,16 +3052,16 @@ letDestructuring_Variant1WithTerm original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "names"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetDestructuring_Variant1"),
-              Core.projectionField = (Core.Name "names")})))),
+              Core.projectionField = (Core.Name "names")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "returnAs"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetDestructuring_Variant1"),
-              Core.projectionField = (Core.Name "returnAs")})))),
+              Core.projectionField = (Core.Name "returnAs")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "term"),
@@ -3085,25 +3085,25 @@ letDestructuring_Variant2 pattern term return =
 letDestructuring_Variant2Pattern :: Phantoms.TTerm Syntax.LetDestructuring_Variant2 -> Phantoms.TTerm Syntax.Pattern
 letDestructuring_Variant2Pattern x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetDestructuring_Variant2"),
-        Core.projectionField = (Core.Name "pattern")})))),
+        Core.projectionField = (Core.Name "pattern")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 letDestructuring_Variant2Return :: Phantoms.TTerm Syntax.LetDestructuring_Variant2 -> Phantoms.TTerm (Maybe Syntax.Term100)
 letDestructuring_Variant2Return x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetDestructuring_Variant2"),
-        Core.projectionField = (Core.Name "return")})))),
+        Core.projectionField = (Core.Name "return")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 letDestructuring_Variant2Term :: Phantoms.TTerm Syntax.LetDestructuring_Variant2 -> Phantoms.TTerm Syntax.Term
 letDestructuring_Variant2Term x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetDestructuring_Variant2"),
-        Core.projectionField = (Core.Name "term")})))),
+        Core.projectionField = (Core.Name "term")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 letDestructuring_Variant2WithPattern :: Phantoms.TTerm Syntax.LetDestructuring_Variant2 -> Phantoms.TTerm Syntax.Pattern -> Phantoms.TTerm Syntax.LetDestructuring_Variant2
@@ -3117,16 +3117,16 @@ letDestructuring_Variant2WithPattern original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "term"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetDestructuring_Variant2"),
-              Core.projectionField = (Core.Name "term")})))),
+              Core.projectionField = (Core.Name "term")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "return"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetDestructuring_Variant2"),
-              Core.projectionField = (Core.Name "return")})))),
+              Core.projectionField = (Core.Name "return")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 letDestructuring_Variant2WithReturn :: Phantoms.TTerm Syntax.LetDestructuring_Variant2 -> Phantoms.TTerm (Maybe Syntax.Term100) -> Phantoms.TTerm Syntax.LetDestructuring_Variant2
@@ -3137,16 +3137,16 @@ letDestructuring_Variant2WithReturn original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "pattern"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetDestructuring_Variant2"),
-              Core.projectionField = (Core.Name "pattern")})))),
+              Core.projectionField = (Core.Name "pattern")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "term"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetDestructuring_Variant2"),
-              Core.projectionField = (Core.Name "term")})))),
+              Core.projectionField = (Core.Name "term")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "return"),
@@ -3160,9 +3160,9 @@ letDestructuring_Variant2WithTerm original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "pattern"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetDestructuring_Variant2"),
-              Core.projectionField = (Core.Name "pattern")})))),
+              Core.projectionField = (Core.Name "pattern")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "term"),
@@ -3170,9 +3170,9 @@ letDestructuring_Variant2WithTerm original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "return"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetDestructuring_Variant2"),
-              Core.projectionField = (Core.Name "return")})))),
+              Core.projectionField = (Core.Name "return")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 letDestructuring_Variant3 :: Phantoms.TTerm Syntax.Pattern -> Phantoms.TTerm Syntax.Pattern -> Phantoms.TTerm Syntax.Term -> Phantoms.TTerm Syntax.Term100 -> Phantoms.TTerm Syntax.LetDestructuring_Variant3
@@ -3196,33 +3196,33 @@ letDestructuring_Variant3 pattern1 pattern2 term return =
 letDestructuring_Variant3Pattern1 :: Phantoms.TTerm Syntax.LetDestructuring_Variant3 -> Phantoms.TTerm Syntax.Pattern
 letDestructuring_Variant3Pattern1 x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetDestructuring_Variant3"),
-        Core.projectionField = (Core.Name "pattern1")})))),
+        Core.projectionField = (Core.Name "pattern1")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 letDestructuring_Variant3Pattern2 :: Phantoms.TTerm Syntax.LetDestructuring_Variant3 -> Phantoms.TTerm Syntax.Pattern
 letDestructuring_Variant3Pattern2 x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetDestructuring_Variant3"),
-        Core.projectionField = (Core.Name "pattern2")})))),
+        Core.projectionField = (Core.Name "pattern2")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 letDestructuring_Variant3Return :: Phantoms.TTerm Syntax.LetDestructuring_Variant3 -> Phantoms.TTerm Syntax.Term100
 letDestructuring_Variant3Return x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetDestructuring_Variant3"),
-        Core.projectionField = (Core.Name "return")})))),
+        Core.projectionField = (Core.Name "return")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 letDestructuring_Variant3Term :: Phantoms.TTerm Syntax.LetDestructuring_Variant3 -> Phantoms.TTerm Syntax.Term
 letDestructuring_Variant3Term x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetDestructuring_Variant3"),
-        Core.projectionField = (Core.Name "term")})))),
+        Core.projectionField = (Core.Name "term")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 letDestructuring_Variant3WithPattern1 :: Phantoms.TTerm Syntax.LetDestructuring_Variant3 -> Phantoms.TTerm Syntax.Pattern -> Phantoms.TTerm Syntax.LetDestructuring_Variant3
@@ -3236,23 +3236,23 @@ letDestructuring_Variant3WithPattern1 original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "pattern2"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetDestructuring_Variant3"),
-              Core.projectionField = (Core.Name "pattern2")})))),
+              Core.projectionField = (Core.Name "pattern2")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "term"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetDestructuring_Variant3"),
-              Core.projectionField = (Core.Name "term")})))),
+              Core.projectionField = (Core.Name "term")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "return"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetDestructuring_Variant3"),
-              Core.projectionField = (Core.Name "return")})))),
+              Core.projectionField = (Core.Name "return")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 letDestructuring_Variant3WithPattern2 :: Phantoms.TTerm Syntax.LetDestructuring_Variant3 -> Phantoms.TTerm Syntax.Pattern -> Phantoms.TTerm Syntax.LetDestructuring_Variant3
@@ -3263,9 +3263,9 @@ letDestructuring_Variant3WithPattern2 original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "pattern1"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetDestructuring_Variant3"),
-              Core.projectionField = (Core.Name "pattern1")})))),
+              Core.projectionField = (Core.Name "pattern1")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "pattern2"),
@@ -3273,16 +3273,16 @@ letDestructuring_Variant3WithPattern2 original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "term"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetDestructuring_Variant3"),
-              Core.projectionField = (Core.Name "term")})))),
+              Core.projectionField = (Core.Name "term")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "return"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetDestructuring_Variant3"),
-              Core.projectionField = (Core.Name "return")})))),
+              Core.projectionField = (Core.Name "return")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 letDestructuring_Variant3WithReturn :: Phantoms.TTerm Syntax.LetDestructuring_Variant3 -> Phantoms.TTerm Syntax.Term100 -> Phantoms.TTerm Syntax.LetDestructuring_Variant3
@@ -3293,23 +3293,23 @@ letDestructuring_Variant3WithReturn original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "pattern1"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetDestructuring_Variant3"),
-              Core.projectionField = (Core.Name "pattern1")})))),
+              Core.projectionField = (Core.Name "pattern1")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "pattern2"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetDestructuring_Variant3"),
-              Core.projectionField = (Core.Name "pattern2")})))),
+              Core.projectionField = (Core.Name "pattern2")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "term"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetDestructuring_Variant3"),
-              Core.projectionField = (Core.Name "term")})))),
+              Core.projectionField = (Core.Name "term")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "return"),
@@ -3323,16 +3323,16 @@ letDestructuring_Variant3WithTerm original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "pattern1"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetDestructuring_Variant3"),
-              Core.projectionField = (Core.Name "pattern1")})))),
+              Core.projectionField = (Core.Name "pattern1")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "pattern2"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetDestructuring_Variant3"),
-              Core.projectionField = (Core.Name "pattern2")})))),
+              Core.projectionField = (Core.Name "pattern2")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "term"),
@@ -3340,17 +3340,17 @@ letDestructuring_Variant3WithTerm original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "return"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetDestructuring_Variant3"),
-              Core.projectionField = (Core.Name "return")})))),
+              Core.projectionField = (Core.Name "return")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 letIn :: Phantoms.TTerm Syntax.Let -> Phantoms.TTerm Syntax.Term
 letIn x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Let"),
-        Core.projectionField = (Core.Name "in")})))),
+        Core.projectionField = (Core.Name "in")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 letNamed :: Phantoms.TTerm Syntax.LetBinder -> Phantoms.TTerm [Syntax.Binder] -> Phantoms.TTerm Syntax.LetNamed
@@ -3368,17 +3368,17 @@ letNamed binder binders =
 letNamedBinder :: Phantoms.TTerm Syntax.LetNamed -> Phantoms.TTerm Syntax.LetBinder
 letNamedBinder x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetNamed"),
-        Core.projectionField = (Core.Name "binder")})))),
+        Core.projectionField = (Core.Name "binder")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 letNamedBinders :: Phantoms.TTerm Syntax.LetNamed -> Phantoms.TTerm [Syntax.Binder]
 letNamedBinders x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetNamed"),
-        Core.projectionField = (Core.Name "binders")})))),
+        Core.projectionField = (Core.Name "binders")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 letNamedWithBinder :: Phantoms.TTerm Syntax.LetNamed -> Phantoms.TTerm Syntax.LetBinder -> Phantoms.TTerm Syntax.LetNamed
@@ -3392,9 +3392,9 @@ letNamedWithBinder original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "binders"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetNamed"),
-              Core.projectionField = (Core.Name "binders")})))),
+              Core.projectionField = (Core.Name "binders")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 letNamedWithBinders :: Phantoms.TTerm Syntax.LetNamed -> Phantoms.TTerm [Syntax.Binder] -> Phantoms.TTerm Syntax.LetNamed
@@ -3405,9 +3405,9 @@ letNamedWithBinders original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "binder"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetNamed"),
-              Core.projectionField = (Core.Name "binder")})))),
+              Core.projectionField = (Core.Name "binder")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "binders"),
@@ -3424,9 +3424,9 @@ letWithBindings original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "in"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Let"),
-              Core.projectionField = (Core.Name "in")})))),
+              Core.projectionField = (Core.Name "in")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 letWithIn :: Phantoms.TTerm Syntax.Let -> Phantoms.TTerm Syntax.Term -> Phantoms.TTerm Syntax.Let
@@ -3437,9 +3437,9 @@ letWithIn original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "bindings"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Let"),
-              Core.projectionField = (Core.Name "bindings")})))),
+              Core.projectionField = (Core.Name "bindings")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "in"),
@@ -3482,33 +3482,33 @@ match caseItems return pipe equations =
 matchCaseItems :: Phantoms.TTerm Syntax.Match -> Phantoms.TTerm [Syntax.CaseItem]
 matchCaseItems x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Match"),
-        Core.projectionField = (Core.Name "caseItems")})))),
+        Core.projectionField = (Core.Name "caseItems")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 matchEquations :: Phantoms.TTerm Syntax.Match -> Phantoms.TTerm [Syntax.Equation]
 matchEquations x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Match"),
-        Core.projectionField = (Core.Name "equations")})))),
+        Core.projectionField = (Core.Name "equations")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 matchPipe :: Phantoms.TTerm Syntax.Match -> Phantoms.TTerm Bool
 matchPipe x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Match"),
-        Core.projectionField = (Core.Name "pipe")})))),
+        Core.projectionField = (Core.Name "pipe")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 matchReturn :: Phantoms.TTerm Syntax.Match -> Phantoms.TTerm (Maybe Syntax.Term100)
 matchReturn x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Match"),
-        Core.projectionField = (Core.Name "return")})))),
+        Core.projectionField = (Core.Name "return")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 matchWithCaseItems :: Phantoms.TTerm Syntax.Match -> Phantoms.TTerm [Syntax.CaseItem] -> Phantoms.TTerm Syntax.Match
@@ -3522,23 +3522,23 @@ matchWithCaseItems original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "return"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Match"),
-              Core.projectionField = (Core.Name "return")})))),
+              Core.projectionField = (Core.Name "return")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "pipe"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Match"),
-              Core.projectionField = (Core.Name "pipe")})))),
+              Core.projectionField = (Core.Name "pipe")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "equations"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Match"),
-              Core.projectionField = (Core.Name "equations")})))),
+              Core.projectionField = (Core.Name "equations")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 matchWithEquations :: Phantoms.TTerm Syntax.Match -> Phantoms.TTerm [Syntax.Equation] -> Phantoms.TTerm Syntax.Match
@@ -3549,23 +3549,23 @@ matchWithEquations original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "caseItems"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Match"),
-              Core.projectionField = (Core.Name "caseItems")})))),
+              Core.projectionField = (Core.Name "caseItems")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "return"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Match"),
-              Core.projectionField = (Core.Name "return")})))),
+              Core.projectionField = (Core.Name "return")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "pipe"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Match"),
-              Core.projectionField = (Core.Name "pipe")})))),
+              Core.projectionField = (Core.Name "pipe")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "equations"),
@@ -3579,16 +3579,16 @@ matchWithPipe original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "caseItems"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Match"),
-              Core.projectionField = (Core.Name "caseItems")})))),
+              Core.projectionField = (Core.Name "caseItems")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "return"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Match"),
-              Core.projectionField = (Core.Name "return")})))),
+              Core.projectionField = (Core.Name "return")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "pipe"),
@@ -3596,9 +3596,9 @@ matchWithPipe original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "equations"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Match"),
-              Core.projectionField = (Core.Name "equations")})))),
+              Core.projectionField = (Core.Name "equations")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 matchWithReturn :: Phantoms.TTerm Syntax.Match -> Phantoms.TTerm (Maybe Syntax.Term100) -> Phantoms.TTerm Syntax.Match
@@ -3609,9 +3609,9 @@ matchWithReturn original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "caseItems"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Match"),
-              Core.projectionField = (Core.Name "caseItems")})))),
+              Core.projectionField = (Core.Name "caseItems")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "return"),
@@ -3619,16 +3619,16 @@ matchWithReturn original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "pipe"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Match"),
-              Core.projectionField = (Core.Name "pipe")})))),
+              Core.projectionField = (Core.Name "pipe")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "equations"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Match"),
-              Core.projectionField = (Core.Name "equations")})))),
+              Core.projectionField = (Core.Name "equations")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 moduleDefinition :: Phantoms.TTerm Syntax.Ident -> Phantoms.TTerm [Syntax.Sentence] -> Phantoms.TTerm Syntax.ModuleDefinition
@@ -3646,17 +3646,17 @@ moduleDefinition name sentences =
 moduleDefinitionName :: Phantoms.TTerm Syntax.ModuleDefinition -> Phantoms.TTerm Syntax.Ident
 moduleDefinitionName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.ModuleDefinition"),
-        Core.projectionField = (Core.Name "name")})))),
+        Core.projectionField = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 moduleDefinitionSentences :: Phantoms.TTerm Syntax.ModuleDefinition -> Phantoms.TTerm [Syntax.Sentence]
 moduleDefinitionSentences x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.ModuleDefinition"),
-        Core.projectionField = (Core.Name "sentences")})))),
+        Core.projectionField = (Core.Name "sentences")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 moduleDefinitionWithName :: Phantoms.TTerm Syntax.ModuleDefinition -> Phantoms.TTerm Syntax.Ident -> Phantoms.TTerm Syntax.ModuleDefinition
@@ -3670,9 +3670,9 @@ moduleDefinitionWithName original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "sentences"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.ModuleDefinition"),
-              Core.projectionField = (Core.Name "sentences")})))),
+              Core.projectionField = (Core.Name "sentences")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 moduleDefinitionWithSentences :: Phantoms.TTerm Syntax.ModuleDefinition -> Phantoms.TTerm [Syntax.Sentence] -> Phantoms.TTerm Syntax.ModuleDefinition
@@ -3683,9 +3683,9 @@ moduleDefinitionWithSentences original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.ModuleDefinition"),
-              Core.projectionField = (Core.Name "name")})))),
+              Core.projectionField = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "sentences"),
@@ -3718,17 +3718,17 @@ naturalArg natural term =
 naturalArgNatural :: Phantoms.TTerm Syntax.NaturalArg -> Phantoms.TTerm Syntax.Natural
 naturalArgNatural x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.NaturalArg"),
-        Core.projectionField = (Core.Name "natural")})))),
+        Core.projectionField = (Core.Name "natural")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 naturalArgTerm :: Phantoms.TTerm Syntax.NaturalArg -> Phantoms.TTerm Syntax.Term
 naturalArgTerm x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.NaturalArg"),
-        Core.projectionField = (Core.Name "term")})))),
+        Core.projectionField = (Core.Name "term")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 naturalArgWithNatural :: Phantoms.TTerm Syntax.NaturalArg -> Phantoms.TTerm Syntax.Natural -> Phantoms.TTerm Syntax.NaturalArg
@@ -3742,9 +3742,9 @@ naturalArgWithNatural original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "term"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.NaturalArg"),
-              Core.projectionField = (Core.Name "term")})))),
+              Core.projectionField = (Core.Name "term")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 naturalArgWithTerm :: Phantoms.TTerm Syntax.NaturalArg -> Phantoms.TTerm Syntax.Term -> Phantoms.TTerm Syntax.NaturalArg
@@ -3755,9 +3755,9 @@ naturalArgWithTerm original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "natural"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.NaturalArg"),
-              Core.projectionField = (Core.Name "natural")})))),
+              Core.projectionField = (Core.Name "natural")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "term"),
@@ -3778,17 +3778,17 @@ normalApplication lhs rhs =
 normalApplicationLhs :: Phantoms.TTerm Syntax.NormalApplication -> Phantoms.TTerm Syntax.Term1
 normalApplicationLhs x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.NormalApplication"),
-        Core.projectionField = (Core.Name "lhs")})))),
+        Core.projectionField = (Core.Name "lhs")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 normalApplicationRhs :: Phantoms.TTerm Syntax.NormalApplication -> Phantoms.TTerm [Syntax.Arg]
 normalApplicationRhs x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.NormalApplication"),
-        Core.projectionField = (Core.Name "rhs")})))),
+        Core.projectionField = (Core.Name "rhs")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 normalApplicationWithLhs :: Phantoms.TTerm Syntax.NormalApplication -> Phantoms.TTerm Syntax.Term1 -> Phantoms.TTerm Syntax.NormalApplication
@@ -3802,9 +3802,9 @@ normalApplicationWithLhs original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "rhs"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.NormalApplication"),
-              Core.projectionField = (Core.Name "rhs")})))),
+              Core.projectionField = (Core.Name "rhs")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 normalApplicationWithRhs :: Phantoms.TTerm Syntax.NormalApplication -> Phantoms.TTerm [Syntax.Arg] -> Phantoms.TTerm Syntax.NormalApplication
@@ -3815,9 +3815,9 @@ normalApplicationWithRhs original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "lhs"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.NormalApplication"),
-              Core.projectionField = (Core.Name "lhs")})))),
+              Core.projectionField = (Core.Name "lhs")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "rhs"),
@@ -3844,33 +3844,33 @@ notationDeclaration notation definition level associativity =
 notationDeclarationAssociativity :: Phantoms.TTerm Syntax.NotationDeclaration -> Phantoms.TTerm (Maybe String)
 notationDeclarationAssociativity x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.NotationDeclaration"),
-        Core.projectionField = (Core.Name "associativity")})))),
+        Core.projectionField = (Core.Name "associativity")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 notationDeclarationDefinition :: Phantoms.TTerm Syntax.NotationDeclaration -> Phantoms.TTerm Syntax.Term
 notationDeclarationDefinition x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.NotationDeclaration"),
-        Core.projectionField = (Core.Name "definition")})))),
+        Core.projectionField = (Core.Name "definition")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 notationDeclarationLevel :: Phantoms.TTerm Syntax.NotationDeclaration -> Phantoms.TTerm (Maybe Syntax.Natural)
 notationDeclarationLevel x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.NotationDeclaration"),
-        Core.projectionField = (Core.Name "level")})))),
+        Core.projectionField = (Core.Name "level")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 notationDeclarationNotation :: Phantoms.TTerm Syntax.NotationDeclaration -> Phantoms.TTerm Syntax.String_
 notationDeclarationNotation x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.NotationDeclaration"),
-        Core.projectionField = (Core.Name "notation")})))),
+        Core.projectionField = (Core.Name "notation")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 notationDeclarationWithAssociativity :: Phantoms.TTerm Syntax.NotationDeclaration -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Syntax.NotationDeclaration
@@ -3881,23 +3881,23 @@ notationDeclarationWithAssociativity original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "notation"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.NotationDeclaration"),
-              Core.projectionField = (Core.Name "notation")})))),
+              Core.projectionField = (Core.Name "notation")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "definition"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.NotationDeclaration"),
-              Core.projectionField = (Core.Name "definition")})))),
+              Core.projectionField = (Core.Name "definition")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "level"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.NotationDeclaration"),
-              Core.projectionField = (Core.Name "level")})))),
+              Core.projectionField = (Core.Name "level")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "associativity"),
@@ -3911,9 +3911,9 @@ notationDeclarationWithDefinition original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "notation"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.NotationDeclaration"),
-              Core.projectionField = (Core.Name "notation")})))),
+              Core.projectionField = (Core.Name "notation")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "definition"),
@@ -3921,16 +3921,16 @@ notationDeclarationWithDefinition original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "level"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.NotationDeclaration"),
-              Core.projectionField = (Core.Name "level")})))),
+              Core.projectionField = (Core.Name "level")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "associativity"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.NotationDeclaration"),
-              Core.projectionField = (Core.Name "associativity")})))),
+              Core.projectionField = (Core.Name "associativity")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 notationDeclarationWithLevel :: Phantoms.TTerm Syntax.NotationDeclaration -> Phantoms.TTerm (Maybe Syntax.Natural) -> Phantoms.TTerm Syntax.NotationDeclaration
@@ -3941,16 +3941,16 @@ notationDeclarationWithLevel original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "notation"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.NotationDeclaration"),
-              Core.projectionField = (Core.Name "notation")})))),
+              Core.projectionField = (Core.Name "notation")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "definition"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.NotationDeclaration"),
-              Core.projectionField = (Core.Name "definition")})))),
+              Core.projectionField = (Core.Name "definition")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "level"),
@@ -3958,9 +3958,9 @@ notationDeclarationWithLevel original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "associativity"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.NotationDeclaration"),
-              Core.projectionField = (Core.Name "associativity")})))),
+              Core.projectionField = (Core.Name "associativity")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 notationDeclarationWithNotation :: Phantoms.TTerm Syntax.NotationDeclaration -> Phantoms.TTerm Syntax.String_ -> Phantoms.TTerm Syntax.NotationDeclaration
@@ -3974,23 +3974,23 @@ notationDeclarationWithNotation original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "definition"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.NotationDeclaration"),
-              Core.projectionField = (Core.Name "definition")})))),
+              Core.projectionField = (Core.Name "definition")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "level"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.NotationDeclaration"),
-              Core.projectionField = (Core.Name "level")})))),
+              Core.projectionField = (Core.Name "level")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "associativity"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.NotationDeclaration"),
-              Core.projectionField = (Core.Name "associativity")})))),
+              Core.projectionField = (Core.Name "associativity")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 number :: Phantoms.TTerm Double -> Phantoms.TTerm Syntax.Number
@@ -4130,17 +4130,17 @@ pattern10_As pattern as =
 pattern10_AsAs :: Phantoms.TTerm Syntax.Pattern10_As -> Phantoms.TTerm Syntax.Name
 pattern10_AsAs x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Pattern10_As"),
-        Core.projectionField = (Core.Name "as")})))),
+        Core.projectionField = (Core.Name "as")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 pattern10_AsPattern :: Phantoms.TTerm Syntax.Pattern10_As -> Phantoms.TTerm Syntax.Pattern1
 pattern10_AsPattern x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Pattern10_As"),
-        Core.projectionField = (Core.Name "pattern")})))),
+        Core.projectionField = (Core.Name "pattern")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 pattern10_AsWithAs :: Phantoms.TTerm Syntax.Pattern10_As -> Phantoms.TTerm Syntax.Name -> Phantoms.TTerm Syntax.Pattern10_As
@@ -4151,9 +4151,9 @@ pattern10_AsWithAs original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "pattern"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Pattern10_As"),
-              Core.projectionField = (Core.Name "pattern")})))),
+              Core.projectionField = (Core.Name "pattern")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "as"),
@@ -4170,9 +4170,9 @@ pattern10_AsWithPattern original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "as"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Pattern10_As"),
-              Core.projectionField = (Core.Name "as")})))),
+              Core.projectionField = (Core.Name "as")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 pattern10_Patterns :: Phantoms.TTerm Syntax.Pattern1 -> Phantoms.TTerm [Syntax.Pattern1] -> Phantoms.TTerm Syntax.Pattern10_Patterns
@@ -4190,17 +4190,17 @@ pattern10_Patterns pattern patterns =
 pattern10_PatternsPattern :: Phantoms.TTerm Syntax.Pattern10_Patterns -> Phantoms.TTerm Syntax.Pattern1
 pattern10_PatternsPattern x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Pattern10_Patterns"),
-        Core.projectionField = (Core.Name "pattern")})))),
+        Core.projectionField = (Core.Name "pattern")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 pattern10_PatternsPatterns :: Phantoms.TTerm Syntax.Pattern10_Patterns -> Phantoms.TTerm [Syntax.Pattern1]
 pattern10_PatternsPatterns x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Pattern10_Patterns"),
-        Core.projectionField = (Core.Name "patterns")})))),
+        Core.projectionField = (Core.Name "patterns")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 pattern10_PatternsWithPattern :: Phantoms.TTerm Syntax.Pattern10_Patterns -> Phantoms.TTerm Syntax.Pattern1 -> Phantoms.TTerm Syntax.Pattern10_Patterns
@@ -4214,9 +4214,9 @@ pattern10_PatternsWithPattern original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "patterns"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Pattern10_Patterns"),
-              Core.projectionField = (Core.Name "patterns")})))),
+              Core.projectionField = (Core.Name "patterns")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 pattern10_PatternsWithPatterns :: Phantoms.TTerm Syntax.Pattern10_Patterns -> Phantoms.TTerm [Syntax.Pattern1] -> Phantoms.TTerm Syntax.Pattern10_Patterns
@@ -4227,9 +4227,9 @@ pattern10_PatternsWithPatterns original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "pattern"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Pattern10_Patterns"),
-              Core.projectionField = (Core.Name "pattern")})))),
+              Core.projectionField = (Core.Name "pattern")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "patterns"),
@@ -4250,17 +4250,17 @@ pattern10_Qualid qualid patterns =
 pattern10_QualidPatterns :: Phantoms.TTerm Syntax.Pattern10_Qualid -> Phantoms.TTerm [Syntax.Pattern1]
 pattern10_QualidPatterns x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Pattern10_Qualid"),
-        Core.projectionField = (Core.Name "patterns")})))),
+        Core.projectionField = (Core.Name "patterns")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 pattern10_QualidQualid :: Phantoms.TTerm Syntax.Pattern10_Qualid -> Phantoms.TTerm Syntax.Qualid
 pattern10_QualidQualid x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Pattern10_Qualid"),
-        Core.projectionField = (Core.Name "qualid")})))),
+        Core.projectionField = (Core.Name "qualid")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 pattern10_QualidWithPatterns :: Phantoms.TTerm Syntax.Pattern10_Qualid -> Phantoms.TTerm [Syntax.Pattern1] -> Phantoms.TTerm Syntax.Pattern10_Qualid
@@ -4271,9 +4271,9 @@ pattern10_QualidWithPatterns original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "qualid"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Pattern10_Qualid"),
-              Core.projectionField = (Core.Name "qualid")})))),
+              Core.projectionField = (Core.Name "qualid")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "patterns"),
@@ -4290,25 +4290,25 @@ pattern10_QualidWithQualid original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "patterns"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Pattern10_Qualid"),
-              Core.projectionField = (Core.Name "patterns")})))),
+              Core.projectionField = (Core.Name "patterns")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 pattern1Pattern :: Phantoms.TTerm Syntax.Pattern1 -> Phantoms.TTerm Syntax.Pattern0
 pattern1Pattern x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Pattern1"),
-        Core.projectionField = (Core.Name "pattern")})))),
+        Core.projectionField = (Core.Name "pattern")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 pattern1Scope :: Phantoms.TTerm Syntax.Pattern1 -> Phantoms.TTerm (Maybe Syntax.ScopeKey)
 pattern1Scope x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Pattern1"),
-        Core.projectionField = (Core.Name "scope")})))),
+        Core.projectionField = (Core.Name "scope")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 pattern1WithPattern :: Phantoms.TTerm Syntax.Pattern1 -> Phantoms.TTerm Syntax.Pattern0 -> Phantoms.TTerm Syntax.Pattern1
@@ -4322,9 +4322,9 @@ pattern1WithPattern original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "scope"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Pattern1"),
-              Core.projectionField = (Core.Name "scope")})))),
+              Core.projectionField = (Core.Name "scope")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 pattern1WithScope :: Phantoms.TTerm Syntax.Pattern1 -> Phantoms.TTerm (Maybe Syntax.ScopeKey) -> Phantoms.TTerm Syntax.Pattern1
@@ -4335,9 +4335,9 @@ pattern1WithScope original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "pattern"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Pattern1"),
-              Core.projectionField = (Core.Name "pattern")})))),
+              Core.projectionField = (Core.Name "pattern")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "scope"),
@@ -4402,17 +4402,17 @@ qualidAndPattern qualid pattern =
 qualidAndPatternPattern :: Phantoms.TTerm Syntax.QualidAndPattern -> Phantoms.TTerm Syntax.Pattern
 qualidAndPatternPattern x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.QualidAndPattern"),
-        Core.projectionField = (Core.Name "pattern")})))),
+        Core.projectionField = (Core.Name "pattern")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 qualidAndPatternQualid :: Phantoms.TTerm Syntax.QualidAndPattern -> Phantoms.TTerm Syntax.Qualid
 qualidAndPatternQualid x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.QualidAndPattern"),
-        Core.projectionField = (Core.Name "qualid")})))),
+        Core.projectionField = (Core.Name "qualid")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 qualidAndPatternWithPattern :: Phantoms.TTerm Syntax.QualidAndPattern -> Phantoms.TTerm Syntax.Pattern -> Phantoms.TTerm Syntax.QualidAndPattern
@@ -4423,9 +4423,9 @@ qualidAndPatternWithPattern original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "qualid"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.QualidAndPattern"),
-              Core.projectionField = (Core.Name "qualid")})))),
+              Core.projectionField = (Core.Name "qualid")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "pattern"),
@@ -4442,9 +4442,9 @@ qualidAndPatternWithQualid original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "pattern"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.QualidAndPattern"),
-              Core.projectionField = (Core.Name "pattern")})))),
+              Core.projectionField = (Core.Name "pattern")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 qualidAnnotated :: Phantoms.TTerm Syntax.Qualid -> Phantoms.TTerm (Maybe Syntax.UnivAnnot) -> Phantoms.TTerm Syntax.QualidAnnotated
@@ -4462,17 +4462,17 @@ qualidAnnotated qualid univAnnot =
 qualidAnnotatedQualid :: Phantoms.TTerm Syntax.QualidAnnotated -> Phantoms.TTerm Syntax.Qualid
 qualidAnnotatedQualid x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.QualidAnnotated"),
-        Core.projectionField = (Core.Name "qualid")})))),
+        Core.projectionField = (Core.Name "qualid")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 qualidAnnotatedUnivAnnot :: Phantoms.TTerm Syntax.QualidAnnotated -> Phantoms.TTerm (Maybe Syntax.UnivAnnot)
 qualidAnnotatedUnivAnnot x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.QualidAnnotated"),
-        Core.projectionField = (Core.Name "univAnnot")})))),
+        Core.projectionField = (Core.Name "univAnnot")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 qualidAnnotatedWithQualid :: Phantoms.TTerm Syntax.QualidAnnotated -> Phantoms.TTerm Syntax.Qualid -> Phantoms.TTerm Syntax.QualidAnnotated
@@ -4486,9 +4486,9 @@ qualidAnnotatedWithQualid original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "univAnnot"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.QualidAnnotated"),
-              Core.projectionField = (Core.Name "univAnnot")})))),
+              Core.projectionField = (Core.Name "univAnnot")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 qualidAnnotatedWithUnivAnnot :: Phantoms.TTerm Syntax.QualidAnnotated -> Phantoms.TTerm (Maybe Syntax.UnivAnnot) -> Phantoms.TTerm Syntax.QualidAnnotated
@@ -4499,9 +4499,9 @@ qualidAnnotatedWithUnivAnnot original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "qualid"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.QualidAnnotated"),
-              Core.projectionField = (Core.Name "qualid")})))),
+              Core.projectionField = (Core.Name "qualid")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "univAnnot"),
@@ -4510,17 +4510,17 @@ qualidAnnotatedWithUnivAnnot original newVal =
 qualidFieldIds :: Phantoms.TTerm Syntax.Qualid -> Phantoms.TTerm [Syntax.FieldIdent]
 qualidFieldIds x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Qualid"),
-        Core.projectionField = (Core.Name "fieldIds")})))),
+        Core.projectionField = (Core.Name "fieldIds")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 qualidId :: Phantoms.TTerm Syntax.Qualid -> Phantoms.TTerm Syntax.Ident
 qualidId x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Qualid"),
-        Core.projectionField = (Core.Name "id")})))),
+        Core.projectionField = (Core.Name "id")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 qualidWithFieldIds :: Phantoms.TTerm Syntax.Qualid -> Phantoms.TTerm [Syntax.FieldIdent] -> Phantoms.TTerm Syntax.Qualid
@@ -4531,9 +4531,9 @@ qualidWithFieldIds original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "id"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Qualid"),
-              Core.projectionField = (Core.Name "id")})))),
+              Core.projectionField = (Core.Name "id")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "fieldIds"),
@@ -4550,9 +4550,9 @@ qualidWithId original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "fieldIds"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Qualid"),
-              Core.projectionField = (Core.Name "fieldIds")})))),
+              Core.projectionField = (Core.Name "fieldIds")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 recordBody :: Phantoms.TTerm (Maybe Syntax.Ident) -> Phantoms.TTerm [Syntax.RecordField] -> Phantoms.TTerm Syntax.RecordBody
@@ -4570,17 +4570,17 @@ recordBody constructor fields =
 recordBodyConstructor :: Phantoms.TTerm Syntax.RecordBody -> Phantoms.TTerm (Maybe Syntax.Ident)
 recordBodyConstructor x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RecordBody"),
-        Core.projectionField = (Core.Name "constructor")})))),
+        Core.projectionField = (Core.Name "constructor")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 recordBodyFields :: Phantoms.TTerm Syntax.RecordBody -> Phantoms.TTerm [Syntax.RecordField]
 recordBodyFields x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RecordBody"),
-        Core.projectionField = (Core.Name "fields")})))),
+        Core.projectionField = (Core.Name "fields")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 recordBodyWithConstructor :: Phantoms.TTerm Syntax.RecordBody -> Phantoms.TTerm (Maybe Syntax.Ident) -> Phantoms.TTerm Syntax.RecordBody
@@ -4594,9 +4594,9 @@ recordBodyWithConstructor original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "fields"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RecordBody"),
-              Core.projectionField = (Core.Name "fields")})))),
+              Core.projectionField = (Core.Name "fields")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 recordBodyWithFields :: Phantoms.TTerm Syntax.RecordBody -> Phantoms.TTerm [Syntax.RecordField] -> Phantoms.TTerm Syntax.RecordBody
@@ -4607,9 +4607,9 @@ recordBodyWithFields original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "constructor"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RecordBody"),
-              Core.projectionField = (Core.Name "constructor")})))),
+              Core.projectionField = (Core.Name "constructor")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "fields"),
@@ -4639,41 +4639,41 @@ recordDefinition locality name binders sort body =
 recordDefinitionBinders :: Phantoms.TTerm Syntax.RecordDefinition -> Phantoms.TTerm [Syntax.Binder]
 recordDefinitionBinders x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RecordDefinition"),
-        Core.projectionField = (Core.Name "binders")})))),
+        Core.projectionField = (Core.Name "binders")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 recordDefinitionBody :: Phantoms.TTerm Syntax.RecordDefinition -> Phantoms.TTerm Syntax.RecordBody
 recordDefinitionBody x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RecordDefinition"),
-        Core.projectionField = (Core.Name "body")})))),
+        Core.projectionField = (Core.Name "body")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 recordDefinitionLocality :: Phantoms.TTerm Syntax.RecordDefinition -> Phantoms.TTerm (Maybe Syntax.Locality)
 recordDefinitionLocality x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RecordDefinition"),
-        Core.projectionField = (Core.Name "locality")})))),
+        Core.projectionField = (Core.Name "locality")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 recordDefinitionName :: Phantoms.TTerm Syntax.RecordDefinition -> Phantoms.TTerm Syntax.Ident
 recordDefinitionName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RecordDefinition"),
-        Core.projectionField = (Core.Name "name")})))),
+        Core.projectionField = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 recordDefinitionSort :: Phantoms.TTerm Syntax.RecordDefinition -> Phantoms.TTerm (Maybe Syntax.Sort)
 recordDefinitionSort x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RecordDefinition"),
-        Core.projectionField = (Core.Name "sort")})))),
+        Core.projectionField = (Core.Name "sort")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 recordDefinitionWithBinders :: Phantoms.TTerm Syntax.RecordDefinition -> Phantoms.TTerm [Syntax.Binder] -> Phantoms.TTerm Syntax.RecordDefinition
@@ -4684,16 +4684,16 @@ recordDefinitionWithBinders original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "locality"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RecordDefinition"),
-              Core.projectionField = (Core.Name "locality")})))),
+              Core.projectionField = (Core.Name "locality")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RecordDefinition"),
-              Core.projectionField = (Core.Name "name")})))),
+              Core.projectionField = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "binders"),
@@ -4701,16 +4701,16 @@ recordDefinitionWithBinders original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "sort"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RecordDefinition"),
-              Core.projectionField = (Core.Name "sort")})))),
+              Core.projectionField = (Core.Name "sort")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RecordDefinition"),
-              Core.projectionField = (Core.Name "body")})))),
+              Core.projectionField = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 recordDefinitionWithBody :: Phantoms.TTerm Syntax.RecordDefinition -> Phantoms.TTerm Syntax.RecordBody -> Phantoms.TTerm Syntax.RecordDefinition
@@ -4721,30 +4721,30 @@ recordDefinitionWithBody original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "locality"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RecordDefinition"),
-              Core.projectionField = (Core.Name "locality")})))),
+              Core.projectionField = (Core.Name "locality")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RecordDefinition"),
-              Core.projectionField = (Core.Name "name")})))),
+              Core.projectionField = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "binders"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RecordDefinition"),
-              Core.projectionField = (Core.Name "binders")})))),
+              Core.projectionField = (Core.Name "binders")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "sort"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RecordDefinition"),
-              Core.projectionField = (Core.Name "sort")})))),
+              Core.projectionField = (Core.Name "sort")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
@@ -4761,30 +4761,30 @@ recordDefinitionWithLocality original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RecordDefinition"),
-              Core.projectionField = (Core.Name "name")})))),
+              Core.projectionField = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "binders"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RecordDefinition"),
-              Core.projectionField = (Core.Name "binders")})))),
+              Core.projectionField = (Core.Name "binders")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "sort"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RecordDefinition"),
-              Core.projectionField = (Core.Name "sort")})))),
+              Core.projectionField = (Core.Name "sort")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RecordDefinition"),
-              Core.projectionField = (Core.Name "body")})))),
+              Core.projectionField = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 recordDefinitionWithName :: Phantoms.TTerm Syntax.RecordDefinition -> Phantoms.TTerm Syntax.Ident -> Phantoms.TTerm Syntax.RecordDefinition
@@ -4795,9 +4795,9 @@ recordDefinitionWithName original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "locality"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RecordDefinition"),
-              Core.projectionField = (Core.Name "locality")})))),
+              Core.projectionField = (Core.Name "locality")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
@@ -4805,23 +4805,23 @@ recordDefinitionWithName original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "binders"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RecordDefinition"),
-              Core.projectionField = (Core.Name "binders")})))),
+              Core.projectionField = (Core.Name "binders")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "sort"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RecordDefinition"),
-              Core.projectionField = (Core.Name "sort")})))),
+              Core.projectionField = (Core.Name "sort")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RecordDefinition"),
-              Core.projectionField = (Core.Name "body")})))),
+              Core.projectionField = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 recordDefinitionWithSort :: Phantoms.TTerm Syntax.RecordDefinition -> Phantoms.TTerm (Maybe Syntax.Sort) -> Phantoms.TTerm Syntax.RecordDefinition
@@ -4832,23 +4832,23 @@ recordDefinitionWithSort original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "locality"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RecordDefinition"),
-              Core.projectionField = (Core.Name "locality")})))),
+              Core.projectionField = (Core.Name "locality")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RecordDefinition"),
-              Core.projectionField = (Core.Name "name")})))),
+              Core.projectionField = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "binders"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RecordDefinition"),
-              Core.projectionField = (Core.Name "binders")})))),
+              Core.projectionField = (Core.Name "binders")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "sort"),
@@ -4856,9 +4856,9 @@ recordDefinitionWithSort original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RecordDefinition"),
-              Core.projectionField = (Core.Name "body")})))),
+              Core.projectionField = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 recordField :: Phantoms.TTerm Syntax.Ident -> Phantoms.TTerm Syntax.Type -> Phantoms.TTerm Syntax.RecordField
@@ -4876,17 +4876,17 @@ recordField name type_ =
 recordFieldName :: Phantoms.TTerm Syntax.RecordField -> Phantoms.TTerm Syntax.Ident
 recordFieldName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RecordField"),
-        Core.projectionField = (Core.Name "name")})))),
+        Core.projectionField = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 recordFieldType :: Phantoms.TTerm Syntax.RecordField -> Phantoms.TTerm Syntax.Type
 recordFieldType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RecordField"),
-        Core.projectionField = (Core.Name "type")})))),
+        Core.projectionField = (Core.Name "type")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 recordFieldWithName :: Phantoms.TTerm Syntax.RecordField -> Phantoms.TTerm Syntax.Ident -> Phantoms.TTerm Syntax.RecordField
@@ -4900,9 +4900,9 @@ recordFieldWithName original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RecordField"),
-              Core.projectionField = (Core.Name "type")})))),
+              Core.projectionField = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 recordFieldWithType :: Phantoms.TTerm Syntax.RecordField -> Phantoms.TTerm Syntax.Type -> Phantoms.TTerm Syntax.RecordField
@@ -4913,9 +4913,9 @@ recordFieldWithType original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RecordField"),
-              Core.projectionField = (Core.Name "name")})))),
+              Core.projectionField = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
@@ -4942,33 +4942,33 @@ requireImport from require qualification modules =
 requireImportFrom :: Phantoms.TTerm Syntax.RequireImport -> Phantoms.TTerm (Maybe Syntax.Qualid)
 requireImportFrom x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RequireImport"),
-        Core.projectionField = (Core.Name "from")})))),
+        Core.projectionField = (Core.Name "from")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 requireImportModules :: Phantoms.TTerm Syntax.RequireImport -> Phantoms.TTerm [Syntax.Qualid]
 requireImportModules x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RequireImport"),
-        Core.projectionField = (Core.Name "modules")})))),
+        Core.projectionField = (Core.Name "modules")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 requireImportQualification :: Phantoms.TTerm Syntax.RequireImport -> Phantoms.TTerm (Maybe Syntax.ImportQualification)
 requireImportQualification x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RequireImport"),
-        Core.projectionField = (Core.Name "qualification")})))),
+        Core.projectionField = (Core.Name "qualification")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 requireImportRequire :: Phantoms.TTerm Syntax.RequireImport -> Phantoms.TTerm Bool
 requireImportRequire x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RequireImport"),
-        Core.projectionField = (Core.Name "require")})))),
+        Core.projectionField = (Core.Name "require")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 requireImportWithFrom :: Phantoms.TTerm Syntax.RequireImport -> Phantoms.TTerm (Maybe Syntax.Qualid) -> Phantoms.TTerm Syntax.RequireImport
@@ -4982,23 +4982,23 @@ requireImportWithFrom original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "require"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RequireImport"),
-              Core.projectionField = (Core.Name "require")})))),
+              Core.projectionField = (Core.Name "require")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "qualification"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RequireImport"),
-              Core.projectionField = (Core.Name "qualification")})))),
+              Core.projectionField = (Core.Name "qualification")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "modules"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RequireImport"),
-              Core.projectionField = (Core.Name "modules")})))),
+              Core.projectionField = (Core.Name "modules")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 requireImportWithModules :: Phantoms.TTerm Syntax.RequireImport -> Phantoms.TTerm [Syntax.Qualid] -> Phantoms.TTerm Syntax.RequireImport
@@ -5009,23 +5009,23 @@ requireImportWithModules original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "from"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RequireImport"),
-              Core.projectionField = (Core.Name "from")})))),
+              Core.projectionField = (Core.Name "from")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "require"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RequireImport"),
-              Core.projectionField = (Core.Name "require")})))),
+              Core.projectionField = (Core.Name "require")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "qualification"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RequireImport"),
-              Core.projectionField = (Core.Name "qualification")})))),
+              Core.projectionField = (Core.Name "qualification")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "modules"),
@@ -5039,16 +5039,16 @@ requireImportWithQualification original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "from"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RequireImport"),
-              Core.projectionField = (Core.Name "from")})))),
+              Core.projectionField = (Core.Name "from")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "require"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RequireImport"),
-              Core.projectionField = (Core.Name "require")})))),
+              Core.projectionField = (Core.Name "require")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "qualification"),
@@ -5056,9 +5056,9 @@ requireImportWithQualification original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "modules"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RequireImport"),
-              Core.projectionField = (Core.Name "modules")})))),
+              Core.projectionField = (Core.Name "modules")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 requireImportWithRequire :: Phantoms.TTerm Syntax.RequireImport -> Phantoms.TTerm Bool -> Phantoms.TTerm Syntax.RequireImport
@@ -5069,9 +5069,9 @@ requireImportWithRequire original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "from"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RequireImport"),
-              Core.projectionField = (Core.Name "from")})))),
+              Core.projectionField = (Core.Name "from")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "require"),
@@ -5079,16 +5079,16 @@ requireImportWithRequire original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "qualification"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RequireImport"),
-              Core.projectionField = (Core.Name "qualification")})))),
+              Core.projectionField = (Core.Name "qualification")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "modules"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RequireImport"),
-              Core.projectionField = (Core.Name "modules")})))),
+              Core.projectionField = (Core.Name "modules")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 returnAs :: Phantoms.TTerm (Maybe Syntax.Name) -> Phantoms.TTerm Syntax.Term100 -> Phantoms.TTerm Syntax.ReturnAs
@@ -5106,17 +5106,17 @@ returnAs as return =
 returnAsAs :: Phantoms.TTerm Syntax.ReturnAs -> Phantoms.TTerm (Maybe Syntax.Name)
 returnAsAs x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.ReturnAs"),
-        Core.projectionField = (Core.Name "as")})))),
+        Core.projectionField = (Core.Name "as")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 returnAsReturn :: Phantoms.TTerm Syntax.ReturnAs -> Phantoms.TTerm Syntax.Term100
 returnAsReturn x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.ReturnAs"),
-        Core.projectionField = (Core.Name "return")})))),
+        Core.projectionField = (Core.Name "return")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 returnAsWithAs :: Phantoms.TTerm Syntax.ReturnAs -> Phantoms.TTerm (Maybe Syntax.Name) -> Phantoms.TTerm Syntax.ReturnAs
@@ -5130,9 +5130,9 @@ returnAsWithAs original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "return"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.ReturnAs"),
-              Core.projectionField = (Core.Name "return")})))),
+              Core.projectionField = (Core.Name "return")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 returnAsWithReturn :: Phantoms.TTerm Syntax.ReturnAs -> Phantoms.TTerm Syntax.Term100 -> Phantoms.TTerm Syntax.ReturnAs
@@ -5143,9 +5143,9 @@ returnAsWithReturn original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "as"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.ReturnAs"),
-              Core.projectionField = (Core.Name "as")})))),
+              Core.projectionField = (Core.Name "as")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "return"),
@@ -5172,17 +5172,17 @@ sectionDefinition name sentences =
 sectionDefinitionName :: Phantoms.TTerm Syntax.SectionDefinition -> Phantoms.TTerm Syntax.Ident
 sectionDefinitionName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.SectionDefinition"),
-        Core.projectionField = (Core.Name "name")})))),
+        Core.projectionField = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 sectionDefinitionSentences :: Phantoms.TTerm Syntax.SectionDefinition -> Phantoms.TTerm [Syntax.Sentence]
 sectionDefinitionSentences x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.SectionDefinition"),
-        Core.projectionField = (Core.Name "sentences")})))),
+        Core.projectionField = (Core.Name "sentences")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 sectionDefinitionWithName :: Phantoms.TTerm Syntax.SectionDefinition -> Phantoms.TTerm Syntax.Ident -> Phantoms.TTerm Syntax.SectionDefinition
@@ -5196,9 +5196,9 @@ sectionDefinitionWithName original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "sentences"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.SectionDefinition"),
-              Core.projectionField = (Core.Name "sentences")})))),
+              Core.projectionField = (Core.Name "sentences")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 sectionDefinitionWithSentences :: Phantoms.TTerm Syntax.SectionDefinition -> Phantoms.TTerm [Syntax.Sentence] -> Phantoms.TTerm Syntax.SectionDefinition
@@ -5209,9 +5209,9 @@ sectionDefinitionWithSentences original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.SectionDefinition"),
-              Core.projectionField = (Core.Name "name")})))),
+              Core.projectionField = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "sentences"),
@@ -5232,17 +5232,17 @@ sentence comment content =
 sentenceComment :: Phantoms.TTerm Syntax.Sentence -> Phantoms.TTerm (Maybe Syntax.Comment)
 sentenceComment x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Sentence"),
-        Core.projectionField = (Core.Name "comment")})))),
+        Core.projectionField = (Core.Name "comment")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 sentenceContent :: Phantoms.TTerm Syntax.Sentence -> Phantoms.TTerm Syntax.SentenceContent
 sentenceContent x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Sentence"),
-        Core.projectionField = (Core.Name "content")})))),
+        Core.projectionField = (Core.Name "content")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 sentenceContentDefinition :: Phantoms.TTerm Syntax.Definition -> Phantoms.TTerm Syntax.SentenceContent
@@ -5328,9 +5328,9 @@ sentenceWithComment original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "content"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Sentence"),
-              Core.projectionField = (Core.Name "content")})))),
+              Core.projectionField = (Core.Name "content")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 sentenceWithContent :: Phantoms.TTerm Syntax.Sentence -> Phantoms.TTerm Syntax.SentenceContent -> Phantoms.TTerm Syntax.Sentence
@@ -5341,9 +5341,9 @@ sentenceWithContent original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "comment"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Sentence"),
-              Core.projectionField = (Core.Name "comment")})))),
+              Core.projectionField = (Core.Name "comment")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "content"),
@@ -5603,41 +5603,41 @@ theoremBody kind name binders type_ proof =
 theoremBodyBinders :: Phantoms.TTerm Syntax.TheoremBody -> Phantoms.TTerm [Syntax.Binder]
 theoremBodyBinders x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TheoremBody"),
-        Core.projectionField = (Core.Name "binders")})))),
+        Core.projectionField = (Core.Name "binders")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 theoremBodyKind :: Phantoms.TTerm Syntax.TheoremBody -> Phantoms.TTerm Syntax.TheoremKind
 theoremBodyKind x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TheoremBody"),
-        Core.projectionField = (Core.Name "kind")})))),
+        Core.projectionField = (Core.Name "kind")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 theoremBodyName :: Phantoms.TTerm Syntax.TheoremBody -> Phantoms.TTerm Syntax.Ident
 theoremBodyName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TheoremBody"),
-        Core.projectionField = (Core.Name "name")})))),
+        Core.projectionField = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 theoremBodyProof :: Phantoms.TTerm Syntax.TheoremBody -> Phantoms.TTerm Syntax.Term
 theoremBodyProof x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TheoremBody"),
-        Core.projectionField = (Core.Name "proof")})))),
+        Core.projectionField = (Core.Name "proof")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 theoremBodyType :: Phantoms.TTerm Syntax.TheoremBody -> Phantoms.TTerm Syntax.Type
 theoremBodyType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TheoremBody"),
-        Core.projectionField = (Core.Name "type")})))),
+        Core.projectionField = (Core.Name "type")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 theoremBodyWithBinders :: Phantoms.TTerm Syntax.TheoremBody -> Phantoms.TTerm [Syntax.Binder] -> Phantoms.TTerm Syntax.TheoremBody
@@ -5648,16 +5648,16 @@ theoremBodyWithBinders original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "kind"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TheoremBody"),
-              Core.projectionField = (Core.Name "kind")})))),
+              Core.projectionField = (Core.Name "kind")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TheoremBody"),
-              Core.projectionField = (Core.Name "name")})))),
+              Core.projectionField = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "binders"),
@@ -5665,16 +5665,16 @@ theoremBodyWithBinders original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TheoremBody"),
-              Core.projectionField = (Core.Name "type")})))),
+              Core.projectionField = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "proof"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TheoremBody"),
-              Core.projectionField = (Core.Name "proof")})))),
+              Core.projectionField = (Core.Name "proof")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 theoremBodyWithKind :: Phantoms.TTerm Syntax.TheoremBody -> Phantoms.TTerm Syntax.TheoremKind -> Phantoms.TTerm Syntax.TheoremBody
@@ -5688,30 +5688,30 @@ theoremBodyWithKind original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TheoremBody"),
-              Core.projectionField = (Core.Name "name")})))),
+              Core.projectionField = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "binders"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TheoremBody"),
-              Core.projectionField = (Core.Name "binders")})))),
+              Core.projectionField = (Core.Name "binders")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TheoremBody"),
-              Core.projectionField = (Core.Name "type")})))),
+              Core.projectionField = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "proof"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TheoremBody"),
-              Core.projectionField = (Core.Name "proof")})))),
+              Core.projectionField = (Core.Name "proof")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 theoremBodyWithName :: Phantoms.TTerm Syntax.TheoremBody -> Phantoms.TTerm Syntax.Ident -> Phantoms.TTerm Syntax.TheoremBody
@@ -5722,9 +5722,9 @@ theoremBodyWithName original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "kind"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TheoremBody"),
-              Core.projectionField = (Core.Name "kind")})))),
+              Core.projectionField = (Core.Name "kind")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
@@ -5732,23 +5732,23 @@ theoremBodyWithName original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "binders"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TheoremBody"),
-              Core.projectionField = (Core.Name "binders")})))),
+              Core.projectionField = (Core.Name "binders")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TheoremBody"),
-              Core.projectionField = (Core.Name "type")})))),
+              Core.projectionField = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "proof"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TheoremBody"),
-              Core.projectionField = (Core.Name "proof")})))),
+              Core.projectionField = (Core.Name "proof")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 theoremBodyWithProof :: Phantoms.TTerm Syntax.TheoremBody -> Phantoms.TTerm Syntax.Term -> Phantoms.TTerm Syntax.TheoremBody
@@ -5759,30 +5759,30 @@ theoremBodyWithProof original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "kind"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TheoremBody"),
-              Core.projectionField = (Core.Name "kind")})))),
+              Core.projectionField = (Core.Name "kind")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TheoremBody"),
-              Core.projectionField = (Core.Name "name")})))),
+              Core.projectionField = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "binders"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TheoremBody"),
-              Core.projectionField = (Core.Name "binders")})))),
+              Core.projectionField = (Core.Name "binders")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TheoremBody"),
-              Core.projectionField = (Core.Name "type")})))),
+              Core.projectionField = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "proof"),
@@ -5796,23 +5796,23 @@ theoremBodyWithType original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "kind"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TheoremBody"),
-              Core.projectionField = (Core.Name "kind")})))),
+              Core.projectionField = (Core.Name "kind")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TheoremBody"),
-              Core.projectionField = (Core.Name "name")})))),
+              Core.projectionField = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "binders"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TheoremBody"),
-              Core.projectionField = (Core.Name "binders")})))),
+              Core.projectionField = (Core.Name "binders")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
@@ -5820,9 +5820,9 @@ theoremBodyWithType original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "proof"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TheoremBody"),
-              Core.projectionField = (Core.Name "proof")})))),
+              Core.projectionField = (Core.Name "proof")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 theoremKindCorollary :: Phantoms.TTerm Syntax.TheoremKind
@@ -5886,17 +5886,17 @@ typeBinders names type_ =
 typeBindersNames :: Phantoms.TTerm Syntax.TypeBinders -> Phantoms.TTerm [Syntax.Name]
 typeBindersNames x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TypeBinders"),
-        Core.projectionField = (Core.Name "names")})))),
+        Core.projectionField = (Core.Name "names")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 typeBindersType :: Phantoms.TTerm Syntax.TypeBinders -> Phantoms.TTerm Syntax.Type
 typeBindersType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TypeBinders"),
-        Core.projectionField = (Core.Name "type")})))),
+        Core.projectionField = (Core.Name "type")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 typeBindersWithNames :: Phantoms.TTerm Syntax.TypeBinders -> Phantoms.TTerm [Syntax.Name] -> Phantoms.TTerm Syntax.TypeBinders
@@ -5910,9 +5910,9 @@ typeBindersWithNames original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TypeBinders"),
-              Core.projectionField = (Core.Name "type")})))),
+              Core.projectionField = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 typeBindersWithType :: Phantoms.TTerm Syntax.TypeBinders -> Phantoms.TTerm Syntax.Type -> Phantoms.TTerm Syntax.TypeBinders
@@ -5923,9 +5923,9 @@ typeBindersWithType original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "names"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TypeBinders"),
-              Core.projectionField = (Core.Name "names")})))),
+              Core.projectionField = (Core.Name "names")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
@@ -5949,9 +5949,9 @@ typeCast term type_ operator =
 typeCastOperator :: Phantoms.TTerm Syntax.TypeCast -> Phantoms.TTerm Syntax.TypeCastOperator
 typeCastOperator x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TypeCast"),
-        Core.projectionField = (Core.Name "operator")})))),
+        Core.projectionField = (Core.Name "operator")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 typeCastOperatorNativeCompute :: Phantoms.TTerm Syntax.TypeCastOperator
@@ -5981,17 +5981,17 @@ typeCastOperatorVmCompute =
 typeCastTerm :: Phantoms.TTerm Syntax.TypeCast -> Phantoms.TTerm Syntax.Term10
 typeCastTerm x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TypeCast"),
-        Core.projectionField = (Core.Name "term")})))),
+        Core.projectionField = (Core.Name "term")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 typeCastType :: Phantoms.TTerm Syntax.TypeCast -> Phantoms.TTerm Syntax.Type
 typeCastType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TypeCast"),
-        Core.projectionField = (Core.Name "type")})))),
+        Core.projectionField = (Core.Name "type")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 typeCastWithOperator :: Phantoms.TTerm Syntax.TypeCast -> Phantoms.TTerm Syntax.TypeCastOperator -> Phantoms.TTerm Syntax.TypeCast
@@ -6002,16 +6002,16 @@ typeCastWithOperator original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "term"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TypeCast"),
-              Core.projectionField = (Core.Name "term")})))),
+              Core.projectionField = (Core.Name "term")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TypeCast"),
-              Core.projectionField = (Core.Name "type")})))),
+              Core.projectionField = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "operator"),
@@ -6028,16 +6028,16 @@ typeCastWithTerm original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TypeCast"),
-              Core.projectionField = (Core.Name "type")})))),
+              Core.projectionField = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "operator"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TypeCast"),
-              Core.projectionField = (Core.Name "operator")})))),
+              Core.projectionField = (Core.Name "operator")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 typeCastWithType :: Phantoms.TTerm Syntax.TypeCast -> Phantoms.TTerm Syntax.Type -> Phantoms.TTerm Syntax.TypeCast
@@ -6048,9 +6048,9 @@ typeCastWithType original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "term"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TypeCast"),
-              Core.projectionField = (Core.Name "term")})))),
+              Core.projectionField = (Core.Name "term")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
@@ -6058,9 +6058,9 @@ typeCastWithType original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "operator"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TypeCast"),
-              Core.projectionField = (Core.Name "operator")})))),
+              Core.projectionField = (Core.Name "operator")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 typeclassConstraint :: Phantoms.TTerm (Maybe Syntax.Name) -> Phantoms.TTerm Bool -> Phantoms.TTerm Syntax.Term -> Phantoms.TTerm Syntax.TypeclassConstraint
@@ -6081,25 +6081,25 @@ typeclassConstraint name generalizing term =
 typeclassConstraintGeneralizing :: Phantoms.TTerm Syntax.TypeclassConstraint -> Phantoms.TTerm Bool
 typeclassConstraintGeneralizing x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TypeclassConstraint"),
-        Core.projectionField = (Core.Name "generalizing")})))),
+        Core.projectionField = (Core.Name "generalizing")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 typeclassConstraintName :: Phantoms.TTerm Syntax.TypeclassConstraint -> Phantoms.TTerm (Maybe Syntax.Name)
 typeclassConstraintName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TypeclassConstraint"),
-        Core.projectionField = (Core.Name "name")})))),
+        Core.projectionField = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 typeclassConstraintTerm :: Phantoms.TTerm Syntax.TypeclassConstraint -> Phantoms.TTerm Syntax.Term
 typeclassConstraintTerm x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TypeclassConstraint"),
-        Core.projectionField = (Core.Name "term")})))),
+        Core.projectionField = (Core.Name "term")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 typeclassConstraintWithGeneralizing :: Phantoms.TTerm Syntax.TypeclassConstraint -> Phantoms.TTerm Bool -> Phantoms.TTerm Syntax.TypeclassConstraint
@@ -6110,9 +6110,9 @@ typeclassConstraintWithGeneralizing original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TypeclassConstraint"),
-              Core.projectionField = (Core.Name "name")})))),
+              Core.projectionField = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "generalizing"),
@@ -6120,9 +6120,9 @@ typeclassConstraintWithGeneralizing original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "term"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TypeclassConstraint"),
-              Core.projectionField = (Core.Name "term")})))),
+              Core.projectionField = (Core.Name "term")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 typeclassConstraintWithName :: Phantoms.TTerm Syntax.TypeclassConstraint -> Phantoms.TTerm (Maybe Syntax.Name) -> Phantoms.TTerm Syntax.TypeclassConstraint
@@ -6136,16 +6136,16 @@ typeclassConstraintWithName original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "generalizing"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TypeclassConstraint"),
-              Core.projectionField = (Core.Name "generalizing")})))),
+              Core.projectionField = (Core.Name "generalizing")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "term"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TypeclassConstraint"),
-              Core.projectionField = (Core.Name "term")})))),
+              Core.projectionField = (Core.Name "term")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 typeclassConstraintWithTerm :: Phantoms.TTerm Syntax.TypeclassConstraint -> Phantoms.TTerm Syntax.Term -> Phantoms.TTerm Syntax.TypeclassConstraint
@@ -6156,16 +6156,16 @@ typeclassConstraintWithTerm original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TypeclassConstraint"),
-              Core.projectionField = (Core.Name "name")})))),
+              Core.projectionField = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "generalizing"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TypeclassConstraint"),
-              Core.projectionField = (Core.Name "generalizing")})))),
+              Core.projectionField = (Core.Name "generalizing")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "term"),
@@ -6174,61 +6174,61 @@ typeclassConstraintWithTerm original newVal =
 unComment :: Phantoms.TTerm Syntax.Comment -> Phantoms.TTerm String
 unComment x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.coq.syntax.Comment")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.coq.syntax.Comment")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unFieldIdent :: Phantoms.TTerm Syntax.FieldIdent -> Phantoms.TTerm Syntax.Ident
 unFieldIdent x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.coq.syntax.FieldIdent")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.coq.syntax.FieldIdent")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unIdent :: Phantoms.TTerm Syntax.Ident -> Phantoms.TTerm Syntax.String_
 unIdent x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.coq.syntax.Ident")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.coq.syntax.Ident")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unName :: Phantoms.TTerm Syntax.Name -> Phantoms.TTerm (Maybe Syntax.Ident)
 unName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.coq.syntax.Name")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.coq.syntax.Name")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unNatural :: Phantoms.TTerm Syntax.Natural -> Phantoms.TTerm Integer
 unNatural x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.coq.syntax.Natural")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.coq.syntax.Natural")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unNumber :: Phantoms.TTerm Syntax.Number -> Phantoms.TTerm Double
 unNumber x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.coq.syntax.Number")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.coq.syntax.Number")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unScopeKey :: Phantoms.TTerm Syntax.ScopeKey -> Phantoms.TTerm Syntax.Ident
 unScopeKey x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.coq.syntax.ScopeKey")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.coq.syntax.ScopeKey")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unString :: Phantoms.TTerm Syntax.String_ -> Phantoms.TTerm String
 unString x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.coq.syntax.String")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.coq.syntax.String")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unType :: Phantoms.TTerm Syntax.Type -> Phantoms.TTerm Syntax.Term
 unType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.coq.syntax.Type")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.coq.syntax.Type")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unUnivAnnot :: Phantoms.TTerm Syntax.UnivAnnot -> Phantoms.TTerm [Syntax.UniverseLevel]
 unUnivAnnot x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.coq.syntax.UnivAnnot")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.coq.syntax.UnivAnnot")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 univAnnot :: Phantoms.TTerm [Syntax.UniverseLevel] -> Phantoms.TTerm Syntax.UnivAnnot
@@ -6332,17 +6332,17 @@ universe_Expr name number =
 universe_ExprName :: Phantoms.TTerm Syntax.Universe_Expr -> Phantoms.TTerm Syntax.UniverseName
 universe_ExprName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Universe_Expr"),
-        Core.projectionField = (Core.Name "name")})))),
+        Core.projectionField = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 universe_ExprNumber :: Phantoms.TTerm Syntax.Universe_Expr -> Phantoms.TTerm (Maybe Syntax.Natural)
 universe_ExprNumber x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Universe_Expr"),
-        Core.projectionField = (Core.Name "number")})))),
+        Core.projectionField = (Core.Name "number")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 universe_ExprWithName :: Phantoms.TTerm Syntax.Universe_Expr -> Phantoms.TTerm Syntax.UniverseName -> Phantoms.TTerm Syntax.Universe_Expr
@@ -6356,9 +6356,9 @@ universe_ExprWithName original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "number"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Universe_Expr"),
-              Core.projectionField = (Core.Name "number")})))),
+              Core.projectionField = (Core.Name "number")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 universe_ExprWithNumber :: Phantoms.TTerm Syntax.Universe_Expr -> Phantoms.TTerm (Maybe Syntax.Natural) -> Phantoms.TTerm Syntax.Universe_Expr
@@ -6369,9 +6369,9 @@ universe_ExprWithNumber original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Universe_Expr"),
-              Core.projectionField = (Core.Name "name")})))),
+              Core.projectionField = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "number"),

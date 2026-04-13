@@ -145,7 +145,6 @@ module_ = Module ns definitions
       toDefinition encodeFloatValue_encodeFloat64,
       toDefinition encodeFloatValue_pySpecialFloat,
       toDefinition encodeForallType,
-      toDefinition encodeFunction,
       toDefinition encodeFunctionDefinition,
       toDefinition encodeFunctionType,
       toDefinition encodeIntegerValue,
@@ -178,7 +177,6 @@ module_ = Module ns definitions
       toDefinition extendMetaForTypes,
       toDefinition extractCaseElimination,
       toDefinition findTypeParams,
-      toDefinition functionArityWithPrimitives,
       toDefinition gatherLambdas,
       toDefinition gatherMetadata,
       toDefinition genericArg,
@@ -360,27 +358,25 @@ deduplicateCaseVariables = def "deduplicateCaseVariables" $
         "fterm" <~ Core.fieldTerm (var "field") $
         -- Check if term is a lambda (strip annotations and type wrappers)
         cases _Term (Strip.deannotateAndDetypeTerm @@ var "fterm") (Just $ pair (var "countByName") (Lists.cons (var "field") (var "done"))) [
-          _Term_function>>: "f" ~>
-            cases _Function (var "f") (Just $ pair (var "countByName") (Lists.cons (var "field") (var "done"))) [
-              _Function_lambda>>: "lam" ~>
-                "v" <~ Core.lambdaParameter (var "lam") $
-                "mdom" <~ Core.lambdaDomain (var "lam") $
-                "body" <~ Core.lambdaBody (var "lam") $
-                -- Check if variable name already seen - use optCases for pattern matching
-                optCases (Maps.lookup (var "v") (var "countByName"))
-                  -- First occurrence: insert with count 1
-                  (pair (Maps.insert (var "v") (int32 1) (var "countByName"))
-                        (Lists.cons (var "field") (var "done")))
-                  -- Already seen: rename variable
-                  ("count" ~>
-                    "count2" <~ (Math.add (var "count") (int32 1)) $
-                    "v2" <~ (Core.name $ Strings.cat2 (Core.unName $ var "v") (Literals.showInt32 $ var "count2")) $
-                    "newBody" <~ (Reduction.alphaConvert @@ var "v" @@ var "v2" @@ var "body") $
-                    "newLam" <~ (Core.lambda (var "v2") (var "mdom") (var "newBody")) $
-                    "newTerm" <~ (inject _Term _Term_function $ inject _Function _Function_lambda $ var "newLam") $
-                    "newField" <~ (Core.field (var "fname") (var "newTerm")) $
-                    pair (Maps.insert (var "v") (var "count2") (var "countByName"))
-                         (Lists.cons (var "newField") (var "done")))]]) $
+          _Term_lambda>>: "lam" ~>
+            "v" <~ Core.lambdaParameter (var "lam") $
+            "mdom" <~ Core.lambdaDomain (var "lam") $
+            "body" <~ Core.lambdaBody (var "lam") $
+            -- Check if variable name already seen - use optCases for pattern matching
+            optCases (Maps.lookup (var "v") (var "countByName"))
+              -- First occurrence: insert with count 1
+              (pair (Maps.insert (var "v") (int32 1) (var "countByName"))
+                    (Lists.cons (var "field") (var "done")))
+              -- Already seen: rename variable
+              ("count" ~>
+                "count2" <~ (Math.add (var "count") (int32 1)) $
+                "v2" <~ (Core.name $ Strings.cat2 (Core.unName $ var "v") (Literals.showInt32 $ var "count2")) $
+                "newBody" <~ (Reduction.alphaConvert @@ var "v" @@ var "v2" @@ var "body") $
+                "newLam" <~ (Core.lambda (var "v2") (var "mdom") (var "newBody")) $
+                "newTerm" <~ (inject _Term _Term_lambda $ var "newLam") $
+                "newField" <~ (Core.field (var "fname") (var "newTerm")) $
+                pair (Maps.insert (var "v") (var "count2") (var "countByName"))
+                     (Lists.cons (var "newField") (var "done")))]) $
     -- fold with initial state (empty map, empty list)
     "result" <~ Lists.foldl (var "rewriteCase")
                   (pair (Maps.empty :: TTerm (M.Map Name I.Int32)) (list ([] :: [TTerm Field])))
@@ -437,24 +433,20 @@ eliminateUnitVar = def "eliminateUnitVar" $
           Core.termApplication $ Core.application
             (var "recurse" @@ Core.applicationFunction (var "app"))
             (var "recurse" @@ Core.applicationArgument (var "app")),
-        _Term_function>>: "f" ~>
-          cases _Function (var "f") (Just $ var "term") [
-            _Function_lambda>>: "lam" ~>
-              -- Don't descend if the lambda shadows our variable
-              Logic.ifElse (Equality.equal (Core.lambdaParameter $ var "lam") (var "v"))
-                (var "term")
-                (Core.termFunction $ Core.functionLambda $ Core.lambda
-                  (Core.lambdaParameter $ var "lam")
-                  (Core.lambdaDomain $ var "lam")
-                  (var "recurse" @@ Core.lambdaBody (var "lam"))),
-            _Function_elimination>>: "e" ~>
-              cases _Elimination (var "e") (Just $ var "term") [
-                _Elimination_union>>: "cs" ~>
-                  Core.termFunction $ Core.functionElimination $ Core.eliminationUnion $
-                    Core.caseStatement
-                      (Core.caseStatementTypeName $ var "cs")
-                      (Maybes.map (var "recurse") (Core.caseStatementDefault $ var "cs"))
-                      (Lists.map (var "rewriteField" @@ var "recurse") (Core.caseStatementCases $ var "cs"))]],
+        _Term_lambda>>: "lam" ~>
+          -- Don't descend if the lambda shadows our variable
+          Logic.ifElse (Equality.equal (Core.lambdaParameter $ var "lam") (var "v"))
+            (var "term")
+            (Core.termLambda $ Core.lambda
+              (Core.lambdaParameter $ var "lam")
+              (Core.lambdaDomain $ var "lam")
+              (var "recurse" @@ Core.lambdaBody (var "lam"))),
+        _Term_cases>>: "cs" ~>
+          Core.termCases $
+            Core.caseStatement
+              (Core.caseStatementTypeName $ var "cs")
+              (Maybes.map (var "recurse") (Core.caseStatementDefault $ var "cs"))
+              (Lists.map (var "rewriteField" @@ var "recurse") (Core.caseStatementCases $ var "cs")),
         _Term_let>>: "lt" ~>
           Core.termLet $ Core.let_
             (Lists.map (var "rewriteBinding" @@ var "recurse") (Core.letBindings $ var "lt"))
@@ -587,31 +579,27 @@ encodeApplicationInner = def "encodeApplicationInner" $
     "defaultCase" <~ ("pfun" <<~ (encodeTermInline @@ var "cx" @@ var "env" @@ false @@ var "fun") $
       right $ pair (PyUtils.functionCall @@ (PyUtils.pyExpressionToPyPrimary @@ var "pfun") @@ var "hargs") (var "rargs")) $
     cases _Term (Strip.deannotateAndDetypeTerm @@ var "fun") (Just $ var "defaultCase") [
-      _Term_function>>: "f" ~>
-        cases _Function (var "f") (Just $ var "defaultCase") [
-          _Function_elimination>>: "elm" ~>
-            cases _Elimination (var "elm") (Just $ var "defaultCase") [
-              -- Record projection: obj.field
-              _Elimination_record>>: "proj" ~>
-                "fname" <~ (project _Projection _Projection_field @@ var "proj") $
-                "fieldExpr" <~ (PyUtils.projectFromExpression @@ var "firstArg" @@ (PyNames.encodeFieldName @@ var "env" @@ var "fname")) $
-                right $ pair (var "withRest" @@ var "fieldExpr") (var "rargs"),
-              -- Union elimination: encode as inline conditional chain (isinstance-based ternary)
-              _Elimination_union>>: "cs" ~>
-                "inlineExpr" <<~ (encodeUnionEliminationInline @@ var "cx" @@ var "env" @@ var "cs" @@ var "firstArg") $
-                right $ pair (var "withRest" @@ var "inlineExpr") (var "rargs"),
-              -- Wrap elimination: obj.value
-              _Elimination_wrap>>: constant $
-                "valueExpr" <~ (PyUtils.projectFromExpression @@ var "firstArg" @@ (PyDsl.name $ string "value")) $
-                "allArgs" <~ (Lists.concat2 (var "restArgs") (var "rargs")) $
-                Logic.ifElse (Lists.null $ var "allArgs")
-                  (right $ pair (var "valueExpr") (list ([] :: [TTerm Py.Expression])))
-                  (right $ pair (PyUtils.functionCall @@ (PyUtils.pyExpressionToPyPrimary @@ var "valueExpr") @@ var "allArgs")
-                                  (list ([] :: [TTerm Py.Expression])))],
-          -- Other functions: encode and apply
-          _Function_lambda>>: constant $
-            "pfun" <<~ (encodeTermInline @@ var "cx" @@ var "env" @@ false @@ var "fun") $
-            right $ pair (PyUtils.functionCall @@ (PyUtils.pyExpressionToPyPrimary @@ var "pfun") @@ var "hargs") (var "rargs")],
+      -- Record projection: obj.field
+      _Term_project>>: "proj" ~>
+        "fname" <~ (project _Projection _Projection_field @@ var "proj") $
+        "fieldExpr" <~ (PyUtils.projectFromExpression @@ var "firstArg" @@ (PyNames.encodeFieldName @@ var "env" @@ var "fname")) $
+        right $ pair (var "withRest" @@ var "fieldExpr") (var "rargs"),
+      -- Union elimination: encode as inline conditional chain (isinstance-based ternary)
+      _Term_cases>>: "cs" ~>
+        "inlineExpr" <<~ (encodeUnionEliminationInline @@ var "cx" @@ var "env" @@ var "cs" @@ var "firstArg") $
+        right $ pair (var "withRest" @@ var "inlineExpr") (var "rargs"),
+      -- Wrap elimination: obj.value
+      _Term_unwrap>>: constant $
+        "valueExpr" <~ (PyUtils.projectFromExpression @@ var "firstArg" @@ (PyDsl.name $ string "value")) $
+        "allArgs" <~ (Lists.concat2 (var "restArgs") (var "rargs")) $
+        Logic.ifElse (Lists.null $ var "allArgs")
+          (right $ pair (var "valueExpr") (list ([] :: [TTerm Py.Expression])))
+          (right $ pair (PyUtils.functionCall @@ (PyUtils.pyExpressionToPyPrimary @@ var "valueExpr") @@ var "allArgs")
+                          (list ([] :: [TTerm Py.Expression]))),
+      -- Other functions: encode and apply
+      _Term_lambda>>: constant $
+        "pfun" <<~ (encodeTermInline @@ var "cx" @@ var "env" @@ false @@ var "fun") $
+        right $ pair (PyUtils.functionCall @@ (PyUtils.pyExpressionToPyPrimary @@ var "pfun") @@ var "hargs") (var "rargs"),
       -- Variable: encode and apply. If variable resolves to a primitive, wrap lazy args.
       _Term_variable>>: "name" ~>
         "g" <~ (pythonEnvironmentGetGraph @@ var "env") $
@@ -914,13 +902,7 @@ encodeCaseBlock = def "encodeCaseBlock" $
       (Just $ "syntheticVar" <~ Core.name (string "_matchValue") $
         Core.lambda (var "syntheticVar") nothing
           (Core.termApplication $ Core.application (var "stripped") (Core.termVariable $ var "syntheticVar"))) [
-      _Term_function>>: "f" ~>
-        cases _Function (var "f")
-          -- Non-lambda function (e.g. primitive): wrap in lambda
-          (Just $ "syntheticVar2" <~ Core.name (string "_matchValue") $
-            Core.lambda (var "syntheticVar2") nothing
-              (Core.termApplication $ Core.application (var "stripped") (Core.termVariable $ var "syntheticVar2"))) [
-          _Function_lambda>>: "lam" ~> var "lam"]]) $
+      _Term_lambda>>: "lam" ~> var "lam"]) $
     -- Now effectiveLambda is always a Lambda
     "v" <~ Core.lambdaParameter (var "effectiveLambda") $
     "rawBody" <~ Core.lambdaBody (var "effectiveLambda") $
@@ -1135,61 +1117,6 @@ encodeForallType = def "encodeForallType" $
     right $ PyUtils.primaryAndParams
       @@ (PyUtils.pyExpressionToPyPrimary @@ var "pyBody")
       @@ (Lists.map ("n" ~> PyDsl.pyNameToPyExpression $ PyDsl.name $ Core.unName (var "n")) (var "params"))
-
--- | Encode a function term to a Python expression.
---   This handles lambdas, primitives, projections, wrap eliminations, and case eliminations.
-encodeFunction :: TTermDefinition (Context -> PyHelpers.PythonEnvironment
-  -> Function
-  -> Either Error Py.Expression)
-encodeFunction = def "encodeFunction" $
-  doc "Encode a function term to a Python expression" $
-  "cx" ~> "env" ~> "f" ~>
-    cases _Function (var "f") Nothing [
-      _Function_lambda>>: "lam" ~>
-        "fs" <<~ (analyzePythonFunction @@ var "cx" @@ var "env" @@ (Core.termFunction $ Core.functionLambda $ var "lam")) $
-        "params" <~ (Phantoms.project HydraTyping._FunctionStructure HydraTyping._FunctionStructure_params @@ var "fs") $
-        "bindings" <~ (Phantoms.project HydraTyping._FunctionStructure HydraTyping._FunctionStructure_bindings @@ var "fs") $
-        "innerBody" <~ (Phantoms.project HydraTyping._FunctionStructure HydraTyping._FunctionStructure_body @@ var "fs") $
-        "innerEnv0" <~ (Phantoms.project HydraTyping._FunctionStructure HydraTyping._FunctionStructure_environment @@ var "fs") $
-        -- Add binding names to inlineVariables so they can be resolved during body encoding
-        "bindingNames" <~ (Lists.map ("b" ~> Core.bindingName (var "b")) (var "bindings")) $
-        "innerEnv" <~ (record PyHelpers._PythonEnvironment [
-          PyHelpers._PythonEnvironment_namespaces>>: project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_namespaces @@ var "innerEnv0",
-          PyHelpers._PythonEnvironment_boundTypeVariables>>: project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_boundTypeVariables @@ var "innerEnv0",
-          PyHelpers._PythonEnvironment_graph>>: project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_graph @@ var "innerEnv0",
-          PyHelpers._PythonEnvironment_nullaryBindings>>: project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_nullaryBindings @@ var "innerEnv0",
-          PyHelpers._PythonEnvironment_version>>: project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_version @@ var "innerEnv0",
-          PyHelpers._PythonEnvironment_skipCasts>>: project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_skipCasts @@ var "innerEnv0",
-          PyHelpers._PythonEnvironment_inlineVariables>>: Sets.union (Sets.fromList (var "bindingNames"))
-            (project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_inlineVariables @@ var "innerEnv0")]) $
-        "pbody" <<~ (encodeTermInline @@ var "cx" @@ var "innerEnv" @@ false @@ var "innerBody") $
-        "pparams" <~ (Lists.map (PyNames.encodeName @@ false @@ Util.caseConventionLowerSnake @@ var "innerEnv") (var "params")) $
-        Logic.ifElse (Lists.null $ var "bindings")
-          (right $ makeUncurriedLambda @@ var "pparams" @@ var "pbody")
-          -- Has bindings: create walrus operator expressions
-          ("pbindingExprs" <<~ (Eithers.mapList (encodeBindingAsAssignment @@ var "cx" @@ false @@ var "innerEnv") (var "bindings")) $
-            "pbindingStarExprs" <~ (Lists.map ("ne" ~> PyDsl.starNamedExpressionSimple (var "ne")) (var "pbindingExprs")) $
-            "pbodyStarExpr" <~ (PyUtils.pyExpressionToPyStarNamedExpression @@ var "pbody") $
-            "tupleElements" <~ (Lists.concat2 (var "pbindingStarExprs") (list [var "pbodyStarExpr"])) $
-            "tupleExpr" <~ (PyUtils.pyAtomToPyExpression @@ (PyDsl.atomTuple $ PyDsl.tuple $ var "tupleElements")) $
-            "indexValue" <~ (PyUtils.pyAtomToPyExpression @@ (PyDsl.atomNumber $ PyDsl.numberInteger $ Literals.int32ToBigint (Lists.length (var "bindings")))) $
-            "indexedExpr" <~ (PyUtils.primaryWithExpressionSlices @@ (PyUtils.pyExpressionToPyPrimary @@ var "tupleExpr") @@ list [var "indexValue"]) $
-            right $ makeUncurriedLambda @@ var "pparams" @@ (PyUtils.pyPrimaryToPyExpression @@ var "indexedExpr")),
-      -- Eliminations
-      _Function_elimination>>: "e" ~>
-        cases _Elimination (var "e") Nothing [
-          -- Record projection: lambda v1: v1.field
-          _Elimination_record>>: "proj" ~>
-            "fname" <~ (Phantoms.project _Projection _Projection_field @@ var "proj") $
-            right $ makeCurriedLambda @@ list [PyDsl.name $ string "v1"] @@
-              (PyUtils.projectFromExpression @@ (PyDsl.pyNameToPyExpression $ PyDsl.name $ string "v1") @@ (PyNames.encodeFieldName @@ var "env" @@ var "fname")),
-          -- Wrap elimination: lambda v1: v1.value
-          _Elimination_wrap>>: constant $
-            right $ makeCurriedLambda @@ list [PyDsl.name $ string "v1"] @@
-              (PyUtils.projectFromExpression @@ (PyDsl.pyNameToPyExpression $ PyDsl.name $ string "v1") @@ (PyDsl.name $ string "value")),
-          -- Union elimination (case) as value: not supported in Python
-          _Elimination_union>>: constant $
-            right $ unsupportedExpression @@ string "case expressions as values are not yet supported"]]
 
 -- | Encode a function definition with parameters and body.
 --   Takes: environment, name, type params, arg names, body term, domain types, optional codomain, comment, prefix statements
@@ -1539,9 +1466,52 @@ encodeTermInline = def "encodeTermInline" $
             var "withCast" @@ (PyUtils.functionCall @@ (PyUtils.pyNameToPyPrimary @@ PyDsl.name (string "Right")) @@ list [var "pyexp"]))
           (var "et"),
 
-      -- TermFunction
-      _Term_function>>: "f" ~>
-        encodeFunction @@ var "cx" @@ var "env" @@ var "f",
+      -- TermLambda: encode as a Python lambda expression
+      _Term_lambda>>: "lam" ~>
+        "fs" <<~ (analyzePythonFunction @@ var "cx" @@ var "env" @@ (Core.termLambda $ var "lam")) $
+        "params" <~ (Phantoms.project HydraTyping._FunctionStructure HydraTyping._FunctionStructure_params @@ var "fs") $
+        "bindings" <~ (Phantoms.project HydraTyping._FunctionStructure HydraTyping._FunctionStructure_bindings @@ var "fs") $
+        "innerBody" <~ (Phantoms.project HydraTyping._FunctionStructure HydraTyping._FunctionStructure_body @@ var "fs") $
+        "innerEnv0" <~ (Phantoms.project HydraTyping._FunctionStructure HydraTyping._FunctionStructure_environment @@ var "fs") $
+        -- Add binding names to inlineVariables so they can be resolved during body encoding
+        "bindingNames" <~ (Lists.map ("b" ~> Core.bindingName (var "b")) (var "bindings")) $
+        "innerEnv" <~ (record PyHelpers._PythonEnvironment [
+          PyHelpers._PythonEnvironment_namespaces>>: project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_namespaces @@ var "innerEnv0",
+          PyHelpers._PythonEnvironment_boundTypeVariables>>: project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_boundTypeVariables @@ var "innerEnv0",
+          PyHelpers._PythonEnvironment_graph>>: project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_graph @@ var "innerEnv0",
+          PyHelpers._PythonEnvironment_nullaryBindings>>: project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_nullaryBindings @@ var "innerEnv0",
+          PyHelpers._PythonEnvironment_version>>: project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_version @@ var "innerEnv0",
+          PyHelpers._PythonEnvironment_skipCasts>>: project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_skipCasts @@ var "innerEnv0",
+          PyHelpers._PythonEnvironment_inlineVariables>>: Sets.union (Sets.fromList (var "bindingNames"))
+            (project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_inlineVariables @@ var "innerEnv0")]) $
+        "pbody" <<~ (encodeTermInline @@ var "cx" @@ var "innerEnv" @@ false @@ var "innerBody") $
+        "pparams" <~ (Lists.map (PyNames.encodeName @@ false @@ Util.caseConventionLowerSnake @@ var "innerEnv") (var "params")) $
+        Logic.ifElse (Lists.null $ var "bindings")
+          (right $ makeUncurriedLambda @@ var "pparams" @@ var "pbody")
+          -- Has bindings: create walrus operator expressions
+          ("pbindingExprs" <<~ (Eithers.mapList (encodeBindingAsAssignment @@ var "cx" @@ false @@ var "innerEnv") (var "bindings")) $
+            "pbindingStarExprs" <~ (Lists.map ("ne" ~> PyDsl.starNamedExpressionSimple (var "ne")) (var "pbindingExprs")) $
+            "pbodyStarExpr" <~ (PyUtils.pyExpressionToPyStarNamedExpression @@ var "pbody") $
+            "tupleElements" <~ (Lists.concat2 (var "pbindingStarExprs") (list [var "pbodyStarExpr"])) $
+            "tupleExpr" <~ (PyUtils.pyAtomToPyExpression @@ (PyDsl.atomTuple $ PyDsl.tuple $ var "tupleElements")) $
+            "indexValue" <~ (PyUtils.pyAtomToPyExpression @@ (PyDsl.atomNumber $ PyDsl.numberInteger $ Literals.int32ToBigint (Lists.length (var "bindings")))) $
+            "indexedExpr" <~ (PyUtils.primaryWithExpressionSlices @@ (PyUtils.pyExpressionToPyPrimary @@ var "tupleExpr") @@ list [var "indexValue"]) $
+            right $ makeUncurriedLambda @@ var "pparams" @@ (PyUtils.pyPrimaryToPyExpression @@ var "indexedExpr")),
+
+      -- TermProject: record projection as lambda v1: v1.field
+      _Term_project>>: "proj" ~>
+        "fname" <~ (Phantoms.project _Projection _Projection_field @@ var "proj") $
+        right $ makeCurriedLambda @@ list [PyDsl.name $ string "v1"] @@
+          (PyUtils.projectFromExpression @@ (PyDsl.pyNameToPyExpression $ PyDsl.name $ string "v1") @@ (PyNames.encodeFieldName @@ var "env" @@ var "fname")),
+
+      -- TermUnwrap: wrap elimination as lambda v1: v1.value
+      _Term_unwrap>>: constant $
+        right $ makeCurriedLambda @@ list [PyDsl.name $ string "v1"] @@
+          (PyUtils.projectFromExpression @@ (PyDsl.pyNameToPyExpression $ PyDsl.name $ string "v1") @@ (PyDsl.name $ string "value")),
+
+      -- TermCases: union elimination (case) as value: not supported in Python
+      _Term_cases>>: constant $
+        right $ unsupportedExpression @@ string "case expressions as values are not yet supported",
 
       -- TermLet - encode using walrus operators in a tuple
       _Term_let>>: "lt" ~>
@@ -1701,25 +1671,21 @@ encodeTermMultiline = def "encodeTermMultiline" $
       -- Try to handle case statement specially
       ("arg" <~ (Lists.head $ var "args") $
         cases _Term (Strip.deannotateAndDetypeTerm @@ var "body") (Just $ var "dfltLogic") [
-          _Term_function>>: "f" ~>
-            cases _Function (var "f") (Just $ var "dfltLogic") [
-              _Function_elimination>>: "e" ~>
-                cases _Elimination (var "e") (Just $ var "dfltLogic") [
-                  _Elimination_union>>: "cs" ~>
-                    "tname" <~ (Core.caseStatementTypeName $ var "cs") $
-                    "dflt" <~ (Core.caseStatementDefault $ var "cs") $
-                    "cases_" <~ (Core.caseStatementCases $ var "cs") $
-                    "rt" <<~ (Resolution.requireUnionType @@ var "cx" @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "tname") $
-                    "isEnum" <~ (Predicates.isEnumRowType @@ var "rt") $
-                    "isFull" <~ (isCasesFull @@ var "rt" @@ var "cases_") $
-                    "pyArg" <<~ (encodeTermInline @@ var "cx" @@ var "env" @@ false @@ var "arg") $
-                    "pyCases" <<~ (Eithers.mapList (encodeCaseBlock @@ var "cx" @@ var "env" @@ var "tname" @@ var "rt" @@ var "isEnum" @@ ("e" ~> "t" ~> encodeTermMultiline @@ var "cx" @@ var "e" @@ var "t")) (deduplicateCaseVariables @@ var "cases_")) $
-                    "pyDflt" <<~ (encodeDefaultCaseBlock @@ ("t" ~> encodeTermInline @@ var "cx" @@ var "env" @@ false @@ var "t") @@ var "isFull" @@ var "dflt" @@ var "tname") $
-                    "subj" <~ (PyDsl.subjectExpressionSimple $ PyDsl.namedExpressionSimple $ var "pyArg") $
-                    "matchStmt" <~ (PyDsl.statementCompound $ PyDsl.compoundStatementMatch $ Phantoms.record Py._MatchStatement [
-                      Phantoms.field Py._MatchStatement_subject (var "subj"),
-                      Phantoms.field Py._MatchStatement_cases (Lists.concat2 (var "pyCases") (var "pyDflt"))]) $
-                    right $ list [var "matchStmt"]]]])
+          _Term_cases>>: "cs" ~>
+            "tname" <~ (Core.caseStatementTypeName $ var "cs") $
+            "dflt" <~ (Core.caseStatementDefault $ var "cs") $
+            "cases_" <~ (Core.caseStatementCases $ var "cs") $
+            "rt" <<~ (Resolution.requireUnionType @@ var "cx" @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "tname") $
+            "isEnum" <~ (Predicates.isEnumRowType @@ var "rt") $
+            "isFull" <~ (isCasesFull @@ var "rt" @@ var "cases_") $
+            "pyArg" <<~ (encodeTermInline @@ var "cx" @@ var "env" @@ false @@ var "arg") $
+            "pyCases" <<~ (Eithers.mapList (encodeCaseBlock @@ var "cx" @@ var "env" @@ var "tname" @@ var "rt" @@ var "isEnum" @@ ("e" ~> "t" ~> encodeTermMultiline @@ var "cx" @@ var "e" @@ var "t")) (deduplicateCaseVariables @@ var "cases_")) $
+            "pyDflt" <<~ (encodeDefaultCaseBlock @@ ("t" ~> encodeTermInline @@ var "cx" @@ var "env" @@ false @@ var "t") @@ var "isFull" @@ var "dflt" @@ var "tname") $
+            "subj" <~ (PyDsl.subjectExpressionSimple $ PyDsl.namedExpressionSimple $ var "pyArg") $
+            "matchStmt" <~ (PyDsl.statementCompound $ PyDsl.compoundStatementMatch $ Phantoms.record Py._MatchStatement [
+              Phantoms.field Py._MatchStatement_subject (var "subj"),
+              Phantoms.field Py._MatchStatement_cases (Lists.concat2 (var "pyCases") (var "pyDflt"))]) $
+            right $ list [var "matchStmt"]])
       -- Default case: use the fallback logic
       (var "dfltLogic")
 
@@ -1765,38 +1731,30 @@ encodeTermMultilineTCO = def "encodeTermMultilineTCO" $
               -- Default: not a case statement, encode as return
               "expr" <<~ (encodeTermInline @@ var "cx" @@ var "env" @@ false @@ var "term") $
               right $ list [PyUtils.returnSingle @@ var "expr"]) [
-              _Term_function>>: "f" ~>
-                cases _Function (var "f") (Just $
-                  "expr" <<~ (encodeTermInline @@ var "cx" @@ var "env" @@ false @@ var "term") $
-                  right $ list [PyUtils.returnSingle @@ var "expr"]) [
-                  _Function_elimination>>: "e" ~>
-                    cases _Elimination (var "e") (Just $
-                      "expr" <<~ (encodeTermInline @@ var "cx" @@ var "env" @@ false @@ var "term") $
-                      right $ list [PyUtils.returnSingle @@ var "expr"]) [
-                      _Elimination_union>>: "cs" ~>
-                        -- Case statement: use encodeCaseBlock with TCO-aware body encoder
-                        "tname" <~ (Core.caseStatementTypeName $ var "cs") $
-                        "dflt" <~ (Core.caseStatementDefault $ var "cs") $
-                        "cases_" <~ (Core.caseStatementCases $ var "cs") $
-                        "rt" <<~ (Resolution.requireUnionType @@ var "cx" @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "tname") $
-                        "isEnum" <~ (Predicates.isEnumRowType @@ var "rt") $
-                        "isFull" <~ (isCasesFull @@ var "rt" @@ var "cases_") $
-                        "pyArg" <<~ (encodeTermInline @@ var "cx" @@ var "env" @@ false @@ var "arg") $
-                        -- Use TCO body encoder for each case branch
-                        "pyCases" <<~ (Eithers.mapList
-                          (encodeCaseBlock @@ var "cx" @@ var "env" @@ var "tname" @@ var "rt" @@ var "isEnum"
-                            @@ ("e2" ~> "t2" ~> encodeTermMultilineTCO @@ var "cx" @@ var "e2" @@ var "funcName" @@ var "paramNames" @@ var "t2"))
-                          (deduplicateCaseVariables @@ var "cases_")) $
-                        -- Default case: uses normal return encoding (base case is never a tail call)
-                        "pyDflt" <<~ (encodeDefaultCaseBlock
-                          @@ ("t2" ~> encodeTermInline @@ var "cx" @@ var "env" @@ false @@ var "t2")
-                          @@ var "isFull" @@ var "dflt" @@ var "tname") $
-                        "subj" <~ (PyDsl.subjectExpressionSimple $ PyDsl.namedExpressionSimple $ var "pyArg") $
-                        "matchStmt" <~ (PyDsl.statementCompound $ PyDsl.compoundStatementMatch $
-                          Phantoms.record Py._MatchStatement [
-                            Phantoms.field Py._MatchStatement_subject (var "subj"),
-                            Phantoms.field Py._MatchStatement_cases (Lists.concat2 (var "pyCases") (var "pyDflt"))]) $
-                        right $ list [var "matchStmt"]]]])
+              _Term_cases>>: "cs" ~>
+                -- Case statement: use encodeCaseBlock with TCO-aware body encoder
+                "tname" <~ (Core.caseStatementTypeName $ var "cs") $
+                "dflt" <~ (Core.caseStatementDefault $ var "cs") $
+                "cases_" <~ (Core.caseStatementCases $ var "cs") $
+                "rt" <<~ (Resolution.requireUnionType @@ var "cx" @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "tname") $
+                "isEnum" <~ (Predicates.isEnumRowType @@ var "rt") $
+                "isFull" <~ (isCasesFull @@ var "rt" @@ var "cases_") $
+                "pyArg" <<~ (encodeTermInline @@ var "cx" @@ var "env" @@ false @@ var "arg") $
+                -- Use TCO body encoder for each case branch
+                "pyCases" <<~ (Eithers.mapList
+                  (encodeCaseBlock @@ var "cx" @@ var "env" @@ var "tname" @@ var "rt" @@ var "isEnum"
+                    @@ ("e2" ~> "t2" ~> encodeTermMultilineTCO @@ var "cx" @@ var "e2" @@ var "funcName" @@ var "paramNames" @@ var "t2"))
+                  (deduplicateCaseVariables @@ var "cases_")) $
+                -- Default case: uses normal return encoding (base case is never a tail call)
+                "pyDflt" <<~ (encodeDefaultCaseBlock
+                  @@ ("t2" ~> encodeTermInline @@ var "cx" @@ var "env" @@ false @@ var "t2")
+                  @@ var "isFull" @@ var "dflt" @@ var "tname") $
+                "subj" <~ (PyDsl.subjectExpressionSimple $ PyDsl.namedExpressionSimple $ var "pyArg") $
+                "matchStmt" <~ (PyDsl.statementCompound $ PyDsl.compoundStatementMatch $
+                  Phantoms.record Py._MatchStatement [
+                    Phantoms.field Py._MatchStatement_subject (var "subj"),
+                    Phantoms.field Py._MatchStatement_cases (Lists.concat2 (var "pyCases") (var "pyDflt"))]) $
+                right $ list [var "matchStmt"]])
           -- Not a single-arg application: fall back to normal return
           ("expr" <<~ (encodeTermInline @@ var "cx" @@ var "env" @@ false @@ var "term") $
             right $ list [PyUtils.returnSingle @@ var "expr"]))
@@ -2258,13 +2216,11 @@ extendEnvWithLambdaParams = def "extendEnvWithLambdaParams" $
   "env" ~> "term" ~>
     "go" <~ ("e" ~> "t" ~>
       cases _Term (Strip.deannotateAndDetypeTerm @@ var "t") (Just $ var "e") [
-        _Term_function>>: "f" ~>
-          cases _Function (var "f") (Just $ var "e") [
-            _Function_lambda>>: "lam" ~>
-              "newTc" <~ (Scoping.extendGraphForLambda @@
-                (pythonEnvironmentGetGraph @@ var "e") @@ var "lam") $
-              "newEnv" <~ (pythonEnvironmentSetGraph @@ var "newTc" @@ var "e") $
-              var "go" @@ var "newEnv" @@ (Core.lambdaBody $ var "lam")]]) $
+        _Term_lambda>>: "lam" ~>
+          "newTc" <~ (Scoping.extendGraphForLambda @@
+            (pythonEnvironmentGetGraph @@ var "e") @@ var "lam") $
+          "newEnv" <~ (pythonEnvironmentSetGraph @@ var "newTc" @@ var "e") $
+          var "go" @@ var "newEnv" @@ (Core.lambdaBody $ var "lam")]) $
     var "go" @@ var "env" @@ var "term"
 
 -- | Extend a PythonEnvironment with a new bound type variable.
@@ -2303,15 +2259,13 @@ extendMetaForTerm = def "extendMetaForTerm" $
             (constant $ setMetaUsesLeft @@ var "metaWithCast" @@ true)
             (constant $ setMetaUsesRight @@ var "metaWithCast" @@ true)
             (var "e"),
-        _Term_function>>: "f" ~>
-          cases _Function (var "f") (Just $ var "meta") [
-            _Function_lambda>>: "lam" ~>
-              Maybes.maybe
-                (var "meta")
-                ("dom" ~> Logic.ifElse (var "topLevel")
-                  (extendMetaForType @@ true @@ false @@ var "dom" @@ var "meta")
-                  (var "meta"))
-                (Core.lambdaDomain $ var "lam")],
+        _Term_lambda>>: "lam" ~>
+          Maybes.maybe
+            (var "meta")
+            ("dom" ~> Logic.ifElse (var "topLevel")
+              (extendMetaForType @@ true @@ false @@ var "dom" @@ var "meta")
+              (var "meta"))
+            (Core.lambdaDomain $ var "lam"),
         _Term_let>>: "lt" ~>
           "bindings" <~ Core.letBindings (var "lt") $
           Lists.foldl ("forBinding" <~ ("m" ~> "b" ~>
@@ -2449,11 +2403,7 @@ extractCaseElimination = def "extractCaseElimination" $
   doc "Extract CaseStatement from a case elimination term" $
   "term" ~>
     cases _Term (Strip.deannotateAndDetypeTerm @@ var "term") (Just nothing) [
-      _Term_function>>: "f" ~>
-        cases _Function (var "f") (Just nothing) [
-          _Function_elimination>>: "e" ~>
-            cases _Elimination (var "e") (Just nothing) [
-              _Elimination_union>>: "cs" ~> just (var "cs")]]]
+      _Term_cases>>: "cs" ~> just (var "cs")]
 
 -- | Find type parameters in a type that are bound in the environment.
 --   Returns the free type variables that are also in the bound type variables map.
@@ -2465,16 +2415,6 @@ findTypeParams = def "findTypeParams" $
     "isBound" <~ ("v" ~> Maybes.isJust (Maps.lookup (var "v") (var "boundVars"))) $
     Lists.filter (var "isBound") (Sets.toList (Variables.freeVariablesInType @@ var "typ"))
 
--- | Calculate the arity of a function, with proper handling of primitives.
-functionArityWithPrimitives :: TTermDefinition (Graph -> Function -> Int)
-functionArityWithPrimitives = def "functionArityWithPrimitives" $
-  doc "Calculate function arity with proper primitive handling" $
-  "graph" ~> "f" ~>
-    cases _Function (var "f") (Just (Phantoms.int 0)) [
-      _Function_elimination>>: constant (Phantoms.int 1),
-      _Function_lambda>>: "lam" ~>
-        Math.add (Phantoms.int 1) (termArityWithPrimitives @@ var "graph" @@ (Core.lambdaBody $ var "lam"))]
-
 -- | Extract lambdas and their bodies from a term.
 --   Returns the list of lambda parameters (in order from outermost to innermost) and the innermost body.
 gatherLambdas :: TTermDefinition (Term -> ([Name], Term))
@@ -2484,12 +2424,9 @@ gatherLambdas = def "gatherLambdas" $
   "go" <~ ("params" ~> "t" ~>
     cases _Term (Strip.deannotateAndDetypeTerm @@ var "t")
       (Just $ pair (var "params") (var "t")) [
-      _Term_function>>: "f" ~>
-        cases _Function (var "f")
-          (Just $ pair (var "params") (var "t")) [
-          _Function_lambda>>: "l" ~>
-            var "go" @@ Lists.concat2 (var "params") (list [Core.lambdaParameter $ var "l"])
-                     @@ Core.lambdaBody (var "l")]]) $
+      _Term_lambda>>: "l" ~>
+        var "go" @@ Lists.concat2 (var "params") (list [Core.lambdaParameter $ var "l"])
+                 @@ Core.lambdaBody (var "l")]) $
   var "go" @@ list ([] :: [TTerm Name]) @@ var "term"
 
 -- | Gather metadata from a list of definitions.
@@ -2611,16 +2548,12 @@ isCaseStatementApplication = def "isCaseStatementApplication" $
       nothing
       ("arg" <~ (Lists.head $ var "args") $
         cases _Term (Strip.deannotateAndDetypeTerm @@ var "body") (Just nothing) [
-          _Term_function>>: "f" ~>
-            cases _Function (var "f") (Just nothing) [
-              _Function_elimination>>: "e" ~>
-                cases _Elimination (var "e") (Just nothing) [
-                  _Elimination_union>>: "cs" ~>
-                    just $ Phantoms.tuple4
-                      (Core.caseStatementTypeName $ var "cs")
-                      (Core.caseStatementDefault $ var "cs")
-                      (Core.caseStatementCases $ var "cs")
-                      (var "arg")]]])
+          _Term_cases>>: "cs" ~>
+            just $ Phantoms.tuple4
+              (Core.caseStatementTypeName $ var "cs")
+              (Core.caseStatementDefault $ var "cs")
+              (Core.caseStatementCases $ var "cs")
+              (var "arg")])
 
 -- | Check whether a list of definitions contains any type definitions
 isTypeModuleCheck :: TTermDefinition ([Definition] -> Bool)
@@ -3997,8 +3930,11 @@ termArityWithPrimitives = def "termArityWithPrimitives" $
         Math.max (Phantoms.int 0) (Math.sub
           (termArityWithPrimitives @@ var "graph" @@ (Core.applicationFunction $ var "app"))
           (Phantoms.int 1)),
-      _Term_function>>: "f" ~>
-        functionArityWithPrimitives @@ var "graph" @@ var "f",
+      _Term_lambda>>: "lam" ~>
+        Math.add (Phantoms.int 1) (termArityWithPrimitives @@ var "graph" @@ (Core.lambdaBody $ var "lam")),
+      _Term_project>>: constant (Phantoms.int 1),
+      _Term_unwrap>>: constant (Phantoms.int 1),
+      _Term_cases>>: constant (Phantoms.int 1),
       -- Look up variables in the graph to compute arity from the binding's type scheme or term.
       -- This is important for hoisted case statement bindings which are local functions.
       _Term_variable>>: "name" ~>

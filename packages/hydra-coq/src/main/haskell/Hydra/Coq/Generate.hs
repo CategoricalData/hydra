@@ -144,7 +144,7 @@ moduleToCoq fieldMap constrCounts ambiguousNames globalSanitizedAcc mod defs _cx
         let schemeVarNames = Set.fromList (map Core.unName typeVars)
             body' = reorderLetBindings $ eraseUnboundTypeVarDomains schemeVarNames body
             showLets' tm = case tm of
-              Core.TermFunction (Core.FunctionLambda lam) -> "fun " ++ Core.unName (Core.lambdaParameter lam) ++ " => " ++ showLets' (Core.lambdaBody lam)
+              Core.TermLambda lam -> "fun " ++ Core.unName (Core.lambdaParameter lam) ++ " => " ++ showLets' (Core.lambdaBody lam)
               Core.TermLet v ->
                 let bs = Core.letBindings v
                     nms = map (Core.unName . Core.bindingName) bs
@@ -152,7 +152,7 @@ moduleToCoq fieldMap constrCounts ambiguousNames globalSanitizedAcc mod defs _cx
               _ -> "..."
             coqBody = Coder.encodeTerm body'
             showFirstBindingVars tm = case tm of
-              Core.TermFunction (Core.FunctionLambda lam) -> showFirstBindingVars (Core.lambdaBody lam)
+              Core.TermLambda lam -> showFirstBindingVars (Core.lambdaBody lam)
               Core.TermLet v ->
                 let b = head (Core.letBindings v)
                     bname = Core.unName (Core.bindingName b)
@@ -161,9 +161,7 @@ moduleToCoq fieldMap constrCounts ambiguousNames globalSanitizedAcc mod defs _cx
             showVarRefs tm = case tm of
               Core.TermVariable v -> Core.unName v ++ " "
               Core.TermApplication v -> showVarRefs (Core.applicationFunction v) ++ showVarRefs (Core.applicationArgument v)
-              Core.TermFunction v -> case v of
-                Core.FunctionLambda lam -> showVarRefs (Core.lambdaBody lam)
-                _ -> ""
+              Core.TermLambda lam -> showVarRefs (Core.lambdaBody lam)
               _ -> ""
             (_, typeBinders) = mkTypeBinders body' typeVars
             returnType = mkReturnType mType
@@ -758,14 +756,11 @@ normalizeInnerTypeLambdas term =
           Core.TermEither v -> Core.TermEither $ case v of
             Left l -> Left (go polyNames l)
             Right r -> Right (go polyNames r)
-          Core.TermFunction v -> Core.TermFunction $ case v of
-            Core.FunctionLambda lam -> Core.FunctionLambda lam
-              { Core.lambdaBody = go polyNames (Core.lambdaBody lam) }
-            Core.FunctionElimination elim -> Core.FunctionElimination $ case elim of
-              Core.EliminationUnion cs -> Core.EliminationUnion cs
-                { Core.caseStatementCases = map (\f -> f { Core.fieldTerm = go polyNames (Core.fieldTerm f) }) (Core.caseStatementCases cs)
-                , Core.caseStatementDefault = fmap (go polyNames) (Core.caseStatementDefault cs) }
-              other -> other
+          Core.TermLambda lam -> Core.TermLambda lam
+            { Core.lambdaBody = go polyNames (Core.lambdaBody lam) }
+          Core.TermCases cs -> Core.TermCases cs
+            { Core.caseStatementCases = map (\f -> f { Core.fieldTerm = go polyNames (Core.fieldTerm f) }) (Core.caseStatementCases cs)
+            , Core.caseStatementDefault = fmap (go polyNames) (Core.caseStatementDefault cs) }
           Core.TermLet v ->
             -- Identify bindings whose terms start with TypeLambda — these get converted
             let newPolyNames = Set.fromList [Core.unName (Core.bindingName b)
@@ -790,7 +785,7 @@ normalizeInnerTypeLambdas term =
             -- Inner type lambda: convert to regular lambda with Type domain
             let param = Core.typeLambdaParameter tl
                 body = Core.typeLambdaBody tl
-            in go polyNames $ Core.TermFunction $ Core.FunctionLambda $ Core.Lambda
+            in go polyNames $ Core.TermLambda $ Core.Lambda
                  param (Just (Core.TypeVariable (Core.Name "Type"))) body
           Core.TermTypeApplication v ->
             let body = Core.typeApplicationTermBody v
@@ -862,13 +857,10 @@ reorderLetBindings = go
       Core.TermApplication v -> Core.TermApplication v
         { Core.applicationFunction = go (Core.applicationFunction v)
         , Core.applicationArgument = go (Core.applicationArgument v) }
-      Core.TermFunction v -> Core.TermFunction $ case v of
-        Core.FunctionLambda lam -> Core.FunctionLambda lam { Core.lambdaBody = go (Core.lambdaBody lam) }
-        Core.FunctionElimination elim -> Core.FunctionElimination $ case elim of
-          Core.EliminationUnion cs -> Core.EliminationUnion cs
-            { Core.caseStatementCases = map (\f -> f { Core.fieldTerm = go (Core.fieldTerm f) }) (Core.caseStatementCases cs)
-            , Core.caseStatementDefault = fmap go (Core.caseStatementDefault cs) }
-          other -> other
+      Core.TermLambda lam -> Core.TermLambda lam { Core.lambdaBody = go (Core.lambdaBody lam) }
+      Core.TermCases cs -> Core.TermCases cs
+        { Core.caseStatementCases = map (\f -> f { Core.fieldTerm = go (Core.fieldTerm f) }) (Core.caseStatementCases cs)
+        , Core.caseStatementDefault = fmap go (Core.caseStatementDefault cs) }
       Core.TermLet v ->
         -- Collect consecutive single-binding lets into one group for sorting.
         -- Haskell's mutual let becomes nested single-binding lets in Hydra.
@@ -898,15 +890,13 @@ reorderLetBindings = go
       Core.TermApplication a -> Core.TermApplication a
         { Core.applicationFunction = renameVar oldName newName (Core.applicationFunction a)
         , Core.applicationArgument = renameVar oldName newName (Core.applicationArgument a) }
-      Core.TermFunction (Core.FunctionLambda lam)
+      Core.TermLambda lam
         | Core.lambdaParameter lam == oldName -> tm  -- shadowed
-        | otherwise -> Core.TermFunction (Core.FunctionLambda lam
-            { Core.lambdaBody = renameVar oldName newName (Core.lambdaBody lam) })
-      Core.TermFunction (Core.FunctionElimination elim) -> case elim of
-        Core.EliminationUnion cs -> Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion cs
-          { Core.caseStatementCases = map (\f -> f { Core.fieldTerm = renameVar oldName newName (Core.fieldTerm f) }) (Core.caseStatementCases cs)
-          , Core.caseStatementDefault = fmap (renameVar oldName newName) (Core.caseStatementDefault cs) }))
-        _ -> tm
+        | otherwise -> Core.TermLambda lam
+            { Core.lambdaBody = renameVar oldName newName (Core.lambdaBody lam) }
+      Core.TermCases cs -> Core.TermCases cs
+        { Core.caseStatementCases = map (\f -> f { Core.fieldTerm = renameVar oldName newName (Core.fieldTerm f) }) (Core.caseStatementCases cs)
+        , Core.caseStatementDefault = fmap (renameVar oldName newName) (Core.caseStatementDefault cs) }
       Core.TermLet lt ->
         let isBound = any (\b -> Core.bindingName b == oldName) (Core.letBindings lt)
         in if isBound then tm
@@ -997,7 +987,7 @@ reorderLetBindings = go
           stripHydraFix bName bTerm = case bTerm of
             Core.TermApplication (Core.Application
               (Core.TermVariable (Core.Name "hydra_fix"))
-              (Core.TermFunction (Core.FunctionLambda lam))) ->
+              (Core.TermLambda lam)) ->
                 -- Replace lambda parameter (self-reference) with the bundle projection
                 let innerName = Core.lambdaParameter lam
                     innerBody = Core.lambdaBody lam
@@ -1018,7 +1008,7 @@ reorderLetBindings = go
           -- wrap the binding with another hydra_fix (it'd detect self-reference otherwise)
           fixTerm = Core.TermApplication (Core.Application
             (Core.TermVariable (Core.Name "hydra_fix"))
-            (Core.TermFunction (Core.FunctionLambda (Core.Lambda bundleInner Nothing fixBody))))
+            (Core.TermLambda (Core.Lambda bundleInner Nothing fixBody)))
           bundleBinding = Core.Binding bundleName fixTerm Nothing
       in Core.TermLet (Core.Let [bundleBinding] (rebuildLets outerProjBindings body))
 
@@ -1044,15 +1034,11 @@ reorderLetBindings = go
     freeVars tm = case tm of
       Core.TermVariable v -> Set.singleton (Core.unName v)
       Core.TermApplication v -> Set.union (freeVars (Core.applicationFunction v)) (freeVars (Core.applicationArgument v))
-      Core.TermFunction v -> case v of
-        Core.FunctionLambda lam ->
-          Set.delete (Core.unName (Core.lambdaParameter lam)) (freeVars (Core.lambdaBody lam))
-        Core.FunctionElimination elim -> case elim of
-          Core.EliminationUnion cs ->
-            Set.unions $ maybe Set.empty freeVars (Core.caseStatementDefault cs) :
-                         map (\f -> freeVars (Core.fieldTerm f)) (Core.caseStatementCases cs)
-          _ -> Set.empty
-        _ -> Set.empty
+      Core.TermLambda lam ->
+        Set.delete (Core.unName (Core.lambdaParameter lam)) (freeVars (Core.lambdaBody lam))
+      Core.TermCases cs ->
+        Set.unions $ maybe Set.empty freeVars (Core.caseStatementDefault cs) :
+                     map (\f -> freeVars (Core.fieldTerm f)) (Core.caseStatementCases cs)
       Core.TermLet v ->
         let boundNames = Set.fromList [Core.unName (Core.bindingName b) | b <- Core.letBindings v]
         in Set.difference
@@ -1088,25 +1074,22 @@ eraseUnboundTypeVarDomains initialBoundVars = go initialBoundVars
       Core.TermEither v -> Core.TermEither $ case v of
         Left l -> Left (go boundVars l)
         Right r -> Right (go boundVars r)
-      Core.TermFunction v -> Core.TermFunction $ case v of
-        Core.FunctionLambda lam ->
-          -- If this lambda introduces a type variable (param with domain Type),
-          -- add it to the bound set so inner references aren't erased
-          let paramName = Core.unName (Core.lambdaParameter lam)
-              isTypeParam = case Core.lambdaDomain lam of
-                Just (Core.TypeVariable v) -> Core.unName v == "Type"
-                _ -> False
-              boundVars' = if isTypeParam && isTypeVarLike paramName
-                           then Set.insert paramName boundVars
-                           else boundVars
-          in Core.FunctionLambda lam
-          { Core.lambdaDomain = eraseIfUnbound boundVars (Core.lambdaDomain lam)
-          , Core.lambdaBody = go boundVars' (Core.lambdaBody lam) }
-        Core.FunctionElimination elim -> Core.FunctionElimination $ case elim of
-          Core.EliminationUnion cs -> Core.EliminationUnion cs
-            { Core.caseStatementCases = map (\f -> f { Core.fieldTerm = go boundVars (Core.fieldTerm f) }) (Core.caseStatementCases cs)
-            , Core.caseStatementDefault = fmap (go boundVars) (Core.caseStatementDefault cs) }
-          other -> other
+      Core.TermLambda lam ->
+        -- If this lambda introduces a type variable (param with domain Type),
+        -- add it to the bound set so inner references aren't erased
+        let paramName = Core.unName (Core.lambdaParameter lam)
+            isTypeParam = case Core.lambdaDomain lam of
+              Just (Core.TypeVariable v) -> Core.unName v == "Type"
+              _ -> False
+            boundVars' = if isTypeParam && isTypeVarLike paramName
+                         then Set.insert paramName boundVars
+                         else boundVars
+        in Core.TermLambda lam
+        { Core.lambdaDomain = eraseIfUnbound boundVars (Core.lambdaDomain lam)
+        , Core.lambdaBody = go boundVars' (Core.lambdaBody lam) }
+      Core.TermCases cs -> Core.TermCases cs
+        { Core.caseStatementCases = map (\f -> f { Core.fieldTerm = go boundVars (Core.fieldTerm f) }) (Core.caseStatementCases cs)
+        , Core.caseStatementDefault = fmap (go boundVars) (Core.caseStatementDefault cs) }
       Core.TermLet v -> Core.TermLet v
         { Core.letBindings = map (\b -> b { Core.bindingTerm = go boundVars (Core.bindingTerm b) }) (Core.letBindings v)
         , Core.letBody = go boundVars (Core.letBody v) }
@@ -1156,20 +1139,16 @@ collectFreeTypeVars = collectFromTerm
       Core.TermApplication v ->
         Set.union (collectFromTerm (Core.applicationFunction v))
                   (collectFromTerm (Core.applicationArgument v))
-      Core.TermFunction v -> case v of
-        Core.FunctionLambda lam ->
-          let paramName = Core.unName (Core.lambdaParameter lam)
-              domVars = maybe Set.empty collectFromType (Core.lambdaDomain lam)
-              bodyVars = collectFromTerm (Core.lambdaBody lam)
-              allVars = Set.union domVars bodyVars
-          in if isTypeVarName paramName then Set.delete paramName allVars else allVars
-        Core.FunctionElimination elim -> case elim of
-          Core.EliminationUnion cs ->
-            let defVars = maybe Set.empty collectFromTerm (Core.caseStatementDefault cs)
-                caseVars = Set.unions (map (\f -> collectFromTerm (Core.fieldTerm f)) (Core.caseStatementCases cs))
-            in Set.union defVars caseVars
-          _ -> Set.empty
-        _ -> Set.empty
+      Core.TermLambda lam ->
+        let paramName = Core.unName (Core.lambdaParameter lam)
+            domVars = maybe Set.empty collectFromType (Core.lambdaDomain lam)
+            bodyVars = collectFromTerm (Core.lambdaBody lam)
+            allVars = Set.union domVars bodyVars
+        in if isTypeVarName paramName then Set.delete paramName allVars else allVars
+      Core.TermCases cs ->
+        let defVars = maybe Set.empty collectFromTerm (Core.caseStatementDefault cs)
+            caseVars = Set.unions (map (\f -> collectFromTerm (Core.fieldTerm f)) (Core.caseStatementCases cs))
+        in Set.union defVars caseVars
       Core.TermLet lt ->
         let bindVars = Set.unions (map (\b ->
               Set.union (collectFromTerm (Core.bindingTerm b))
@@ -1675,21 +1654,19 @@ rewriteTermFields fm = go
       Core.TermEither v -> Core.TermEither $ case v of
         Left l -> Left (go l)
         Right r -> Right (go r)
-      Core.TermFunction v -> Core.TermFunction $ case v of
-        Core.FunctionLambda lam -> Core.FunctionLambda lam { Core.lambdaBody = go (Core.lambdaBody lam) }
-        Core.FunctionElimination elim -> Core.FunctionElimination $ case elim of
-          Core.EliminationRecord proj ->
-            let tname = Core.unName (Core.projectionTypeName proj)
-                fname = Core.unName (Core.projectionField proj)
-                key = (tname, localNameRaw fname)
-                newFname = case Map.lookup key fm of
-                  Just prefixed -> Core.Name prefixed
-                  Nothing -> Core.projectionField proj
-            in Core.EliminationRecord proj { Core.projectionField = newFname }
-          Core.EliminationUnion cs -> Core.EliminationUnion cs
-            { Core.caseStatementCases = map (\f -> f { Core.fieldTerm = go (Core.fieldTerm f) }) (Core.caseStatementCases cs)
-            , Core.caseStatementDefault = fmap go (Core.caseStatementDefault cs) }
-          Core.EliminationWrap w -> Core.EliminationWrap w
+      Core.TermLambda lam -> Core.TermLambda lam { Core.lambdaBody = go (Core.lambdaBody lam) }
+      Core.TermProject proj ->
+        let tname = Core.unName (Core.projectionTypeName proj)
+            fname = Core.unName (Core.projectionField proj)
+            key = (tname, localNameRaw fname)
+            newFname = case Map.lookup key fm of
+              Just prefixed -> Core.Name prefixed
+              Nothing -> Core.projectionField proj
+        in Core.TermProject proj { Core.projectionField = newFname }
+      Core.TermCases cs -> Core.TermCases cs
+        { Core.caseStatementCases = map (\f -> f { Core.fieldTerm = go (Core.fieldTerm f) }) (Core.caseStatementCases cs)
+        , Core.caseStatementDefault = fmap go (Core.caseStatementDefault cs) }
+      Core.TermUnwrap w -> Core.TermUnwrap w
       Core.TermLet v -> Core.TermLet v
         { Core.letBindings = map (\b -> b { Core.bindingTerm = go (Core.bindingTerm b) }) (Core.letBindings v)
         , Core.letBody = go (Core.letBody v) }
@@ -1800,14 +1777,12 @@ termRefs locals ns tm = case tm of
   Core.TermEither v -> case v of
     Left l -> termRefs locals ns l
     Right r -> termRefs locals ns r
-  Core.TermFunction v -> case v of
-    Core.FunctionLambda lam -> termRefs locals ns (Core.lambdaBody lam)
-    Core.FunctionElimination elim -> case elim of
-      Core.EliminationRecord _ -> Set.empty
-      Core.EliminationUnion cs ->
-        Set.unions $ map (\f -> termRefs locals ns (Core.fieldTerm f)) (Core.caseStatementCases cs)
-          ++ maybe [] (\d -> [termRefs locals ns d]) (Core.caseStatementDefault cs)
-      Core.EliminationWrap _ -> Set.empty
+  Core.TermLambda lam -> termRefs locals ns (Core.lambdaBody lam)
+  Core.TermProject _ -> Set.empty
+  Core.TermCases cs ->
+    Set.unions $ map (\f -> termRefs locals ns (Core.fieldTerm f)) (Core.caseStatementCases cs)
+      ++ maybe [] (\d -> [termRefs locals ns d]) (Core.caseStatementDefault cs)
+  Core.TermUnwrap _ -> Set.empty
   Core.TermLet v ->
     let bindingRefs = Set.unions $ map (\b -> termRefs locals ns (Core.bindingTerm b)) (Core.letBindings v)
     in Set.union bindingRefs (termRefs locals ns (Core.letBody v))

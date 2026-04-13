@@ -18,11 +18,14 @@ def term_variant(v1: hydra.variants.TermVariant) -> str:
         case hydra.variants.TermVariant.APPLICATION:
             return "application"
 
+        case hydra.variants.TermVariant.CASES:
+            return "cases"
+
         case hydra.variants.TermVariant.EITHER:
             return "either"
 
-        case hydra.variants.TermVariant.FUNCTION:
-            return "function"
+        case hydra.variants.TermVariant.LAMBDA:
+            return "lambda"
 
         case hydra.variants.TermVariant.LET:
             return "let"
@@ -42,6 +45,9 @@ def term_variant(v1: hydra.variants.TermVariant) -> str:
         case hydra.variants.TermVariant.PAIR:
             return "pair"
 
+        case hydra.variants.TermVariant.PROJECT:
+            return "project"
+
         case hydra.variants.TermVariant.RECORD:
             return "record"
 
@@ -59,6 +65,9 @@ def term_variant(v1: hydra.variants.TermVariant) -> str:
 
         case hydra.variants.TermVariant.UNIT:
             return "unit"
+
+        case hydra.variants.TermVariant.UNWRAP:
+            return "unwrap"
 
         case hydra.variants.TermVariant.VARIABLE:
             return "variable"

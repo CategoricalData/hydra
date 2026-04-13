@@ -23,6 +23,24 @@ public interface Core {
       hydra.show.Core.term(t)));
   }
 
+  static String caseStatement(hydra.core.CaseStatement cs) {
+    java.util.List<hydra.core.Field> csCases = (cs).cases;
+    hydra.util.Maybe<hydra.core.Term> mdef = (cs).default_;
+    hydra.util.Lazy<java.util.List<hydra.core.Field>> defaultField = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.applyLazy(
+      () -> (java.util.List<hydra.core.Field>) (java.util.Collections.<hydra.core.Field>emptyList()),
+      (java.util.function.Function<hydra.core.Term, java.util.List<hydra.core.Field>>) (d -> java.util.Arrays.asList(new hydra.core.Field(new hydra.core.Name("[default]"), d))),
+      mdef));
+    hydra.util.Lazy<java.util.List<hydra.core.Field>> allFields = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat.apply(java.util.Arrays.asList(
+      csCases,
+      defaultField.get())));
+    String tname = (cs).typeName.value;
+    return hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
+      "case(",
+      tname,
+      ")",
+      hydra.show.Core.fields(allFields.get())));
+  }
+
   static <T0, T1> String either(java.util.function.Function<T0, String> showA, java.util.function.Function<T1, String> showB, hydra.util.Either<T0, T1> e) {
     return hydra.lib.eithers.Either.apply(
       (java.util.function.Function<T0, String>) (a -> hydra.lib.strings.Cat2.apply(
@@ -36,49 +54,6 @@ public interface Core {
           (showB).apply(b),
           ")"))),
       e);
-  }
-
-  static String elimination(hydra.core.Elimination elm) {
-    return (elm).accept(new hydra.core.Elimination.PartialVisitor<>() {
-      @Override
-      public String visit(hydra.core.Elimination.Record proj) {
-        String fname = (proj).value.field.value;
-        String tname = (proj).value.typeName.value;
-        return hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
-          "project(",
-          tname,
-          "){",
-          fname,
-          "}"));
-      }
-
-      @Override
-      public String visit(hydra.core.Elimination.Union cs) {
-        java.util.List<hydra.core.Field> cases = (cs).value.cases;
-        hydra.util.Maybe<hydra.core.Term> mdef = (cs).value.default_;
-        hydra.util.Lazy<java.util.List<hydra.core.Field>> defaultField = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.applyLazy(
-          () -> (java.util.List<hydra.core.Field>) (java.util.Collections.<hydra.core.Field>emptyList()),
-          (java.util.function.Function<hydra.core.Term, java.util.List<hydra.core.Field>>) (d -> java.util.Arrays.asList(new hydra.core.Field(new hydra.core.Name("[default]"), d))),
-          mdef));
-        hydra.util.Lazy<java.util.List<hydra.core.Field>> allFields = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat.apply(java.util.Arrays.asList(
-          cases,
-          defaultField.get())));
-        String tname = (cs).value.typeName.value;
-        return hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
-          "case(",
-          tname,
-          ")",
-          hydra.show.Core.fields(allFields.get())));
-      }
-
-      @Override
-      public String visit(hydra.core.Elimination.Wrap tname) {
-        return hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
-          "unwrap(",
-          (tname).value.value,
-          ")"));
-      }
-    });
   }
 
   static String field(hydra.core.Field field) {
@@ -151,20 +126,6 @@ public interface Core {
       @Override
       public String visit(hydra.core.FloatType.Float64 ignored) {
         return "float64";
-      }
-    });
-  }
-
-  static String function(hydra.core.Function f) {
-    return (f).accept(new hydra.core.Function.PartialVisitor<>() {
-      @Override
-      public String visit(hydra.core.Function.Elimination v1) {
-        return hydra.show.Core.elimination((v1).value);
-      }
-
-      @Override
-      public String visit(hydra.core.Function.Lambda v1) {
-        return hydra.show.Core.lambda((v1).value);
       }
     });
   }
@@ -436,6 +397,17 @@ public interface Core {
       ")"));
   }
 
+  static String projection(hydra.core.Projection proj) {
+    String fname = (proj).field.value;
+    String tname = (proj).typeName.value;
+    return hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
+      "project(",
+      tname,
+      "){",
+      fname,
+      "}"));
+  }
+
   static hydra.util.Maybe<hydra.core.Term> readTerm(String s) {
     return hydra.util.Maybe.just(new hydra.core.Term.Literal(new hydra.core.Literal.String_(s)));
   }
@@ -496,6 +468,11 @@ public interface Core {
       }
 
       @Override
+      public String visit(hydra.core.Term.Cases v1) {
+        return hydra.show.Core.caseStatement((v1).value);
+      }
+
+      @Override
       public String visit(hydra.core.Term.Either e) {
         return hydra.lib.eithers.Either.apply(
           (java.util.function.Function<hydra.core.Term, String>) (l -> hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
@@ -510,8 +487,8 @@ public interface Core {
       }
 
       @Override
-      public String visit(hydra.core.Term.Function v1) {
-        return hydra.show.Core.function((v1).value);
+      public String visit(hydra.core.Term.Lambda v1) {
+        return hydra.show.Core.lambda((v1).value);
       }
 
       @Override
@@ -575,6 +552,11 @@ public interface Core {
       }
 
       @Override
+      public String visit(hydra.core.Term.Project v1) {
+        return hydra.show.Core.projection((v1).value);
+      }
+
+      @Override
       public String visit(hydra.core.Term.Record rec) {
         java.util.List<hydra.core.Field> flds = (rec).value.fields;
         String tname = (rec).value.typeName.value;
@@ -627,6 +609,14 @@ public interface Core {
       @Override
       public String visit(hydra.core.Term.Unit ignored) {
         return "unit";
+      }
+
+      @Override
+      public String visit(hydra.core.Term.Unwrap tname) {
+        return hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
+          "unwrap(",
+          (tname).value.value,
+          ")"));
       }
 
       @Override

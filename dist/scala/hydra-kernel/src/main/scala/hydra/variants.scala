@@ -21,20 +21,23 @@ enum LiteralVariant :
 enum TermVariant :
    case annotated extends TermVariant
    case application extends TermVariant
+   case cases extends TermVariant
    case either extends TermVariant
-   case function extends TermVariant
+   case lambda extends TermVariant
    case let extends TermVariant
    case list extends TermVariant
    case literal extends TermVariant
    case map extends TermVariant
    case maybe extends TermVariant
    case pair extends TermVariant
+   case project extends TermVariant
    case record extends TermVariant
    case set extends TermVariant
    case typeApplication extends TermVariant
    case typeLambda extends TermVariant
    case union extends TermVariant
    case unit extends TermVariant
+   case unwrap extends TermVariant
    case variable extends TermVariant
    case wrap extends TermVariant
 

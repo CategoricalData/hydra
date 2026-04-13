@@ -6,7 +6,7 @@ import Hydra.Kernel hiding (
   bindingIsPolymorphic, bindingUsesContextTypeVars,
   countVarOccurrences,
   hoistAllLetBindings, hoistCaseStatements, hoistCaseStatementsInGraph, hoistLetBindingsWithContext, hoistLetBindingsWithPredicate, hoistPolymorphicLetBindings, hoistSubterms,
-  isApplicationFunction, isEliminationUnion, isLambdaBody, isUnionElimination, isUnionEliminationApplication,
+  isApplicationFunction, isLambdaBody, isUnionElimination, isUnionEliminationApplication,
   normalizePathForHoisting,
   shouldHoistAll, shouldHoistCaseStatement, shouldHoistPolymorphic, updateHoistState)
 import Hydra.Sources.Libraries
@@ -93,7 +93,6 @@ module_ = Module ns definitions
      toDefinition hoistPolymorphicLetBindings,
      toDefinition hoistSubterms,
      toDefinition isApplicationFunction,
-     toDefinition isEliminationUnion,
      toDefinition isLambdaBody,
      toDefinition isUnionElimination,
      toDefinition isUnionEliminationApplication,
@@ -154,8 +153,7 @@ augmentBindingsWithNewFreeVars = define "augmentBindingsWithNewFreeVars" $
     cases _Term (var "term")
       -- Default: wrap with lambdas (for any non-type-lambda term)
       (Just $ Lists.foldl
-        ("t" ~> "p" ~> Core.termFunction $ Core.functionLambda $
-          Core.lambda (Pairs.first $ var "p") (Pairs.second $ var "p") (var "t"))
+        ("t" ~> "p" ~> Core.termLambda $ Core.lambda (Pairs.first $ var "p") (Pairs.second $ var "p") (var "t"))
         (var "term") (Lists.reverse $ var "vars")) [
       -- Recurse through type lambdas
       _Term_typeLambda>>: "tl" ~>
@@ -267,8 +265,7 @@ hoistLetBindingsWithPredicate = define "hoistLetBindingsWithPredicate" $
     -- Then re-add all type scheme variables as type lambdas.
     "strippedTerm" <~ Strip.stripTypeLambdas @@ (Core.bindingTerm $ var "b") $
     "termWithLambdas" <~ Lists.foldl
-      ("t" ~> "p" ~> Core.termFunction $ Core.functionLambda $
-        Core.lambda (Pairs.first $ var "p") (Maybes.map ("dom" ~> Strip.deannotateTypeParameters @@ var "dom") (Pairs.second $ var "p")) (var "t"))
+      ("t" ~> "p" ~> Core.termLambda $ Core.lambda (Pairs.first $ var "p") (Maybes.map ("dom" ~> Strip.deannotateTypeParameters @@ var "dom") (Pairs.second $ var "p")) (var "t"))
       (var "strippedTerm")
       (Lists.reverse $ var "capturedTermVarTypePairs") $
     -- Add type lambdas for all new type scheme variables (captured + original scheme vars)
@@ -549,17 +546,7 @@ isUnionElimination = define "isUnionElimination" $
   doc "Check if a term is a union elimination (case statement)" $
   "term" ~> cases _Term (var "term")
     (Just false) [
-    _Term_function>>: "f" ~> isEliminationUnion @@ var "f"]
-
--- | Check if a function is an elimination for union types
-isEliminationUnion :: TTermDefinition (Function -> Bool)
-isEliminationUnion = define "isEliminationUnion" $
-  doc "Check if a function is a union elimination" $
-  "f" ~> cases _Function (var "f")
-    (Just false) [
-    _Function_elimination>>: "e" ~> cases _Elimination (var "e")
-      (Just false) [
-      _Elimination_union>>: constant true]]
+    _Term_cases>>: constant true]
 
 -- | Check if a term is a case statement applied to an argument (i.e. Application where the function is a union elimination).
 -- This is used for hoisting: we want to hoist the entire application, not just the bare case function.
@@ -580,13 +567,11 @@ wrapLetInsideLambdas = define "wrapLetInsideLambdas" $
   doc "Wrap bindings in a let term, pushing the let inside leading lambdas" $
   "bindings" ~> "term" ~>
   cases _Term (var "term") (Just $ Core.termLet $ Core.let_ (var "bindings") (var "term")) [
-    _Term_function>>: "f" ~>
-      cases _Function (var "f") (Just $ Core.termLet $ Core.let_ (var "bindings") (var "term")) [
-        _Function_lambda>>: "lam" ~>
-          Core.termFunction $ Core.functionLambda $ Core.lambda
-            (Core.lambdaParameter $ var "lam")
-            (Core.lambdaDomain $ var "lam")
-            (wrapLetInsideLambdas @@ var "bindings" @@ Core.lambdaBody (var "lam"))],
+    _Term_lambda>>: "lam" ~>
+      Core.termLambda $ Core.lambda
+        (Core.lambdaParameter $ var "lam")
+        (Core.lambdaDomain $ var "lam")
+        (wrapLetInsideLambdas @@ var "bindings" @@ Core.lambdaBody (var "lam")),
     _Term_annotated>>: "ann" ~>
       Core.termAnnotated $ Core.annotatedTerm
         (wrapLetInsideLambdas @@ var "bindings" @@ Core.annotatedTermBody (var "ann"))
@@ -790,7 +775,7 @@ hoistSubterms = define "hoistSubterms" $
              "typeMap" <~ Maps.map (Scoping.typeSchemeToFType) (Graph.graphBoundTypes (var "cxInner")) $
              "wrappedTerm" <~ Lists.foldl
                ("body" ~> "varName" ~>
-                 Core.termFunction $ Core.functionLambda $ Core.lambda (var "varName")
+                 Core.termLambda $ Core.lambda (var "varName")
                    (Maps.lookup (var "varName") (var "typeMap"))
                    (var "body"))
                (var "processedTerm")

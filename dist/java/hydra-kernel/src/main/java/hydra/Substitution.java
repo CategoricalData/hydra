@@ -180,29 +180,13 @@ public interface Substitution {
   static hydra.core.Term substTypesInTerm(hydra.typing.TypeSubst subst, hydra.core.Term term0) {
     java.util.function.Function<java.util.function.Function<hydra.core.Term, hydra.core.Term>, java.util.function.Function<hydra.core.Term, hydra.core.Term>> rewrite = (java.util.function.Function<java.util.function.Function<hydra.core.Term, hydra.core.Term>, java.util.function.Function<hydra.core.Term, hydra.core.Term>>) (recurse -> (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (term -> {
       hydra.core.Term dflt = (recurse).apply(term);
-      java.util.function.Function<hydra.core.Lambda, hydra.core.Term> forLambda = (java.util.function.Function<hydra.core.Lambda, hydra.core.Term>) (l -> new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda((l).parameter, hydra.lib.maybes.Map.apply(
+      java.util.function.Function<hydra.core.Lambda, hydra.core.Term> forLambda = (java.util.function.Function<hydra.core.Lambda, hydra.core.Term>) (l -> new hydra.core.Term.Lambda(new hydra.core.Lambda((l).parameter, hydra.lib.maybes.Map.apply(
         (java.util.function.Function<hydra.core.Type, hydra.core.Type>) (v1 -> hydra.Substitution.substInType(
           subst,
           v1)),
         (l).domain), hydra.Substitution.substTypesInTerm(
         subst,
-        (l).body)))));
-      java.util.function.Function<hydra.core.Function, hydra.core.Term> forFunction = (java.util.function.Function<hydra.core.Function, hydra.core.Term>) (f -> (f).accept(new hydra.core.Function.PartialVisitor<>() {
-        @Override
-        public hydra.core.Term otherwise(hydra.core.Function instance) {
-          return dflt;
-        }
-
-        @Override
-        public hydra.core.Term visit(hydra.core.Function.Elimination e) {
-          return dflt;
-        }
-
-        @Override
-        public hydra.core.Term visit(hydra.core.Function.Lambda l) {
-          return (forLambda).apply((l).value);
-        }
-      }));
+        (l).body))));
       java.util.function.Function<hydra.core.Let, hydra.core.Term> forLet = (java.util.function.Function<hydra.core.Let, hydra.core.Term>) (l -> {
         java.util.function.Function<hydra.core.Binding, hydra.core.Binding> rewriteBinding = (java.util.function.Function<hydra.core.Binding, hydra.core.Binding>) (b -> new hydra.core.Binding((b).name, hydra.Substitution.substTypesInTerm(
           subst,
@@ -238,8 +222,8 @@ public interface Substitution {
         }
 
         @Override
-        public hydra.core.Term visit(hydra.core.Term.Function f) {
-          return (forFunction).apply((f).value);
+        public hydra.core.Term visit(hydra.core.Term.Lambda l) {
+          return (forLambda).apply((l).value);
         }
 
         @Override
@@ -293,9 +277,9 @@ public interface Substitution {
         hydra.util.Lazy<hydra.typing.TermSubst> subst2 = new hydra.util.Lazy<>(() -> new hydra.typing.TermSubst(hydra.lib.maps.Delete.apply(
           v,
           s)));
-        return new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(v, (l).domain, hydra.Substitution.substituteInTerm(
+        return new hydra.core.Term.Lambda(new hydra.core.Lambda(v, (l).domain, hydra.Substitution.substituteInTerm(
           subst2.get(),
-          (l).body))));
+          (l).body)));
       });
       java.util.function.Function<hydra.core.Let, hydra.core.Term> withLet = (java.util.function.Function<hydra.core.Let, hydra.core.Term>) (lt -> {
         java.util.List<hydra.core.Binding> bindings = (lt).bindings;
@@ -323,18 +307,8 @@ public interface Substitution {
         }
 
         @Override
-        public hydra.core.Term visit(hydra.core.Term.Function fun) {
-          return (fun).value.accept(new hydra.core.Function.PartialVisitor<>() {
-            @Override
-            public hydra.core.Term otherwise(hydra.core.Function instance) {
-              return (recurse).apply(term);
-            }
-
-            @Override
-            public hydra.core.Term visit(hydra.core.Function.Lambda l) {
-              return (withLambda).apply((l).value);
-            }
-          });
+        public hydra.core.Term visit(hydra.core.Term.Lambda l) {
+          return (withLambda).apply((l).value);
         }
 
         @Override

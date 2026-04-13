@@ -39,10 +39,12 @@ def termVariant(v1: hydra.variants.TermVariant): hydra.core.Term =
      hydra.core.Field("annotated", hydra.core.Term.unit)))
   case hydra.variants.TermVariant.application => hydra.core.Term.union(hydra.core.Injection("hydra.variants.TermVariant",
      hydra.core.Field("application", hydra.core.Term.unit)))
+  case hydra.variants.TermVariant.cases => hydra.core.Term.union(hydra.core.Injection("hydra.variants.TermVariant",
+     hydra.core.Field("cases", hydra.core.Term.unit)))
   case hydra.variants.TermVariant.either => hydra.core.Term.union(hydra.core.Injection("hydra.variants.TermVariant",
      hydra.core.Field("either", hydra.core.Term.unit)))
-  case hydra.variants.TermVariant.function => hydra.core.Term.union(hydra.core.Injection("hydra.variants.TermVariant",
-     hydra.core.Field("function", hydra.core.Term.unit)))
+  case hydra.variants.TermVariant.lambda => hydra.core.Term.union(hydra.core.Injection("hydra.variants.TermVariant",
+     hydra.core.Field("lambda", hydra.core.Term.unit)))
   case hydra.variants.TermVariant.let => hydra.core.Term.union(hydra.core.Injection("hydra.variants.TermVariant",
      hydra.core.Field("let", hydra.core.Term.unit)))
   case hydra.variants.TermVariant.list => hydra.core.Term.union(hydra.core.Injection("hydra.variants.TermVariant",
@@ -55,6 +57,8 @@ def termVariant(v1: hydra.variants.TermVariant): hydra.core.Term =
      hydra.core.Field("maybe", hydra.core.Term.unit)))
   case hydra.variants.TermVariant.pair => hydra.core.Term.union(hydra.core.Injection("hydra.variants.TermVariant",
      hydra.core.Field("pair", hydra.core.Term.unit)))
+  case hydra.variants.TermVariant.project => hydra.core.Term.union(hydra.core.Injection("hydra.variants.TermVariant",
+     hydra.core.Field("project", hydra.core.Term.unit)))
   case hydra.variants.TermVariant.record => hydra.core.Term.union(hydra.core.Injection("hydra.variants.TermVariant",
      hydra.core.Field("record", hydra.core.Term.unit)))
   case hydra.variants.TermVariant.set => hydra.core.Term.union(hydra.core.Injection("hydra.variants.TermVariant",
@@ -67,6 +71,8 @@ def termVariant(v1: hydra.variants.TermVariant): hydra.core.Term =
      hydra.core.Field("union", hydra.core.Term.unit)))
   case hydra.variants.TermVariant.unit => hydra.core.Term.union(hydra.core.Injection("hydra.variants.TermVariant",
      hydra.core.Field("unit", hydra.core.Term.unit)))
+  case hydra.variants.TermVariant.unwrap => hydra.core.Term.union(hydra.core.Injection("hydra.variants.TermVariant",
+     hydra.core.Field("unwrap", hydra.core.Term.unit)))
   case hydra.variants.TermVariant.variable => hydra.core.Term.union(hydra.core.Injection("hydra.variants.TermVariant",
      hydra.core.Field("variable", hydra.core.Term.unit)))
   case hydra.variants.TermVariant.wrap => hydra.core.Term.union(hydra.core.Injection("hydra.variants.TermVariant",

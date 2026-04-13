@@ -54,12 +54,16 @@ public interface Variants {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.variants.TermVariant"), new hydra.core.Field(new hydra.core.Name("application"), new hydra.core.Term.Unit()))));
   }
 
+  static hydra.phantoms.TTerm<hydra.variants.TermVariant> termVariantCases() {
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.variants.TermVariant"), new hydra.core.Field(new hydra.core.Name("cases"), new hydra.core.Term.Unit()))));
+  }
+
   static hydra.phantoms.TTerm<hydra.variants.TermVariant> termVariantEither() {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.variants.TermVariant"), new hydra.core.Field(new hydra.core.Name("either"), new hydra.core.Term.Unit()))));
   }
 
-  static hydra.phantoms.TTerm<hydra.variants.TermVariant> termVariantFunction() {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.variants.TermVariant"), new hydra.core.Field(new hydra.core.Name("function"), new hydra.core.Term.Unit()))));
+  static hydra.phantoms.TTerm<hydra.variants.TermVariant> termVariantLambda() {
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.variants.TermVariant"), new hydra.core.Field(new hydra.core.Name("lambda"), new hydra.core.Term.Unit()))));
   }
 
   static hydra.phantoms.TTerm<hydra.variants.TermVariant> termVariantLet() {
@@ -86,6 +90,10 @@ public interface Variants {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.variants.TermVariant"), new hydra.core.Field(new hydra.core.Name("pair"), new hydra.core.Term.Unit()))));
   }
 
+  static hydra.phantoms.TTerm<hydra.variants.TermVariant> termVariantProject() {
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.variants.TermVariant"), new hydra.core.Field(new hydra.core.Name("project"), new hydra.core.Term.Unit()))));
+  }
+
   static hydra.phantoms.TTerm<hydra.variants.TermVariant> termVariantRecord() {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.variants.TermVariant"), new hydra.core.Field(new hydra.core.Name("record"), new hydra.core.Term.Unit()))));
   }
@@ -108,6 +116,10 @@ public interface Variants {
 
   static hydra.phantoms.TTerm<hydra.variants.TermVariant> termVariantUnit() {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.variants.TermVariant"), new hydra.core.Field(new hydra.core.Name("unit"), new hydra.core.Term.Unit()))));
+  }
+
+  static hydra.phantoms.TTerm<hydra.variants.TermVariant> termVariantUnwrap() {
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.variants.TermVariant"), new hydra.core.Field(new hydra.core.Name("unwrap"), new hydra.core.Term.Unit()))));
   }
 
   static hydra.phantoms.TTerm<hydra.variants.TermVariant> termVariantVariable() {

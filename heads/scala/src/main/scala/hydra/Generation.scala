@@ -62,8 +62,8 @@ object Generation:
         Term.literal(Literal.binary(hydra.lib.literals.stringToBinary(b)))
       case Term.application(app) =>
         Term.application(Application(decodeBinaryLiteralsDepth(app.function, d), decodeBinaryLiteralsDepth(app.argument, d)))
-      case Term.function(Function.lambda(lam)) =>
-        Term.function(Function.lambda(Lambda(lam.parameter, lam.domain, decodeBinaryLiteralsDepth(lam.body, d))))
+      case Term.lambda(lam) =>
+        Term.lambda(Lambda(lam.parameter, lam.domain, decodeBinaryLiteralsDepth(lam.body, d)))
       case Term.let(lt) =>
         Term.let(Let(lt.bindings.map(b => Binding(b.name, decodeBinaryLiteralsDepth(b.term, d), b.`type`)),
           decodeBinaryLiteralsDepth(lt.body, d)))

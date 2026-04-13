@@ -114,10 +114,10 @@ allTests =
                   _ -> 0)) 0 (Core.TermList [
                   Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)),
                   (Core.TermApplication (Core.Application {
-                    Core.applicationFunction = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                    Core.applicationFunction = (Core.TermLambda (Core.Lambda {
                       Core.lambdaParameter = (Core.Name "x"),
                       Core.lambdaDomain = Nothing,
-                      Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))),
+                      Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})),
                     Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 10)))}))])))))),
                 Testing.universalTestCaseExpected = (Core_.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 52))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
@@ -135,10 +135,10 @@ allTests =
                     Core.TermLiteral (Core.LiteralString "foo"),
                     (Core.TermLiteral (Core.LiteralString "bar"))],
                   (Core.TermApplication (Core.Application {
-                    Core.applicationFunction = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                    Core.applicationFunction = (Core.TermLambda (Core.Lambda {
                       Core.lambdaParameter = (Core.Name "x"),
                       Core.lambdaDomain = Nothing,
-                      Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))),
+                      Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})),
                     Core.applicationArgument = (Core.TermList [
                       Core.TermLiteral (Core.LiteralString "quux")])}))]))))),
                 Testing.universalTestCaseExpected = (Core_.term (Core.TermList [
@@ -160,10 +160,10 @@ allTests =
                     Core.TermLiteral (Core.LiteralString "foo"),
                     (Core.TermLiteral (Core.LiteralString "bar"))],
                   (Core.TermApplication (Core.Application {
-                    Core.applicationFunction = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                    Core.applicationFunction = (Core.TermLambda (Core.Lambda {
                       Core.lambdaParameter = (Core.Name "x"),
                       Core.lambdaDomain = Nothing,
-                      Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))),
+                      Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})),
                     Core.applicationArgument = (Core.TermList [
                       Core.TermLiteral (Core.LiteralString "quux")])}))]))))),
                 Testing.universalTestCaseExpected = (Core_.term (Core.TermList [
@@ -359,14 +359,14 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "string in lambda body",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Core_.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "x"),
                   Core.lambdaDomain = Nothing,
-                  Core.lambdaBody = (Core.TermLiteral (Core.LiteralString "foo"))}))))),
-                Testing.universalTestCaseExpected = (Core_.term (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                  Core.lambdaBody = (Core.TermLiteral (Core.LiteralString "foo"))})))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "x"),
                   Core.lambdaDomain = Nothing,
-                  Core.lambdaBody = (Core.TermLiteral (Core.LiteralString "bar"))}))))})),
+                  Core.lambdaBody = (Core.TermLiteral (Core.LiteralString "bar"))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
@@ -478,7 +478,7 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "string in first case branch",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Core_.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermCases (Core.CaseStatement {
                   Core.caseStatementTypeName = (Core.Name "Result"),
                   Core.caseStatementDefault = Nothing,
                   Core.caseStatementCases = [
@@ -487,8 +487,8 @@ allTests =
                       Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "foo"))},
                     Core.Field {
                       Core.fieldName = (Core.Name "error"),
-                      Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "baz"))}]})))))),
-                Testing.universalTestCaseExpected = (Core_.term (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
+                      Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "baz"))}]})))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermCases (Core.CaseStatement {
                   Core.caseStatementTypeName = (Core.Name "Result"),
                   Core.caseStatementDefault = Nothing,
                   Core.caseStatementCases = [
@@ -497,13 +497,13 @@ allTests =
                       Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "bar"))},
                     Core.Field {
                       Core.fieldName = (Core.Name "error"),
-                      Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "baz"))}]})))))})),
+                      Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "baz"))}]})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "string in second case branch",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Core_.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermCases (Core.CaseStatement {
                   Core.caseStatementTypeName = (Core.Name "Result"),
                   Core.caseStatementDefault = Nothing,
                   Core.caseStatementCases = [
@@ -512,8 +512,8 @@ allTests =
                       Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "baz"))},
                     Core.Field {
                       Core.fieldName = (Core.Name "error"),
-                      Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "foo"))}]})))))),
-                Testing.universalTestCaseExpected = (Core_.term (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
+                      Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "foo"))}]})))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermCases (Core.CaseStatement {
                   Core.caseStatementTypeName = (Core.Name "Result"),
                   Core.caseStatementDefault = Nothing,
                   Core.caseStatementCases = [
@@ -522,13 +522,13 @@ allTests =
                       Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "baz"))},
                     Core.Field {
                       Core.fieldName = (Core.Name "error"),
-                      Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "bar"))}]})))))})),
+                      Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "bar"))}]})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "string in default branch",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Core_.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
+                Testing.universalTestCaseActual = (Core_.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermCases (Core.CaseStatement {
                   Core.caseStatementTypeName = (Core.Name "Result"),
                   Core.caseStatementDefault = (Just (Core.TermLiteral (Core.LiteralString "foo"))),
                   Core.caseStatementCases = [
@@ -537,8 +537,8 @@ allTests =
                       Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "baz"))},
                     Core.Field {
                       Core.fieldName = (Core.Name "error"),
-                      Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "baz"))}]})))))),
-                Testing.universalTestCaseExpected = (Core_.term (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
+                      Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "baz"))}]})))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermCases (Core.CaseStatement {
                   Core.caseStatementTypeName = (Core.Name "Result"),
                   Core.caseStatementDefault = (Just (Core.TermLiteral (Core.LiteralString "bar"))),
                   Core.caseStatementCases = [
@@ -547,7 +547,7 @@ allTests =
                       Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "baz"))},
                     Core.Field {
                       Core.fieldName = (Core.Name "error"),
-                      Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "baz"))}]})))))})),
+                      Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "baz"))}]})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
@@ -746,7 +746,7 @@ allTests =
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "handler"),
-                      Core.bindingTerm = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
+                      Core.bindingTerm = (Core.TermCases (Core.CaseStatement {
                         Core.caseStatementTypeName = (Core.Name "Result"),
                         Core.caseStatementDefault = Nothing,
                         Core.caseStatementCases = [
@@ -755,14 +755,14 @@ allTests =
                             Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "foo"))},
                           Core.Field {
                             Core.fieldName = (Core.Name "err"),
-                            Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "baz"))}]})))),
+                            Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "baz"))}]})),
                       Core.bindingType = Nothing}],
                   Core.letBody = (Core.TermVariable (Core.Name "handler"))})))),
                 Testing.universalTestCaseExpected = (Core_.term (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "handler"),
-                      Core.bindingTerm = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
+                      Core.bindingTerm = (Core.TermCases (Core.CaseStatement {
                         Core.caseStatementTypeName = (Core.Name "Result"),
                         Core.caseStatementDefault = Nothing,
                         Core.caseStatementCases = [
@@ -771,7 +771,7 @@ allTests =
                             Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "bar"))},
                           Core.Field {
                             Core.fieldName = (Core.Name "err"),
-                            Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "baz"))}]})))),
+                            Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "baz"))}]})),
                       Core.bindingType = Nothing}],
                   Core.letBody = (Core.TermVariable (Core.Name "handler"))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
@@ -816,10 +816,10 @@ allTests =
                       _ -> 0
                     _ -> 0
                   _ -> 0)) 0 (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                  Core.applicationFunction = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "x"),
                     Core.lambdaDomain = Nothing,
-                    Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))),
+                    Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})),
                   Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}))))))),
                 Testing.universalTestCaseExpected = (Core_.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
@@ -835,15 +835,15 @@ allTests =
                     _ -> 0
                   _ -> 0)) 0 (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermApplication (Core.Application {
-                    Core.applicationFunction = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                    Core.applicationFunction = (Core.TermLambda (Core.Lambda {
                       Core.lambdaParameter = (Core.Name "x"),
                       Core.lambdaDomain = Nothing,
-                      Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.lambdaBody = (Core.TermLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.Name "y"),
                         Core.lambdaDomain = Nothing,
                         Core.lambdaBody = (Core.TermList [
                           Core.TermVariable (Core.Name "x"),
-                          (Core.TermVariable (Core.Name "y"))])})))}))),
+                          (Core.TermVariable (Core.Name "y"))])}))})),
                     Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))})),
                   Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))}))))))),
                 Testing.universalTestCaseExpected = (Core_.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3))))})),
@@ -900,7 +900,7 @@ allTests =
                       Core.IntegerValueInt32 v2 -> v2
                       _ -> 0
                     _ -> 0
-                  _ -> 0)) 0 (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
+                  _ -> 0)) 0 (Core.TermCases (Core.CaseStatement {
                   Core.caseStatementTypeName = (Core.Name "Result"),
                   Core.caseStatementDefault = Nothing,
                   Core.caseStatementCases = [
@@ -909,7 +909,7 @@ allTests =
                       Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))},
                     Core.Field {
                       Core.fieldName = (Core.Name "err"),
-                      Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))}]}))))))))),
+                      Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))}]}))))))),
                 Testing.universalTestCaseExpected = (Core_.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
@@ -1013,12 +1013,12 @@ allTests =
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "f"),
-                      Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.bindingTerm = (Core.TermLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.Name "x"),
                         Core.lambdaDomain = Nothing,
                         Core.lambdaBody = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermVariable (Core.Name "x")),
-                          Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 5)))}))}))),
+                          Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 5)))}))})),
                       Core.bindingType = Nothing}],
                   Core.letBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 10)))}))))))),
                 Testing.universalTestCaseExpected = (Core_.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 15))))})),

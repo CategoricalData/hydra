@@ -8,94 +8,88 @@
             "body": {
               "typeLambda": {
                 "body": {
-                  "function": {
-                    "lambda": {
-                      "body": {
-                        "function": {
-                          "lambda": {
-                            "body": {
-                              "union": {
-                                "field": {
-                                  "name": "record",
-                                  "term": {
-                                    "record": {
-                                      "fields": [
-                                        {
-                                          "name": "typeName",
-                                          "term": {
-                                            "wrap": {
-                                              "body": {"literal": {"string": "hydra.phantoms.TBinding"}},
-                                              "typeName": "hydra.core.Name"}}},
-                                        {
-                                          "name": "fields",
-                                          "term": {
-                                            "list": [
-                                              {
-                                                "record": {
-                                                  "fields": [
-                                                    {
-                                                      "name": "name",
-                                                      "term": {
-                                                        "wrap": {
-                                                          "body": {"literal": {"string": "name"}},
-                                                          "typeName": "hydra.core.Name"}}},
-                                                    {
-                                                      "name": "term",
-                                                      "term": {
+                  "lambda": {
+                    "body": {
+                      "lambda": {
+                        "body": {
+                          "union": {
+                            "field": {
+                              "name": "record",
+                              "term": {
+                                "record": {
+                                  "fields": [
+                                    {
+                                      "name": "typeName",
+                                      "term": {
+                                        "wrap": {
+                                          "body": {"literal": {"string": "hydra.phantoms.TBinding"}},
+                                          "typeName": "hydra.core.Name"}}},
+                                    {
+                                      "name": "fields",
+                                      "term": {
+                                        "list": [
+                                          {
+                                            "record": {
+                                              "fields": [
+                                                {
+                                                  "name": "name",
+                                                  "term": {
+                                                    "wrap": {
+                                                      "body": {"literal": {"string": "name"}},
+                                                      "typeName": "hydra.core.Name"}}},
+                                                {
+                                                  "name": "term",
+                                                  "term": {
+                                                    "application": {
+                                                      "argument": {
                                                         "application": {
-                                                          "argument": {
-                                                            "application": {
-                                                              "argument": {"variable": "x"},
-                                                              "function": {
-                                                                "typeApplication": {
-                                                                  "body": {
-                                                                    "function": {
-                                                                      "elimination": {"record": {"field": "name", "typeName": "hydra.phantoms.TBinding"}}}},
-                                                                  "type": {"variable": "t1"}}}}},
-                                                          "function": {"variable": "hydra.encode.core.name"}}}}],
-                                                  "typeName": "hydra.core.Field"}},
-                                              {
-                                                "record": {
-                                                  "fields": [
-                                                    {
-                                                      "name": "name",
-                                                      "term": {
-                                                        "wrap": {
-                                                          "body": {"literal": {"string": "term"}},
-                                                          "typeName": "hydra.core.Name"}}},
-                                                    {
-                                                      "name": "term",
-                                                      "term": {
-                                                        "application": {
-                                                          "argument": {
-                                                            "application": {
-                                                              "argument": {"variable": "x"},
-                                                              "function": {
-                                                                "typeApplication": {
-                                                                  "body": {
-                                                                    "function": {
-                                                                      "elimination": {"record": {"field": "term", "typeName": "hydra.phantoms.TBinding"}}}},
-                                                                  "type": {"variable": "t1"}}}}},
+                                                          "argument": {"variable": "x"},
                                                           "function": {
-                                                            "application": {
-                                                              "argument": {"variable": "a"},
-                                                              "function": {
+                                                            "typeApplication": {
+                                                              "body": {"project": {"field": "name", "typeName": "hydra.phantoms.TBinding"}},
+                                                              "type": {"variable": "t1"}}}}},
+                                                      "function": {"variable": "hydra.encode.core.name"}}}}],
+                                              "typeName": "hydra.core.Field"}},
+                                          {
+                                            "record": {
+                                              "fields": [
+                                                {
+                                                  "name": "name",
+                                                  "term": {
+                                                    "wrap": {
+                                                      "body": {"literal": {"string": "term"}},
+                                                      "typeName": "hydra.core.Name"}}},
+                                                {
+                                                  "name": "term",
+                                                  "term": {
+                                                    "application": {
+                                                      "argument": {
+                                                        "application": {
+                                                          "argument": {"variable": "x"},
+                                                          "function": {
+                                                            "typeApplication": {
+                                                              "body": {"project": {"field": "term", "typeName": "hydra.phantoms.TBinding"}},
+                                                              "type": {"variable": "t1"}}}}},
+                                                      "function": {
+                                                        "application": {
+                                                          "argument": {"variable": "a"},
+                                                          "function": {
+                                                            "typeApplication": {
+                                                              "body": {
                                                                 "typeApplication": {
-                                                                  "body": {
-                                                                    "typeApplication": {
-                                                                      "body": {"variable": "hydra.encode.phantoms.tTerm"},
-                                                                      "type": {"variable": "t0"}}},
-                                                                  "type": {"variable": "t1"}}}}}}}}],
-                                                  "typeName": "hydra.core.Field"}}]}}],
-                                      "typeName": "hydra.core.Record"}}},
-                                "typeName": "hydra.core.Term"}},
-                            "domain": {
-                              "application": {
-                                "argument": {"variable": "t1"},
-                                "function": {"variable": "hydra.phantoms.TBinding"}}},
-                            "parameter": "x"}}},
-                      "domain": {"variable": "t0"},
-                      "parameter": "a"}}},
+                                                                  "body": {"variable": "hydra.encode.phantoms.tTerm"},
+                                                                  "type": {"variable": "t0"}}},
+                                                              "type": {"variable": "t1"}}}}}}}}],
+                                              "typeName": "hydra.core.Field"}}]}}],
+                                  "typeName": "hydra.core.Record"}}},
+                            "typeName": "hydra.core.Term"}},
+                        "domain": {
+                          "application": {
+                            "argument": {"variable": "t1"},
+                            "function": {"variable": "hydra.phantoms.TBinding"}}},
+                        "parameter": "x"}},
+                    "domain": {"variable": "t0"},
+                    "parameter": "a"}},
                 "parameter": "t1"}},
             "parameter": "t0"}},
         "type": {
@@ -118,45 +112,43 @@
             "body": {
               "typeLambda": {
                 "body": {
-                  "function": {
-                    "lambda": {
-                      "body": {
-                        "function": {
-                          "lambda": {
-                            "body": {
-                              "union": {
-                                "field": {
-                                  "name": "wrap",
-                                  "term": {
-                                    "record": {
-                                      "fields": [
-                                        {
-                                          "name": "typeName",
-                                          "term": {
-                                            "wrap": {
-                                              "body": {"literal": {"string": "hydra.phantoms.TTerm"}},
-                                              "typeName": "hydra.core.Name"}}},
-                                        {
-                                          "name": "body",
-                                          "term": {
+                  "lambda": {
+                    "body": {
+                      "lambda": {
+                        "body": {
+                          "union": {
+                            "field": {
+                              "name": "wrap",
+                              "term": {
+                                "record": {
+                                  "fields": [
+                                    {
+                                      "name": "typeName",
+                                      "term": {
+                                        "wrap": {
+                                          "body": {"literal": {"string": "hydra.phantoms.TTerm"}},
+                                          "typeName": "hydra.core.Name"}}},
+                                    {
+                                      "name": "body",
+                                      "term": {
+                                        "application": {
+                                          "argument": {
                                             "application": {
-                                              "argument": {
-                                                "application": {
-                                                  "argument": {"variable": "x"},
-                                                  "function": {
-                                                    "typeApplication": {
-                                                      "body": {"function": {"elimination": {"wrap": "hydra.phantoms.TTerm"}}},
-                                                      "type": {"variable": "t1"}}}}},
-                                              "function": {"variable": "hydra.encode.core.term"}}}}],
-                                      "typeName": "hydra.core.WrappedTerm"}}},
-                                "typeName": "hydra.core.Term"}},
-                            "domain": {
-                              "application": {
-                                "argument": {"variable": "t1"},
-                                "function": {"variable": "hydra.phantoms.TTerm"}}},
-                            "parameter": "x"}}},
-                      "domain": {"variable": "t0"},
-                      "parameter": "a"}}},
+                                              "argument": {"variable": "x"},
+                                              "function": {
+                                                "typeApplication": {
+                                                  "body": {"unwrap": "hydra.phantoms.TTerm"},
+                                                  "type": {"variable": "t1"}}}}},
+                                          "function": {"variable": "hydra.encode.core.term"}}}}],
+                                  "typeName": "hydra.core.WrappedTerm"}}},
+                            "typeName": "hydra.core.Term"}},
+                        "domain": {
+                          "application": {
+                            "argument": {"variable": "t1"},
+                            "function": {"variable": "hydra.phantoms.TTerm"}}},
+                        "parameter": "x"}},
+                    "domain": {"variable": "t0"},
+                    "parameter": "a"}},
                 "parameter": "t1"}},
             "parameter": "t0"}},
         "type": {
@@ -179,96 +171,90 @@
             "body": {
               "typeLambda": {
                 "body": {
-                  "function": {
-                    "lambda": {
-                      "body": {
-                        "function": {
-                          "lambda": {
-                            "body": {
-                              "union": {
-                                "field": {
-                                  "name": "record",
-                                  "term": {
-                                    "record": {
-                                      "fields": [
-                                        {
-                                          "name": "typeName",
-                                          "term": {
-                                            "wrap": {
-                                              "body": {"literal": {"string": "hydra.phantoms.TTermDefinition"}},
-                                              "typeName": "hydra.core.Name"}}},
-                                        {
-                                          "name": "fields",
-                                          "term": {
-                                            "list": [
-                                              {
-                                                "record": {
-                                                  "fields": [
-                                                    {
-                                                      "name": "name",
-                                                      "term": {
-                                                        "wrap": {
-                                                          "body": {"literal": {"string": "name"}},
-                                                          "typeName": "hydra.core.Name"}}},
-                                                    {
-                                                      "name": "term",
-                                                      "term": {
+                  "lambda": {
+                    "body": {
+                      "lambda": {
+                        "body": {
+                          "union": {
+                            "field": {
+                              "name": "record",
+                              "term": {
+                                "record": {
+                                  "fields": [
+                                    {
+                                      "name": "typeName",
+                                      "term": {
+                                        "wrap": {
+                                          "body": {"literal": {"string": "hydra.phantoms.TTermDefinition"}},
+                                          "typeName": "hydra.core.Name"}}},
+                                    {
+                                      "name": "fields",
+                                      "term": {
+                                        "list": [
+                                          {
+                                            "record": {
+                                              "fields": [
+                                                {
+                                                  "name": "name",
+                                                  "term": {
+                                                    "wrap": {
+                                                      "body": {"literal": {"string": "name"}},
+                                                      "typeName": "hydra.core.Name"}}},
+                                                {
+                                                  "name": "term",
+                                                  "term": {
+                                                    "application": {
+                                                      "argument": {
                                                         "application": {
-                                                          "argument": {
-                                                            "application": {
-                                                              "argument": {"variable": "x"},
-                                                              "function": {
-                                                                "typeApplication": {
-                                                                  "body": {
-                                                                    "function": {
-                                                                      "elimination": {
-                                                                        "record": {"field": "name", "typeName": "hydra.phantoms.TTermDefinition"}}}},
-                                                                  "type": {"variable": "t1"}}}}},
-                                                          "function": {"variable": "hydra.encode.core.name"}}}}],
-                                                  "typeName": "hydra.core.Field"}},
-                                              {
-                                                "record": {
-                                                  "fields": [
-                                                    {
-                                                      "name": "name",
-                                                      "term": {
-                                                        "wrap": {
-                                                          "body": {"literal": {"string": "term"}},
-                                                          "typeName": "hydra.core.Name"}}},
-                                                    {
-                                                      "name": "term",
-                                                      "term": {
-                                                        "application": {
-                                                          "argument": {
-                                                            "application": {
-                                                              "argument": {"variable": "x"},
-                                                              "function": {
-                                                                "typeApplication": {
-                                                                  "body": {
-                                                                    "function": {
-                                                                      "elimination": {
-                                                                        "record": {"field": "term", "typeName": "hydra.phantoms.TTermDefinition"}}}},
-                                                                  "type": {"variable": "t1"}}}}},
+                                                          "argument": {"variable": "x"},
                                                           "function": {
-                                                            "application": {
-                                                              "argument": {"variable": "a"},
-                                                              "function": {
+                                                            "typeApplication": {
+                                                              "body": {
+                                                                "project": {"field": "name", "typeName": "hydra.phantoms.TTermDefinition"}},
+                                                              "type": {"variable": "t1"}}}}},
+                                                      "function": {"variable": "hydra.encode.core.name"}}}}],
+                                              "typeName": "hydra.core.Field"}},
+                                          {
+                                            "record": {
+                                              "fields": [
+                                                {
+                                                  "name": "name",
+                                                  "term": {
+                                                    "wrap": {
+                                                      "body": {"literal": {"string": "term"}},
+                                                      "typeName": "hydra.core.Name"}}},
+                                                {
+                                                  "name": "term",
+                                                  "term": {
+                                                    "application": {
+                                                      "argument": {
+                                                        "application": {
+                                                          "argument": {"variable": "x"},
+                                                          "function": {
+                                                            "typeApplication": {
+                                                              "body": {
+                                                                "project": {"field": "term", "typeName": "hydra.phantoms.TTermDefinition"}},
+                                                              "type": {"variable": "t1"}}}}},
+                                                      "function": {
+                                                        "application": {
+                                                          "argument": {"variable": "a"},
+                                                          "function": {
+                                                            "typeApplication": {
+                                                              "body": {
                                                                 "typeApplication": {
-                                                                  "body": {
-                                                                    "typeApplication": {
-                                                                      "body": {"variable": "hydra.encode.phantoms.tTerm"},
-                                                                      "type": {"variable": "t0"}}},
-                                                                  "type": {"variable": "t1"}}}}}}}}],
-                                                  "typeName": "hydra.core.Field"}}]}}],
-                                      "typeName": "hydra.core.Record"}}},
-                                "typeName": "hydra.core.Term"}},
-                            "domain": {
-                              "application": {
-                                "argument": {"variable": "t1"},
-                                "function": {"variable": "hydra.phantoms.TTermDefinition"}}},
-                            "parameter": "x"}}},
-                      "domain": {"variable": "t0"},
-                      "parameter": "a"}}},
+                                                                  "body": {"variable": "hydra.encode.phantoms.tTerm"},
+                                                                  "type": {"variable": "t0"}}},
+                                                              "type": {"variable": "t1"}}}}}}}}],
+                                              "typeName": "hydra.core.Field"}}]}}],
+                                  "typeName": "hydra.core.Record"}}},
+                            "typeName": "hydra.core.Term"}},
+                        "domain": {
+                          "application": {
+                            "argument": {"variable": "t1"},
+                            "function": {"variable": "hydra.phantoms.TTermDefinition"}}},
+                        "parameter": "x"}},
+                    "domain": {"variable": "t0"},
+                    "parameter": "a"}},
                 "parameter": "t1"}},
             "parameter": "t0"}},
         "type": {

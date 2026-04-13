@@ -10,43 +10,42 @@
                 "@key": "description",
                 "@value": {"literal": {"string": "Show a list of bindings as a string"}}}],
             "body": {
-              "function": {
-                "lambda": {
-                  "body": {
-                    "let": {
-                      "bindings": [
-                        {
-                          "name": "elementStrs",
-                          "term": {
-                            "application": {
-                              "argument": {"variable": "elements"},
-                              "function": {
-                                "application": {
-                                  "argument": {"variable": "hydra.show.core.binding"},
-                                  "function": {
-                                    "typeApplication": {
-                                      "body": {
-                                        "typeApplication": {
-                                          "body": {"variable": "hydra.lib.lists.map"},
-                                          "type": {"variable": "hydra.core.Binding"}}},
-                                      "type": {"literal": {"string": {}}}}}}}}},
-                          "type": {"type": {"list": {"literal": {"string": {}}}}, "variables": []}}],
-                      "body": {
-                        "application": {
-                          "argument": {
-                            "list": [
-                              {"literal": {"string": "{"}},
-                              {
-                                "application": {
-                                  "argument": {"variable": "elementStrs"},
-                                  "function": {
-                                    "application": {
-                                      "argument": {"literal": {"string": ", "}},
-                                      "function": {"variable": "hydra.lib.strings.intercalate"}}}}},
-                              {"literal": {"string": "}"}}]},
-                          "function": {"variable": "hydra.lib.strings.cat"}}}}},
-                  "domain": {"list": {"variable": "hydra.core.Binding"}},
-                  "parameter": "elements"}}}}},
+              "lambda": {
+                "body": {
+                  "let": {
+                    "bindings": [
+                      {
+                        "name": "elementStrs",
+                        "term": {
+                          "application": {
+                            "argument": {"variable": "elements"},
+                            "function": {
+                              "application": {
+                                "argument": {"variable": "hydra.show.core.binding"},
+                                "function": {
+                                  "typeApplication": {
+                                    "body": {
+                                      "typeApplication": {
+                                        "body": {"variable": "hydra.lib.lists.map"},
+                                        "type": {"variable": "hydra.core.Binding"}}},
+                                    "type": {"literal": {"string": {}}}}}}}}},
+                        "type": {"type": {"list": {"literal": {"string": {}}}}, "variables": []}}],
+                    "body": {
+                      "application": {
+                        "argument": {
+                          "list": [
+                            {"literal": {"string": "{"}},
+                            {
+                              "application": {
+                                "argument": {"variable": "elementStrs"},
+                                "function": {
+                                  "application": {
+                                    "argument": {"literal": {"string": ", "}},
+                                    "function": {"variable": "hydra.lib.strings.intercalate"}}}}},
+                            {"literal": {"string": "}"}}]},
+                        "function": {"variable": "hydra.lib.strings.cat"}}}}},
+                "domain": {"list": {"variable": "hydra.core.Binding"}},
+                "parameter": "elements"}}}},
         "type": {
           "type": {
             "function": {

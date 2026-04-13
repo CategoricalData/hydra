@@ -210,51 +210,44 @@
                   {
                     "name": "typePredicate",
                     "term": {
-                      "function": {
-                        "lambda": {
-                          "body": {
-                            "application": {
-                              "argument": {
-                                "application": {
-                                  "argument": {"variable": "typ"},
-                                  "function": {"variable": "hydra.strip.deannotateType"}}},
-                              "function": {
-                                "function": {
-                                  "elimination": {
-                                    "union": {
-                                      "cases": [
-                                        {
-                                          "name": "maybe",
-                                          "term": {
+                      "lambda": {
+                        "body": {
+                          "application": {
+                            "argument": {
+                              "application": {
+                                "argument": {"variable": "typ"},
+                                "function": {"variable": "hydra.strip.deannotateType"}}},
+                            "function": {
+                              "cases": {
+                                "cases": [
+                                  {
+                                    "name": "maybe",
+                                    "term": {
+                                      "lambda": {
+                                        "body": {
+                                          "application": {
+                                            "argument": {
+                                              "application": {
+                                                "argument": {"variable": "inner"},
+                                                "function": {"variable": "hydra.strip.deannotateType"}}},
                                             "function": {
-                                              "lambda": {
-                                                "body": {
-                                                  "application": {
-                                                    "argument": {
-                                                      "application": {
-                                                        "argument": {"variable": "inner"},
-                                                        "function": {"variable": "hydra.strip.deannotateType"}}},
-                                                    "function": {
-                                                      "function": {
-                                                        "elimination": {
-                                                          "union": {
-                                                            "cases": [
-                                                              {
-                                                                "name": "maybe",
-                                                                "term": {
-                                                                  "function": {
-                                                                    "lambda": {
-                                                                      "body": {"literal": {"boolean": false}},
-                                                                      "domain": {"variable": "hydra.core.Type"},
-                                                                      "parameter": "_"}}}}],
-                                                            "default": {"literal": {"boolean": true}},
-                                                            "typeName": "hydra.core.Type"}}}}}},
-                                                "domain": {"variable": "hydra.core.Type"},
-                                                "parameter": "inner"}}}}],
-                                      "default": {"literal": {"boolean": true}},
-                                      "typeName": "hydra.core.Type"}}}}}},
-                          "domain": {"variable": "hydra.core.Type"},
-                          "parameter": "typ"}}},
+                                              "cases": {
+                                                "cases": [
+                                                  {
+                                                    "name": "maybe",
+                                                    "term": {
+                                                      "lambda": {
+                                                        "body": {"literal": {"boolean": false}},
+                                                        "domain": {"variable": "hydra.core.Type"},
+                                                        "parameter": "_"}}}],
+                                                "default": {"literal": {"boolean": true}},
+                                                "typeName": "hydra.core.Type"}}}},
+                                        "domain": {"variable": "hydra.core.Type"},
+                                        "parameter": "inner"}}}],
+                                "default": {"literal": {"boolean": true}},
+                                "typeName": "hydra.core.Type"}}}},
+                        "domain": {"variable": "hydra.core.Type"},
+                        "parameter": "typ"}},
                     "type": {
                       "type": {
                         "function": {

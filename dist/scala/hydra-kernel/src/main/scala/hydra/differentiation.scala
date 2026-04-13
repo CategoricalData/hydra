@@ -45,16 +45,13 @@ def differentiateBinary(bfname: hydra.core.Name)(a: hydra.core.Term)(b: hydra.co
 def differentiateFunction(term: hydra.core.Term): hydra.core.Term =
   term match
   case hydra.core.Term.annotated(v_Term_annotated_at) => hydra.differentiation.differentiateFunction(v_Term_annotated_at.body)
-  case hydra.core.Term.function(v_Term_function_f) => v_Term_function_f match
-    case hydra.core.Function.lambda(v_Function_lambda_l) => {
-      lazy val paramName: hydra.core.Name = (v_Function_lambda_l.parameter)
-      {
-        lazy val body: hydra.core.Term = (v_Function_lambda_l.body)
-        hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda(paramName, (v_Function_lambda_l.domain),
-           hydra.differentiation.differentiateTerm(paramName)(body))))
-      }
+  case hydra.core.Term.lambda(v_Term_lambda_l) => {
+    lazy val paramName: hydra.core.Name = (v_Term_lambda_l.parameter)
+    {
+      lazy val body: hydra.core.Term = (v_Term_lambda_l.body)
+      hydra.core.Term.lambda(hydra.core.Lambda(paramName, (v_Term_lambda_l.domain), hydra.differentiation.differentiateTerm(paramName)(body)))
     }
-    case hydra.core.Function.elimination(v_Function_elimination__) => term
+  }
   case _ => term
 
 def differentiateTerm(dx: hydra.core.Name)(term: hydra.core.Term): hydra.core.Term =
@@ -87,11 +84,12 @@ def differentiateTerm(dx: hydra.core.Name)(term: hydra.core.Term): hydra.core.Te
            arg))))), hydra.differentiation.differentiateTerm(dx)(arg)))
     }
   }
-  case hydra.core.Term.function(v_Term_function_f) => v_Term_function_f match
-    case hydra.core.Function.lambda(v_Function_lambda_l) => hydra.lib.logic.ifElse[hydra.core.Term](hydra.lib.equality.equal[hydra.core.Name](v_Function_lambda_l.parameter)(dx))(hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda(v_Function_lambda_l.parameter,
-       (v_Function_lambda_l.domain), hydra.core.Term.literal(hydra.core.Literal.float(hydra.core.FloatValue.float64(0.0)))))))(hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda(v_Function_lambda_l.parameter,
-       (v_Function_lambda_l.domain), hydra.differentiation.differentiateTerm(dx)(v_Function_lambda_l.body)))))
-    case hydra.core.Function.elimination(v_Function_elimination__) => hydra.core.Term.literal(hydra.core.Literal.float(hydra.core.FloatValue.float64(0.0)))
+  case hydra.core.Term.lambda(v_Term_lambda_l) => hydra.lib.logic.ifElse[hydra.core.Term](hydra.lib.equality.equal[hydra.core.Name](v_Term_lambda_l.parameter)(dx))(hydra.core.Term.lambda(hydra.core.Lambda(v_Term_lambda_l.parameter,
+     (v_Term_lambda_l.domain), hydra.core.Term.literal(hydra.core.Literal.float(hydra.core.FloatValue.float64(0.0))))))(hydra.core.Term.lambda(hydra.core.Lambda(v_Term_lambda_l.parameter,
+     (v_Term_lambda_l.domain), hydra.differentiation.differentiateTerm(dx)(v_Term_lambda_l.body))))
+  case hydra.core.Term.cases(v_Term_cases__) => hydra.core.Term.literal(hydra.core.Literal.float(hydra.core.FloatValue.float64(0.0)))
+  case hydra.core.Term.project(v_Term_project__) => hydra.core.Term.literal(hydra.core.Literal.float(hydra.core.FloatValue.float64(0.0)))
+  case hydra.core.Term.unwrap(v_Term_unwrap__) => hydra.core.Term.literal(hydra.core.Literal.float(hydra.core.FloatValue.float64(0.0)))
   case hydra.core.Term.let(v_Term_let_l) => hydra.core.Term.let(hydra.core.Let(hydra.lib.lists.map[hydra.core.Binding,
      hydra.core.Binding]((b: hydra.core.Binding) =>
     hydra.core.Binding(b.name, hydra.differentiation.differentiateTerm(dx)(b.term), None))(v_Term_let_l.bindings),
@@ -120,58 +118,58 @@ def gradient(typeName: hydra.core.Name)(vars: Seq[hydra.core.Name])(term: hydra.
   hydra.core.Field(v, hydra.differentiation.differentiateTerm(v)(term)))(vars)))
 
 def primitiveDerivative(name: hydra.core.Name): Option[hydra.core.Term] =
-  hydra.lib.logic.ifElse[Option[hydra.core.Term]](hydra.lib.equality.equal[hydra.core.Name](name)("hydra.lib.math.sin"))(Some(hydra.core.Term.variable("hydra.lib.math.cos")))(hydra.lib.logic.ifElse[Option[hydra.core.Term]](hydra.lib.equality.equal[hydra.core.Name](name)("hydra.lib.math.cos"))(Some(hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("_x",
+  hydra.lib.logic.ifElse[Option[hydra.core.Term]](hydra.lib.equality.equal[hydra.core.Name](name)("hydra.lib.math.sin"))(Some(hydra.core.Term.variable("hydra.lib.math.cos")))(hydra.lib.logic.ifElse[Option[hydra.core.Term]](hydra.lib.equality.equal[hydra.core.Name](name)("hydra.lib.math.cos"))(Some(hydra.core.Term.lambda(hydra.core.Lambda("_x",
      None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.math.negateFloat64"),
      hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.math.sin"),
-     hydra.core.Term.variable("_x"))))))))))(hydra.lib.logic.ifElse[Option[hydra.core.Term]](hydra.lib.equality.equal[hydra.core.Name](name)("hydra.lib.math.tan"))(Some(hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("_x",
+     hydra.core.Term.variable("_x")))))))))(hydra.lib.logic.ifElse[Option[hydra.core.Term]](hydra.lib.equality.equal[hydra.core.Name](name)("hydra.lib.math.tan"))(Some(hydra.core.Term.lambda(hydra.core.Lambda("_x",
      None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.math.pow"),
      hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.math.cos"),
-     hydra.core.Term.variable("_x"))))), hydra.core.Term.literal(hydra.core.Literal.float(hydra.core.FloatValue.float64(-2.0))))))))))(hydra.lib.logic.ifElse[Option[hydra.core.Term]](hydra.lib.equality.equal[hydra.core.Name](name)("hydra.lib.math.exp"))(Some(hydra.core.Term.variable("hydra.lib.math.exp")))(hydra.lib.logic.ifElse[Option[hydra.core.Term]](hydra.lib.equality.equal[hydra.core.Name](name)("hydra.lib.math.log"))(Some(hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("_x",
+     hydra.core.Term.variable("_x"))))), hydra.core.Term.literal(hydra.core.Literal.float(hydra.core.FloatValue.float64(-2.0)))))))))(hydra.lib.logic.ifElse[Option[hydra.core.Term]](hydra.lib.equality.equal[hydra.core.Name](name)("hydra.lib.math.exp"))(Some(hydra.core.Term.variable("hydra.lib.math.exp")))(hydra.lib.logic.ifElse[Option[hydra.core.Term]](hydra.lib.equality.equal[hydra.core.Name](name)("hydra.lib.math.log"))(Some(hydra.core.Term.lambda(hydra.core.Lambda("_x",
      None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.math.pow"),
-     hydra.core.Term.variable("_x"))), hydra.core.Term.literal(hydra.core.Literal.float(hydra.core.FloatValue.float64(-1.0))))))))))(hydra.lib.logic.ifElse[Option[hydra.core.Term]](hydra.lib.equality.equal[hydra.core.Name](name)("hydra.lib.math.sqrt"))(Some(hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("_x",
+     hydra.core.Term.variable("_x"))), hydra.core.Term.literal(hydra.core.Literal.float(hydra.core.FloatValue.float64(-1.0)))))))))(hydra.lib.logic.ifElse[Option[hydra.core.Term]](hydra.lib.equality.equal[hydra.core.Name](name)("hydra.lib.math.sqrt"))(Some(hydra.core.Term.lambda(hydra.core.Lambda("_x",
      None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.math.mulFloat64"),
      hydra.core.Term.literal(hydra.core.Literal.float(hydra.core.FloatValue.float64(0.5))))), hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.math.pow"),
      hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.math.sqrt"),
-     hydra.core.Term.variable("_x"))))), hydra.core.Term.literal(hydra.core.Literal.float(hydra.core.FloatValue.float64(-1.0))))))))))))(hydra.lib.logic.ifElse[Option[hydra.core.Term]](hydra.lib.equality.equal[hydra.core.Name](name)("hydra.lib.math.asin"))(Some(hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("_x",
+     hydra.core.Term.variable("_x"))))), hydra.core.Term.literal(hydra.core.Literal.float(hydra.core.FloatValue.float64(-1.0)))))))))))(hydra.lib.logic.ifElse[Option[hydra.core.Term]](hydra.lib.equality.equal[hydra.core.Name](name)("hydra.lib.math.asin"))(Some(hydra.core.Term.lambda(hydra.core.Lambda("_x",
      None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.math.pow"),
      hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.math.sqrt"),
      hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.math.subFloat64"),
      hydra.core.Term.literal(hydra.core.Literal.float(hydra.core.FloatValue.float64(1.0))))), hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.math.mulFloat64"),
-     hydra.core.Term.variable("_x"))), hydra.core.Term.variable("_x"))))))))), hydra.core.Term.literal(hydra.core.Literal.float(hydra.core.FloatValue.float64(-1.0))))))))))(hydra.lib.logic.ifElse[Option[hydra.core.Term]](hydra.lib.equality.equal[hydra.core.Name](name)("hydra.lib.math.acos"))(Some(hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("_x",
+     hydra.core.Term.variable("_x"))), hydra.core.Term.variable("_x"))))))))), hydra.core.Term.literal(hydra.core.Literal.float(hydra.core.FloatValue.float64(-1.0)))))))))(hydra.lib.logic.ifElse[Option[hydra.core.Term]](hydra.lib.equality.equal[hydra.core.Name](name)("hydra.lib.math.acos"))(Some(hydra.core.Term.lambda(hydra.core.Lambda("_x",
      None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.math.negateFloat64"),
      hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.math.pow"),
      hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.math.sqrt"),
      hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.math.subFloat64"),
      hydra.core.Term.literal(hydra.core.Literal.float(hydra.core.FloatValue.float64(1.0))))), hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.math.mulFloat64"),
-     hydra.core.Term.variable("_x"))), hydra.core.Term.variable("_x"))))))))), hydra.core.Term.literal(hydra.core.Literal.float(hydra.core.FloatValue.float64(-1.0))))))))))))(hydra.lib.logic.ifElse[Option[hydra.core.Term]](hydra.lib.equality.equal[hydra.core.Name](name)("hydra.lib.math.atan"))(Some(hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("_x",
+     hydra.core.Term.variable("_x"))), hydra.core.Term.variable("_x"))))))))), hydra.core.Term.literal(hydra.core.Literal.float(hydra.core.FloatValue.float64(-1.0)))))))))))(hydra.lib.logic.ifElse[Option[hydra.core.Term]](hydra.lib.equality.equal[hydra.core.Name](name)("hydra.lib.math.atan"))(Some(hydra.core.Term.lambda(hydra.core.Lambda("_x",
      None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.math.pow"),
      hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.math.addFloat64"),
      hydra.core.Term.literal(hydra.core.Literal.float(hydra.core.FloatValue.float64(1.0))))), hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.math.mulFloat64"),
-     hydra.core.Term.variable("_x"))), hydra.core.Term.variable("_x"))))))), hydra.core.Term.literal(hydra.core.Literal.float(hydra.core.FloatValue.float64(-1.0))))))))))(hydra.lib.logic.ifElse[Option[hydra.core.Term]](hydra.lib.equality.equal[hydra.core.Name](name)("hydra.lib.math.sinh"))(Some(hydra.core.Term.variable("hydra.lib.math.cosh")))(hydra.lib.logic.ifElse[Option[hydra.core.Term]](hydra.lib.equality.equal[hydra.core.Name](name)("hydra.lib.math.cosh"))(Some(hydra.core.Term.variable("hydra.lib.math.sinh")))(hydra.lib.logic.ifElse[Option[hydra.core.Term]](hydra.lib.equality.equal[hydra.core.Name](name)("hydra.lib.math.tanh"))(Some(hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("_x",
+     hydra.core.Term.variable("_x"))), hydra.core.Term.variable("_x"))))))), hydra.core.Term.literal(hydra.core.Literal.float(hydra.core.FloatValue.float64(-1.0)))))))))(hydra.lib.logic.ifElse[Option[hydra.core.Term]](hydra.lib.equality.equal[hydra.core.Name](name)("hydra.lib.math.sinh"))(Some(hydra.core.Term.variable("hydra.lib.math.cosh")))(hydra.lib.logic.ifElse[Option[hydra.core.Term]](hydra.lib.equality.equal[hydra.core.Name](name)("hydra.lib.math.cosh"))(Some(hydra.core.Term.variable("hydra.lib.math.sinh")))(hydra.lib.logic.ifElse[Option[hydra.core.Term]](hydra.lib.equality.equal[hydra.core.Name](name)("hydra.lib.math.tanh"))(Some(hydra.core.Term.lambda(hydra.core.Lambda("_x",
      None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.math.subFloat64"),
      hydra.core.Term.literal(hydra.core.Literal.float(hydra.core.FloatValue.float64(1.0))))), hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.math.mulFloat64"),
      hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.math.tanh"),
      hydra.core.Term.variable("_x"))))), hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.math.tanh"),
-     hydra.core.Term.variable("_x"))))))))))))(hydra.lib.logic.ifElse[Option[hydra.core.Term]](hydra.lib.equality.equal[hydra.core.Name](name)("hydra.lib.math.asinh"))(Some(hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("_x",
+     hydra.core.Term.variable("_x")))))))))))(hydra.lib.logic.ifElse[Option[hydra.core.Term]](hydra.lib.equality.equal[hydra.core.Name](name)("hydra.lib.math.asinh"))(Some(hydra.core.Term.lambda(hydra.core.Lambda("_x",
      None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.math.pow"),
      hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.math.sqrt"),
      hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.math.addFloat64"),
      hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.math.mulFloat64"),
      hydra.core.Term.variable("_x"))), hydra.core.Term.variable("_x"))))), hydra.core.Term.literal(hydra.core.Literal.float(hydra.core.FloatValue.float64(1.0))))))))),
-     hydra.core.Term.literal(hydra.core.Literal.float(hydra.core.FloatValue.float64(-1.0))))))))))(hydra.lib.logic.ifElse[Option[hydra.core.Term]](hydra.lib.equality.equal[hydra.core.Name](name)("hydra.lib.math.acosh"))(Some(hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("_x",
+     hydra.core.Term.literal(hydra.core.Literal.float(hydra.core.FloatValue.float64(-1.0)))))))))(hydra.lib.logic.ifElse[Option[hydra.core.Term]](hydra.lib.equality.equal[hydra.core.Name](name)("hydra.lib.math.acosh"))(Some(hydra.core.Term.lambda(hydra.core.Lambda("_x",
      None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.math.pow"),
      hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.math.sqrt"),
      hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.math.subFloat64"),
      hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.math.mulFloat64"),
      hydra.core.Term.variable("_x"))), hydra.core.Term.variable("_x"))))), hydra.core.Term.literal(hydra.core.Literal.float(hydra.core.FloatValue.float64(1.0))))))))),
-     hydra.core.Term.literal(hydra.core.Literal.float(hydra.core.FloatValue.float64(-1.0))))))))))(hydra.lib.logic.ifElse[Option[hydra.core.Term]](hydra.lib.equality.equal[hydra.core.Name](name)("hydra.lib.math.atanh"))(Some(hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("_x",
+     hydra.core.Term.literal(hydra.core.Literal.float(hydra.core.FloatValue.float64(-1.0)))))))))(hydra.lib.logic.ifElse[Option[hydra.core.Term]](hydra.lib.equality.equal[hydra.core.Name](name)("hydra.lib.math.atanh"))(Some(hydra.core.Term.lambda(hydra.core.Lambda("_x",
      None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.math.pow"),
      hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.math.subFloat64"),
      hydra.core.Term.literal(hydra.core.Literal.float(hydra.core.FloatValue.float64(1.0))))), hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.math.mulFloat64"),
-     hydra.core.Term.variable("_x"))), hydra.core.Term.variable("_x"))))))), hydra.core.Term.literal(hydra.core.Literal.float(hydra.core.FloatValue.float64(-1.0))))))))))(hydra.lib.logic.ifElse[Option[hydra.core.Term]](hydra.lib.equality.equal[hydra.core.Name](name)("hydra.lib.math.negate"))(Some(hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("_x",
-     None, hydra.core.Term.literal(hydra.core.Literal.float(hydra.core.FloatValue.float64(-1.0))))))))(hydra.lib.logic.ifElse[Option[hydra.core.Term]](hydra.lib.equality.equal[hydra.core.Name](name)("hydra.lib.math.abs"))(Some(hydra.core.Term.variable("hydra.lib.math.signum")))(hydra.lib.logic.ifElse[Option[hydra.core.Term]](hydra.lib.equality.equal[hydra.core.Name](name)("hydra.lib.math.ceiling"))(Some(hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("_x",
-     None, hydra.core.Term.literal(hydra.core.Literal.float(hydra.core.FloatValue.float64(0.0))))))))(hydra.lib.logic.ifElse[Option[hydra.core.Term]](hydra.lib.equality.equal[hydra.core.Name](name)("hydra.lib.math.floor"))(Some(hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("_x",
-     None, hydra.core.Term.literal(hydra.core.Literal.float(hydra.core.FloatValue.float64(0.0))))))))(hydra.lib.logic.ifElse[Option[hydra.core.Term]](hydra.lib.equality.equal[hydra.core.Name](name)("hydra.lib.math.round"))(Some(hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("_x",
-     None, hydra.core.Term.literal(hydra.core.Literal.float(hydra.core.FloatValue.float64(0.0))))))))(hydra.lib.logic.ifElse[Option[hydra.core.Term]](hydra.lib.equality.equal[hydra.core.Name](name)("hydra.lib.math.truncate"))(Some(hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("_x",
-     None, hydra.core.Term.literal(hydra.core.Literal.float(hydra.core.FloatValue.float64(0.0))))))))(hydra.lib.logic.ifElse[Option[hydra.core.Term]](hydra.lib.equality.equal[hydra.core.Name](name)("hydra.lib.math.signum"))(Some(hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("_x",
-     None, hydra.core.Term.literal(hydra.core.Literal.float(hydra.core.FloatValue.float64(0.0))))))))(None))))))))))))))))))))))
+     hydra.core.Term.variable("_x"))), hydra.core.Term.variable("_x"))))))), hydra.core.Term.literal(hydra.core.Literal.float(hydra.core.FloatValue.float64(-1.0)))))))))(hydra.lib.logic.ifElse[Option[hydra.core.Term]](hydra.lib.equality.equal[hydra.core.Name](name)("hydra.lib.math.negate"))(Some(hydra.core.Term.lambda(hydra.core.Lambda("_x",
+     None, hydra.core.Term.literal(hydra.core.Literal.float(hydra.core.FloatValue.float64(-1.0)))))))(hydra.lib.logic.ifElse[Option[hydra.core.Term]](hydra.lib.equality.equal[hydra.core.Name](name)("hydra.lib.math.abs"))(Some(hydra.core.Term.variable("hydra.lib.math.signum")))(hydra.lib.logic.ifElse[Option[hydra.core.Term]](hydra.lib.equality.equal[hydra.core.Name](name)("hydra.lib.math.ceiling"))(Some(hydra.core.Term.lambda(hydra.core.Lambda("_x",
+     None, hydra.core.Term.literal(hydra.core.Literal.float(hydra.core.FloatValue.float64(0.0)))))))(hydra.lib.logic.ifElse[Option[hydra.core.Term]](hydra.lib.equality.equal[hydra.core.Name](name)("hydra.lib.math.floor"))(Some(hydra.core.Term.lambda(hydra.core.Lambda("_x",
+     None, hydra.core.Term.literal(hydra.core.Literal.float(hydra.core.FloatValue.float64(0.0)))))))(hydra.lib.logic.ifElse[Option[hydra.core.Term]](hydra.lib.equality.equal[hydra.core.Name](name)("hydra.lib.math.round"))(Some(hydra.core.Term.lambda(hydra.core.Lambda("_x",
+     None, hydra.core.Term.literal(hydra.core.Literal.float(hydra.core.FloatValue.float64(0.0)))))))(hydra.lib.logic.ifElse[Option[hydra.core.Term]](hydra.lib.equality.equal[hydra.core.Name](name)("hydra.lib.math.truncate"))(Some(hydra.core.Term.lambda(hydra.core.Lambda("_x",
+     None, hydra.core.Term.literal(hydra.core.Literal.float(hydra.core.FloatValue.float64(0.0)))))))(hydra.lib.logic.ifElse[Option[hydra.core.Term]](hydra.lib.equality.equal[hydra.core.Name](name)("hydra.lib.math.signum"))(Some(hydra.core.Term.lambda(hydra.core.Lambda("_x",
+     None, hydra.core.Term.literal(hydra.core.Literal.float(hydra.core.FloatValue.float64(0.0)))))))(None))))))))))))))))))))))

@@ -305,33 +305,13 @@ public interface Predicates {
           }
 
           @Override
-          public Boolean visit(hydra.core.Term.Function f) {
-            return (f).value.accept(new hydra.core.Function.PartialVisitor<>() {
-              @Override
-              public Boolean otherwise(hydra.core.Function instance) {
-                return false;
-              }
+          public Boolean visit(hydra.core.Term.Project ignored) {
+            return hydra.Predicates.isTrivialTerm(arg);
+          }
 
-              @Override
-              public Boolean visit(hydra.core.Function.Elimination e) {
-                return (e).value.accept(new hydra.core.Elimination.PartialVisitor<>() {
-                  @Override
-                  public Boolean otherwise(hydra.core.Elimination instance) {
-                    return false;
-                  }
-
-                  @Override
-                  public Boolean visit(hydra.core.Elimination.Record ignored) {
-                    return hydra.Predicates.isTrivialTerm(arg);
-                  }
-
-                  @Override
-                  public Boolean visit(hydra.core.Elimination.Wrap ignored) {
-                    return hydra.Predicates.isTrivialTerm(arg);
-                  }
-                });
-              }
-            });
+          @Override
+          public Boolean visit(hydra.core.Term.Unwrap ignored) {
+            return hydra.Predicates.isTrivialTerm(arg);
           }
         });
       }

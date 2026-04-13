@@ -64,19 +64,11 @@ module_ = Module ns definitions
     Just "Functions dealing with arguments and arity."
   where
     definitions = [
-      toDefinition functionArity,
       toDefinition primitiveArity,
       toDefinition termArity,
       toDefinition typeArity,
       toDefinition typeSchemeArity,
       toDefinition uncurryType]
-
-functionArity :: TTermDefinition (Function -> Int)
-functionArity = define "functionArity" $
-  doc "Find the arity (expected number of arguments) of a function" $
-  match _Function Nothing [
-    _Function_elimination>>: constant (int32 1),
-    _Function_lambda>>: (lambda "i" $ Math.add (int32 1) (var "i")) <.> (termArity <.> unaryFunction Core.lambdaBody)]
 
 primitiveArity :: TTermDefinition (Primitive -> Int)
 primitiveArity = define "primitiveArity" $
@@ -88,7 +80,10 @@ termArity = define "termArity" $
   doc "Find the arity (expected number of arguments) of a term" $
   match _Term (Just $ int32 0) [
     _Term_application>>: (lambda "xapp" $ Math.sub (var "xapp") (int32 1)) <.> termArity <.> unaryFunction Core.applicationFunction,
-    _Term_function>>: functionArity]
+    _Term_cases>>: constant (int32 1),
+    _Term_lambda>>: (lambda "i" $ Math.add (int32 1) (var "i")) <.> (termArity <.> unaryFunction Core.lambdaBody),
+    _Term_project>>: constant (int32 1),
+    _Term_unwrap>>: constant (int32 1)]
     -- Note: ignoring variables which might resolve to functions
 
 typeArity :: TTermDefinition (Type -> Int)

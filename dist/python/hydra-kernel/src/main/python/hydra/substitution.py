@@ -106,18 +106,8 @@ def subst_types_in_term(subst: hydra.typing.TypeSubst, term0: hydra.core.Term) -
         @lru_cache(1)
         def dflt() -> hydra.core.Term:
             return recurse(term)
-        def for_function(f: hydra.core.Function) -> hydra.core.Term:
-            match f:
-                case hydra.core.FunctionElimination():
-                    return dflt()
-
-                case hydra.core.FunctionLambda(value=l):
-                    return for_lambda(l)
-
-                case _:
-                    return dflt()
         def for_lambda(l: hydra.core.Lambda) -> hydra.core.Term:
-            return cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(l.parameter, hydra.lib.maybes.map((lambda v1: subst_in_type(subst, v1)), l.domain), subst_types_in_term(subst, l.body))))))
+            return cast(hydra.core.Term, hydra.core.TermLambda(hydra.core.Lambda(l.parameter, hydra.lib.maybes.map((lambda v1: subst_in_type(subst, v1)), l.domain), subst_types_in_term(subst, l.body))))
         def for_let(l: hydra.core.Let) -> hydra.core.Term:
             def rewrite_binding(b: hydra.core.Binding) -> hydra.core.Binding:
                 return hydra.core.Binding(b.name, subst_types_in_term(subst, b.term), hydra.lib.maybes.map((lambda v1: subst_in_type_scheme(subst, v1)), b.type))
@@ -131,11 +121,11 @@ def subst_types_in_term(subst: hydra.typing.TypeSubst, term0: hydra.core.Term) -
                 return hydra.typing.TypeSubst(hydra.lib.maps.delete(param, subst.value))
             return cast(hydra.core.Term, hydra.core.TermTypeLambda(hydra.core.TypeLambda(param, subst_types_in_term(subst2(), ta.body))))
         match term:
-            case hydra.core.TermFunction(value=f):
-                return for_function(f)
+            case hydra.core.TermLambda(value=l):
+                return for_lambda(l)
 
-            case hydra.core.TermLet(value=l):
-                return for_let(l)
+            case hydra.core.TermLet(value=l2):
+                return for_let(l2)
 
             case hydra.core.TermTypeApplication(value=ta):
                 return for_type_application(ta)
@@ -151,13 +141,13 @@ def substitute_in_term(subst: hydra.typing.TermSubst, term0: hydra.core.Term) ->
     r"""Apply a term substitution to a term."""
 
     s = subst.value
-    def rewrite(recurse: Callable[[hydra.core.Term], hydra.core.Term], term: hydra.core.Term):
+    def rewrite(recurse: Callable[[hydra.core.Term], hydra.core.Term], term: hydra.core.Term) -> hydra.core.Term:
         def with_lambda(l: hydra.core.Lambda) -> hydra.core.Term:
             v = l.parameter
             @lru_cache(1)
             def subst2() -> hydra.typing.TermSubst:
                 return hydra.typing.TermSubst(hydra.lib.maps.delete(v, s))
-            return cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(v, l.domain, substitute_in_term(subst2(), l.body))))))
+            return cast(hydra.core.Term, hydra.core.TermLambda(hydra.core.Lambda(v, l.domain, substitute_in_term(subst2(), l.body))))
         def with_let(lt: hydra.core.Let) -> hydra.core.Term:
             bindings = lt.bindings
             @lru_cache(1)
@@ -169,19 +159,12 @@ def substitute_in_term(subst: hydra.typing.TermSubst, term0: hydra.core.Term) ->
             def rewrite_binding(b: hydra.core.Binding) -> hydra.core.Binding:
                 return hydra.core.Binding(b.name, substitute_in_term(subst2(), b.term), b.type)
             return cast(hydra.core.Term, hydra.core.TermLet(hydra.core.Let(hydra.lib.lists.map((lambda x1: rewrite_binding(x1)), bindings), substitute_in_term(subst2(), lt.body))))
-        def _hoist_with_lambda_body_1(v1):
-            match v1:
-                case hydra.core.FunctionLambda(value=l):
-                    return with_lambda(l)
-
-                case _:
-                    return recurse(term)
         match term:
-            case hydra.core.TermFunction(value=fun):
-                return _hoist_with_lambda_body_1(fun)
+            case hydra.core.TermLambda(value=l):
+                return with_lambda(l)
 
-            case hydra.core.TermLet(value=l):
-                return with_let(l)
+            case hydra.core.TermLet(value=l2):
+                return with_let(l2)
 
             case hydra.core.TermVariable(value=name):
                 return hydra.lib.maybes.maybe((lambda : recurse(term)), (lambda sterm: sterm), hydra.lib.maps.lookup(name, s))

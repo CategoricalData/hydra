@@ -6,7 +6,7 @@
 
 ;; Term-building helpers for annotation bindings
 (defun hydra--t-lam (param body)
-  (list :function (list :lambda (make-hydra_core_lambda :parameter param :domain nil :body body))))
+  (list :lambda (make-hydra_core_lambda :parameter param :domain nil :body body)))
 (defun hydra--t-var (name)
   (list :variable name))
 (defun hydra--t-app (fun arg)
@@ -26,11 +26,9 @@
 (defun hydra--t-field (name term)
   (make-hydra_core_field :name name :term term))
 (defun hydra--t-project (type-name field-name)
-  (list :function (list :elimination
-    (list :record (make-hydra_core_projection :type_name type-name :field field-name)))))
+  (list :project (make-hydra_core_projection :type_name type-name :field field-name)))
 (defun hydra--t-match (type-name default &rest case-fields)
-  (list :function (list :elimination
-    (list :union (make-hydra_core_case_statement :type_name type-name :default default :cases case-fields)))))
+  (list :cases (make-hydra_core_case_statement :type_name type-name :default default :cases case-fields)))
 (defun hydra--t-right (v) (list :either (list :right v)))
 (defun hydra--t-left (v) (list :either (list :left v)))
 (defun hydra--t-just (v) (list :maybe (hydra--t-inject "hydra.core.Term" "literal"

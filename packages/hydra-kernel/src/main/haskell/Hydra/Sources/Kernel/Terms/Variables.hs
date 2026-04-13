@@ -114,12 +114,9 @@ freeTypeVariablesInTerm = define "freeTypeVariablesInTerm" $
     "dflt" <~ (var "allOf" @@ Lists.map (var "recurse") (Rewriting.subterms @@ var "term")) $
     cases _Term (var "term")
       (Just $ var "dflt") [
-      _Term_function>>: "f" ~> cases _Function (var "f")
-        (Just $ var "dflt") [
-        _Function_elimination>>: "e" ~> var "dflt",
-        _Function_lambda>>: "l" ~>
-          "domt" <~ optCases (Core.lambdaDomain $ var "l") (Sets.empty) (var "tryType" @@ var "vars") $
-          Sets.union (var "domt") (var "recurse" @@ (Core.lambdaBody $ var "l"))],
+      _Term_lambda>>: "l" ~>
+        "domt" <~ optCases (Core.lambdaDomain $ var "l") (Sets.empty) (var "tryType" @@ var "vars") $
+        Sets.union (var "domt") (var "recurse" @@ (Core.lambdaBody $ var "l")),
       _Term_let>>: "l" ~>
         "forBinding" <~ ("b" ~>
           "newVars" <~ optCases (Core.bindingType $ var "b")
@@ -157,10 +154,9 @@ freeVariablesInTerm = define "freeVariablesInTerm" $
     (Rewriting.subterms @@ var "term")) $
   cases _Term (var "term")
     (Just $ var "dfltVars" @@ unit) [
-    _Term_function>>: match _Function (Just $ var "dfltVars" @@ unit) [
-      _Function_lambda>>: "l" ~> Sets.delete
-        (Core.lambdaParameter $ var "l")
-        (freeVariablesInTerm @@ (Core.lambdaBody $ var "l"))],
+    _Term_lambda>>: "l" ~> Sets.delete
+      (Core.lambdaParameter $ var "l")
+      (freeVariablesInTerm @@ (Core.lambdaBody $ var "l")),
     _Term_let>>: "l" ~> Sets.difference
       (var "dfltVars" @@ unit)
       (Sets.fromList (Lists.map (unaryFunction Core.bindingName) (Core.letBindings $ var "l"))),
@@ -251,15 +247,12 @@ normalizeTypeVariablesInTerm = define "normalizeTypeVariablesInTerm" $
     "rewrite" <~ ("recurse" ~> "term" ~> cases _Term (var "term")
       (Just $ var "recurse" @@ var "term") [
       -- Lambdas have a "domain" type which needs to be rewritten
-      _Term_function>>: match _Function
-        (Just $ var "recurse" @@ var "term") [
-        _Function_elimination>>: constant $ var "recurse" @@ var "term",
-        _Function_lambda>>: "l" ~>
-          "domain" <~ Core.lambdaDomain (var "l") $
-          Core.termFunction $ Core.functionLambda $ Core.lambda
-            (Core.lambdaParameter $ var "l")
-            (Maybes.map (var "substType" @@ var "subst") (var "domain"))
-            (var "rewriteWithSubst" @@ (pair (pair (var "subst") (var "boundVars")) (var "next")) @@ (Core.lambdaBody $ var "l"))],
+      _Term_lambda>>: "l" ~>
+        "domain" <~ Core.lambdaDomain (var "l") $
+        Core.termLambda $ Core.lambda
+          (Core.lambdaParameter $ var "l")
+          (Maybes.map (var "substType" @@ var "subst") (var "domain"))
+          (var "rewriteWithSubst" @@ (pair (pair (var "subst") (var "boundVars")) (var "next")) @@ (Core.lambdaBody $ var "l")),
       -- Let bindings each have a type which needs to be rewritten
       _Term_let>>: "lt" ~>
         "bindings0" <~ Core.letBindings (var "lt") $
@@ -340,14 +333,11 @@ replaceFreeTermVariable = define "replaceFreeTermVariable" $
   "vold" ~> "tnew" ~> "term" ~>
   "rewrite" <~ ("recurse" ~> "t" ~> cases _Term (var "t")
     (Just $ var "recurse" @@ var "t") [
-    _Term_function>>: "f" ~>
-      cases _Function (var "f")
-        (Just $ var "recurse" @@ var "t") [
-        _Function_lambda>>: "l" ~>
-          "v" <~ Core.lambdaParameter (var "l") $
-          Logic.ifElse (Equality.equal (var "v") (var "vold"))
-            (var "t")
-            (var "recurse" @@ var "t")],
+    _Term_lambda>>: "l" ~>
+      "v" <~ Core.lambdaParameter (var "l") $
+      Logic.ifElse (Equality.equal (var "v") (var "vold"))
+        (var "t")
+        (var "recurse" @@ var "t"),
     _Term_variable>>: "v" ~>
       Logic.ifElse (Equality.equal (var "v") (var "vold"))
         (var "tnew")
@@ -393,12 +383,10 @@ substituteTypeVariablesInTerm = define "substituteTypeVariablesInTerm" $
   "replace" <~ ("recurse" ~> "t" ~>
     cases _Term (var "t")
       (Just $ var "recurse" @@ var "t") [
-      _Term_function>>: match _Function
-        (Just $ var "recurse" @@ var "t") [
-        _Function_lambda>>: "l" ~> Core.termFunction $ Core.functionLambda $ Core.lambda
-          (Core.lambdaParameter $ var "l")
-          (var "stOpt" @@ (Core.lambdaDomain $ var "l"))
-          (var "recurse" @@ (Core.lambdaBody $ var "l"))],
+      _Term_lambda>>: "l" ~> Core.termLambda $ Core.lambda
+        (Core.lambdaParameter $ var "l")
+        (var "stOpt" @@ (Core.lambdaDomain $ var "l"))
+        (var "recurse" @@ (Core.lambdaBody $ var "l")),
       _Term_let>>: "lt" ~>
         "mapBinding" <~ ("b" ~> Core.binding
           (Core.bindingName $ var "b")
@@ -427,12 +415,10 @@ substituteVariable = define "substituteVariable" $
       (Just $ var "recurse" @@ var "term") [
       _Term_variable>>: "x" ~>
         Core.termVariable $ Logic.ifElse (Equality.equal (var "x") (var "from")) (var "to") (var "x"),
-      _Term_function>>: match _Function
-        (Just $ var "recurse" @@ var "term") [
-        _Function_lambda>>: "l" ~> Logic.ifElse
-          (Equality.equal (Core.lambdaParameter $ var "l") (var "from"))
-          (var "term")
-          (var "recurse" @@ var "term")]]) $
+      _Term_lambda>>: "l" ~> Logic.ifElse
+        (Equality.equal (Core.lambdaParameter $ var "l") (var "from"))
+        (var "term")
+        (var "recurse" @@ var "term")]) $
   Rewriting.rewriteTerm @@ var "replace" @@ var "term"
 
 substituteVariables :: TTermDefinition (M.Map Name Name -> Term -> Term)
@@ -444,13 +430,11 @@ substituteVariables = define "substituteVariables" $
       (Just $ var "recurse" @@ var "term") [
       _Term_variable>>: "n" ~>
         Core.termVariable $ Maybes.fromMaybe (var "n") $ Maps.lookup (var "n") (var "subst"),
-      _Term_function>>: match _Function
-        (Just $ var "recurse" @@ var "term") [
-        _Function_lambda>>: "l" ~>
-          Maybes.maybe
-            (var "recurse" @@ var "term")
-            (constant $ var "term")
-            (Maps.lookup (Core.lambdaParameter $ var "l") (var "subst"))]]) $
+      _Term_lambda>>: "l" ~>
+        Maybes.maybe
+          (var "recurse" @@ var "term")
+          (constant $ var "term")
+          (Maps.lookup (Core.lambdaParameter $ var "l") (var "subst"))]) $
   Rewriting.rewriteTerm @@ var "replace" @@ var "term"
 
 unshadowVariables :: TTermDefinition (Term -> Term)
@@ -466,21 +450,19 @@ unshadowVariables = define "unshadowVariables" $
       (var "candidate")) $
   "f" <~ ("recurse" ~> "m" ~> "term" ~>
     cases _Term (var "term") (Just $ var "recurse" @@ var "m" @@ var "term") [
-    _Term_function>>: "fn" ~> cases _Function (var "fn")
-      (Just $ var "recurse" @@ var "m" @@ var "term") [
-      _Function_lambda>>: "l" ~>
-        "v" <~ Core.lambdaParameter (var "l") $
-        "domain" <~ Core.lambdaDomain (var "l") $
-        "body" <~ Core.lambdaBody (var "l") $
-        Logic.ifElse (Maps.member (var "v") (var "m"))
-          -- Shadowed: find a fresh name, add v -> fresh to map, recurse into body
-          ("v2" <~ var "freshName" @@ var "v" @@ int32 2 @@ var "m" $
-            "m2" <~ Maps.insert (var "v") (var "v2") (Maps.insert (var "v2") (var "v2") (var "m")) $
-            Core.termFunction $ Core.functionLambda $ Core.lambda (var "v2") (var "domain")
-              (var "f" @@ var "recurse" @@ var "m2" @@ var "body"))
-          -- First occurrence: register v -> v (identity), recurse into body
-          (Core.termFunction $ Core.functionLambda $ Core.lambda (var "v") (var "domain")
-            (var "f" @@ var "recurse" @@ Maps.insert (var "v") (var "v") (var "m") @@ var "body"))],
+    _Term_lambda>>: "l" ~>
+      "v" <~ Core.lambdaParameter (var "l") $
+      "domain" <~ Core.lambdaDomain (var "l") $
+      "body" <~ Core.lambdaBody (var "l") $
+      Logic.ifElse (Maps.member (var "v") (var "m"))
+        -- Shadowed: find a fresh name, add v -> fresh to map, recurse into body
+        ("v2" <~ var "freshName" @@ var "v" @@ int32 2 @@ var "m" $
+          "m2" <~ Maps.insert (var "v") (var "v2") (Maps.insert (var "v2") (var "v2") (var "m")) $
+          Core.termLambda $ Core.lambda (var "v2") (var "domain")
+            (var "f" @@ var "recurse" @@ var "m2" @@ var "body"))
+        -- First occurrence: register v -> v (identity), recurse into body
+        (Core.termLambda $ Core.lambda (var "v") (var "domain")
+          (var "f" @@ var "recurse" @@ Maps.insert (var "v") (var "v") (var "m") @@ var "body")),
     _Term_let>>: "lt" ~>
       -- Register all let-bound names as in-scope (identity mapping) so inner lambdas know about them
       "m2" <~ Lists.foldl ("acc" ~> "b" ~>

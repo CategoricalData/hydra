@@ -137,12 +137,10 @@ adaptIntegerType constraints it =
 adaptLambdaDomains :: Coders.LanguageConstraints -> M.Map Core.LiteralType Core.LiteralType -> (t0 -> Either Errors.Error Core.Term) -> t0 -> Either Errors.Error Core.Term
 adaptLambdaDomains constraints litmap recurse term =
     Eithers.bind (recurse term) (\rewritten -> case rewritten of
-      Core.TermFunction v0 -> case v0 of
-        Core.FunctionLambda v1 -> Eithers.bind (Maybes.maybe (Right Nothing) (\dom -> Eithers.bind (adaptType constraints litmap dom) (\dom1 -> Right (Just dom1))) (Core.lambdaDomain v1)) (\adaptedDomain -> Right (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-          Core.lambdaParameter = (Core.lambdaParameter v1),
-          Core.lambdaDomain = adaptedDomain,
-          Core.lambdaBody = (Core.lambdaBody v1)}))))
-        _ -> Right (Core.TermFunction v0)
+      Core.TermLambda v0 -> Eithers.bind (Maybes.maybe (Right Nothing) (\dom -> Eithers.bind (adaptType constraints litmap dom) (\dom1 -> Right (Just dom1))) (Core.lambdaDomain v0)) (\adaptedDomain -> Right (Core.TermLambda (Core.Lambda {
+        Core.lambdaParameter = (Core.lambdaParameter v0),
+        Core.lambdaDomain = adaptedDomain,
+        Core.lambdaBody = (Core.lambdaBody v0)})))
       _ -> Right rewritten)
 
 -- | Convert a literal to a different type
@@ -474,7 +472,7 @@ prepareType cx typ =
           _ -> v), msgs))
       _ -> prepareSame typ
 
--- | Normalize a term by pushing TermTypeApplication inward past TermApplication and TermFunction (Lambda). This corrects structures produced by poly-let hoisting and eta expansion, where type applications from inference end up wrapping term applications or lambda abstractions instead of being directly on the polymorphic variable.
+-- | Normalize a term by pushing TermTypeApplication inward past TermApplication and TermLambda. This corrects structures produced by poly-let hoisting and eta expansion, where type applications from inference end up wrapping term applications or lambda abstractions instead of being directly on the polymorphic variable.
 pushTypeAppsInward :: Core.Term -> Core.Term
 pushTypeAppsInward term =
 
@@ -485,16 +483,12 @@ pushTypeAppsInward term =
                     Core.typeApplicationTermBody = (Core.applicationFunction v0),
                     Core.typeApplicationTermType = typ})),
                   Core.applicationArgument = (Core.applicationArgument v0)}))
-                Core.TermFunction v0 -> case v0 of
-                  Core.FunctionLambda v1 -> go (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                    Core.lambdaParameter = (Core.lambdaParameter v1),
-                    Core.lambdaDomain = (Core.lambdaDomain v1),
-                    Core.lambdaBody = (Core.TermTypeApplication (Core.TypeApplicationTerm {
-                      Core.typeApplicationTermBody = (Core.lambdaBody v1),
-                      Core.typeApplicationTermType = typ}))})))
-                  _ -> Core.TermTypeApplication (Core.TypeApplicationTerm {
-                    Core.typeApplicationTermBody = (Core.TermFunction v0),
-                    Core.typeApplicationTermType = typ})
+                Core.TermLambda v0 -> go (Core.TermLambda (Core.Lambda {
+                  Core.lambdaParameter = (Core.lambdaParameter v0),
+                  Core.lambdaDomain = (Core.lambdaDomain v0),
+                  Core.lambdaBody = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+                    Core.typeApplicationTermBody = (Core.lambdaBody v0),
+                    Core.typeApplicationTermType = typ}))}))
                 Core.TermLet v0 -> go (Core.TermLet (Core.Let {
                   Core.letBindings = (Core.letBindings v0),
                   Core.letBody = (Core.TermTypeApplication (Core.TypeApplicationTerm {
@@ -509,21 +503,6 @@ pushTypeAppsInward term =
                             \fld -> Core.Field {
                               Core.fieldName = (Core.fieldName fld),
                               Core.fieldTerm = (go (Core.fieldTerm fld))}
-                        forElimination =
-                                \elm -> case elm of
-                                  Core.EliminationRecord v0 -> Core.EliminationRecord v0
-                                  Core.EliminationUnion v0 -> Core.EliminationUnion (Core.CaseStatement {
-                                    Core.caseStatementTypeName = (Core.caseStatementTypeName v0),
-                                    Core.caseStatementDefault = (Maybes.map go (Core.caseStatementDefault v0)),
-                                    Core.caseStatementCases = (Lists.map forField (Core.caseStatementCases v0))})
-                                  Core.EliminationWrap v0 -> Core.EliminationWrap v0
-                        forFunction =
-                                \fun -> case fun of
-                                  Core.FunctionElimination v0 -> Core.FunctionElimination (forElimination v0)
-                                  Core.FunctionLambda v0 -> Core.FunctionLambda (Core.Lambda {
-                                    Core.lambdaParameter = (Core.lambdaParameter v0),
-                                    Core.lambdaDomain = (Core.lambdaDomain v0),
-                                    Core.lambdaBody = (go (Core.lambdaBody v0))})
                         forLet =
                                 \lt ->
                                   let mapBinding =
@@ -545,14 +524,22 @@ pushTypeAppsInward term =
                       Core.TermApplication v0 -> Core.TermApplication (Core.Application {
                         Core.applicationFunction = (go (Core.applicationFunction v0)),
                         Core.applicationArgument = (go (Core.applicationArgument v0))})
+                      Core.TermCases v0 -> Core.TermCases (Core.CaseStatement {
+                        Core.caseStatementTypeName = (Core.caseStatementTypeName v0),
+                        Core.caseStatementDefault = (Maybes.map go (Core.caseStatementDefault v0)),
+                        Core.caseStatementCases = (Lists.map forField (Core.caseStatementCases v0))})
                       Core.TermEither v0 -> Core.TermEither (Eithers.either (\l -> Left (go l)) (\r -> Right (go r)) v0)
-                      Core.TermFunction v0 -> Core.TermFunction (forFunction v0)
+                      Core.TermLambda v0 -> Core.TermLambda (Core.Lambda {
+                        Core.lambdaParameter = (Core.lambdaParameter v0),
+                        Core.lambdaDomain = (Core.lambdaDomain v0),
+                        Core.lambdaBody = (go (Core.lambdaBody v0))})
                       Core.TermLet v0 -> Core.TermLet (forLet v0)
                       Core.TermList v0 -> Core.TermList (Lists.map go v0)
                       Core.TermLiteral v0 -> Core.TermLiteral v0
                       Core.TermMap v0 -> Core.TermMap (forMap v0)
                       Core.TermMaybe v0 -> Core.TermMaybe (Maybes.map go v0)
                       Core.TermPair v0 -> Core.TermPair (go (Pairs.first v0), (go (Pairs.second v0)))
+                      Core.TermProject v0 -> Core.TermProject v0
                       Core.TermRecord v0 -> Core.TermRecord (Core.Record {
                         Core.recordTypeName = (Core.recordTypeName v0),
                         Core.recordFields = (Lists.map forField (Core.recordFields v0))})
@@ -567,6 +554,7 @@ pushTypeAppsInward term =
                         Core.injectionTypeName = (Core.injectionTypeName v0),
                         Core.injectionField = (forField (Core.injectionField v0))})
                       Core.TermUnit -> Core.TermUnit
+                      Core.TermUnwrap v0 -> Core.TermUnwrap v0
                       Core.TermVariable v0 -> Core.TermVariable v0
                       Core.TermWrap v0 -> Core.TermWrap (Core.WrappedTerm {
                         Core.wrappedTermTypeName = (Core.wrappedTermTypeName v0),

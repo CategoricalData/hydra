@@ -16,148 +16,74 @@
                           "literal": {
                             "string": "Run type inference on all terms in a TestGroup to ensure lambdas have domain types"}}}],
                     "body": {
-                      "function": {
-                        "lambda": {
-                          "body": {
-                            "function": {
-                              "lambda": {
-                                "body": {
-                                  "let": {
-                                    "bindings": [
-                                      {
-                                        "name": "name_",
-                                        "term": {
-                                          "application": {
-                                            "argument": {"variable": "tg"},
-                                            "function": {
-                                              "function": {
-                                                "elimination": {"record": {"field": "name", "typeName": "hydra.testing.TestGroup"}}}}}},
-                                        "type": {"type": {"literal": {"string": {}}}, "variables": []}},
-                                      {
-                                        "name": "desc",
-                                        "term": {
-                                          "application": {
-                                            "argument": {"variable": "tg"},
-                                            "function": {
-                                              "function": {
-                                                "elimination": {
-                                                  "record": {"field": "description", "typeName": "hydra.testing.TestGroup"}}}}}},
-                                        "type": {"type": {"maybe": {"literal": {"string": {}}}}, "variables": []}},
-                                      {
-                                        "name": "subgroups",
-                                        "term": {
-                                          "application": {
-                                            "argument": {"variable": "tg"},
-                                            "function": {
-                                              "function": {
-                                                "elimination": {
-                                                  "record": {"field": "subgroups", "typeName": "hydra.testing.TestGroup"}}}}}},
-                                        "type": {
-                                          "type": {"list": {"variable": "hydra.testing.TestGroup"}},
-                                          "variables": []}},
-                                      {
-                                        "name": "cases_",
-                                        "term": {
-                                          "application": {
-                                            "argument": {"variable": "tg"},
-                                            "function": {
-                                              "function": {
-                                                "elimination": {"record": {"field": "cases", "typeName": "hydra.testing.TestGroup"}}}}}},
-                                        "type": {
-                                          "type": {"list": {"variable": "hydra.testing.TestCaseWithMetadata"}},
-                                          "variables": []}}],
-                                    "body": {
+                      "lambda": {
+                        "body": {
+                          "lambda": {
+                            "body": {
+                              "let": {
+                                "bindings": [
+                                  {
+                                    "name": "name_",
+                                    "term": {
                                       "application": {
-                                        "argument": {
-                                          "function": {
-                                            "lambda": {
-                                              "body": {
-                                                "application": {
-                                                  "argument": {
-                                                    "application": {
-                                                      "argument": {"variable": "cases_"},
-                                                      "function": {
-                                                        "application": {
-                                                          "argument": {
-                                                            "function": {
-                                                              "lambda": {
-                                                                "body": {
-                                                                  "application": {
-                                                                    "argument": {"variable": "tc"},
-                                                                    "function": {
-                                                                      "application": {
-                                                                        "argument": {"variable": "g"},
-                                                                        "function": {
-                                                                          "typeApplication": {
-                                                                            "body": {
-                                                                              "typeApplication": {
-                                                                                "body": {"variable": "hydra.test.utils.inferTestCase"},
-                                                                                "type": {"variable": "t0"}}},
-                                                                            "type": {"variable": "t1"}}}}}}},
-                                                                "domain": {"variable": "hydra.testing.TestCaseWithMetadata"},
-                                                                "parameter": "tc"}}},
-                                                          "function": {
-                                                            "typeApplication": {
-                                                              "body": {
-                                                                "typeApplication": {
-                                                                  "body": {
-                                                                    "typeApplication": {
-                                                                      "body": {"variable": "hydra.lib.eithers.mapList"},
-                                                                      "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}},
-                                                                  "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}},
-                                                              "type": {"variable": "t1"}}}}}}},
-                                                  "function": {
-                                                    "application": {
-                                                      "argument": {
-                                                        "function": {
-                                                          "lambda": {
-                                                            "body": {
-                                                              "record": {
-                                                                "fields": [
-                                                                  {"name": "name", "term": {"variable": "name_"}},
-                                                                  {"name": "description", "term": {"variable": "desc"}},
-                                                                  {"name": "subgroups", "term": {"variable": "inferredSubgroups"}},
-                                                                  {"name": "cases", "term": {"variable": "inferredCases"}}],
-                                                                "typeName": "hydra.testing.TestGroup"}},
-                                                            "domain": {"list": {"variable": "hydra.testing.TestCaseWithMetadata"}},
-                                                            "parameter": "inferredCases"}}},
-                                                      "function": {
-                                                        "typeApplication": {
-                                                          "body": {
-                                                            "typeApplication": {
-                                                              "body": {
-                                                                "typeApplication": {
-                                                                  "body": {"variable": "hydra.lib.eithers.map"},
-                                                                  "type": {"list": {"variable": "hydra.testing.TestCaseWithMetadata"}}}},
-                                                              "type": {"variable": "hydra.testing.TestGroup"}}},
-                                                          "type": {"variable": "t1"}}}}}}},
-                                              "domain": {"list": {"variable": "hydra.testing.TestGroup"}},
-                                              "parameter": "inferredSubgroups"}}},
+                                        "argument": {"variable": "tg"},
+                                        "function": {"project": {"field": "name", "typeName": "hydra.testing.TestGroup"}}}},
+                                    "type": {"type": {"literal": {"string": {}}}, "variables": []}},
+                                  {
+                                    "name": "desc",
+                                    "term": {
+                                      "application": {
+                                        "argument": {"variable": "tg"},
                                         "function": {
+                                          "project": {"field": "description", "typeName": "hydra.testing.TestGroup"}}}},
+                                    "type": {"type": {"maybe": {"literal": {"string": {}}}}, "variables": []}},
+                                  {
+                                    "name": "subgroups",
+                                    "term": {
+                                      "application": {
+                                        "argument": {"variable": "tg"},
+                                        "function": {
+                                          "project": {"field": "subgroups", "typeName": "hydra.testing.TestGroup"}}}},
+                                    "type": {
+                                      "type": {"list": {"variable": "hydra.testing.TestGroup"}},
+                                      "variables": []}},
+                                  {
+                                    "name": "cases_",
+                                    "term": {
+                                      "application": {
+                                        "argument": {"variable": "tg"},
+                                        "function": {"project": {"field": "cases", "typeName": "hydra.testing.TestGroup"}}}},
+                                    "type": {
+                                      "type": {"list": {"variable": "hydra.testing.TestCaseWithMetadata"}},
+                                      "variables": []}}],
+                                "body": {
+                                  "application": {
+                                    "argument": {
+                                      "lambda": {
+                                        "body": {
                                           "application": {
                                             "argument": {
                                               "application": {
-                                                "argument": {"variable": "subgroups"},
+                                                "argument": {"variable": "cases_"},
                                                 "function": {
                                                   "application": {
                                                     "argument": {
-                                                      "function": {
-                                                        "lambda": {
-                                                          "body": {
-                                                            "application": {
-                                                              "argument": {"variable": "sg"},
-                                                              "function": {
-                                                                "application": {
-                                                                  "argument": {"variable": "g"},
-                                                                  "function": {
-                                                                    "typeApplication": {
-                                                                      "body": {
-                                                                        "typeApplication": {
-                                                                          "body": {"variable": "hydra.test.utils.inferTestGroupTerms"},
-                                                                          "type": {"variable": "t0"}}},
-                                                                      "type": {"variable": "t1"}}}}}}},
-                                                          "domain": {"variable": "hydra.testing.TestGroup"},
-                                                          "parameter": "sg"}}},
+                                                      "lambda": {
+                                                        "body": {
+                                                          "application": {
+                                                            "argument": {"variable": "tc"},
+                                                            "function": {
+                                                              "application": {
+                                                                "argument": {"variable": "g"},
+                                                                "function": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "typeApplication": {
+                                                                        "body": {"variable": "hydra.test.utils.inferTestCase"},
+                                                                        "type": {"variable": "t0"}}},
+                                                                    "type": {"variable": "t1"}}}}}}},
+                                                        "domain": {"variable": "hydra.testing.TestCaseWithMetadata"},
+                                                        "parameter": "tc"}},
                                                     "function": {
                                                       "typeApplication": {
                                                         "body": {
@@ -165,23 +91,83 @@
                                                             "body": {
                                                               "typeApplication": {
                                                                 "body": {"variable": "hydra.lib.eithers.mapList"},
-                                                                "type": {"variable": "hydra.testing.TestGroup"}}},
-                                                            "type": {"variable": "hydra.testing.TestGroup"}}},
+                                                                "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}},
+                                                            "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}},
                                                         "type": {"variable": "t1"}}}}}}},
                                             "function": {
-                                              "typeApplication": {
-                                                "body": {
+                                              "application": {
+                                                "argument": {
+                                                  "lambda": {
+                                                    "body": {
+                                                      "record": {
+                                                        "fields": [
+                                                          {"name": "name", "term": {"variable": "name_"}},
+                                                          {"name": "description", "term": {"variable": "desc"}},
+                                                          {"name": "subgroups", "term": {"variable": "inferredSubgroups"}},
+                                                          {"name": "cases", "term": {"variable": "inferredCases"}}],
+                                                        "typeName": "hydra.testing.TestGroup"}},
+                                                    "domain": {"list": {"variable": "hydra.testing.TestCaseWithMetadata"}},
+                                                    "parameter": "inferredCases"}},
+                                                "function": {
                                                   "typeApplication": {
                                                     "body": {
                                                       "typeApplication": {
-                                                        "body": {"variable": "hydra.lib.eithers.bind"},
-                                                        "type": {"variable": "t1"}}},
-                                                    "type": {"list": {"variable": "hydra.testing.TestGroup"}}}},
-                                                "type": {"variable": "hydra.testing.TestGroup"}}}}}}}}},
-                                "domain": {"variable": "hydra.testing.TestGroup"},
-                                "parameter": "tg"}}},
-                          "domain": {"variable": "t0"},
-                          "parameter": "g"}}}}},
+                                                        "body": {
+                                                          "typeApplication": {
+                                                            "body": {"variable": "hydra.lib.eithers.map"},
+                                                            "type": {"list": {"variable": "hydra.testing.TestCaseWithMetadata"}}}},
+                                                        "type": {"variable": "hydra.testing.TestGroup"}}},
+                                                    "type": {"variable": "t1"}}}}}}},
+                                        "domain": {"list": {"variable": "hydra.testing.TestGroup"}},
+                                        "parameter": "inferredSubgroups"}},
+                                    "function": {
+                                      "application": {
+                                        "argument": {
+                                          "application": {
+                                            "argument": {"variable": "subgroups"},
+                                            "function": {
+                                              "application": {
+                                                "argument": {
+                                                  "lambda": {
+                                                    "body": {
+                                                      "application": {
+                                                        "argument": {"variable": "sg"},
+                                                        "function": {
+                                                          "application": {
+                                                            "argument": {"variable": "g"},
+                                                            "function": {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {"variable": "hydra.test.utils.inferTestGroupTerms"},
+                                                                    "type": {"variable": "t0"}}},
+                                                                "type": {"variable": "t1"}}}}}}},
+                                                    "domain": {"variable": "hydra.testing.TestGroup"},
+                                                    "parameter": "sg"}},
+                                                "function": {
+                                                  "typeApplication": {
+                                                    "body": {
+                                                      "typeApplication": {
+                                                        "body": {
+                                                          "typeApplication": {
+                                                            "body": {"variable": "hydra.lib.eithers.mapList"},
+                                                            "type": {"variable": "hydra.testing.TestGroup"}}},
+                                                        "type": {"variable": "hydra.testing.TestGroup"}}},
+                                                    "type": {"variable": "t1"}}}}}}},
+                                        "function": {
+                                          "typeApplication": {
+                                            "body": {
+                                              "typeApplication": {
+                                                "body": {
+                                                  "typeApplication": {
+                                                    "body": {"variable": "hydra.lib.eithers.bind"},
+                                                    "type": {"variable": "t1"}}},
+                                                "type": {"list": {"variable": "hydra.testing.TestGroup"}}}},
+                                            "type": {"variable": "hydra.testing.TestGroup"}}}}}}}}},
+                            "domain": {"variable": "hydra.testing.TestGroup"},
+                            "parameter": "tg"}},
+                        "domain": {"variable": "t0"},
+                        "parameter": "g"}}}},
                 "parameter": "t1"}},
             "parameter": "t0"}},
         "type": {
@@ -211,94 +197,83 @@
                         "@value": {
                           "literal": {"string": "Run type inference on the terms in a test case"}}}],
                     "body": {
-                      "function": {
-                        "lambda": {
-                          "body": {
-                            "function": {
-                              "lambda": {
+                      "lambda": {
+                        "body": {
+                          "lambda": {
+                            "body": {
+                              "let": {
+                                "bindings": [
+                                  {
+                                    "name": "name_",
+                                    "term": {
+                                      "application": {
+                                        "argument": {"variable": "tcm"},
+                                        "function": {
+                                          "project": {"field": "name", "typeName": "hydra.testing.TestCaseWithMetadata"}}}},
+                                    "type": {"type": {"literal": {"string": {}}}, "variables": []}},
+                                  {
+                                    "name": "tcase",
+                                    "term": {
+                                      "application": {
+                                        "argument": {"variable": "tcm"},
+                                        "function": {
+                                          "project": {"field": "case", "typeName": "hydra.testing.TestCaseWithMetadata"}}}},
+                                    "type": {"type": {"variable": "hydra.testing.TestCase"}, "variables": []}},
+                                  {
+                                    "name": "desc",
+                                    "term": {
+                                      "application": {
+                                        "argument": {"variable": "tcm"},
+                                        "function": {
+                                          "project": {
+                                            "field": "description",
+                                            "typeName": "hydra.testing.TestCaseWithMetadata"}}}},
+                                    "type": {"type": {"maybe": {"literal": {"string": {}}}}, "variables": []}},
+                                  {
+                                    "name": "tags_",
+                                    "term": {
+                                      "application": {
+                                        "argument": {"variable": "tcm"},
+                                        "function": {
+                                          "project": {"field": "tags", "typeName": "hydra.testing.TestCaseWithMetadata"}}}},
+                                    "type": {"type": {"list": {"variable": "hydra.testing.Tag"}}, "variables": []}}],
                                 "body": {
-                                  "let": {
-                                    "bindings": [
-                                      {
-                                        "name": "name_",
-                                        "term": {
-                                          "application": {
-                                            "argument": {"variable": "tcm"},
-                                            "function": {
-                                              "function": {
-                                                "elimination": {
-                                                  "record": {"field": "name", "typeName": "hydra.testing.TestCaseWithMetadata"}}}}}},
-                                        "type": {"type": {"literal": {"string": {}}}, "variables": []}},
-                                      {
-                                        "name": "tcase",
-                                        "term": {
-                                          "application": {
-                                            "argument": {"variable": "tcm"},
-                                            "function": {
-                                              "function": {
-                                                "elimination": {
-                                                  "record": {"field": "case", "typeName": "hydra.testing.TestCaseWithMetadata"}}}}}},
-                                        "type": {"type": {"variable": "hydra.testing.TestCase"}, "variables": []}},
-                                      {
-                                        "name": "desc",
-                                        "term": {
-                                          "application": {
-                                            "argument": {"variable": "tcm"},
-                                            "function": {
-                                              "function": {
-                                                "elimination": {
-                                                  "record": {
-                                                    "field": "description",
-                                                    "typeName": "hydra.testing.TestCaseWithMetadata"}}}}}},
-                                        "type": {"type": {"maybe": {"literal": {"string": {}}}}, "variables": []}},
-                                      {
-                                        "name": "tags_",
-                                        "term": {
-                                          "application": {
-                                            "argument": {"variable": "tcm"},
-                                            "function": {
-                                              "function": {
-                                                "elimination": {
-                                                  "record": {"field": "tags", "typeName": "hydra.testing.TestCaseWithMetadata"}}}}}},
-                                        "type": {"type": {"list": {"variable": "hydra.testing.Tag"}}, "variables": []}}],
-                                    "body": {
+                                  "application": {
+                                    "argument": {
+                                      "typeApplication": {
+                                        "body": {
+                                          "typeApplication": {
+                                            "body": {"either": {"@right": {"variable": "tcase"}}},
+                                            "type": {"variable": "t1"}}},
+                                        "type": {"variable": "hydra.testing.TestCase"}}},
+                                    "function": {
                                       "application": {
                                         "argument": {
+                                          "lambda": {
+                                            "body": {
+                                              "record": {
+                                                "fields": [
+                                                  {"name": "name", "term": {"variable": "name_"}},
+                                                  {"name": "case", "term": {"variable": "inferredCase"}},
+                                                  {"name": "description", "term": {"variable": "desc"}},
+                                                  {"name": "tags", "term": {"variable": "tags_"}}],
+                                                "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                                            "domain": {"variable": "hydra.testing.TestCase"},
+                                            "parameter": "inferredCase"}},
+                                        "function": {
                                           "typeApplication": {
                                             "body": {
                                               "typeApplication": {
-                                                "body": {"either": {"@right": {"variable": "tcase"}}},
-                                                "type": {"variable": "t1"}}},
-                                            "type": {"variable": "hydra.testing.TestCase"}}},
-                                        "function": {
-                                          "application": {
-                                            "argument": {
-                                              "function": {
-                                                "lambda": {
-                                                  "body": {
-                                                    "record": {
-                                                      "fields": [
-                                                        {"name": "name", "term": {"variable": "name_"}},
-                                                        {"name": "case", "term": {"variable": "inferredCase"}},
-                                                        {"name": "description", "term": {"variable": "desc"}},
-                                                        {"name": "tags", "term": {"variable": "tags_"}}],
-                                                      "typeName": "hydra.testing.TestCaseWithMetadata"}},
-                                                  "domain": {"variable": "hydra.testing.TestCase"},
-                                                  "parameter": "inferredCase"}}},
-                                            "function": {
-                                              "typeApplication": {
                                                 "body": {
                                                   "typeApplication": {
-                                                    "body": {
-                                                      "typeApplication": {
-                                                        "body": {"variable": "hydra.lib.eithers.map"},
-                                                        "type": {"variable": "hydra.testing.TestCase"}}},
-                                                    "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}},
-                                                "type": {"variable": "t1"}}}}}}}}},
-                                "domain": {"variable": "hydra.testing.TestCaseWithMetadata"},
-                                "parameter": "tcm"}}},
-                          "domain": {"variable": "t0"},
-                          "parameter": "g"}}}}},
+                                                    "body": {"variable": "hydra.lib.eithers.map"},
+                                                    "type": {"variable": "hydra.testing.TestCase"}}},
+                                                "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}},
+                                            "type": {"variable": "t1"}}}}}}}}},
+                            "domain": {"variable": "hydra.testing.TestCaseWithMetadata"},
+                            "parameter": "tcm"}},
+                        "domain": {"variable": "t0"},
+                        "parameter": "g"}}}},
                 "parameter": "t1"}},
             "parameter": "t0"}},
         "type": {
@@ -323,65 +298,59 @@
                 "@key": "description",
                 "@value": {"literal": {"string": "Run type inference on a single term"}}}],
             "body": {
-              "function": {
-                "lambda": {
-                  "body": {
-                    "function": {
-                      "lambda": {
-                        "body": {
+              "lambda": {
+                "body": {
+                  "lambda": {
+                    "body": {
+                      "application": {
+                        "argument": {
                           "application": {
-                            "argument": {
+                            "argument": {"variable": "term"},
+                            "function": {
                               "application": {
-                                "argument": {"variable": "term"},
+                                "argument": {"variable": "g"},
                                 "function": {
                                   "application": {
-                                    "argument": {"variable": "g"},
+                                    "argument": {"variable": "hydra.lexical.emptyContext"},
+                                    "function": {"variable": "hydra.inference.inferInGraphContext"}}}}}}},
+                        "function": {
+                          "application": {
+                            "argument": {
+                              "lambda": {
+                                "body": {
+                                  "application": {
+                                    "argument": {"variable": "x"},
                                     "function": {
-                                      "application": {
-                                        "argument": {"variable": "hydra.lexical.emptyContext"},
-                                        "function": {"variable": "hydra.inference.inferInGraphContext"}}}}}}},
+                                      "project": {"field": "term", "typeName": "hydra.typing.InferenceResult"}}}},
+                                "domain": {"variable": "hydra.typing.InferenceResult"},
+                                "parameter": "x"}},
                             "function": {
                               "application": {
                                 "argument": {
-                                  "function": {
-                                    "lambda": {
-                                      "body": {
-                                        "application": {
-                                          "argument": {"variable": "x"},
-                                          "function": {
-                                            "function": {
-                                              "elimination": {
-                                                "record": {"field": "term", "typeName": "hydra.typing.InferenceResult"}}}}}},
-                                      "domain": {"variable": "hydra.typing.InferenceResult"},
-                                      "parameter": "x"}}},
+                                  "lambda": {
+                                    "body": {
+                                      "application": {
+                                        "argument": {"variable": "e"},
+                                        "function": {"variable": "hydra.show.errors.error"}}},
+                                    "domain": {"variable": "hydra.errors.Error"},
+                                    "parameter": "e"}},
                                 "function": {
-                                  "application": {
-                                    "argument": {
-                                      "function": {
-                                        "lambda": {
-                                          "body": {
-                                            "application": {
-                                              "argument": {"variable": "e"},
-                                              "function": {"variable": "hydra.show.errors.error"}}},
-                                          "domain": {"variable": "hydra.errors.Error"},
-                                          "parameter": "e"}}},
-                                    "function": {
+                                  "typeApplication": {
+                                    "body": {
                                       "typeApplication": {
                                         "body": {
                                           "typeApplication": {
                                             "body": {
                                               "typeApplication": {
-                                                "body": {
-                                                  "typeApplication": {
-                                                    "body": {"variable": "hydra.lib.eithers.bimap"},
-                                                    "type": {"variable": "hydra.errors.Error"}}},
-                                                "type": {"variable": "hydra.typing.InferenceResult"}}},
-                                            "type": {"literal": {"string": {}}}}},
-                                        "type": {"variable": "hydra.core.Term"}}}}}}}}},
-                        "domain": {"variable": "hydra.core.Term"},
-                        "parameter": "term"}}},
-                  "domain": {"variable": "hydra.graph.Graph"},
-                  "parameter": "g"}}}}},
+                                                "body": {"variable": "hydra.lib.eithers.bimap"},
+                                                "type": {"variable": "hydra.errors.Error"}}},
+                                            "type": {"variable": "hydra.typing.InferenceResult"}}},
+                                        "type": {"literal": {"string": {}}}}},
+                                    "type": {"variable": "hydra.core.Term"}}}}}}}}},
+                    "domain": {"variable": "hydra.core.Term"},
+                    "parameter": "term"}},
+                "domain": {"variable": "hydra.graph.Graph"},
+                "parameter": "g"}}}},
         "type": {
           "type": {
             "function": {

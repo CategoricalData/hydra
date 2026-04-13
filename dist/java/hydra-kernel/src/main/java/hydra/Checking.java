@@ -98,25 +98,10 @@ public interface Checking {
         }
 
         @Override
-        public hydra.util.Either<hydra.errors.Error_, java.lang.Void> visit(hydra.core.Term.Function f) {
-          return (f).value.accept(new hydra.core.Function.PartialVisitor<>() {
-            @Override
-            public hydra.util.Either<hydra.errors.Error_, java.lang.Void> otherwise(hydra.core.Function instance) {
-              return dflt.get();
-            }
-
-            @Override
-            public hydra.util.Either<hydra.errors.Error_, java.lang.Void> visit(hydra.core.Function.Elimination e) {
-              return dflt.get();
-            }
-
-            @Override
-            public hydra.util.Either<hydra.errors.Error_, java.lang.Void> visit(hydra.core.Function.Lambda l) {
-              return hydra.lib.eithers.Bind.apply(
-                (checkOptional).apply((l).value.domain),
-                (java.util.function.Function<java.lang.Void, hydra.util.Either<hydra.errors.Error_, java.lang.Void>>) (ignored -> (recurse).apply((l).value.body)));
-            }
-          });
+        public hydra.util.Either<hydra.errors.Error_, java.lang.Void> visit(hydra.core.Term.Lambda l) {
+          return hydra.lib.eithers.Bind.apply(
+            (checkOptional).apply((l).value.domain),
+            (java.util.function.Function<java.lang.Void, hydra.util.Either<hydra.errors.Error_, java.lang.Void>>) (ignored -> (recurse).apply((l).value.body)));
         }
 
         @Override
@@ -361,6 +346,15 @@ public interface Checking {
       }
 
       @Override
+      public hydra.util.Either<hydra.errors.Error_, hydra.util.Pair<hydra.core.Type, hydra.context.Context>> visit(hydra.core.Term.Cases v1) {
+        return hydra.Checking.typeOfCaseStatement(
+          cx1.get(),
+          tx,
+          typeArgs,
+          (v1).value);
+      }
+
+      @Override
       public hydra.util.Either<hydra.errors.Error_, hydra.util.Pair<hydra.core.Type, hydra.context.Context>> visit(hydra.core.Term.Either v1) {
         return hydra.Checking.typeOfEither(
           cx1.get(),
@@ -370,49 +364,12 @@ public interface Checking {
       }
 
       @Override
-      public hydra.util.Either<hydra.errors.Error_, hydra.util.Pair<hydra.core.Type, hydra.context.Context>> visit(hydra.core.Term.Function f) {
-        return (f).value.accept(new hydra.core.Function.PartialVisitor<>() {
-          @Override
-          public hydra.util.Either<hydra.errors.Error_, hydra.util.Pair<hydra.core.Type, hydra.context.Context>> visit(hydra.core.Function.Elimination elm) {
-            return (elm).value.accept(new hydra.core.Elimination.PartialVisitor<>() {
-              @Override
-              public hydra.util.Either<hydra.errors.Error_, hydra.util.Pair<hydra.core.Type, hydra.context.Context>> visit(hydra.core.Elimination.Record v1) {
-                return hydra.Checking.typeOfProjection(
-                  cx1.get(),
-                  tx,
-                  typeArgs,
-                  (v1).value);
-              }
-
-              @Override
-              public hydra.util.Either<hydra.errors.Error_, hydra.util.Pair<hydra.core.Type, hydra.context.Context>> visit(hydra.core.Elimination.Union v1) {
-                return hydra.Checking.typeOfCaseStatement(
-                  cx1.get(),
-                  tx,
-                  typeArgs,
-                  (v1).value);
-              }
-
-              @Override
-              public hydra.util.Either<hydra.errors.Error_, hydra.util.Pair<hydra.core.Type, hydra.context.Context>> visit(hydra.core.Elimination.Wrap v1) {
-                return hydra.Checking.typeOfUnwrap(
-                  cx1.get(),
-                  tx,
-                  typeArgs,
-                  (v1).value);
-              }
-            });
-          }
-
-          @Override
-          public hydra.util.Either<hydra.errors.Error_, hydra.util.Pair<hydra.core.Type, hydra.context.Context>> visit(hydra.core.Function.Lambda v1) {
-            return hydra.Checking.typeOfLambda(
-              cx1.get(),
-              tx,
-              typeArgs,
-              (v1).value);
-          }
-        });
+      public hydra.util.Either<hydra.errors.Error_, hydra.util.Pair<hydra.core.Type, hydra.context.Context>> visit(hydra.core.Term.Lambda v1) {
+        return hydra.Checking.typeOfLambda(
+          cx1.get(),
+          tx,
+          typeArgs,
+          (v1).value);
       }
 
       @Override
@@ -470,6 +427,15 @@ public interface Checking {
       }
 
       @Override
+      public hydra.util.Either<hydra.errors.Error_, hydra.util.Pair<hydra.core.Type, hydra.context.Context>> visit(hydra.core.Term.Project v1) {
+        return hydra.Checking.typeOfProjection(
+          cx1.get(),
+          tx,
+          typeArgs,
+          (v1).value);
+      }
+
+      @Override
       public hydra.util.Either<hydra.errors.Error_, hydra.util.Pair<hydra.core.Type, hydra.context.Context>> visit(hydra.core.Term.Record v1) {
         return hydra.Checking.typeOfRecord(
           cx1.get(),
@@ -520,6 +486,15 @@ public interface Checking {
           cx1.get(),
           tx,
           typeArgs);
+      }
+
+      @Override
+      public hydra.util.Either<hydra.errors.Error_, hydra.util.Pair<hydra.core.Type, hydra.context.Context>> visit(hydra.core.Term.Unwrap v1) {
+        return hydra.Checking.typeOfUnwrap(
+          cx1.get(),
+          tx,
+          typeArgs,
+          (v1).value);
       }
 
       @Override

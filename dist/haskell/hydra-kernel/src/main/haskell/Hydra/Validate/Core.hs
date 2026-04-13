@@ -92,27 +92,21 @@ checkTerm typed path cx term =
               _ -> Nothing
             _ -> Nothing,
           case fun of
-            Core.TermFunction v1 -> case v1 of
-              Core.FunctionLambda v2 ->
-                let param = Core.lambdaParameter v2
-                    body = Core.lambdaBody v2
-                in case body of
-                  Core.TermVariable v3 -> Logic.ifElse (Equality.equal param v3) (Just (Core_.InvalidTermErrorUnnecessaryIdentityApplication (Core_.UnnecessaryIdentityApplicationError {
-                    Core_.unnecessaryIdentityApplicationErrorLocation = path}))) Nothing
-                  _ -> Nothing
-              _ -> Nothing
+            Core.TermLambda v1 ->
+              let param = Core.lambdaParameter v1
+                  body = Core.lambdaBody v1
+              in case body of
+                Core.TermVariable v2 -> Logic.ifElse (Equality.equal param v2) (Just (Core_.InvalidTermErrorUnnecessaryIdentityApplication (Core_.UnnecessaryIdentityApplicationError {
+                  Core_.unnecessaryIdentityApplicationErrorLocation = path}))) Nothing
+                _ -> Nothing
             _ -> Nothing,
           case fun of
-            Core.TermFunction v1 -> case v1 of
-              Core.FunctionElimination v2 -> case v2 of
-                Core.EliminationWrap v3 -> case arg of
-                  Core.TermWrap v4 ->
-                    let wrapName = Core.wrappedTermTypeName v4
-                    in (Logic.ifElse (Equality.equal v3 wrapName) (Just (Core_.InvalidTermErrorRedundantWrapUnwrap (Core_.RedundantWrapUnwrapError {
-                      Core_.redundantWrapUnwrapErrorLocation = path,
-                      Core_.redundantWrapUnwrapErrorTypeName = v3}))) Nothing)
-                  _ -> Nothing
-                _ -> Nothing
+            Core.TermUnwrap v1 -> case arg of
+              Core.TermWrap v2 ->
+                let wrapName = Core.wrappedTermTypeName v2
+                in (Logic.ifElse (Equality.equal v1 wrapName) (Just (Core_.InvalidTermErrorRedundantWrapUnwrap (Core_.RedundantWrapUnwrapError {
+                  Core_.redundantWrapUnwrapErrorLocation = path,
+                  Core_.redundantWrapUnwrapErrorTypeName = v1}))) Nothing)
               _ -> Nothing
             _ -> Nothing])
       Core.TermRecord v0 ->
@@ -140,37 +134,33 @@ checkTerm typed path cx term =
         let tname = Core.injectionTypeName v0
         in (Logic.ifElse (Equality.equal (Core.unName tname) "") (Just (Core_.InvalidTermErrorEmptyTypeNameInTerm (Core_.EmptyTypeNameInTermError {
           Core_.emptyTypeNameInTermErrorLocation = path}))) Nothing)
-      Core.TermFunction v0 -> case v0 of
-        Core.FunctionLambda v1 ->
-          let paramName = Core.lambdaParameter v1
-          in (firstError [
-            Logic.ifElse (Maybes.isJust (Maps.lookup paramName (Graph.graphBoundTerms cx))) (Just (Core_.InvalidTermErrorTermVariableShadowing (Core_.TermVariableShadowingError {
-              Core_.termVariableShadowingErrorLocation = path,
-              Core_.termVariableShadowingErrorName = paramName}))) Nothing,
-            (Logic.ifElse (isValidName paramName) Nothing (Just (Core_.InvalidTermErrorInvalidLambdaParameterName (Core_.InvalidLambdaParameterNameError {
-              Core_.invalidLambdaParameterNameErrorLocation = path,
-              Core_.invalidLambdaParameterNameErrorName = paramName})))),
-            (Logic.ifElse typed (Maybes.cases (Core.lambdaDomain v1) Nothing (\dom -> checkUndefinedTypeVariablesInType path cx dom (\uvName -> Just (Core_.InvalidTermErrorUndefinedTypeVariableInLambdaDomain (Core_.UndefinedTypeVariableInLambdaDomainError {
-              Core_.undefinedTypeVariableInLambdaDomainErrorLocation = path,
-              Core_.undefinedTypeVariableInLambdaDomainErrorName = uvName}))))) Nothing)])
-        Core.FunctionElimination v1 -> case v1 of
-          Core.EliminationRecord v2 ->
-            let tname = Core.projectionTypeName v2
-            in (Logic.ifElse (Equality.equal (Core.unName tname) "") (Just (Core_.InvalidTermErrorEmptyTypeNameInTerm (Core_.EmptyTypeNameInTermError {
-              Core_.emptyTypeNameInTermErrorLocation = path}))) Nothing)
-          Core.EliminationUnion v2 ->
-            let tname = Core.caseStatementTypeName v2
-                csDefault = Core.caseStatementDefault v2
-                csCases = Core.caseStatementCases v2
-            in (firstError [
-              Logic.ifElse (Equality.equal (Core.unName tname) "") (Just (Core_.InvalidTermErrorEmptyTypeNameInTerm (Core_.EmptyTypeNameInTermError {
-                Core_.emptyTypeNameInTermErrorLocation = path}))) Nothing,
-              (Logic.ifElse (Logic.and (Lists.null csCases) (Maybes.isNothing csDefault)) (Just (Core_.InvalidTermErrorEmptyCaseStatement (Core_.EmptyCaseStatementError {
-                Core_.emptyCaseStatementErrorLocation = path,
-                Core_.emptyCaseStatementErrorTypeName = tname}))) Nothing),
-              (checkDuplicateFields path (Lists.map Core.fieldName csCases))])
-          _ -> Nothing
-        _ -> Nothing
+      Core.TermLambda v0 ->
+        let paramName = Core.lambdaParameter v0
+        in (firstError [
+          Logic.ifElse (Maybes.isJust (Maps.lookup paramName (Graph.graphBoundTerms cx))) (Just (Core_.InvalidTermErrorTermVariableShadowing (Core_.TermVariableShadowingError {
+            Core_.termVariableShadowingErrorLocation = path,
+            Core_.termVariableShadowingErrorName = paramName}))) Nothing,
+          (Logic.ifElse (isValidName paramName) Nothing (Just (Core_.InvalidTermErrorInvalidLambdaParameterName (Core_.InvalidLambdaParameterNameError {
+            Core_.invalidLambdaParameterNameErrorLocation = path,
+            Core_.invalidLambdaParameterNameErrorName = paramName})))),
+          (Logic.ifElse typed (Maybes.cases (Core.lambdaDomain v0) Nothing (\dom -> checkUndefinedTypeVariablesInType path cx dom (\uvName -> Just (Core_.InvalidTermErrorUndefinedTypeVariableInLambdaDomain (Core_.UndefinedTypeVariableInLambdaDomainError {
+            Core_.undefinedTypeVariableInLambdaDomainErrorLocation = path,
+            Core_.undefinedTypeVariableInLambdaDomainErrorName = uvName}))))) Nothing)])
+      Core.TermProject v0 ->
+        let tname = Core.projectionTypeName v0
+        in (Logic.ifElse (Equality.equal (Core.unName tname) "") (Just (Core_.InvalidTermErrorEmptyTypeNameInTerm (Core_.EmptyTypeNameInTermError {
+          Core_.emptyTypeNameInTermErrorLocation = path}))) Nothing)
+      Core.TermCases v0 ->
+        let tname = Core.caseStatementTypeName v0
+            csDefault = Core.caseStatementDefault v0
+            csCases = Core.caseStatementCases v0
+        in (firstError [
+          Logic.ifElse (Equality.equal (Core.unName tname) "") (Just (Core_.InvalidTermErrorEmptyTypeNameInTerm (Core_.EmptyTypeNameInTermError {
+            Core_.emptyTypeNameInTermErrorLocation = path}))) Nothing,
+          (Logic.ifElse (Logic.and (Lists.null csCases) (Maybes.isNothing csDefault)) (Just (Core_.InvalidTermErrorEmptyCaseStatement (Core_.EmptyCaseStatementError {
+            Core_.emptyCaseStatementErrorLocation = path,
+            Core_.emptyCaseStatementErrorTypeName = tname}))) Nothing),
+          (checkDuplicateFields path (Lists.map Core.fieldName csCases))])
       Core.TermTypeApplication v0 -> Logic.ifElse typed (checkUndefinedTypeVariablesInType path cx (Core.typeApplicationTermType v0) (\uvName -> Just (Core_.InvalidTermErrorUndefinedTypeVariableInTypeApplication (Core_.UndefinedTypeVariableInTypeApplicationError {
         Core_.undefinedTypeVariableInTypeApplicationErrorLocation = path,
         Core_.undefinedTypeVariableInTypeApplicationErrorName = uvName})))) Nothing

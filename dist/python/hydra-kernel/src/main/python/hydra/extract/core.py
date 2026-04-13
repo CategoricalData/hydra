@@ -122,26 +122,12 @@ def boolean(graph: hydra.graph.Graph, t: hydra.core.Term) -> Either[hydra.errors
 def cases(name: hydra.core.Name, graph: hydra.graph.Graph, term0: hydra.core.Term):
     def _hoist_hydra_extract_core_cases_1(name, term, v1):
         match v1:
-            case hydra.core.EliminationUnion(value=cs):
+            case hydra.core.TermCases(value=cs):
                 return hydra.lib.logic.if_else(hydra.lib.equality.equal(cs.type_name.value, name.value), (lambda : Right(cs)), (lambda : Left(cast(hydra.errors.Error, hydra.errors.ErrorExtraction(cast(hydra.errors.ExtractionError, hydra.errors.ExtractionErrorUnexpectedShape(hydra.errors.UnexpectedShapeError(hydra.lib.strings.cat2("case statement for type ", name.value), hydra.show.core.term(term)))))))))
 
             case _:
                 return Left(cast(hydra.errors.Error, hydra.errors.ErrorExtraction(cast(hydra.errors.ExtractionError, hydra.errors.ExtractionErrorUnexpectedShape(hydra.errors.UnexpectedShapeError("case statement", hydra.show.core.term(term)))))))
-    def _hoist_hydra_extract_core_cases_2(name, term, v1):
-        match v1:
-            case hydra.core.FunctionElimination(value=elimination):
-                return _hoist_hydra_extract_core_cases_1(name, term, elimination)
-
-            case _:
-                return Left(cast(hydra.errors.Error, hydra.errors.ErrorExtraction(cast(hydra.errors.ExtractionError, hydra.errors.ExtractionErrorUnexpectedShape(hydra.errors.UnexpectedShapeError("case statement", hydra.show.core.term(term)))))))
-    def _hoist_hydra_extract_core_cases_3(name, term, v1):
-        match v1:
-            case hydra.core.TermFunction(value=function):
-                return _hoist_hydra_extract_core_cases_2(name, term, function)
-
-            case _:
-                return Left(cast(hydra.errors.Error, hydra.errors.ErrorExtraction(cast(hydra.errors.ExtractionError, hydra.errors.ExtractionErrorUnexpectedShape(hydra.errors.UnexpectedShapeError("case statement", hydra.show.core.term(term)))))))
-    return hydra.lib.eithers.bind(hydra.lexical.strip_and_dereference_term(graph, term0), (lambda term: _hoist_hydra_extract_core_cases_3(name, term, term)))
+    return hydra.lib.eithers.bind(hydra.lexical.strip_and_dereference_term(graph, term0), (lambda term: _hoist_hydra_extract_core_cases_1(name, term, term)))
 
 def case_field(name: hydra.core.Name, n: str, graph: hydra.graph.Graph, term: hydra.core.Term) -> Either[hydra.errors.Error, hydra.core.Field]:
     r"""Extract a specific case handler from a case statement term."""
@@ -391,19 +377,12 @@ def integer_value(graph: hydra.graph.Graph, t: hydra.core.Term) -> Either[hydra.
 def lambda_(graph: hydra.graph.Graph, term0: hydra.core.Term):
     def _hoist_hydra_extract_core_lambda_1(term, v1):
         match v1:
-            case hydra.core.FunctionLambda(value=l):
+            case hydra.core.TermLambda(value=l):
                 return Right(l)
 
             case _:
                 return Left(cast(hydra.errors.Error, hydra.errors.ErrorExtraction(cast(hydra.errors.ExtractionError, hydra.errors.ExtractionErrorUnexpectedShape(hydra.errors.UnexpectedShapeError("lambda", hydra.show.core.term(term)))))))
-    def _hoist_hydra_extract_core_lambda_2(term, v1):
-        match v1:
-            case hydra.core.TermFunction(value=function):
-                return _hoist_hydra_extract_core_lambda_1(term, function)
-
-            case _:
-                return Left(cast(hydra.errors.Error, hydra.errors.ErrorExtraction(cast(hydra.errors.ExtractionError, hydra.errors.ExtractionErrorUnexpectedShape(hydra.errors.UnexpectedShapeError("lambda", hydra.show.core.term(term)))))))
-    return hydra.lib.eithers.bind(hydra.lexical.strip_and_dereference_term(graph, term0), (lambda term: _hoist_hydra_extract_core_lambda_2(term, term)))
+    return hydra.lib.eithers.bind(hydra.lexical.strip_and_dereference_term(graph, term0), (lambda term: _hoist_hydra_extract_core_lambda_1(term, term)))
 
 def lambda_body(graph: hydra.graph.Graph, term: hydra.core.Term) -> Either[hydra.errors.Error, hydra.core.Term]:
     r"""Extract the body of a lambda term."""

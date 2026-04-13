@@ -193,34 +193,28 @@ checkTerm = define "checkTerm" $
                   noError]],
         -- T16. UnnecessaryIdentityApplicationError: (\x -> x) applied to arg
         cases _Term (var "fun") (Just noError) [
-          _Term_function>>: "f" ~>
-            cases _Function (var "f") (Just noError) [
-              _Function_lambda>>: "lam" ~>
-                "param" <~ Core.lambdaParameter (var "lam") $
-                "body" <~ Core.lambdaBody (var "lam") $
-                cases _Term (var "body") (Just noError) [
-                  _Term_variable>>: "bodyVar" ~>
-                    Logic.ifElse (Equality.equal (var "param") (var "bodyVar"))
-                      (mkJust $ inject _InvalidTermError _InvalidTermError_unnecessaryIdentityApplication $
-                        record _UnnecessaryIdentityApplicationError [
-                          _UnnecessaryIdentityApplicationError_location>>: var "path"])
-                      noError]]],
+          _Term_lambda>>: "lam" ~>
+            "param" <~ Core.lambdaParameter (var "lam") $
+            "body" <~ Core.lambdaBody (var "lam") $
+            cases _Term (var "body") (Just noError) [
+              _Term_variable>>: "bodyVar" ~>
+                Logic.ifElse (Equality.equal (var "param") (var "bodyVar"))
+                  (mkJust $ inject _InvalidTermError _InvalidTermError_unnecessaryIdentityApplication $
+                    record _UnnecessaryIdentityApplicationError [
+                      _UnnecessaryIdentityApplicationError_location>>: var "path"])
+                  noError]],
         -- T14. RedundantWrapUnwrapError: unwrap(n) applied to wrap(n, _)
         cases _Term (var "fun") (Just noError) [
-          _Term_function>>: "f" ~>
-            cases _Function (var "f") (Just noError) [
-              _Function_elimination>>: "elim" ~>
-                cases _Elimination (var "elim") (Just noError) [
-                  _Elimination_wrap>>: "unwrapName" ~>
-                    cases _Term (var "arg") (Just noError) [
-                      _Term_wrap>>: "wt" ~>
-                        "wrapName" <~ Core.wrappedTermTypeName (var "wt") $
-                        Logic.ifElse (Equality.equal (var "unwrapName") (var "wrapName"))
-                          (mkJust $ inject _InvalidTermError _InvalidTermError_redundantWrapUnwrap $
-                            record _RedundantWrapUnwrapError [
-                              _RedundantWrapUnwrapError_location>>: var "path",
-                              _RedundantWrapUnwrapError_typeName>>: var "unwrapName"])
-                          noError]]]]],
+          _Term_unwrap>>: "unwrapName" ~>
+            cases _Term (var "arg") (Just noError) [
+              _Term_wrap>>: "wt" ~>
+                "wrapName" <~ Core.wrappedTermTypeName (var "wt") $
+                Logic.ifElse (Equality.equal (var "unwrapName") (var "wrapName"))
+                  (mkJust $ inject _InvalidTermError _InvalidTermError_redundantWrapUnwrap $
+                    record _RedundantWrapUnwrapError [
+                      _RedundantWrapUnwrapError_location>>: var "path",
+                      _RedundantWrapUnwrapError_typeName>>: var "unwrapName"])
+                  noError]]],
 
     -- T5: TermRecord — check for empty type name, duplicate fields
     _Term_record>>: "rec" ~>
@@ -289,78 +283,72 @@ checkTerm = define "checkTerm" $
             _EmptyTypeNameInTermError_location>>: var "path"])
         noError,
 
-    -- T11/T22/T5: TermFunction — check for shadowing, unknown primitives, empty type names
-    _Term_function>>: "fun" ~>
-      cases _Function (var "fun") (Just noError) [
-        -- T11/T17/T8: Lambda — shadowing, naming, undefined type vars in domain
-        _Function_lambda>>: "lam" ~>
-          "paramName" <~ Core.lambdaParameter (var "lam") $
-          firstError @@ list [
-            -- T11. TermVariableShadowingError
-            -- Note: the graph has already been extended with this lambda's parameter.
-            -- We check graphBoundTerms (not modified by lambdas) to detect let-to-lambda shadowing.
-            -- Lambda-to-lambda shadowing is not detected here due to the pre-extension.
-            Logic.ifElse
-              (Maybes.isJust $ Maps.lookup (var "paramName") (Graph.graphBoundTerms $ var "cx"))
-              (mkJust $ inject _InvalidTermError _InvalidTermError_termVariableShadowing $
-                record _TermVariableShadowingError [
-                  _TermVariableShadowingError_location>>: var "path",
-                  _TermVariableShadowingError_name>>: var "paramName"])
-              noError,
-            -- T17. InvalidLambdaParameterNameError
-            Logic.ifElse (isValidName @@ var "paramName")
-              noError
-              (mkJust $ inject _InvalidTermError _InvalidTermError_invalidLambdaParameterName $
-                record _InvalidLambdaParameterNameError [
-                  _InvalidLambdaParameterNameError_location>>: var "path",
-                  _InvalidLambdaParameterNameError_name>>: var "paramName"]),
-            -- T8. UndefinedTypeVariableInLambdaDomainError (typed mode only)
-            Logic.ifElse (var "typed")
-              (Maybes.cases (Core.lambdaDomain $ var "lam")
-                noError
-                ("dom" ~> checkUndefinedTypeVariablesInType
-                  @@ var "path" @@ var "cx" @@ var "dom"
-                  @@ ("uvName" ~>
-                    mkJust $ inject _InvalidTermError _InvalidTermError_undefinedTypeVariableInLambdaDomain $
-                      record _UndefinedTypeVariableInLambdaDomainError [
-                        _UndefinedTypeVariableInLambdaDomainError_location>>: var "path",
-                        _UndefinedTypeVariableInLambdaDomainError_name>>: var "uvName"])))
-              noError],
-        -- Elimination checks
-        _Function_elimination>>: "elim" ~>
-          cases _Elimination (var "elim") (Just noError) [
-            -- T5: Projection — check empty type name
-            _Elimination_record>>: "proj" ~>
-              "tname" <~ Core.projectionTypeName (var "proj") $
-              Logic.ifElse (Equality.equal (Core.unName $ var "tname") (string ""))
-                (mkJust $ inject _InvalidTermError _InvalidTermError_emptyTypeNameInTerm $
-                  record _EmptyTypeNameInTermError [
-                    _EmptyTypeNameInTermError_location>>: var "path"])
-                noError,
-            -- T4/T5/T6: CaseStatement — check empty type name, empty cases, duplicate case fields
-            _Elimination_union>>: "cs" ~>
-              "tname" <~ Core.caseStatementTypeName (var "cs") $
-              "csDefault" <~ Core.caseStatementDefault (var "cs") $
-              "csCases" <~ Core.caseStatementCases (var "cs") $
-              firstError @@ list [
-                -- T5. EmptyTypeNameInTermError
-                Logic.ifElse (Equality.equal (Core.unName $ var "tname") (string ""))
-                  (mkJust $ inject _InvalidTermError _InvalidTermError_emptyTypeNameInTerm $
-                    record _EmptyTypeNameInTermError [
-                      _EmptyTypeNameInTermError_location>>: var "path"])
-                  noError,
-                -- T6. EmptyCaseStatementError
-                Logic.ifElse
-                  (Logic.and (Lists.null $ var "csCases") (Maybes.isNothing $ var "csDefault"))
-                  (mkJust $ inject _InvalidTermError _InvalidTermError_emptyCaseStatement $
-                    record _EmptyCaseStatementError [
-                      _EmptyCaseStatementError_location>>: var "path",
-                      _EmptyCaseStatementError_typeName>>: var "tname"])
-                  noError,
-                -- T4. DuplicateCaseStatementFieldNamesError (via DuplicateFieldError)
-                checkDuplicateFields @@ var "path" @@ (Lists.map
-                  (unaryFunction Core.fieldName)
-                  (var "csCases"))]]],
+    -- T11/T17/T8: Lambda — shadowing, naming, undefined type vars in domain
+    _Term_lambda>>: "lam" ~>
+      "paramName" <~ Core.lambdaParameter (var "lam") $
+      firstError @@ list [
+        -- T11. TermVariableShadowingError
+        -- Note: the graph has already been extended with this lambda's parameter.
+        -- We check graphBoundTerms (not modified by lambdas) to detect let-to-lambda shadowing.
+        -- Lambda-to-lambda shadowing is not detected here due to the pre-extension.
+        Logic.ifElse
+          (Maybes.isJust $ Maps.lookup (var "paramName") (Graph.graphBoundTerms $ var "cx"))
+          (mkJust $ inject _InvalidTermError _InvalidTermError_termVariableShadowing $
+            record _TermVariableShadowingError [
+              _TermVariableShadowingError_location>>: var "path",
+              _TermVariableShadowingError_name>>: var "paramName"])
+          noError,
+        -- T17. InvalidLambdaParameterNameError
+        Logic.ifElse (isValidName @@ var "paramName")
+          noError
+          (mkJust $ inject _InvalidTermError _InvalidTermError_invalidLambdaParameterName $
+            record _InvalidLambdaParameterNameError [
+              _InvalidLambdaParameterNameError_location>>: var "path",
+              _InvalidLambdaParameterNameError_name>>: var "paramName"]),
+        -- T8. UndefinedTypeVariableInLambdaDomainError (typed mode only)
+        Logic.ifElse (var "typed")
+          (Maybes.cases (Core.lambdaDomain $ var "lam")
+            noError
+            ("dom" ~> checkUndefinedTypeVariablesInType
+              @@ var "path" @@ var "cx" @@ var "dom"
+              @@ ("uvName" ~>
+                mkJust $ inject _InvalidTermError _InvalidTermError_undefinedTypeVariableInLambdaDomain $
+                  record _UndefinedTypeVariableInLambdaDomainError [
+                    _UndefinedTypeVariableInLambdaDomainError_location>>: var "path",
+                    _UndefinedTypeVariableInLambdaDomainError_name>>: var "uvName"])))
+          noError],
+    -- T5: Projection — check empty type name
+    _Term_project>>: "proj" ~>
+      "tname" <~ Core.projectionTypeName (var "proj") $
+      Logic.ifElse (Equality.equal (Core.unName $ var "tname") (string ""))
+        (mkJust $ inject _InvalidTermError _InvalidTermError_emptyTypeNameInTerm $
+          record _EmptyTypeNameInTermError [
+            _EmptyTypeNameInTermError_location>>: var "path"])
+        noError,
+    -- T4/T5/T6: CaseStatement — check empty type name, empty cases, duplicate case fields
+    _Term_cases>>: "cs" ~>
+      "tname" <~ Core.caseStatementTypeName (var "cs") $
+      "csDefault" <~ Core.caseStatementDefault (var "cs") $
+      "csCases" <~ Core.caseStatementCases (var "cs") $
+      firstError @@ list [
+        -- T5. EmptyTypeNameInTermError
+        Logic.ifElse (Equality.equal (Core.unName $ var "tname") (string ""))
+          (mkJust $ inject _InvalidTermError _InvalidTermError_emptyTypeNameInTerm $
+            record _EmptyTypeNameInTermError [
+              _EmptyTypeNameInTermError_location>>: var "path"])
+          noError,
+        -- T6. EmptyCaseStatementError
+        Logic.ifElse
+          (Logic.and (Lists.null $ var "csCases") (Maybes.isNothing $ var "csDefault"))
+          (mkJust $ inject _InvalidTermError _InvalidTermError_emptyCaseStatement $
+            record _EmptyCaseStatementError [
+              _EmptyCaseStatementError_location>>: var "path",
+              _EmptyCaseStatementError_typeName>>: var "tname"])
+          noError,
+        -- T4. DuplicateCaseStatementFieldNamesError (via DuplicateFieldError)
+        checkDuplicateFields @@ var "path" @@ (Lists.map
+          (unaryFunction Core.fieldName)
+          (var "csCases"))],
 
     -- T9. UndefinedTypeVariableInTypeApplicationError (typed mode only)
     _Term_typeApplication>>: "ta" ~>

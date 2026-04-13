@@ -180,7 +180,7 @@ generateRecordAccessor origType typeName ft =
                     Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.phantoms.TTerm")),
                     Core.applicationTypeArgument = (nominalResultType typeName origType)})
           body =
-                  Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                  Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "x"),
                     Core.lambdaDomain = (Just paramDomain),
                     Core.lambdaBody = (Core.TermWrap (Core.WrappedTerm {
@@ -197,33 +197,25 @@ generateRecordAccessor origType typeName ft =
                                 Core.fieldTerm = (Core.TermUnion (Core.Injection {
                                   Core.injectionTypeName = (Core.Name "hydra.core.Term"),
                                   Core.injectionField = Core.Field {
-                                    Core.fieldName = (Core.Name "function"),
-                                    Core.fieldTerm = (Core.TermUnion (Core.Injection {
-                                      Core.injectionTypeName = (Core.Name "hydra.core.Function"),
-                                      Core.injectionField = Core.Field {
-                                        Core.fieldName = (Core.Name "elimination"),
-                                        Core.fieldTerm = (Core.TermUnion (Core.Injection {
-                                          Core.injectionTypeName = (Core.Name "hydra.core.Elimination"),
-                                          Core.injectionField = Core.Field {
-                                            Core.fieldName = (Core.Name "record"),
-                                            Core.fieldTerm = (Core.TermRecord (Core.Record {
-                                              Core.recordTypeName = (Core.Name "hydra.core.Projection"),
-                                              Core.recordFields = [
-                                                Core.Field {
-                                                  Core.fieldName = (Core.Name "typeName"),
-                                                  Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
-                                                    Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
-                                                    Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString (Core.unName typeName)))}))},
-                                                Core.Field {
-                                                  Core.fieldName = (Core.Name "field"),
-                                                  Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
-                                                    Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
-                                                    Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString (Core.unName fieldName)))}))}]}))}}))}}))}}))},
+                                    Core.fieldName = (Core.Name "project"),
+                                    Core.fieldTerm = (Core.TermRecord (Core.Record {
+                                      Core.recordTypeName = (Core.Name "hydra.core.Projection"),
+                                      Core.recordFields = [
+                                        Core.Field {
+                                          Core.fieldName = (Core.Name "typeName"),
+                                          Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
+                                            Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
+                                            Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString (Core.unName typeName)))}))},
+                                        Core.Field {
+                                          Core.fieldName = (Core.Name "field"),
+                                          Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
+                                            Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
+                                            Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString (Core.unName fieldName)))}))}]}))}}))},
                               Core.Field {
                                 Core.fieldName = (Core.Name "argument"),
                                 Core.fieldTerm = (Core.TermApplication (Core.Application {
-                                  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.phantoms.TTerm")))),
-                                  Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}]}))}}))}))}))
+                                  Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.phantoms.TTerm")),
+                                  Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}]}))}}))}))})
           ts = dslTypeScheme origType [
                 nominalResultType typeName origType] (Core.fieldTypeType ft)
       in Core.Binding {
@@ -247,7 +239,7 @@ generateRecordConstructor origType typeName fieldTypes =
                   Core.Field {
                     Core.fieldName = (Core.Name "term"),
                     Core.fieldTerm = (Core.TermApplication (Core.Application {
-                      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.phantoms.TTerm")))),
+                      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.phantoms.TTerm")),
                       Core.applicationArgument = (Core.TermVariable (Core.Name (Formatting.decapitalize (Names.localNameOf (Core.fieldTypeName ft)))))}))}]})) fieldTypes
           recordTerm =
                   Core.TermWrap (Core.WrappedTerm {
@@ -272,10 +264,10 @@ generateRecordConstructor origType typeName fieldTypes =
                     Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.phantoms.TTerm")),
                     Core.applicationTypeArgument = (Core.fieldTypeType ft)})))) fieldTypes
           body =
-                  Lists.foldl (\acc -> \pp -> Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                  Lists.foldl (\acc -> \pp -> Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name (Pairs.first pp)),
                     Core.lambdaDomain = (Just (Pairs.second pp)),
-                    Core.lambdaBody = acc}))) recordTerm (Lists.reverse paramPairs)
+                    Core.lambdaBody = acc})) recordTerm (Lists.reverse paramPairs)
           paramTypes = Lists.map (\ft -> Core.fieldTypeType ft) fieldTypes
           resultType = nominalResultType typeName origType
           ts = dslTypeScheme origType paramTypes resultType
@@ -308,7 +300,7 @@ generateRecordWithUpdater origType typeName allFields targetField =
                       Core.Field {
                         Core.fieldName = (Core.Name "term"),
                         Core.fieldTerm = (Logic.ifElse (Equality.equal (Core.unName (Core.fieldTypeName ft)) (Core.unName targetFieldName)) (Core.TermApplication (Core.Application {
-                          Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.phantoms.TTerm")))),
+                          Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.phantoms.TTerm")),
                           Core.applicationArgument = (Core.TermVariable (Core.Name "newVal"))})) (Core.TermUnion (Core.Injection {
                           Core.injectionTypeName = (Core.Name "hydra.core.Term"),
                           Core.injectionField = Core.Field {
@@ -321,32 +313,24 @@ generateRecordWithUpdater origType typeName allFields targetField =
                                   Core.fieldTerm = (Core.TermUnion (Core.Injection {
                                     Core.injectionTypeName = (Core.Name "hydra.core.Term"),
                                     Core.injectionField = Core.Field {
-                                      Core.fieldName = (Core.Name "function"),
-                                      Core.fieldTerm = (Core.TermUnion (Core.Injection {
-                                        Core.injectionTypeName = (Core.Name "hydra.core.Function"),
-                                        Core.injectionField = Core.Field {
-                                          Core.fieldName = (Core.Name "elimination"),
-                                          Core.fieldTerm = (Core.TermUnion (Core.Injection {
-                                            Core.injectionTypeName = (Core.Name "hydra.core.Elimination"),
-                                            Core.injectionField = Core.Field {
-                                              Core.fieldName = (Core.Name "record"),
-                                              Core.fieldTerm = (Core.TermRecord (Core.Record {
-                                                Core.recordTypeName = (Core.Name "hydra.core.Projection"),
-                                                Core.recordFields = [
-                                                  Core.Field {
-                                                    Core.fieldName = (Core.Name "typeName"),
-                                                    Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
-                                                      Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
-                                                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString (Core.unName typeName)))}))},
-                                                  Core.Field {
-                                                    Core.fieldName = (Core.Name "field"),
-                                                    Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
-                                                      Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
-                                                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString (Core.unName (Core.fieldTypeName ft))))}))}]}))}}))}}))}}))},
+                                      Core.fieldName = (Core.Name "project"),
+                                      Core.fieldTerm = (Core.TermRecord (Core.Record {
+                                        Core.recordTypeName = (Core.Name "hydra.core.Projection"),
+                                        Core.recordFields = [
+                                          Core.Field {
+                                            Core.fieldName = (Core.Name "typeName"),
+                                            Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
+                                              Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
+                                              Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString (Core.unName typeName)))}))},
+                                          Core.Field {
+                                            Core.fieldName = (Core.Name "field"),
+                                            Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
+                                              Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
+                                              Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString (Core.unName (Core.fieldTypeName ft))))}))}]}))}}))},
                                 Core.Field {
                                   Core.fieldName = (Core.Name "argument"),
                                   Core.fieldTerm = (Core.TermApplication (Core.Application {
-                                    Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.phantoms.TTerm")))),
+                                    Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.phantoms.TTerm")),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "original"))}))}]}))}})))}]})) allFields
           recDomain =
                   Core.TypeApplication (Core.ApplicationType {
@@ -357,10 +341,10 @@ generateRecordWithUpdater origType typeName allFields targetField =
                     Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.phantoms.TTerm")),
                     Core.applicationTypeArgument = (Core.fieldTypeType targetField)})
           body =
-                  Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                  Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "original"),
                     Core.lambdaDomain = (Just recDomain),
-                    Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                    Core.lambdaBody = (Core.TermLambda (Core.Lambda {
                       Core.lambdaParameter = (Core.Name "newVal"),
                       Core.lambdaDomain = (Just fieldDomain),
                       Core.lambdaBody = (Core.TermWrap (Core.WrappedTerm {
@@ -379,7 +363,7 @@ generateRecordWithUpdater origType typeName allFields targetField =
                                     Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString (Core.unName typeName)))}))},
                                 Core.Field {
                                   Core.fieldName = (Core.Name "fields"),
-                                  Core.fieldTerm = (Core.TermList dFields)}]}))}}))}))})))}))
+                                  Core.fieldTerm = (Core.TermList dFields)}]}))}}))}))}))})
           recType = nominalResultType typeName origType
           ts =
                   dslTypeScheme origType [
@@ -411,7 +395,7 @@ generateUnionInjector origType typeName ft =
                     Core.injectionField = Core.Field {
                       Core.fieldName = (Core.Name "unit"),
                       Core.fieldTerm = Core.TermUnit}})) (Core.TermApplication (Core.Application {
-                    Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.phantoms.TTerm")))),
+                    Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.phantoms.TTerm")),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))
           injectionTerm =
                   Core.TermWrap (Core.WrappedTerm {
@@ -446,10 +430,10 @@ generateUnionInjector origType typeName ft =
                     Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.phantoms.TTerm")),
                     Core.applicationTypeArgument = (Core.fieldTypeType ft)})
           body =
-                  Logic.ifElse isUnit injectionTerm (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                  Logic.ifElse isUnit injectionTerm (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "x"),
                     Core.lambdaDomain = (Just variantDomain),
-                    Core.lambdaBody = injectionTerm})))
+                    Core.lambdaBody = injectionTerm}))
           unionType = nominalResultType typeName origType
           ts = Logic.ifElse isUnit (dslTypeScheme origType [] unionType) (dslTypeScheme origType [
                 Core.fieldTypeType ft] unionType)
@@ -475,7 +459,7 @@ generateWrappedTypeAccessors origType typeName innerType =
                     Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.phantoms.TTerm")),
                     Core.applicationTypeArgument = innerType})
           wrapBody =
-                  Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                  Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "x"),
                     Core.lambdaDomain = (Just wrapDomain),
                     Core.lambdaBody = (Core.TermWrap (Core.WrappedTerm {
@@ -495,14 +479,14 @@ generateWrappedTypeAccessors origType typeName innerType =
                               Core.Field {
                                 Core.fieldName = (Core.Name "body"),
                                 Core.fieldTerm = (Core.TermApplication (Core.Application {
-                                  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.phantoms.TTerm")))),
-                                  Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}]}))}}))}))}))
+                                  Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.phantoms.TTerm")),
+                                  Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}]}))}}))}))})
           unwrapDomain =
                   Core.TypeApplication (Core.ApplicationType {
                     Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.phantoms.TTerm")),
                     Core.applicationTypeArgument = wrapperType})
           unwrapBody =
-                  Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                  Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "x"),
                     Core.lambdaDomain = (Just unwrapDomain),
                     Core.lambdaBody = (Core.TermWrap (Core.WrappedTerm {
@@ -519,23 +503,15 @@ generateWrappedTypeAccessors origType typeName innerType =
                                 Core.fieldTerm = (Core.TermUnion (Core.Injection {
                                   Core.injectionTypeName = (Core.Name "hydra.core.Term"),
                                   Core.injectionField = Core.Field {
-                                    Core.fieldName = (Core.Name "function"),
-                                    Core.fieldTerm = (Core.TermUnion (Core.Injection {
-                                      Core.injectionTypeName = (Core.Name "hydra.core.Function"),
-                                      Core.injectionField = Core.Field {
-                                        Core.fieldName = (Core.Name "elimination"),
-                                        Core.fieldTerm = (Core.TermUnion (Core.Injection {
-                                          Core.injectionTypeName = (Core.Name "hydra.core.Elimination"),
-                                          Core.injectionField = Core.Field {
-                                            Core.fieldName = (Core.Name "wrap"),
-                                            Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
-                                              Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
-                                              Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString (Core.unName typeName)))}))}}))}}))}}))},
+                                    Core.fieldName = (Core.Name "unwrap"),
+                                    Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
+                                      Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
+                                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString (Core.unName typeName)))}))}}))},
                               Core.Field {
                                 Core.fieldName = (Core.Name "argument"),
                                 Core.fieldTerm = (Core.TermApplication (Core.Application {
-                                  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.phantoms.TTerm")))),
-                                  Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}]}))}}))}))}))
+                                  Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.phantoms.TTerm")),
+                                  Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}]}))}}))}))})
           wrapTs = dslTypeScheme origType [
                 innerType] wrapperType
           unwrapTs = dslTypeScheme origType [

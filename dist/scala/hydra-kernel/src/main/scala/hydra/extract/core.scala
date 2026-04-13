@@ -57,15 +57,8 @@ def caseField(name: hydra.core.Name)(n: scala.Predef.String)(graph: hydra.graph.
 def cases(name: hydra.core.Name)(graph: hydra.graph.Graph)(term0: hydra.core.Term): Either[hydra.errors.Error, hydra.core.CaseStatement] =
   hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Term, hydra.core.CaseStatement](hydra.lexical.stripAndDereferenceTerm(graph)(term0))((term: hydra.core.Term) =>
   term match
-  case hydra.core.Term.function(v_Term_function_function) => v_Term_function_function match
-    case hydra.core.Function.elimination(v_Function_elimination_elimination) => v_Function_elimination_elimination match
-      case hydra.core.Elimination.union(v_Elimination_union_cs) => hydra.lib.logic.ifElse[Either[hydra.errors.Error,
-         hydra.core.CaseStatement]](hydra.lib.equality.equal[scala.Predef.String](v_Elimination_union_cs.typeName)(name))(Right(v_Elimination_union_cs))(Left(hydra.errors.Error.extraction(hydra.errors.ExtractionError.unexpectedShape(hydra.errors.UnexpectedShapeError(hydra.lib.strings.cat2("case statement for type ")(name),
-         hydra.show.core.term(term))))))
-      case _ => Left(hydra.errors.Error.extraction(hydra.errors.ExtractionError.unexpectedShape(hydra.errors.UnexpectedShapeError("case statement",
-         hydra.show.core.term(term)))))
-    case _ => Left(hydra.errors.Error.extraction(hydra.errors.ExtractionError.unexpectedShape(hydra.errors.UnexpectedShapeError("case statement",
-       hydra.show.core.term(term)))))
+  case hydra.core.Term.cases(v_Term_cases_cs) => hydra.lib.logic.ifElse[Either[hydra.errors.Error, hydra.core.CaseStatement]](hydra.lib.equality.equal[scala.Predef.String](v_Term_cases_cs.typeName)(name))(Right(v_Term_cases_cs))(Left(hydra.errors.Error.extraction(hydra.errors.ExtractionError.unexpectedShape(hydra.errors.UnexpectedShapeError(hydra.lib.strings.cat2("case statement for type ")(name),
+     hydra.show.core.term(term))))))
   case _ => Left(hydra.errors.Error.extraction(hydra.errors.ExtractionError.unexpectedShape(hydra.errors.UnexpectedShapeError("case statement",
      hydra.show.core.term(term))))))
 
@@ -270,10 +263,7 @@ def integerValue(graph: hydra.graph.Graph)(t: hydra.core.Term): Either[hydra.err
 def lambda(graph: hydra.graph.Graph)(term0: hydra.core.Term): Either[hydra.errors.Error, hydra.core.Lambda] =
   hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Term, hydra.core.Lambda](hydra.lexical.stripAndDereferenceTerm(graph)(term0))((term: hydra.core.Term) =>
   term match
-  case hydra.core.Term.function(v_Term_function_function) => v_Term_function_function match
-    case hydra.core.Function.lambda(v_Function_lambda_l) => Right(v_Function_lambda_l)
-    case _ => Left(hydra.errors.Error.extraction(hydra.errors.ExtractionError.unexpectedShape(hydra.errors.UnexpectedShapeError("lambda",
-       hydra.show.core.term(term)))))
+  case hydra.core.Term.lambda(v_Term_lambda_l) => Right(v_Term_lambda_l)
   case _ => Left(hydra.errors.Error.extraction(hydra.errors.ExtractionError.unexpectedShape(hydra.errors.UnexpectedShapeError("lambda",
      hydra.show.core.term(term))))))
 

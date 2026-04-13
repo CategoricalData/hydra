@@ -10,51 +10,44 @@
                 "@key": "description",
                 "@value": {"literal": {"string": "Show a case convention as a string"}}}],
             "body": {
-              "function": {
-                "lambda": {
-                  "body": {
-                    "application": {
-                      "argument": {"variable": "c"},
-                      "function": {
-                        "function": {
-                          "elimination": {
-                            "union": {
-                              "cases": [
-                                {
-                                  "name": "lowerSnake",
-                                  "term": {
-                                    "function": {
-                                      "lambda": {
-                                        "body": {"literal": {"string": "lower_snake_case"}},
-                                        "domain": {"unit": {}},
-                                        "parameter": "_"}}}},
-                                {
-                                  "name": "upperSnake",
-                                  "term": {
-                                    "function": {
-                                      "lambda": {
-                                        "body": {"literal": {"string": "UPPER_SNAKE_CASE"}},
-                                        "domain": {"unit": {}},
-                                        "parameter": "_"}}}},
-                                {
-                                  "name": "camel",
-                                  "term": {
-                                    "function": {
-                                      "lambda": {
-                                        "body": {"literal": {"string": "camelCase"}},
-                                        "domain": {"unit": {}},
-                                        "parameter": "_"}}}},
-                                {
-                                  "name": "pascal",
-                                  "term": {
-                                    "function": {
-                                      "lambda": {
-                                        "body": {"literal": {"string": "PascalCase"}},
-                                        "domain": {"unit": {}},
-                                        "parameter": "_"}}}}],
-                              "typeName": "hydra.util.CaseConvention"}}}}}},
-                  "domain": {"variable": "hydra.util.CaseConvention"},
-                  "parameter": "c"}}}}},
+              "lambda": {
+                "body": {
+                  "application": {
+                    "argument": {"variable": "c"},
+                    "function": {
+                      "cases": {
+                        "cases": [
+                          {
+                            "name": "lowerSnake",
+                            "term": {
+                              "lambda": {
+                                "body": {"literal": {"string": "lower_snake_case"}},
+                                "domain": {"unit": {}},
+                                "parameter": "_"}}},
+                          {
+                            "name": "upperSnake",
+                            "term": {
+                              "lambda": {
+                                "body": {"literal": {"string": "UPPER_SNAKE_CASE"}},
+                                "domain": {"unit": {}},
+                                "parameter": "_"}}},
+                          {
+                            "name": "camel",
+                            "term": {
+                              "lambda": {
+                                "body": {"literal": {"string": "camelCase"}},
+                                "domain": {"unit": {}},
+                                "parameter": "_"}}},
+                          {
+                            "name": "pascal",
+                            "term": {
+                              "lambda": {
+                                "body": {"literal": {"string": "PascalCase"}},
+                                "domain": {"unit": {}},
+                                "parameter": "_"}}}],
+                        "typeName": "hydra.util.CaseConvention"}}}},
+                "domain": {"variable": "hydra.util.CaseConvention"},
+                "parameter": "c"}}}},
         "type": {
           "type": {
             "function": {
@@ -71,43 +64,37 @@
                 "@key": "description",
                 "@value": {"literal": {"string": "Show a comparison result as a string"}}}],
             "body": {
-              "function": {
-                "lambda": {
-                  "body": {
-                    "application": {
-                      "argument": {"variable": "c"},
-                      "function": {
-                        "function": {
-                          "elimination": {
-                            "union": {
-                              "cases": [
-                                {
-                                  "name": "lessThan",
-                                  "term": {
-                                    "function": {
-                                      "lambda": {
-                                        "body": {"literal": {"string": "lessThan"}},
-                                        "domain": {"unit": {}},
-                                        "parameter": "_"}}}},
-                                {
-                                  "name": "equalTo",
-                                  "term": {
-                                    "function": {
-                                      "lambda": {
-                                        "body": {"literal": {"string": "equalTo"}},
-                                        "domain": {"unit": {}},
-                                        "parameter": "_"}}}},
-                                {
-                                  "name": "greaterThan",
-                                  "term": {
-                                    "function": {
-                                      "lambda": {
-                                        "body": {"literal": {"string": "greaterThan"}},
-                                        "domain": {"unit": {}},
-                                        "parameter": "_"}}}}],
-                              "typeName": "hydra.util.Comparison"}}}}}},
-                  "domain": {"variable": "hydra.util.Comparison"},
-                  "parameter": "c"}}}}},
+              "lambda": {
+                "body": {
+                  "application": {
+                    "argument": {"variable": "c"},
+                    "function": {
+                      "cases": {
+                        "cases": [
+                          {
+                            "name": "lessThan",
+                            "term": {
+                              "lambda": {
+                                "body": {"literal": {"string": "lessThan"}},
+                                "domain": {"unit": {}},
+                                "parameter": "_"}}},
+                          {
+                            "name": "equalTo",
+                            "term": {
+                              "lambda": {
+                                "body": {"literal": {"string": "equalTo"}},
+                                "domain": {"unit": {}},
+                                "parameter": "_"}}},
+                          {
+                            "name": "greaterThan",
+                            "term": {
+                              "lambda": {
+                                "body": {"literal": {"string": "greaterThan"}},
+                                "domain": {"unit": {}},
+                                "parameter": "_"}}}],
+                        "typeName": "hydra.util.Comparison"}}}},
+                "domain": {"variable": "hydra.util.Comparison"},
+                "parameter": "c"}}}},
         "type": {
           "type": {
             "function": {

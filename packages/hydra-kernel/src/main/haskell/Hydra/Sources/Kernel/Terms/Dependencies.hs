@@ -188,9 +188,7 @@ isLambda = define "isLambda" $
   doc "Check whether a term is a lambda, possibly nested within let and/or annotation terms" $
   "term" ~> cases _Term (Strip.deannotateTerm @@ var "term")
     (Just false) [
-    _Term_function>>: match _Function
-      (Just false) [
-      _Function_lambda>>: constant true],
+    _Term_lambda>>: constant true,
     _Term_let>>: "lt" ~> isLambda @@ (project _Let _Let_body @@ var "lt")]
 
 -- TODO: account for shadowing among let- and lambda-bound variables
@@ -208,13 +206,11 @@ liftLambdaAboveLet = define "liftLambdaAboveLet" $
         @@ var "original"
         @@ ("t" ~> Core.termAnnotated $ Core.annotatedTermWithBody (var "at") (var "cons" @@ var "t"))
         @@ (Core.annotatedTermBody $ var "at"),
-      _Term_function>>: "f" ~> cases _Function (var "f")
-        (Just $ var "recurse" @@ var "original") [
-        _Function_lambda>>: "l" ~> Core.termFunction $ Core.functionLambda $ Core.lambdaWithBody (var "l") $
-          var "digForLambdas"
-            @@ (var "cons" @@ (Core.lambdaBody $ var "l"))
-            @@ ("t" ~> var "cons" @@ var "t")
-            @@ (Core.lambdaBody $ var "l")],
+      _Term_lambda>>: "l" ~> Core.termLambda $ Core.lambdaWithBody (var "l") $
+        var "digForLambdas"
+          @@ (var "cons" @@ (Core.lambdaBody $ var "l"))
+          @@ ("t" ~> var "cons" @@ var "t")
+          @@ (Core.lambdaBody $ var "l"),
       _Term_let>>: "l" ~> var "digForLambdas"
         @@ var "original"
         @@ ("t" ~> var "cons" @@ (Core.termLet $ Core.let_ (var "rewriteBindings" @@ (Core.letBindings $ var "l")) (var "t")))
@@ -291,17 +287,14 @@ simplifyTerm = define "simplifyTerm" $
       _Term_variable>>: "v" ~>
         simplifyTerm @@ (Variables.substituteVariable @@ var "var" @@ var "v" @@ var "body")]) $
     "forLhs" <~ ("lhs" ~> "rhs" ~>
-      "forFun" <~ ("fun" ~> cases _Function (var "fun")
+      cases _Term (Strip.deannotateTerm @@ var "lhs")
         (Just $ var "term") [
-        _Function_lambda>>: "l" ~>
+        _Term_lambda>>: "l" ~>
           "var" <~ Core.lambdaParameter (var "l") $
           "body" <~ Core.lambdaBody (var "l") $
           Logic.ifElse (Sets.member (var "var") (Variables.freeVariablesInTerm @@ var "body"))
             (var "forRhs" @@ var "rhs" @@ var "var" @@ var "body")
             (simplifyTerm @@ var "body")]) $
-      cases _Term (Strip.deannotateTerm @@ var "lhs")
-        (Just $ var "term") [
-        _Term_function>>: "fun" ~> var "forFun" @@ var "fun"]) $
     "forTerm" <~ ("stripped" ~> cases _Term (var "stripped")
       (Just $ var "term") [
       _Term_application>>: "app" ~>
@@ -328,13 +321,9 @@ termDependencyNames = define "termDependencyNames" $
       (var "names")) $
     cases _Term (var "term")
       (Just $ var "names") [
-      _Term_function>>: "f" ~> cases _Function (var "f")
-        (Just $ var "names") [
-        _Function_elimination>>: "e" ~> cases _Elimination (var "e")
-          Nothing [
-          _Elimination_record>>: "proj" ~> var "nominal" @@ (Core.projectionTypeName $ var "proj"),
-          _Elimination_union>>: "caseStmt" ~> var "nominal" @@ (Core.caseStatementTypeName $ var "caseStmt"),
-          _Elimination_wrap>>: "name" ~> var "nominal" @@ var "name"]],
+      _Term_cases>>: "caseStmt" ~> var "nominal" @@ (Core.caseStatementTypeName $ var "caseStmt"),
+      _Term_project>>: "proj" ~> var "nominal" @@ (Core.projectionTypeName $ var "proj"),
+      _Term_unwrap>>: "name" ~> var "nominal" @@ var "name",
       _Term_record>>: "record" ~> var "nominal" @@ (Core.recordTypeName $ var "record"),
       _Term_union>>: "injection" ~> var "nominal" @@ (Core.injectionTypeName $ var "injection"),
       _Term_variable>>: "name" ~> var "var" @@ var "name",

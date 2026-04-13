@@ -26,17 +26,17 @@ orderingIsomorphism encode decode =
 orderingIsomorphismDecode :: Phantoms.TTerm (Topology.OrderingIsomorphism a) -> Phantoms.TTerm ([a] -> [a])
 orderingIsomorphismDecode x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.topology.OrderingIsomorphism"),
-        Core.projectionField = (Core.Name "decode")})))),
+        Core.projectionField = (Core.Name "decode")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 orderingIsomorphismEncode :: Phantoms.TTerm (Topology.OrderingIsomorphism a) -> Phantoms.TTerm ([a] -> [a])
 orderingIsomorphismEncode x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.topology.OrderingIsomorphism"),
-        Core.projectionField = (Core.Name "encode")})))),
+        Core.projectionField = (Core.Name "encode")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 orderingIsomorphismWithDecode :: Phantoms.TTerm (Topology.OrderingIsomorphism a) -> Phantoms.TTerm ([a] -> [a]) -> Phantoms.TTerm (Topology.OrderingIsomorphism a)
@@ -47,9 +47,9 @@ orderingIsomorphismWithDecode original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "encode"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.topology.OrderingIsomorphism"),
-              Core.projectionField = (Core.Name "encode")})))),
+              Core.projectionField = (Core.Name "encode")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "decode"),
@@ -66,9 +66,9 @@ orderingIsomorphismWithEncode original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "decode"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.topology.OrderingIsomorphism"),
-              Core.projectionField = (Core.Name "decode")})))),
+              Core.projectionField = (Core.Name "decode")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 tarjanState :: Phantoms.TTerm Int -> Phantoms.TTerm (M.Map Topology.Vertex Int) -> Phantoms.TTerm (M.Map Topology.Vertex Int) -> Phantoms.TTerm [Topology.Vertex] -> Phantoms.TTerm (S.Set Topology.Vertex) -> Phantoms.TTerm [[Topology.Vertex]] -> Phantoms.TTerm Topology.TarjanState
@@ -98,49 +98,49 @@ tarjanState counter indices lowLinks stack onStack sccs =
 tarjanStateCounter :: Phantoms.TTerm Topology.TarjanState -> Phantoms.TTerm Int
 tarjanStateCounter x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.topology.TarjanState"),
-        Core.projectionField = (Core.Name "counter")})))),
+        Core.projectionField = (Core.Name "counter")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 tarjanStateIndices :: Phantoms.TTerm Topology.TarjanState -> Phantoms.TTerm (M.Map Topology.Vertex Int)
 tarjanStateIndices x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.topology.TarjanState"),
-        Core.projectionField = (Core.Name "indices")})))),
+        Core.projectionField = (Core.Name "indices")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 tarjanStateLowLinks :: Phantoms.TTerm Topology.TarjanState -> Phantoms.TTerm (M.Map Topology.Vertex Int)
 tarjanStateLowLinks x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.topology.TarjanState"),
-        Core.projectionField = (Core.Name "lowLinks")})))),
+        Core.projectionField = (Core.Name "lowLinks")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 tarjanStateOnStack :: Phantoms.TTerm Topology.TarjanState -> Phantoms.TTerm (S.Set Topology.Vertex)
 tarjanStateOnStack x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.topology.TarjanState"),
-        Core.projectionField = (Core.Name "onStack")})))),
+        Core.projectionField = (Core.Name "onStack")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 tarjanStateSccs :: Phantoms.TTerm Topology.TarjanState -> Phantoms.TTerm [[Topology.Vertex]]
 tarjanStateSccs x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.topology.TarjanState"),
-        Core.projectionField = (Core.Name "sccs")})))),
+        Core.projectionField = (Core.Name "sccs")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 tarjanStateStack :: Phantoms.TTerm Topology.TarjanState -> Phantoms.TTerm [Topology.Vertex]
 tarjanStateStack x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.topology.TarjanState"),
-        Core.projectionField = (Core.Name "stack")})))),
+        Core.projectionField = (Core.Name "stack")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 tarjanStateWithCounter :: Phantoms.TTerm Topology.TarjanState -> Phantoms.TTerm Int -> Phantoms.TTerm Topology.TarjanState
@@ -154,37 +154,37 @@ tarjanStateWithCounter original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "indices"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.topology.TarjanState"),
-              Core.projectionField = (Core.Name "indices")})))),
+              Core.projectionField = (Core.Name "indices")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "lowLinks"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.topology.TarjanState"),
-              Core.projectionField = (Core.Name "lowLinks")})))),
+              Core.projectionField = (Core.Name "lowLinks")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "stack"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.topology.TarjanState"),
-              Core.projectionField = (Core.Name "stack")})))),
+              Core.projectionField = (Core.Name "stack")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "onStack"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.topology.TarjanState"),
-              Core.projectionField = (Core.Name "onStack")})))),
+              Core.projectionField = (Core.Name "onStack")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "sccs"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.topology.TarjanState"),
-              Core.projectionField = (Core.Name "sccs")})))),
+              Core.projectionField = (Core.Name "sccs")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 tarjanStateWithIndices :: Phantoms.TTerm Topology.TarjanState -> Phantoms.TTerm (M.Map Topology.Vertex Int) -> Phantoms.TTerm Topology.TarjanState
@@ -195,9 +195,9 @@ tarjanStateWithIndices original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "counter"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.topology.TarjanState"),
-              Core.projectionField = (Core.Name "counter")})))),
+              Core.projectionField = (Core.Name "counter")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "indices"),
@@ -205,30 +205,30 @@ tarjanStateWithIndices original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "lowLinks"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.topology.TarjanState"),
-              Core.projectionField = (Core.Name "lowLinks")})))),
+              Core.projectionField = (Core.Name "lowLinks")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "stack"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.topology.TarjanState"),
-              Core.projectionField = (Core.Name "stack")})))),
+              Core.projectionField = (Core.Name "stack")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "onStack"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.topology.TarjanState"),
-              Core.projectionField = (Core.Name "onStack")})))),
+              Core.projectionField = (Core.Name "onStack")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "sccs"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.topology.TarjanState"),
-              Core.projectionField = (Core.Name "sccs")})))),
+              Core.projectionField = (Core.Name "sccs")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 tarjanStateWithLowLinks :: Phantoms.TTerm Topology.TarjanState -> Phantoms.TTerm (M.Map Topology.Vertex Int) -> Phantoms.TTerm Topology.TarjanState
@@ -239,16 +239,16 @@ tarjanStateWithLowLinks original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "counter"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.topology.TarjanState"),
-              Core.projectionField = (Core.Name "counter")})))),
+              Core.projectionField = (Core.Name "counter")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "indices"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.topology.TarjanState"),
-              Core.projectionField = (Core.Name "indices")})))),
+              Core.projectionField = (Core.Name "indices")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "lowLinks"),
@@ -256,23 +256,23 @@ tarjanStateWithLowLinks original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "stack"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.topology.TarjanState"),
-              Core.projectionField = (Core.Name "stack")})))),
+              Core.projectionField = (Core.Name "stack")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "onStack"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.topology.TarjanState"),
-              Core.projectionField = (Core.Name "onStack")})))),
+              Core.projectionField = (Core.Name "onStack")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "sccs"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.topology.TarjanState"),
-              Core.projectionField = (Core.Name "sccs")})))),
+              Core.projectionField = (Core.Name "sccs")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 tarjanStateWithOnStack :: Phantoms.TTerm Topology.TarjanState -> Phantoms.TTerm (S.Set Topology.Vertex) -> Phantoms.TTerm Topology.TarjanState
@@ -283,30 +283,30 @@ tarjanStateWithOnStack original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "counter"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.topology.TarjanState"),
-              Core.projectionField = (Core.Name "counter")})))),
+              Core.projectionField = (Core.Name "counter")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "indices"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.topology.TarjanState"),
-              Core.projectionField = (Core.Name "indices")})))),
+              Core.projectionField = (Core.Name "indices")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "lowLinks"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.topology.TarjanState"),
-              Core.projectionField = (Core.Name "lowLinks")})))),
+              Core.projectionField = (Core.Name "lowLinks")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "stack"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.topology.TarjanState"),
-              Core.projectionField = (Core.Name "stack")})))),
+              Core.projectionField = (Core.Name "stack")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "onStack"),
@@ -314,9 +314,9 @@ tarjanStateWithOnStack original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "sccs"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.topology.TarjanState"),
-              Core.projectionField = (Core.Name "sccs")})))),
+              Core.projectionField = (Core.Name "sccs")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 tarjanStateWithSccs :: Phantoms.TTerm Topology.TarjanState -> Phantoms.TTerm [[Topology.Vertex]] -> Phantoms.TTerm Topology.TarjanState
@@ -327,37 +327,37 @@ tarjanStateWithSccs original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "counter"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.topology.TarjanState"),
-              Core.projectionField = (Core.Name "counter")})))),
+              Core.projectionField = (Core.Name "counter")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "indices"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.topology.TarjanState"),
-              Core.projectionField = (Core.Name "indices")})))),
+              Core.projectionField = (Core.Name "indices")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "lowLinks"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.topology.TarjanState"),
-              Core.projectionField = (Core.Name "lowLinks")})))),
+              Core.projectionField = (Core.Name "lowLinks")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "stack"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.topology.TarjanState"),
-              Core.projectionField = (Core.Name "stack")})))),
+              Core.projectionField = (Core.Name "stack")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "onStack"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.topology.TarjanState"),
-              Core.projectionField = (Core.Name "onStack")})))),
+              Core.projectionField = (Core.Name "onStack")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "sccs"),
@@ -371,23 +371,23 @@ tarjanStateWithStack original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "counter"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.topology.TarjanState"),
-              Core.projectionField = (Core.Name "counter")})))),
+              Core.projectionField = (Core.Name "counter")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "indices"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.topology.TarjanState"),
-              Core.projectionField = (Core.Name "indices")})))),
+              Core.projectionField = (Core.Name "indices")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "lowLinks"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.topology.TarjanState"),
-              Core.projectionField = (Core.Name "lowLinks")})))),
+              Core.projectionField = (Core.Name "lowLinks")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "stack"),
@@ -395,14 +395,14 @@ tarjanStateWithStack original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "onStack"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.topology.TarjanState"),
-              Core.projectionField = (Core.Name "onStack")})))),
+              Core.projectionField = (Core.Name "onStack")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "sccs"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.topology.TarjanState"),
-              Core.projectionField = (Core.Name "sccs")})))),
+              Core.projectionField = (Core.Name "sccs")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))

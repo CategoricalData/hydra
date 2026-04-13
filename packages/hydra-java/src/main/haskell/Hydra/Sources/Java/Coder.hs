@@ -161,6 +161,7 @@ module_ = Module ns definitions
       toDefinition encodeDefinitions,
       toDefinition encodeElimination,
       toDefinition encodeFunction,
+      toDefinition encodeFunctionFormTerm,
       toDefinition encodeFunctionPrimitiveByName,
       toDefinition encodeNullaryPrimitiveByName,
       toDefinition encodeLiteral,
@@ -439,22 +440,16 @@ applyOvergenSubstToTermAnnotations_go = def "applyOvergenSubstToTermAnnotations_
         Core.termApplication (Core.application
           (applyOvergenSubstToTermAnnotations_go @@ var "subst" @@ var "cx" @@ Core.applicationFunction (var "app"))
           (applyOvergenSubstToTermAnnotations_go @@ var "subst" @@ var "cx" @@ Core.applicationArgument (var "app"))),
-      _Term_function>>: lambda "f" $
-        cases _Function (var "f")
-          (Just $ var "term") [
-          _Function_lambda>>: lambda "lam" $
-            Core.termFunction (Core.functionLambda (Core.lambda
-              (Core.lambdaParameter (var "lam"))
-              (Maybes.map (lambda "d" $ substituteTypeVarsWithTypes @@ var "subst" @@ var "d") (Core.lambdaDomain (var "lam")))
-              (applyOvergenSubstToTermAnnotations_go @@ var "subst" @@ var "cx" @@ Core.lambdaBody (var "lam")))),
-          _Function_elimination>>: lambda "elim" $
-            cases _Elimination (var "elim")
-              (Just $ var "term") [
-              _Elimination_union>>: lambda "cs" $
-                Core.termFunction (Core.functionElimination (Core.eliminationUnion (Core.caseStatement
-                  (Core.caseStatementTypeName (var "cs"))
-                  (Maybes.map (lambda "d" $ applyOvergenSubstToTermAnnotations_go @@ var "subst" @@ var "cx" @@ var "d") (Core.caseStatementDefault (var "cs")))
-                  (Lists.map (lambda "fld" $ Core.field (Core.fieldName (var "fld")) (applyOvergenSubstToTermAnnotations_go @@ var "subst" @@ var "cx" @@ Core.fieldTerm (var "fld"))) (Core.caseStatementCases (var "cs"))))))]],
+      _Term_lambda>>: lambda "lam" $
+        Core.termLambda (Core.lambda
+          (Core.lambdaParameter (var "lam"))
+          (Maybes.map (lambda "d" $ substituteTypeVarsWithTypes @@ var "subst" @@ var "d") (Core.lambdaDomain (var "lam")))
+          (applyOvergenSubstToTermAnnotations_go @@ var "subst" @@ var "cx" @@ Core.lambdaBody (var "lam"))),
+      _Term_cases>>: lambda "cs" $
+        Core.termCases (Core.caseStatement
+          (Core.caseStatementTypeName (var "cs"))
+          (Maybes.map (lambda "d" $ applyOvergenSubstToTermAnnotations_go @@ var "subst" @@ var "cx" @@ var "d") (Core.caseStatementDefault (var "cs")))
+          (Lists.map (lambda "fld" $ Core.field (Core.fieldName (var "fld")) (applyOvergenSubstToTermAnnotations_go @@ var "subst" @@ var "cx" @@ Core.fieldTerm (var "fld"))) (Core.caseStatementCases (var "cs")))),
       _Term_let>>: lambda "lt" $
         Core.termLet (Core.let_
           (Lists.map (lambda "b" $ Core.binding (Core.bindingName (var "b")) (applyOvergenSubstToTermAnnotations_go @@ var "subst" @@ var "cx" @@ Core.bindingTerm (var "b")) (Core.bindingType (var "b"))) (Core.letBindings (var "lt")))
@@ -589,7 +584,10 @@ bindingIsFunctionType = def "bindingIsFunctionType" $
       -- No type scheme: check term structure
       (cases _Term (Strip.deannotateTerm @@ Core.bindingTerm (var "b"))
         (Just $ boolean False) [
-        _Term_function>>: lambda "_f" $ boolean True])
+        _Term_lambda>>: lambda "_f" $ boolean True,
+        _Term_project>>: lambda "_f" $ boolean True,
+        _Term_cases>>: lambda "_f" $ boolean True,
+        _Term_unwrap>>: lambda "_f" $ boolean True])
       -- Has type scheme: check type
       (lambda "ts" $
         cases _Type (Strip.deannotateType @@ Core.typeSchemeType (var "ts"))
@@ -782,43 +780,34 @@ buildSubstFromAnnotations_go = def "buildSubstFromAnnotations_go" $
               (lambda "annType" $
                 cases _Term (Strip.deannotateTerm @@ var "body")
                   (Just Maps.empty) [
-                  _Term_function>>: lambda "f" $
-                    cases _Function (var "f")
-                      (Just Maps.empty) [
-                      _Function_lambda>>: lambda "lam" $
-                        Maybes.cases (Core.lambdaDomain (var "lam"))
-                          Maps.empty
-                          (lambda "dom" $
-                            cases _Type (Strip.deannotateType @@ var "annType")
-                              (Just Maps.empty) [
-                              _Type_function>>: lambda "ft" $
-                                buildTypeVarSubst @@ var "schemeVarSet"
-                                  @@ Core.functionTypeDomain (var "ft")
-                                  @@ var "dom"])]])
+                  _Term_lambda>>: lambda "lam" $
+                    Maybes.cases (Core.lambdaDomain (var "lam"))
+                      Maps.empty
+                      (lambda "dom" $
+                        cases _Type (Strip.deannotateType @@ var "annType")
+                          (Just Maps.empty) [
+                          _Type_function>>: lambda "ft" $
+                            buildTypeVarSubst @@ var "schemeVarSet"
+                              @@ Core.functionTypeDomain (var "ft")
+                              @@ var "dom"])])
               (Phantoms.decoderFor _Type @@ var "g" @@ var "typeTerm")) $
         Maps.union (var "annSubst") (var "bodySubst"),
       _Term_application>>: lambda "app" $
         Maps.union
           (buildSubstFromAnnotations_go @@ var "schemeVarSet" @@ var "g" @@ Core.applicationFunction (var "app"))
           (buildSubstFromAnnotations_go @@ var "schemeVarSet" @@ var "g" @@ Core.applicationArgument (var "app")),
-      _Term_function>>: lambda "f" $
-        cases _Function (var "f")
-          (Just Maps.empty) [
-          _Function_lambda>>: lambda "lam" $
-            buildSubstFromAnnotations_go @@ var "schemeVarSet" @@ var "g" @@ Core.lambdaBody (var "lam"),
-          _Function_elimination>>: lambda "elim" $
-            cases _Elimination (var "elim")
-              (Just Maps.empty) [
-              _Elimination_union>>: lambda "cs" $
-                "defSubst" <~ Maybes.cases (Core.caseStatementDefault (var "cs"))
-                  Maps.empty
-                  (lambda "d" $ buildSubstFromAnnotations_go @@ var "schemeVarSet" @@ var "g" @@ var "d") $
-                "caseSubsts" <~ Lists.foldl
-                  (lambda "acc" $ lambda "fld" $
-                    Maps.union (var "acc") (buildSubstFromAnnotations_go @@ var "schemeVarSet" @@ var "g" @@ Core.fieldTerm (var "fld")))
-                  Maps.empty
-                  (Core.caseStatementCases (var "cs")) $
-                Maps.union (var "defSubst") (var "caseSubsts")]],
+      _Term_lambda>>: lambda "lam" $
+        buildSubstFromAnnotations_go @@ var "schemeVarSet" @@ var "g" @@ Core.lambdaBody (var "lam"),
+      _Term_cases>>: lambda "cs" $
+        "defSubst" <~ Maybes.cases (Core.caseStatementDefault (var "cs"))
+          Maps.empty
+          (lambda "d" $ buildSubstFromAnnotations_go @@ var "schemeVarSet" @@ var "g" @@ var "d") $
+        "caseSubsts" <~ Lists.foldl
+          (lambda "acc" $ lambda "fld" $
+            Maps.union (var "acc") (buildSubstFromAnnotations_go @@ var "schemeVarSet" @@ var "g" @@ Core.fieldTerm (var "fld")))
+          Maps.empty
+          (Core.caseStatementCases (var "cs")) $
+        Maps.union (var "defSubst") (var "caseSubsts"),
       _Term_let>>: lambda "lt" $
         "bindingSubst" <~ Lists.foldl
           (lambda "acc" $ lambda "b" $
@@ -1081,12 +1070,9 @@ classifyDataTerm_countLambdaParams = def "classifyDataTerm_countLambdaParams" $
   lambda "t" $
     cases _Term (Strip.deannotateTerm @@ var "t")
       (Just $ int32 0) [
-      _Term_function>>: lambda "f" $
-        cases _Function (var "f")
-          (Just $ int32 0) [
-          _Function_lambda>>: lambda "lam" $
-            Math.add (int32 1)
-              (classifyDataTerm_countLambdaParams @@ (project _Lambda _Lambda_body @@ var "lam"))],
+      _Term_lambda>>: lambda "lam" $
+        Math.add (int32 1)
+          (classifyDataTerm_countLambdaParams @@ (project _Lambda _Lambda_body @@ var "lam")),
       _Term_let>>: lambda "lt" $
         classifyDataTerm_countLambdaParams @@ (project _Let _Let_body @@ var "lt")]
 
@@ -1139,16 +1125,13 @@ collectLambdaDomains = def "collectLambdaDomains" $
   lambda "t" $
     cases _Term (Strip.deannotateTerm @@ var "t")
       (Just $ pair (list ([] :: [TTerm Type])) (var "t")) [
-      _Term_function>>: lambda "f" $
-        cases _Function (var "f")
-          (Just $ pair (list ([] :: [TTerm Type])) (var "t")) [
-          _Function_lambda>>: lambda "lam" $
-            Maybes.cases (Core.lambdaDomain (var "lam"))
-              (pair (list ([] :: [TTerm Type])) (var "t"))
-              (lambda "dom" $
-                "rest" <~ (collectLambdaDomains @@ Core.lambdaBody (var "lam")) $
-                pair (Lists.cons (var "dom") (Pairs.first (var "rest")))
-                  (Pairs.second (var "rest")))]]
+      _Term_lambda>>: lambda "lam" $
+        Maybes.cases (Core.lambdaDomain (var "lam"))
+          (pair (list ([] :: [TTerm Type])) (var "t"))
+          (lambda "dom" $
+            "rest" <~ (collectLambdaDomains @@ Core.lambdaBody (var "lam")) $
+            pair (Lists.cons (var "dom") (Pairs.first (var "rest")))
+              (Pairs.second (var "rest")))]
 
 -- | Collect type arguments from nested TermTypeApplication chain, stripping annotations.
 collectTypeApps :: TTermDefinition (Term -> [Type] -> (Term, [Type]))
@@ -1967,36 +1950,32 @@ encodeApplication_fallback = def "encodeApplication_fallback" $
       _Type_function>>: lambda "ft" $
         "dom" <~ Core.functionTypeDomain (var "ft") $
         "cod" <~ Core.functionTypeCodomain (var "ft") $
-        cases _Term (Strip.deannotateTerm @@ var "lhs")
-          (Just $
-            -- defaultExpression: apply using .apply()
+        "defaultExpr" <~ (
             "jfun" <<~ (encodeTerm @@ var "env" @@ var "lhs" @@ var "cx" @@ var "g") $
             "jarg" <<~ (encodeTerm @@ var "env" @@ var "rhs" @@ var "cx" @@ var "g") $
-            right (applyJavaArg @@ var "jfun" @@ var "jarg")) [
-          _Term_function>>: lambda "f" $
-            cases _Function (var "f")
-              (Just $
-                -- defaultExpression
-                "jfun" <<~ (encodeTerm @@ var "env" @@ var "lhs" @@ var "cx" @@ var "g") $
-                "jarg" <<~ (encodeTerm @@ var "env" @@ var "rhs" @@ var "cx" @@ var "g") $
-                right (applyJavaArg @@ var "jfun" @@ var "jarg")) [
-              _Function_elimination>>: lambda "e" $
-                "jarg" <<~ (encodeTerm @@ var "env" @@ var "rhs" @@ var "cx" @@ var "g") $
-                -- If dom has no type args, try to get a richer type from the argument
-                "enrichedDom" <<~ (Logic.ifElse
-                  (Logic.not (Lists.null (javaTypeArgumentsForType @@ var "dom")))
-                  (right (var "dom"))
-                  ("mrt" <<~ (getTypeE (var "cx") (var "g") (Annotations.termAnnotationInternal @@ var "rhs")) $
-                    Maybes.cases (var "mrt")
-                      ("rt" <<~ (Checking.typeOfTerm @@ var "cx" @@ var "g" @@ var "rhs") $
-                        right (Logic.ifElse (Logic.not (Lists.null (javaTypeArgumentsForType @@ var "rt")))
-                          (var "rt")
-                          (var "dom")))
-                      (lambda "rt" $
-                        right (Logic.ifElse (Logic.not (Lists.null (javaTypeArgumentsForType @@ var "rt")))
-                          (var "rt")
-                          (var "dom"))))) $
-                encodeElimination @@ var "env" @@ just (var "jarg") @@ var "enrichedDom" @@ var "cod" @@ var "e" @@ var "cx" @@ var "g"]]])
+            right (applyJavaArg @@ var "jfun" @@ var "jarg")) $
+        "elimBranch" <~ (
+            "jarg" <<~ (encodeTerm @@ var "env" @@ var "rhs" @@ var "cx" @@ var "g") $
+            -- If dom has no type args, try to get a richer type from the argument
+            "enrichedDom" <<~ (Logic.ifElse
+              (Logic.not (Lists.null (javaTypeArgumentsForType @@ var "dom")))
+              (right (var "dom"))
+              ("mrt" <<~ (getTypeE (var "cx") (var "g") (Annotations.termAnnotationInternal @@ var "rhs")) $
+                Maybes.cases (var "mrt")
+                  ("rt" <<~ (Checking.typeOfTerm @@ var "cx" @@ var "g" @@ var "rhs") $
+                    right (Logic.ifElse (Logic.not (Lists.null (javaTypeArgumentsForType @@ var "rt")))
+                      (var "rt")
+                      (var "dom")))
+                  (lambda "rt" $
+                    right (Logic.ifElse (Logic.not (Lists.null (javaTypeArgumentsForType @@ var "rt")))
+                      (var "rt")
+                      (var "dom"))))) $
+            encodeElimination @@ var "env" @@ just (var "jarg") @@ var "enrichedDom" @@ var "cod" @@ (Strip.deannotateTerm @@ var "lhs") @@ var "cx" @@ var "g") $
+        cases _Term (Strip.deannotateTerm @@ var "lhs")
+          (Just $ var "defaultExpr") [
+          _Term_project>>: lambda "_p" $ var "elimBranch",
+          _Term_cases>>: lambda "_c" $ var "elimBranch",
+          _Term_unwrap>>: lambda "_w" $ var "elimBranch"]])
 
 -- | Encode all definitions in a module to Java compilation units.
 encodeDefinitions :: TTermDefinition (Module -> [Definition] -> Context -> Graph -> Either Error (M.Map Name Java.CompilationUnit))
@@ -2023,17 +2002,18 @@ encodeDefinitions = def "encodeDefinitions" $
         right (list [constructElementsInterface @@ var "mod" @@ var "dataMembers"])) $
     right (Maps.fromList (Lists.concat2 (var "typeUnits") (var "termUnits")))
 
--- | Encode an elimination expression.
-encodeElimination :: TTermDefinition (JavaHelpers.JavaEnvironment -> Maybe Java.Expression -> Type -> Type -> Elimination -> Context -> Graph -> Either Error Java.Expression)
+-- | Encode an elimination expression. The "elimTerm" argument must be one of
+-- the elimination-form Term variants: project, cases, or unwrap.
+encodeElimination :: TTermDefinition (JavaHelpers.JavaEnvironment -> Maybe Java.Expression -> Type -> Type -> Term -> Context -> Graph -> Either Error Java.Expression)
 encodeElimination = def "encodeElimination" $
-  lambda "env" $ lambda "marg" $ lambda "dom" $ lambda "cod" $ lambda "elm" $
+  lambda "env" $ lambda "marg" $ lambda "dom" $ lambda "cod" $ lambda "elimTerm" $
     "cx" ~> "g" ~>
     "aliases" <~ (project JavaHelpers._JavaEnvironment JavaHelpers._JavaEnvironment_aliases @@ var "env") $
-    cases _Elimination (var "elm")
+    cases _Term (Strip.deannotateTerm @@ var "elimTerm")
       (Just $ Ctx.failInContext (Error.errorOther $ Error.otherError $ Strings.cat2 (string "unexpected ") (Strings.cat2 (string "elimination case") (Strings.cat2 (string " in ") (string "encodeElimination")))) (var "cx")) [
 
-      -- EliminationRecord: field projection
-      _Elimination_record>>: lambda "proj" $
+      -- Projection: field projection
+      _Term_project>>: lambda "proj" $
         "fname" <~ (Core.projectionField (var "proj")) $
         "jdom0" <<~ (encodeType @@ var "aliases" @@ Sets.empty @@ var "dom" @@ var "cx" @@ var "g") $
         "jdomr" <<~ (JavaUtilsSource.javaTypeToJavaReferenceType @@ var "jdom0" @@ var "cx") $
@@ -2052,20 +2032,20 @@ encodeElimination = def "encodeElimination" $
               Java._FieldAccess_qualifier>>: var "qual",
               Java._FieldAccess_identifier>>: JavaUtilsSource.javaIdentifier @@ (Core.unName (var "fname"))]))),
 
-      -- EliminationUnion: case statement
-      _Elimination_union>>: lambda "cs" $
+      -- Case statement
+      _Term_cases>>: lambda "cs" $
         "tname" <~ (project _CaseStatement _CaseStatement_typeName @@ var "cs") $
         "def_" <~ (project _CaseStatement _CaseStatement_default @@ var "cs") $
         "fields" <~ (project _CaseStatement _CaseStatement_cases @@ var "cs") $
         Maybes.cases (var "marg")
           -- No arg: wrap elimination in a lambda
           ("uVar" <~ wrap _Name (string "u") $
-            "typedLambda" <~ (inject _Term _Term_function (inject _Function _Function_lambda (record _Lambda [
+            "typedLambda" <~ (inject _Term _Term_lambda (record _Lambda [
               _Lambda_parameter>>: var "uVar",
               _Lambda_domain>>: just (var "dom"),
               _Lambda_body>>: inject _Term _Term_application (record _Application [
-                _Application_function>>: inject _Term _Term_function (inject _Function _Function_elimination (var "elm")),
-                _Application_argument>>: inject _Term _Term_variable (var "uVar")])]))) $
+                _Application_function>>: var "elimTerm",
+                _Application_argument>>: inject _Term _Term_variable (var "uVar")])])) $
             encodeTerm @@ var "env" @@ var "typedLambda" @@ var "cx" @@ var "g")
           -- With arg: apply elimination to visitor
           (lambda "jarg" $
@@ -2088,8 +2068,8 @@ encodeElimination = def "encodeElimination" $
               (JavaUtilsSource.methodInvocation @@ just (right (var "prim"))
                 @@ JavaDsl.identifier (asTerm JavaNamesSource.acceptMethodName) @@ list [var "visitor"]))),
 
-      -- EliminationWrap: unwrap a newtype
-      _Elimination_wrap>>: lambda "wrapName" $
+      -- Unwrap: unwrap a newtype
+      _Term_unwrap>>: lambda "wrapName" $
         "withArg" <~ (lambda "ja" $
           JavaUtilsSource.javaFieldAccessToJavaExpression @@ (record Java._FieldAccess [
             Java._FieldAccess_qualifier>>: inject Java._FieldAccess_Qualifier Java._FieldAccess_Qualifier_primary
@@ -2159,80 +2139,88 @@ encodeNullaryPrimitiveByName = def "encodeNullaryPrimitiveByName" $
        right (JavaUtilsSource.javaMethodInvocationToJavaExpression @@
          (JavaUtilsSource.methodInvocationStaticWithTypeArgs @@ var "className" @@ var "methodName" @@ var "targs" @@ (list ([] :: [TTerm Java.Expression])))))
 
--- | Encode a function.
-encodeFunction :: TTermDefinition (JavaHelpers.JavaEnvironment -> Type -> Type -> Function -> Context -> Graph -> Either Error Java.Expression)
+-- | Encode a function-form term. The "funTerm" argument must be one of
+-- the function-form Term variants: lambda, project, cases, or unwrap.
+encodeFunction :: TTermDefinition (JavaHelpers.JavaEnvironment -> Type -> Type -> Term -> Context -> Graph -> Either Error Java.Expression)
 encodeFunction = def "encodeFunction" $
-  lambda "env" $ lambda "dom" $ lambda "cod" $ lambda "fun" $
+  lambda "env" $ lambda "dom" $ lambda "cod" $ lambda "funTerm" $
     "cx" ~> "g" ~>
     "aliases" <~ (project JavaHelpers._JavaEnvironment JavaHelpers._JavaEnvironment_aliases @@ var "env") $
-    cases _Function (var "fun")
+    "encodeLambdaFallback" <~ (lambda "env2" $ lambda "lam" $
+      "lambdaVar" <~ Core.lambdaParameter (var "lam") $
+      "body" <~ Core.lambdaBody (var "lam") $
+      "fs" <<~ (analyzeJavaFunction @@ var "env2" @@ var "body" @@ var "cx" @@ var "g") $
+      "bindings" <~ (project _FunctionStructure _FunctionStructure_bindings @@ var "fs") $
+      "innerBody" <~ (project _FunctionStructure _FunctionStructure_body @@ var "fs") $
+      "env3" <~ (project _FunctionStructure _FunctionStructure_environment @@ var "fs") $
+      "bindResult" <<~ (bindingsToStatements @@ var "env3" @@ var "bindings" @@ var "cx" @@ var "g") $
+      "bindingStmts" <~ Pairs.first (var "bindResult") $
+      "env4" <~ Pairs.second (var "bindResult") $
+      "jbody" <<~ (encodeTerm @@ var "env4" @@ var "innerBody" @@ var "cx" @@ var "g") $
+      "lam1" <~ (Logic.ifElse (Lists.null (var "bindings"))
+        (JavaUtilsSource.javaLambda @@ var "lambdaVar" @@ var "jbody")
+        ("returnSt" <~ (JavaDsl.blockStatementStatement (JavaUtilsSource.javaReturnStatement @@ just (var "jbody"))) $
+          JavaUtilsSource.javaLambdaFromBlock @@ var "lambdaVar" @@
+            (wrap Java._Block (Lists.concat2 (var "bindingStmts") (list [var "returnSt"]))))) $
+      applyCastIfSafe @@ var "aliases" @@ (inject _Type _Type_function (record _FunctionType [
+        _FunctionType_domain>>: var "dom",
+        _FunctionType_codomain>>: var "cod"])) @@ var "lam1" @@ var "cx" @@ var "g") $
+    cases _Term (Strip.deannotateTerm @@ var "funTerm")
       (Just $ right (encodeLiteral @@ (inject _Literal _Literal_string
-        (Strings.cat2 (string "Unimplemented function variant: ") (ShowCore.function @@ var "fun"))))) [
+        (Strings.cat2 (string "Unimplemented function variant: ") (ShowCore.term @@ var "funTerm"))))) [
 
-      -- FunctionElimination: delegate to encodeElimination
-      _Function_elimination>>: lambda "elm" $
-        (encodeElimination @@ var "env" @@ nothing @@ var "dom" @@ var "cod" @@ var "elm" @@ var "cx" @@ var "g"),
+      -- Projection: delegate to encodeElimination
+      _Term_project>>: lambda "_p" $
+        (encodeElimination @@ var "env" @@ nothing @@ var "dom" @@ var "cod" @@ (Strip.deannotateTerm @@ var "funTerm") @@ var "cx" @@ var "g"),
 
-      -- FunctionLambda: encode as Java lambda
-      _Function_lambda>>: lambda "lam" $
+      -- Case statement: delegate to encodeElimination
+      _Term_cases>>: lambda "_c" $
+        (encodeElimination @@ var "env" @@ nothing @@ var "dom" @@ var "cod" @@ (Strip.deannotateTerm @@ var "funTerm") @@ var "cx" @@ var "g"),
+
+      -- Unwrap: delegate to encodeElimination
+      _Term_unwrap>>: lambda "_w" $
+        (encodeElimination @@ var "env" @@ nothing @@ var "dom" @@ var "cod" @@ (Strip.deannotateTerm @@ var "funTerm") @@ var "cx" @@ var "g"),
+
+      -- Lambda: encode as Java lambda
+      _Term_lambda>>: lambda "lam" $
         (withLambda @@ var "env" @@ var "lam" @@ (lambda "env2" $
           "lambdaVar" <~ Core.lambdaParameter (var "lam") $
           "body" <~ Core.lambdaBody (var "lam") $
           cases _Term (Strip.deannotateTerm @@ var "body")
-            (Just $
-              -- Body is not a lambda: analyze and encode normally
-              "fs" <<~ (analyzeJavaFunction @@ var "env2" @@ var "body" @@ var "cx" @@ var "g") $
-              "bindings" <~ (project _FunctionStructure _FunctionStructure_bindings @@ var "fs") $
-              "innerBody" <~ (project _FunctionStructure _FunctionStructure_body @@ var "fs") $
-              "env3" <~ (project _FunctionStructure _FunctionStructure_environment @@ var "fs") $
-              "bindResult" <<~ (bindingsToStatements @@ var "env3" @@ var "bindings" @@ var "cx" @@ var "g") $
-              "bindingStmts" <~ Pairs.first (var "bindResult") $
-              "env4" <~ Pairs.second (var "bindResult") $
-              "jbody" <<~ (encodeTerm @@ var "env4" @@ var "innerBody" @@ var "cx" @@ var "g") $
-              "lam1" <~ (Logic.ifElse (Lists.null (var "bindings"))
-                (JavaUtilsSource.javaLambda @@ var "lambdaVar" @@ var "jbody")
-                ("returnSt" <~ (JavaDsl.blockStatementStatement (JavaUtilsSource.javaReturnStatement @@ just (var "jbody"))) $
-                  JavaUtilsSource.javaLambdaFromBlock @@ var "lambdaVar" @@
-                    (wrap Java._Block (Lists.concat2 (var "bindingStmts") (list [var "returnSt"]))))) $
-              applyCastIfSafe @@ var "aliases" @@ (inject _Type _Type_function (record _FunctionType [
-                _FunctionType_domain>>: var "dom",
-                _FunctionType_codomain>>: var "cod"])) @@ var "lam1" @@ var "cx" @@ var "g") [
+            (Just $ var "encodeLambdaFallback" @@ var "env2" @@ var "lam") [
 
             -- Body is another lambda: recursively encode it
-            _Term_function>>: lambda "f2" $
-              cases _Function (var "f2")
-                (Just $
-                  -- Not a lambda — fall through to the default case above
-                  "fs" <<~ (analyzeJavaFunction @@ var "env2" @@ var "body" @@ var "cx" @@ var "g") $
-                  "bindings" <~ (project _FunctionStructure _FunctionStructure_bindings @@ var "fs") $
-                  "innerBody" <~ (project _FunctionStructure _FunctionStructure_body @@ var "fs") $
-                  "env3" <~ (project _FunctionStructure _FunctionStructure_environment @@ var "fs") $
-                  "bindResult" <<~ (bindingsToStatements @@ var "env3" @@ var "bindings" @@ var "cx" @@ var "g") $
-                  "bindingStmts" <~ Pairs.first (var "bindResult") $
-                  "env4" <~ Pairs.second (var "bindResult") $
-                  "jbody" <<~ (encodeTerm @@ var "env4" @@ var "innerBody" @@ var "cx" @@ var "g") $
-                  "lam1" <~ (Logic.ifElse (Lists.null (var "bindings"))
-                    (JavaUtilsSource.javaLambda @@ var "lambdaVar" @@ var "jbody")
-                    ("returnSt" <~ (JavaDsl.blockStatementStatement (JavaUtilsSource.javaReturnStatement @@ just (var "jbody"))) $
-                      JavaUtilsSource.javaLambdaFromBlock @@ var "lambdaVar" @@
-                        (wrap Java._Block (Lists.concat2 (var "bindingStmts") (list [var "returnSt"]))))) $
+            _Term_lambda>>: lambda "innerLam" $
+              cases _Type (Strip.deannotateType @@ var "cod")
+                (Just $ Ctx.failInContext (Error.errorOther $ Error.otherError $ Strings.cat2 (string "expected function type for lambda body, but got: ")
+                  (ShowCore.type_ @@ var "cod")) (var "cx")) [
+                _Type_function>>: lambda "ft" $
+                  "dom2" <~ Core.functionTypeDomain (var "ft") $
+                  "cod2" <~ Core.functionTypeCodomain (var "ft") $
+                  "innerJavaLambda" <<~ (encodeFunction @@ var "env2" @@ var "dom2" @@ var "cod2"
+                    @@ (inject _Term _Term_lambda (var "innerLam")) @@ var "cx" @@ var "g") $
+                  "lam1" <~ (JavaUtilsSource.javaLambda @@ var "lambdaVar" @@ var "innerJavaLambda") $
                   applyCastIfSafe @@ var "aliases" @@ (inject _Type _Type_function (record _FunctionType [
                     _FunctionType_domain>>: var "dom",
-                    _FunctionType_codomain>>: var "cod"])) @@ var "lam1" @@ var "cx" @@ var "g") [
+                    _FunctionType_codomain>>: var "cod"])) @@ var "lam1" @@ var "cx" @@ var "g"]]))]
 
-                _Function_lambda>>: lambda "innerLam" $
-                  cases _Type (Strip.deannotateType @@ var "cod")
-                    (Just $ Ctx.failInContext (Error.errorOther $ Error.otherError $ Strings.cat2 (string "expected function type for lambda body, but got: ")
-                      (ShowCore.type_ @@ var "cod")) (var "cx")) [
-                    _Type_function>>: lambda "ft" $
-                      "dom2" <~ Core.functionTypeDomain (var "ft") $
-                      "cod2" <~ Core.functionTypeCodomain (var "ft") $
-                      "innerJavaLambda" <<~ (encodeFunction @@ var "env2" @@ var "dom2" @@ var "cod2"
-                        @@ (inject _Function _Function_lambda (var "innerLam")) @@ var "cx" @@ var "g") $
-                      "lam1" <~ (JavaUtilsSource.javaLambda @@ var "lambdaVar" @@ var "innerJavaLambda") $
-                      applyCastIfSafe @@ var "aliases" @@ (inject _Type _Type_function (record _FunctionType [
-                        _FunctionType_domain>>: var "dom",
-                        _FunctionType_codomain>>: var "cod"])) @@ var "lam1" @@ var "cx" @@ var "g"]]]))]
+-- | Shared handler for function-form Term variants (lambda, project, cases, unwrap)
+-- at the encodeTermInternal level. Resolves the term's type and delegates to encodeFunction.
+encodeFunctionFormTerm :: TTermDefinition (JavaHelpers.JavaEnvironment -> [M.Map Name Term] -> Term -> Context -> Graph -> Either Error Java.Expression)
+encodeFunctionFormTerm = def "encodeFunctionFormTerm" $
+  lambda "env" $ lambda "anns" $ lambda "term" $
+    "cx" ~> "g" ~>
+    "combinedAnns" <~ Lists.foldl (lambda "acc" $ lambda "m" $ Maps.union (var "acc") (var "m")) Maps.empty (var "anns") $
+    "mt" <<~ (getTypeE (var "cx") (var "g") (var "combinedAnns")) $
+    "typ" <<~ (Maybes.cases (var "mt")
+      (Maybes.cases (tryInferFunctionType @@ var "term")
+        (Checking.typeOfTerm @@ var "cx" @@ var "g" @@ var "term")
+        (lambda "inferredType" $ right (var "inferredType")))
+      (lambda "t" $ right (var "t"))) $
+    cases _Type (Strip.deannotateType @@ var "typ")
+      (Just $ encodeNullaryConstant @@ var "env" @@ var "typ" @@ var "term" @@ var "cx" @@ var "g") [
+      _Type_function>>: lambda "ft" $
+        encodeFunction @@ var "env" @@ (Core.functionTypeDomain (var "ft")) @@ (Core.functionTypeCodomain (var "ft")) @@ var "term" @@ var "cx" @@ var "g"]
 
 -- | Encode a literal value to a Java expression
 encodeLiteral :: TTermDefinition (Literal -> Java.Expression)
@@ -2460,11 +2448,11 @@ encodeLiteralType_simple = def "encodeLiteralType_simple" $
     @@ var "n")
 
 -- | Encode a nullary constant function as a Java expression
-encodeNullaryConstant :: TTermDefinition (JavaHelpers.JavaEnvironment -> Type -> Function -> Context -> Graph -> Either Error Java.Expression)
+encodeNullaryConstant :: TTermDefinition (JavaHelpers.JavaEnvironment -> Type -> Term -> Context -> Graph -> Either Error Java.Expression)
 encodeNullaryConstant = def "encodeNullaryConstant" $
-  lambda "env" $ lambda "typ" $ lambda "fun" $
+  lambda "env" $ lambda "typ" $ lambda "funTerm" $
     "cx" ~> "g" ~>
-    Ctx.failInContext (Error.errorOther $ Error.otherError $ Strings.cat2 (string "unexpected ") (Strings.cat2 (string "nullary function") (Strings.cat2 (string " in ") (ShowCore.function @@ var "fun")))) (var "cx")
+    Ctx.failInContext (Error.errorOther $ Error.otherError $ Strings.cat2 (string "unexpected ") (Strings.cat2 (string "nullary function") (Strings.cat2 (string " in ") (ShowCore.term @@ var "funTerm")))) (var "cx")
 
 -- | Extract type arguments from the return type for generic method calls
 encodeNullaryConstant_typeArgsFromReturnType :: TTermDefinition (JavaHelpers.Aliases -> Type -> Context -> Graph -> Either Error [Java.TypeArgument])
@@ -2726,19 +2714,11 @@ encodeTermInternal = def "encodeTermInternal" $
             right (var "eitherCall" @@ string "right" @@ var "expr"))
           (var "et"),
 
-      -- TermFunction: encode function with type from annotations
-      _Term_function>>: lambda "f" $
-        ("combinedAnns" <~ Lists.foldl (lambda "acc" $ lambda "m" $ Maps.union (var "acc") (var "m")) Maps.empty (var "anns") $
-        "mt" <<~ (getTypeE (var "cx") (var "g") (var "combinedAnns")) $
-        "typ" <<~ (Maybes.cases (var "mt")
-          (Maybes.cases (tryInferFunctionType @@ var "f")
-            (Checking.typeOfTerm @@ var "cx" @@ var "g" @@ var "term")
-            (lambda "inferredType" $ right (var "inferredType")))
-          (lambda "t" $ right (var "t"))) $
-        cases _Type (Strip.deannotateType @@ var "typ")
-          (Just $ encodeNullaryConstant @@ var "env" @@ var "typ" @@ var "f" @@ var "cx" @@ var "g") [
-          _Type_function>>: lambda "ft" $
-            encodeFunction @@ var "env" @@ (Core.functionTypeDomain (var "ft")) @@ (Core.functionTypeCodomain (var "ft")) @@ var "f" @@ var "cx" @@ var "g"]),
+      -- Function-form terms: encode with type from annotations.
+      _Term_lambda>>: lambda "_lam" $ encodeFunctionFormTerm @@ var "env" @@ var "anns" @@ var "term" @@ var "cx" @@ var "g",
+      _Term_project>>: lambda "_p" $ encodeFunctionFormTerm @@ var "env" @@ var "anns" @@ var "term" @@ var "cx" @@ var "g",
+      _Term_cases>>: lambda "_c" $ encodeFunctionFormTerm @@ var "env" @@ var "anns" @@ var "term" @@ var "cx" @@ var "g",
+      _Term_unwrap>>: lambda "_w" $ encodeFunctionFormTerm @@ var "env" @@ var "anns" @@ var "term" @@ var "cx" @@ var "g",
 
       -- TermLet: convert let bindings to block-bodied nullary lambda with .get()
       _Term_let>>: lambda "lt" $
@@ -3184,15 +3164,7 @@ encodeTermTCO = def "encodeTermTCO" $
               -- Default: not a case statement, encode as return
               "expr" <<~ (encodeTerm @@ var "env" @@ var "term" @@ var "cx" @@ var "g") $
               right $ list [JavaDsl.blockStatementStatement (JavaUtilsSource.javaReturnStatement @@ just (var "expr"))]) [
-              _Term_function>>: "f" ~>
-                cases _Function (var "f") (Just $
-                  "expr" <<~ (encodeTerm @@ var "env" @@ var "term" @@ var "cx" @@ var "g") $
-                  right $ list [JavaDsl.blockStatementStatement (JavaUtilsSource.javaReturnStatement @@ just (var "expr"))]) [
-                  _Function_elimination>>: "e" ~>
-                    cases _Elimination (var "e") (Just $
-                      "expr" <<~ (encodeTerm @@ var "env" @@ var "term" @@ var "cx" @@ var "g") $
-                      right $ list [JavaDsl.blockStatementStatement (JavaUtilsSource.javaReturnStatement @@ just (var "expr"))]) [
-                      _Elimination_union>>: "cs" ~>
+              _Term_cases>>: "cs" ~>
                         -- Case statement: generate if/instanceof chain
                         "aliases" <~ (project JavaHelpers._JavaEnvironment JavaHelpers._JavaEnvironment_aliases @@ var "env") $
                         "tname" <~ (Core.caseStatementTypeName $ var "cs") $
@@ -3219,10 +3191,7 @@ encodeTermTCO = def "encodeTermTCO" $
                           -- Extract the lambda body from this case branch
                           cases _Term (Strip.deannotateTerm @@ Core.fieldTerm (var "field"))
                             (Just $ Ctx.failInContext (Error.errorOther $ Error.otherError $ string "TCO: case branch is not a lambda") (var "cx")) [
-                            _Term_function>>: "f2" ~>
-                              cases _Function (var "f2")
-                                (Just $ Ctx.failInContext (Error.errorOther $ Error.otherError $ string "TCO: case branch is not a lambda") (var "cx")) [
-                                _Function_lambda>>: "lam" ~>
+                            _Term_lambda>>: "lam" ~>
                                   -- Use withLambda to properly set up the lambda context
                                   withLambda @@ var "env" @@ var "lam" @@ (lambda "env2" $
                                   "lambdaParam" <~ Core.lambdaParameter (var "lam") $
@@ -3262,7 +3231,7 @@ encodeTermTCO = def "encodeTermTCO" $
                                   "ifBody" <~ (JavaDsl.statementWithoutTrailing
                                     (JavaDsl.stmtBlock (JavaDsl.block (var "blockStmts")))) $
                                   right $ JavaDsl.blockStatementStatement
-                                    (JavaDsl.statementIfThen (JavaDsl.ifThenStatement (var "condExpr") (var "ifBody"))))]])
+                                    (JavaDsl.statementIfThen (JavaDsl.ifThenStatement (var "condExpr") (var "ifBody"))))])
                           (var "cases_")) $
                         -- Default: return the expression (or the arg for otherwise)
                         "defaultStmt" <<~ (Maybes.cases (var "dflt")
@@ -3274,7 +3243,7 @@ encodeTermTCO = def "encodeTermTCO" $
                             "dExpr" <<~ (encodeTerm @@ var "env" @@ var "d" @@ var "cx" @@ var "g") $
                             right $ list [JavaDsl.blockStatementStatement
                               (JavaUtilsSource.javaReturnStatement @@ just (var "dExpr"))])) $
-                        right $ Lists.concat (list [list [var "matchDecl"], var "ifBlocks", var "defaultStmt"])]]])
+                        right $ Lists.concat (list [list [var "matchDecl"], var "ifBlocks", var "defaultStmt"])])
           -- Not a single-arg application: fall back to normal return
           ("expr" <<~ (encodeTerm @@ var "env" @@ var "term" @@ var "cx" @@ var "g") $
             right $ list [JavaDsl.blockStatementStatement (JavaUtilsSource.javaReturnStatement @@ just (var "expr"))])) [
@@ -4423,17 +4392,14 @@ propagateType = def "propagateType" $
         @@ var "t") $
     cases _Term (Strip.deannotateTerm @@ var "term")
       (Just $ var "setTypeAnn" @@ var "term") [
-      _Term_function>>: lambda "f" $
-        cases _Function (var "f")
-          (Just $ var "setTypeAnn" @@ var "term") [
-          _Function_lambda>>: lambda "lam" $
-            "annotated" <~ (var "setTypeAnn" @@ var "term") $
-            cases _Type (Strip.deannotateType @@ var "typ")
-              (Just $ var "annotated") [
-              _Type_function>>: lambda "ft" $
-                propagateType_propagateIntoLambda
-                  @@ (Core.functionTypeCodomain (var "ft"))
-                  @@ var "annotated"]],
+      _Term_lambda>>: lambda "lam" $
+        "annotated" <~ (var "setTypeAnn" @@ var "term") $
+        cases _Type (Strip.deannotateType @@ var "typ")
+          (Just $ var "annotated") [
+          _Type_function>>: lambda "ft" $
+            propagateType_propagateIntoLambda
+              @@ (Core.functionTypeCodomain (var "ft"))
+              @@ var "annotated"],
       _Term_let>>: lambda "lt" $
         -- Propagate into let binding values using each binding's type scheme
         "propagatedBindings" <~ Lists.map
@@ -4455,18 +4421,12 @@ propagateType = def "propagateType" $
         "arg" <~ Core.applicationArgument (var "app") $
         "annotatedFun" <~ (cases _Term (Strip.deannotateTerm @@ var "fun")
           (Just $ var "fun") [
-          _Term_function>>: lambda "fn" $
-            cases _Function (var "fn")
-              (Just $ var "fun") [
-              _Function_elimination>>: lambda "elim" $
-                cases _Elimination (var "elim")
-                  (Just $ var "fun") [
-                  _Elimination_union>>: lambda "cs" $
-                    "dom" <~ (Resolution.nominalApplication @@ (Core.caseStatementTypeName (var "cs"))
-                      @@ list ([] :: [TTerm Type])) $
-                    "ft" <~ inject _Type _Type_function (Core.functionType (var "dom") (var "typ")) $
-                    Annotations.setTermAnnotation @@ asTerm Constants.key_type
-                      @@ just (Phantoms.encoderFor _Type @@ var "ft") @@ var "fun"]]]) $
+          _Term_cases>>: lambda "cs" $
+            "dom" <~ (Resolution.nominalApplication @@ (Core.caseStatementTypeName (var "cs"))
+              @@ list ([] :: [TTerm Type])) $
+            "ft" <~ inject _Type _Type_function (Core.functionType (var "dom") (var "typ")) $
+            Annotations.setTermAnnotation @@ asTerm Constants.key_type
+              @@ just (Phantoms.encoderFor _Type @@ var "ft") @@ var "fun"]) $
         var "setTypeAnn" @@ Core.termApplication (Core.application (var "annotatedFun") (var "arg"))]
 
 -- | Propagate the codomain type into a lambda's body, traversing through annotations
@@ -4479,14 +4439,11 @@ propagateType_propagateIntoLambda = def "propagateType_propagateIntoLambda" $
         Core.termAnnotated (Core.annotatedTerm
           (propagateType_propagateIntoLambda @@ var "cod" @@ Core.annotatedTermBody (var "at"))
           (Core.annotatedTermAnnotation (var "at"))),
-      _Term_function>>: lambda "f" $
-        cases _Function (var "f")
-          (Just $ var "t") [
-          _Function_lambda>>: lambda "lam" $
-            Core.termFunction (Core.functionLambda (Core.lambda
-              (Core.lambdaParameter (var "lam"))
-              (Core.lambdaDomain (var "lam"))
-              (propagateType @@ var "cod" @@ Core.lambdaBody (var "lam"))))]]
+      _Term_lambda>>: lambda "lam" $
+        Core.termLambda (Core.lambda
+          (Core.lambdaParameter (var "lam"))
+          (Core.lambdaDomain (var "lam"))
+          (propagateType @@ var "cod" @@ Core.lambdaBody (var "lam")))]
 
 -- | Rebuild a let expression with a new body, preserving annotations
 propagateType_rebuildLet :: TTermDefinition (Term -> [Binding] -> Term -> Term)
@@ -4534,18 +4491,12 @@ propagateTypesInAppChain = def "propagateTypesInAppChain" $
           -- Annotate case statement LHS with function type
           "annotatedLhs" <~ (cases _Term (Strip.deannotateTerm @@ var "lhs")
             (Just $ var "lhs") [
-            _Term_function>>: lambda "fn" $
-              cases _Function (var "fn")
-                (Just $ var "lhs") [
-                _Function_elimination>>: lambda "elim" $
-                  cases _Elimination (var "elim")
-                    (Just $ var "lhs") [
-                    _Elimination_union>>: lambda "cs" $
-                      "dom" <~ (Resolution.nominalApplication @@ (Core.caseStatementTypeName (var "cs"))
-                        @@ list ([] :: [TTerm Type])) $
-                      "ft" <~ inject _Type _Type_function (Core.functionType (var "dom") (var "fixedCod")) $
-                      Annotations.setTermAnnotation @@ asTerm Constants.key_type
-                        @@ just (encodeTypeAsTerm @@ var "ft") @@ var "lhs"]]]) $
+            _Term_cases>>: lambda "cs" $
+              "dom" <~ (Resolution.nominalApplication @@ (Core.caseStatementTypeName (var "cs"))
+                @@ list ([] :: [TTerm Type])) $
+              "ft" <~ inject _Type _Type_function (Core.functionType (var "dom") (var "fixedCod")) $
+              Annotations.setTermAnnotation @@ asTerm Constants.key_type
+                @@ just (encodeTypeAsTerm @@ var "ft") @@ var "lhs"]) $
           Annotations.setTermAnnotation @@ asTerm Constants.key_type
             @@ just (encodeTypeAsTerm @@ var "resultType")
             @@ inject _Term _Term_application (Core.application (var "annotatedLhs") (var "rhs"))])
@@ -5022,12 +4973,13 @@ toDeclStatement = def "toDeclStatement" $
         (right (JavaUtilsSource.variableDeclarationStatement @@ var "aliasesExt" @@ var "jtype" @@ var "id" @@ var "rhs")))
 
 -- | Try to infer the function type from lambda structure when type annotations are unavailable.
-tryInferFunctionType :: TTermDefinition (Function -> Maybe Type)
+-- The "funTerm" argument should be a function-form Term (lambda, project, cases, or unwrap).
+tryInferFunctionType :: TTermDefinition (Term -> Maybe Type)
 tryInferFunctionType = def "tryInferFunctionType" $
-  lambda "fun" $
-    cases _Function (var "fun")
+  lambda "funTerm" $
+    cases _Term (Strip.deannotateTerm @@ var "funTerm")
       (Just nothing) [
-      _Function_lambda>>: lambda "lam" $
+      _Term_lambda>>: lambda "lam" $
         Maybes.bind (Core.lambdaDomain (var "lam")) (lambda "dom" $
           "mCod" <~ (cases _Term (Core.lambdaBody (var "lam"))
             (Just nothing) [
@@ -5036,8 +4988,8 @@ tryInferFunctionType = def "tryInferFunctionType" $
                 (Maps.lookup (Constants.key_type) (Core.annotatedTermAnnotation (var "at")))
                 (lambda "typeTerm" $
                   decodeTypeFromTerm @@ var "typeTerm"),
-            _Term_function>>: lambda "innerFun" $
-              tryInferFunctionType @@ var "innerFun"]) $
+            _Term_lambda>>: lambda "_innerLam" $
+              tryInferFunctionType @@ (Core.lambdaBody (var "lam"))]) $
           Maybes.map (lambda "cod" $
             Core.typeFunction (Core.functionType (var "dom") (var "cod")))
             (var "mCod"))]
@@ -5200,27 +5152,24 @@ visitBranch = def "visitBranch" $
     -- Field terms are lambdas; apply to special var that encodes to instance.value
     cases _Term (Strip.deannotateTerm @@ Core.fieldTerm (var "field"))
       (Just $ Ctx.failInContext (Error.errorOther $ Error.otherError $ Strings.cat2 (string "visitBranch: field term is not a lambda: ") (ShowCore.term @@ Core.fieldTerm (var "field"))) (var "cx")) [
-      _Term_function>>: lambda "f" $
-        cases _Function (var "f")
-          (Just $ Ctx.failInContext (Error.errorOther $ Error.otherError $ Strings.cat2 (string "visitBranch: field term is not a lambda: ") (ShowCore.term @@ Core.fieldTerm (var "field"))) (var "cx")) [
-          _Function_lambda>>: lambda "lam" $
-            withLambda @@ var "env" @@ var "lam" @@ (lambda "env2" $
-              "lambdaParam" <~ Core.lambdaParameter (var "lam") $
-              "body" <~ Core.lambdaBody (var "lam") $
-              "env3" <~ (insertBranchVar @@ var "lambdaParam" @@ var "env2") $
-              "fs" <<~ (analyzeJavaFunction @@ var "env3" @@ var "body" @@ var "cx" @@ var "g") $
-              "bindings" <~ (project _FunctionStructure _FunctionStructure_bindings @@ var "fs") $
-              "innerBody" <~ (project _FunctionStructure _FunctionStructure_body @@ var "fs") $
-              "env4" <~ (project _FunctionStructure _FunctionStructure_environment @@ var "fs") $
-              "bindResult" <<~ (bindingsToStatements @@ var "env4" @@ var "bindings" @@ var "cx" @@ var "g") $
-              "bindingStmts" <~ Pairs.first (var "bindResult") $
-              "env5" <~ Pairs.second (var "bindResult") $
-              "jret" <<~ (encodeTerm @@ var "env5" @@ var "innerBody" @@ var "cx" @@ var "g") $
-              "param" <~ (JavaUtilsSource.javaTypeToJavaFormalParameter @@ var "jdom" @@ var "lambdaParam") $
-              "returnStmt" <~ (JavaDsl.blockStatementStatement (JavaUtilsSource.javaReturnStatement @@ just (var "jret"))) $
-              "allStmts" <~ Lists.concat2 (var "bindingStmts") (list [var "returnStmt"]) $
-              right (noComment @@ (JavaUtilsSource.methodDeclaration @@ var "mods" @@ list ([] :: [TTerm Java.TypeParameter]) @@ var "anns"
-                @@ asTerm JavaNamesSource.visitMethodName @@ list [var "param"] @@ var "result" @@ just (var "allStmts"))))]]
+      _Term_lambda>>: lambda "lam" $
+        withLambda @@ var "env" @@ var "lam" @@ (lambda "env2" $
+          "lambdaParam" <~ Core.lambdaParameter (var "lam") $
+          "body" <~ Core.lambdaBody (var "lam") $
+          "env3" <~ (insertBranchVar @@ var "lambdaParam" @@ var "env2") $
+          "fs" <<~ (analyzeJavaFunction @@ var "env3" @@ var "body" @@ var "cx" @@ var "g") $
+          "bindings" <~ (project _FunctionStructure _FunctionStructure_bindings @@ var "fs") $
+          "innerBody" <~ (project _FunctionStructure _FunctionStructure_body @@ var "fs") $
+          "env4" <~ (project _FunctionStructure _FunctionStructure_environment @@ var "fs") $
+          "bindResult" <<~ (bindingsToStatements @@ var "env4" @@ var "bindings" @@ var "cx" @@ var "g") $
+          "bindingStmts" <~ Pairs.first (var "bindResult") $
+          "env5" <~ Pairs.second (var "bindResult") $
+          "jret" <<~ (encodeTerm @@ var "env5" @@ var "innerBody" @@ var "cx" @@ var "g") $
+          "param" <~ (JavaUtilsSource.javaTypeToJavaFormalParameter @@ var "jdom" @@ var "lambdaParam") $
+          "returnStmt" <~ (JavaDsl.blockStatementStatement (JavaUtilsSource.javaReturnStatement @@ just (var "jret"))) $
+          "allStmts" <~ Lists.concat2 (var "bindingStmts") (list [var "returnStmt"]) $
+          right (noComment @@ (JavaUtilsSource.methodDeclaration @@ var "mods" @@ list ([] :: [TTerm Java.TypeParameter]) @@ var "anns"
+            @@ asTerm JavaNamesSource.visitMethodName @@ list [var "param"] @@ var "result" @@ just (var "allStmts"))))]
 
 -- | Execute a computation in the context of a lambda, extending both the Graph
 -- and aliasesLambdaVars with the lambda parameter.

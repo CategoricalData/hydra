@@ -27,25 +27,25 @@ subtermEdge source path target =
 subtermEdgePath :: Phantoms.TTerm Paths.SubtermEdge -> Phantoms.TTerm Paths.SubtermPath
 subtermEdgePath x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.paths.SubtermEdge"),
-        Core.projectionField = (Core.Name "path")})))),
+        Core.projectionField = (Core.Name "path")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 subtermEdgeSource :: Phantoms.TTerm Paths.SubtermEdge -> Phantoms.TTerm Paths.SubtermNode
 subtermEdgeSource x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.paths.SubtermEdge"),
-        Core.projectionField = (Core.Name "source")})))),
+        Core.projectionField = (Core.Name "source")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 subtermEdgeTarget :: Phantoms.TTerm Paths.SubtermEdge -> Phantoms.TTerm Paths.SubtermNode
 subtermEdgeTarget x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.paths.SubtermEdge"),
-        Core.projectionField = (Core.Name "target")})))),
+        Core.projectionField = (Core.Name "target")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 subtermEdgeWithPath :: Phantoms.TTerm Paths.SubtermEdge -> Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm Paths.SubtermEdge
@@ -56,9 +56,9 @@ subtermEdgeWithPath original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "source"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.paths.SubtermEdge"),
-              Core.projectionField = (Core.Name "source")})))),
+              Core.projectionField = (Core.Name "source")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "path"),
@@ -66,9 +66,9 @@ subtermEdgeWithPath original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "target"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.paths.SubtermEdge"),
-              Core.projectionField = (Core.Name "target")})))),
+              Core.projectionField = (Core.Name "target")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 subtermEdgeWithSource :: Phantoms.TTerm Paths.SubtermEdge -> Phantoms.TTerm Paths.SubtermNode -> Phantoms.TTerm Paths.SubtermEdge
@@ -82,16 +82,16 @@ subtermEdgeWithSource original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "path"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.paths.SubtermEdge"),
-              Core.projectionField = (Core.Name "path")})))),
+              Core.projectionField = (Core.Name "path")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "target"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.paths.SubtermEdge"),
-              Core.projectionField = (Core.Name "target")})))),
+              Core.projectionField = (Core.Name "target")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 subtermEdgeWithTarget :: Phantoms.TTerm Paths.SubtermEdge -> Phantoms.TTerm Paths.SubtermNode -> Phantoms.TTerm Paths.SubtermEdge
@@ -102,16 +102,16 @@ subtermEdgeWithTarget original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "source"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.paths.SubtermEdge"),
-              Core.projectionField = (Core.Name "source")})))),
+              Core.projectionField = (Core.Name "source")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "path"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.paths.SubtermEdge"),
-              Core.projectionField = (Core.Name "path")})))),
+              Core.projectionField = (Core.Name "path")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "target"),
@@ -132,17 +132,17 @@ subtermGraph nodes edges =
 subtermGraphEdges :: Phantoms.TTerm Paths.SubtermGraph -> Phantoms.TTerm [Paths.SubtermEdge]
 subtermGraphEdges x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.paths.SubtermGraph"),
-        Core.projectionField = (Core.Name "edges")})))),
+        Core.projectionField = (Core.Name "edges")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 subtermGraphNodes :: Phantoms.TTerm Paths.SubtermGraph -> Phantoms.TTerm [Paths.SubtermNode]
 subtermGraphNodes x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.paths.SubtermGraph"),
-        Core.projectionField = (Core.Name "nodes")})))),
+        Core.projectionField = (Core.Name "nodes")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 subtermGraphWithEdges :: Phantoms.TTerm Paths.SubtermGraph -> Phantoms.TTerm [Paths.SubtermEdge] -> Phantoms.TTerm Paths.SubtermGraph
@@ -153,9 +153,9 @@ subtermGraphWithEdges original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "nodes"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.paths.SubtermGraph"),
-              Core.projectionField = (Core.Name "nodes")})))),
+              Core.projectionField = (Core.Name "nodes")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "edges"),
@@ -172,9 +172,9 @@ subtermGraphWithNodes original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "edges"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.paths.SubtermGraph"),
-              Core.projectionField = (Core.Name "edges")})))),
+              Core.projectionField = (Core.Name "edges")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 subtermNode :: Phantoms.TTerm Core.Name -> Phantoms.TTerm String -> Phantoms.TTerm String -> Phantoms.TTerm Paths.SubtermNode
@@ -195,25 +195,25 @@ subtermNode name label id =
 subtermNodeId :: Phantoms.TTerm Paths.SubtermNode -> Phantoms.TTerm String
 subtermNodeId x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.paths.SubtermNode"),
-        Core.projectionField = (Core.Name "id")})))),
+        Core.projectionField = (Core.Name "id")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 subtermNodeLabel :: Phantoms.TTerm Paths.SubtermNode -> Phantoms.TTerm String
 subtermNodeLabel x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.paths.SubtermNode"),
-        Core.projectionField = (Core.Name "label")})))),
+        Core.projectionField = (Core.Name "label")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 subtermNodeName :: Phantoms.TTerm Paths.SubtermNode -> Phantoms.TTerm Core.Name
 subtermNodeName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.paths.SubtermNode"),
-        Core.projectionField = (Core.Name "name")})))),
+        Core.projectionField = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 subtermNodeWithId :: Phantoms.TTerm Paths.SubtermNode -> Phantoms.TTerm String -> Phantoms.TTerm Paths.SubtermNode
@@ -224,16 +224,16 @@ subtermNodeWithId original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.paths.SubtermNode"),
-              Core.projectionField = (Core.Name "name")})))),
+              Core.projectionField = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "label"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.paths.SubtermNode"),
-              Core.projectionField = (Core.Name "label")})))),
+              Core.projectionField = (Core.Name "label")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "id"),
@@ -247,9 +247,9 @@ subtermNodeWithLabel original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.paths.SubtermNode"),
-              Core.projectionField = (Core.Name "name")})))),
+              Core.projectionField = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "label"),
@@ -257,9 +257,9 @@ subtermNodeWithLabel original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "id"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.paths.SubtermNode"),
-              Core.projectionField = (Core.Name "id")})))),
+              Core.projectionField = (Core.Name "id")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 subtermNodeWithName :: Phantoms.TTerm Paths.SubtermNode -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Paths.SubtermNode
@@ -273,16 +273,16 @@ subtermNodeWithName original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "label"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.paths.SubtermNode"),
-              Core.projectionField = (Core.Name "label")})))),
+              Core.projectionField = (Core.Name "label")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "id"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.paths.SubtermNode"),
-              Core.projectionField = (Core.Name "id")})))),
+              Core.projectionField = (Core.Name "id")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 subtermPath :: Phantoms.TTerm [Paths.SubtermStep] -> Phantoms.TTerm Paths.SubtermPath
@@ -469,25 +469,25 @@ subtypeEdge source path target =
 subtypeEdgePath :: Phantoms.TTerm Paths.SubtypeEdge -> Phantoms.TTerm Paths.SubtypePath
 subtypeEdgePath x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.paths.SubtypeEdge"),
-        Core.projectionField = (Core.Name "path")})))),
+        Core.projectionField = (Core.Name "path")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 subtypeEdgeSource :: Phantoms.TTerm Paths.SubtypeEdge -> Phantoms.TTerm Paths.SubtypeNode
 subtypeEdgeSource x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.paths.SubtypeEdge"),
-        Core.projectionField = (Core.Name "source")})))),
+        Core.projectionField = (Core.Name "source")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 subtypeEdgeTarget :: Phantoms.TTerm Paths.SubtypeEdge -> Phantoms.TTerm Paths.SubtypeNode
 subtypeEdgeTarget x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.paths.SubtypeEdge"),
-        Core.projectionField = (Core.Name "target")})))),
+        Core.projectionField = (Core.Name "target")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 subtypeEdgeWithPath :: Phantoms.TTerm Paths.SubtypeEdge -> Phantoms.TTerm Paths.SubtypePath -> Phantoms.TTerm Paths.SubtypeEdge
@@ -498,9 +498,9 @@ subtypeEdgeWithPath original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "source"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.paths.SubtypeEdge"),
-              Core.projectionField = (Core.Name "source")})))),
+              Core.projectionField = (Core.Name "source")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "path"),
@@ -508,9 +508,9 @@ subtypeEdgeWithPath original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "target"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.paths.SubtypeEdge"),
-              Core.projectionField = (Core.Name "target")})))),
+              Core.projectionField = (Core.Name "target")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 subtypeEdgeWithSource :: Phantoms.TTerm Paths.SubtypeEdge -> Phantoms.TTerm Paths.SubtypeNode -> Phantoms.TTerm Paths.SubtypeEdge
@@ -524,16 +524,16 @@ subtypeEdgeWithSource original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "path"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.paths.SubtypeEdge"),
-              Core.projectionField = (Core.Name "path")})))),
+              Core.projectionField = (Core.Name "path")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "target"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.paths.SubtypeEdge"),
-              Core.projectionField = (Core.Name "target")})))),
+              Core.projectionField = (Core.Name "target")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 subtypeEdgeWithTarget :: Phantoms.TTerm Paths.SubtypeEdge -> Phantoms.TTerm Paths.SubtypeNode -> Phantoms.TTerm Paths.SubtypeEdge
@@ -544,16 +544,16 @@ subtypeEdgeWithTarget original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "source"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.paths.SubtypeEdge"),
-              Core.projectionField = (Core.Name "source")})))),
+              Core.projectionField = (Core.Name "source")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "path"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.paths.SubtypeEdge"),
-              Core.projectionField = (Core.Name "path")})))),
+              Core.projectionField = (Core.Name "path")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "target"),
@@ -574,17 +574,17 @@ subtypeGraph nodes edges =
 subtypeGraphEdges :: Phantoms.TTerm Paths.SubtypeGraph -> Phantoms.TTerm [Paths.SubtypeEdge]
 subtypeGraphEdges x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.paths.SubtypeGraph"),
-        Core.projectionField = (Core.Name "edges")})))),
+        Core.projectionField = (Core.Name "edges")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 subtypeGraphNodes :: Phantoms.TTerm Paths.SubtypeGraph -> Phantoms.TTerm [Paths.SubtypeNode]
 subtypeGraphNodes x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.paths.SubtypeGraph"),
-        Core.projectionField = (Core.Name "nodes")})))),
+        Core.projectionField = (Core.Name "nodes")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 subtypeGraphWithEdges :: Phantoms.TTerm Paths.SubtypeGraph -> Phantoms.TTerm [Paths.SubtypeEdge] -> Phantoms.TTerm Paths.SubtypeGraph
@@ -595,9 +595,9 @@ subtypeGraphWithEdges original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "nodes"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.paths.SubtypeGraph"),
-              Core.projectionField = (Core.Name "nodes")})))),
+              Core.projectionField = (Core.Name "nodes")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "edges"),
@@ -614,9 +614,9 @@ subtypeGraphWithNodes original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "edges"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.paths.SubtypeGraph"),
-              Core.projectionField = (Core.Name "edges")})))),
+              Core.projectionField = (Core.Name "edges")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 subtypeNode :: Phantoms.TTerm Core.Name -> Phantoms.TTerm String -> Phantoms.TTerm String -> Phantoms.TTerm Paths.SubtypeNode
@@ -637,25 +637,25 @@ subtypeNode name label id =
 subtypeNodeId :: Phantoms.TTerm Paths.SubtypeNode -> Phantoms.TTerm String
 subtypeNodeId x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.paths.SubtypeNode"),
-        Core.projectionField = (Core.Name "id")})))),
+        Core.projectionField = (Core.Name "id")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 subtypeNodeLabel :: Phantoms.TTerm Paths.SubtypeNode -> Phantoms.TTerm String
 subtypeNodeLabel x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.paths.SubtypeNode"),
-        Core.projectionField = (Core.Name "label")})))),
+        Core.projectionField = (Core.Name "label")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 subtypeNodeName :: Phantoms.TTerm Paths.SubtypeNode -> Phantoms.TTerm Core.Name
 subtypeNodeName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.paths.SubtypeNode"),
-        Core.projectionField = (Core.Name "name")})))),
+        Core.projectionField = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 subtypeNodeWithId :: Phantoms.TTerm Paths.SubtypeNode -> Phantoms.TTerm String -> Phantoms.TTerm Paths.SubtypeNode
@@ -666,16 +666,16 @@ subtypeNodeWithId original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.paths.SubtypeNode"),
-              Core.projectionField = (Core.Name "name")})))),
+              Core.projectionField = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "label"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.paths.SubtypeNode"),
-              Core.projectionField = (Core.Name "label")})))),
+              Core.projectionField = (Core.Name "label")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "id"),
@@ -689,9 +689,9 @@ subtypeNodeWithLabel original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.paths.SubtypeNode"),
-              Core.projectionField = (Core.Name "name")})))),
+              Core.projectionField = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "label"),
@@ -699,9 +699,9 @@ subtypeNodeWithLabel original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "id"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.paths.SubtypeNode"),
-              Core.projectionField = (Core.Name "id")})))),
+              Core.projectionField = (Core.Name "id")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 subtypeNodeWithName :: Phantoms.TTerm Paths.SubtypeNode -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Paths.SubtypeNode
@@ -715,16 +715,16 @@ subtypeNodeWithName original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "label"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.paths.SubtypeNode"),
-              Core.projectionField = (Core.Name "label")})))),
+              Core.projectionField = (Core.Name "label")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "id"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.paths.SubtypeNode"),
-              Core.projectionField = (Core.Name "id")})))),
+              Core.projectionField = (Core.Name "id")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 subtypePath :: Phantoms.TTerm [Paths.SubtypeStep] -> Phantoms.TTerm Paths.SubtypePath
@@ -880,11 +880,11 @@ subtypeStepWrappedType =
 unSubtermPath :: Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm [Paths.SubtermStep]
 unSubtermPath x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.paths.SubtermPath")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.paths.SubtermPath")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unSubtypePath :: Phantoms.TTerm Paths.SubtypePath -> Phantoms.TTerm [Paths.SubtypeStep]
 unSubtypePath x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.paths.SubtypePath")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.paths.SubtypePath")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))

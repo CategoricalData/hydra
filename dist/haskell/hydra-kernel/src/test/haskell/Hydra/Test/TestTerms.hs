@@ -49,9 +49,9 @@ testElementFirstName :: Core.Binding
 testElementFirstName =
     Core.Binding {
       Core.bindingName = (Core.Name "firstName"),
-      Core.bindingTerm = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.bindingTerm = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = TestTypes.testTypePersonName,
-        Core.projectionField = (Core.Name "firstName")})))),
+        Core.projectionField = (Core.Name "firstName")})),
       Core.bindingType = (Just (Core.TypeScheme {
         Core.typeSchemeVariables = [],
         Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {

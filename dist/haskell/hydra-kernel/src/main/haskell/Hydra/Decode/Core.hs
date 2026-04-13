@@ -86,24 +86,6 @@ eitherType cx raw =
           Core.eitherTypeRight = field_right}))))
       _ -> Left (Errors.DecodingError "expected record")) (Core_.stripWithDecodingError cx raw)
 
-elimination :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.Elimination
-elimination cx raw =
-    Eithers.either (\err -> Left err) (\stripped -> case stripped of
-      Core.TermUnion v0 ->
-        let field = Core.injectionField v0
-            fname = Core.fieldName field
-            fterm = Core.fieldTerm field
-            variantMap =
-                    Maps.fromList [
-                      (Core.Name "record", (\input -> Eithers.map (\t -> Core.EliminationRecord t) (projection cx input))),
-                      (Core.Name "union", (\input -> Eithers.map (\t -> Core.EliminationUnion t) (caseStatement cx input))),
-                      (Core.Name "wrap", (\input -> Eithers.map (\t -> Core.EliminationWrap t) (name cx input)))]
-        in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
-          "no such field ",
-          (Core.unName fname),
-          " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
-      _ -> Left (Errors.DecodingError "expected union")) (Core_.stripWithDecodingError cx raw)
-
 field :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.Field
 field cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -187,23 +169,6 @@ forallType cx raw =
           Core.forallTypeParameter = field_parameter,
           Core.forallTypeBody = field_body}))))
       _ -> Left (Errors.DecodingError "expected record")) (Core_.stripWithDecodingError cx raw)
-
-function :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.Function
-function cx raw =
-    Eithers.either (\err -> Left err) (\stripped -> case stripped of
-      Core.TermUnion v0 ->
-        let field = Core.injectionField v0
-            fname = Core.fieldName field
-            fterm = Core.fieldTerm field
-            variantMap =
-                    Maps.fromList [
-                      (Core.Name "elimination", (\input -> Eithers.map (\t -> Core.FunctionElimination t) (elimination cx input))),
-                      (Core.Name "lambda", (\input -> Eithers.map (\t -> Core.FunctionLambda t) (lambda cx input)))]
-        in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
-          "no such field ",
-          (Core.unName fname),
-          " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
-      _ -> Left (Errors.DecodingError "expected union")) (Core_.stripWithDecodingError cx raw)
 
 functionType :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.FunctionType
 functionType cx raw =
@@ -461,20 +426,23 @@ term cx raw =
                     Maps.fromList [
                       (Core.Name "annotated", (\input -> Eithers.map (\t -> Core.TermAnnotated t) (annotatedTerm cx input))),
                       (Core.Name "application", (\input -> Eithers.map (\t -> Core.TermApplication t) (application cx input))),
+                      (Core.Name "cases", (\input -> Eithers.map (\t -> Core.TermCases t) (caseStatement cx input))),
                       (Core.Name "either", (\input -> Eithers.map (\t -> Core.TermEither t) (Core_.decodeEither term term cx input))),
-                      (Core.Name "function", (\input -> Eithers.map (\t -> Core.TermFunction t) (function cx input))),
+                      (Core.Name "lambda", (\input -> Eithers.map (\t -> Core.TermLambda t) (lambda cx input))),
                       (Core.Name "let", (\input -> Eithers.map (\t -> Core.TermLet t) (let_ cx input))),
                       (Core.Name "list", (\input -> Eithers.map (\t -> Core.TermList t) (Core_.decodeList term cx input))),
                       (Core.Name "literal", (\input -> Eithers.map (\t -> Core.TermLiteral t) (literal cx input))),
                       (Core.Name "map", (\input -> Eithers.map (\t -> Core.TermMap t) (Core_.decodeMap term term cx input))),
                       (Core.Name "maybe", (\input -> Eithers.map (\t -> Core.TermMaybe t) (Core_.decodeMaybe term cx input))),
                       (Core.Name "pair", (\input -> Eithers.map (\t -> Core.TermPair t) (Core_.decodePair term term cx input))),
+                      (Core.Name "project", (\input -> Eithers.map (\t -> Core.TermProject t) (projection cx input))),
                       (Core.Name "record", (\input -> Eithers.map (\t -> Core.TermRecord t) (record cx input))),
                       (Core.Name "set", (\input -> Eithers.map (\t -> Core.TermSet t) (Core_.decodeSet term cx input))),
                       (Core.Name "typeApplication", (\input -> Eithers.map (\t -> Core.TermTypeApplication t) (typeApplicationTerm cx input))),
                       (Core.Name "typeLambda", (\input -> Eithers.map (\t -> Core.TermTypeLambda t) (typeLambda cx input))),
                       (Core.Name "union", (\input -> Eithers.map (\t -> Core.TermUnion t) (injection cx input))),
                       (Core.Name "unit", (\input -> Eithers.map (\t -> Core.TermUnit) (Core_.decodeUnit cx input))),
+                      (Core.Name "unwrap", (\input -> Eithers.map (\t -> Core.TermUnwrap t) (name cx input))),
                       (Core.Name "variable", (\input -> Eithers.map (\t -> Core.TermVariable t) (name cx input))),
                       (Core.Name "wrap", (\input -> Eithers.map (\t -> Core.TermWrap t) (wrappedTerm cx input)))]
         in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
