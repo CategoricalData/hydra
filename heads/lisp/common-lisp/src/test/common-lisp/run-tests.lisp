@@ -9,18 +9,26 @@
 ;; a d0 suffix. Without this setting, SBCL reads them as single-float, losing precision.
 (setf *read-default-float-format* 'double-float)
 
-;; Load cl-ppcre for regex support.
-;; Try loading via ASDF directly (avoids quicklisp cache permission issues).
-(handler-case
-  (progn
-    (require :asdf)
-    ;; Register the quicklisp software directory so ASDF can find cl-ppcre
-    (let ((ql-software (merge-pathnames "quicklisp/dists/quicklisp/software/" (user-homedir-pathname))))
-      (when (probe-file ql-software)
-        (funcall (intern "INITIALIZE-SOURCE-REGISTRY" :asdf)
-                 `(:source-registry (:tree ,ql-software) :inherit-configuration))))
-    (funcall (intern "LOAD-SYSTEM" :asdf) :cl-ppcre :verbose nil))
-  (error (e) (format t "Warning: Could not load cl-ppcre: ~A~%" e)))
+;; Load cl-ppcre for regex support. Required by the regex test suite —
+;; fail loudly if it cannot be loaded, since silently skipping would let
+;; regex tests run with broken primitives.
+;;
+;; Search path priority:
+;;   1. ~/quicklisp/dists/quicklisp/software/  (developer/local installs)
+;;   2. /usr/share/common-lisp/source/         (Debian/Ubuntu apt package)
+(require :asdf)
+(let ((trees nil)
+      (ql-software (merge-pathnames "quicklisp/dists/quicklisp/software/"
+                                    (user-homedir-pathname)))
+      (system-cl  #P"/usr/share/common-lisp/source/"))
+  (when (probe-file ql-software) (push ql-software trees))
+  (when (probe-file system-cl)   (push system-cl trees))
+  (when trees
+    (funcall (intern "INITIALIZE-SOURCE-REGISTRY" :asdf)
+             `(:source-registry
+                ,@(mapcar (lambda (d) `(:tree ,d)) trees)
+                :inherit-configuration))))
+(funcall (intern "LOAD-SYSTEM" :asdf) :cl-ppcre :verbose nil)
 
 ;; Determine the base directory (hydra-common-lisp/)
 ;; *hydra-cl-head* = heads/lisp/common-lisp/ (hand-written sources)
