@@ -5,7 +5,7 @@
 module Hydra.Encode.Query where
 
 import qualified Hydra.Core as Core
-import qualified Hydra.Encode.Core as Core_
+import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Query as Query
@@ -52,13 +52,13 @@ edge x =
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = (Core_.name (Query.edgeType x))},
+          Core.fieldTerm = (EncodeCore.name (Query.edgeType x))},
         Core.Field {
           Core.fieldName = (Core.Name "out"),
-          Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map Core_.name opt)) (Query.edgeOut x))},
+          Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map EncodeCore.name opt)) (Query.edgeOut x))},
         Core.Field {
           Core.fieldName = (Core.Name "in"),
-          Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map Core_.name opt)) (Query.edgeIn x))}]})
+          Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map EncodeCore.name opt)) (Query.edgeIn x))}]})
 
 graphPattern :: Query.GraphPattern -> Core.Term
 graphPattern x =
@@ -67,7 +67,7 @@ graphPattern x =
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "graph"),
-          Core.fieldTerm = (Core_.name (Query.graphPatternGraph x))},
+          Core.fieldTerm = (EncodeCore.name (Query.graphPatternGraph x))},
         Core.Field {
           Core.fieldName = (Core.Name "patterns"),
           Core.fieldTerm = ((\xs -> Core.TermList (Lists.map pattern xs)) (Query.graphPatternPatterns x))}]})
@@ -79,7 +79,7 @@ node x =
         Core.injectionTypeName = (Core.Name "hydra.query.Node"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "term"),
-          Core.fieldTerm = (Core_.term v0)}})
+          Core.fieldTerm = (EncodeCore.term v0)}})
       Query.NodeVariable v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.query.Node"),
         Core.injectionField = Core.Field {
@@ -250,7 +250,7 @@ step x =
         Core.injectionTypeName = (Core.Name "hydra.query.Step"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "project"),
-          Core.fieldTerm = (Core_.projection v0)}})
+          Core.fieldTerm = (EncodeCore.projection v0)}})
       Query.StepCompare v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.query.Step"),
         Core.injectionField = Core.Field {

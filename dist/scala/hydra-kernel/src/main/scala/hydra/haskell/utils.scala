@@ -46,50 +46,133 @@ def namespacesForModule[T0](mod: hydra.packaging.Module)(cx: T0)(g: hydra.graph.
   {
   lazy val ns: hydra.packaging.Namespace = (mod.namespace)
   {
-    def toModuleName(namespace: hydra.packaging.Namespace): hydra.haskell.syntax.ModuleName =
-      {
-      lazy val namespaceStr: scala.Predef.String = namespace
-      lazy val parts: Seq[scala.Predef.String] = hydra.lib.strings.splitOn(".")(namespaceStr)
-      lazy val lastPart: scala.Predef.String = hydra.lib.lists.last[scala.Predef.String](parts)
-      lazy val capitalized: scala.Predef.String = hydra.formatting.capitalize(lastPart)
-      capitalized
-    }
+    def segmentsOf(namespace: hydra.packaging.Namespace): Seq[scala.Predef.String] = hydra.lib.strings.splitOn(".")(namespace)
     {
-      def toPair(name: hydra.packaging.Namespace): Tuple2[hydra.packaging.Namespace, hydra.haskell.syntax.ModuleName] = Tuple2(name, toModuleName(name))
-      {
-        def addPair[T1](state: Tuple2[Map[T1, hydra.haskell.syntax.ModuleName], scala.collection.immutable.Set[hydra.haskell.syntax.ModuleName]])(namePair: Tuple2[T1,
-           hydra.haskell.syntax.ModuleName]): Tuple2[Map[T1, hydra.haskell.syntax.ModuleName], scala.collection.immutable.Set[hydra.haskell.syntax.ModuleName]] =
-          {
-          lazy val currentMap: Map[T1, hydra.haskell.syntax.ModuleName] = hydra.lib.pairs.first[Map[T1,
-             hydra.haskell.syntax.ModuleName], scala.collection.immutable.Set[hydra.haskell.syntax.ModuleName]](state)
-          lazy val currentSet: scala.collection.immutable.Set[hydra.haskell.syntax.ModuleName] = hydra.lib.pairs.second[Map[T1,
-             hydra.haskell.syntax.ModuleName], scala.collection.immutable.Set[hydra.haskell.syntax.ModuleName]](state)
-          lazy val name: T1 = hydra.lib.pairs.first[T1, hydra.haskell.syntax.ModuleName](namePair)
-          lazy val alias: hydra.haskell.syntax.ModuleName = hydra.lib.pairs.second[T1, hydra.haskell.syntax.ModuleName](namePair)
-          lazy val aliasStr: scala.Predef.String = alias
-          hydra.lib.logic.ifElse[Tuple2[Map[T1, hydra.haskell.syntax.ModuleName], scala.collection.immutable.Set[hydra.haskell.syntax.ModuleName]]](hydra.lib.sets.member[hydra.haskell.syntax.ModuleName](alias)(currentSet))(addPair(state)(Tuple2(name,
-             hydra.lib.strings.cat2(aliasStr)("_"))))(Tuple2(hydra.lib.maps.insert[T1, hydra.haskell.syntax.ModuleName](name)(alias)(currentMap),
-             hydra.lib.sets.insert[hydra.haskell.syntax.ModuleName](alias)(currentSet)))
-        }
+      def aliasFromSuffix(segs: Seq[scala.Predef.String])(n: Int): hydra.haskell.syntax.ModuleName =
         {
-          lazy val focusPair: Tuple2[hydra.packaging.Namespace, hydra.haskell.syntax.ModuleName] = toPair(ns)
+        lazy val dropCount: Int = hydra.lib.math.sub(hydra.lib.lists.length[scala.Predef.String](segs))(n)
+        lazy val suffix: Seq[scala.Predef.String] = hydra.lib.lists.drop[scala.Predef.String](dropCount)(segs)
+        lazy val capitalizedSuffix: Seq[scala.Predef.String] = hydra.lib.lists.map[scala.Predef.String,
+           scala.Predef.String](hydra.formatting.capitalize)(suffix)
+        hydra.lib.strings.cat(capitalizedSuffix)
+      }
+      {
+        def toModuleName(namespace: hydra.packaging.Namespace): hydra.haskell.syntax.ModuleName = aliasFromSuffix(segmentsOf(namespace))(1)
+        {
+          lazy val focusPair: Tuple2[hydra.packaging.Namespace, hydra.haskell.syntax.ModuleName] = Tuple2(ns, toModuleName(ns))
           {
             lazy val nssAsList: Seq[hydra.packaging.Namespace] = hydra.lib.sets.toList[hydra.packaging.Namespace](nss)
             {
-              lazy val nssPairs: Seq[Tuple2[hydra.packaging.Namespace, hydra.haskell.syntax.ModuleName]] = hydra.lib.lists.map[hydra.packaging.Namespace,
-                 Tuple2[hydra.packaging.Namespace, hydra.haskell.syntax.ModuleName]](toPair)(nssAsList)
+              lazy val segsMap: Map[hydra.packaging.Namespace, Seq[scala.Predef.String]] = hydra.lib.maps.fromList[hydra.packaging.Namespace,
+                 Seq[scala.Predef.String]](hydra.lib.lists.map[hydra.packaging.Namespace, Tuple2[hydra.packaging.Namespace,
+                 Seq[scala.Predef.String]]]((nm: hydra.packaging.Namespace) => Tuple2(nm, segmentsOf(nm)))(nssAsList))
               {
-                def emptyState[T1, T2, T3]: Tuple2[Map[T1, T2], scala.collection.immutable.Set[T3]] = Tuple2(hydra.lib.maps.empty[T1,
-                   T2], hydra.lib.sets.empty[T3])
+                lazy val maxSegs: Int = hydra.lib.lists.foldl[Int, Int]((a: Int) =>
+                  (b: Int) =>
+                  hydra.lib.logic.ifElse[Int](hydra.lib.equality.gt[Int](a)(b))(a)(b))(1)(hydra.lib.lists.map[hydra.packaging.Namespace,
+                     Int]((nm: hydra.packaging.Namespace) => hydra.lib.lists.length[scala.Predef.String](segmentsOf(nm)))(nssAsList))
                 {
-                  lazy val finalState: Tuple2[Map[hydra.packaging.Namespace, hydra.haskell.syntax.ModuleName],
-                     scala.collection.immutable.Set[hydra.haskell.syntax.ModuleName]] = hydra.lib.lists.foldl[Tuple2[Map[hydra.packaging.Namespace,
-                     hydra.haskell.syntax.ModuleName], scala.collection.immutable.Set[hydra.haskell.syntax.ModuleName]],
-                     Tuple2[hydra.packaging.Namespace, hydra.haskell.syntax.ModuleName]](addPair)(emptyState)(nssPairs)
+                  lazy val initialState: Map[hydra.packaging.Namespace, Int] = hydra.lib.maps.fromList[hydra.packaging.Namespace,
+                     Int](hydra.lib.lists.map[hydra.packaging.Namespace, Tuple2[hydra.packaging.Namespace,
+                     Int]]((nm: hydra.packaging.Namespace) => Tuple2(nm, 1))(nssAsList))
                   {
-                    lazy val resultMap: Map[hydra.packaging.Namespace, hydra.haskell.syntax.ModuleName] = hydra.lib.pairs.first[Map[hydra.packaging.Namespace,
-                       hydra.haskell.syntax.ModuleName], scala.collection.immutable.Set[hydra.haskell.syntax.ModuleName]](finalState)
-                    Right(hydra.packaging.Namespaces(focusPair, resultMap))
+                    def segsFor(nm: hydra.packaging.Namespace): Seq[scala.Predef.String] =
+                      hydra.lib.maybes.fromMaybe[Seq[scala.Predef.String]](Seq())(hydra.lib.maps.lookup[hydra.packaging.Namespace,
+                         Seq[scala.Predef.String]](nm)(segsMap))
+                    {
+                      def takenFor[T1](state: Map[T1, Int])(nm: T1): Int = hydra.lib.maybes.fromMaybe[Int](1)(hydra.lib.maps.lookup[T1, Int](nm)(state))
+                      {
+                        def growStep[T1](state: Map[hydra.packaging.Namespace, Int])(_ign: T1): Map[hydra.packaging.Namespace, Int] =
+                          {
+                          lazy val aliasEntries: Seq[Tuple2[hydra.packaging.Namespace, Tuple2[Int, Tuple2[Int,
+                             scala.Predef.String]]]] = hydra.lib.lists.map[hydra.packaging.Namespace,
+                             Tuple2[hydra.packaging.Namespace, Tuple2[Int, Tuple2[Int, scala.Predef.String]]]]((nm: hydra.packaging.Namespace) =>
+                            {
+                            lazy val segs: Seq[scala.Predef.String] = segsFor(nm)
+                            lazy val n: Int = takenFor(state)(nm)
+                            lazy val segCount: Int = hydra.lib.lists.length[scala.Predef.String](segs)
+                            lazy val aliasStr: scala.Predef.String = aliasFromSuffix(segs)(n)
+                            Tuple2(nm, Tuple2(n, Tuple2(segCount, aliasStr)))
+                          })(nssAsList)
+                          lazy val aliasCounts: Map[scala.Predef.String, Int] = hydra.lib.lists.foldl[Map[scala.Predef.String,
+                             Int], Tuple2[hydra.packaging.Namespace, Tuple2[Int, Tuple2[Int, scala.Predef.String]]]]((m: Map[scala.Predef.String,
+                             Int]) =>
+                            (e: Tuple2[hydra.packaging.Namespace, Tuple2[Int, Tuple2[Int, scala.Predef.String]]]) =>
+                            {
+                            lazy val k: scala.Predef.String = hydra.lib.pairs.second[Int, scala.Predef.String](hydra.lib.pairs.second[Int,
+                               Tuple2[Int, scala.Predef.String]](hydra.lib.pairs.second[hydra.packaging.Namespace,
+                               Tuple2[Int, Tuple2[Int, scala.Predef.String]]](e)))
+                            hydra.lib.maps.insert[scala.Predef.String, Int](k)(hydra.lib.math.add(1)(hydra.lib.maybes.fromMaybe[Int](0)(hydra.lib.maps.lookup[scala.Predef.String,
+                               Int](k)(m))))(m)
+                          })(hydra.lib.maps.empty[scala.Predef.String, Int])(aliasEntries)
+                          lazy val aliasMinSegs: Map[scala.Predef.String, Int] = hydra.lib.lists.foldl[Map[scala.Predef.String,
+                             Int], Tuple2[hydra.packaging.Namespace, Tuple2[Int, Tuple2[Int, scala.Predef.String]]]]((m: Map[scala.Predef.String,
+                             Int]) =>
+                            (e: Tuple2[hydra.packaging.Namespace, Tuple2[Int, Tuple2[Int, scala.Predef.String]]]) =>
+                            {
+                            lazy val segCount: Int = hydra.lib.pairs.first[Int, scala.Predef.String](hydra.lib.pairs.second[Int,
+                               Tuple2[Int, scala.Predef.String]](hydra.lib.pairs.second[hydra.packaging.Namespace,
+                               Tuple2[Int, Tuple2[Int, scala.Predef.String]]](e)))
+                            lazy val k: scala.Predef.String = hydra.lib.pairs.second[Int, scala.Predef.String](hydra.lib.pairs.second[Int,
+                               Tuple2[Int, scala.Predef.String]](hydra.lib.pairs.second[hydra.packaging.Namespace,
+                               Tuple2[Int, Tuple2[Int, scala.Predef.String]]](e)))
+                            lazy val existing: Option[Int] = hydra.lib.maps.lookup[scala.Predef.String, Int](k)(m)
+                            hydra.lib.maps.insert[scala.Predef.String, Int](k)(hydra.lib.maybes.cases[Int, Int](existing)(segCount)((prev: Int) =>
+                              hydra.lib.logic.ifElse[Int](hydra.lib.equality.lt[Int](segCount)(prev))(segCount)(prev)))(m)
+                          })(hydra.lib.maps.empty[scala.Predef.String, Int])(aliasEntries)
+                          lazy val aliasMinSegsCount: Map[scala.Predef.String, Int] = hydra.lib.lists.foldl[Map[scala.Predef.String,
+                             Int], Tuple2[hydra.packaging.Namespace, Tuple2[Int, Tuple2[Int, scala.Predef.String]]]]((m: Map[scala.Predef.String,
+                             Int]) =>
+                            (e: Tuple2[hydra.packaging.Namespace, Tuple2[Int, Tuple2[Int, scala.Predef.String]]]) =>
+                            {
+                            lazy val segCount: Int = hydra.lib.pairs.first[Int, scala.Predef.String](hydra.lib.pairs.second[Int,
+                               Tuple2[Int, scala.Predef.String]](hydra.lib.pairs.second[hydra.packaging.Namespace,
+                               Tuple2[Int, Tuple2[Int, scala.Predef.String]]](e)))
+                            lazy val k: scala.Predef.String = hydra.lib.pairs.second[Int, scala.Predef.String](hydra.lib.pairs.second[Int,
+                               Tuple2[Int, scala.Predef.String]](hydra.lib.pairs.second[hydra.packaging.Namespace,
+                               Tuple2[Int, Tuple2[Int, scala.Predef.String]]](e)))
+                            lazy val minSegs: Int = hydra.lib.maybes.fromMaybe[Int](segCount)(hydra.lib.maps.lookup[scala.Predef.String, Int](k)(aliasMinSegs))
+                            hydra.lib.logic.ifElse[Map[scala.Predef.String, Int]](hydra.lib.equality.equal[Int](segCount)(minSegs))(hydra.lib.maps.insert[scala.Predef.String,
+                               Int](k)(hydra.lib.math.add(1)(hydra.lib.maybes.fromMaybe[Int](0)(hydra.lib.maps.lookup[scala.Predef.String,
+                               Int](k)(m))))(m))(m)
+                          })(hydra.lib.maps.empty[scala.Predef.String, Int])(aliasEntries)
+                          hydra.lib.maps.fromList[hydra.packaging.Namespace, Int](hydra.lib.lists.map[Tuple2[hydra.packaging.Namespace,
+                             Tuple2[Int, Tuple2[Int, scala.Predef.String]]], Tuple2[hydra.packaging.Namespace,
+                             Int]]((e: Tuple2[hydra.packaging.Namespace, Tuple2[Int, Tuple2[Int, scala.Predef.String]]]) =>
+                            {
+                            lazy val nm: hydra.packaging.Namespace = hydra.lib.pairs.first[hydra.packaging.Namespace,
+                               Tuple2[Int, Tuple2[Int, scala.Predef.String]]](e)
+                            lazy val n: Int = hydra.lib.pairs.first[Int, Tuple2[Int, scala.Predef.String]](hydra.lib.pairs.second[hydra.packaging.Namespace,
+                               Tuple2[Int, Tuple2[Int, scala.Predef.String]]](e))
+                            lazy val segCount: Int = hydra.lib.pairs.first[Int, scala.Predef.String](hydra.lib.pairs.second[Int,
+                               Tuple2[Int, scala.Predef.String]](hydra.lib.pairs.second[hydra.packaging.Namespace,
+                               Tuple2[Int, Tuple2[Int, scala.Predef.String]]](e)))
+                            lazy val aliasStr: scala.Predef.String = hydra.lib.pairs.second[Int, scala.Predef.String](hydra.lib.pairs.second[Int,
+                               Tuple2[Int, scala.Predef.String]](hydra.lib.pairs.second[hydra.packaging.Namespace,
+                               Tuple2[Int, Tuple2[Int, scala.Predef.String]]](e)))
+                            lazy val count: Int = hydra.lib.maybes.fromMaybe[Int](0)(hydra.lib.maps.lookup[scala.Predef.String, Int](aliasStr)(aliasCounts))
+                            lazy val minSegs: Int = hydra.lib.maybes.fromMaybe[Int](segCount)(hydra.lib.maps.lookup[scala.Predef.String,
+                               Int](aliasStr)(aliasMinSegs))
+                            lazy val minSegsCount: Int = hydra.lib.maybes.fromMaybe[Int](0)(hydra.lib.maps.lookup[scala.Predef.String,
+                               Int](aliasStr)(aliasMinSegsCount))
+                            lazy val canGrow: Boolean = hydra.lib.logic.and(hydra.lib.equality.gt[Int](count)(1))(hydra.lib.logic.and(hydra.lib.equality.gt[Int](segCount)(n))(hydra.lib.logic.or(hydra.lib.equality.gt[Int](segCount)(minSegs))(hydra.lib.equality.gt[Int](minSegsCount)(1))))
+                            lazy val newN: Int = hydra.lib.logic.ifElse[Int](canGrow)(hydra.lib.math.add(n)(1))(n)
+                            Tuple2(nm, newN)
+                          })(aliasEntries))
+                        }
+                        {
+                          lazy val finalState: Map[hydra.packaging.Namespace, Int] = hydra.lib.lists.foldl[Map[hydra.packaging.Namespace,
+                             Int], Unit](growStep)(initialState)(hydra.lib.lists.replicate[Unit](maxSegs)(()))
+                          {
+                            lazy val resultMap: Map[hydra.packaging.Namespace, hydra.haskell.syntax.ModuleName] = hydra.lib.maps.fromList[hydra.packaging.Namespace,
+                               hydra.haskell.syntax.ModuleName](hydra.lib.lists.map[hydra.packaging.Namespace,
+                               Tuple2[hydra.packaging.Namespace, hydra.haskell.syntax.ModuleName]]((nm: hydra.packaging.Namespace) =>
+                              Tuple2(nm, aliasFromSuffix(segsFor(nm))(takenFor(finalState)(nm))))(nssAsList))
+                            Right(hydra.packaging.Namespaces(focusPair, resultMap))
+                          }
+                        }
+                      }
+                    }
                   }
                 }
               }
