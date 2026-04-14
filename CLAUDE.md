@@ -259,6 +259,13 @@ Key rules:
 - **Consistent imports**: Copy the import block from an existing module of the same kind.
   Use the standard aliases (`Lists`, `Maps`, `Core`, `Graph`, etc.).
 - **No post-generation patches**: If generated code is wrong, fix the generator.
+  This rule is routinely violated under pressure — sync scripts accumulate
+  `sed_inplace` calls that paper over generator bugs instead of fixing them,
+  and hand-written files sometimes land in `dist/` because a test needs them
+  "right there." Both are violations. The narrow exception is a deliberate
+  bootstrap patch, which must be overwritten by the next regeneration; a patch
+  that runs on every sync is not a bootstrap patch. See [Checking for design
+  violations](docs/recipes/maintenance.md#checking-for-design-violations).
 
 ## Critical pitfalls
 
@@ -270,7 +277,17 @@ These are hard-won lessons. Read the linked docs for full context.
    build errors, test failures, sync failures, demo failures.
 
 2. **Never edit generated files** (anything under `dist/`) except for bootstrap patches
-   that will be overwritten by regeneration.
+   that will be overwritten by regeneration. A `sed_inplace` call in a sync script that
+   rewrites a generated file is an edit — it is as prohibited as manually opening the file.
+   If generated output is wrong, fix the generator. If a hand-written file needs to sit
+   under `dist/` because a test imports it from there, put the canonical copy in `heads/`
+   and copy it into `dist/` from a sync script. See [Checking for design
+   violations](docs/recipes/maintenance.md#checking-for-design-violations).
+   One additional narrow exception: the sync-python patch that injects `testGraph`
+   into the generated test suite (via a `__getattr__` shim calling `test_env.py`)
+   solves a persistent test-bootstrapping problem, not a bad-generation problem.
+   It is intended to be removed once the underlying issue is solved; new patches
+   of this kind still require a clear justification and a tracking issue.
 
 3. **The bootstrap problem**: Extending core types creates a circular dependency.
    You must manually patch generated files, rebuild, then regenerate to overwrite patches.
