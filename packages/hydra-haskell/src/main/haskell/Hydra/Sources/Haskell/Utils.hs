@@ -191,29 +191,120 @@ namespacesForModule = haskellUtilsDefinition "namespacesForModule" $
   "mod" ~> "cx" ~> "g" ~>
     "nss" <<~ Analysis.moduleDependencyNamespaces @@ var "cx" @@ var "g" @@ true @@ true @@ true @@ true @@ var "mod" $
     "ns" <~ (Packaging.moduleNamespace $ var "mod") $
-    "toModuleName" <~ ("namespace" ~> lets [
-      "namespaceStr">: unwrap _Namespace @@ var "namespace",
-      "parts">: Strings.splitOn (string ".") (var "namespaceStr"),
-      "lastPart">: Lists.last $ var "parts",
-      "capitalized">: Formatting.capitalize @@ var "lastPart"] $
-      wrap H._ModuleName $ var "capitalized") $
-    "toPair" <~ ("name" ~>
-      pair (var "name") (var "toModuleName" @@ var "name")) $
-    "addPair" <~ ("state" ~> "namePair" ~> lets [
-      "currentMap">: Pairs.first $ var "state",
-      "currentSet">: Pairs.second $ var "state",
-      "name">: Pairs.first $ var "namePair",
-      "alias">: Pairs.second $ var "namePair",
-      "aliasStr">: unwrap H._ModuleName @@ var "alias"] $
-      Logic.ifElse (Sets.member (var "alias") (var "currentSet"))
-        (var "addPair" @@ var "state" @@ pair (var "name") (wrap H._ModuleName $ Strings.cat2 (var "aliasStr") (string "_")))
-        (pair (Maps.insert (var "name") (var "alias") (var "currentMap")) (Sets.insert (var "alias") (var "currentSet")))) $
-    "focusPair" <~ (var "toPair" @@ var "ns") $
+    "segmentsOf" <~ ("namespace" ~>
+      Strings.splitOn (string ".") (unwrap _Namespace @@ var "namespace")) $
+    -- Build an alias by taking the last `n` segments of `segs`, capitalizing each,
+    -- and concatenating. E.g. ["hydra","encode","core"] with n=2 becomes "EncodeCore".
+    "aliasFromSuffix" <~ ("segs" ~> "n" ~> lets [
+      "dropCount">: Math.sub (Lists.length $ var "segs") (var "n"),
+      "suffix">: Lists.drop (var "dropCount") (var "segs"),
+      "capitalizedSuffix">: Lists.map (Formatting.capitalize) (var "suffix")] $
+      wrap H._ModuleName $ Strings.cat $ var "capitalizedSuffix") $
+    "toModuleName" <~ ("namespace" ~>
+      var "aliasFromSuffix" @@ (var "segmentsOf" @@ var "namespace") @@ (int32 1)) $
+    "focusPair" <~ pair (var "ns") (var "toModuleName" @@ var "ns") $
     "nssAsList" <~ (Sets.toList $ var "nss") $
-    "nssPairs" <~ (Lists.map (var "toPair") (var "nssAsList")) $
-    "emptyState" <~ (pair Maps.empty Sets.empty) $
-    "finalState" <~ (Lists.foldl (var "addPair") (var "emptyState") (var "nssPairs")) $
-    "resultMap" <~ (Pairs.first $ var "finalState") $
+    "segsMap" <~ (Maps.fromList $ Lists.map
+      ("nm" ~> pair (var "nm") (var "segmentsOf" @@ var "nm"))
+      (var "nssAsList")) $
+    -- Maximum number of segments across all dependency namespaces; used as an
+    -- upper bound on how many disambiguation passes are needed. At least 1 so
+    -- the fold runs at least once even for single-namespace inputs.
+    "maxSegs" <~ Lists.foldl
+      ("a" ~> "b" ~> Logic.ifElse (Equality.gt (var "a") (var "b")) (var "a") (var "b"))
+      (int32 1)
+      (Lists.map ("nm" ~> Lists.length (var "segmentsOf" @@ var "nm")) (var "nssAsList")) $
+    -- Disambiguation state: Map Namespace Int, where the Int is the number of
+    -- trailing segments currently used to form the alias. Every namespace starts
+    -- at 1 (just the last segment, matching the legacy behavior).
+    "initialState" <~ (Maps.fromList $ Lists.map
+      ("nm" ~> pair (var "nm") (int32 1))
+      (var "nssAsList")) $
+    "segsFor" <~ ("nm" ~> Maybes.fromMaybe (list ([] :: [TTerm String])) (Maps.lookup (var "nm") (var "segsMap"))) $
+    "takenFor" <~ ("state" ~> "nm" ~> Maybes.fromMaybe (int32 1) (Maps.lookup (var "nm") (var "state"))) $
+    -- One pass of the fixed point: within each collision group (namespaces
+    -- currently sharing an alias), only namespaces with *more* segments than
+    -- the shortest in the group grow. This realizes the "shortest module
+    -- name gets the shortest alias" rule from issue #322: e.g. for
+    -- {hydra.core, hydra.extract.core}, hydra.core stays `Core` and
+    -- hydra.extract.core grows to `ExtractCore`.
+    "growStep" <~ ("state" ~> "_ign" ~> lets [
+      -- Parallel lists of (nm, segs, n, aliasStr, segCount) per namespace.
+      "aliasEntries">: Lists.map
+        ("nm" ~> lets [
+          "segs">: var "segsFor" @@ var "nm",
+          "n">: var "takenFor" @@ var "state" @@ var "nm",
+          "segCount">: Lists.length $ var "segs",
+          "aliasStr">: unwrap H._ModuleName @@ (var "aliasFromSuffix" @@ var "segs" @@ var "n")] $
+          pair (var "nm") (pair (var "n") (pair (var "segCount") (var "aliasStr"))))
+        (var "nssAsList"),
+      -- Map alias-string -> number of namespaces producing that alias.
+      "aliasCounts">: Lists.foldl
+        ("m" ~> "e" ~> lets [
+          "k">: Pairs.second $ Pairs.second $ Pairs.second $ var "e"] $
+          Maps.insert (var "k")
+            (Math.add (int32 1) (Maybes.fromMaybe (int32 0) (Maps.lookup (var "k") (var "m"))))
+            (var "m"))
+        Maps.empty
+        (var "aliasEntries"),
+      -- Map alias-string -> smallest total segment count among colliding namespaces.
+      -- Used to identify the "winner" (shortest name) in each collision group.
+      "aliasMinSegs">: Lists.foldl
+        ("m" ~> "e" ~> lets [
+          "segCount">: Pairs.first $ Pairs.second $ Pairs.second $ var "e",
+          "k">: Pairs.second $ Pairs.second $ Pairs.second $ var "e",
+          "existing">: Maps.lookup (var "k") (var "m")] $
+          Maps.insert (var "k")
+            (Maybes.cases (var "existing")
+              (var "segCount") $
+              "prev" ~> Logic.ifElse (Equality.lt (var "segCount") (var "prev")) (var "segCount") (var "prev"))
+            (var "m"))
+        Maps.empty
+        (var "aliasEntries")] $
+      -- Map alias-string -> number of colliding namespaces tied at the minimum
+      -- segment count. If >1, every tied-minimum member must grow too (no one
+      -- can unambiguously claim the shortest alias).
+      lets [
+        "aliasMinSegsCount">: Lists.foldl
+          ("m" ~> "e" ~> lets [
+            "segCount">: Pairs.first $ Pairs.second $ Pairs.second $ var "e",
+            "k">: Pairs.second $ Pairs.second $ Pairs.second $ var "e",
+            "minSegs">: Maybes.fromMaybe (var "segCount") (Maps.lookup (var "k") (var "aliasMinSegs"))] $
+            Logic.ifElse (Equality.equal (var "segCount") (var "minSegs"))
+              (Maps.insert (var "k")
+                (Math.add (int32 1) (Maybes.fromMaybe (int32 0) (Maps.lookup (var "k") (var "m"))))
+                (var "m"))
+              (var "m"))
+          Maps.empty
+          (var "aliasEntries")] $
+      Maps.fromList $ Lists.map
+        ("e" ~> lets [
+          "nm">: Pairs.first $ var "e",
+          "n">: Pairs.first $ Pairs.second $ var "e",
+          "segCount">: Pairs.first $ Pairs.second $ Pairs.second $ var "e",
+          "aliasStr">: Pairs.second $ Pairs.second $ Pairs.second $ var "e",
+          "count">: Maybes.fromMaybe (int32 0) (Maps.lookup (var "aliasStr") (var "aliasCounts")),
+          "minSegs">: Maybes.fromMaybe (var "segCount") (Maps.lookup (var "aliasStr") (var "aliasMinSegs")),
+          "minSegsCount">: Maybes.fromMaybe (int32 0) (Maps.lookup (var "aliasStr") (var "aliasMinSegsCount")),
+          -- A namespace grows iff (1) its alias currently collides, (2) it
+          -- still has room to grow, and (3) it is strictly longer than the
+          -- shortest in its group OR the shortest position is tied (in which
+          -- case no single winner exists and every tied-minimum must grow).
+          "canGrow">: Logic.and
+            (Equality.gt (var "count") (int32 1))
+            (Logic.and
+              (Equality.gt (var "segCount") (var "n"))
+              (Logic.or
+                (Equality.gt (var "segCount") (var "minSegs"))
+                (Equality.gt (var "minSegsCount") (int32 1)))),
+          "newN">: Logic.ifElse (var "canGrow") (Math.add (var "n") (int32 1)) (var "n")] $
+          pair (var "nm") (var "newN"))
+        (var "aliasEntries")) $
+    "finalState" <~ (Lists.foldl (var "growStep") (var "initialState") (Lists.replicate (var "maxSegs") unit)) $
+    "resultMap" <~ (Maps.fromList $ Lists.map
+      ("nm" ~> pair (var "nm")
+        (var "aliasFromSuffix" @@ (var "segsFor" @@ var "nm") @@ (var "takenFor" @@ var "finalState" @@ var "nm"))) $
+      (var "nssAsList")) $
     right $ Packaging.namespaces (var "focusPair") (var "resultMap")
 
 newtypeAccessorName :: TTermDefinition (Name -> String)
