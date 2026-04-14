@@ -5,9 +5,9 @@
 module Hydra.Encode.Errors where
 
 import qualified Hydra.Core as Core
-import qualified Hydra.Encode.Core as Core_
+import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Encode.Error.Checking as Checking
-import qualified Hydra.Encode.Error.Core as Core__
+import qualified Hydra.Encode.Error.Core as ErrorCore
 import qualified Hydra.Encode.Paths as Paths
 import qualified Hydra.Errors as Errors
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
@@ -38,12 +38,12 @@ error x =
         Core.injectionTypeName = (Core.Name "hydra.errors.Error"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "duplicateBinding"),
-          Core.fieldTerm = (Core__.duplicateBindingError v0)}})
+          Core.fieldTerm = (ErrorCore.duplicateBindingError v0)}})
       Errors.ErrorDuplicateField v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.errors.Error"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "duplicateField"),
-          Core.fieldTerm = (Core__.duplicateFieldError v0)}})
+          Core.fieldTerm = (ErrorCore.duplicateFieldError v0)}})
       Errors.ErrorExtraction v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.errors.Error"),
         Core.injectionField = Core.Field {
@@ -68,27 +68,27 @@ error x =
         Core.injectionTypeName = (Core.Name "hydra.errors.Error"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "undefinedField"),
-          Core.fieldTerm = (Core__.undefinedFieldError v0)}})
+          Core.fieldTerm = (ErrorCore.undefinedFieldError v0)}})
       Errors.ErrorUndefinedTermVariable v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.errors.Error"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "undefinedTermVariable"),
-          Core.fieldTerm = (Core__.undefinedTermVariableError v0)}})
+          Core.fieldTerm = (ErrorCore.undefinedTermVariableError v0)}})
       Errors.ErrorUntypedTermVariable v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.errors.Error"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "untypedTermVariable"),
-          Core.fieldTerm = (Core__.untypedTermVariableError v0)}})
+          Core.fieldTerm = (ErrorCore.untypedTermVariableError v0)}})
       Errors.ErrorUnexpectedTermVariant v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.errors.Error"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "unexpectedTermVariant"),
-          Core.fieldTerm = (Core__.unexpectedTermVariantError v0)}})
+          Core.fieldTerm = (ErrorCore.unexpectedTermVariantError v0)}})
       Errors.ErrorUnexpectedTypeVariant v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.errors.Error"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "unexpectedTypeVariant"),
-          Core.fieldTerm = (Core__.unexpectedTypeVariantError v0)}})
+          Core.fieldTerm = (ErrorCore.unexpectedTypeVariantError v0)}})
       Errors.ErrorUnification v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.errors.Error"),
         Core.injectionField = Core.Field {
@@ -160,7 +160,7 @@ multipleBindingsError x =
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Core_.name (Errors.multipleBindingsErrorName x))}]})
+          Core.fieldTerm = (EncodeCore.name (Errors.multipleBindingsErrorName x))}]})
 
 multipleFieldsError :: Errors.MultipleFieldsError -> Core.Term
 multipleFieldsError x =
@@ -169,7 +169,7 @@ multipleFieldsError x =
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "fieldName"),
-          Core.fieldTerm = (Core_.name (Errors.multipleFieldsErrorFieldName x))}]})
+          Core.fieldTerm = (EncodeCore.name (Errors.multipleFieldsErrorFieldName x))}]})
 
 noMatchingFieldError :: Errors.NoMatchingFieldError -> Core.Term
 noMatchingFieldError x =
@@ -178,7 +178,7 @@ noMatchingFieldError x =
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "fieldName"),
-          Core.fieldTerm = (Core_.name (Errors.noMatchingFieldErrorFieldName x))}]})
+          Core.fieldTerm = (EncodeCore.name (Errors.noMatchingFieldErrorFieldName x))}]})
 
 noSuchBindingError :: Errors.NoSuchBindingError -> Core.Term
 noSuchBindingError x =
@@ -187,7 +187,7 @@ noSuchBindingError x =
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Core_.name (Errors.noSuchBindingErrorName x))}]})
+          Core.fieldTerm = (EncodeCore.name (Errors.noSuchBindingErrorName x))}]})
 
 noSuchPrimitiveError :: Errors.NoSuchPrimitiveError -> Core.Term
 noSuchPrimitiveError x =
@@ -196,7 +196,7 @@ noSuchPrimitiveError x =
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Core_.name (Errors.noSuchPrimitiveErrorName x))}]})
+          Core.fieldTerm = (EncodeCore.name (Errors.noSuchPrimitiveErrorName x))}]})
 
 notEnoughCasesError :: t0 -> Core.Term
 notEnoughCasesError _ = Core.TermUnit
@@ -273,10 +273,10 @@ unificationError x =
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "leftType"),
-          Core.fieldTerm = (Core_.type_ (Errors.unificationErrorLeftType x))},
+          Core.fieldTerm = (EncodeCore.type_ (Errors.unificationErrorLeftType x))},
         Core.Field {
           Core.fieldName = (Core.Name "rightType"),
-          Core.fieldTerm = (Core_.type_ (Errors.unificationErrorRightType x))},
+          Core.fieldTerm = (EncodeCore.type_ (Errors.unificationErrorRightType x))},
         Core.Field {
           Core.fieldName = (Core.Name "message"),
           Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Errors.unificationErrorMessage x))}]})

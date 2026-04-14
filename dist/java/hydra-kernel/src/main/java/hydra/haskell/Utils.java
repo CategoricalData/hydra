@@ -68,65 +68,197 @@ public interface Utils {
         true,
         mod),
       (java.util.function.Function<java.util.Set<hydra.packaging.Namespace>, hydra.util.Either<hydra.errors.Error_, hydra.packaging.Namespaces<hydra.haskell.syntax.ModuleName>>>) (nss -> {
+        java.util.function.Function<java.util.List<String>, java.util.function.Function<Integer, hydra.haskell.syntax.ModuleName>> aliasFromSuffix = (java.util.function.Function<java.util.List<String>, java.util.function.Function<Integer, hydra.haskell.syntax.ModuleName>>) (segs -> (java.util.function.Function<Integer, hydra.haskell.syntax.ModuleName>) (n -> {
+          hydra.util.Lazy<Integer> dropCount = new hydra.util.Lazy<>(() -> hydra.lib.math.Sub.apply(
+            hydra.lib.lists.Length.apply(segs),
+            n));
+          hydra.util.Lazy<java.util.List<String>> suffix = new hydra.util.Lazy<>(() -> hydra.lib.lists.Drop.apply(
+            dropCount.get(),
+            segs));
+          hydra.util.Lazy<java.util.List<String>> capitalizedSuffix = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
+            hydra.Formatting::capitalize,
+            suffix.get()));
+          return new hydra.haskell.syntax.ModuleName(hydra.lib.strings.Cat.apply(capitalizedSuffix.get()));
+        }));
         hydra.util.Lazy<java.util.List<hydra.packaging.Namespace>> nssAsList = new hydra.util.Lazy<>(() -> hydra.lib.sets.ToList.apply(nss));
-        java.util.function.Function<hydra.packaging.Namespace, hydra.haskell.syntax.ModuleName> toModuleName = (java.util.function.Function<hydra.packaging.Namespace, hydra.haskell.syntax.ModuleName>) (namespace -> {
-          String namespaceStr = (namespace).value;
-          java.util.List<String> parts = hydra.lib.strings.SplitOn.apply(
-            ".",
-            namespaceStr);
-          hydra.util.Lazy<String> lastPart = new hydra.util.Lazy<>(() -> hydra.lib.lists.Last.apply(parts));
-          String capitalized = hydra.Formatting.capitalize(lastPart.get());
-          return new hydra.haskell.syntax.ModuleName(capitalized);
-        });
-        java.util.function.Function<hydra.packaging.Namespace, hydra.util.Pair<hydra.packaging.Namespace, hydra.haskell.syntax.ModuleName>> toPair = (java.util.function.Function<hydra.packaging.Namespace, hydra.util.Pair<hydra.packaging.Namespace, hydra.haskell.syntax.ModuleName>>) (name -> (hydra.util.Pair<hydra.packaging.Namespace, hydra.haskell.syntax.ModuleName>) ((hydra.util.Pair<hydra.packaging.Namespace, hydra.haskell.syntax.ModuleName>) (new hydra.util.Pair<hydra.packaging.Namespace, hydra.haskell.syntax.ModuleName>(name, (toModuleName).apply(name)))));
-        hydra.util.Lazy<java.util.List<hydra.util.Pair<hydra.packaging.Namespace, hydra.haskell.syntax.ModuleName>>> nssPairs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
-          toPair,
-          nssAsList.get()));
-        hydra.util.Lazy<hydra.util.Pair<java.util.Map<hydra.packaging.Namespace, hydra.haskell.syntax.ModuleName>, java.util.Set<hydra.haskell.syntax.ModuleName>>> finalState = new hydra.util.Lazy<>(() -> hydra.lib.lists.Foldl.apply(
-          p0 -> p1 -> hydra.haskell.Utils.<hydra.packaging.Namespace>namespacesForModule_addPair(
-            p0,
-            p1),
-          hydra.haskell.Utils.<hydra.packaging.Namespace, hydra.haskell.syntax.ModuleName, hydra.haskell.syntax.ModuleName>namespacesForModule_emptyState(),
-          nssPairs.get()));
+        hydra.util.Lazy<java.util.Map<hydra.packaging.Namespace, Integer>> initialState = new hydra.util.Lazy<>(() -> hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
+          (java.util.function.Function<hydra.packaging.Namespace, hydra.util.Pair<hydra.packaging.Namespace, Integer>>) (nm -> (hydra.util.Pair<hydra.packaging.Namespace, Integer>) ((hydra.util.Pair<hydra.packaging.Namespace, Integer>) (new hydra.util.Pair<hydra.packaging.Namespace, Integer>(nm, 1)))),
+          nssAsList.get())));
+        java.util.function.Function<hydra.packaging.Namespace, java.util.List<String>> segmentsOf = (java.util.function.Function<hydra.packaging.Namespace, java.util.List<String>>) (namespace -> hydra.lib.strings.SplitOn.apply(
+          ".",
+          (namespace).value));
+        hydra.util.Lazy<Integer> maxSegs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Foldl.apply(
+          (java.util.function.Function<Integer, java.util.function.Function<Integer, Integer>>) (a -> (java.util.function.Function<Integer, Integer>) (b -> hydra.lib.logic.IfElse.lazy(
+            hydra.lib.equality.Gt.apply(
+              a,
+              b),
+            () -> a,
+            () -> b))),
+          1,
+          hydra.lib.lists.Map.apply(
+            (java.util.function.Function<hydra.packaging.Namespace, Integer>) (nm -> hydra.lib.lists.Length.apply((segmentsOf).apply(nm))),
+            nssAsList.get())));
+        hydra.util.Lazy<java.util.Map<hydra.packaging.Namespace, java.util.List<String>>> segsMap = new hydra.util.Lazy<>(() -> hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
+          (java.util.function.Function<hydra.packaging.Namespace, hydra.util.Pair<hydra.packaging.Namespace, java.util.List<String>>>) (nm -> (hydra.util.Pair<hydra.packaging.Namespace, java.util.List<String>>) ((hydra.util.Pair<hydra.packaging.Namespace, java.util.List<String>>) (new hydra.util.Pair<hydra.packaging.Namespace, java.util.List<String>>(nm, (segmentsOf).apply(nm))))),
+          nssAsList.get())));
+        java.util.function.Function<hydra.packaging.Namespace, java.util.List<String>> segsFor = (java.util.function.Function<hydra.packaging.Namespace, java.util.List<String>>) (nm -> hydra.lib.maybes.FromMaybe.applyLazy(
+          () -> (java.util.List<String>) (java.util.Collections.<String>emptyList()),
+          hydra.lib.maps.Lookup.apply(
+            nm,
+            segsMap.get())));
+        hydra.util.Lazy<java.util.Map<hydra.packaging.Namespace, Integer>> finalState = new hydra.util.Lazy<>(() -> hydra.lib.lists.Foldl.apply(
+          (java.util.function.Function<java.util.Map<hydra.packaging.Namespace, Integer>, java.util.function.Function<java.lang.Void, java.util.Map<hydra.packaging.Namespace, Integer>>>) (v1 -> (java.util.function.Function<java.lang.Void, java.util.Map<hydra.packaging.Namespace, Integer>>) (v2 -> hydra.haskell.Utils.<java.lang.Void>namespacesForModule_growStep(
+            aliasFromSuffix,
+            nssAsList.get(),
+            segsFor,
+            v1,
+            v2))),
+          initialState.get(),
+          hydra.lib.lists.Replicate.apply(
+            maxSegs.get(),
+            null)));
         hydra.packaging.Namespace ns = (mod).namespace;
-        hydra.util.Pair<hydra.packaging.Namespace, hydra.haskell.syntax.ModuleName> focusPair = (toPair).apply(ns);
-        hydra.util.Lazy<java.util.Map<hydra.packaging.Namespace, hydra.haskell.syntax.ModuleName>> resultMap = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(finalState.get()));
-        return hydra.util.Either.<hydra.errors.Error_, hydra.packaging.Namespaces<hydra.haskell.syntax.ModuleName>>right((hydra.packaging.Namespaces<hydra.haskell.syntax.ModuleName>) (new hydra.packaging.Namespaces<hydra.haskell.syntax.ModuleName>(focusPair, resultMap.get())));
+        java.util.function.Function<hydra.packaging.Namespace, hydra.haskell.syntax.ModuleName> toModuleName = (java.util.function.Function<hydra.packaging.Namespace, hydra.haskell.syntax.ModuleName>) (namespace -> (aliasFromSuffix).apply((segmentsOf).apply(namespace)).apply(1));
+        hydra.util.Lazy<hydra.util.Pair<hydra.packaging.Namespace, hydra.haskell.syntax.ModuleName>> focusPair = new hydra.util.Lazy<>(() -> (hydra.util.Pair<hydra.packaging.Namespace, hydra.haskell.syntax.ModuleName>) ((hydra.util.Pair<hydra.packaging.Namespace, hydra.haskell.syntax.ModuleName>) (new hydra.util.Pair<hydra.packaging.Namespace, hydra.haskell.syntax.ModuleName>(ns, (toModuleName).apply(ns)))));
+        hydra.util.Lazy<java.util.Map<hydra.packaging.Namespace, hydra.haskell.syntax.ModuleName>> resultMap = new hydra.util.Lazy<>(() -> hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
+          (java.util.function.Function<hydra.packaging.Namespace, hydra.util.Pair<hydra.packaging.Namespace, hydra.haskell.syntax.ModuleName>>) (nm -> (hydra.util.Pair<hydra.packaging.Namespace, hydra.haskell.syntax.ModuleName>) ((hydra.util.Pair<hydra.packaging.Namespace, hydra.haskell.syntax.ModuleName>) (new hydra.util.Pair<hydra.packaging.Namespace, hydra.haskell.syntax.ModuleName>(nm, (aliasFromSuffix).apply((segsFor).apply(nm)).apply(hydra.haskell.Utils.namespacesForModule_takenFor(
+            finalState.get(),
+            nm)))))),
+          nssAsList.get())));
+        return hydra.util.Either.<hydra.errors.Error_, hydra.packaging.Namespaces<hydra.haskell.syntax.ModuleName>>right((hydra.packaging.Namespaces<hydra.haskell.syntax.ModuleName>) (new hydra.packaging.Namespaces<hydra.haskell.syntax.ModuleName>(focusPair.get(), resultMap.get())));
       }));
   }
 
-  static <T1> hydra.util.Pair<java.util.Map<T1, hydra.haskell.syntax.ModuleName>, java.util.Set<hydra.haskell.syntax.ModuleName>> namespacesForModule_addPair(hydra.util.Pair<java.util.Map<T1, hydra.haskell.syntax.ModuleName>, java.util.Set<hydra.haskell.syntax.ModuleName>> state, hydra.util.Pair<T1, hydra.haskell.syntax.ModuleName> namePair) {
-    hydra.util.Lazy<hydra.haskell.syntax.ModuleName> alias = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(namePair));
-    String aliasStr = alias.get().value;
-    hydra.util.Lazy<java.util.Set<hydra.haskell.syntax.ModuleName>> currentSet = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(state));
-    hydra.util.Lazy<T1> name = new hydra.util.Lazy<>(() -> hydra.haskell.Utils.<T1>namespacesForModule_name(namePair));
-    return hydra.lib.logic.IfElse.lazy(
-      hydra.lib.sets.Member.apply(
-        alias.get(),
-        currentSet.get()),
-      () -> hydra.haskell.Utils.<T1>namespacesForModule_addPair(
-        state,
-        (hydra.util.Pair<T1, hydra.haskell.syntax.ModuleName>) ((hydra.util.Pair<T1, hydra.haskell.syntax.ModuleName>) (new hydra.util.Pair<T1, hydra.haskell.syntax.ModuleName>(name.get(), new hydra.haskell.syntax.ModuleName(hydra.lib.strings.Cat2.apply(
-          aliasStr,
-          "_")))))),
-      () -> (hydra.util.Pair<java.util.Map<T1, hydra.haskell.syntax.ModuleName>, java.util.Set<hydra.haskell.syntax.ModuleName>>) ((hydra.util.Pair<java.util.Map<T1, hydra.haskell.syntax.ModuleName>, java.util.Set<hydra.haskell.syntax.ModuleName>>) (new hydra.util.Pair<java.util.Map<T1, hydra.haskell.syntax.ModuleName>, java.util.Set<hydra.haskell.syntax.ModuleName>>(hydra.lib.maps.Insert.apply(
-        name.get(),
-        alias.get(),
-        hydra.haskell.Utils.<T1>namespacesForModule_currentMap(state)), hydra.lib.sets.Insert.apply(
-        alias.get(),
-        currentSet.get())))));
+  static <T1> java.util.Map<hydra.packaging.Namespace, Integer> namespacesForModule_growStep(java.util.function.Function<java.util.List<String>, java.util.function.Function<Integer, hydra.haskell.syntax.ModuleName>> aliasFromSuffix, java.util.List<hydra.packaging.Namespace> nssAsList, java.util.function.Function<hydra.packaging.Namespace, java.util.List<String>> segsFor, java.util.Map<hydra.packaging.Namespace, Integer> state, T1 _ign) {
+    hydra.util.Lazy<java.util.List<hydra.util.Pair<hydra.packaging.Namespace, hydra.util.Pair<Integer, hydra.util.Pair<Integer, String>>>>> aliasEntries = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
+      (java.util.function.Function<hydra.packaging.Namespace, hydra.util.Pair<hydra.packaging.Namespace, hydra.util.Pair<Integer, hydra.util.Pair<Integer, String>>>>) (nm -> {
+        hydra.util.Lazy<Integer> n = new hydra.util.Lazy<>(() -> hydra.haskell.Utils.namespacesForModule_takenFor(
+          state,
+          nm));
+        java.util.List<String> segs = (segsFor).apply(nm);
+        String aliasStr = (aliasFromSuffix).apply(segs).apply(n.get()).value;
+        hydra.util.Lazy<Integer> segCount = new hydra.util.Lazy<>(() -> hydra.lib.lists.Length.apply(segs));
+        return (hydra.util.Pair<hydra.packaging.Namespace, hydra.util.Pair<Integer, hydra.util.Pair<Integer, String>>>) ((hydra.util.Pair<hydra.packaging.Namespace, hydra.util.Pair<Integer, hydra.util.Pair<Integer, String>>>) (new hydra.util.Pair<hydra.packaging.Namespace, hydra.util.Pair<Integer, hydra.util.Pair<Integer, String>>>(nm, (hydra.util.Pair<Integer, hydra.util.Pair<Integer, String>>) ((hydra.util.Pair<Integer, hydra.util.Pair<Integer, String>>) (new hydra.util.Pair<Integer, hydra.util.Pair<Integer, String>>(n.get(), (hydra.util.Pair<Integer, String>) ((hydra.util.Pair<Integer, String>) (new hydra.util.Pair<Integer, String>(segCount.get(), aliasStr)))))))));
+      }),
+      nssAsList));
+    hydra.util.Lazy<java.util.Map<String, Integer>> aliasCounts = new hydra.util.Lazy<>(() -> hydra.lib.lists.Foldl.apply(
+      (java.util.function.Function<java.util.Map<String, Integer>, java.util.function.Function<hydra.util.Pair<hydra.packaging.Namespace, hydra.util.Pair<Integer, hydra.util.Pair<Integer, String>>>, java.util.Map<String, Integer>>>) (m -> (java.util.function.Function<hydra.util.Pair<hydra.packaging.Namespace, hydra.util.Pair<Integer, hydra.util.Pair<Integer, String>>>, java.util.Map<String, Integer>>) (e -> {
+        hydra.util.Lazy<String> k = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(hydra.lib.pairs.Second.apply(hydra.lib.pairs.Second.apply(e))));
+        return hydra.lib.maps.Insert.apply(
+          k.get(),
+          hydra.lib.math.Add.apply(
+            1,
+            hydra.lib.maybes.FromMaybe.applyLazy(
+              () -> 0,
+              hydra.lib.maps.Lookup.apply(
+                k.get(),
+                m))),
+          m);
+      })),
+      (java.util.Map<String, Integer>) ((java.util.Map<String, Integer>) (hydra.lib.maps.Empty.<String, Integer>apply())),
+      aliasEntries.get()));
+    hydra.util.Lazy<java.util.Map<String, Integer>> aliasMinSegs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Foldl.apply(
+      (java.util.function.Function<java.util.Map<String, Integer>, java.util.function.Function<hydra.util.Pair<hydra.packaging.Namespace, hydra.util.Pair<Integer, hydra.util.Pair<Integer, String>>>, java.util.Map<String, Integer>>>) (m -> (java.util.function.Function<hydra.util.Pair<hydra.packaging.Namespace, hydra.util.Pair<Integer, hydra.util.Pair<Integer, String>>>, java.util.Map<String, Integer>>) (e -> {
+        hydra.util.Lazy<String> k = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(hydra.lib.pairs.Second.apply(hydra.lib.pairs.Second.apply(e))));
+        hydra.util.Lazy<hydra.util.Maybe<Integer>> existing = new hydra.util.Lazy<>(() -> hydra.lib.maps.Lookup.apply(
+          k.get(),
+          m));
+        hydra.util.Lazy<Integer> segCount = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(hydra.lib.pairs.Second.apply(hydra.lib.pairs.Second.apply(e))));
+        return hydra.lib.maps.Insert.apply(
+          k.get(),
+          hydra.lib.maybes.Cases.applyLazy(
+            existing.get(),
+            () -> segCount.get(),
+            (java.util.function.Function<Integer, Integer>) (prev -> hydra.lib.logic.IfElse.lazy(
+              hydra.lib.equality.Lt.apply(
+                segCount.get(),
+                prev),
+              () -> segCount.get(),
+              () -> prev))),
+          m);
+      })),
+      (java.util.Map<String, Integer>) ((java.util.Map<String, Integer>) (hydra.lib.maps.Empty.<String, Integer>apply())),
+      aliasEntries.get()));
+    hydra.util.Lazy<java.util.Map<String, Integer>> aliasMinSegsCount = new hydra.util.Lazy<>(() -> hydra.lib.lists.Foldl.apply(
+      (java.util.function.Function<java.util.Map<String, Integer>, java.util.function.Function<hydra.util.Pair<hydra.packaging.Namespace, hydra.util.Pair<Integer, hydra.util.Pair<Integer, String>>>, java.util.Map<String, Integer>>>) (m -> (java.util.function.Function<hydra.util.Pair<hydra.packaging.Namespace, hydra.util.Pair<Integer, hydra.util.Pair<Integer, String>>>, java.util.Map<String, Integer>>) (e -> {
+        hydra.util.Lazy<String> k = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(hydra.lib.pairs.Second.apply(hydra.lib.pairs.Second.apply(e))));
+        hydra.util.Lazy<Integer> segCount = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(hydra.lib.pairs.Second.apply(hydra.lib.pairs.Second.apply(e))));
+        hydra.util.Lazy<Integer> minSegs = new hydra.util.Lazy<>(() -> hydra.lib.maybes.FromMaybe.applyLazy(
+          () -> segCount.get(),
+          hydra.lib.maps.Lookup.apply(
+            k.get(),
+            aliasMinSegs.get())));
+        return hydra.lib.logic.IfElse.lazy(
+          hydra.lib.equality.Equal.apply(
+            segCount.get(),
+            minSegs.get()),
+          () -> hydra.lib.maps.Insert.apply(
+            k.get(),
+            hydra.lib.math.Add.apply(
+              1,
+              hydra.lib.maybes.FromMaybe.applyLazy(
+                () -> 0,
+                hydra.lib.maps.Lookup.apply(
+                  k.get(),
+                  m))),
+            m),
+          () -> m);
+      })),
+      (java.util.Map<String, Integer>) ((java.util.Map<String, Integer>) (hydra.lib.maps.Empty.<String, Integer>apply())),
+      aliasEntries.get()));
+    return hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
+      (java.util.function.Function<hydra.util.Pair<hydra.packaging.Namespace, hydra.util.Pair<Integer, hydra.util.Pair<Integer, String>>>, hydra.util.Pair<hydra.packaging.Namespace, Integer>>) (e -> {
+        hydra.util.Lazy<String> aliasStr = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(hydra.lib.pairs.Second.apply(hydra.lib.pairs.Second.apply(e))));
+        hydra.util.Lazy<Integer> count = new hydra.util.Lazy<>(() -> hydra.lib.maybes.FromMaybe.applyLazy(
+          () -> 0,
+          hydra.lib.maps.Lookup.apply(
+            aliasStr.get(),
+            aliasCounts.get())));
+        hydra.util.Lazy<Integer> segCount = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(hydra.lib.pairs.Second.apply(hydra.lib.pairs.Second.apply(e))));
+        hydra.util.Lazy<Integer> minSegs = new hydra.util.Lazy<>(() -> hydra.lib.maybes.FromMaybe.applyLazy(
+          () -> segCount.get(),
+          hydra.lib.maps.Lookup.apply(
+            aliasStr.get(),
+            aliasMinSegs.get())));
+        hydra.util.Lazy<Integer> minSegsCount = new hydra.util.Lazy<>(() -> hydra.lib.maybes.FromMaybe.applyLazy(
+          () -> 0,
+          hydra.lib.maps.Lookup.apply(
+            aliasStr.get(),
+            aliasMinSegsCount.get())));
+        hydra.util.Lazy<Integer> n = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(hydra.lib.pairs.Second.apply(e)));
+        hydra.util.Lazy<Boolean> canGrow = new hydra.util.Lazy<>(() -> hydra.lib.logic.And.apply(
+          hydra.lib.equality.Gt.apply(
+            count.get(),
+            1),
+          hydra.lib.logic.And.apply(
+            hydra.lib.equality.Gt.apply(
+              segCount.get(),
+              n.get()),
+            hydra.lib.logic.Or.apply(
+              hydra.lib.equality.Gt.apply(
+                segCount.get(),
+                minSegs.get()),
+              hydra.lib.equality.Gt.apply(
+                minSegsCount.get(),
+                1)))));
+        hydra.util.Lazy<Integer> newN = new hydra.util.Lazy<>(() -> hydra.lib.logic.IfElse.lazy(
+          canGrow.get(),
+          () -> hydra.lib.math.Add.apply(
+            n.get(),
+            1),
+          () -> n.get()));
+        hydra.util.Lazy<hydra.packaging.Namespace> nm = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(e));
+        return (hydra.util.Pair<hydra.packaging.Namespace, Integer>) ((hydra.util.Pair<hydra.packaging.Namespace, Integer>) (new hydra.util.Pair<hydra.packaging.Namespace, Integer>(nm.get(), newN.get())));
+      }),
+      aliasEntries.get()));
   }
 
-  static <T1> java.util.Map<T1, hydra.haskell.syntax.ModuleName> namespacesForModule_currentMap(hydra.util.Pair<java.util.Map<T1, hydra.haskell.syntax.ModuleName>, java.util.Set<hydra.haskell.syntax.ModuleName>> state) {
-    return hydra.lib.pairs.First.apply(state);
-  }
-
-  static <T1, T2, T3> hydra.util.Pair<java.util.Map<T1, T2>, java.util.Set<T3>> namespacesForModule_emptyState() {
-    return (hydra.util.Pair<java.util.Map<T1, T2>, java.util.Set<T3>>) ((hydra.util.Pair<java.util.Map<T1, T2>, java.util.Set<T3>>) (new hydra.util.Pair<java.util.Map<T1, T2>, java.util.Set<T3>>((java.util.Map<T1, T2>) ((java.util.Map<T1, T2>) (hydra.lib.maps.Empty.<T1, T2>apply())), (java.util.Set<T3>) (hydra.lib.sets.Empty.<T3>apply()))));
-  }
-
-  static <T1> T1 namespacesForModule_name(hydra.util.Pair<T1, hydra.haskell.syntax.ModuleName> namePair) {
-    return hydra.lib.pairs.First.apply(namePair);
+  static <T1> Integer namespacesForModule_takenFor(java.util.Map<T1, Integer> state, T1 nm) {
+    return hydra.lib.maybes.FromMaybe.applyLazy(
+      () -> 1,
+      hydra.lib.maps.Lookup.apply(
+        nm,
+        state));
   }
 
   static String newtypeAccessorName(hydra.core.Name name) {
