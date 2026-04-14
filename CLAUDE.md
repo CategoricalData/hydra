@@ -20,13 +20,20 @@ Key use cases: graph construction (TinkerPop, RDF, SHACL, GQL), data integration
 (coders for Protobuf, Avro, JSON, YAML, GraphQL, PDL, CSV/TSV, RDF), and computational
 graphs with deep support for polymorphism.
 
-## The one rule
+## Where code lives
 
-- **`packages/` and `heads/`** contain hand-written code. Edit freely.
-- **`dist/`** contains generated code. **Never manually edit**
+- **`packages/`** holds each package's DSL-based module definitions, plus source-language helpers used to write them.
+- **`heads/`** holds per-host runtimes that run those modules after translation to a target language.
+- **`dist/`** holds generated and copied artifacts. **Never manually edit**
   (unless doing a bootstrap patch, which must be overwritten by regeneration afterward).
 
+The test for `packages/` vs `heads/`: does this code describe (or help describe) Hydra modules,
+or does it run them after translation?
+Description goes in `packages/`; running goes in `heads/`.
+
 Generated files have a header: "Note: this is an automatically generated file. Do not edit."
+
+For the longer-form discussion, see [Code organization](https://github.com/CategoricalData/hydra/wiki/Code-organization).
 
 ---
 
