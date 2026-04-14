@@ -23,8 +23,8 @@ Definition fileExtension : FileExtension -> Term :=
   fun (x : FileExtension) => (Term_Wrap) ((Build_WrappedTerm) ("FileExtension"%string) ((fun (x2 : string) => (Term_Literal) ((Literal_String) (x2))) ((fun w_ => w_) (x)))).
 Definition definition : Definition_ -> Term :=
   fun x_ => match x_ with
-| Definition__Term v_ => (fun (y : TermDefinition) => (Term_Union) ((Build_Injection) ("Definition_"%string) ((Build_Field) ("term"%string) ((termDefinition) (y))))) (v_)
-| Definition__Type v_ => (fun (y : TypeDefinition) => (Term_Union) ((Build_Injection) ("Definition_"%string) ((Build_Field) ("type"%string) ((typeDefinition) (y))))) (v_)
+| Definition__Term v_ => (fun (y : TermDefinition) => (Term_Inject) ((Build_Injection) ("Definition_"%string) ((Build_Field) ("term"%string) ((termDefinition) (y))))) (v_)
+| Definition__Type v_ => (fun (y : TypeDefinition) => (Term_Inject) ((Build_Injection) ("Definition_"%string) ((Build_Field) ("type"%string) ((typeDefinition) (y))))) (v_)
 end.
 Definition module : Module_ -> Term :=
   fun (x : Module_) => (Term_Record) ((Build_Record_) ("Module_"%string) ((cons) ((Build_Field) ("namespace"%string) ((namespace) ((fun r_ => (module__namespace) (r_)) (x)))) ((cons) ((Build_Field) ("definitions"%string) ((fun (xs : (list) (Definition_)) => (Term_List) (((lists.map) (definition)) (xs))) ((fun r_ => (module__definitions) (r_)) (x)))) ((cons) ((Build_Field) ("termDependencies"%string) ((fun (xs : (list) (Namespace)) => (Term_List) (((lists.map) (namespace)) (xs))) ((fun r_ => (module__termDependencies) (r_)) (x)))) ((cons) ((Build_Field) ("typeDependencies"%string) ((fun (xs : (list) (Namespace)) => (Term_List) (((lists.map) (namespace)) (xs))) ((fun r_ => (module__typeDependencies) (r_)) (x)))) ((cons) ((Build_Field) ("description"%string) ((fun (opt : (option) (string)) => (Term_Maybe) (((maybes.map) (fun (x2 : string) => (Term_Literal) ((Literal_String) (x2)))) (opt))) ((fun r_ => (module__description) (r_)) (x)))) (nil))))))).

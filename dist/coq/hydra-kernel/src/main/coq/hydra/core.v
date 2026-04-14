@@ -65,35 +65,33 @@ Inductive AnnotatedTerm : Type :=
 with Term : Type :=
 | Term_Annotated : AnnotatedTerm -> Term
 | Term_Application : Application -> Term
+| Term_Cases : CaseStatement -> Term
 | Term_Either : (sum) (Term) (Term) -> Term
-| Term_Function : Function -> Term
+| Term_Inject : Injection -> Term
+| Term_Lambda : Lambda -> Term
 | Term_Let : Let -> Term
 | Term_List : (list) (Term) -> Term
 | Term_Literal : Literal -> Term
 | Term_Map : (list) ((prod) (Term) (Term)) -> Term
 | Term_Maybe : (option) (Term) -> Term
 | Term_Pair : (prod) (Term) (Term) -> Term
+| Term_Project : Projection -> Term
 | Term_Record : Record_ -> Term
 | Term_Set : (list) (Term) -> Term
 | Term_TypeApplication : TypeApplicationTerm -> Term
 | Term_TypeLambda : TypeLambda -> Term
-| Term_Union : Injection -> Term
 | Term_Unit : unit -> Term
+| Term_Unwrap : Name -> Term
 | Term_Variable : Name -> Term
 | Term_Wrap : WrappedTerm -> Term
 with Application : Type :=
 | Build_Application : Term -> Term -> Application
-with Function : Type :=
-| Function_Elimination : Elimination -> Function
-| Function_Lambda : Lambda -> Function
-with Elimination : Type :=
-| Elimination_Record : Projection -> Elimination
-| Elimination_Union : CaseStatement -> Elimination
-| Elimination_Wrap : Name -> Elimination
 with CaseStatement : Type :=
 | Build_CaseStatement : Name -> (option) (Term) -> (list) (Field) -> CaseStatement
 with Field : Type :=
 | Build_Field : Name -> Term -> Field
+with Injection : Type :=
+| Build_Injection : Name -> Field -> Injection
 with Lambda : Type :=
 | Build_Lambda : Name -> (option) (Type_) -> Term -> Lambda
 with Type_ : Type :=
@@ -130,8 +128,6 @@ with MapType : Type :=
 | Build_MapType : Type_ -> Type_ -> MapType
 with PairType : Type :=
 | Build_PairType : Type_ -> Type_ -> PairType
-with Injection : Type :=
-| Build_Injection : Name -> Field -> Injection
 with Let : Type :=
 | Build_Let : (list) (Binding) -> Term -> Let
 with Binding : Type :=
@@ -190,6 +186,16 @@ end.
 Definition field_term (r_ : Field) :=
   match r_ with
 | Build_Field f0 f1 => f1
+end.
+
+Definition injection_typeName (r_ : Injection) :=
+  match r_ with
+| Build_Injection f0 f1 => f0
+end.
+
+Definition injection_field (r_ : Injection) :=
+  match r_ with
+| Build_Injection f0 f1 => f1
 end.
 
 Definition lambda_parameter (r_ : Lambda) :=
@@ -285,16 +291,6 @@ end.
 Definition pairType_second (r_ : PairType) :=
   match r_ with
 | Build_PairType f0 f1 => f1
-end.
-
-Definition injection_typeName (r_ : Injection) :=
-  match r_ with
-| Build_Injection f0 f1 => f0
-end.
-
-Definition injection_field (r_ : Injection) :=
-  match r_ with
-| Build_Injection f0 f1 => f1
 end.
 
 Definition let_bindings (r_ : Let) :=

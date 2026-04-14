@@ -19,10 +19,7 @@ Definition stripTypeLambdas : Term -> Term :=
   stripTypeLambdas_bundle.
 Definition removeTypesFromTerm : Term -> Term :=
   fun (term_ : Term) => let strip := fun recurse => fun term2 => let stripBinding := fun (b : Binding) => (Build_Binding) ((fun r_ => (binding_name) (r_)) (b)) ((fun r_ => (binding_term) (r_)) (b)) (None) in let rewritten := (recurse) (term2) in (fun x_ => match x_ with
-| Term_Function v_ => (fun (f : Function) => (fun x_ => match x_ with
-| Function_Elimination v_ => (fun (e : Elimination) => (Term_Function) ((Function_Elimination) (e))) (v_)
-| Function_Lambda v_ => (fun (l : Lambda) => (Term_Function) ((Function_Lambda) ((Build_Lambda) ((fun r_ => (lambda_parameter) (r_)) (l)) (None) ((fun r_ => (lambda_body) (r_)) (l))))) (v_)
-end) (f)) (v_)
+| Term_Lambda v_ => (fun (l : Lambda) => (Term_Lambda) ((Build_Lambda) ((fun r_ => (lambda_parameter) (r_)) (l)) (None) ((fun r_ => (lambda_body) (r_)) (l)))) (v_)
 | Term_Let v_ => (fun (lt : Let) => (Term_Let) ((Build_Let) (((lists.map) (stripBinding)) ((fun r_ => (let_bindings) (r_)) (lt))) ((fun r_ => (let_body) (r_)) (lt)))) (v_)
 | Term_TypeApplication v_ => (fun (tt : TypeApplicationTerm) => (fun r_ => (typeApplicationTerm_body) (r_)) (tt)) (v_)
 | Term_TypeLambda v_ => (fun (ta : TypeLambda) => (fun r_ => (typeLambda_body) (r_)) (ta)) (v_)

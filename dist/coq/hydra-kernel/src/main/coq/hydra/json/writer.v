@@ -18,7 +18,7 @@ Definition keyValueToExpr_valueToExpr_bundle :=
 | Value_Array v_ => (fun (arr : (list) (Value)) => (bracketListAdaptive) (((lists.map) (valueToExpr)) (arr))) (v_)
 | Value_Boolean v_ => (fun (b : bool) => (cst) ((((logic.ifElse) (b)) ("true"%string)) ("false"%string))) (v_)
 | Value_Null _ => (cst) ("null"%string)
-| Value_Number v_ => (fun (n : Q) => let rounded := (literals.bigfloatToBigint) (n) in (cst) ((((logic.ifElse) (((equality.equal) (n)) ((literals.bigintToBigfloat) (rounded)))) ((literals.showBigint) (rounded))) ((literals.showBigfloat) (n)))) (v_)
+| Value_Number v_ => (fun (n : Q) => let shown := (literals.showBigfloat) (n) in let rounded := (literals.bigfloatToBigint) (n) in (cst) ((((logic.ifElse) (((logic.and) (((equality.equal) (n)) ((literals.bigintToBigfloat) (rounded)))) ((logic.not) (((equality.equal) (shown)) ("-0.0"%string))))) ((literals.showBigint) (rounded))) (shown))) (v_)
 | Value_Object v_ => (fun (obj : (list) ((prod) (string) (Value))) => (bracesListAdaptive) (((lists.map) (keyValueToExpr)) ((maps.toList) (obj)))) (v_)
 | Value_String v_ => (fun (s : string) => (cst) ((jsonString) (s))) (v_)
 end) (value)))).

@@ -160,10 +160,7 @@ Definition letBinding : string -> hydra.graph.Graph -> Term -> (sum) (Error) (Te
   fun (n : string) => fun (graph_ : hydra.graph.Graph) => fun (term_ : Term) => let name := n in ((eithers.bind) (((let_) (graph_)) (term_))) (fun (letExpr : Let) => let matchingBindings := ((lists.filter) (fun (b : Binding) => ((equality.equal) ((fun w_ => w_) ((fun r_ => (binding_name) (r_)) (b)))) ((fun w_ => w_) (name)))) ((fun r_ => (let_bindings) (r_)) (letExpr)) in (((logic.ifElse) ((lists.null) (matchingBindings))) ((inl) ((Error_Extraction) ((ExtractionError_NoSuchBinding) ((Build_NoSuchBindingError) (name)))))) ((((logic.ifElse) (((equality.equal) ((lists.length) (matchingBindings))) ((1)%Z))) ((inr) ((fun r_ => (binding_term) (r_)) ((lists.head) (matchingBindings))))) ((inl) ((Error_Extraction) ((ExtractionError_MultipleBindings) ((Build_MultipleBindingsError) (name))))))).
 Definition lambda : hydra.graph.Graph -> Term -> (sum) (Error) (Lambda) :=
   fun (graph_ : hydra.graph.Graph) => fun (term0 : Term) => ((eithers.bind) (((stripAndDereferenceTerm) (graph_)) (term0))) (fun (term_ : Term) => (fun x_ => match x_ with
-| Term_Function v_ => (fun (function : Function) => (fun x_ => match x_ with
-| Function_Lambda v_ => (fun (l : Lambda) => (inr) (l)) (v_)
-| _ => (inl) ((Error_Extraction) ((ExtractionError_UnexpectedShape) ((Build_UnexpectedShapeError) ("lambda"%string) ((hydra.show.core.term) (term_)))))
-end) (function)) (v_)
+| Term_Lambda v_ => (fun (l : Lambda) => (inr) (l)) (v_)
 | _ => (inl) ((Error_Extraction) ((ExtractionError_UnexpectedShape) ((Build_UnexpectedShapeError) ("lambda"%string) ((hydra.show.core.term) (term_)))))
 end) (term_)).
 Definition lambdaBody : hydra.graph.Graph -> Term -> (sum) (Error) (Term) :=
@@ -215,7 +212,7 @@ Definition injection_bundle :=
   hydra_fix (fun (bundle_ : Name -> hydra.graph.Graph -> Term -> (sum) (Error) (Field)) =>
     let injection := bundle_ in
     fun (expected : Name) => fun (graph_ : hydra.graph.Graph) => fun (term0 : Term) => ((eithers.bind) (((stripAndDereferenceTerm) (graph_)) (term0))) (fun (term_ : Term) => (fun x_ => match x_ with
-| Term_Union v_ => (fun (injection : Injection) => (((logic.ifElse) (((equality.equal) ((fun w_ => w_) ((fun r_ => (injection_typeName) (r_)) (injection)))) ((fun w_ => w_) (expected)))) ((inr) ((fun r_ => (injection_field) (r_)) (injection)))) ((inl) ((Error_Extraction) ((ExtractionError_UnexpectedShape) ((Build_UnexpectedShapeError) (((strings.cat2) ("injection of type "%string)) ((fun w_ => w_) (expected))) ((fun w_ => w_) ((fun r_ => (injection_typeName) (r_)) (injection)))))))) (v_)
+| Term_Inject v_ => (fun (injection : Injection) => (((logic.ifElse) (((equality.equal) ((fun w_ => w_) ((fun r_ => (injection_typeName) (r_)) (injection)))) ((fun w_ => w_) (expected)))) ((inr) ((fun r_ => (injection_field) (r_)) (injection)))) ((inl) ((Error_Extraction) ((ExtractionError_UnexpectedShape) ((Build_UnexpectedShapeError) (((strings.cat2) ("injection of type "%string)) ((fun w_ => w_) (expected))) ((fun w_ => w_) ((fun r_ => (injection_typeName) (r_)) (injection)))))))) (v_)
 | _ => (inl) ((Error_Extraction) ((ExtractionError_UnexpectedShape) ((Build_UnexpectedShapeError) ("injection"%string) ((hydra.show.core.term) (term_)))))
 end) (term_))).
 
@@ -312,13 +309,7 @@ end) (stripped)).
 Arguments decodeEither {t0} {t1}.
 Definition cases : Name -> hydra.graph.Graph -> Term -> (sum) (Error) (CaseStatement) :=
   fun (name : Name) => fun (graph_ : hydra.graph.Graph) => fun (term0 : Term) => ((eithers.bind) (((stripAndDereferenceTerm) (graph_)) (term0))) (fun (term_ : Term) => (fun x_ => match x_ with
-| Term_Function v_ => (fun (function : Function) => (fun x_ => match x_ with
-| Function_Elimination v_ => (fun (elimination : Elimination) => (fun x_ => match x_ with
-| Elimination_Union v_ => (fun (cs : CaseStatement) => (((logic.ifElse) (((equality.equal) ((fun w_ => w_) ((fun r_ => (caseStatement_typeName) (r_)) (cs)))) ((fun w_ => w_) (name)))) ((inr) (cs))) ((inl) ((Error_Extraction) ((ExtractionError_UnexpectedShape) ((Build_UnexpectedShapeError) (((strings.cat2) ("case statement for type "%string)) ((fun w_ => w_) (name))) ((hydra.show.core.term) (term_))))))) (v_)
-| _ => (inl) ((Error_Extraction) ((ExtractionError_UnexpectedShape) ((Build_UnexpectedShapeError) ("case statement"%string) ((hydra.show.core.term) (term_)))))
-end) (elimination)) (v_)
-| _ => (inl) ((Error_Extraction) ((ExtractionError_UnexpectedShape) ((Build_UnexpectedShapeError) ("case statement"%string) ((hydra.show.core.term) (term_)))))
-end) (function)) (v_)
+| Term_Cases v_ => (fun (cs : CaseStatement) => (((logic.ifElse) (((equality.equal) ((fun w_ => w_) ((fun r_ => (caseStatement_typeName) (r_)) (cs)))) ((fun w_ => w_) (name)))) ((inr) (cs))) ((inl) ((Error_Extraction) ((ExtractionError_UnexpectedShape) ((Build_UnexpectedShapeError) (((strings.cat2) ("case statement for type "%string)) ((fun w_ => w_) (name))) ((hydra.show.core.term) (term_))))))) (v_)
 | _ => (inl) ((Error_Extraction) ((ExtractionError_UnexpectedShape) ((Build_UnexpectedShapeError) ("case statement"%string) ((hydra.show.core.term) (term_)))))
 end) (term_)).
 Definition caseField : Name -> string -> hydra.graph.Graph -> Term -> (sum) (Error) (Field) :=

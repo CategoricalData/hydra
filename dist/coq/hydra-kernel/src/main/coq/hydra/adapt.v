@@ -21,45 +21,38 @@ Definition termAlternatives (t0 : Type) : t0 -> hydra.graph.Graph -> Term -> (su
 | Term_Maybe v_ => (fun (ot : (option) (Term)) => (inr) ((cons) ((Term_List) ((((maybes.maybe) (nil)) (fun (term2 : Term) => (cons) (term2) (nil))) (ot))) (nil))) (v_)
 | Term_TypeLambda v_ => (fun (abs : TypeLambda) => let term2 := (fun r_ => (typeLambda_body) (r_)) (abs) in (inr) ((cons) (term2) (nil))) (v_)
 | Term_TypeApplication v_ => (fun (ta : TypeApplicationTerm) => let term2 := (fun r_ => (typeApplicationTerm_body) (r_)) (ta) in (inr) ((cons) (term2) (nil))) (v_)
-| Term_Union v_ => (fun (inj : Injection) => let tname := (fun r_ => (injection_typeName) (r_)) (inj) in let field := (fun r_ => (injection_field) (r_)) (inj) in let fname := (fun r_ => (field_name) (r_)) (field) in let fterm := (fun r_ => (field_term) (r_)) (field) in let forFieldType := fun (ft : FieldType) => let ftname := (fun r_ => (fieldType_name) (r_)) (ft) in (Build_Field) (fname) ((Term_Maybe) ((((logic.ifElse) (((equality.equal) (ftname)) (fname))) ((Some) (fterm))) (None))) in ((eithers.bind) ((((requireUnionType) (cx)) (graph_)) (tname))) (fun (rt : (list) (FieldType)) => (inr) ((cons) ((Term_Record) ((Build_Record_) (tname) (((lists.map) (forFieldType)) (rt)))) (nil)))) (v_)
+| Term_Inject v_ => (fun (inj : Injection) => let tname := (fun r_ => (injection_typeName) (r_)) (inj) in let field := (fun r_ => (injection_field) (r_)) (inj) in let fname := (fun r_ => (field_name) (r_)) (field) in let fterm := (fun r_ => (field_term) (r_)) (field) in let forFieldType := fun (ft : FieldType) => let ftname := (fun r_ => (fieldType_name) (r_)) (ft) in (Build_Field) (fname) ((Term_Maybe) ((((logic.ifElse) (((equality.equal) (ftname)) (fname))) ((Some) (fterm))) (None))) in ((eithers.bind) ((((requireUnionType) (cx)) (graph_)) (tname))) (fun (rt : (list) (FieldType)) => (inr) ((cons) ((Term_Record) ((Build_Record_) (tname) (((lists.map) (forFieldType)) (rt)))) (nil)))) (v_)
 | Term_Unit _ => (inr) ((cons) ((Term_Literal) ((Literal_Boolean) (true))) (nil))
 | Term_Wrap v_ => (fun (wt : WrappedTerm) => let term2 := (fun r_ => (wrappedTerm_body) (r_)) (wt) in (inr) ((cons) (term2) (nil))) (v_)
 | _ => (inr) (nil)
 end) (term_).
 Arguments termAlternatives {t0}.
 Definition pushTypeAppsInward : Term -> Term :=
-  fun (term_ : Term) => let hydra_mutual_bundle_ := (hydra_fix) (fun hydra_mutual_b_ => let go := (pairs.first) (hydra_mutual_b_) in let push := (pairs.second) (hydra_mutual_b_) in (pair) (fun (t : Term) => let forMap := fun (m : (list) ((prod) (Term) (Term))) => let forPair := fun (p : (prod) (Term) (Term)) => (pair) ((go) ((pairs.first) (p))) ((go) ((pairs.second) (p))) in (maps.fromList) (((lists.map) (forPair)) ((maps.toList) (m))) in let forLet := fun (lt : Let) => let mapBinding := fun (b : Binding) => (Build_Binding) ((fun r_ => (binding_name) (r_)) (b)) ((go) ((fun r_ => (binding_term) (r_)) (b))) ((fun r_ => (binding_type) (r_)) (b)) in (Build_Let) (((lists.map) (mapBinding)) ((fun r_ => (let_bindings) (r_)) (lt))) ((go) ((fun r_ => (let_body) (r_)) (lt))) in let forField := fun (fld : Field) => (Build_Field) ((fun r_ => (field_name) (r_)) (fld)) ((go) ((fun r_ => (field_term) (r_)) (fld))) in let forElimination := fun (elm : Elimination) => (fun x_ => match x_ with
-| Elimination_Record v_ => (fun (p : Projection) => (Elimination_Record) (p)) (v_)
-| Elimination_Union v_ => (fun (cs : CaseStatement) => (Elimination_Union) ((Build_CaseStatement) ((fun r_ => (caseStatement_typeName) (r_)) (cs)) (((maybes.map) (go)) ((fun r_ => (caseStatement_default) (r_)) (cs))) (((lists.map) (forField)) ((fun r_ => (caseStatement_cases) (r_)) (cs))))) (v_)
-| Elimination_Wrap v_ => (fun (name : Name) => (Elimination_Wrap) (name)) (v_)
-end) (elm) in let forFunction := fun (fun_ : Function) => (fun x_ => match x_ with
-| Function_Elimination v_ => (fun (elm : Elimination) => (Function_Elimination) ((forElimination) (elm))) (v_)
-| Function_Lambda v_ => (fun (l : Lambda) => (Function_Lambda) ((Build_Lambda) ((fun r_ => (lambda_parameter) (r_)) (l)) ((fun r_ => (lambda_domain) (r_)) (l)) ((go) ((fun r_ => (lambda_body) (r_)) (l))))) (v_)
-end) (fun_) in (fun x_ => match x_ with
+  fun (term_ : Term) => let hydra_mutual_bundle_ := (hydra_fix) (fun hydra_mutual_b_ => let go := (pairs.first) (hydra_mutual_b_) in let push := (pairs.second) (hydra_mutual_b_) in (pair) (fun (t : Term) => let forMap := fun (m : (list) ((prod) (Term) (Term))) => let forPair := fun (p : (prod) (Term) (Term)) => (pair) ((go) ((pairs.first) (p))) ((go) ((pairs.second) (p))) in (maps.fromList) (((lists.map) (forPair)) ((maps.toList) (m))) in let forLet := fun (lt : Let) => let mapBinding := fun (b : Binding) => (Build_Binding) ((fun r_ => (binding_name) (r_)) (b)) ((go) ((fun r_ => (binding_term) (r_)) (b))) ((fun r_ => (binding_type) (r_)) (b)) in (Build_Let) (((lists.map) (mapBinding)) ((fun r_ => (let_bindings) (r_)) (lt))) ((go) ((fun r_ => (let_body) (r_)) (lt))) in let forField := fun (fld : Field) => (Build_Field) ((fun r_ => (field_name) (r_)) (fld)) ((go) ((fun r_ => (field_term) (r_)) (fld))) in (fun x_ => match x_ with
 | Term_Annotated v_ => (fun (at_ : AnnotatedTerm) => (Term_Annotated) ((Build_AnnotatedTerm) ((go) ((fun r_ => (annotatedTerm_body) (r_)) (at_))) ((fun r_ => (annotatedTerm_annotation) (r_)) (at_)))) (v_)
 | Term_Application v_ => (fun (a : Application) => (Term_Application) ((Build_Application) ((go) ((fun r_ => (application_function) (r_)) (a))) ((go) ((fun r_ => (application_argument) (r_)) (a))))) (v_)
+| Term_Cases v_ => (fun (cs : CaseStatement) => (Term_Cases) ((Build_CaseStatement) ((fun r_ => (caseStatement_typeName) (r_)) (cs)) (((maybes.map) (go)) ((fun r_ => (caseStatement_default) (r_)) (cs))) (((lists.map) (forField)) ((fun r_ => (caseStatement_cases) (r_)) (cs))))) (v_)
 | Term_Either v_ => (fun (e : (sum) (Term) (Term)) => (Term_Either) ((((eithers.either) (fun (l : Term) => (inl) ((go) (l)))) (fun (r : Term) => (inr) ((go) (r)))) (e))) (v_)
-| Term_Function v_ => (fun (fun_ : Function) => (Term_Function) ((forFunction) (fun_))) (v_)
+| Term_Lambda v_ => (fun (l : Lambda) => (Term_Lambda) ((Build_Lambda) ((fun r_ => (lambda_parameter) (r_)) (l)) ((fun r_ => (lambda_domain) (r_)) (l)) ((go) ((fun r_ => (lambda_body) (r_)) (l))))) (v_)
 | Term_Let v_ => (fun (lt : Let) => (Term_Let) ((forLet) (lt))) (v_)
 | Term_List v_ => (fun (els : (list) (Term)) => (Term_List) (((lists.map) (go)) (els))) (v_)
 | Term_Literal v_ => (fun (v : Literal) => (Term_Literal) (v)) (v_)
 | Term_Map v_ => (fun (m : (list) ((prod) (Term) (Term))) => (Term_Map) ((forMap) (m))) (v_)
 | Term_Maybe v_ => (fun (m : (option) (Term)) => (Term_Maybe) (((maybes.map) (go)) (m))) (v_)
 | Term_Pair v_ => (fun (p : (prod) (Term) (Term)) => (Term_Pair) ((pair) ((go) ((pairs.first) (p))) ((go) ((pairs.second) (p))))) (v_)
+| Term_Project v_ => (fun (p : Projection) => (Term_Project) (p)) (v_)
 | Term_Record v_ => (fun (r : Record_) => (Term_Record) ((Build_Record_) ((fun r_ => (record__typeName) (r_)) (r)) (((lists.map) (forField)) ((fun r_ => (record__fields) (r_)) (r))))) (v_)
 | Term_Set v_ => (fun (s : (list) (Term)) => (Term_Set) ((sets.fromList) (((lists.map) (go)) ((sets.toList) (s))))) (v_)
 | Term_TypeApplication v_ => (fun (tt : TypeApplicationTerm) => let body1 := (go) ((fun r_ => (typeApplicationTerm_body) (r_)) (tt)) in ((push) (body1)) ((fun r_ => (typeApplicationTerm_type) (r_)) (tt))) (v_)
 | Term_TypeLambda v_ => (fun (ta : TypeLambda) => (Term_TypeLambda) ((Build_TypeLambda) ((fun r_ => (typeLambda_parameter) (r_)) (ta)) ((go) ((fun r_ => (typeLambda_body) (r_)) (ta))))) (v_)
-| Term_Union v_ => (fun (i : Injection) => (Term_Union) ((Build_Injection) ((fun r_ => (injection_typeName) (r_)) (i)) ((forField) ((fun r_ => (injection_field) (r_)) (i))))) (v_)
+| Term_Inject v_ => (fun (i : Injection) => (Term_Inject) ((Build_Injection) ((fun r_ => (injection_typeName) (r_)) (i)) ((forField) ((fun r_ => (injection_field) (r_)) (i))))) (v_)
 | Term_Unit _ => (Term_Unit) (tt)
+| Term_Unwrap v_ => (fun (n : Name) => (Term_Unwrap) (n)) (v_)
 | Term_Variable v_ => (fun (v : Name) => (Term_Variable) (v)) (v_)
 | Term_Wrap v_ => (fun (wt : WrappedTerm) => (Term_Wrap) ((Build_WrappedTerm) ((fun r_ => (wrappedTerm_typeName) (r_)) (wt)) ((go) ((fun r_ => (wrappedTerm_body) (r_)) (wt))))) (v_)
 end) (t)) (fun (body : Term) => fun (typ : Type_) => (fun x_ => match x_ with
 | Term_Application v_ => (fun (a : Application) => (go) ((Term_Application) ((Build_Application) ((Term_TypeApplication) ((Build_TypeApplicationTerm) ((fun r_ => (application_function) (r_)) (a)) (typ))) ((fun r_ => (application_argument) (r_)) (a))))) (v_)
-| Term_Function v_ => (fun (f : Function) => (fun x_ => match x_ with
-| Function_Lambda v_ => (fun (l : Lambda) => (go) ((Term_Function) ((Function_Lambda) ((Build_Lambda) ((fun r_ => (lambda_parameter) (r_)) (l)) ((fun r_ => (lambda_domain) (r_)) (l)) ((Term_TypeApplication) ((Build_TypeApplicationTerm) ((fun r_ => (lambda_body) (r_)) (l)) (typ))))))) (v_)
-| _ => (Term_TypeApplication) ((Build_TypeApplicationTerm) ((Term_Function) (f)) (typ))
-end) (f)) (v_)
+| Term_Lambda v_ => (fun (l : Lambda) => (go) ((Term_Lambda) ((Build_Lambda) ((fun r_ => (lambda_parameter) (r_)) (l)) ((fun r_ => (lambda_domain) (r_)) (l)) ((Term_TypeApplication) ((Build_TypeApplicationTerm) ((fun r_ => (lambda_body) (r_)) (l)) (typ)))))) (v_)
 | Term_Let v_ => (fun (lt : Let) => (go) ((Term_Let) ((Build_Let) ((fun r_ => (let_bindings) (r_)) (lt)) ((Term_TypeApplication) ((Build_TypeApplicationTerm) ((fun r_ => (let_body) (r_)) (lt)) (typ)))))) (v_)
 | _ => (Term_TypeApplication) ((Build_TypeApplicationTerm) (body) (typ))
 end) (body))) in let go := (pairs.first) (hydra_mutual_bundle_) in let push := (pairs.second) (hydra_mutual_bundle_) in (go) (term_).
@@ -178,10 +171,7 @@ end) (term1)) in ((rewriteTermM) ((rewrite) (Term))) (term0).
 Arguments adaptTerm {t0}.
 Definition adaptLambdaDomains (t0 : Type) : LanguageConstraints -> (list) ((prod) (LiteralType) (LiteralType)) -> (t0 -> (sum) (Error) (Term)) -> t0 -> (sum) (Error) (Term) :=
   fun (constraints : LanguageConstraints) => fun (litmap : (list) ((prod) (LiteralType) (LiteralType))) => fun (recurse : t0 -> (sum) (Error) (Term)) => fun (term_ : t0) => ((eithers.bind) ((recurse) (term_))) (fun (rewritten : Term) => (fun x_ => match x_ with
-| Term_Function v_ => (fun (f : Function) => (fun x_ => match x_ with
-| Function_Lambda v_ => (fun (l : Lambda) => ((eithers.bind) ((((maybes.maybe) ((inr) (None))) (fun (dom : Type_) => ((eithers.bind) ((((adaptType) (constraints)) (litmap)) (dom))) (fun (dom1 : Type_) => (inr) ((Some) (dom1))))) ((fun r_ => (lambda_domain) (r_)) (l)))) (fun (adaptedDomain : (option) (Type_)) => (inr) ((Term_Function) ((Function_Lambda) ((Build_Lambda) ((fun r_ => (lambda_parameter) (r_)) (l)) (adaptedDomain) ((fun r_ => (lambda_body) (r_)) (l))))))) (v_)
-| _ => (inr) ((Term_Function) (f))
-end) (f)) (v_)
+| Term_Lambda v_ => (fun (l : Lambda) => ((eithers.bind) ((((maybes.maybe) ((inr) (None))) (fun (dom : Type_) => ((eithers.bind) ((((adaptType) (constraints)) (litmap)) (dom))) (fun (dom1 : Type_) => (inr) ((Some) (dom1))))) ((fun r_ => (lambda_domain) (r_)) (l)))) (fun (adaptedDomain : (option) (Type_)) => (inr) ((Term_Lambda) ((Build_Lambda) ((fun r_ => (lambda_parameter) (r_)) (l)) (adaptedDomain) ((fun r_ => (lambda_body) (r_)) (l)))))) (v_)
 | _ => (inr) (rewritten)
 end) (rewritten)).
 Arguments adaptLambdaDomains {t0}.

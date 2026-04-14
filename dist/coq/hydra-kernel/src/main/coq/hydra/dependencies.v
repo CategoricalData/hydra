@@ -22,16 +22,11 @@ Definition toShortNames : (list) (Name) -> (list) ((prod) (Name) (Name)) :=
   fun (original : (list) (Name)) => let renameGroup := fun localNames => let rangeFrom := (hydra_fix) (fun rangeFrom => fun (start : Z) => ((lists.cons) (start)) ((rangeFrom) (((math.add) (start)) ((1)%Z)))) in let names := (pairs.second) (localNames) in let local := (pairs.first) (localNames) in let rename := fun name => fun (i : Z) => (pair) (name) ((((logic.ifElse) (((equality.gt) (i)) ((1)%Z))) (((strings.cat2) (local)) ((literals.showInt32) (i)))) (local)) in (((lists.zipWith) (rename)) ((sets.toList) (names))) ((rangeFrom) ((1)%Z)) in let addName := fun (acc : (list) ((prod) (string) ((list) (Name)))) => fun (name : Name) => let local := (localNameOf) (name) in let group := ((maybes.fromMaybe) (sets.empty)) (((maps.lookup) (local)) (acc)) in (((maps.insert) (local)) (((sets.insert) (name)) (group))) (acc) in let groupNamesByLocal := fun (names : (list) (Name)) => (((lists.foldl) (addName)) (maps.empty)) (names) in let groups := (groupNamesByLocal) (original) in (maps.fromList) ((lists.concat) (((lists.map) (renameGroup)) ((maps.toList) (groups)))).
 Definition termDependencyNames : bool -> bool -> bool -> Term -> (list) (Name) :=
   fun (binds : bool) => fun (withPrims : bool) => fun (withNoms : bool) => fun (term0 : Term) => let addNames := fun (names : (list) (Name)) => fun (term_ : Term) => let var := fun (name : Name) => (((logic.ifElse) (binds)) (((sets.insert) (name)) (names))) (names) in let prim := fun (name : Name) => (((logic.ifElse) (withPrims)) (((sets.insert) (name)) (names))) (names) in let nominal := fun (name : Name) => (((logic.ifElse) (withNoms)) (((sets.insert) (name)) (names))) (names) in (fun x_ => match x_ with
-| Term_Function v_ => (fun (f : Function) => (fun x_ => match x_ with
-| Function_Elimination v_ => (fun (e : Elimination) => (fun x_ => match x_ with
-| Elimination_Record v_ => (fun (proj : Projection) => (nominal) ((fun r_ => (projection_typeName) (r_)) (proj))) (v_)
-| Elimination_Union v_ => (fun (caseStmt : CaseStatement) => (nominal) ((fun r_ => (caseStatement_typeName) (r_)) (caseStmt))) (v_)
-| Elimination_Wrap v_ => (fun (name : Name) => (nominal) (name)) (v_)
-end) (e)) (v_)
-| _ => names
-end) (f)) (v_)
+| Term_Cases v_ => (fun (caseStmt : CaseStatement) => (nominal) ((fun r_ => (caseStatement_typeName) (r_)) (caseStmt))) (v_)
+| Term_Project v_ => (fun (proj : Projection) => (nominal) ((fun r_ => (projection_typeName) (r_)) (proj))) (v_)
+| Term_Unwrap v_ => (fun (name : Name) => (nominal) (name)) (v_)
 | Term_Record v_ => (fun (record : Record_) => (nominal) ((fun r_ => (record__typeName) (r_)) (record))) (v_)
-| Term_Union v_ => (fun (injection : Injection) => (nominal) ((fun r_ => (injection_typeName) (r_)) (injection))) (v_)
+| Term_Inject v_ => (fun (injection : Injection) => (nominal) ((fun r_ => (injection_typeName) (r_)) (injection))) (v_)
 | Term_Variable v_ => (fun (name : Name) => (var) (name)) (v_)
 | Term_Wrap v_ => (fun (wrappedTerm : WrappedTerm) => (nominal) ((fun r_ => (wrappedTerm_typeName) (r_)) (wrappedTerm))) (v_)
 | _ => names
@@ -44,11 +39,8 @@ Definition simplifyTerm_bundle :=
     fun (term_ : Term) => let simplify := fun recurse => fun (term2 : Term) => let stripped := (deannotateTerm) (term2) in let forRhs := fun (rhs : Term) => fun (var : Name) => fun (body : Term) => (fun x_ => match x_ with
 | Term_Variable v_ => (fun (v : Name) => (simplifyTerm) ((((substituteVariable) (var)) (v)) (body))) (v_)
 | _ => term2
-end) ((deannotateTerm) (rhs)) in let forLhs := fun (lhs : Term) => fun (rhs : Term) => let forFun := fun (fun_ : Function) => (fun x_ => match x_ with
-| Function_Lambda v_ => (fun (l : Lambda) => let var := (fun r_ => (lambda_parameter) (r_)) (l) in let body := (fun r_ => (lambda_body) (r_)) (l) in (((logic.ifElse) (((sets.member) (var)) ((freeVariablesInTerm) (body)))) ((((forRhs) (rhs)) (var)) (body))) ((simplifyTerm) (body))) (v_)
-| _ => term2
-end) (fun_) in (fun x_ => match x_ with
-| Term_Function v_ => (fun (fun_ : Function) => (forFun) (fun_)) (v_)
+end) ((deannotateTerm) (rhs)) in let forLhs := fun (lhs : Term) => fun (rhs : Term) => (fun x_ => match x_ with
+| Term_Lambda v_ => (fun (l : Lambda) => let var := (fun r_ => (lambda_parameter) (r_)) (l) in let body := (fun r_ => (lambda_body) (r_)) (l) in (((logic.ifElse) (((sets.member) (var)) ((freeVariablesInTerm) (body)))) ((((forRhs) (rhs)) (var)) (body))) ((simplifyTerm) (body))) (v_)
 | _ => term2
 end) ((deannotateTerm) (lhs)) in let forTerm := fun (stripped : Term) => (fun x_ => match x_ with
 | Term_Application v_ => (fun (app : Application) => let rhs := (fun r_ => (application_argument) (r_)) (app) in let lhs := (fun r_ => (application_function) (r_)) (app) in ((forLhs) (lhs)) (rhs)) (v_)
@@ -76,10 +68,7 @@ Definition pruneLet : Let -> Let :=
 Definition liftLambdaAboveLet : Term -> Term :=
   fun (term0 : Term) => let rewrite := (hydra_fix) (fun rewrite => fun (recurse : Term -> Term) => fun (term_ : Term) => let rewriteBinding := fun (b : Binding) => (Build_Binding) ((fun r_ => (binding_name) (r_)) (b)) (((rewrite) (recurse)) ((fun r_ => (binding_term) (r_)) (b))) ((fun r_ => (binding_type) (r_)) (b)) in let rewriteBindings := fun (bs : (list) (Binding)) => ((lists.map) (rewriteBinding)) (bs) in let digForLambdas := (hydra_fix) (fun digForLambdas => fun (original : Term) => fun (cons_ : Term -> Term) => fun (term2 : Term) => (fun x_ => match x_ with
 | Term_Annotated v_ => (fun (at_ : AnnotatedTerm) => (((digForLambdas) (original)) (fun (t : Term) => (Term_Annotated) ((Build_AnnotatedTerm) ((cons_) (t)) ((fun r_ => (annotatedTerm_annotation) (r_)) (at_))))) ((fun r_ => (annotatedTerm_body) (r_)) (at_))) (v_)
-| Term_Function v_ => (fun (f : Function) => (fun x_ => match x_ with
-| Function_Lambda v_ => (fun (l : Lambda) => (Term_Function) ((Function_Lambda) ((Build_Lambda) ((fun r_ => (lambda_parameter) (r_)) (l)) ((fun r_ => (lambda_domain) (r_)) (l)) ((((digForLambdas) ((cons_) ((fun r_ => (lambda_body) (r_)) (l)))) (fun (t : Term) => (cons_) (t))) ((fun r_ => (lambda_body) (r_)) (l)))))) (v_)
-| _ => (recurse) (original)
-end) (f)) (v_)
+| Term_Lambda v_ => (fun (l : Lambda) => (Term_Lambda) ((Build_Lambda) ((fun r_ => (lambda_parameter) (r_)) (l)) ((fun r_ => (lambda_domain) (r_)) (l)) ((((digForLambdas) ((cons_) ((fun r_ => (lambda_body) (r_)) (l)))) (fun (t : Term) => (cons_) (t))) ((fun r_ => (lambda_body) (r_)) (l))))) (v_)
 | Term_Let v_ => (fun (l : Let) => (((digForLambdas) (original)) (fun (t : Term) => (cons_) ((Term_Let) ((Build_Let) ((rewriteBindings) ((fun r_ => (let_bindings) (r_)) (l))) (t))))) ((fun r_ => (let_body) (r_)) (l))) (v_)
 | _ => (recurse) (original)
 end) (term2)) in (fun x_ => match x_ with
@@ -90,10 +79,7 @@ Definition isLambda_bundle :=
   hydra_fix (fun (bundle_ : Term -> bool) =>
     let isLambda := bundle_ in
     fun (term_ : Term) => (fun x_ => match x_ with
-| Term_Function v_ => (fun x_ => match x_ with
-| Function_Lambda v_ => (fun (_ : Lambda) => true) (v_)
-| _ => false
-end) (v_)
+| Term_Lambda v_ => (fun (_ : Lambda) => true) (v_)
 | Term_Let v_ => (fun (lt : Let) => (isLambda) ((fun r_ => (let_body) (r_)) (lt))) (v_)
 | _ => false
 end) ((deannotateTerm) (term_))).

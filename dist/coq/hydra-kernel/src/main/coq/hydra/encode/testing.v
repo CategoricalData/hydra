@@ -10,7 +10,7 @@ Definition universalTestCase : UniversalTestCase -> Term :=
   fun (x : UniversalTestCase) => (Term_Record) ((Build_Record_) ("UniversalTestCase"%string) ((cons) ((Build_Field) ("actual"%string) ((fun (x2 : string) => (Term_Literal) ((Literal_String) (x2))) ((fun r_ => (universalTestCase_actual) (r_)) (x)))) ((cons) ((Build_Field) ("expected"%string) ((fun (x2 : string) => (Term_Literal) ((Literal_String) (x2))) ((fun r_ => (universalTestCase_expected) (r_)) (x)))) (nil)))).
 Definition testCase : TestCase -> Term :=
   fun x_ => match x_ with
-| TestCase_Universal v_ => (fun (y : UniversalTestCase) => (Term_Union) ((Build_Injection) ("TestCase"%string) ((Build_Field) ("universal"%string) ((universalTestCase) (y))))) (v_)
+| TestCase_Universal v_ => (fun (y : UniversalTestCase) => (Term_Inject) ((Build_Injection) ("TestCase"%string) ((Build_Field) ("universal"%string) ((universalTestCase) (y))))) (v_)
 end.
 Definition tag : Tag -> Term :=
   fun (x : Tag) => (Term_Wrap) ((Build_WrappedTerm) ("Tag"%string) ((fun (x2 : string) => (Term_Literal) ((Literal_String) (x2))) ((fun w_ => w_) (x)))).

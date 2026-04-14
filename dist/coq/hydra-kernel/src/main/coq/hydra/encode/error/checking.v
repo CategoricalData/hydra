@@ -35,18 +35,18 @@ Definition incorrectUnificationError : IncorrectUnificationError -> Term :=
   fun (x : IncorrectUnificationError) => (Term_Record) ((Build_Record_) ("IncorrectUnificationError"%string) ((cons) ((Build_Field) ("substitution"%string) ((hydra.encode.typing.typeSubst) ((fun r_ => (incorrectUnificationError_substitution) (r_)) (x)))) (nil))).
 Definition checkingError : CheckingError -> Term :=
   fun x_ => match x_ with
-| CheckingError_IncorrectUnification v_ => (fun (y : IncorrectUnificationError) => (Term_Union) ((Build_Injection) ("CheckingError"%string) ((Build_Field) ("incorrectUnification"%string) ((incorrectUnificationError) (y))))) (v_)
-| CheckingError_NotAForallType v_ => (fun (y : NotAForallTypeError) => (Term_Union) ((Build_Injection) ("CheckingError"%string) ((Build_Field) ("notAForallType"%string) ((notAForallTypeError) (y))))) (v_)
-| CheckingError_NotAFunctionType v_ => (fun (y : NotAFunctionTypeError) => (Term_Union) ((Build_Injection) ("CheckingError"%string) ((Build_Field) ("notAFunctionType"%string) ((notAFunctionTypeError) (y))))) (v_)
-| CheckingError_Other v_ => (fun (y : OtherCheckingError) => (Term_Union) ((Build_Injection) ("CheckingError"%string) ((Build_Field) ("other"%string) ((otherCheckingError) (y))))) (v_)
-| CheckingError_TypeArityMismatch v_ => (fun (y : TypeArityMismatchError) => (Term_Union) ((Build_Injection) ("CheckingError"%string) ((Build_Field) ("typeArityMismatch"%string) ((typeArityMismatchError) (y))))) (v_)
-| CheckingError_TypeMismatch v_ => (fun (y : TypeMismatchError) => (Term_Union) ((Build_Injection) ("CheckingError"%string) ((Build_Field) ("typeMismatch"%string) ((typeMismatchError) (y))))) (v_)
-| CheckingError_UnboundTypeVariables v_ => (fun (y : UnboundTypeVariablesError) => (Term_Union) ((Build_Injection) ("CheckingError"%string) ((Build_Field) ("unboundTypeVariables"%string) ((unboundTypeVariablesError) (y))))) (v_)
-| CheckingError_UndefinedTermVariable v_ => (fun (y : UndefinedTermVariableCheckingError) => (Term_Union) ((Build_Injection) ("CheckingError"%string) ((Build_Field) ("undefinedTermVariable"%string) ((undefinedTermVariableCheckingError) (y))))) (v_)
-| CheckingError_UnequalTypes v_ => (fun (y : UnequalTypesError) => (Term_Union) ((Build_Injection) ("CheckingError"%string) ((Build_Field) ("unequalTypes"%string) ((unequalTypesError) (y))))) (v_)
-| CheckingError_UnsupportedTermVariant v_ => (fun (y : UnsupportedTermVariantError) => (Term_Union) ((Build_Injection) ("CheckingError"%string) ((Build_Field) ("unsupportedTermVariant"%string) ((unsupportedTermVariantError) (y))))) (v_)
-| CheckingError_UntypedLambda v_ => (fun (y : UntypedLambdaError) => (Term_Union) ((Build_Injection) ("CheckingError"%string) ((Build_Field) ("untypedLambda"%string) ((untypedLambdaError) (y))))) (v_)
-| CheckingError_UntypedLetBinding v_ => (fun (y : UntypedLetBindingError) => (Term_Union) ((Build_Injection) ("CheckingError"%string) ((Build_Field) ("untypedLetBinding"%string) ((untypedLetBindingError) (y))))) (v_)
-| CheckingError_UntypedTermVariable v_ => (fun (y : UntypedTermVariableCheckingError) => (Term_Union) ((Build_Injection) ("CheckingError"%string) ((Build_Field) ("untypedTermVariable"%string) ((untypedTermVariableCheckingError) (y))))) (v_)
+| CheckingError_IncorrectUnification v_ => (fun (y : IncorrectUnificationError) => (Term_Inject) ((Build_Injection) ("CheckingError"%string) ((Build_Field) ("incorrectUnification"%string) ((incorrectUnificationError) (y))))) (v_)
+| CheckingError_NotAForallType v_ => (fun (y : NotAForallTypeError) => (Term_Inject) ((Build_Injection) ("CheckingError"%string) ((Build_Field) ("notAForallType"%string) ((notAForallTypeError) (y))))) (v_)
+| CheckingError_NotAFunctionType v_ => (fun (y : NotAFunctionTypeError) => (Term_Inject) ((Build_Injection) ("CheckingError"%string) ((Build_Field) ("notAFunctionType"%string) ((notAFunctionTypeError) (y))))) (v_)
+| CheckingError_Other v_ => (fun (y : OtherCheckingError) => (Term_Inject) ((Build_Injection) ("CheckingError"%string) ((Build_Field) ("other"%string) ((otherCheckingError) (y))))) (v_)
+| CheckingError_TypeArityMismatch v_ => (fun (y : TypeArityMismatchError) => (Term_Inject) ((Build_Injection) ("CheckingError"%string) ((Build_Field) ("typeArityMismatch"%string) ((typeArityMismatchError) (y))))) (v_)
+| CheckingError_TypeMismatch v_ => (fun (y : TypeMismatchError) => (Term_Inject) ((Build_Injection) ("CheckingError"%string) ((Build_Field) ("typeMismatch"%string) ((typeMismatchError) (y))))) (v_)
+| CheckingError_UnboundTypeVariables v_ => (fun (y : UnboundTypeVariablesError) => (Term_Inject) ((Build_Injection) ("CheckingError"%string) ((Build_Field) ("unboundTypeVariables"%string) ((unboundTypeVariablesError) (y))))) (v_)
+| CheckingError_UndefinedTermVariable v_ => (fun (y : UndefinedTermVariableCheckingError) => (Term_Inject) ((Build_Injection) ("CheckingError"%string) ((Build_Field) ("undefinedTermVariable"%string) ((undefinedTermVariableCheckingError) (y))))) (v_)
+| CheckingError_UnequalTypes v_ => (fun (y : UnequalTypesError) => (Term_Inject) ((Build_Injection) ("CheckingError"%string) ((Build_Field) ("unequalTypes"%string) ((unequalTypesError) (y))))) (v_)
+| CheckingError_UnsupportedTermVariant v_ => (fun (y : UnsupportedTermVariantError) => (Term_Inject) ((Build_Injection) ("CheckingError"%string) ((Build_Field) ("unsupportedTermVariant"%string) ((unsupportedTermVariantError) (y))))) (v_)
+| CheckingError_UntypedLambda v_ => (fun (y : UntypedLambdaError) => (Term_Inject) ((Build_Injection) ("CheckingError"%string) ((Build_Field) ("untypedLambda"%string) ((untypedLambdaError) (y))))) (v_)
+| CheckingError_UntypedLetBinding v_ => (fun (y : UntypedLetBindingError) => (Term_Inject) ((Build_Injection) ("CheckingError"%string) ((Build_Field) ("untypedLetBinding"%string) ((untypedLetBindingError) (y))))) (v_)
+| CheckingError_UntypedTermVariable v_ => (fun (y : UntypedTermVariableCheckingError) => (Term_Inject) ((Build_Injection) ("CheckingError"%string) ((Build_Field) ("untypedTermVariable"%string) ((untypedTermVariableCheckingError) (y))))) (v_)
 end.
 

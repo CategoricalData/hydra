@@ -8,6 +8,8 @@ Require Import hydra.core hydra.lib.strings hydra.lib.pairs hydra.lib.maybes hyd
 
 Definition readTerm : string -> (option) (Term) :=
   fun (s : string) => (Some) ((Term_Literal) ((Literal_String) (s))).
+Definition projection : Projection -> string :=
+  fun (proj : Projection) => let tname := (fun w_ => w_) ((fun r_ => (projection_typeName) (r_)) (proj)) in let fname := (fun w_ => w_) ((fun r_ => (projection_field) (r_)) (proj)) in (strings.cat) ((cons) ("project("%string) ((cons) (tname) ((cons) ("){"%string) ((cons) (fname) ((cons) ("}"%string) (nil)))))).
 Definition pair_ (t0 : Type) (t1 : Type) : (t0 -> string) -> (t1 -> string) -> (prod) (t0) (t1) -> string :=
   fun (showA : t0 -> string) => fun (showB : t1 -> string) => fun (p : (prod) (t0) (t1)) => (strings.cat) ((cons) ("("%string) ((cons) ((showA) ((pairs.first) (p))) ((cons) (", "%string) ((cons) ((showB) ((pairs.second) (p))) ((cons) (")"%string) (nil)))))).
 Arguments pair_ {t0} {t1}.
@@ -133,63 +135,56 @@ Definition either (t0 : Type) (t1 : Type) : (t0 -> string) -> (t1 -> string) -> 
   either_bundle.
 Arguments either {t0} {t1}.
 Definition binding_term_bundle :=
-  hydra_fix (fun (bundle_ : prod (Binding -> string) (prod (Term -> string) (prod ((list) (Field) -> string) (prod (Field -> string) (prod (Function -> string) (prod (Elimination -> string) (prod (Lambda -> string) (prod (Injection -> string) (Let -> string))))))))) =>
+  hydra_fix (fun (bundle_ : prod (Binding -> string) (prod (Term -> string) (prod (CaseStatement -> string) (prod ((list) (Field) -> string) (prod (Field -> string) (prod (Injection -> string) (prod (Lambda -> string) (Let -> string)))))))) =>
     let binding := (fst bundle_) in
     let term := (fst (snd bundle_)) in
-    let fields := (fst (snd (snd bundle_))) in
-    let field := (fst (snd (snd (snd bundle_)))) in
-    let function := (fst (snd (snd (snd (snd bundle_))))) in
-    let elimination := (fst (snd (snd (snd (snd (snd bundle_)))))) in
+    let caseStatement := (fst (snd (snd bundle_))) in
+    let fields := (fst (snd (snd (snd bundle_)))) in
+    let field := (fst (snd (snd (snd (snd bundle_))))) in
+    let injection := (fst (snd (snd (snd (snd (snd bundle_)))))) in
     let lambda := (fst (snd (snd (snd (snd (snd (snd bundle_))))))) in
-    let injection := (fst (snd (snd (snd (snd (snd (snd (snd bundle_)))))))) in
-    let let_ := (snd (snd (snd (snd (snd (snd (snd (snd bundle_)))))))) in
+    let let_ := (snd (snd (snd (snd (snd (snd (snd bundle_))))))) in
     (pair (fun (el : Binding) => let typeStr := (((maybes.maybe) (""%string)) (fun (ts : TypeScheme) => (strings.cat) ((cons) (":("%string) ((cons) ((typeScheme) (ts)) ((cons) (")"%string) (nil)))))) ((fun r_ => (binding_type) (r_)) (el)) in let t := (fun r_ => (binding_term) (r_)) (el) in let name := (fun w_ => w_) ((fun r_ => (binding_name) (r_)) (el)) in (strings.cat) ((cons) (name) ((cons) (typeStr) ((cons) (" = "%string) ((cons) ((term) (t)) (nil)))))) ((pair (fun (t : Term) => let gatherTerms := (hydra_fix) (fun gatherTerms => fun (prev : (list) (Term)) => fun (app : Application) => let rhs := (fun r_ => (application_argument) (r_)) (app) in let lhs := (fun r_ => (application_function) (r_)) (app) in (fun x_ => match x_ with
 | Term_Application v_ => (fun (app2 : Application) => ((gatherTerms) (((lists.cons) (rhs)) (prev))) (app2)) (v_)
 | _ => ((lists.cons) (lhs)) (((lists.cons) (rhs)) (prev))
 end) (lhs)) in (fun x_ => match x_ with
 | Term_Annotated v_ => (fun (at_ : AnnotatedTerm) => (term) ((fun r_ => (annotatedTerm_body) (r_)) (at_))) (v_)
 | Term_Application v_ => (fun (app : Application) => let terms := ((gatherTerms) (nil)) (app) in let termStrs := ((lists.map) (term)) (terms) in (strings.cat) ((cons) ("("%string) ((cons) (((strings.intercalate) (" @ "%string)) (termStrs)) ((cons) (")"%string) (nil))))) (v_)
+| Term_Cases v_ => (caseStatement) (v_)
 | Term_Either v_ => (fun (e : (sum) (Term) (Term)) => (((eithers.either) (fun (l : Term) => (strings.cat) ((cons) ("left("%string) ((cons) ((term) (l)) ((cons) (")"%string) (nil)))))) (fun (r : Term) => (strings.cat) ((cons) ("right("%string) ((cons) ((term) (r)) ((cons) (")"%string) (nil)))))) (e)) (v_)
-| Term_Function v_ => (function) (v_)
+| Term_Lambda v_ => (lambda) (v_)
 | Term_Let v_ => (fun (l : Let) => (let_) (l)) (v_)
 | Term_List v_ => (fun (els : (list) (Term)) => let termStrs := ((lists.map) (term)) (els) in (strings.cat) ((cons) ("["%string) ((cons) (((strings.intercalate) (", "%string)) (termStrs)) ((cons) ("]"%string) (nil))))) (v_)
 | Term_Literal v_ => (fun (lit : Literal) => (literal) (lit)) (v_)
 | Term_Map v_ => (fun (m : (list) ((prod) (Term) (Term))) => let entry := fun (p : (prod) (Term) (Term)) => (strings.cat) ((cons) ((term) ((pairs.first) (p))) ((cons) ("="%string) ((cons) ((term) ((pairs.second) (p))) (nil)))) in (strings.cat) ((cons) ("{"%string) ((cons) (((strings.intercalate) (", "%string)) (((lists.map) (entry)) ((maps.toList) (m)))) ((cons) ("}"%string) (nil))))) (v_)
 | Term_Maybe v_ => (fun (mt : (option) (Term)) => (((maybes.maybe) ("nothing"%string)) (fun (t2 : Term) => (strings.cat) ((cons) ("just("%string) ((cons) ((term) (t2)) ((cons) (")"%string) (nil)))))) (mt)) (v_)
 | Term_Pair v_ => (fun (p : (prod) (Term) (Term)) => (strings.cat) ((cons) ("("%string) ((cons) ((term) ((pairs.first) (p))) ((cons) (", "%string) ((cons) ((term) ((pairs.second) (p))) ((cons) (")"%string) (nil))))))) (v_)
+| Term_Project v_ => (projection) (v_)
 | Term_Record v_ => (fun (rec : Record_) => let tname := (fun w_ => w_) ((fun r_ => (record__typeName) (r_)) (rec)) in let flds := (fun r_ => (record__fields) (r_)) (rec) in (strings.cat) ((cons) ("record("%string) ((cons) (tname) ((cons) (")"%string) ((cons) ((fields) (flds)) (nil)))))) (v_)
 | Term_Set v_ => (fun (s : (list) (Term)) => (strings.cat) ((cons) ("{"%string) ((cons) (((strings.intercalate) (", "%string)) (((lists.map) (term)) ((sets.toList) (s)))) ((cons) ("}"%string) (nil))))) (v_)
 | Term_TypeLambda v_ => (fun (ta : TypeLambda) => let param := (fun w_ => w_) ((fun r_ => (typeLambda_parameter) (r_)) (ta)) in let body := (fun r_ => (typeLambda_body) (r_)) (ta) in (strings.cat) ((cons) ("Λ"%string) ((cons) (param) ((cons) ("."%string) ((cons) ((term) (body)) (nil)))))) (v_)
 | Term_TypeApplication v_ => (fun (tt : TypeApplicationTerm) => let typ := (fun r_ => (typeApplicationTerm_type) (r_)) (tt) in let t2 := (fun r_ => (typeApplicationTerm_body) (r_)) (tt) in (strings.cat) ((cons) ((term) (t2)) ((cons) ("⟨"%string) ((cons) ((type) (typ)) ((cons) ("⟩"%string) (nil)))))) (v_)
-| Term_Union v_ => (injection) (v_)
+| Term_Inject v_ => (injection) (v_)
 | Term_Unit _ => "unit"%string
+| Term_Unwrap v_ => (fun (tname : Name) => (strings.cat) ((cons) ("unwrap("%string) ((cons) ((fun w_ => w_) (tname)) ((cons) (")"%string) (nil))))) (v_)
 | Term_Variable v_ => (fun (name : Name) => (fun w_ => w_) (name)) (v_)
 | Term_Wrap v_ => (fun (wt : WrappedTerm) => let tname := (fun w_ => w_) ((fun r_ => (wrappedTerm_typeName) (r_)) (wt)) in let term1 := (fun r_ => (wrappedTerm_body) (r_)) (wt) in (strings.cat) ((cons) ("wrap("%string) ((cons) (tname) ((cons) ("){"%string) ((cons) ((term) (term1)) ((cons) ("}"%string) (nil))))))) (v_)
-end) (t)) ((pair (fun (flds : (list) (Field)) => let fieldStrs := ((lists.map) (field)) (flds) in (strings.cat) ((cons) ("{"%string) ((cons) (((strings.intercalate) (", "%string)) (fieldStrs)) ((cons) ("}"%string) (nil))))) ((pair (fun (field : Field) => let fterm := (fun r_ => (field_term) (r_)) (field) in let fname := (fun w_ => w_) ((fun r_ => (field_name) (r_)) (field)) in (strings.cat) ((cons) (fname) ((cons) ("="%string) ((cons) ((term) (fterm)) (nil))))) ((pair (fun (f : Function) => (fun x_ => match x_ with
-| Function_Elimination v_ => (elimination) (v_)
-| Function_Lambda v_ => (lambda) (v_)
-end) (f)) ((pair (fun (elm : Elimination) => (fun x_ => match x_ with
-| Elimination_Record v_ => (fun (proj : Projection) => let tname := (fun w_ => w_) ((fun r_ => (projection_typeName) (r_)) (proj)) in let fname := (fun w_ => w_) ((fun r_ => (projection_field) (r_)) (proj)) in (strings.cat) ((cons) ("project("%string) ((cons) (tname) ((cons) ("){"%string) ((cons) (fname) ((cons) ("}"%string) (nil))))))) (v_)
-| Elimination_Union v_ => (fun (cs : CaseStatement) => let tname := (fun w_ => w_) ((fun r_ => (caseStatement_typeName) (r_)) (cs)) in let mdef := (fun r_ => (caseStatement_default) (r_)) (cs) in let defaultField := (((maybes.maybe) (nil)) (fun (d : Term) => (cons) ((Build_Field) ("[default]"%string) (d)) (nil))) (mdef) in let cases := (fun r_ => (caseStatement_cases) (r_)) (cs) in let allFields := (lists.concat) ((cons) (cases) ((cons) (defaultField) (nil))) in (strings.cat) ((cons) ("case("%string) ((cons) (tname) ((cons) (")"%string) ((cons) ((fields) (allFields)) (nil)))))) (v_)
-| Elimination_Wrap v_ => (fun (tname : Name) => (strings.cat) ((cons) ("unwrap("%string) ((cons) ((fun w_ => w_) (tname)) ((cons) (")"%string) (nil))))) (v_)
-end) (elm)) ((pair (fun (l : Lambda) => let v := (fun w_ => w_) ((fun r_ => (lambda_parameter) (r_)) (l)) in let mt := (fun r_ => (lambda_domain) (r_)) (l) in let typeStr := (((maybes.maybe) (""%string)) (fun (t : Type_) => ((strings.cat2) (":"%string)) ((type) (t)))) (mt) in let body := (fun r_ => (lambda_body) (r_)) (l) in (strings.cat) ((cons) ("λ"%string) ((cons) (v) ((cons) (typeStr) ((cons) ("."%string) ((cons) ((term) (body)) (nil))))))) ((pair (fun (inj : Injection) => let tname := (fun r_ => (injection_typeName) (r_)) (inj) in let f := (fun r_ => (injection_field) (r_)) (inj) in (strings.cat) ((cons) ("inject("%string) ((cons) ((fun w_ => w_) (tname)) ((cons) (")"%string) ((cons) ((fields) ((cons) (f) (nil))) (nil)))))) (fun (l : Let) => let env := (fun r_ => (let_body) (r_)) (l) in let bindings := (fun r_ => (let_bindings) (r_)) (l) in let bindingStrs := ((lists.map) (binding)) (bindings) in (strings.cat) ((cons) ("let "%string) ((cons) (((strings.intercalate) (", "%string)) (bindingStrs)) ((cons) (" in "%string) ((cons) ((term) (env)) (nil)))))))))))))))))))))).
+end) (t)) ((pair (fun (cs : CaseStatement) => let tname := (fun w_ => w_) ((fun r_ => (caseStatement_typeName) (r_)) (cs)) in let mdef := (fun r_ => (caseStatement_default) (r_)) (cs) in let defaultField := (((maybes.maybe) (nil)) (fun (d : Term) => (cons) ((Build_Field) ("[default]"%string) (d)) (nil))) (mdef) in let csCases := (fun r_ => (caseStatement_cases) (r_)) (cs) in let allFields := (lists.concat) ((cons) (csCases) ((cons) (defaultField) (nil))) in (strings.cat) ((cons) ("case("%string) ((cons) (tname) ((cons) (")"%string) ((cons) ((fields) (allFields)) (nil)))))) ((pair (fun (flds : (list) (Field)) => let fieldStrs := ((lists.map) (field)) (flds) in (strings.cat) ((cons) ("{"%string) ((cons) (((strings.intercalate) (", "%string)) (fieldStrs)) ((cons) ("}"%string) (nil))))) ((pair (fun (field : Field) => let fterm := (fun r_ => (field_term) (r_)) (field) in let fname := (fun w_ => w_) ((fun r_ => (field_name) (r_)) (field)) in (strings.cat) ((cons) (fname) ((cons) ("="%string) ((cons) ((term) (fterm)) (nil))))) ((pair (fun (inj : Injection) => let tname := (fun r_ => (injection_typeName) (r_)) (inj) in let f := (fun r_ => (injection_field) (r_)) (inj) in (strings.cat) ((cons) ("inject("%string) ((cons) ((fun w_ => w_) (tname)) ((cons) (")"%string) ((cons) ((fields) ((cons) (f) (nil))) (nil)))))) ((pair (fun (l : Lambda) => let v := (fun w_ => w_) ((fun r_ => (lambda_parameter) (r_)) (l)) in let mt := (fun r_ => (lambda_domain) (r_)) (l) in let typeStr := (((maybes.maybe) (""%string)) (fun (t : Type_) => ((strings.cat2) (":"%string)) ((type) (t)))) (mt) in let body := (fun r_ => (lambda_body) (r_)) (l) in (strings.cat) ((cons) ("λ"%string) ((cons) (v) ((cons) (typeStr) ((cons) ("."%string) ((cons) ((term) (body)) (nil))))))) (fun (l : Let) => let env := (fun r_ => (let_body) (r_)) (l) in let bindings := (fun r_ => (let_bindings) (r_)) (l) in let bindingStrs := ((lists.map) (binding)) (bindings) in (strings.cat) ((cons) ("let "%string) ((cons) (((strings.intercalate) (", "%string)) (bindingStrs)) ((cons) (" in "%string) ((cons) ((term) (env)) (nil)))))))))))))))))))).
 
 Definition binding : Binding -> string :=
   (fst binding_term_bundle).
 Definition term : Term -> string :=
   (fst (snd binding_term_bundle)).
-Definition fields : (list) (Field) -> string :=
+Definition caseStatement : CaseStatement -> string :=
   (fst (snd (snd binding_term_bundle))).
-Definition field : Field -> string :=
+Definition fields : (list) (Field) -> string :=
   (fst (snd (snd (snd binding_term_bundle)))).
-Definition function : Function -> string :=
+Definition field : Field -> string :=
   (fst (snd (snd (snd (snd binding_term_bundle))))).
-Definition elimination : Elimination -> string :=
+Definition injection : Injection -> string :=
   (fst (snd (snd (snd (snd (snd binding_term_bundle)))))).
 Definition lambda : Lambda -> string :=
   (fst (snd (snd (snd (snd (snd (snd binding_term_bundle))))))).
-Definition injection : Injection -> string :=
-  (fst (snd (snd (snd (snd (snd (snd (snd binding_term_bundle)))))))).
 Definition let_ : Let -> string :=
-  (snd (snd (snd (snd (snd (snd (snd (snd binding_term_bundle)))))))).
+  (snd (snd (snd (snd (snd (snd (snd binding_term_bundle))))))).
 

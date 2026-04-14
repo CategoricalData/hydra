@@ -132,6 +132,8 @@ Definition mathTan : Name :=
   "math.tan"%string.
 Definition mathSucc : Name :=
   "math.succ"%string.
+Definition mathSubFloat64 : Name :=
+  "math.subFloat64"%string.
 Definition mathSub : Name :=
   "math.sub"%string.
 Definition mathSqrt : Name :=
@@ -162,8 +164,12 @@ Definition mathPi : Name :=
   "math.pi"%string.
 Definition mathOdd : Name :=
   "math.odd"%string.
+Definition mathNegateFloat64 : Name :=
+  "math.negateFloat64"%string.
 Definition mathNegate : Name :=
   "math.negate"%string.
+Definition mathMulFloat64 : Name :=
+  "math.mulFloat64"%string.
 Definition mathMul : Name :=
   "math.mul"%string.
 Definition mathMod : Name :=
@@ -212,6 +218,8 @@ Definition mathAsinh : Name :=
   "math.asinh"%string.
 Definition mathAsin : Name :=
   "math.asin"%string.
+Definition mathAddFloat64 : Name :=
+  "math.addFloat64"%string.
 Definition mathAdd : Name :=
   "math.add"%string.
 Definition mathAcosh : Name :=

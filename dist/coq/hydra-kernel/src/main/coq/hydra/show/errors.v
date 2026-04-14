@@ -53,13 +53,15 @@ Definition error : Error -> string :=
 | Error_Decoding v_ => (decodingError) (v_)
 | Error_DuplicateBinding v_ => (hydra.show.error.core.duplicateBindingError) (v_)
 | Error_DuplicateField v_ => (hydra.show.error.core.duplicateFieldError) (v_)
+| Error_Extraction v_ => (fun (_ : ExtractionError) => "extraction error"%string) (v_)
+| Error_Inference v_ => (fun (_ : InferenceError) => "inference error"%string) (v_)
 | Error_Other v_ => (otherError) (v_)
+| Error_Resolution v_ => (fun (_ : ResolutionError) => "resolution error"%string) (v_)
 | Error_UndefinedField v_ => (hydra.show.error.core.undefinedFieldError) (v_)
 | Error_UndefinedTermVariable v_ => (hydra.show.error.core.undefinedTermVariableError) (v_)
 | Error_UntypedTermVariable v_ => (hydra.show.error.core.untypedTermVariableError) (v_)
 | Error_UnexpectedTermVariant v_ => (hydra.show.error.core.unexpectedTermVariantError) (v_)
 | Error_UnexpectedTypeVariant v_ => (hydra.show.error.core.unexpectedTypeVariantError) (v_)
 | Error_Unification v_ => (unificationError) (v_)
-| _ => hydra_unreachable
 end) (e).
 

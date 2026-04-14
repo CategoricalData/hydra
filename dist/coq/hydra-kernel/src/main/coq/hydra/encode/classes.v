@@ -8,7 +8,7 @@ Require Import hydra.classes hydra.core.
 
 Definition typeClass : TypeClass -> Term :=
   fun x_ => match x_ with
-| TypeClass_Equality v_ => (fun (y : unit) => (Term_Union) ((Build_Injection) ("TypeClass"%string) ((Build_Field) ("equality"%string) ((fun (_ : unit) => (Term_Unit) (tt)) (y))))) (v_)
-| TypeClass_Ordering v_ => (fun (y : unit) => (Term_Union) ((Build_Injection) ("TypeClass"%string) ((Build_Field) ("ordering"%string) ((fun (_ : unit) => (Term_Unit) (tt)) (y))))) (v_)
+| TypeClass_Equality v_ => (fun (y : unit) => (Term_Inject) ((Build_Injection) ("TypeClass"%string) ((Build_Field) ("equality"%string) ((fun (_ : unit) => (Term_Unit) (tt)) (y))))) (v_)
+| TypeClass_Ordering v_ => (fun (y : unit) => (Term_Inject) ((Build_Injection) ("TypeClass"%string) ((Build_Field) ("ordering"%string) ((fun (_ : unit) => (Term_Unit) (tt)) (y))))) (v_)
 end.
 

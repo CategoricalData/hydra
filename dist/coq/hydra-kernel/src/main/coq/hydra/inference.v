@@ -32,13 +32,11 @@ Axiom inferTypeOfWrappedTerm : Context_ -> hydra.graph.Graph -> WrappedTerm -> (
 Axiom inferTypeOfTerm : Context_ -> hydra.graph.Graph -> Term -> string -> (sum) (Error) (InferenceResult).
 Axiom inferTypeOfAnnotatedTerm : Context_ -> hydra.graph.Graph -> AnnotatedTerm -> (sum) (Error) (InferenceResult).
 Axiom inferTypeOfApplication : Context_ -> hydra.graph.Graph -> Application -> (sum) (Error) (InferenceResult).
-Axiom inferTypeOfEither : Context_ -> hydra.graph.Graph -> (sum) (Term) (Term) -> (sum) (Error) (InferenceResult).
-Axiom inferTypeOfFunction : Context_ -> hydra.graph.Graph -> Function -> (sum) (Error) (InferenceResult).
-Axiom inferTypeOfElimination : Context_ -> hydra.graph.Graph -> Elimination -> (sum) (Error) (InferenceResult).
 Axiom inferTypeOfCaseStatement : Context_ -> hydra.graph.Graph -> CaseStatement -> (sum) (Error) (InferenceResult).
 Axiom inferMany : Context_ -> hydra.graph.Graph -> (list) ((prod) (Term) (string)) -> (sum) (Error) ((prod) ((prod) ((list) (Term)) ((prod) ((list) (Type_)) ((prod) (TypeSubst) ((list) ((prod) (Name) (TypeVariableMetadata)))))) (Context_)).
-Axiom inferTypeOfLambda : Context_ -> hydra.graph.Graph -> Lambda -> (sum) (Error) (InferenceResult).
+Axiom inferTypeOfEither : Context_ -> hydra.graph.Graph -> (sum) (Term) (Term) -> (sum) (Error) (InferenceResult).
 Axiom inferTypeOfInjection : Context_ -> hydra.graph.Graph -> Injection -> (sum) (Error) (InferenceResult).
+Axiom inferTypeOfLambda : Context_ -> hydra.graph.Graph -> Lambda -> (sum) (Error) (InferenceResult).
 Axiom inferTypeOfLet : Context_ -> hydra.graph.Graph -> Let -> (sum) (Error) (InferenceResult).
 Axiom inferTypeOfLetNormalized : Context_ -> hydra.graph.Graph -> Let -> (sum) (Error) (InferenceResult).
 Axiom inferTypesOfTemporaryBindings : Context_ -> hydra.graph.Graph -> (list) (Binding) -> (sum) (Error) ((prod) ((prod) ((list) (Term)) ((prod) ((list) (Type_)) ((prod) (TypeSubst) ((list) ((prod) (Name) (TypeVariableMetadata)))))) (Context_)).

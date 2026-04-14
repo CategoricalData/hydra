@@ -88,8 +88,8 @@ Definition setTermDescription : (option) (string) -> Term -> Term :=
   fun (d : (option) (string)) => ((setTermAnnotation) (key_description)) (((maybes.map) (fun (s : string) => (Term_Literal) ((Literal_String) (s)))) (d)).
 Definition setTypeClasses : (list) ((prod) (Name) ((list) (TypeClass))) -> Term -> Term :=
   fun (m : (list) ((prod) (Name) ((list) (TypeClass)))) => fun (term_ : Term) => let encodeClass := fun (tc : TypeClass) => (fun x_ => match x_ with
-| TypeClass_Equality _ => (Term_Union) ((Build_Injection) ("TypeClass"%string) ((Build_Field) ("equality"%string) ((Term_Unit) (tt))))
-| TypeClass_Ordering _ => (Term_Union) ((Build_Injection) ("TypeClass"%string) ((Build_Field) ("ordering"%string) ((Term_Unit) (tt))))
+| TypeClass_Equality _ => (Term_Inject) ((Build_Injection) ("TypeClass"%string) ((Build_Field) ("equality"%string) ((Term_Unit) (tt))))
+| TypeClass_Ordering _ => (Term_Inject) ((Build_Injection) ("TypeClass"%string) ((Build_Field) ("ordering"%string) ((Term_Unit) (tt))))
 end) (tc) in let encodePair := fun (nameClasses : (prod) (Name) ((list) (TypeClass))) => let name := (pairs.first) (nameClasses) in let classes := (pairs.second) (nameClasses) in (pair) ((hydra.encode.core.name) (name)) ((Term_Set) ((sets.fromList) (((lists.map) (encodeClass)) ((sets.toList) (classes))))) in let encoded := (((logic.ifElse) ((maps.null) (m))) (None)) ((Some) ((Term_Map) ((maps.fromList) (((lists.map) (encodePair)) ((maps.toList) (m)))))) in (((setTermAnnotation) (key_classes)) (encoded)) (term_).
 Definition typeAnnotationInternal : Type_ -> (list) ((prod) (Name) (Term)) :=
   fun (typ : Type_) => let getAnn := fun (t : Type_) => (fun x_ => match x_ with

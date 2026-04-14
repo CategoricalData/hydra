@@ -39,14 +39,8 @@ Definition isTrivialTerm_bundle :=
 | Term_Variable v_ => (fun (nm : Name) => ((equality.equal) ((lists.length) (((strings.splitOn) ("."%string)) ((fun w_ => w_) (nm))))) ((1)%Z)) (v_)
 | Term_Unit _ => true
 | Term_Application v_ => (fun (app : Application) => let fun_ := (fun r_ => (application_function) (r_)) (app) in let arg := (fun r_ => (application_argument) (r_)) (app) in (fun x_ => match x_ with
-| Term_Function v_ => (fun (f : Function) => (fun x_ => match x_ with
-| Function_Elimination v_ => (fun (e : Elimination) => (fun x_ => match x_ with
-| Elimination_Record v_ => (fun (_ : Projection) => (isTrivialTerm) (arg)) (v_)
-| Elimination_Wrap v_ => (fun (_ : Name) => (isTrivialTerm) (arg)) (v_)
-| _ => false
-end) (e)) (v_)
-| _ => false
-end) (f)) (v_)
+| Term_Project v_ => (fun (_ : Projection) => (isTrivialTerm) (arg)) (v_)
+| Term_Unwrap v_ => (fun (_ : Name) => (isTrivialTerm) (arg)) (v_)
 | _ => false
 end) (fun_)) (v_)
 | Term_Maybe v_ => (fun (opt : (option) (Term)) => (((maybes.maybe) (true)) (fun (inner : Term) => (isTrivialTerm) (inner))) (opt)) (v_)
@@ -90,7 +84,7 @@ Definition isEncodedType_bundle :=
     let isEncodedType := bundle_ in
     fun (t : Term) => (fun x_ => match x_ with
 | Term_Application v_ => (fun (a : Application) => (isEncodedType) ((fun r_ => (application_function) (r_)) (a))) (v_)
-| Term_Union v_ => (fun (i : Injection) => ((equality.equal) ("Type_"%string)) ((fun w_ => w_) ((fun r_ => (injection_typeName) (r_)) (i)))) (v_)
+| Term_Inject v_ => (fun (i : Injection) => ((equality.equal) ("Type_"%string)) ((fun w_ => w_) ((fun r_ => (injection_typeName) (r_)) (i)))) (v_)
 | _ => false
 end) ((deannotateTerm) (t))).
 
@@ -101,7 +95,7 @@ Definition isEncodedTerm_bundle :=
     let isEncodedTerm := bundle_ in
     fun (t : Term) => (fun x_ => match x_ with
 | Term_Application v_ => (fun (a : Application) => (isEncodedTerm) ((fun r_ => (application_function) (r_)) (a))) (v_)
-| Term_Union v_ => (fun (i : Injection) => ((equality.equal) ("Term"%string)) ((fun w_ => w_) ((fun r_ => (injection_typeName) (r_)) (i)))) (v_)
+| Term_Inject v_ => (fun (i : Injection) => ((equality.equal) ("Term"%string)) ((fun w_ => w_) ((fun r_ => (injection_typeName) (r_)) (i)))) (v_)
 | _ => false
 end) ((deannotateTerm) (t))).
 

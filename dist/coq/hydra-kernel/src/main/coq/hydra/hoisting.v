@@ -8,11 +8,10 @@ Require Import hydra.paths hydra.lib.pairs hydra.lib.logic hydra.core hydra.stri
 
 Axiom updateHoistState : SubtermStep -> (prod) (bool) (bool) -> (prod) (bool) (bool).
 Axiom shouldHoistAll : forall (t0 : Type) (t1 : Type), t0 -> t1 -> bool.
-Axiom isLambdaBody : SubtermStep -> bool.
-Axiom isEliminationUnion : Function -> bool.
 Axiom isUnionElimination : Term -> bool.
 Axiom isUnionEliminationApplication : Term -> bool.
 Axiom shouldHoistCaseStatement : (prod) ((list) (SubtermStep)) (Term) -> bool.
+Axiom isLambdaBody : SubtermStep -> bool.
 Axiom isApplicationFunction : SubtermStep -> bool.
 Axiom normalizePathForHoisting : (list) (SubtermStep) -> (list) (SubtermStep).
 Axiom hoistSubterms : ((prod) ((list) (SubtermStep)) (Term) -> bool) -> hydra.graph.Graph -> Term -> Term.

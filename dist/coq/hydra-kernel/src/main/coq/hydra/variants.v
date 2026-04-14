@@ -24,20 +24,23 @@ Inductive TypeVariant : Type :=
 Inductive TermVariant : Type :=
 | TermVariant_Annotated : unit -> TermVariant
 | TermVariant_Application : unit -> TermVariant
+| TermVariant_Cases : unit -> TermVariant
 | TermVariant_Either : unit -> TermVariant
-| TermVariant_Function : unit -> TermVariant
+| TermVariant_Inject : unit -> TermVariant
+| TermVariant_Lambda : unit -> TermVariant
 | TermVariant_Let : unit -> TermVariant
 | TermVariant_List : unit -> TermVariant
 | TermVariant_Literal : unit -> TermVariant
 | TermVariant_Map : unit -> TermVariant
 | TermVariant_Maybe : unit -> TermVariant
 | TermVariant_Pair : unit -> TermVariant
+| TermVariant_Project : unit -> TermVariant
 | TermVariant_Record : unit -> TermVariant
 | TermVariant_Set : unit -> TermVariant
 | TermVariant_TypeApplication : unit -> TermVariant
 | TermVariant_TypeLambda : unit -> TermVariant
-| TermVariant_Union : unit -> TermVariant
 | TermVariant_Unit : unit -> TermVariant
+| TermVariant_Unwrap : unit -> TermVariant
 | TermVariant_Variable : unit -> TermVariant
 | TermVariant_Wrap : unit -> TermVariant.
 

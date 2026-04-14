@@ -13,8 +13,8 @@ Definition parseError : ParseError -> Term :=
   fun (x : ParseError) => (Term_Record) ((Build_Record_) ("ParseError"%string) ((cons) ((Build_Field) ("message"%string) ((fun (x2 : string) => (Term_Literal) ((Literal_String) (x2))) ((fun r_ => (parseError_message) (r_)) (x)))) ((cons) ((Build_Field) ("remainder"%string) ((fun (x2 : string) => (Term_Literal) ((Literal_String) (x2))) ((fun r_ => (parseError_remainder) (r_)) (x)))) (nil)))).
 Definition parseResult (t0 : Type) : (t0 -> Term) -> (ParseResult) (t0) -> Term :=
   fun (a : t0 -> Term) => fun x_ => match x_ with
-| ParseResult_Success v_ => (fun (y : (ParseSuccess) (t0)) => (Term_Union) ((Build_Injection) ("ParseResult"%string) ((Build_Field) ("success"%string) (((parseSuccess) (a)) (y))))) (v_)
-| ParseResult_Failure v_ => (fun (y : ParseError) => (Term_Union) ((Build_Injection) ("ParseResult"%string) ((Build_Field) ("failure"%string) ((parseError) (y))))) (v_)
+| ParseResult_Success v_ => (fun (y : (ParseSuccess) (t0)) => (Term_Inject) ((Build_Injection) ("ParseResult"%string) ((Build_Field) ("success"%string) (((parseSuccess) (a)) (y))))) (v_)
+| ParseResult_Failure v_ => (fun (y : ParseError) => (Term_Inject) ((Build_Injection) ("ParseResult"%string) ((Build_Field) ("failure"%string) ((parseError) (y))))) (v_)
 end.
 Arguments parseResult {t0}.
 

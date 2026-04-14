@@ -29,25 +29,28 @@ Definition typeVariant : Type_ -> TypeVariant :=
 | Type__Wrap v_ => (fun (_ : Type_) => (TypeVariant_Wrap) (tt)) (v_)
 end.
 Definition termVariants : (list) (TermVariant) :=
-  (cons) ((TermVariant_Annotated) (tt)) ((cons) ((TermVariant_Application) (tt)) ((cons) ((TermVariant_Either) (tt)) ((cons) ((TermVariant_Function) (tt)) ((cons) ((TermVariant_List) (tt)) ((cons) ((TermVariant_Literal) (tt)) ((cons) ((TermVariant_Map) (tt)) ((cons) ((TermVariant_Maybe) (tt)) ((cons) ((TermVariant_Pair) (tt)) ((cons) ((TermVariant_Record) (tt)) ((cons) ((TermVariant_Set) (tt)) ((cons) ((TermVariant_TypeLambda) (tt)) ((cons) ((TermVariant_TypeApplication) (tt)) ((cons) ((TermVariant_Union) (tt)) ((cons) ((TermVariant_Unit) (tt)) ((cons) ((TermVariant_Variable) (tt)) ((cons) ((TermVariant_Wrap) (tt)) (nil))))))))))))))))).
+  (cons) ((TermVariant_Annotated) (tt)) ((cons) ((TermVariant_Application) (tt)) ((cons) ((TermVariant_Cases) (tt)) ((cons) ((TermVariant_Either) (tt)) ((cons) ((TermVariant_Lambda) (tt)) ((cons) ((TermVariant_Let) (tt)) ((cons) ((TermVariant_List) (tt)) ((cons) ((TermVariant_Literal) (tt)) ((cons) ((TermVariant_Map) (tt)) ((cons) ((TermVariant_Maybe) (tt)) ((cons) ((TermVariant_Pair) (tt)) ((cons) ((TermVariant_Project) (tt)) ((cons) ((TermVariant_Record) (tt)) ((cons) ((TermVariant_Set) (tt)) ((cons) ((TermVariant_TypeLambda) (tt)) ((cons) ((TermVariant_TypeApplication) (tt)) ((cons) ((TermVariant_Inject) (tt)) ((cons) ((TermVariant_Unit) (tt)) ((cons) ((TermVariant_Unwrap) (tt)) ((cons) ((TermVariant_Variable) (tt)) ((cons) ((TermVariant_Wrap) (tt)) (nil))))))))))))))))))))).
 Definition termVariant : Term -> TermVariant :=
   fun x_ => match x_ with
 | Term_Annotated v_ => (fun (_ : AnnotatedTerm) => (TermVariant_Annotated) (tt)) (v_)
 | Term_Application v_ => (fun (_ : Application) => (TermVariant_Application) (tt)) (v_)
+| Term_Cases v_ => (fun (_ : CaseStatement) => (TermVariant_Cases) (tt)) (v_)
 | Term_Either v_ => (fun (_ : (sum) (Term) (Term)) => (TermVariant_Either) (tt)) (v_)
-| Term_Function v_ => (fun (_ : Function) => (TermVariant_Function) (tt)) (v_)
+| Term_Lambda v_ => (fun (_ : Lambda) => (TermVariant_Lambda) (tt)) (v_)
 | Term_Let v_ => (fun (_ : Let) => (TermVariant_Let) (tt)) (v_)
 | Term_List v_ => (fun (_ : (list) (Term)) => (TermVariant_List) (tt)) (v_)
 | Term_Literal v_ => (fun (_ : Literal) => (TermVariant_Literal) (tt)) (v_)
 | Term_Map v_ => (fun (_ : (list) ((prod) (Term) (Term))) => (TermVariant_Map) (tt)) (v_)
 | Term_Maybe v_ => (fun (_ : (option) (Term)) => (TermVariant_Maybe) (tt)) (v_)
 | Term_Pair v_ => (fun (_ : (prod) (Term) (Term)) => (TermVariant_Pair) (tt)) (v_)
+| Term_Project v_ => (fun (_ : Projection) => (TermVariant_Project) (tt)) (v_)
 | Term_Record v_ => (fun (_ : Record_) => (TermVariant_Record) (tt)) (v_)
 | Term_Set v_ => (fun (_ : (list) (Term)) => (TermVariant_Set) (tt)) (v_)
 | Term_TypeApplication v_ => (fun (_ : TypeApplicationTerm) => (TermVariant_TypeApplication) (tt)) (v_)
 | Term_TypeLambda v_ => (fun (_ : TypeLambda) => (TermVariant_TypeLambda) (tt)) (v_)
-| Term_Union v_ => (fun (_ : Injection) => (TermVariant_Union) (tt)) (v_)
+| Term_Inject v_ => (fun (_ : Injection) => (TermVariant_Inject) (tt)) (v_)
 | Term_Unit _ => (TermVariant_Unit) (tt)
+| Term_Unwrap v_ => (fun (_ : Name) => (TermVariant_Unwrap) (tt)) (v_)
 | Term_Variable v_ => (fun (_ : Name) => (TermVariant_Variable) (tt)) (v_)
 | Term_Wrap v_ => (fun (_ : WrappedTerm) => (TermVariant_Wrap) (tt)) (v_)
 end.
@@ -101,11 +104,6 @@ Definition integerTypeIsSigned : IntegerType -> bool :=
 end.
 Definition functionVariants : (list) (FunctionVariant) :=
   (cons) ((FunctionVariant_Elimination) (tt)) ((cons) ((FunctionVariant_Lambda) (tt)) (nil)).
-Definition functionVariant : Function -> FunctionVariant :=
-  fun x_ => match x_ with
-| Function_Elimination v_ => (fun (_ : Elimination) => (FunctionVariant_Elimination) (tt)) (v_)
-| Function_Lambda v_ => (fun (_ : Lambda) => (FunctionVariant_Lambda) (tt)) (v_)
-end.
 Definition floatValueType : FloatValue -> FloatType :=
   fun x_ => match x_ with
 | FloatValue_Bigfloat v_ => (fun (_ : Q) => (FloatType_Bigfloat) (tt)) (v_)
@@ -134,10 +132,4 @@ Definition floatTypePrecision : FloatType -> Precision :=
 end.
 Definition eliminationVariants : (list) (EliminationVariant) :=
   (cons) ((EliminationVariant_Record) (tt)) ((cons) ((EliminationVariant_Union) (tt)) ((cons) ((EliminationVariant_Wrap) (tt)) (nil))).
-Definition eliminationVariant : Elimination -> EliminationVariant :=
-  fun x_ => match x_ with
-| Elimination_Record v_ => (fun (_ : Projection) => (EliminationVariant_Record) (tt)) (v_)
-| Elimination_Union v_ => (fun (_ : CaseStatement) => (EliminationVariant_Union) (tt)) (v_)
-| Elimination_Wrap v_ => (fun (_ : Name) => (EliminationVariant_Wrap) (tt)) (v_)
-end.
 

@@ -10,7 +10,7 @@ Definition value_bundle :=
   hydra_fix (fun (bundle_ : hydra.graph.Graph -> Term -> (sum) (DecodingError) (Value)) =>
     let value := bundle_ in
     fun (cx : hydra.graph.Graph) => fun (raw : Term) => (((eithers.either) (fun (err : DecodingError) => (inl) (err))) (fun (stripped : Term) => (fun x_ => match x_ with
-| Term_Union v_ => (fun (inj : Injection) => let variantMap := (maps.fromList) ((cons) ((pair) ("array"%string) (fun (input : Term) => ((eithers.map) (fun (t : (list) (Value)) => (Value_Array) (t))) ((((decodeList) (value)) (cx)) (input)))) ((cons) ((pair) ("boolean"%string) (fun (input : Term) => ((eithers.map) (fun (t : bool) => (Value_Boolean) (t))) (((fun (cx2 : hydra.graph.Graph) => fun (raw2 : Term) => (((eithers.either) (fun (err : DecodingError) => (inl) (err))) (fun (stripped2 : Term) => (fun x_ => match x_ with
+| Term_Inject v_ => (fun (inj : Injection) => let variantMap := (maps.fromList) ((cons) ((pair) ("array"%string) (fun (input : Term) => ((eithers.map) (fun (t : (list) (Value)) => (Value_Array) (t))) ((((decodeList) (value)) (cx)) (input)))) ((cons) ((pair) ("boolean"%string) (fun (input : Term) => ((eithers.map) (fun (t : bool) => (Value_Boolean) (t))) (((fun (cx2 : hydra.graph.Graph) => fun (raw2 : Term) => (((eithers.either) (fun (err : DecodingError) => (inl) (err))) (fun (stripped2 : Term) => (fun x_ => match x_ with
 | Term_Literal v_ => (fun (v : Literal) => (fun x_ => match x_ with
 | Literal_Boolean v_ => (fun (b : bool) => (inr) (b)) (v_)
 | _ => (inl) ("expected boolean literal"%string)
