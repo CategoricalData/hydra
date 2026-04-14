@@ -10,7 +10,7 @@ import qualified Hydra.Coders as Coders
 import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Errors as Errors
-import qualified Hydra.Extract.Core as Core_
+import qualified Hydra.Extract.Core as ExtractCore
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Json.Model as Model
 import qualified Hydra.Lib.Eithers as Eithers
@@ -106,7 +106,7 @@ encodeTypeInner cx mName typ env =
                                 \entry ->
                                   let k = Pairs.first entry
                                       v = Pairs.second entry
-                                  in (Eithers.bind (Core_.string (Graph.Graph {
+                                  in (Eithers.bind (ExtractCore.string (Graph.Graph {
                                     Graph.graphBoundTerms = Maps.empty,
                                     Graph.graphBoundTypes = Maps.empty,
                                     Graph.graphClassConstraints = Maps.empty,
@@ -232,7 +232,7 @@ floatAdapter cx typ ft =
                   Coders.coderEncode = encode,
                   Coders.coderDecode = decode}})
       in case ft of
-        Core.FloatTypeFloat32 -> simple (Schema.SchemaPrimitive Schema.PrimitiveFloat) False (\_cx -> \t -> Eithers.map (\f -> Model.ValueNumber (Literals.float32ToBigfloat f)) (Core_.float32 (Graph.Graph {
+        Core.FloatTypeFloat32 -> simple (Schema.SchemaPrimitive Schema.PrimitiveFloat) False (\_cx -> \t -> Eithers.map (\f -> Model.ValueNumber (Literals.float32ToBigfloat f)) (ExtractCore.float32 (Graph.Graph {
           Graph.graphBoundTerms = Maps.empty,
           Graph.graphBoundTypes = Maps.empty,
           Graph.graphClassConstraints = Maps.empty,
@@ -242,7 +242,7 @@ floatAdapter cx typ ft =
           Graph.graphSchemaTypes = Maps.empty,
           Graph.graphTypeVariables = Sets.empty}) t)) (\_cx -> \j -> case j of
           Model.ValueNumber v1 -> Right (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 (Literals.bigfloatToFloat32 v1)))))
-        Core.FloatTypeFloat64 -> simple (Schema.SchemaPrimitive Schema.PrimitiveDouble) False (\_cx -> \t -> Eithers.map (\d -> Model.ValueNumber (Literals.float64ToBigfloat d)) (Core_.float64 (Graph.Graph {
+        Core.FloatTypeFloat64 -> simple (Schema.SchemaPrimitive Schema.PrimitiveDouble) False (\_cx -> \t -> Eithers.map (\d -> Model.ValueNumber (Literals.float64ToBigfloat d)) (ExtractCore.float64 (Graph.Graph {
           Graph.graphBoundTerms = Maps.empty,
           Graph.graphBoundTypes = Maps.empty,
           Graph.graphClassConstraints = Maps.empty,
@@ -309,7 +309,7 @@ integerAdapter cx typ it =
                   Coders.coderEncode = encode,
                   Coders.coderDecode = decode}})
       in case it of
-        Core.IntegerTypeInt32 -> simple (Schema.SchemaPrimitive Schema.PrimitiveInt) False (\_cx -> \t -> Eithers.map (\i -> Model.ValueNumber (Literals.bigintToBigfloat (Literals.int32ToBigint i))) (Core_.int32 (Graph.Graph {
+        Core.IntegerTypeInt32 -> simple (Schema.SchemaPrimitive Schema.PrimitiveInt) False (\_cx -> \t -> Eithers.map (\i -> Model.ValueNumber (Literals.bigintToBigfloat (Literals.int32ToBigint i))) (ExtractCore.int32 (Graph.Graph {
           Graph.graphBoundTerms = Maps.empty,
           Graph.graphBoundTypes = Maps.empty,
           Graph.graphClassConstraints = Maps.empty,
@@ -319,7 +319,7 @@ integerAdapter cx typ it =
           Graph.graphSchemaTypes = Maps.empty,
           Graph.graphTypeVariables = Sets.empty}) t)) (\_cx -> \j -> case j of
           Model.ValueNumber v1 -> Right (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (Literals.bigintToInt32 (Literals.bigfloatToBigint (Literals.float64ToBigfloat (Math.truncate (Literals.bigfloatToFloat64 v1)))))))))
-        Core.IntegerTypeInt64 -> simple (Schema.SchemaPrimitive Schema.PrimitiveLong) False (\_cx -> \t -> Eithers.map (\i -> Model.ValueNumber (Literals.bigintToBigfloat (Literals.int64ToBigint i))) (Core_.int64 (Graph.Graph {
+        Core.IntegerTypeInt64 -> simple (Schema.SchemaPrimitive Schema.PrimitiveLong) False (\_cx -> \t -> Eithers.map (\i -> Model.ValueNumber (Literals.bigintToBigfloat (Literals.int64ToBigint i))) (ExtractCore.int64 (Graph.Graph {
           Graph.graphBoundTerms = Maps.empty,
           Graph.graphBoundTypes = Maps.empty,
           Graph.graphClassConstraints = Maps.empty,

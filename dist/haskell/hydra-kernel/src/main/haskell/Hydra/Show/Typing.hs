@@ -9,7 +9,7 @@ import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Strings as Strings
-import qualified Hydra.Show.Core as Core_
+import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Typing as Typing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 
@@ -20,9 +20,9 @@ typeConstraint tc =
       let ltyp = Typing.typeConstraintLeft tc
           rtyp = Typing.typeConstraintRight tc
       in (Strings.cat [
-        Core_.type_ ltyp,
+        ShowCore.type_ ltyp,
         "\8801",
-        (Core_.type_ rtyp)])
+        (ShowCore.type_ rtyp)])
 
 -- | Show a type substitution as a string
 typeSubst :: Typing.TypeSubst -> String
@@ -37,7 +37,7 @@ typeSubst ts =
                     in (Strings.cat [
                       name,
                       "\8614",
-                      (Core_.type_ typ)])
+                      (ShowCore.type_ typ)])
           pairStrs = Lists.map showPair pairs
       in (Strings.cat [
         "{",

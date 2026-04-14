@@ -5,7 +5,7 @@
 module Hydra.Encode.Paths where
 
 import qualified Hydra.Core as Core
-import qualified Hydra.Encode.Core as Core_
+import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Paths as Paths
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
@@ -44,7 +44,7 @@ subtermNode x =
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Core_.name (Paths.subtermNodeName x))},
+          Core.fieldTerm = (EncodeCore.name (Paths.subtermNodeName x))},
         Core.Field {
           Core.fieldName = (Core.Name "label"),
           Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Paths.subtermNodeLabel x))},
@@ -90,7 +90,7 @@ subtermStep x =
         Core.injectionTypeName = (Core.Name "hydra.paths.SubtermStep"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "unionCasesBranch"),
-          Core.fieldTerm = (Core_.name v0)}})
+          Core.fieldTerm = (EncodeCore.name v0)}})
       Paths.SubtermStepLetBody -> Core.TermUnion (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.paths.SubtermStep"),
         Core.injectionField = Core.Field {
@@ -100,7 +100,7 @@ subtermStep x =
         Core.injectionTypeName = (Core.Name "hydra.paths.SubtermStep"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "letBinding"),
-          Core.fieldTerm = (Core_.name v0)}})
+          Core.fieldTerm = (EncodeCore.name v0)}})
       Paths.SubtermStepListElement v0 -> Core.TermUnion (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.paths.SubtermStep"),
         Core.injectionField = Core.Field {
@@ -130,7 +130,7 @@ subtermStep x =
         Core.injectionTypeName = (Core.Name "hydra.paths.SubtermStep"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "recordField"),
-          Core.fieldTerm = (Core_.name v0)}})
+          Core.fieldTerm = (EncodeCore.name v0)}})
       Paths.SubtermStepSetElement v0 -> Core.TermUnion (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.paths.SubtermStep"),
         Core.injectionField = Core.Field {
@@ -196,7 +196,7 @@ subtypeNode x =
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Core_.name (Paths.subtypeNodeName x))},
+          Core.fieldTerm = (EncodeCore.name (Paths.subtypeNodeName x))},
         Core.Field {
           Core.fieldName = (Core.Name "label"),
           Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Paths.subtypeNodeLabel x))},
@@ -287,7 +287,7 @@ subtypeStep x =
         Core.injectionTypeName = (Core.Name "hydra.paths.SubtypeStep"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "recordField"),
-          Core.fieldTerm = (Core_.name v0)}})
+          Core.fieldTerm = (EncodeCore.name v0)}})
       Paths.SubtypeStepSetElement -> Core.TermUnion (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.paths.SubtypeStep"),
         Core.injectionField = Core.Field {
@@ -297,7 +297,7 @@ subtypeStep x =
         Core.injectionTypeName = (Core.Name "hydra.paths.SubtypeStep"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "unionField"),
-          Core.fieldTerm = (Core_.name v0)}})
+          Core.fieldTerm = (EncodeCore.name v0)}})
       Paths.SubtypeStepWrappedType -> Core.TermUnion (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.paths.SubtypeStep"),
         Core.injectionField = Core.Field {

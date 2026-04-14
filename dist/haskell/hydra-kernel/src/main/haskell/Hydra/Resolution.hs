@@ -6,7 +6,7 @@ module Hydra.Resolution where
 
 import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
-import qualified Hydra.Decode.Core as Core_
+import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lexical as Lexical
@@ -22,7 +22,7 @@ import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Names as Names
 import qualified Hydra.Scoping as Scoping
-import qualified Hydra.Show.Core as Core__
+import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Strip as Strip
 import qualified Hydra.Substitution as Substitution
 import qualified Hydra.Typing as Typing
@@ -37,7 +37,7 @@ dereferenceType cx graph name =
       let mel = Lexical.lookupBinding graph name
       in (Maybes.maybe (Right Nothing) (\el -> Eithers.map Maybes.pure (Eithers.bimap (\_e -> Errors.ErrorResolution (Errors.ResolutionErrorUnexpectedShape (Errors.UnexpectedShapeError {
         Errors.unexpectedShapeErrorExpected = "type",
-        Errors.unexpectedShapeErrorActual = (Errors.unDecodingError _e)}))) (\_a -> _a) (Core_.type_ graph (Core.bindingTerm el)))) mel)
+        Errors.unexpectedShapeErrorActual = (Errors.unDecodingError _e)}))) (\_a -> _a) (DecodeCore.type_ graph (Core.bindingTerm el)))) mel)
 
 -- | Test whether a given System F type is polymorphic (i.e., a forall type)
 fTypeIsPolymorphic :: Core.Type -> Bool
@@ -70,10 +70,10 @@ fieldTypes cx graph t =
         Core.TypeUnion v0 -> Right (toMap v0)
         Core.TypeVariable v0 -> Maybes.maybe (Eithers.bind (Lexical.requireBinding graph v0) (\el -> Eithers.bind (Eithers.bimap (\_e -> Errors.ErrorResolution (Errors.ResolutionErrorUnexpectedShape (Errors.UnexpectedShapeError {
           Errors.unexpectedShapeErrorExpected = "type",
-          Errors.unexpectedShapeErrorActual = (Errors.unDecodingError _e)}))) (\_a -> _a) (Core_.type_ graph (Core.bindingTerm el))) (\decodedType -> fieldTypes cx graph decodedType))) (\ts -> fieldTypes cx graph (Core.typeSchemeType ts)) (Maps.lookup v0 (Graph.graphSchemaTypes graph))
+          Errors.unexpectedShapeErrorActual = (Errors.unDecodingError _e)}))) (\_a -> _a) (DecodeCore.type_ graph (Core.bindingTerm el))) (\decodedType -> fieldTypes cx graph decodedType))) (\ts -> fieldTypes cx graph (Core.typeSchemeType ts)) (Maps.lookup v0 (Graph.graphSchemaTypes graph))
         _ -> Left (Errors.ErrorResolution (Errors.ResolutionErrorUnexpectedShape (Errors.UnexpectedShapeError {
           Errors.unexpectedShapeErrorExpected = "record or union type",
-          Errors.unexpectedShapeErrorActual = (Core__.type_ t)})))
+          Errors.unexpectedShapeErrorActual = (ShowCore.type_ t)})))
 
 -- | Find a field type by name in a list of field types
 findFieldType :: t0 -> Core.Name -> [Core.FieldType] -> Either Errors.Error Core.Type
@@ -159,7 +159,7 @@ requireRowType cx label getter graph name =
                 _ -> t
       in (Eithers.bind (requireType cx graph name) (\t -> Maybes.maybe (Left (Errors.ErrorResolution (Errors.ResolutionErrorUnexpectedShape (Errors.UnexpectedShapeError {
         Errors.unexpectedShapeErrorExpected = (Strings.cat2 label " type"),
-        Errors.unexpectedShapeErrorActual = (Strings.cat2 (Core.unName name) (Strings.cat2 ": " (Core__.type_ t)))})))) (\x -> Right x) (getter (rawType t))))
+        Errors.unexpectedShapeErrorActual = (Strings.cat2 (Core.unName name) (Strings.cat2 ": " (ShowCore.type_ t)))})))) (\x -> Right x) (getter (rawType t))))
 
 -- | Look up a schema type and instantiate it, threading Context
 requireSchemaType :: Context.Context -> M.Map Core.Name Core.TypeScheme -> Core.Name -> Either Errors.Error (Core.TypeScheme, Context.Context)

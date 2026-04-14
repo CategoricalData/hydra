@@ -8,7 +8,7 @@ import qualified Hydra.Coders as Coders
 import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Errors as Errors
-import qualified Hydra.Extract.Core as Core_
+import qualified Hydra.Extract.Core as ExtractCore
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lib.Chars as Chars
 import qualified Hydra.Lib.Eithers as Eithers
@@ -146,9 +146,9 @@ evaluateEdge cx g edgeSpec record =
         Core.applicationFunction = idSpec,
         Core.applicationArgument = record}))) (\id -> Eithers.bind (Eithers.bind (Reduction.reduceTerm cx g True (Core.TermApplication (Core.Application {
         Core.applicationFunction = outSpec,
-        Core.applicationArgument = record}))) (\_term -> Core_.maybeTerm (\t -> Right t) g _term)) (\mOutId -> Eithers.bind (Eithers.bind (Reduction.reduceTerm cx g True (Core.TermApplication (Core.Application {
+        Core.applicationArgument = record}))) (\_term -> ExtractCore.maybeTerm (\t -> Right t) g _term)) (\mOutId -> Eithers.bind (Eithers.bind (Reduction.reduceTerm cx g True (Core.TermApplication (Core.Application {
         Core.applicationFunction = inSpec,
-        Core.applicationArgument = record}))) (\_term -> Core_.maybeTerm (\t -> Right t) g _term)) (\mInId -> Eithers.bind (evaluateProperties cx g propSpecs record) (\props -> Right (Maybes.bind mOutId (\outId -> Maybes.map (\inId -> Model.Edge {
+        Core.applicationArgument = record}))) (\_term -> ExtractCore.maybeTerm (\t -> Right t) g _term)) (\mInId -> Eithers.bind (evaluateProperties cx g propSpecs record) (\props -> Right (Maybes.bind mOutId (\outId -> Maybes.map (\inId -> Model.Edge {
         Model.edgeLabel = label,
         Model.edgeId = id,
         Model.edgeOut = outId,
@@ -178,7 +178,7 @@ evaluateVertex cx g vertexSpec record =
           propSpecs = Model.vertexProperties vertexSpec
       in (Eithers.bind (Eithers.bind (Reduction.reduceTerm cx g True (Core.TermApplication (Core.Application {
         Core.applicationFunction = idSpec,
-        Core.applicationArgument = record}))) (\_term -> Core_.maybeTerm (\t -> Right t) g _term)) (\mId -> Eithers.bind (evaluateProperties cx g propSpecs record) (\props -> Right (Maybes.map (\id -> Model.Vertex {
+        Core.applicationArgument = record}))) (\_term -> ExtractCore.maybeTerm (\t -> Right t) g _term)) (\mId -> Eithers.bind (evaluateProperties cx g propSpecs record) (\props -> Right (Maybes.map (\id -> Model.Vertex {
         Model.vertexLabel = label,
         Model.vertexId = id,
         Model.vertexProperties = props}) mId))))

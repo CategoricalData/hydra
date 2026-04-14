@@ -9,7 +9,7 @@ import qualified Hydra.Avro.Schema as Schema
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
 import qualified Hydra.Errors as Errors
-import qualified Hydra.Extract.Core as Core_
+import qualified Hydra.Extract.Core as ExtractCore
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Json.Model as Model
 import qualified Hydra.Lib.Eithers as Eithers
@@ -86,7 +86,7 @@ avroHydraAdapter cx schema env0 =
             Coders.adapterCoder = Coders.Coder {
               Coders.coderEncode = (\cx1 -> \v -> case v of
                 Model.ValueObject v1 -> Eithers.map (\pairs -> Core.TermMap (Maps.fromList pairs)) (Eithers.mapList (\e -> pairToHydra cx1 e) (Maps.toList v1))),
-              Coders.coderDecode = (\cx1 -> \m -> Eithers.map (\mp_ -> Model.ValueObject mp_) (Core_.map (\t -> Core_.string (Graph.Graph {
+              Coders.coderDecode = (\cx1 -> \m -> Eithers.map (\mp_ -> Model.ValueObject mp_) (ExtractCore.map (\t -> ExtractCore.string (Graph.Graph {
                 Graph.graphBoundTerms = Maps.empty,
                 Graph.graphBoundTypes = Maps.empty,
                 Graph.graphClassConstraints = Maps.empty,
@@ -137,7 +137,7 @@ avroHydraAdapter cx schema env0 =
                       fn = Core.fieldName fld
                   in (Right (Model.ValueString (Core.unName fn)))))
             Schema.NamedTypeFixed _ -> simpleAdapter env1 (Core.TypeLiteral Core.LiteralTypeBinary) (\_cx -> \jv -> case jv of
-              Model.ValueString v2 -> Right (Core.TermLiteral (Core.LiteralBinary (Literals.stringToBinary v2)))) (\cx1 -> \t -> Eithers.map (\b -> Model.ValueString (Literals.binaryToString b)) (Core_.binary (Graph.Graph {
+              Model.ValueString v2 -> Right (Core.TermLiteral (Core.LiteralBinary (Literals.stringToBinary v2)))) (\cx1 -> \t -> Eithers.map (\b -> Model.ValueString (Literals.binaryToString b)) (ExtractCore.binary (Graph.Graph {
               Graph.graphBoundTerms = Maps.empty,
               Graph.graphBoundTypes = Maps.empty,
               Graph.graphClassConstraints = Maps.empty,
@@ -201,7 +201,7 @@ avroHydraAdapter cx schema env0 =
             in (Right (annotateAdapter ann ad, env4)))) (\_ad -> err cx (Strings.cat2 "Avro named type defined more than once: " (showQname qname))) (getAvroHydraAdapter qname env1))
         Schema.SchemaPrimitive v0 -> case v0 of
           Schema.PrimitiveNull -> simpleAdapter env0 Core.TypeUnit (\_cx -> \jv -> case jv of
-            Model.ValueString v2 -> Right (Core.TermLiteral (Core.LiteralString v2))) (\cx1 -> \t -> Eithers.map (\s -> Model.ValueString s) (Core_.string (Graph.Graph {
+            Model.ValueString v2 -> Right (Core.TermLiteral (Core.LiteralString v2))) (\cx1 -> \t -> Eithers.map (\s -> Model.ValueString s) (ExtractCore.string (Graph.Graph {
             Graph.graphBoundTerms = Maps.empty,
             Graph.graphBoundTypes = Maps.empty,
             Graph.graphClassConstraints = Maps.empty,
@@ -211,7 +211,7 @@ avroHydraAdapter cx schema env0 =
             Graph.graphSchemaTypes = Maps.empty,
             Graph.graphTypeVariables = Sets.empty}) t))
           Schema.PrimitiveBoolean -> simpleAdapter env0 (Core.TypeLiteral Core.LiteralTypeBoolean) (\_cx -> \jv -> case jv of
-            Model.ValueBoolean v2 -> Right (Core.TermLiteral (Core.LiteralBoolean v2))) (\cx1 -> \t -> Eithers.map (\b -> Model.ValueBoolean b) (Core_.boolean (Graph.Graph {
+            Model.ValueBoolean v2 -> Right (Core.TermLiteral (Core.LiteralBoolean v2))) (\cx1 -> \t -> Eithers.map (\b -> Model.ValueBoolean b) (ExtractCore.boolean (Graph.Graph {
             Graph.graphBoundTerms = Maps.empty,
             Graph.graphBoundTypes = Maps.empty,
             Graph.graphClassConstraints = Maps.empty,
@@ -221,7 +221,7 @@ avroHydraAdapter cx schema env0 =
             Graph.graphSchemaTypes = Maps.empty,
             Graph.graphTypeVariables = Sets.empty}) t))
           Schema.PrimitiveInt -> simpleAdapter env0 (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)) (\_cx -> \jv -> case jv of
-            Model.ValueNumber v2 -> Right (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (doubleToInt v2))))) (\cx1 -> \t -> Eithers.map (\i -> Model.ValueNumber (Literals.bigintToBigfloat (Literals.int32ToBigint i))) (Core_.int32 (Graph.Graph {
+            Model.ValueNumber v2 -> Right (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (doubleToInt v2))))) (\cx1 -> \t -> Eithers.map (\i -> Model.ValueNumber (Literals.bigintToBigfloat (Literals.int32ToBigint i))) (ExtractCore.int32 (Graph.Graph {
             Graph.graphBoundTerms = Maps.empty,
             Graph.graphBoundTypes = Maps.empty,
             Graph.graphClassConstraints = Maps.empty,
@@ -231,7 +231,7 @@ avroHydraAdapter cx schema env0 =
             Graph.graphSchemaTypes = Maps.empty,
             Graph.graphTypeVariables = Sets.empty}) t))
           Schema.PrimitiveLong -> simpleAdapter env0 (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt64)) (\_cx -> \jv -> case jv of
-            Model.ValueNumber v2 -> Right (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt64 (doubleToLong v2))))) (\cx1 -> \t -> Eithers.map (\i -> Model.ValueNumber (Literals.bigintToBigfloat (Literals.int64ToBigint i))) (Core_.int64 (Graph.Graph {
+            Model.ValueNumber v2 -> Right (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt64 (doubleToLong v2))))) (\cx1 -> \t -> Eithers.map (\i -> Model.ValueNumber (Literals.bigintToBigfloat (Literals.int64ToBigint i))) (ExtractCore.int64 (Graph.Graph {
             Graph.graphBoundTerms = Maps.empty,
             Graph.graphBoundTypes = Maps.empty,
             Graph.graphClassConstraints = Maps.empty,
@@ -241,7 +241,7 @@ avroHydraAdapter cx schema env0 =
             Graph.graphSchemaTypes = Maps.empty,
             Graph.graphTypeVariables = Sets.empty}) t))
           Schema.PrimitiveFloat -> simpleAdapter env0 (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat32)) (\_cx -> \jv -> case jv of
-            Model.ValueNumber v2 -> Right (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 (Literals.bigfloatToFloat32 v2))))) (\cx1 -> \t -> Eithers.map (\f -> Model.ValueNumber (Literals.float32ToBigfloat f)) (Core_.float32 (Graph.Graph {
+            Model.ValueNumber v2 -> Right (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 (Literals.bigfloatToFloat32 v2))))) (\cx1 -> \t -> Eithers.map (\f -> Model.ValueNumber (Literals.float32ToBigfloat f)) (ExtractCore.float32 (Graph.Graph {
             Graph.graphBoundTerms = Maps.empty,
             Graph.graphBoundTypes = Maps.empty,
             Graph.graphClassConstraints = Maps.empty,
@@ -251,7 +251,7 @@ avroHydraAdapter cx schema env0 =
             Graph.graphSchemaTypes = Maps.empty,
             Graph.graphTypeVariables = Sets.empty}) t))
           Schema.PrimitiveDouble -> simpleAdapter env0 (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64)) (\_cx -> \jv -> case jv of
-            Model.ValueNumber v2 -> Right (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 (Literals.bigfloatToFloat64 v2))))) (\cx1 -> \t -> Eithers.map (\d -> Model.ValueNumber (Literals.float64ToBigfloat d)) (Core_.float64 (Graph.Graph {
+            Model.ValueNumber v2 -> Right (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 (Literals.bigfloatToFloat64 v2))))) (\cx1 -> \t -> Eithers.map (\d -> Model.ValueNumber (Literals.float64ToBigfloat d)) (ExtractCore.float64 (Graph.Graph {
             Graph.graphBoundTerms = Maps.empty,
             Graph.graphBoundTypes = Maps.empty,
             Graph.graphClassConstraints = Maps.empty,
@@ -261,7 +261,7 @@ avroHydraAdapter cx schema env0 =
             Graph.graphSchemaTypes = Maps.empty,
             Graph.graphTypeVariables = Sets.empty}) t))
           Schema.PrimitiveBytes -> simpleAdapter env0 (Core.TypeLiteral Core.LiteralTypeBinary) (\_cx -> \jv -> case jv of
-            Model.ValueString v2 -> Right (Core.TermLiteral (Core.LiteralBinary (Literals.stringToBinary v2)))) (\cx1 -> \t -> Eithers.map (\b -> Model.ValueString (Literals.binaryToString b)) (Core_.binary (Graph.Graph {
+            Model.ValueString v2 -> Right (Core.TermLiteral (Core.LiteralBinary (Literals.stringToBinary v2)))) (\cx1 -> \t -> Eithers.map (\b -> Model.ValueString (Literals.binaryToString b)) (ExtractCore.binary (Graph.Graph {
             Graph.graphBoundTerms = Maps.empty,
             Graph.graphBoundTypes = Maps.empty,
             Graph.graphClassConstraints = Maps.empty,
@@ -271,7 +271,7 @@ avroHydraAdapter cx schema env0 =
             Graph.graphSchemaTypes = Maps.empty,
             Graph.graphTypeVariables = Sets.empty}) t))
           Schema.PrimitiveString -> simpleAdapter env0 (Core.TypeLiteral Core.LiteralTypeString) (\_cx -> \jv -> case jv of
-            Model.ValueString v2 -> Right (Core.TermLiteral (Core.LiteralString v2))) (\cx1 -> \t -> Eithers.map (\s -> Model.ValueString s) (Core_.string (Graph.Graph {
+            Model.ValueString v2 -> Right (Core.TermLiteral (Core.LiteralString v2))) (\cx1 -> \t -> Eithers.map (\s -> Model.ValueString s) (ExtractCore.string (Graph.Graph {
             Graph.graphBoundTerms = Maps.empty,
             Graph.graphBoundTypes = Maps.empty,
             Graph.graphClassConstraints = Maps.empty,

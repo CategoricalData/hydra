@@ -31,8 +31,8 @@ import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Names as Names
 import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Predicates as Predicates
-import qualified Hydra.Python.Environment as Environment_
-import qualified Hydra.Python.Names as Names_
+import qualified Hydra.Python.Environment as PythonEnvironment
+import qualified Hydra.Python.Names as PythonNames
 import qualified Hydra.Python.Serde as Serde
 import qualified Hydra.Python.Syntax as Syntax
 import qualified Hydra.Python.Utils as Utils
@@ -41,7 +41,7 @@ import qualified Hydra.Resolution as Resolution
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Scoping as Scoping
 import qualified Hydra.Serialization as Serialization
-import qualified Hydra.Show.Core as Core_
+import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Sorting as Sorting
 import qualified Hydra.Strip as Strip
 import qualified Hydra.Typing as Typing
@@ -52,7 +52,7 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | Analyze a function term with Python-specific Graph management
-analyzePythonFunction :: Context.Context -> Environment_.PythonEnvironment -> Core.Term -> Either t0 (Typing.FunctionStructure Environment_.PythonEnvironment)
+analyzePythonFunction :: Context.Context -> PythonEnvironment.PythonEnvironment -> Core.Term -> Either t0 (Typing.FunctionStructure PythonEnvironment.PythonEnvironment)
 analyzePythonFunction cx env term =
     Analysis.analyzeFunctionTermWith cx pythonBindingMetadata pythonEnvironmentGetGraph pythonEnvironmentSetGraph env term
 
@@ -66,13 +66,13 @@ classVariantPatternUnit pyVariantName =
       Syntax.classPatternKeywordPatterns = Nothing})
 
 -- | Create a class pattern for a variant with captured value
-classVariantPatternWithCapture :: Environment_.PythonEnvironment -> Syntax.Name -> Core.Name -> Syntax.ClosedPattern
+classVariantPatternWithCapture :: PythonEnvironment.PythonEnvironment -> Syntax.Name -> Core.Name -> Syntax.ClosedPattern
 classVariantPatternWithCapture env pyVariantName varName =
 
       let pyVarNameAttr = Syntax.NameOrAttribute [
             pyVariantName]
           capturePattern =
-                  Syntax.ClosedPatternCapture (Syntax.CapturePattern (Syntax.PatternCaptureTarget (Names_.encodeName False Util.CaseConventionLowerSnake env varName)))
+                  Syntax.ClosedPatternCapture (Syntax.CapturePattern (Syntax.PatternCaptureTarget (PythonNames.encodeName False Util.CaseConventionLowerSnake env varName)))
           keywordPattern =
                   Syntax.KeywordPattern {
                     Syntax.keywordPatternName = (Syntax.Name "value"),
@@ -114,14 +114,14 @@ dataclassDecorator =
       Syntax.argsKwargOrDoubleStarred = []}))))
 
 -- | Deconflict a variant name to avoid collisions with type names
-deconflictVariantName :: Bool -> Environment_.PythonEnvironment -> Core.Name -> Core.Name -> Graph.Graph -> Syntax.Name
+deconflictVariantName :: Bool -> PythonEnvironment.PythonEnvironment -> Core.Name -> Core.Name -> Graph.Graph -> Syntax.Name
 deconflictVariantName isQualified env unionName fname g =
 
       let candidateHydraName = Core.Name (Strings.cat2 (Core.unName unionName) (Formatting.capitalize (Core.unName fname)))
           termCollision = Maps.member candidateHydraName (Graph.graphBoundTerms g)
           typeCollision = Maps.member candidateHydraName (Graph.graphSchemaTypes g)
           collision = Logic.or termCollision typeCollision
-      in (Logic.ifElse collision (Syntax.Name (Strings.cat2 (Syntax.unName (Names_.variantName isQualified env unionName fname)) "_")) (Names_.variantName isQualified env unionName fname))
+      in (Logic.ifElse collision (Syntax.Name (Strings.cat2 (Syntax.unName (PythonNames.variantName isQualified env unionName fname)) "_")) (PythonNames.variantName isQualified env unionName fname))
 
 -- | Rewrite case statements to avoid variable name collisions
 deduplicateCaseVariables :: [Core.Field] -> [Core.Field]
@@ -160,7 +160,7 @@ deduplicateCaseVariables cases_ =
       in (Lists.reverse (Pairs.second result))
 
 -- | Recursively dig through forall types to find wrap types
-digForWrap :: Bool -> Environment_.PythonModuleMetadata -> Core.Type -> Environment_.PythonModuleMetadata
+digForWrap :: Bool -> PythonEnvironment.PythonModuleMetadata -> Core.Type -> PythonEnvironment.PythonModuleMetadata
 digForWrap isTermAnnot meta typ =
     case (Strip.deannotateType typ) of
       Core.TypeForall v0 -> digForWrap isTermAnnot meta (Core.forallTypeBody v0)
@@ -230,34 +230,34 @@ eliminateUnitVar v term0 =
       in (go term0)
 
 -- | Create an initial empty metadata record with given namespaces
-emptyMetadata :: Packaging.Namespaces Syntax.DottedName -> Environment_.PythonModuleMetadata
+emptyMetadata :: Packaging.Namespaces Syntax.DottedName -> PythonEnvironment.PythonModuleMetadata
 emptyMetadata ns =
-    Environment_.PythonModuleMetadata {
-      Environment_.pythonModuleMetadataNamespaces = ns,
-      Environment_.pythonModuleMetadataTypeVariables = Sets.empty,
-      Environment_.pythonModuleMetadataUsesAnnotated = False,
-      Environment_.pythonModuleMetadataUsesCallable = False,
-      Environment_.pythonModuleMetadataUsesCast = False,
-      Environment_.pythonModuleMetadataUsesLruCache = False,
-      Environment_.pythonModuleMetadataUsesTypeAlias = False,
-      Environment_.pythonModuleMetadataUsesDataclass = False,
-      Environment_.pythonModuleMetadataUsesDecimal = False,
-      Environment_.pythonModuleMetadataUsesEither = False,
-      Environment_.pythonModuleMetadataUsesEnum = False,
-      Environment_.pythonModuleMetadataUsesFrozenDict = False,
-      Environment_.pythonModuleMetadataUsesFrozenList = False,
-      Environment_.pythonModuleMetadataUsesGeneric = False,
-      Environment_.pythonModuleMetadataUsesJust = False,
-      Environment_.pythonModuleMetadataUsesLeft = False,
-      Environment_.pythonModuleMetadataUsesMaybe = False,
-      Environment_.pythonModuleMetadataUsesName = False,
-      Environment_.pythonModuleMetadataUsesNode = False,
-      Environment_.pythonModuleMetadataUsesNothing = False,
-      Environment_.pythonModuleMetadataUsesRight = False,
-      Environment_.pythonModuleMetadataUsesTypeVar = False}
+    PythonEnvironment.PythonModuleMetadata {
+      PythonEnvironment.pythonModuleMetadataNamespaces = ns,
+      PythonEnvironment.pythonModuleMetadataTypeVariables = Sets.empty,
+      PythonEnvironment.pythonModuleMetadataUsesAnnotated = False,
+      PythonEnvironment.pythonModuleMetadataUsesCallable = False,
+      PythonEnvironment.pythonModuleMetadataUsesCast = False,
+      PythonEnvironment.pythonModuleMetadataUsesLruCache = False,
+      PythonEnvironment.pythonModuleMetadataUsesTypeAlias = False,
+      PythonEnvironment.pythonModuleMetadataUsesDataclass = False,
+      PythonEnvironment.pythonModuleMetadataUsesDecimal = False,
+      PythonEnvironment.pythonModuleMetadataUsesEither = False,
+      PythonEnvironment.pythonModuleMetadataUsesEnum = False,
+      PythonEnvironment.pythonModuleMetadataUsesFrozenDict = False,
+      PythonEnvironment.pythonModuleMetadataUsesFrozenList = False,
+      PythonEnvironment.pythonModuleMetadataUsesGeneric = False,
+      PythonEnvironment.pythonModuleMetadataUsesJust = False,
+      PythonEnvironment.pythonModuleMetadataUsesLeft = False,
+      PythonEnvironment.pythonModuleMetadataUsesMaybe = False,
+      PythonEnvironment.pythonModuleMetadataUsesName = False,
+      PythonEnvironment.pythonModuleMetadataUsesNode = False,
+      PythonEnvironment.pythonModuleMetadataUsesNothing = False,
+      PythonEnvironment.pythonModuleMetadataUsesRight = False,
+      PythonEnvironment.pythonModuleMetadataUsesTypeVar = False}
 
 -- | Encode a function application to a Python expression
-encodeApplication :: Context.Context -> Environment_.PythonEnvironment -> Core.Application -> Either Errors.Error Syntax.Expression
+encodeApplication :: Context.Context -> PythonEnvironment.PythonEnvironment -> Core.Application -> Either Errors.Error Syntax.Expression
 encodeApplication cx env app =
 
       let g = pythonEnvironmentGetGraph env
@@ -278,7 +278,7 @@ encodeApplication cx env app =
           in (Right pyapp)))))
 
 -- | Inner helper for encodeApplication
-encodeApplicationInner :: Context.Context -> Environment_.PythonEnvironment -> Core.Term -> [Syntax.Expression] -> [Syntax.Expression] -> Either Errors.Error (Syntax.Expression, [Syntax.Expression])
+encodeApplicationInner :: Context.Context -> PythonEnvironment.PythonEnvironment -> Core.Term -> [Syntax.Expression] -> [Syntax.Expression] -> Either Errors.Error (Syntax.Expression, [Syntax.Expression])
 encodeApplicationInner cx env fun hargs rargs =
 
       let firstArg = Lists.head hargs
@@ -291,7 +291,7 @@ encodeApplicationInner cx env fun hargs rargs =
           Core.FunctionElimination v1 -> case v1 of
             Core.EliminationRecord v2 ->
               let fname = Core.projectionField v2
-                  fieldExpr = Utils.projectFromExpression firstArg (Names_.encodeFieldName env fname)
+                  fieldExpr = Utils.projectFromExpression firstArg (PythonNames.encodeFieldName env fname)
               in (Right (withRest fieldExpr, rargs))
             Core.EliminationUnion v2 -> Eithers.bind (encodeUnionEliminationInline cx env v2 firstArg) (\inlineExpr -> Right (withRest inlineExpr, rargs))
             Core.EliminationWrap _ ->
@@ -309,13 +309,13 @@ encodeApplicationInner cx env fun hargs rargs =
                 consumeCount = Math.min elArity (Lists.length allArgs)
                 consumedArgs = Lists.take consumeCount allArgs
                 remainingArgs = Lists.drop consumeCount allArgs
-            in (Logic.ifElse (Lists.null consumedArgs) (Eithers.bind (encodeVariable cx env v0 []) (\expr -> Right (expr, rargs))) (Right (Utils.functionCall (Utils.pyNameToPyPrimary (Names_.encodeName True Util.CaseConventionLowerSnake env v0)) consumedArgs, remainingArgs)))) (Core.bindingType el)) (Lexical.lookupBinding g v0)) (\_prim ->
+            in (Logic.ifElse (Lists.null consumedArgs) (Eithers.bind (encodeVariable cx env v0 []) (\expr -> Right (expr, rargs))) (Right (Utils.functionCall (Utils.pyNameToPyPrimary (PythonNames.encodeName True Util.CaseConventionLowerSnake env v0)) consumedArgs, remainingArgs)))) (Core.bindingType el)) (Lexical.lookupBinding g v0)) (\_prim ->
             let wrappedArgs = wrapLazyArguments v0 hargs
             in (Eithers.bind (encodeVariable cx env v0 wrappedArgs) (\expr -> Right (expr, rargs)))))
         _ -> defaultCase
 
 -- | Encode an application type to Python expression
-encodeApplicationType :: Environment_.PythonEnvironment -> Core.ApplicationType -> Either t0 Syntax.Expression
+encodeApplicationType :: PythonEnvironment.PythonEnvironment -> Core.ApplicationType -> Either t0 Syntax.Expression
 encodeApplicationType env at =
 
       let gatherParams =
@@ -343,13 +343,13 @@ encodeApplicationType env at =
       in (Eithers.bind (encodeType env body) (\pyBody -> Eithers.bind (Eithers.mapList (encodeType env) args) (\pyArgs -> Right (Utils.primaryAndParams (Utils.pyExpressionToPyPrimary pyBody) pyArgs))))
 
 -- | Encode a binding as a Python statement (function definition or assignment)
-encodeBindingAs :: Context.Context -> Environment_.PythonEnvironment -> Core.Binding -> Either Errors.Error Syntax.Statement
+encodeBindingAs :: Context.Context -> PythonEnvironment.PythonEnvironment -> Core.Binding -> Either Errors.Error Syntax.Statement
 encodeBindingAs cx env binding =
 
       let name1 = Core.bindingName binding
           term1 = Core.bindingTerm binding
           mts = Core.bindingType binding
-          fname = Names_.encodeName True Util.CaseConventionLowerSnake env name1
+          fname = PythonNames.encodeName True Util.CaseConventionLowerSnake env name1
       in (Maybes.maybe (
         let gathered = gatherLambdas term1
             lambdaParams = Pairs.first gathered
@@ -457,10 +457,10 @@ encodeBindingAs cx env binding =
                 capturedParams =
                         Lists.map (\n -> Syntax.ParamNoDefault {
                           Syntax.paramNoDefaultParam = Syntax.Param {
-                            Syntax.paramName = (Names_.encodeName False Util.CaseConventionLowerSnake env n),
+                            Syntax.paramName = (PythonNames.encodeName False Util.CaseConventionLowerSnake env n),
                             Syntax.paramAnnotation = Nothing},
                           Syntax.paramNoDefaultTypeComment = Nothing}) capturedVarNames
-                matchArgName = Names_.encodeName False Util.CaseConventionLowerSnake env matchLambdaParam
+                matchArgName = PythonNames.encodeName False Util.CaseConventionLowerSnake env matchLambdaParam
                 matchParam =
                         Syntax.ParamNoDefault {
                           Syntax.paramNoDefaultParam = Syntax.Param {
@@ -501,15 +501,15 @@ encodeBindingAs cx env binding =
         in (encodeTermAssignment cx env name1 term1 ts normComment))) mts)
 
 -- | Encode a binding as a walrus operator assignment
-encodeBindingAsAssignment :: Context.Context -> Bool -> Environment_.PythonEnvironment -> Core.Binding -> Either Errors.Error Syntax.NamedExpression
+encodeBindingAsAssignment :: Context.Context -> Bool -> PythonEnvironment.PythonEnvironment -> Core.Binding -> Either Errors.Error Syntax.NamedExpression
 encodeBindingAsAssignment cx allowThunking env binding =
 
       let name = Core.bindingName binding
           term = Core.bindingTerm binding
           mts = Core.bindingType binding
-          pyName = Names_.encodeName False Util.CaseConventionLowerSnake env name
+          pyName = PythonNames.encodeName False Util.CaseConventionLowerSnake env name
       in (Eithers.bind (encodeTermInline cx env False term) (\pbody ->
-        let tc = Environment_.pythonEnvironmentGraph env
+        let tc = PythonEnvironment.pythonEnvironmentGraph env
             isComplexVar = Predicates.isComplexVariable tc name
             termIsComplex = Predicates.isComplexTerm tc term
             isTrivial = Predicates.isTrivialTerm term
@@ -525,7 +525,7 @@ encodeBindingsAsDefs :: t0 -> (t0 -> t1 -> Either t2 t3) -> [t1] -> Either t2 [t
 encodeBindingsAsDefs env encodeBinding bindings = Eithers.mapList (encodeBinding env) bindings
 
 -- | Encode a single case (Field) into a CaseBlock for a match statement
-encodeCaseBlock :: t0 -> Environment_.PythonEnvironment -> Core.Name -> [Core.FieldType] -> Bool -> (Environment_.PythonEnvironment -> Core.Term -> Either t1 [Syntax.Statement]) -> Core.Field -> Either t1 Syntax.CaseBlock
+encodeCaseBlock :: t0 -> PythonEnvironment.PythonEnvironment -> Core.Name -> [Core.FieldType] -> Bool -> (PythonEnvironment.PythonEnvironment -> Core.Term -> Either t1 [Syntax.Statement]) -> Core.Field -> Either t1 Syntax.CaseBlock
 encodeCaseBlock cx env tname rowType isEnum encodeBody field =
 
       let fname = Core.fieldName field
@@ -558,7 +558,7 @@ encodeCaseBlock cx env tname rowType isEnum encodeBody field =
           shouldCapture =
                   Logic.not (Logic.or isUnitVariant (Logic.or (Variables.isFreeVariableInTerm v rawBody) (Predicates.isUnitTerm rawBody)))
           env2 = pythonEnvironmentSetGraph (Scoping.extendGraphForLambda (pythonEnvironmentGetGraph env) effectiveLambda) env
-          pyVariantName = deconflictVariantName True env2 tname fname (Environment_.pythonEnvironmentGraph env2)
+          pyVariantName = deconflictVariantName True env2 tname fname (PythonEnvironment.pythonEnvironmentGraph env2)
           pattern = variantClosedPattern env2 tname fname pyVariantName rowType isEnum v shouldCapture
       in (Eithers.bind (encodeBody env2 effectiveBody) (\stmts ->
         let pyBody = Utils.indentedBlock Nothing [
@@ -583,7 +583,7 @@ encodeDefaultCaseBlock encodeTerm isFull mdflt tname =
           Syntax.caseBlockBody = body}]))
 
 -- | Encode a definition (term or type) to Python statements
-encodeDefinition :: Context.Context -> Environment_.PythonEnvironment -> Packaging.Definition -> Either Errors.Error [[Syntax.Statement]]
+encodeDefinition :: Context.Context -> PythonEnvironment.PythonEnvironment -> Packaging.Definition -> Either Errors.Error [[Syntax.Statement]]
 encodeDefinition cx env def_ =
     case def_ of
       Packaging.DefinitionTerm v0 ->
@@ -607,16 +607,16 @@ encodeDefinition cx env def_ =
           in (encodeTypeAssignment cx env name typ normComment)))
 
 -- | Encode an enum value assignment statement with optional comment
-encodeEnumValueAssignment :: t0 -> Environment_.PythonEnvironment -> Core.FieldType -> Either Errors.Error [Syntax.Statement]
+encodeEnumValueAssignment :: t0 -> PythonEnvironment.PythonEnvironment -> Core.FieldType -> Either Errors.Error [Syntax.Statement]
 encodeEnumValueAssignment cx env fieldType =
 
       let fname = Core.fieldTypeName fieldType
           ftype = Core.fieldTypeType fieldType
       in (Eithers.bind (Annotations.getTypeDescription cx (pythonEnvironmentGetGraph env) ftype) (\mcomment ->
-        let pyName = Names_.encodeEnumValue env fname
+        let pyName = PythonNames.encodeEnumValue env fname
             fnameStr = Core.unName fname
             pyValue =
-                    Utils.functionCall (Utils.pyNameToPyPrimary (Names_.encodeName True Util.CaseConventionPascal env (Core.Name "hydra.core.Name"))) [
+                    Utils.functionCall (Utils.pyNameToPyPrimary (PythonNames.encodeName True Util.CaseConventionPascal env (Core.Name "hydra.core.Name"))) [
                       Utils.doubleQuotedString fnameStr]
             assignStmt = Utils.assignmentStatement pyName pyValue
         in (Right (Maybes.maybe [
@@ -625,21 +625,21 @@ encodeEnumValueAssignment cx env fieldType =
           (Utils.pyExpressionToPyStatement (Utils.tripleQuotedString c))]) mcomment))))
 
 -- | Encode a field (name-value pair) to a Python (Name, Expression) pair
-encodeField :: t0 -> Environment_.PythonEnvironment -> Core.Field -> (Core.Term -> Either t1 t2) -> Either t1 (Syntax.Name, t2)
+encodeField :: t0 -> PythonEnvironment.PythonEnvironment -> Core.Field -> (Core.Term -> Either t1 t2) -> Either t1 (Syntax.Name, t2)
 encodeField cx env field encodeTerm =
 
       let fname = Core.fieldName field
           fterm = Core.fieldTerm field
-      in (Eithers.bind (encodeTerm fterm) (\pterm -> Right (Names_.encodeFieldName env fname, pterm)))
+      in (Eithers.bind (encodeTerm fterm) (\pterm -> Right (PythonNames.encodeFieldName env fname, pterm)))
 
 -- | Encode a field type for record definitions (field: type annotation)
-encodeFieldType :: t0 -> Environment_.PythonEnvironment -> Core.FieldType -> Either Errors.Error Syntax.Statement
+encodeFieldType :: t0 -> PythonEnvironment.PythonEnvironment -> Core.FieldType -> Either Errors.Error Syntax.Statement
 encodeFieldType cx env fieldType =
 
       let fname = Core.fieldTypeName fieldType
           ftype = Core.fieldTypeType fieldType
       in (Eithers.bind (Annotations.getTypeDescription cx (pythonEnvironmentGetGraph env) ftype) (\comment ->
-        let pyName = Syntax.SingleTargetName (Names_.encodeFieldName env fname)
+        let pyName = Syntax.SingleTargetName (PythonNames.encodeFieldName env fname)
         in (Eithers.bind (encodeType env ftype) (\pyType ->
           let annotatedPyType = Utils.annotatedExpression comment pyType
           in (Right (Utils.pyAssignmentToPyStatement (Syntax.AssignmentTyped (Syntax.TypedAssignment {
@@ -674,7 +674,7 @@ encodeFloatValue_pySpecialFloat value =
       Utils.singleQuotedString value]
 
 -- | Encode a forall type to Python expression
-encodeForallType :: Environment_.PythonEnvironment -> Core.ForallType -> Either t0 Syntax.Expression
+encodeForallType :: PythonEnvironment.PythonEnvironment -> Core.ForallType -> Either t0 Syntax.Expression
 encodeForallType env lt =
 
       let gatherParams =
@@ -722,7 +722,7 @@ encodeForallType env lt =
             Syntax.comparisonRhs = []})]])) params))))
 
 -- | Encode a function term to a Python expression
-encodeFunction :: Context.Context -> Environment_.PythonEnvironment -> Core.Function -> Either Errors.Error Syntax.Expression
+encodeFunction :: Context.Context -> PythonEnvironment.PythonEnvironment -> Core.Function -> Either Errors.Error Syntax.Expression
 encodeFunction cx env f =
     case f of
       Core.FunctionLambda v0 -> Eithers.bind (analyzePythonFunction cx env (Core.TermFunction (Core.FunctionLambda v0))) (\fs ->
@@ -732,16 +732,16 @@ encodeFunction cx env f =
             innerEnv0 = Typing.functionStructureEnvironment fs
             bindingNames = Lists.map (\b -> Core.bindingName b) bindings
             innerEnv =
-                    Environment_.PythonEnvironment {
-                      Environment_.pythonEnvironmentNamespaces = (Environment_.pythonEnvironmentNamespaces innerEnv0),
-                      Environment_.pythonEnvironmentBoundTypeVariables = (Environment_.pythonEnvironmentBoundTypeVariables innerEnv0),
-                      Environment_.pythonEnvironmentGraph = (Environment_.pythonEnvironmentGraph innerEnv0),
-                      Environment_.pythonEnvironmentNullaryBindings = (Environment_.pythonEnvironmentNullaryBindings innerEnv0),
-                      Environment_.pythonEnvironmentVersion = (Environment_.pythonEnvironmentVersion innerEnv0),
-                      Environment_.pythonEnvironmentSkipCasts = (Environment_.pythonEnvironmentSkipCasts innerEnv0),
-                      Environment_.pythonEnvironmentInlineVariables = (Sets.union (Sets.fromList bindingNames) (Environment_.pythonEnvironmentInlineVariables innerEnv0))}
+                    PythonEnvironment.PythonEnvironment {
+                      PythonEnvironment.pythonEnvironmentNamespaces = (PythonEnvironment.pythonEnvironmentNamespaces innerEnv0),
+                      PythonEnvironment.pythonEnvironmentBoundTypeVariables = (PythonEnvironment.pythonEnvironmentBoundTypeVariables innerEnv0),
+                      PythonEnvironment.pythonEnvironmentGraph = (PythonEnvironment.pythonEnvironmentGraph innerEnv0),
+                      PythonEnvironment.pythonEnvironmentNullaryBindings = (PythonEnvironment.pythonEnvironmentNullaryBindings innerEnv0),
+                      PythonEnvironment.pythonEnvironmentVersion = (PythonEnvironment.pythonEnvironmentVersion innerEnv0),
+                      PythonEnvironment.pythonEnvironmentSkipCasts = (PythonEnvironment.pythonEnvironmentSkipCasts innerEnv0),
+                      PythonEnvironment.pythonEnvironmentInlineVariables = (Sets.union (Sets.fromList bindingNames) (PythonEnvironment.pythonEnvironmentInlineVariables innerEnv0))}
         in (Eithers.bind (encodeTermInline cx innerEnv False innerBody) (\pbody ->
-          let pparams = Lists.map (Names_.encodeName False Util.CaseConventionLowerSnake innerEnv) params
+          let pparams = Lists.map (PythonNames.encodeName False Util.CaseConventionLowerSnake innerEnv) params
           in (Logic.ifElse (Lists.null bindings) (Right (makeUncurriedLambda pparams pbody)) (Eithers.bind (Eithers.mapList (encodeBindingAsAssignment cx False innerEnv) bindings) (\pbindingExprs ->
             let pbindingStarExprs = Lists.map (\ne -> Syntax.StarNamedExpressionSimple ne) pbindingExprs
                 pbodyStarExpr = Utils.pyExpressionToPyStarNamedExpression pbody
@@ -777,7 +777,7 @@ encodeFunction cx env f =
                                 Syntax.awaitPrimaryAwait = False,
                                 Syntax.awaitPrimaryPrimary = (Syntax.PrimarySimple (Syntax.AtomName (Syntax.Name "v1")))},
                               Syntax.powerRhs = Nothing}))}}}}}},
-                Syntax.comparisonRhs = []})]])) (Names_.encodeFieldName env fname))))
+                Syntax.comparisonRhs = []})]])) (PythonNames.encodeFieldName env fname))))
         Core.EliminationWrap _ -> Right (makeCurriedLambda [
           Syntax.Name "v1"] (Utils.projectFromExpression (Syntax.ExpressionSimple (Syntax.Disjunction [
           Syntax.Conjunction [
@@ -803,14 +803,14 @@ encodeFunction cx env f =
         Core.EliminationUnion _ -> Right (unsupportedExpression "case expressions as values are not yet supported")
 
 -- | Encode a function definition with parameters and body
-encodeFunctionDefinition :: Context.Context -> Environment_.PythonEnvironment -> Core.Name -> [Core.Name] -> [Core.Name] -> Core.Term -> [Core.Type] -> Maybe Core.Type -> Maybe String -> [Syntax.Statement] -> Either Errors.Error Syntax.Statement
+encodeFunctionDefinition :: Context.Context -> PythonEnvironment.PythonEnvironment -> Core.Name -> [Core.Name] -> [Core.Name] -> Core.Term -> [Core.Type] -> Maybe Core.Type -> Maybe String -> [Syntax.Statement] -> Either Errors.Error Syntax.Statement
 encodeFunctionDefinition cx env name tparams args body doms mcod comment prefixes =
     Eithers.bind (Eithers.mapList (\pair ->
       let argName = Pairs.first pair
           typ = Pairs.second pair
       in (Eithers.bind (encodeType env typ) (\pyTyp -> Right (Syntax.ParamNoDefault {
         Syntax.paramNoDefaultParam = Syntax.Param {
-          Syntax.paramName = (Names_.encodeName False Util.CaseConventionLowerSnake env argName),
+          Syntax.paramName = (PythonNames.encodeName False Util.CaseConventionLowerSnake env argName),
           Syntax.paramAnnotation = (Just (Syntax.Annotation pyTyp))},
         Syntax.paramNoDefaultTypeComment = Nothing})))) (Lists.zip args doms)) (\pyArgs ->
       let pyParams =
@@ -833,11 +833,11 @@ encodeFunctionDefinition cx env name tparams args body doms mcod comment prefixe
             whileStmt]])))) (Eithers.bind (encodeTermMultiline cx env body) (\stmts -> Right (Utils.indentedBlock comment [
         Lists.concat2 prefixes stmts])))) (\block -> Eithers.bind (Maybes.maybe (Right Nothing) (\cod -> Eithers.bind (encodeType env cod) (\pytyp -> Right (Just pytyp))) mcod) (\mreturnType ->
         let pyTparams =
-                Logic.ifElse useInlineTypeParams (Lists.map (\arg_ -> Utils.pyNameToPyTypeParameter (Names_.encodeTypeVariable arg_)) tparams) []
+                Logic.ifElse useInlineTypeParams (Lists.map (\arg_ -> Utils.pyNameToPyTypeParameter (PythonNames.encodeTypeVariable arg_)) tparams) []
             isThunk = Lists.null args
             mDecorators = Logic.ifElse isThunk (Just (Syntax.Decorators [
                   lruCacheDecorator])) Nothing
-            pyName = Names_.encodeName False Util.CaseConventionLowerSnake env name
+            pyName = PythonNames.encodeName False Util.CaseConventionLowerSnake env name
         in (Right (Syntax.StatementCompound (Syntax.CompoundStatementFunction (Syntax.FunctionDefinition {
           Syntax.functionDefinitionDecorators = mDecorators,
           Syntax.functionDefinitionRaw = Syntax.FunctionDefRaw {
@@ -850,7 +850,7 @@ encodeFunctionDefinition cx env name tparams args body doms mcod comment prefixe
             Syntax.functionDefRawBlock = block}}))))))))
 
 -- | Encode a function type to Python Callable expression
-encodeFunctionType :: Environment_.PythonEnvironment -> Core.FunctionType -> Either t0 Syntax.Expression
+encodeFunctionType :: PythonEnvironment.PythonEnvironment -> Core.FunctionType -> Either t0 Syntax.Expression
 encodeFunctionType env ft =
 
       let gatherParams =
@@ -947,15 +947,15 @@ encodeLiteralType lt =
             Syntax.comparisonRhs = []})]])))
 
 -- | Generate name constants for a type as class-level attributes
-encodeNameConstants :: Environment_.PythonEnvironment -> Core.Name -> [Core.FieldType] -> [Syntax.Statement]
+encodeNameConstants :: PythonEnvironment.PythonEnvironment -> Core.Name -> [Core.FieldType] -> [Syntax.Statement]
 encodeNameConstants env name fields =
 
       let toStmt =
-              \pair -> Utils.assignmentStatement (Pairs.first pair) (Utils.functionCall (Utils.pyNameToPyPrimary (Names_.encodeName True Util.CaseConventionPascal env (Core.Name "hydra.core.Name"))) [
+              \pair -> Utils.assignmentStatement (Pairs.first pair) (Utils.functionCall (Utils.pyNameToPyPrimary (PythonNames.encodeName True Util.CaseConventionPascal env (Core.Name "hydra.core.Name"))) [
                 Utils.doubleQuotedString (Core.unName (Pairs.second pair))])
-          namePair = (Names_.encodeConstantForTypeName env name, name)
+          namePair = (PythonNames.encodeConstantForTypeName env name, name)
           fieldPairs =
-                  Lists.map (\field -> (Names_.encodeConstantForFieldName env name (Core.fieldTypeName field), (Core.fieldTypeName field))) fields
+                  Lists.map (\field -> (PythonNames.encodeConstantForFieldName env name (Core.fieldTypeName field), (Core.fieldTypeName field))) fields
       in (Lists.map toStmt (Lists.cons namePair fieldPairs))
 
 -- | Encode a Hydra module to a Python module AST
@@ -964,21 +964,21 @@ encodePythonModule cx g mod defs0 =
 
       let defs = Environment.reorderDefs defs0
           meta0 = gatherMetadata (Packaging.moduleNamespace mod) defs
-          namespaces0 = Environment_.pythonModuleMetadataNamespaces meta0
+          namespaces0 = PythonEnvironment.pythonModuleMetadataNamespaces meta0
           env0 = initialEnvironment namespaces0 g
           isTypeMod = isTypeModuleCheck defs0
       in (withDefinitions env0 defs (\env -> Eithers.bind (Eithers.map (\xs -> Lists.concat xs) (Eithers.mapList (\d -> encodeDefinition cx env d) defs)) (\defStmts ->
         let meta2 = Logic.ifElse (Logic.and (Logic.not isTypeMod) useInlineTypeParams) (setMetaUsesTypeVar meta0 False) meta0
             meta =
-                    Logic.ifElse (Logic.and isTypeMod (Equality.equal targetPythonVersion Environment_.PythonVersionPython310)) (setMetaUsesTypeAlias meta2 True) meta2
-            namespaces = Environment_.pythonModuleMetadataNamespaces meta0
+                    Logic.ifElse (Logic.and isTypeMod (Equality.equal targetPythonVersion PythonEnvironment.PythonVersionPython310)) (setMetaUsesTypeAlias meta2 True) meta2
+            namespaces = PythonEnvironment.pythonModuleMetadataNamespaces meta0
             commentStmts =
                     Maybes.maybe [] (\c -> [
                       Utils.commentStatement c]) (Maybes.map Formatting.normalizeComment (Packaging.moduleDescription mod))
             importStmts = moduleImports namespaces meta
             tvars =
-                    Logic.ifElse (Logic.or isTypeMod (Logic.not useInlineTypeParams)) (Environment_.pythonModuleMetadataTypeVariables meta) Sets.empty
-            tvarStmts = Lists.map (\tv -> tvarStatement (Names_.encodeTypeVariable tv)) (Sets.toList tvars)
+                    Logic.ifElse (Logic.or isTypeMod (Logic.not useInlineTypeParams)) (PythonEnvironment.pythonModuleMetadataTypeVariables meta) Sets.empty
+            tvarStmts = Lists.map (\tv -> tvarStatement (PythonNames.encodeTypeVariable tv)) (Sets.toList tvars)
             body =
                     Lists.filter (\group -> Logic.not (Lists.null group)) (Lists.concat [
                       [
@@ -989,7 +989,7 @@ encodePythonModule cx g mod defs0 =
         in (Right (Syntax.Module body)))))
 
 -- | Encode a record type as a Python dataclass
-encodeRecordType :: t0 -> Environment_.PythonEnvironment -> Core.Name -> [Core.FieldType] -> Maybe String -> Either Errors.Error Syntax.Statement
+encodeRecordType :: t0 -> PythonEnvironment.PythonEnvironment -> Core.Name -> [Core.FieldType] -> Maybe String -> Either Errors.Error Syntax.Statement
 encodeRecordType cx env name rowType comment =
     Eithers.bind (Eithers.mapList (encodeFieldType cx env) rowType) (\pyFields ->
       let constStmts = encodeNameConstants env name rowType
@@ -997,14 +997,14 @@ encodeRecordType cx env name rowType comment =
                   Utils.indentedBlock comment [
                     pyFields,
                     constStmts]
-          boundVars = Environment_.pythonEnvironmentBoundTypeVariables env
+          boundVars = PythonEnvironment.pythonEnvironmentBoundTypeVariables env
           tparamList = Pairs.first boundVars
           mGenericArg = genericArg tparamList
           args = Maybes.maybe Nothing (\a -> Just (Utils.pyExpressionsToPyArgs [
                 a])) mGenericArg
           decs = Just (Syntax.Decorators [
                 dataclassDecorator])
-          pyName = Names_.encodeName False Util.CaseConventionPascal env name
+          pyName = PythonNames.encodeName False Util.CaseConventionPascal env name
           noTypeParams = []
       in (Right (Utils.pyClassDefinitionToPyStatement (Syntax.ClassDefinition {
         Syntax.classDefinitionDecorators = decs,
@@ -1014,7 +1014,7 @@ encodeRecordType cx env name rowType comment =
         Syntax.classDefinitionBody = body}))))
 
 -- | Encode a term assignment to a Python statement
-encodeTermAssignment :: Context.Context -> Environment_.PythonEnvironment -> Core.Name -> Core.Term -> Core.TypeScheme -> Maybe String -> Either Errors.Error Syntax.Statement
+encodeTermAssignment :: Context.Context -> PythonEnvironment.PythonEnvironment -> Core.Name -> Core.Term -> Core.TypeScheme -> Maybe String -> Either Errors.Error Syntax.Statement
 encodeTermAssignment cx env name term ts comment =
     Eithers.bind (analyzePythonFunction cx env term) (\fs ->
       let tparams = Typing.functionStructureTypeParams fs
@@ -1024,7 +1024,7 @@ encodeTermAssignment cx env name term ts comment =
           doms = Typing.functionStructureDomains fs
           mcod = Typing.functionStructureCodomain fs
           env2 = Typing.functionStructureEnvironment fs
-          tc = Environment_.pythonEnvironmentGraph env2
+          tc = PythonEnvironment.pythonEnvironmentGraph env2
           binding =
                   Core.Binding {
                     Core.bindingName = name,
@@ -1033,11 +1033,11 @@ encodeTermAssignment cx env name term ts comment =
           isComplex = Predicates.isComplexBinding tc binding
           isTrivial = Predicates.isTrivialTerm term
       in (Logic.ifElse (Logic.and isComplex (Logic.not isTrivial)) (Eithers.bind (Eithers.mapList (encodeBindingAs cx env2) bindings) (\bindingStmts -> encodeFunctionDefinition cx env2 name tparams params body doms mcod comment bindingStmts)) (Eithers.bind (encodeTermInline cx env2 False body) (\bodyExpr ->
-        let pyName = Names_.encodeName False Util.CaseConventionLowerSnake env2 name
+        let pyName = PythonNames.encodeName False Util.CaseConventionLowerSnake env2 name
         in (Right (Utils.annotatedStatement comment (Utils.assignmentStatement pyName bodyExpr)))))))
 
 -- | Encode a term to a Python expression (inline form)
-encodeTermInline :: Context.Context -> Environment_.PythonEnvironment -> Bool -> Core.Term -> Either Errors.Error Syntax.Expression
+encodeTermInline :: Context.Context -> PythonEnvironment.PythonEnvironment -> Bool -> Core.Term -> Either Errors.Error Syntax.Expression
 encodeTermInline cx env noCast term =
 
       let encode = \t -> encodeTermInline cx env False t
@@ -1047,8 +1047,8 @@ encodeTermInline cx env noCast term =
                     Core.TermTypeApplication v0 -> stripTypeApps (Core.typeApplicationTermBody v0)
                     _ -> t
           withCast =
-                  \pyexp -> Logic.ifElse (Logic.or noCast (Environment_.pythonEnvironmentSkipCasts env)) (Right pyexp) (
-                    let tc = Environment_.pythonEnvironmentGraph env
+                  \pyexp -> Logic.ifElse (Logic.or noCast (PythonEnvironment.pythonEnvironmentSkipCasts env)) (Right pyexp) (
+                    let tc = PythonEnvironment.pythonEnvironmentGraph env
                         mtyp = Eithers.map (\_r -> Pairs.first _r) (Checking.typeOf cx tc [] term)
                     in (Eithers.either (\_ -> Right pyexp) (\typ -> Eithers.either (\_ -> Right pyexp) (\pytyp -> Right (Utils.castTo pytyp pyexp)) (encodeType env typ)) mtyp))
       in case (Strip.deannotateAndDetypeTerm term) of
@@ -1091,7 +1091,7 @@ encodeTermInline cx env noCast term =
         Core.TermRecord v0 ->
           let tname = Core.recordTypeName v0
               fields = Core.recordFields v0
-          in (Eithers.bind (Eithers.mapList (\fld -> encode (Core.fieldTerm fld)) fields) (\pargs -> Right (Utils.functionCall (Utils.pyNameToPyPrimary (Names_.encodeNameQualified env tname)) pargs)))
+          in (Eithers.bind (Eithers.mapList (\fld -> encode (Core.fieldTerm fld)) fields) (\pargs -> Right (Utils.functionCall (Utils.pyNameToPyPrimary (PythonNames.encodeNameQualified env tname)) pargs)))
         Core.TermSet v0 -> Eithers.bind (Eithers.mapList encode (Sets.toList v0)) (\pyEls -> Right (Utils.functionCall (Utils.pyNameToPyPrimary (Syntax.Name "frozenset")) [
           Utils.pyAtomToPyExpression (Syntax.AtomSet (Syntax.Set (Lists.map Utils.pyExpressionToPyStarNamedExpression pyEls)))]))
         Core.TermTypeApplication v0 ->
@@ -1103,24 +1103,24 @@ encodeTermInline cx env noCast term =
         Core.TermUnion v0 ->
           let tname = Core.injectionTypeName v0
               field = Core.injectionField v0
-          in (Eithers.bind (Resolution.requireUnionType cx (pythonEnvironmentGetGraph env) tname) (\rt -> Logic.ifElse (Predicates.isEnumRowType rt) (Right (Utils.projectFromExpression (Utils.pyNameToPyExpression (Names_.encodeNameQualified env tname)) (Names_.encodeEnumValue env (Core.fieldName field)))) (
+          in (Eithers.bind (Resolution.requireUnionType cx (pythonEnvironmentGetGraph env) tname) (\rt -> Logic.ifElse (Predicates.isEnumRowType rt) (Right (Utils.projectFromExpression (Utils.pyNameToPyExpression (PythonNames.encodeNameQualified env tname)) (PythonNames.encodeEnumValue env (Core.fieldName field)))) (
             let fname = Core.fieldName field
                 isUnitVariant =
                         Maybes.maybe False (\ft -> Predicates.isUnitType (Strip.deannotateType (Core.fieldTypeType ft))) (Lists.find (\ft -> Equality.equal (Core.unName (Core.fieldTypeName ft)) (Core.unName fname)) rt)
             in (Eithers.bind (Logic.ifElse (Logic.or (Predicates.isUnitTerm (Core.fieldTerm field)) isUnitVariant) (Right []) (Eithers.bind (encode (Core.fieldTerm field)) (\parg -> Right [
               parg]))) (\args ->
-              let deconflictedName = deconflictVariantName True env tname fname (Environment_.pythonEnvironmentGraph env)
-              in (Right (Utils.castTo (Names_.typeVariableReference env tname) (Utils.functionCall (Utils.pyNameToPyPrimary deconflictedName) args))))))))
+              let deconflictedName = deconflictVariantName True env tname fname (PythonEnvironment.pythonEnvironmentGraph env)
+              in (Right (Utils.castTo (PythonNames.typeVariableReference env tname) (Utils.functionCall (Utils.pyNameToPyPrimary deconflictedName) args))))))))
         Core.TermUnit -> Right (Utils.pyNameToPyExpression Utils.pyNone)
         Core.TermVariable v0 -> encodeVariable cx env v0 []
         Core.TermWrap v0 ->
           let tname = Core.wrappedTermTypeName v0
               inner = Core.wrappedTermBody v0
-          in (Eithers.bind (encode inner) (\parg -> Right (Utils.functionCall (Utils.pyNameToPyPrimary (Names_.encodeNameQualified env tname)) [
+          in (Eithers.bind (encode inner) (\parg -> Right (Utils.functionCall (Utils.pyNameToPyPrimary (PythonNames.encodeNameQualified env tname)) [
             parg])))
 
 -- | Encode a term to a list of statements with return as final statement
-encodeTermMultiline :: Context.Context -> Environment_.PythonEnvironment -> Core.Term -> Either Errors.Error [Syntax.Statement]
+encodeTermMultiline :: Context.Context -> PythonEnvironment.PythonEnvironment -> Core.Term -> Either Errors.Error [Syntax.Statement]
 encodeTermMultiline cx env term =
 
       let dfltLogic =
@@ -1159,7 +1159,7 @@ encodeTermMultiline cx env term =
           _ -> dfltLogic) dfltLogic)
 
 -- | Encode a term body for TCO: tail self-calls become param reassignment + continue
-encodeTermMultilineTCO :: Context.Context -> Environment_.PythonEnvironment -> Core.Name -> [Core.Name] -> Core.Term -> Either Errors.Error [Syntax.Statement]
+encodeTermMultilineTCO :: Context.Context -> PythonEnvironment.PythonEnvironment -> Core.Name -> [Core.Name] -> Core.Term -> Either Errors.Error [Syntax.Statement]
 encodeTermMultilineTCO cx env funcName paramNames term =
 
       let stripped = Strip.deannotateAndDetypeTerm term
@@ -1176,7 +1176,7 @@ encodeTermMultilineTCO cx env funcName paramNames term =
                 Lists.map (\pair ->
                   let paramName = Pairs.first pair
                       pyArg = Pairs.second pair
-                  in (Utils.assignmentStatement (Names_.encodeName False Util.CaseConventionLowerSnake env paramName) pyArg)) (Lists.zip paramNames pyArgs)
+                  in (Utils.assignmentStatement (PythonNames.encodeName False Util.CaseConventionLowerSnake env paramName) pyArg)) (Lists.zip paramNames pyArgs)
             continueStmt = Syntax.StatementSimple [
                   Syntax.SimpleStatementContinue]
         in (Right (Lists.concat2 assignments [
@@ -1213,10 +1213,10 @@ encodeTermMultilineTCO cx env funcName paramNames term =
           Utils.returnSingle expr])))))
 
 -- | Encode a Hydra type to a Python type expression
-encodeType :: Environment_.PythonEnvironment -> Core.Type -> Either t0 Syntax.Expression
+encodeType :: PythonEnvironment.PythonEnvironment -> Core.Type -> Either t0 Syntax.Expression
 encodeType env typ =
 
-      let dflt = Right (Utils.doubleQuotedString (Strings.cat2 "type = " (Core_.type_ (Strip.deannotateType typ))))
+      let dflt = Right (Utils.doubleQuotedString (Strings.cat2 "type = " (ShowCore.type_ (Strip.deannotateType typ))))
       in case (Strip.deannotateType typ) of
         Core.TypeApplication v0 -> encodeApplicationType env v0
         Core.TypeFunction v0 -> encodeFunctionType env v0
@@ -1241,18 +1241,18 @@ encodeType env typ =
         Core.TypeUnion _ -> dflt
         Core.TypeUnit -> Right (Utils.pyNameToPyExpression Utils.pyNone)
         Core.TypeVoid -> Right (Utils.pyNameToPyExpression Utils.pyNone)
-        Core.TypeVariable v0 -> Right (Names_.typeVariableReference env v0)
+        Core.TypeVariable v0 -> Right (PythonNames.typeVariableReference env v0)
         Core.TypeWrap _ -> dflt
         Core.TypeAnnotated _ -> dflt
 
 -- | Encode a type definition, dispatching based on type structure
-encodeTypeAssignment :: t0 -> Environment_.PythonEnvironment -> Core.Name -> Core.Type -> Maybe String -> Either Errors.Error [[Syntax.Statement]]
+encodeTypeAssignment :: t0 -> PythonEnvironment.PythonEnvironment -> Core.Name -> Core.Type -> Maybe String -> Either Errors.Error [[Syntax.Statement]]
 encodeTypeAssignment cx env name typ comment =
     Eithers.bind (encodeTypeAssignmentInner cx env name typ comment) (\defStmts -> Right (Lists.map (\s -> [
       s]) defStmts))
 
 -- | Encode the inner type definition, unwrapping forall types
-encodeTypeAssignmentInner :: t0 -> Environment_.PythonEnvironment -> Core.Name -> Core.Type -> Maybe String -> Either Errors.Error [Syntax.Statement]
+encodeTypeAssignmentInner :: t0 -> PythonEnvironment.PythonEnvironment -> Core.Name -> Core.Type -> Maybe String -> Either Errors.Error [Syntax.Statement]
 encodeTypeAssignmentInner cx env name typ comment =
 
       let stripped = Strip.deannotateType typ
@@ -1270,21 +1270,21 @@ encodeTypeAssignmentInner cx env name typ comment =
         _ -> dflt
 
 -- | Encode a simple type alias definition
-encodeTypeDefSingle :: Environment_.PythonEnvironment -> Core.Name -> Maybe String -> Syntax.Expression -> [Syntax.Statement]
+encodeTypeDefSingle :: PythonEnvironment.PythonEnvironment -> Core.Name -> Maybe String -> Syntax.Expression -> [Syntax.Statement]
 encodeTypeDefSingle env name comment typeExpr =
 
-      let pyName = Names_.encodeName False Util.CaseConventionPascal env name
+      let pyName = PythonNames.encodeName False Util.CaseConventionPascal env name
           tparams = environmentTypeParameters env
       in [
         typeAliasStatementFor env pyName tparams comment typeExpr]
 
 -- | Encode a type to a Python expression, quoting if the type has free variables
-encodeTypeQuoted :: Environment_.PythonEnvironment -> Core.Type -> Either t0 Syntax.Expression
+encodeTypeQuoted :: PythonEnvironment.PythonEnvironment -> Core.Type -> Either t0 Syntax.Expression
 encodeTypeQuoted env typ =
     Eithers.bind (encodeType env typ) (\pytype -> Right (Logic.ifElse (Sets.null (Variables.freeVariablesInType typ)) pytype (Utils.doubleQuotedString (Serialization.printExpr (Serde.encodeExpression pytype)))))
 
 -- | Encode a union elimination as an inline conditional chain (isinstance-based ternary)
-encodeUnionEliminationInline :: Context.Context -> Environment_.PythonEnvironment -> Core.CaseStatement -> Syntax.Expression -> Either Errors.Error Syntax.Expression
+encodeUnionEliminationInline :: Context.Context -> PythonEnvironment.PythonEnvironment -> Core.CaseStatement -> Syntax.Expression -> Either Errors.Error Syntax.Expression
 encodeUnionEliminationInline cx env cs pyArg =
 
       let tname = Core.caseStatementTypeName cs
@@ -1300,7 +1300,7 @@ encodeUnionEliminationInline cx env cs pyArg =
                     let fname = Core.fieldName field
                         fterm = Core.fieldTerm field
                         isUnitVariant = isVariantUnitType rt fname
-                        pyVariantName = deconflictVariantName True env tname fname (Environment_.pythonEnvironmentGraph env)
+                        pyVariantName = deconflictVariantName True env tname fname (PythonEnvironment.pythonEnvironmentGraph env)
                         isinstanceCheck =
                                 Logic.ifElse isEnum (Syntax.ExpressionSimple (Syntax.Disjunction [
                                   Syntax.Conjunction [
@@ -1331,16 +1331,16 @@ encodeUnionEliminationInline cx env cs pyArg =
             in (Right (Lists.foldl buildChain pyDefault (Lists.reverse encodedBranches)))))))))
 
 -- | Encode a union field as a variant class
-encodeUnionField :: t0 -> Environment_.PythonEnvironment -> Core.Name -> Core.FieldType -> Either Errors.Error Syntax.Statement
+encodeUnionField :: t0 -> PythonEnvironment.PythonEnvironment -> Core.Name -> Core.FieldType -> Either Errors.Error Syntax.Statement
 encodeUnionField cx env unionName fieldType =
 
       let fname = Core.fieldTypeName fieldType
           ftype = Core.fieldTypeType fieldType
       in (Eithers.bind (Annotations.getTypeDescription cx (pythonEnvironmentGetGraph env) ftype) (\fcomment ->
         let isUnit = Equality.equal (Strip.deannotateType ftype) Core.TypeUnit
-            varName = deconflictVariantName False env unionName fname (Environment_.pythonEnvironmentGraph env)
+            varName = deconflictVariantName False env unionName fname (PythonEnvironment.pythonEnvironmentGraph env)
             tparamNames = findTypeParams env ftype
-            tparamPyNames = Lists.map Names_.encodeTypeVariable tparamNames
+            tparamPyNames = Lists.map PythonNames.encodeTypeVariable tparamNames
             fieldParams = Lists.map Utils.pyNameToPyTypeParameter tparamPyNames
             body =
                     Logic.ifElse isUnit (Utils.indentedBlock fcomment [
@@ -1353,29 +1353,29 @@ encodeUnionField cx env unionName fieldType =
           Syntax.classDefinitionBody = body}))))))
 
 -- | Encode a union field as a primary expression for | alternatives
-encodeUnionFieldAlt :: Environment_.PythonEnvironment -> Core.Name -> Core.FieldType -> Syntax.Primary
+encodeUnionFieldAlt :: PythonEnvironment.PythonEnvironment -> Core.Name -> Core.FieldType -> Syntax.Primary
 encodeUnionFieldAlt env unionName fieldType =
 
       let fname = Core.fieldTypeName fieldType
           ftype = Core.fieldTypeType fieldType
           tparamNames = findTypeParams env ftype
-          tparams = Lists.map Names_.encodeTypeVariable tparamNames
-          namePrim = Utils.pyNameToPyPrimary (Names_.variantName False env unionName fname)
+          tparams = Lists.map PythonNames.encodeTypeVariable tparamNames
+          namePrim = Utils.pyNameToPyPrimary (PythonNames.variantName False env unionName fname)
       in (Logic.ifElse (Lists.null tparams) namePrim (
         let tparamExprs = Lists.map Utils.pyNameToPyExpression tparams
         in (Utils.primaryWithExpressionSlices namePrim tparamExprs)))
 
 -- | Encode a union type as an enum (for unit-only fields) or variant classes
-encodeUnionType :: t0 -> Environment_.PythonEnvironment -> Core.Name -> [Core.FieldType] -> Maybe String -> Either Errors.Error [Syntax.Statement]
+encodeUnionType :: t0 -> PythonEnvironment.PythonEnvironment -> Core.Name -> [Core.FieldType] -> Maybe String -> Either Errors.Error [Syntax.Statement]
 encodeUnionType cx env name rowType comment =
     Logic.ifElse (Predicates.isEnumRowType rowType) (Eithers.bind (Eithers.mapList (encodeEnumValueAssignment cx env) rowType) (\vals ->
       let body = Utils.indentedBlock comment vals
           enumName = Syntax.Name "Enum"
           args = Just (Utils.pyExpressionsToPyArgs [
                 Utils.pyNameToPyExpression enumName])
-          pyName = Names_.encodeName False Util.CaseConventionPascal env name
+          pyName = PythonNames.encodeName False Util.CaseConventionPascal env name
           typeConstStmt =
-                  Utils.dottedAssignmentStatement pyName (Names_.encodeConstantForTypeName env name) (Utils.functionCall (Utils.pyNameToPyPrimary (Names_.encodeName True Util.CaseConventionPascal env (Core.Name "hydra.core.Name"))) [
+                  Utils.dottedAssignmentStatement pyName (PythonNames.encodeConstantForTypeName env name) (Utils.functionCall (Utils.pyNameToPyPrimary (PythonNames.encodeName True Util.CaseConventionPascal env (Core.Name "hydra.core.Name"))) [
                     Utils.doubleQuotedString (Core.unName name)])
       in (Right [
         Utils.pyClassDefinitionToPyStatement (Syntax.ClassDefinition {
@@ -1390,24 +1390,24 @@ encodeUnionType cx env name rowType comment =
         let tparams = environmentTypeParameters env
             unionAlts = Lists.map (encodeUnionFieldAlt env name) rowType
             unionStmts =
-                    unionTypeStatementsFor env (Names_.encodeName False Util.CaseConventionPascal env name) tparams comment (Utils.orExpression unionAlts) constStmts
+                    unionTypeStatementsFor env (PythonNames.encodeName False Util.CaseConventionPascal env name) tparams comment (Utils.orExpression unionAlts) constStmts
         in (Right (Lists.concat2 fieldStmts unionStmts)))))
 
 -- | Encode a variable reference to a Python expression
-encodeVariable :: t0 -> Environment_.PythonEnvironment -> Core.Name -> [Syntax.Expression] -> Either Errors.Error Syntax.Expression
+encodeVariable :: t0 -> PythonEnvironment.PythonEnvironment -> Core.Name -> [Syntax.Expression] -> Either Errors.Error Syntax.Expression
 encodeVariable cx env name args =
 
       let g = pythonEnvironmentGetGraph env
-          tc = Environment_.pythonEnvironmentGraph env
+          tc = PythonEnvironment.pythonEnvironmentGraph env
           tcTypes = Graph.graphBoundTypes tc
           tcLambdaVars = Graph.graphLambdaVariables tc
           tcMetadata = Graph.graphMetadata tc
-          inlineVars = Environment_.pythonEnvironmentInlineVariables env
+          inlineVars = PythonEnvironment.pythonEnvironmentInlineVariables env
           mTypScheme = Maps.lookup name tcTypes
           mTyp = Maybes.map (\ts_ -> Core.typeSchemeType ts_) mTypScheme
-          asVariable = Names_.termVariableReference env name
+          asVariable = PythonNames.termVariableReference env name
           asFunctionCall =
-                  Utils.functionCall (Utils.pyNameToPyPrimary (Names_.encodeName True Util.CaseConventionLowerSnake env name)) args
+                  Utils.functionCall (Utils.pyNameToPyPrimary (PythonNames.encodeName True Util.CaseConventionLowerSnake env name)) args
       in (Logic.ifElse (Logic.not (Lists.null args)) (Maybes.maybe (Right asFunctionCall) (\prim ->
         let primArity = Arity.primitiveArity prim
         in (Logic.ifElse (Equality.equal primArity (Lists.length args)) (Right asFunctionCall) (
@@ -1437,7 +1437,7 @@ encodeVariable cx env name args =
                             Syntax.comparisonRhs = []})]])) remainingParams
               allArgs = Lists.concat2 args remainingExprs
               fullCall =
-                      Utils.functionCall (Utils.pyNameToPyPrimary (Names_.encodeName True Util.CaseConventionLowerSnake env name)) allArgs
+                      Utils.functionCall (Utils.pyNameToPyPrimary (PythonNames.encodeName True Util.CaseConventionLowerSnake env name)) allArgs
           in (Right (makeUncurriedLambda remainingParams fullCall))))) (Lexical.lookupPrimitive g name)) (Maybes.maybe (Logic.ifElse (Sets.member name tcLambdaVars) (Right asVariable) (Logic.ifElse (Sets.member name inlineVars) (Right asVariable) (Maybes.maybe (Maybes.maybe (Maybes.maybe (Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "Unknown variable: " (Core.unName name))))) (\_ -> Right asFunctionCall) (Maps.lookup name tcMetadata)) (\el ->
         let elTrivial1 = Predicates.isTrivialTerm (Core.bindingTerm el)
         in (Maybes.maybe (Right asVariable) (\ts -> Logic.ifElse (Logic.and (Logic.and (Equality.equal (Arity.typeSchemeArity ts) 0) (Predicates.isComplexBinding tc el)) (Logic.not elTrivial1)) (Right asFunctionCall) (
@@ -1469,39 +1469,39 @@ encodeVariable cx env name args =
         in (Right asFunctionRef)))))) mTyp))
 
 -- | Encode a wrapped type (newtype) to a Python class definition
-encodeWrappedType :: Environment_.PythonEnvironment -> Core.Name -> Core.Type -> Maybe String -> Either t0 [Syntax.Statement]
+encodeWrappedType :: PythonEnvironment.PythonEnvironment -> Core.Name -> Core.Type -> Maybe String -> Either t0 [Syntax.Statement]
 encodeWrappedType env name typ comment =
 
-      let tparamList = Pairs.first (Environment_.pythonEnvironmentBoundTypeVariables env)
+      let tparamList = Pairs.first (PythonEnvironment.pythonEnvironmentBoundTypeVariables env)
       in (Eithers.bind (encodeTypeQuoted env typ) (\ptypeQuoted ->
-        let pyName = Names_.encodeName False Util.CaseConventionPascal env name
+        let pyName = PythonNames.encodeName False Util.CaseConventionPascal env name
             body = Utils.indentedBlock comment []
             typeConstStmt =
-                    Utils.dottedAssignmentStatement pyName (Names_.encodeConstantForTypeName env name) (Utils.functionCall (Utils.pyNameToPyPrimary (Names_.encodeName True Util.CaseConventionPascal env (Core.Name "hydra.core.Name"))) [
+                    Utils.dottedAssignmentStatement pyName (PythonNames.encodeConstantForTypeName env name) (Utils.functionCall (Utils.pyNameToPyPrimary (PythonNames.encodeName True Util.CaseConventionPascal env (Core.Name "hydra.core.Name"))) [
                       Utils.doubleQuotedString (Core.unName name)])
         in (Right [
           Utils.pyClassDefinitionToPyStatement (Syntax.ClassDefinition {
             Syntax.classDefinitionDecorators = Nothing,
             Syntax.classDefinitionName = pyName,
-            Syntax.classDefinitionTypeParams = (Lists.map (\arg_ -> Utils.pyNameToPyTypeParameter (Names_.encodeTypeVariable arg_)) (findTypeParams env typ)),
+            Syntax.classDefinitionTypeParams = (Lists.map (\arg_ -> Utils.pyNameToPyTypeParameter (PythonNames.encodeTypeVariable arg_)) (findTypeParams env typ)),
             Syntax.classDefinitionArguments = (Just (variantArgs ptypeQuoted tparamList)),
             Syntax.classDefinitionBody = body}),
           typeConstStmt])))
 
 -- | Create a value pattern for an enum variant
-enumVariantPattern :: Environment_.PythonEnvironment -> Core.Name -> Core.Name -> Syntax.ClosedPattern
+enumVariantPattern :: PythonEnvironment.PythonEnvironment -> Core.Name -> Core.Name -> Syntax.ClosedPattern
 enumVariantPattern env typeName fieldName =
     Syntax.ClosedPatternValue (Syntax.ValuePattern (Syntax.Attribute [
-      Names_.encodeName True Util.CaseConventionPascal env typeName,
-      (Names_.encodeEnumValue env fieldName)]))
+      PythonNames.encodeName True Util.CaseConventionPascal env typeName,
+      (PythonNames.encodeEnumValue env fieldName)]))
 
 -- | Get type parameters from environment as Python TypeParameters
-environmentTypeParameters :: Environment_.PythonEnvironment -> [Syntax.TypeParameter]
+environmentTypeParameters :: PythonEnvironment.PythonEnvironment -> [Syntax.TypeParameter]
 environmentTypeParameters env =
-    Lists.map (\arg_ -> Utils.pyNameToPyTypeParameter (Names_.encodeTypeVariable arg_)) (Pairs.first (Environment_.pythonEnvironmentBoundTypeVariables env))
+    Lists.map (\arg_ -> Utils.pyNameToPyTypeParameter (PythonNames.encodeTypeVariable arg_)) (Pairs.first (PythonEnvironment.pythonEnvironmentBoundTypeVariables env))
 
 -- | Extend environment with lambda parameters from a term
-extendEnvWithLambdaParams :: Environment_.PythonEnvironment -> Core.Term -> Environment_.PythonEnvironment
+extendEnvWithLambdaParams :: PythonEnvironment.PythonEnvironment -> Core.Term -> PythonEnvironment.PythonEnvironment
 extendEnvWithLambdaParams env term =
 
       let go =
@@ -1516,26 +1516,26 @@ extendEnvWithLambdaParams env term =
       in (go env term)
 
 -- | Extend a PythonEnvironment with a new bound type variable
-extendEnvWithTypeVar :: Environment_.PythonEnvironment -> Core.Name -> Environment_.PythonEnvironment
+extendEnvWithTypeVar :: PythonEnvironment.PythonEnvironment -> Core.Name -> PythonEnvironment.PythonEnvironment
 extendEnvWithTypeVar env var_ =
 
-      let oldBound = Environment_.pythonEnvironmentBoundTypeVariables env
+      let oldBound = PythonEnvironment.pythonEnvironmentBoundTypeVariables env
           tparamList = Pairs.first oldBound
           tparamMap = Pairs.second oldBound
           newList = Lists.concat2 tparamList [
                 var_]
-          newMap = Maps.insert var_ (Names_.encodeTypeVariable var_) tparamMap
-      in Environment_.PythonEnvironment {
-        Environment_.pythonEnvironmentNamespaces = (Environment_.pythonEnvironmentNamespaces env),
-        Environment_.pythonEnvironmentBoundTypeVariables = (newList, newMap),
-        Environment_.pythonEnvironmentGraph = (Environment_.pythonEnvironmentGraph env),
-        Environment_.pythonEnvironmentNullaryBindings = (Environment_.pythonEnvironmentNullaryBindings env),
-        Environment_.pythonEnvironmentVersion = (Environment_.pythonEnvironmentVersion env),
-        Environment_.pythonEnvironmentSkipCasts = (Environment_.pythonEnvironmentSkipCasts env),
-        Environment_.pythonEnvironmentInlineVariables = (Environment_.pythonEnvironmentInlineVariables env)}
+          newMap = Maps.insert var_ (PythonNames.encodeTypeVariable var_) tparamMap
+      in PythonEnvironment.PythonEnvironment {
+        PythonEnvironment.pythonEnvironmentNamespaces = (PythonEnvironment.pythonEnvironmentNamespaces env),
+        PythonEnvironment.pythonEnvironmentBoundTypeVariables = (newList, newMap),
+        PythonEnvironment.pythonEnvironmentGraph = (PythonEnvironment.pythonEnvironmentGraph env),
+        PythonEnvironment.pythonEnvironmentNullaryBindings = (PythonEnvironment.pythonEnvironmentNullaryBindings env),
+        PythonEnvironment.pythonEnvironmentVersion = (PythonEnvironment.pythonEnvironmentVersion env),
+        PythonEnvironment.pythonEnvironmentSkipCasts = (PythonEnvironment.pythonEnvironmentSkipCasts env),
+        PythonEnvironment.pythonEnvironmentInlineVariables = (PythonEnvironment.pythonEnvironmentInlineVariables env)}
 
 -- | Extend metadata based on a term (used during module encoding)
-extendMetaForTerm :: Bool -> Environment_.PythonModuleMetadata -> Core.Term -> Environment_.PythonModuleMetadata
+extendMetaForTerm :: Bool -> PythonEnvironment.PythonModuleMetadata -> Core.Term -> PythonEnvironment.PythonModuleMetadata
 extendMetaForTerm topLevel meta0 term =
 
       let step =
@@ -1566,10 +1566,10 @@ extendMetaForTerm topLevel meta0 term =
       in (Rewriting.foldOverTerm Coders.TraversalOrderPre step meta0 term)
 
 -- | Extend metadata based on a type (used during module encoding)
-extendMetaForType :: Bool -> Bool -> Core.Type -> Environment_.PythonModuleMetadata -> Environment_.PythonModuleMetadata
+extendMetaForType :: Bool -> Bool -> Core.Type -> PythonEnvironment.PythonModuleMetadata -> PythonEnvironment.PythonModuleMetadata
 extendMetaForType topLevel isTermAnnot typ meta =
 
-      let currentTvars = Environment_.pythonModuleMetadataTypeVariables meta
+      let currentTvars = PythonEnvironment.pythonModuleMetadataTypeVariables meta
           newTvars = collectTypeVariables currentTvars typ
           metaWithTvars = setMetaTypeVariables meta newTvars
           metaWithSubtypes = Lists.foldl (\m -> \t -> extendMetaForType False isTermAnnot t m) metaWithTvars (Rewriting.subtypes typ)
@@ -1604,12 +1604,12 @@ extendMetaForType topLevel isTermAnnot typ meta =
         _ -> metaWithSubtypes
 
 -- | Extend metadata for a list of types
-extendMetaForTypes :: [Core.Type] -> Environment_.PythonModuleMetadata -> Environment_.PythonModuleMetadata
+extendMetaForTypes :: [Core.Type] -> PythonEnvironment.PythonModuleMetadata -> PythonEnvironment.PythonModuleMetadata
 extendMetaForTypes types meta =
 
       let names = Sets.unions (Lists.map (\t -> Dependencies.typeDependencyNames False t) types)
-          currentNs = Environment_.pythonModuleMetadataNamespaces meta
-          updatedNs = Analysis.addNamesToNamespaces Names_.encodeNamespace names currentNs
+          currentNs = PythonEnvironment.pythonModuleMetadataNamespaces meta
+          updatedNs = Analysis.addNamesToNamespaces PythonNames.encodeNamespace names currentNs
           meta1 = setMetaNamespaces updatedNs meta
       in (Lists.foldl (\m -> \t -> extendMetaForType True False t m) meta1 types)
 
@@ -1625,10 +1625,10 @@ extractCaseElimination term =
       _ -> Nothing
 
 -- | Find type parameters in a type that are bound in the environment
-findTypeParams :: Environment_.PythonEnvironment -> Core.Type -> [Core.Name]
+findTypeParams :: PythonEnvironment.PythonEnvironment -> Core.Type -> [Core.Name]
 findTypeParams env typ =
 
-      let boundVars = Pairs.second (Environment_.pythonEnvironmentBoundTypeVariables env)
+      let boundVars = Pairs.second (PythonEnvironment.pythonEnvironmentBoundTypeVariables env)
           isBound = \v -> Maybes.isJust (Maps.lookup v boundVars)
       in (Lists.filter isBound (Sets.toList (Variables.freeVariablesInType typ)))
 
@@ -1654,7 +1654,7 @@ gatherLambdas term =
       in (go [] term)
 
 -- | Gather metadata from definitions
-gatherMetadata :: Packaging.Namespace -> [Packaging.Definition] -> Environment_.PythonModuleMetadata
+gatherMetadata :: Packaging.Namespace -> [Packaging.Definition] -> PythonEnvironment.PythonModuleMetadata
 gatherMetadata focusNs defs =
 
       let start = emptyMetadata (Utils.findNamespaces focusNs defs)
@@ -1670,7 +1670,7 @@ gatherMetadata focusNs defs =
                           meta2 = setMetaUsesName meta True
                       in (Rewriting.foldOverType Coders.TraversalOrderPre (\m -> \t -> extendMetaForType True False t m) meta2 typ)
           result = Lists.foldl addDef start defs
-          tvars = Environment_.pythonModuleMetadataTypeVariables result
+          tvars = PythonEnvironment.pythonModuleMetadataTypeVariables result
           result2 = setMetaUsesCast True (setMetaUsesLruCache True result)
       in (setMetaUsesTypeVar result2 (Logic.not (Sets.null tvars)))
 
@@ -1695,54 +1695,54 @@ genericArg tparamList =
                       Syntax.termRhs = (Syntax.FactorSimple (Syntax.Power {
                         Syntax.powerLhs = Syntax.AwaitPrimary {
                           Syntax.awaitPrimaryAwait = False,
-                          Syntax.awaitPrimaryPrimary = (Syntax.PrimarySimple (Syntax.AtomName (Names_.encodeTypeVariable n)))},
+                          Syntax.awaitPrimaryPrimary = (Syntax.PrimarySimple (Syntax.AtomName (PythonNames.encodeTypeVariable n)))},
                         Syntax.powerRhs = Nothing}))}}}}}},
           Syntax.comparisonRhs = []})]])) tparamList))))
 
 -- | Create an initial Python environment for code generation
-initialEnvironment :: Packaging.Namespaces Syntax.DottedName -> Graph.Graph -> Environment_.PythonEnvironment
+initialEnvironment :: Packaging.Namespaces Syntax.DottedName -> Graph.Graph -> PythonEnvironment.PythonEnvironment
 initialEnvironment namespaces tcontext =
-    Environment_.PythonEnvironment {
-      Environment_.pythonEnvironmentNamespaces = namespaces,
-      Environment_.pythonEnvironmentBoundTypeVariables = ([], Maps.empty),
-      Environment_.pythonEnvironmentGraph = tcontext,
-      Environment_.pythonEnvironmentNullaryBindings = Sets.empty,
-      Environment_.pythonEnvironmentVersion = targetPythonVersion,
-      Environment_.pythonEnvironmentSkipCasts = True,
-      Environment_.pythonEnvironmentInlineVariables = Sets.empty}
+    PythonEnvironment.PythonEnvironment {
+      PythonEnvironment.pythonEnvironmentNamespaces = namespaces,
+      PythonEnvironment.pythonEnvironmentBoundTypeVariables = ([], Maps.empty),
+      PythonEnvironment.pythonEnvironmentGraph = tcontext,
+      PythonEnvironment.pythonEnvironmentNullaryBindings = Sets.empty,
+      PythonEnvironment.pythonEnvironmentVersion = targetPythonVersion,
+      PythonEnvironment.pythonEnvironmentSkipCasts = True,
+      PythonEnvironment.pythonEnvironmentInlineVariables = Sets.empty}
 
 -- | Create initial empty metadata for a Python module
-initialMetadata :: Packaging.Namespace -> Environment_.PythonModuleMetadata
+initialMetadata :: Packaging.Namespace -> PythonEnvironment.PythonModuleMetadata
 initialMetadata ns =
 
-      let dottedNs = Names_.encodeNamespace ns
+      let dottedNs = PythonNames.encodeNamespace ns
           emptyNs =
                   Packaging.Namespaces {
                     Packaging.namespacesFocus = (ns, dottedNs),
                     Packaging.namespacesMapping = Maps.empty}
-      in Environment_.PythonModuleMetadata {
-        Environment_.pythonModuleMetadataNamespaces = emptyNs,
-        Environment_.pythonModuleMetadataTypeVariables = Sets.empty,
-        Environment_.pythonModuleMetadataUsesAnnotated = False,
-        Environment_.pythonModuleMetadataUsesCallable = False,
-        Environment_.pythonModuleMetadataUsesCast = False,
-        Environment_.pythonModuleMetadataUsesLruCache = False,
-        Environment_.pythonModuleMetadataUsesTypeAlias = False,
-        Environment_.pythonModuleMetadataUsesDataclass = False,
-        Environment_.pythonModuleMetadataUsesDecimal = False,
-        Environment_.pythonModuleMetadataUsesEither = False,
-        Environment_.pythonModuleMetadataUsesEnum = False,
-        Environment_.pythonModuleMetadataUsesFrozenDict = False,
-        Environment_.pythonModuleMetadataUsesFrozenList = False,
-        Environment_.pythonModuleMetadataUsesGeneric = False,
-        Environment_.pythonModuleMetadataUsesJust = False,
-        Environment_.pythonModuleMetadataUsesLeft = False,
-        Environment_.pythonModuleMetadataUsesMaybe = False,
-        Environment_.pythonModuleMetadataUsesName = False,
-        Environment_.pythonModuleMetadataUsesNode = False,
-        Environment_.pythonModuleMetadataUsesNothing = False,
-        Environment_.pythonModuleMetadataUsesRight = False,
-        Environment_.pythonModuleMetadataUsesTypeVar = False}
+      in PythonEnvironment.PythonModuleMetadata {
+        PythonEnvironment.pythonModuleMetadataNamespaces = emptyNs,
+        PythonEnvironment.pythonModuleMetadataTypeVariables = Sets.empty,
+        PythonEnvironment.pythonModuleMetadataUsesAnnotated = False,
+        PythonEnvironment.pythonModuleMetadataUsesCallable = False,
+        PythonEnvironment.pythonModuleMetadataUsesCast = False,
+        PythonEnvironment.pythonModuleMetadataUsesLruCache = False,
+        PythonEnvironment.pythonModuleMetadataUsesTypeAlias = False,
+        PythonEnvironment.pythonModuleMetadataUsesDataclass = False,
+        PythonEnvironment.pythonModuleMetadataUsesDecimal = False,
+        PythonEnvironment.pythonModuleMetadataUsesEither = False,
+        PythonEnvironment.pythonModuleMetadataUsesEnum = False,
+        PythonEnvironment.pythonModuleMetadataUsesFrozenDict = False,
+        PythonEnvironment.pythonModuleMetadataUsesFrozenList = False,
+        PythonEnvironment.pythonModuleMetadataUsesGeneric = False,
+        PythonEnvironment.pythonModuleMetadataUsesJust = False,
+        PythonEnvironment.pythonModuleMetadataUsesLeft = False,
+        PythonEnvironment.pythonModuleMetadataUsesMaybe = False,
+        PythonEnvironment.pythonModuleMetadataUsesName = False,
+        PythonEnvironment.pythonModuleMetadataUsesNode = False,
+        PythonEnvironment.pythonModuleMetadataUsesNothing = False,
+        PythonEnvironment.pythonModuleMetadataUsesRight = False,
+        PythonEnvironment.pythonModuleMetadataUsesTypeVar = False}
 
 -- | Check if a term is a case statement applied to exactly one argument
 isCaseStatementApplication :: Core.Term -> Maybe (Core.Name, (Maybe Core.Term, ([Core.Field], Core.Term)))
@@ -1806,11 +1806,11 @@ makeCurriedLambda params body =
       Syntax.lambdaBody = acc})) body (Lists.reverse params)
 
 -- | Constructor for PyGraph record
-makePyGraph :: Graph.Graph -> Environment_.PythonModuleMetadata -> Environment_.PyGraph
+makePyGraph :: Graph.Graph -> PythonEnvironment.PythonModuleMetadata -> PythonEnvironment.PyGraph
 makePyGraph g m =
-    Environment_.PyGraph {
-      Environment_.pyGraphGraph = g,
-      Environment_.pyGraphMetadata = m}
+    PythonEnvironment.PyGraph {
+      PythonEnvironment.pyGraphGraph = g,
+      PythonEnvironment.pyGraphMetadata = m}
 
 -- | Wrap a bare reference to a polymorphic function in an uncurried lambda
 makeSimpleLambda :: Int -> Syntax.Expression -> Syntax.Expression
@@ -1874,46 +1874,46 @@ moduleDomainImports namespaces =
           Syntax.dottedAsNameAs = Nothing}])) names)
 
 -- | Generate all import statements for a Python module
-moduleImports :: Packaging.Namespaces Syntax.DottedName -> Environment_.PythonModuleMetadata -> [Syntax.Statement]
+moduleImports :: Packaging.Namespaces Syntax.DottedName -> PythonEnvironment.PythonModuleMetadata -> [Syntax.Statement]
 moduleImports namespaces meta =
     Lists.map (\imp -> Utils.pySimpleStatementToPyStatement (Syntax.SimpleStatementImport imp)) (Lists.concat [
       moduleStandardImports meta,
       (moduleDomainImports namespaces)])
 
 -- | Generate standard import statements based on module metadata
-moduleStandardImports :: Environment_.PythonModuleMetadata -> [Syntax.ImportStatement]
+moduleStandardImports :: PythonEnvironment.PythonModuleMetadata -> [Syntax.ImportStatement]
 moduleStandardImports meta =
 
       let pairs =
               [
                 ("__future__", [
-                  condImportSymbol "annotations" Names_.useFutureAnnotations]),
+                  condImportSymbol "annotations" PythonNames.useFutureAnnotations]),
                 ("collections.abc", [
-                  condImportSymbol "Callable" (Environment_.pythonModuleMetadataUsesCallable meta)]),
+                  condImportSymbol "Callable" (PythonEnvironment.pythonModuleMetadataUsesCallable meta)]),
                 ("dataclasses", [
-                  condImportSymbol "dataclass" (Environment_.pythonModuleMetadataUsesDataclass meta)]),
+                  condImportSymbol "dataclass" (PythonEnvironment.pythonModuleMetadataUsesDataclass meta)]),
                 ("decimal", [
-                  condImportSymbol "Decimal" (Environment_.pythonModuleMetadataUsesDecimal meta)]),
+                  condImportSymbol "Decimal" (PythonEnvironment.pythonModuleMetadataUsesDecimal meta)]),
                 ("enum", [
-                  condImportSymbol "Enum" (Environment_.pythonModuleMetadataUsesEnum meta)]),
+                  condImportSymbol "Enum" (PythonEnvironment.pythonModuleMetadataUsesEnum meta)]),
                 ("functools", [
-                  condImportSymbol "lru_cache" (Environment_.pythonModuleMetadataUsesLruCache meta)]),
+                  condImportSymbol "lru_cache" (PythonEnvironment.pythonModuleMetadataUsesLruCache meta)]),
                 ("hydra.dsl.python", [
-                  condImportSymbol "Either" (Environment_.pythonModuleMetadataUsesEither meta),
-                  (condImportSymbol "FrozenDict" (Environment_.pythonModuleMetadataUsesFrozenDict meta)),
-                  (condImportSymbol "Just" (Environment_.pythonModuleMetadataUsesJust meta)),
-                  (condImportSymbol "Left" (Environment_.pythonModuleMetadataUsesLeft meta)),
-                  (condImportSymbol "Maybe" (Environment_.pythonModuleMetadataUsesMaybe meta)),
-                  (condImportSymbol "Node" (Environment_.pythonModuleMetadataUsesNode meta)),
-                  (condImportSymbol "Nothing" (Environment_.pythonModuleMetadataUsesNothing meta)),
-                  (condImportSymbol "Right" (Environment_.pythonModuleMetadataUsesRight meta)),
-                  (condImportSymbol "frozenlist" (Environment_.pythonModuleMetadataUsesFrozenList meta))]),
+                  condImportSymbol "Either" (PythonEnvironment.pythonModuleMetadataUsesEither meta),
+                  (condImportSymbol "FrozenDict" (PythonEnvironment.pythonModuleMetadataUsesFrozenDict meta)),
+                  (condImportSymbol "Just" (PythonEnvironment.pythonModuleMetadataUsesJust meta)),
+                  (condImportSymbol "Left" (PythonEnvironment.pythonModuleMetadataUsesLeft meta)),
+                  (condImportSymbol "Maybe" (PythonEnvironment.pythonModuleMetadataUsesMaybe meta)),
+                  (condImportSymbol "Node" (PythonEnvironment.pythonModuleMetadataUsesNode meta)),
+                  (condImportSymbol "Nothing" (PythonEnvironment.pythonModuleMetadataUsesNothing meta)),
+                  (condImportSymbol "Right" (PythonEnvironment.pythonModuleMetadataUsesRight meta)),
+                  (condImportSymbol "frozenlist" (PythonEnvironment.pythonModuleMetadataUsesFrozenList meta))]),
                 ("typing", [
-                  condImportSymbol "Annotated" (Environment_.pythonModuleMetadataUsesAnnotated meta),
-                  (condImportSymbol "Generic" (Environment_.pythonModuleMetadataUsesGeneric meta)),
-                  (condImportSymbol "TypeAlias" (Environment_.pythonModuleMetadataUsesTypeAlias meta)),
-                  (condImportSymbol "TypeVar" (Environment_.pythonModuleMetadataUsesTypeVar meta)),
-                  (condImportSymbol "cast" (Environment_.pythonModuleMetadataUsesCast meta))])]
+                  condImportSymbol "Annotated" (PythonEnvironment.pythonModuleMetadataUsesAnnotated meta),
+                  (condImportSymbol "Generic" (PythonEnvironment.pythonModuleMetadataUsesGeneric meta)),
+                  (condImportSymbol "TypeAlias" (PythonEnvironment.pythonModuleMetadataUsesTypeAlias meta)),
+                  (condImportSymbol "TypeVar" (PythonEnvironment.pythonModuleMetadataUsesTypeVar meta)),
+                  (condImportSymbol "cast" (PythonEnvironment.pythonModuleMetadataUsesCast meta))])]
           simplified =
                   Maybes.cat (Lists.map (\p ->
                     let modName = Pairs.first p
@@ -1931,12 +1931,12 @@ moduleToPython mod defs cx g =
       in (Right (Maps.singleton path s)))
 
 -- | Accessor for the graph field of PyGraph
-pyGraphGraph :: Environment_.PyGraph -> Graph.Graph
-pyGraphGraph pyg = Environment_.pyGraphGraph pyg
+pyGraphGraph :: PythonEnvironment.PyGraph -> Graph.Graph
+pyGraphGraph pyg = PythonEnvironment.pyGraphGraph pyg
 
 -- | Accessor for the metadata field of PyGraph
-pyGraphMetadata :: Environment_.PyGraph -> Environment_.PythonModuleMetadata
-pyGraphMetadata pyg = Environment_.pyGraphMetadata pyg
+pyGraphMetadata :: PythonEnvironment.PyGraph -> PythonEnvironment.PythonModuleMetadata
+pyGraphMetadata pyg = PythonEnvironment.pyGraphMetadata pyg
 
 -- | Create integer literal expression
 pyInt :: Integer -> Syntax.Expression
@@ -1948,592 +1948,592 @@ pythonBindingMetadata g b =
     Logic.ifElse (shouldThunkBinding g b) (Logic.ifElse (Predicates.isComplexBinding g b) (Just (Core.TermLiteral (Core.LiteralBoolean True))) Nothing) Nothing
 
 -- | Get the Graph from a PythonEnvironment
-pythonEnvironmentGetGraph :: Environment_.PythonEnvironment -> Graph.Graph
-pythonEnvironmentGetGraph env = Environment_.pythonEnvironmentGraph env
+pythonEnvironmentGetGraph :: PythonEnvironment.PythonEnvironment -> Graph.Graph
+pythonEnvironmentGetGraph env = PythonEnvironment.pythonEnvironmentGraph env
 
 -- | Set the Graph in a PythonEnvironment
-pythonEnvironmentSetGraph :: Graph.Graph -> Environment_.PythonEnvironment -> Environment_.PythonEnvironment
+pythonEnvironmentSetGraph :: Graph.Graph -> PythonEnvironment.PythonEnvironment -> PythonEnvironment.PythonEnvironment
 pythonEnvironmentSetGraph tc env =
-    Environment_.PythonEnvironment {
-      Environment_.pythonEnvironmentNamespaces = (Environment_.pythonEnvironmentNamespaces env),
-      Environment_.pythonEnvironmentBoundTypeVariables = (Environment_.pythonEnvironmentBoundTypeVariables env),
-      Environment_.pythonEnvironmentGraph = tc,
-      Environment_.pythonEnvironmentNullaryBindings = (Environment_.pythonEnvironmentNullaryBindings env),
-      Environment_.pythonEnvironmentVersion = (Environment_.pythonEnvironmentVersion env),
-      Environment_.pythonEnvironmentSkipCasts = (Environment_.pythonEnvironmentSkipCasts env),
-      Environment_.pythonEnvironmentInlineVariables = (Environment_.pythonEnvironmentInlineVariables env)}
+    PythonEnvironment.PythonEnvironment {
+      PythonEnvironment.pythonEnvironmentNamespaces = (PythonEnvironment.pythonEnvironmentNamespaces env),
+      PythonEnvironment.pythonEnvironmentBoundTypeVariables = (PythonEnvironment.pythonEnvironmentBoundTypeVariables env),
+      PythonEnvironment.pythonEnvironmentGraph = tc,
+      PythonEnvironment.pythonEnvironmentNullaryBindings = (PythonEnvironment.pythonEnvironmentNullaryBindings env),
+      PythonEnvironment.pythonEnvironmentVersion = (PythonEnvironment.pythonEnvironmentVersion env),
+      PythonEnvironment.pythonEnvironmentSkipCasts = (PythonEnvironment.pythonEnvironmentSkipCasts env),
+      PythonEnvironment.pythonEnvironmentInlineVariables = (PythonEnvironment.pythonEnvironmentInlineVariables env)}
 
-setMetaNamespaces :: Packaging.Namespaces Syntax.DottedName -> Environment_.PythonModuleMetadata -> Environment_.PythonModuleMetadata
+setMetaNamespaces :: Packaging.Namespaces Syntax.DottedName -> PythonEnvironment.PythonModuleMetadata -> PythonEnvironment.PythonModuleMetadata
 setMetaNamespaces ns m =
-    Environment_.PythonModuleMetadata {
-      Environment_.pythonModuleMetadataNamespaces = ns,
-      Environment_.pythonModuleMetadataTypeVariables = (Environment_.pythonModuleMetadataTypeVariables m),
-      Environment_.pythonModuleMetadataUsesAnnotated = (Environment_.pythonModuleMetadataUsesAnnotated m),
-      Environment_.pythonModuleMetadataUsesCallable = (Environment_.pythonModuleMetadataUsesCallable m),
-      Environment_.pythonModuleMetadataUsesCast = (Environment_.pythonModuleMetadataUsesCast m),
-      Environment_.pythonModuleMetadataUsesLruCache = (Environment_.pythonModuleMetadataUsesLruCache m),
-      Environment_.pythonModuleMetadataUsesTypeAlias = (Environment_.pythonModuleMetadataUsesTypeAlias m),
-      Environment_.pythonModuleMetadataUsesDataclass = (Environment_.pythonModuleMetadataUsesDataclass m),
-      Environment_.pythonModuleMetadataUsesDecimal = (Environment_.pythonModuleMetadataUsesDecimal m),
-      Environment_.pythonModuleMetadataUsesEither = (Environment_.pythonModuleMetadataUsesEither m),
-      Environment_.pythonModuleMetadataUsesEnum = (Environment_.pythonModuleMetadataUsesEnum m),
-      Environment_.pythonModuleMetadataUsesFrozenDict = (Environment_.pythonModuleMetadataUsesFrozenDict m),
-      Environment_.pythonModuleMetadataUsesFrozenList = (Environment_.pythonModuleMetadataUsesFrozenList m),
-      Environment_.pythonModuleMetadataUsesGeneric = (Environment_.pythonModuleMetadataUsesGeneric m),
-      Environment_.pythonModuleMetadataUsesJust = (Environment_.pythonModuleMetadataUsesJust m),
-      Environment_.pythonModuleMetadataUsesLeft = (Environment_.pythonModuleMetadataUsesLeft m),
-      Environment_.pythonModuleMetadataUsesMaybe = (Environment_.pythonModuleMetadataUsesMaybe m),
-      Environment_.pythonModuleMetadataUsesName = (Environment_.pythonModuleMetadataUsesName m),
-      Environment_.pythonModuleMetadataUsesNode = (Environment_.pythonModuleMetadataUsesNode m),
-      Environment_.pythonModuleMetadataUsesNothing = (Environment_.pythonModuleMetadataUsesNothing m),
-      Environment_.pythonModuleMetadataUsesRight = (Environment_.pythonModuleMetadataUsesRight m),
-      Environment_.pythonModuleMetadataUsesTypeVar = (Environment_.pythonModuleMetadataUsesTypeVar m)}
+    PythonEnvironment.PythonModuleMetadata {
+      PythonEnvironment.pythonModuleMetadataNamespaces = ns,
+      PythonEnvironment.pythonModuleMetadataTypeVariables = (PythonEnvironment.pythonModuleMetadataTypeVariables m),
+      PythonEnvironment.pythonModuleMetadataUsesAnnotated = (PythonEnvironment.pythonModuleMetadataUsesAnnotated m),
+      PythonEnvironment.pythonModuleMetadataUsesCallable = (PythonEnvironment.pythonModuleMetadataUsesCallable m),
+      PythonEnvironment.pythonModuleMetadataUsesCast = (PythonEnvironment.pythonModuleMetadataUsesCast m),
+      PythonEnvironment.pythonModuleMetadataUsesLruCache = (PythonEnvironment.pythonModuleMetadataUsesLruCache m),
+      PythonEnvironment.pythonModuleMetadataUsesTypeAlias = (PythonEnvironment.pythonModuleMetadataUsesTypeAlias m),
+      PythonEnvironment.pythonModuleMetadataUsesDataclass = (PythonEnvironment.pythonModuleMetadataUsesDataclass m),
+      PythonEnvironment.pythonModuleMetadataUsesDecimal = (PythonEnvironment.pythonModuleMetadataUsesDecimal m),
+      PythonEnvironment.pythonModuleMetadataUsesEither = (PythonEnvironment.pythonModuleMetadataUsesEither m),
+      PythonEnvironment.pythonModuleMetadataUsesEnum = (PythonEnvironment.pythonModuleMetadataUsesEnum m),
+      PythonEnvironment.pythonModuleMetadataUsesFrozenDict = (PythonEnvironment.pythonModuleMetadataUsesFrozenDict m),
+      PythonEnvironment.pythonModuleMetadataUsesFrozenList = (PythonEnvironment.pythonModuleMetadataUsesFrozenList m),
+      PythonEnvironment.pythonModuleMetadataUsesGeneric = (PythonEnvironment.pythonModuleMetadataUsesGeneric m),
+      PythonEnvironment.pythonModuleMetadataUsesJust = (PythonEnvironment.pythonModuleMetadataUsesJust m),
+      PythonEnvironment.pythonModuleMetadataUsesLeft = (PythonEnvironment.pythonModuleMetadataUsesLeft m),
+      PythonEnvironment.pythonModuleMetadataUsesMaybe = (PythonEnvironment.pythonModuleMetadataUsesMaybe m),
+      PythonEnvironment.pythonModuleMetadataUsesName = (PythonEnvironment.pythonModuleMetadataUsesName m),
+      PythonEnvironment.pythonModuleMetadataUsesNode = (PythonEnvironment.pythonModuleMetadataUsesNode m),
+      PythonEnvironment.pythonModuleMetadataUsesNothing = (PythonEnvironment.pythonModuleMetadataUsesNothing m),
+      PythonEnvironment.pythonModuleMetadataUsesRight = (PythonEnvironment.pythonModuleMetadataUsesRight m),
+      PythonEnvironment.pythonModuleMetadataUsesTypeVar = (PythonEnvironment.pythonModuleMetadataUsesTypeVar m)}
 
-setMetaTypeVariables :: Environment_.PythonModuleMetadata -> S.Set Core.Name -> Environment_.PythonModuleMetadata
+setMetaTypeVariables :: PythonEnvironment.PythonModuleMetadata -> S.Set Core.Name -> PythonEnvironment.PythonModuleMetadata
 setMetaTypeVariables m tvars =
-    Environment_.PythonModuleMetadata {
-      Environment_.pythonModuleMetadataNamespaces = (Environment_.pythonModuleMetadataNamespaces m),
-      Environment_.pythonModuleMetadataTypeVariables = tvars,
-      Environment_.pythonModuleMetadataUsesAnnotated = (Environment_.pythonModuleMetadataUsesAnnotated m),
-      Environment_.pythonModuleMetadataUsesCallable = (Environment_.pythonModuleMetadataUsesCallable m),
-      Environment_.pythonModuleMetadataUsesCast = (Environment_.pythonModuleMetadataUsesCast m),
-      Environment_.pythonModuleMetadataUsesLruCache = (Environment_.pythonModuleMetadataUsesLruCache m),
-      Environment_.pythonModuleMetadataUsesTypeAlias = (Environment_.pythonModuleMetadataUsesTypeAlias m),
-      Environment_.pythonModuleMetadataUsesDataclass = (Environment_.pythonModuleMetadataUsesDataclass m),
-      Environment_.pythonModuleMetadataUsesDecimal = (Environment_.pythonModuleMetadataUsesDecimal m),
-      Environment_.pythonModuleMetadataUsesEither = (Environment_.pythonModuleMetadataUsesEither m),
-      Environment_.pythonModuleMetadataUsesEnum = (Environment_.pythonModuleMetadataUsesEnum m),
-      Environment_.pythonModuleMetadataUsesFrozenDict = (Environment_.pythonModuleMetadataUsesFrozenDict m),
-      Environment_.pythonModuleMetadataUsesFrozenList = (Environment_.pythonModuleMetadataUsesFrozenList m),
-      Environment_.pythonModuleMetadataUsesGeneric = (Environment_.pythonModuleMetadataUsesGeneric m),
-      Environment_.pythonModuleMetadataUsesJust = (Environment_.pythonModuleMetadataUsesJust m),
-      Environment_.pythonModuleMetadataUsesLeft = (Environment_.pythonModuleMetadataUsesLeft m),
-      Environment_.pythonModuleMetadataUsesMaybe = (Environment_.pythonModuleMetadataUsesMaybe m),
-      Environment_.pythonModuleMetadataUsesName = (Environment_.pythonModuleMetadataUsesName m),
-      Environment_.pythonModuleMetadataUsesNode = (Environment_.pythonModuleMetadataUsesNode m),
-      Environment_.pythonModuleMetadataUsesNothing = (Environment_.pythonModuleMetadataUsesNothing m),
-      Environment_.pythonModuleMetadataUsesRight = (Environment_.pythonModuleMetadataUsesRight m),
-      Environment_.pythonModuleMetadataUsesTypeVar = (Environment_.pythonModuleMetadataUsesTypeVar m)}
+    PythonEnvironment.PythonModuleMetadata {
+      PythonEnvironment.pythonModuleMetadataNamespaces = (PythonEnvironment.pythonModuleMetadataNamespaces m),
+      PythonEnvironment.pythonModuleMetadataTypeVariables = tvars,
+      PythonEnvironment.pythonModuleMetadataUsesAnnotated = (PythonEnvironment.pythonModuleMetadataUsesAnnotated m),
+      PythonEnvironment.pythonModuleMetadataUsesCallable = (PythonEnvironment.pythonModuleMetadataUsesCallable m),
+      PythonEnvironment.pythonModuleMetadataUsesCast = (PythonEnvironment.pythonModuleMetadataUsesCast m),
+      PythonEnvironment.pythonModuleMetadataUsesLruCache = (PythonEnvironment.pythonModuleMetadataUsesLruCache m),
+      PythonEnvironment.pythonModuleMetadataUsesTypeAlias = (PythonEnvironment.pythonModuleMetadataUsesTypeAlias m),
+      PythonEnvironment.pythonModuleMetadataUsesDataclass = (PythonEnvironment.pythonModuleMetadataUsesDataclass m),
+      PythonEnvironment.pythonModuleMetadataUsesDecimal = (PythonEnvironment.pythonModuleMetadataUsesDecimal m),
+      PythonEnvironment.pythonModuleMetadataUsesEither = (PythonEnvironment.pythonModuleMetadataUsesEither m),
+      PythonEnvironment.pythonModuleMetadataUsesEnum = (PythonEnvironment.pythonModuleMetadataUsesEnum m),
+      PythonEnvironment.pythonModuleMetadataUsesFrozenDict = (PythonEnvironment.pythonModuleMetadataUsesFrozenDict m),
+      PythonEnvironment.pythonModuleMetadataUsesFrozenList = (PythonEnvironment.pythonModuleMetadataUsesFrozenList m),
+      PythonEnvironment.pythonModuleMetadataUsesGeneric = (PythonEnvironment.pythonModuleMetadataUsesGeneric m),
+      PythonEnvironment.pythonModuleMetadataUsesJust = (PythonEnvironment.pythonModuleMetadataUsesJust m),
+      PythonEnvironment.pythonModuleMetadataUsesLeft = (PythonEnvironment.pythonModuleMetadataUsesLeft m),
+      PythonEnvironment.pythonModuleMetadataUsesMaybe = (PythonEnvironment.pythonModuleMetadataUsesMaybe m),
+      PythonEnvironment.pythonModuleMetadataUsesName = (PythonEnvironment.pythonModuleMetadataUsesName m),
+      PythonEnvironment.pythonModuleMetadataUsesNode = (PythonEnvironment.pythonModuleMetadataUsesNode m),
+      PythonEnvironment.pythonModuleMetadataUsesNothing = (PythonEnvironment.pythonModuleMetadataUsesNothing m),
+      PythonEnvironment.pythonModuleMetadataUsesRight = (PythonEnvironment.pythonModuleMetadataUsesRight m),
+      PythonEnvironment.pythonModuleMetadataUsesTypeVar = (PythonEnvironment.pythonModuleMetadataUsesTypeVar m)}
 
-setMetaUsesAnnotated :: Environment_.PythonModuleMetadata -> Bool -> Environment_.PythonModuleMetadata
+setMetaUsesAnnotated :: PythonEnvironment.PythonModuleMetadata -> Bool -> PythonEnvironment.PythonModuleMetadata
 setMetaUsesAnnotated m b =
-    Environment_.PythonModuleMetadata {
-      Environment_.pythonModuleMetadataNamespaces = (Environment_.pythonModuleMetadataNamespaces m),
-      Environment_.pythonModuleMetadataTypeVariables = (Environment_.pythonModuleMetadataTypeVariables m),
-      Environment_.pythonModuleMetadataUsesAnnotated = b,
-      Environment_.pythonModuleMetadataUsesCallable = (Environment_.pythonModuleMetadataUsesCallable m),
-      Environment_.pythonModuleMetadataUsesCast = (Environment_.pythonModuleMetadataUsesCast m),
-      Environment_.pythonModuleMetadataUsesLruCache = (Environment_.pythonModuleMetadataUsesLruCache m),
-      Environment_.pythonModuleMetadataUsesTypeAlias = (Environment_.pythonModuleMetadataUsesTypeAlias m),
-      Environment_.pythonModuleMetadataUsesDataclass = (Environment_.pythonModuleMetadataUsesDataclass m),
-      Environment_.pythonModuleMetadataUsesDecimal = (Environment_.pythonModuleMetadataUsesDecimal m),
-      Environment_.pythonModuleMetadataUsesEither = (Environment_.pythonModuleMetadataUsesEither m),
-      Environment_.pythonModuleMetadataUsesEnum = (Environment_.pythonModuleMetadataUsesEnum m),
-      Environment_.pythonModuleMetadataUsesFrozenDict = (Environment_.pythonModuleMetadataUsesFrozenDict m),
-      Environment_.pythonModuleMetadataUsesFrozenList = (Environment_.pythonModuleMetadataUsesFrozenList m),
-      Environment_.pythonModuleMetadataUsesGeneric = (Environment_.pythonModuleMetadataUsesGeneric m),
-      Environment_.pythonModuleMetadataUsesJust = (Environment_.pythonModuleMetadataUsesJust m),
-      Environment_.pythonModuleMetadataUsesLeft = (Environment_.pythonModuleMetadataUsesLeft m),
-      Environment_.pythonModuleMetadataUsesMaybe = (Environment_.pythonModuleMetadataUsesMaybe m),
-      Environment_.pythonModuleMetadataUsesName = (Environment_.pythonModuleMetadataUsesName m),
-      Environment_.pythonModuleMetadataUsesNode = (Environment_.pythonModuleMetadataUsesNode m),
-      Environment_.pythonModuleMetadataUsesNothing = (Environment_.pythonModuleMetadataUsesNothing m),
-      Environment_.pythonModuleMetadataUsesRight = (Environment_.pythonModuleMetadataUsesRight m),
-      Environment_.pythonModuleMetadataUsesTypeVar = (Environment_.pythonModuleMetadataUsesTypeVar m)}
+    PythonEnvironment.PythonModuleMetadata {
+      PythonEnvironment.pythonModuleMetadataNamespaces = (PythonEnvironment.pythonModuleMetadataNamespaces m),
+      PythonEnvironment.pythonModuleMetadataTypeVariables = (PythonEnvironment.pythonModuleMetadataTypeVariables m),
+      PythonEnvironment.pythonModuleMetadataUsesAnnotated = b,
+      PythonEnvironment.pythonModuleMetadataUsesCallable = (PythonEnvironment.pythonModuleMetadataUsesCallable m),
+      PythonEnvironment.pythonModuleMetadataUsesCast = (PythonEnvironment.pythonModuleMetadataUsesCast m),
+      PythonEnvironment.pythonModuleMetadataUsesLruCache = (PythonEnvironment.pythonModuleMetadataUsesLruCache m),
+      PythonEnvironment.pythonModuleMetadataUsesTypeAlias = (PythonEnvironment.pythonModuleMetadataUsesTypeAlias m),
+      PythonEnvironment.pythonModuleMetadataUsesDataclass = (PythonEnvironment.pythonModuleMetadataUsesDataclass m),
+      PythonEnvironment.pythonModuleMetadataUsesDecimal = (PythonEnvironment.pythonModuleMetadataUsesDecimal m),
+      PythonEnvironment.pythonModuleMetadataUsesEither = (PythonEnvironment.pythonModuleMetadataUsesEither m),
+      PythonEnvironment.pythonModuleMetadataUsesEnum = (PythonEnvironment.pythonModuleMetadataUsesEnum m),
+      PythonEnvironment.pythonModuleMetadataUsesFrozenDict = (PythonEnvironment.pythonModuleMetadataUsesFrozenDict m),
+      PythonEnvironment.pythonModuleMetadataUsesFrozenList = (PythonEnvironment.pythonModuleMetadataUsesFrozenList m),
+      PythonEnvironment.pythonModuleMetadataUsesGeneric = (PythonEnvironment.pythonModuleMetadataUsesGeneric m),
+      PythonEnvironment.pythonModuleMetadataUsesJust = (PythonEnvironment.pythonModuleMetadataUsesJust m),
+      PythonEnvironment.pythonModuleMetadataUsesLeft = (PythonEnvironment.pythonModuleMetadataUsesLeft m),
+      PythonEnvironment.pythonModuleMetadataUsesMaybe = (PythonEnvironment.pythonModuleMetadataUsesMaybe m),
+      PythonEnvironment.pythonModuleMetadataUsesName = (PythonEnvironment.pythonModuleMetadataUsesName m),
+      PythonEnvironment.pythonModuleMetadataUsesNode = (PythonEnvironment.pythonModuleMetadataUsesNode m),
+      PythonEnvironment.pythonModuleMetadataUsesNothing = (PythonEnvironment.pythonModuleMetadataUsesNothing m),
+      PythonEnvironment.pythonModuleMetadataUsesRight = (PythonEnvironment.pythonModuleMetadataUsesRight m),
+      PythonEnvironment.pythonModuleMetadataUsesTypeVar = (PythonEnvironment.pythonModuleMetadataUsesTypeVar m)}
 
-setMetaUsesCallable :: Environment_.PythonModuleMetadata -> Bool -> Environment_.PythonModuleMetadata
+setMetaUsesCallable :: PythonEnvironment.PythonModuleMetadata -> Bool -> PythonEnvironment.PythonModuleMetadata
 setMetaUsesCallable m b =
-    Environment_.PythonModuleMetadata {
-      Environment_.pythonModuleMetadataNamespaces = (Environment_.pythonModuleMetadataNamespaces m),
-      Environment_.pythonModuleMetadataTypeVariables = (Environment_.pythonModuleMetadataTypeVariables m),
-      Environment_.pythonModuleMetadataUsesAnnotated = (Environment_.pythonModuleMetadataUsesAnnotated m),
-      Environment_.pythonModuleMetadataUsesCallable = b,
-      Environment_.pythonModuleMetadataUsesCast = (Environment_.pythonModuleMetadataUsesCast m),
-      Environment_.pythonModuleMetadataUsesLruCache = (Environment_.pythonModuleMetadataUsesLruCache m),
-      Environment_.pythonModuleMetadataUsesTypeAlias = (Environment_.pythonModuleMetadataUsesTypeAlias m),
-      Environment_.pythonModuleMetadataUsesDataclass = (Environment_.pythonModuleMetadataUsesDataclass m),
-      Environment_.pythonModuleMetadataUsesDecimal = (Environment_.pythonModuleMetadataUsesDecimal m),
-      Environment_.pythonModuleMetadataUsesEither = (Environment_.pythonModuleMetadataUsesEither m),
-      Environment_.pythonModuleMetadataUsesEnum = (Environment_.pythonModuleMetadataUsesEnum m),
-      Environment_.pythonModuleMetadataUsesFrozenDict = (Environment_.pythonModuleMetadataUsesFrozenDict m),
-      Environment_.pythonModuleMetadataUsesFrozenList = (Environment_.pythonModuleMetadataUsesFrozenList m),
-      Environment_.pythonModuleMetadataUsesGeneric = (Environment_.pythonModuleMetadataUsesGeneric m),
-      Environment_.pythonModuleMetadataUsesJust = (Environment_.pythonModuleMetadataUsesJust m),
-      Environment_.pythonModuleMetadataUsesLeft = (Environment_.pythonModuleMetadataUsesLeft m),
-      Environment_.pythonModuleMetadataUsesMaybe = (Environment_.pythonModuleMetadataUsesMaybe m),
-      Environment_.pythonModuleMetadataUsesName = (Environment_.pythonModuleMetadataUsesName m),
-      Environment_.pythonModuleMetadataUsesNode = (Environment_.pythonModuleMetadataUsesNode m),
-      Environment_.pythonModuleMetadataUsesNothing = (Environment_.pythonModuleMetadataUsesNothing m),
-      Environment_.pythonModuleMetadataUsesRight = (Environment_.pythonModuleMetadataUsesRight m),
-      Environment_.pythonModuleMetadataUsesTypeVar = (Environment_.pythonModuleMetadataUsesTypeVar m)}
+    PythonEnvironment.PythonModuleMetadata {
+      PythonEnvironment.pythonModuleMetadataNamespaces = (PythonEnvironment.pythonModuleMetadataNamespaces m),
+      PythonEnvironment.pythonModuleMetadataTypeVariables = (PythonEnvironment.pythonModuleMetadataTypeVariables m),
+      PythonEnvironment.pythonModuleMetadataUsesAnnotated = (PythonEnvironment.pythonModuleMetadataUsesAnnotated m),
+      PythonEnvironment.pythonModuleMetadataUsesCallable = b,
+      PythonEnvironment.pythonModuleMetadataUsesCast = (PythonEnvironment.pythonModuleMetadataUsesCast m),
+      PythonEnvironment.pythonModuleMetadataUsesLruCache = (PythonEnvironment.pythonModuleMetadataUsesLruCache m),
+      PythonEnvironment.pythonModuleMetadataUsesTypeAlias = (PythonEnvironment.pythonModuleMetadataUsesTypeAlias m),
+      PythonEnvironment.pythonModuleMetadataUsesDataclass = (PythonEnvironment.pythonModuleMetadataUsesDataclass m),
+      PythonEnvironment.pythonModuleMetadataUsesDecimal = (PythonEnvironment.pythonModuleMetadataUsesDecimal m),
+      PythonEnvironment.pythonModuleMetadataUsesEither = (PythonEnvironment.pythonModuleMetadataUsesEither m),
+      PythonEnvironment.pythonModuleMetadataUsesEnum = (PythonEnvironment.pythonModuleMetadataUsesEnum m),
+      PythonEnvironment.pythonModuleMetadataUsesFrozenDict = (PythonEnvironment.pythonModuleMetadataUsesFrozenDict m),
+      PythonEnvironment.pythonModuleMetadataUsesFrozenList = (PythonEnvironment.pythonModuleMetadataUsesFrozenList m),
+      PythonEnvironment.pythonModuleMetadataUsesGeneric = (PythonEnvironment.pythonModuleMetadataUsesGeneric m),
+      PythonEnvironment.pythonModuleMetadataUsesJust = (PythonEnvironment.pythonModuleMetadataUsesJust m),
+      PythonEnvironment.pythonModuleMetadataUsesLeft = (PythonEnvironment.pythonModuleMetadataUsesLeft m),
+      PythonEnvironment.pythonModuleMetadataUsesMaybe = (PythonEnvironment.pythonModuleMetadataUsesMaybe m),
+      PythonEnvironment.pythonModuleMetadataUsesName = (PythonEnvironment.pythonModuleMetadataUsesName m),
+      PythonEnvironment.pythonModuleMetadataUsesNode = (PythonEnvironment.pythonModuleMetadataUsesNode m),
+      PythonEnvironment.pythonModuleMetadataUsesNothing = (PythonEnvironment.pythonModuleMetadataUsesNothing m),
+      PythonEnvironment.pythonModuleMetadataUsesRight = (PythonEnvironment.pythonModuleMetadataUsesRight m),
+      PythonEnvironment.pythonModuleMetadataUsesTypeVar = (PythonEnvironment.pythonModuleMetadataUsesTypeVar m)}
 
-setMetaUsesCast :: Bool -> Environment_.PythonModuleMetadata -> Environment_.PythonModuleMetadata
+setMetaUsesCast :: Bool -> PythonEnvironment.PythonModuleMetadata -> PythonEnvironment.PythonModuleMetadata
 setMetaUsesCast b m =
-    Environment_.PythonModuleMetadata {
-      Environment_.pythonModuleMetadataNamespaces = (Environment_.pythonModuleMetadataNamespaces m),
-      Environment_.pythonModuleMetadataTypeVariables = (Environment_.pythonModuleMetadataTypeVariables m),
-      Environment_.pythonModuleMetadataUsesAnnotated = (Environment_.pythonModuleMetadataUsesAnnotated m),
-      Environment_.pythonModuleMetadataUsesCallable = (Environment_.pythonModuleMetadataUsesCallable m),
-      Environment_.pythonModuleMetadataUsesCast = b,
-      Environment_.pythonModuleMetadataUsesLruCache = (Environment_.pythonModuleMetadataUsesLruCache m),
-      Environment_.pythonModuleMetadataUsesTypeAlias = (Environment_.pythonModuleMetadataUsesTypeAlias m),
-      Environment_.pythonModuleMetadataUsesDataclass = (Environment_.pythonModuleMetadataUsesDataclass m),
-      Environment_.pythonModuleMetadataUsesDecimal = (Environment_.pythonModuleMetadataUsesDecimal m),
-      Environment_.pythonModuleMetadataUsesEither = (Environment_.pythonModuleMetadataUsesEither m),
-      Environment_.pythonModuleMetadataUsesEnum = (Environment_.pythonModuleMetadataUsesEnum m),
-      Environment_.pythonModuleMetadataUsesFrozenDict = (Environment_.pythonModuleMetadataUsesFrozenDict m),
-      Environment_.pythonModuleMetadataUsesFrozenList = (Environment_.pythonModuleMetadataUsesFrozenList m),
-      Environment_.pythonModuleMetadataUsesGeneric = (Environment_.pythonModuleMetadataUsesGeneric m),
-      Environment_.pythonModuleMetadataUsesJust = (Environment_.pythonModuleMetadataUsesJust m),
-      Environment_.pythonModuleMetadataUsesLeft = (Environment_.pythonModuleMetadataUsesLeft m),
-      Environment_.pythonModuleMetadataUsesMaybe = (Environment_.pythonModuleMetadataUsesMaybe m),
-      Environment_.pythonModuleMetadataUsesName = (Environment_.pythonModuleMetadataUsesName m),
-      Environment_.pythonModuleMetadataUsesNode = (Environment_.pythonModuleMetadataUsesNode m),
-      Environment_.pythonModuleMetadataUsesNothing = (Environment_.pythonModuleMetadataUsesNothing m),
-      Environment_.pythonModuleMetadataUsesRight = (Environment_.pythonModuleMetadataUsesRight m),
-      Environment_.pythonModuleMetadataUsesTypeVar = (Environment_.pythonModuleMetadataUsesTypeVar m)}
+    PythonEnvironment.PythonModuleMetadata {
+      PythonEnvironment.pythonModuleMetadataNamespaces = (PythonEnvironment.pythonModuleMetadataNamespaces m),
+      PythonEnvironment.pythonModuleMetadataTypeVariables = (PythonEnvironment.pythonModuleMetadataTypeVariables m),
+      PythonEnvironment.pythonModuleMetadataUsesAnnotated = (PythonEnvironment.pythonModuleMetadataUsesAnnotated m),
+      PythonEnvironment.pythonModuleMetadataUsesCallable = (PythonEnvironment.pythonModuleMetadataUsesCallable m),
+      PythonEnvironment.pythonModuleMetadataUsesCast = b,
+      PythonEnvironment.pythonModuleMetadataUsesLruCache = (PythonEnvironment.pythonModuleMetadataUsesLruCache m),
+      PythonEnvironment.pythonModuleMetadataUsesTypeAlias = (PythonEnvironment.pythonModuleMetadataUsesTypeAlias m),
+      PythonEnvironment.pythonModuleMetadataUsesDataclass = (PythonEnvironment.pythonModuleMetadataUsesDataclass m),
+      PythonEnvironment.pythonModuleMetadataUsesDecimal = (PythonEnvironment.pythonModuleMetadataUsesDecimal m),
+      PythonEnvironment.pythonModuleMetadataUsesEither = (PythonEnvironment.pythonModuleMetadataUsesEither m),
+      PythonEnvironment.pythonModuleMetadataUsesEnum = (PythonEnvironment.pythonModuleMetadataUsesEnum m),
+      PythonEnvironment.pythonModuleMetadataUsesFrozenDict = (PythonEnvironment.pythonModuleMetadataUsesFrozenDict m),
+      PythonEnvironment.pythonModuleMetadataUsesFrozenList = (PythonEnvironment.pythonModuleMetadataUsesFrozenList m),
+      PythonEnvironment.pythonModuleMetadataUsesGeneric = (PythonEnvironment.pythonModuleMetadataUsesGeneric m),
+      PythonEnvironment.pythonModuleMetadataUsesJust = (PythonEnvironment.pythonModuleMetadataUsesJust m),
+      PythonEnvironment.pythonModuleMetadataUsesLeft = (PythonEnvironment.pythonModuleMetadataUsesLeft m),
+      PythonEnvironment.pythonModuleMetadataUsesMaybe = (PythonEnvironment.pythonModuleMetadataUsesMaybe m),
+      PythonEnvironment.pythonModuleMetadataUsesName = (PythonEnvironment.pythonModuleMetadataUsesName m),
+      PythonEnvironment.pythonModuleMetadataUsesNode = (PythonEnvironment.pythonModuleMetadataUsesNode m),
+      PythonEnvironment.pythonModuleMetadataUsesNothing = (PythonEnvironment.pythonModuleMetadataUsesNothing m),
+      PythonEnvironment.pythonModuleMetadataUsesRight = (PythonEnvironment.pythonModuleMetadataUsesRight m),
+      PythonEnvironment.pythonModuleMetadataUsesTypeVar = (PythonEnvironment.pythonModuleMetadataUsesTypeVar m)}
 
-setMetaUsesDataclass :: Environment_.PythonModuleMetadata -> Bool -> Environment_.PythonModuleMetadata
+setMetaUsesDataclass :: PythonEnvironment.PythonModuleMetadata -> Bool -> PythonEnvironment.PythonModuleMetadata
 setMetaUsesDataclass m b =
-    Environment_.PythonModuleMetadata {
-      Environment_.pythonModuleMetadataNamespaces = (Environment_.pythonModuleMetadataNamespaces m),
-      Environment_.pythonModuleMetadataTypeVariables = (Environment_.pythonModuleMetadataTypeVariables m),
-      Environment_.pythonModuleMetadataUsesAnnotated = (Environment_.pythonModuleMetadataUsesAnnotated m),
-      Environment_.pythonModuleMetadataUsesCallable = (Environment_.pythonModuleMetadataUsesCallable m),
-      Environment_.pythonModuleMetadataUsesCast = (Environment_.pythonModuleMetadataUsesCast m),
-      Environment_.pythonModuleMetadataUsesLruCache = (Environment_.pythonModuleMetadataUsesLruCache m),
-      Environment_.pythonModuleMetadataUsesTypeAlias = (Environment_.pythonModuleMetadataUsesTypeAlias m),
-      Environment_.pythonModuleMetadataUsesDataclass = b,
-      Environment_.pythonModuleMetadataUsesDecimal = (Environment_.pythonModuleMetadataUsesDecimal m),
-      Environment_.pythonModuleMetadataUsesEither = (Environment_.pythonModuleMetadataUsesEither m),
-      Environment_.pythonModuleMetadataUsesEnum = (Environment_.pythonModuleMetadataUsesEnum m),
-      Environment_.pythonModuleMetadataUsesFrozenDict = (Environment_.pythonModuleMetadataUsesFrozenDict m),
-      Environment_.pythonModuleMetadataUsesFrozenList = (Environment_.pythonModuleMetadataUsesFrozenList m),
-      Environment_.pythonModuleMetadataUsesGeneric = (Environment_.pythonModuleMetadataUsesGeneric m),
-      Environment_.pythonModuleMetadataUsesJust = (Environment_.pythonModuleMetadataUsesJust m),
-      Environment_.pythonModuleMetadataUsesLeft = (Environment_.pythonModuleMetadataUsesLeft m),
-      Environment_.pythonModuleMetadataUsesMaybe = (Environment_.pythonModuleMetadataUsesMaybe m),
-      Environment_.pythonModuleMetadataUsesName = (Environment_.pythonModuleMetadataUsesName m),
-      Environment_.pythonModuleMetadataUsesNode = (Environment_.pythonModuleMetadataUsesNode m),
-      Environment_.pythonModuleMetadataUsesNothing = (Environment_.pythonModuleMetadataUsesNothing m),
-      Environment_.pythonModuleMetadataUsesRight = (Environment_.pythonModuleMetadataUsesRight m),
-      Environment_.pythonModuleMetadataUsesTypeVar = (Environment_.pythonModuleMetadataUsesTypeVar m)}
+    PythonEnvironment.PythonModuleMetadata {
+      PythonEnvironment.pythonModuleMetadataNamespaces = (PythonEnvironment.pythonModuleMetadataNamespaces m),
+      PythonEnvironment.pythonModuleMetadataTypeVariables = (PythonEnvironment.pythonModuleMetadataTypeVariables m),
+      PythonEnvironment.pythonModuleMetadataUsesAnnotated = (PythonEnvironment.pythonModuleMetadataUsesAnnotated m),
+      PythonEnvironment.pythonModuleMetadataUsesCallable = (PythonEnvironment.pythonModuleMetadataUsesCallable m),
+      PythonEnvironment.pythonModuleMetadataUsesCast = (PythonEnvironment.pythonModuleMetadataUsesCast m),
+      PythonEnvironment.pythonModuleMetadataUsesLruCache = (PythonEnvironment.pythonModuleMetadataUsesLruCache m),
+      PythonEnvironment.pythonModuleMetadataUsesTypeAlias = (PythonEnvironment.pythonModuleMetadataUsesTypeAlias m),
+      PythonEnvironment.pythonModuleMetadataUsesDataclass = b,
+      PythonEnvironment.pythonModuleMetadataUsesDecimal = (PythonEnvironment.pythonModuleMetadataUsesDecimal m),
+      PythonEnvironment.pythonModuleMetadataUsesEither = (PythonEnvironment.pythonModuleMetadataUsesEither m),
+      PythonEnvironment.pythonModuleMetadataUsesEnum = (PythonEnvironment.pythonModuleMetadataUsesEnum m),
+      PythonEnvironment.pythonModuleMetadataUsesFrozenDict = (PythonEnvironment.pythonModuleMetadataUsesFrozenDict m),
+      PythonEnvironment.pythonModuleMetadataUsesFrozenList = (PythonEnvironment.pythonModuleMetadataUsesFrozenList m),
+      PythonEnvironment.pythonModuleMetadataUsesGeneric = (PythonEnvironment.pythonModuleMetadataUsesGeneric m),
+      PythonEnvironment.pythonModuleMetadataUsesJust = (PythonEnvironment.pythonModuleMetadataUsesJust m),
+      PythonEnvironment.pythonModuleMetadataUsesLeft = (PythonEnvironment.pythonModuleMetadataUsesLeft m),
+      PythonEnvironment.pythonModuleMetadataUsesMaybe = (PythonEnvironment.pythonModuleMetadataUsesMaybe m),
+      PythonEnvironment.pythonModuleMetadataUsesName = (PythonEnvironment.pythonModuleMetadataUsesName m),
+      PythonEnvironment.pythonModuleMetadataUsesNode = (PythonEnvironment.pythonModuleMetadataUsesNode m),
+      PythonEnvironment.pythonModuleMetadataUsesNothing = (PythonEnvironment.pythonModuleMetadataUsesNothing m),
+      PythonEnvironment.pythonModuleMetadataUsesRight = (PythonEnvironment.pythonModuleMetadataUsesRight m),
+      PythonEnvironment.pythonModuleMetadataUsesTypeVar = (PythonEnvironment.pythonModuleMetadataUsesTypeVar m)}
 
-setMetaUsesDecimal :: Environment_.PythonModuleMetadata -> Bool -> Environment_.PythonModuleMetadata
+setMetaUsesDecimal :: PythonEnvironment.PythonModuleMetadata -> Bool -> PythonEnvironment.PythonModuleMetadata
 setMetaUsesDecimal m b =
-    Environment_.PythonModuleMetadata {
-      Environment_.pythonModuleMetadataNamespaces = (Environment_.pythonModuleMetadataNamespaces m),
-      Environment_.pythonModuleMetadataTypeVariables = (Environment_.pythonModuleMetadataTypeVariables m),
-      Environment_.pythonModuleMetadataUsesAnnotated = (Environment_.pythonModuleMetadataUsesAnnotated m),
-      Environment_.pythonModuleMetadataUsesCallable = (Environment_.pythonModuleMetadataUsesCallable m),
-      Environment_.pythonModuleMetadataUsesCast = (Environment_.pythonModuleMetadataUsesCast m),
-      Environment_.pythonModuleMetadataUsesLruCache = (Environment_.pythonModuleMetadataUsesLruCache m),
-      Environment_.pythonModuleMetadataUsesTypeAlias = (Environment_.pythonModuleMetadataUsesTypeAlias m),
-      Environment_.pythonModuleMetadataUsesDataclass = (Environment_.pythonModuleMetadataUsesDataclass m),
-      Environment_.pythonModuleMetadataUsesDecimal = b,
-      Environment_.pythonModuleMetadataUsesEither = (Environment_.pythonModuleMetadataUsesEither m),
-      Environment_.pythonModuleMetadataUsesEnum = (Environment_.pythonModuleMetadataUsesEnum m),
-      Environment_.pythonModuleMetadataUsesFrozenDict = (Environment_.pythonModuleMetadataUsesFrozenDict m),
-      Environment_.pythonModuleMetadataUsesFrozenList = (Environment_.pythonModuleMetadataUsesFrozenList m),
-      Environment_.pythonModuleMetadataUsesGeneric = (Environment_.pythonModuleMetadataUsesGeneric m),
-      Environment_.pythonModuleMetadataUsesJust = (Environment_.pythonModuleMetadataUsesJust m),
-      Environment_.pythonModuleMetadataUsesLeft = (Environment_.pythonModuleMetadataUsesLeft m),
-      Environment_.pythonModuleMetadataUsesMaybe = (Environment_.pythonModuleMetadataUsesMaybe m),
-      Environment_.pythonModuleMetadataUsesName = (Environment_.pythonModuleMetadataUsesName m),
-      Environment_.pythonModuleMetadataUsesNode = (Environment_.pythonModuleMetadataUsesNode m),
-      Environment_.pythonModuleMetadataUsesNothing = (Environment_.pythonModuleMetadataUsesNothing m),
-      Environment_.pythonModuleMetadataUsesRight = (Environment_.pythonModuleMetadataUsesRight m),
-      Environment_.pythonModuleMetadataUsesTypeVar = (Environment_.pythonModuleMetadataUsesTypeVar m)}
+    PythonEnvironment.PythonModuleMetadata {
+      PythonEnvironment.pythonModuleMetadataNamespaces = (PythonEnvironment.pythonModuleMetadataNamespaces m),
+      PythonEnvironment.pythonModuleMetadataTypeVariables = (PythonEnvironment.pythonModuleMetadataTypeVariables m),
+      PythonEnvironment.pythonModuleMetadataUsesAnnotated = (PythonEnvironment.pythonModuleMetadataUsesAnnotated m),
+      PythonEnvironment.pythonModuleMetadataUsesCallable = (PythonEnvironment.pythonModuleMetadataUsesCallable m),
+      PythonEnvironment.pythonModuleMetadataUsesCast = (PythonEnvironment.pythonModuleMetadataUsesCast m),
+      PythonEnvironment.pythonModuleMetadataUsesLruCache = (PythonEnvironment.pythonModuleMetadataUsesLruCache m),
+      PythonEnvironment.pythonModuleMetadataUsesTypeAlias = (PythonEnvironment.pythonModuleMetadataUsesTypeAlias m),
+      PythonEnvironment.pythonModuleMetadataUsesDataclass = (PythonEnvironment.pythonModuleMetadataUsesDataclass m),
+      PythonEnvironment.pythonModuleMetadataUsesDecimal = b,
+      PythonEnvironment.pythonModuleMetadataUsesEither = (PythonEnvironment.pythonModuleMetadataUsesEither m),
+      PythonEnvironment.pythonModuleMetadataUsesEnum = (PythonEnvironment.pythonModuleMetadataUsesEnum m),
+      PythonEnvironment.pythonModuleMetadataUsesFrozenDict = (PythonEnvironment.pythonModuleMetadataUsesFrozenDict m),
+      PythonEnvironment.pythonModuleMetadataUsesFrozenList = (PythonEnvironment.pythonModuleMetadataUsesFrozenList m),
+      PythonEnvironment.pythonModuleMetadataUsesGeneric = (PythonEnvironment.pythonModuleMetadataUsesGeneric m),
+      PythonEnvironment.pythonModuleMetadataUsesJust = (PythonEnvironment.pythonModuleMetadataUsesJust m),
+      PythonEnvironment.pythonModuleMetadataUsesLeft = (PythonEnvironment.pythonModuleMetadataUsesLeft m),
+      PythonEnvironment.pythonModuleMetadataUsesMaybe = (PythonEnvironment.pythonModuleMetadataUsesMaybe m),
+      PythonEnvironment.pythonModuleMetadataUsesName = (PythonEnvironment.pythonModuleMetadataUsesName m),
+      PythonEnvironment.pythonModuleMetadataUsesNode = (PythonEnvironment.pythonModuleMetadataUsesNode m),
+      PythonEnvironment.pythonModuleMetadataUsesNothing = (PythonEnvironment.pythonModuleMetadataUsesNothing m),
+      PythonEnvironment.pythonModuleMetadataUsesRight = (PythonEnvironment.pythonModuleMetadataUsesRight m),
+      PythonEnvironment.pythonModuleMetadataUsesTypeVar = (PythonEnvironment.pythonModuleMetadataUsesTypeVar m)}
 
-setMetaUsesEither :: Environment_.PythonModuleMetadata -> Bool -> Environment_.PythonModuleMetadata
+setMetaUsesEither :: PythonEnvironment.PythonModuleMetadata -> Bool -> PythonEnvironment.PythonModuleMetadata
 setMetaUsesEither m b =
-    Environment_.PythonModuleMetadata {
-      Environment_.pythonModuleMetadataNamespaces = (Environment_.pythonModuleMetadataNamespaces m),
-      Environment_.pythonModuleMetadataTypeVariables = (Environment_.pythonModuleMetadataTypeVariables m),
-      Environment_.pythonModuleMetadataUsesAnnotated = (Environment_.pythonModuleMetadataUsesAnnotated m),
-      Environment_.pythonModuleMetadataUsesCallable = (Environment_.pythonModuleMetadataUsesCallable m),
-      Environment_.pythonModuleMetadataUsesCast = (Environment_.pythonModuleMetadataUsesCast m),
-      Environment_.pythonModuleMetadataUsesLruCache = (Environment_.pythonModuleMetadataUsesLruCache m),
-      Environment_.pythonModuleMetadataUsesTypeAlias = (Environment_.pythonModuleMetadataUsesTypeAlias m),
-      Environment_.pythonModuleMetadataUsesDataclass = (Environment_.pythonModuleMetadataUsesDataclass m),
-      Environment_.pythonModuleMetadataUsesDecimal = (Environment_.pythonModuleMetadataUsesDecimal m),
-      Environment_.pythonModuleMetadataUsesEither = b,
-      Environment_.pythonModuleMetadataUsesEnum = (Environment_.pythonModuleMetadataUsesEnum m),
-      Environment_.pythonModuleMetadataUsesFrozenDict = (Environment_.pythonModuleMetadataUsesFrozenDict m),
-      Environment_.pythonModuleMetadataUsesFrozenList = (Environment_.pythonModuleMetadataUsesFrozenList m),
-      Environment_.pythonModuleMetadataUsesGeneric = (Environment_.pythonModuleMetadataUsesGeneric m),
-      Environment_.pythonModuleMetadataUsesJust = (Environment_.pythonModuleMetadataUsesJust m),
-      Environment_.pythonModuleMetadataUsesLeft = (Environment_.pythonModuleMetadataUsesLeft m),
-      Environment_.pythonModuleMetadataUsesMaybe = (Environment_.pythonModuleMetadataUsesMaybe m),
-      Environment_.pythonModuleMetadataUsesName = (Environment_.pythonModuleMetadataUsesName m),
-      Environment_.pythonModuleMetadataUsesNode = (Environment_.pythonModuleMetadataUsesNode m),
-      Environment_.pythonModuleMetadataUsesNothing = (Environment_.pythonModuleMetadataUsesNothing m),
-      Environment_.pythonModuleMetadataUsesRight = (Environment_.pythonModuleMetadataUsesRight m),
-      Environment_.pythonModuleMetadataUsesTypeVar = (Environment_.pythonModuleMetadataUsesTypeVar m)}
+    PythonEnvironment.PythonModuleMetadata {
+      PythonEnvironment.pythonModuleMetadataNamespaces = (PythonEnvironment.pythonModuleMetadataNamespaces m),
+      PythonEnvironment.pythonModuleMetadataTypeVariables = (PythonEnvironment.pythonModuleMetadataTypeVariables m),
+      PythonEnvironment.pythonModuleMetadataUsesAnnotated = (PythonEnvironment.pythonModuleMetadataUsesAnnotated m),
+      PythonEnvironment.pythonModuleMetadataUsesCallable = (PythonEnvironment.pythonModuleMetadataUsesCallable m),
+      PythonEnvironment.pythonModuleMetadataUsesCast = (PythonEnvironment.pythonModuleMetadataUsesCast m),
+      PythonEnvironment.pythonModuleMetadataUsesLruCache = (PythonEnvironment.pythonModuleMetadataUsesLruCache m),
+      PythonEnvironment.pythonModuleMetadataUsesTypeAlias = (PythonEnvironment.pythonModuleMetadataUsesTypeAlias m),
+      PythonEnvironment.pythonModuleMetadataUsesDataclass = (PythonEnvironment.pythonModuleMetadataUsesDataclass m),
+      PythonEnvironment.pythonModuleMetadataUsesDecimal = (PythonEnvironment.pythonModuleMetadataUsesDecimal m),
+      PythonEnvironment.pythonModuleMetadataUsesEither = b,
+      PythonEnvironment.pythonModuleMetadataUsesEnum = (PythonEnvironment.pythonModuleMetadataUsesEnum m),
+      PythonEnvironment.pythonModuleMetadataUsesFrozenDict = (PythonEnvironment.pythonModuleMetadataUsesFrozenDict m),
+      PythonEnvironment.pythonModuleMetadataUsesFrozenList = (PythonEnvironment.pythonModuleMetadataUsesFrozenList m),
+      PythonEnvironment.pythonModuleMetadataUsesGeneric = (PythonEnvironment.pythonModuleMetadataUsesGeneric m),
+      PythonEnvironment.pythonModuleMetadataUsesJust = (PythonEnvironment.pythonModuleMetadataUsesJust m),
+      PythonEnvironment.pythonModuleMetadataUsesLeft = (PythonEnvironment.pythonModuleMetadataUsesLeft m),
+      PythonEnvironment.pythonModuleMetadataUsesMaybe = (PythonEnvironment.pythonModuleMetadataUsesMaybe m),
+      PythonEnvironment.pythonModuleMetadataUsesName = (PythonEnvironment.pythonModuleMetadataUsesName m),
+      PythonEnvironment.pythonModuleMetadataUsesNode = (PythonEnvironment.pythonModuleMetadataUsesNode m),
+      PythonEnvironment.pythonModuleMetadataUsesNothing = (PythonEnvironment.pythonModuleMetadataUsesNothing m),
+      PythonEnvironment.pythonModuleMetadataUsesRight = (PythonEnvironment.pythonModuleMetadataUsesRight m),
+      PythonEnvironment.pythonModuleMetadataUsesTypeVar = (PythonEnvironment.pythonModuleMetadataUsesTypeVar m)}
 
-setMetaUsesEnum :: Environment_.PythonModuleMetadata -> Bool -> Environment_.PythonModuleMetadata
+setMetaUsesEnum :: PythonEnvironment.PythonModuleMetadata -> Bool -> PythonEnvironment.PythonModuleMetadata
 setMetaUsesEnum m b =
-    Environment_.PythonModuleMetadata {
-      Environment_.pythonModuleMetadataNamespaces = (Environment_.pythonModuleMetadataNamespaces m),
-      Environment_.pythonModuleMetadataTypeVariables = (Environment_.pythonModuleMetadataTypeVariables m),
-      Environment_.pythonModuleMetadataUsesAnnotated = (Environment_.pythonModuleMetadataUsesAnnotated m),
-      Environment_.pythonModuleMetadataUsesCallable = (Environment_.pythonModuleMetadataUsesCallable m),
-      Environment_.pythonModuleMetadataUsesCast = (Environment_.pythonModuleMetadataUsesCast m),
-      Environment_.pythonModuleMetadataUsesLruCache = (Environment_.pythonModuleMetadataUsesLruCache m),
-      Environment_.pythonModuleMetadataUsesTypeAlias = (Environment_.pythonModuleMetadataUsesTypeAlias m),
-      Environment_.pythonModuleMetadataUsesDataclass = (Environment_.pythonModuleMetadataUsesDataclass m),
-      Environment_.pythonModuleMetadataUsesDecimal = (Environment_.pythonModuleMetadataUsesDecimal m),
-      Environment_.pythonModuleMetadataUsesEither = (Environment_.pythonModuleMetadataUsesEither m),
-      Environment_.pythonModuleMetadataUsesEnum = b,
-      Environment_.pythonModuleMetadataUsesFrozenDict = (Environment_.pythonModuleMetadataUsesFrozenDict m),
-      Environment_.pythonModuleMetadataUsesFrozenList = (Environment_.pythonModuleMetadataUsesFrozenList m),
-      Environment_.pythonModuleMetadataUsesGeneric = (Environment_.pythonModuleMetadataUsesGeneric m),
-      Environment_.pythonModuleMetadataUsesJust = (Environment_.pythonModuleMetadataUsesJust m),
-      Environment_.pythonModuleMetadataUsesLeft = (Environment_.pythonModuleMetadataUsesLeft m),
-      Environment_.pythonModuleMetadataUsesMaybe = (Environment_.pythonModuleMetadataUsesMaybe m),
-      Environment_.pythonModuleMetadataUsesName = (Environment_.pythonModuleMetadataUsesName m),
-      Environment_.pythonModuleMetadataUsesNode = (Environment_.pythonModuleMetadataUsesNode m),
-      Environment_.pythonModuleMetadataUsesNothing = (Environment_.pythonModuleMetadataUsesNothing m),
-      Environment_.pythonModuleMetadataUsesRight = (Environment_.pythonModuleMetadataUsesRight m),
-      Environment_.pythonModuleMetadataUsesTypeVar = (Environment_.pythonModuleMetadataUsesTypeVar m)}
+    PythonEnvironment.PythonModuleMetadata {
+      PythonEnvironment.pythonModuleMetadataNamespaces = (PythonEnvironment.pythonModuleMetadataNamespaces m),
+      PythonEnvironment.pythonModuleMetadataTypeVariables = (PythonEnvironment.pythonModuleMetadataTypeVariables m),
+      PythonEnvironment.pythonModuleMetadataUsesAnnotated = (PythonEnvironment.pythonModuleMetadataUsesAnnotated m),
+      PythonEnvironment.pythonModuleMetadataUsesCallable = (PythonEnvironment.pythonModuleMetadataUsesCallable m),
+      PythonEnvironment.pythonModuleMetadataUsesCast = (PythonEnvironment.pythonModuleMetadataUsesCast m),
+      PythonEnvironment.pythonModuleMetadataUsesLruCache = (PythonEnvironment.pythonModuleMetadataUsesLruCache m),
+      PythonEnvironment.pythonModuleMetadataUsesTypeAlias = (PythonEnvironment.pythonModuleMetadataUsesTypeAlias m),
+      PythonEnvironment.pythonModuleMetadataUsesDataclass = (PythonEnvironment.pythonModuleMetadataUsesDataclass m),
+      PythonEnvironment.pythonModuleMetadataUsesDecimal = (PythonEnvironment.pythonModuleMetadataUsesDecimal m),
+      PythonEnvironment.pythonModuleMetadataUsesEither = (PythonEnvironment.pythonModuleMetadataUsesEither m),
+      PythonEnvironment.pythonModuleMetadataUsesEnum = b,
+      PythonEnvironment.pythonModuleMetadataUsesFrozenDict = (PythonEnvironment.pythonModuleMetadataUsesFrozenDict m),
+      PythonEnvironment.pythonModuleMetadataUsesFrozenList = (PythonEnvironment.pythonModuleMetadataUsesFrozenList m),
+      PythonEnvironment.pythonModuleMetadataUsesGeneric = (PythonEnvironment.pythonModuleMetadataUsesGeneric m),
+      PythonEnvironment.pythonModuleMetadataUsesJust = (PythonEnvironment.pythonModuleMetadataUsesJust m),
+      PythonEnvironment.pythonModuleMetadataUsesLeft = (PythonEnvironment.pythonModuleMetadataUsesLeft m),
+      PythonEnvironment.pythonModuleMetadataUsesMaybe = (PythonEnvironment.pythonModuleMetadataUsesMaybe m),
+      PythonEnvironment.pythonModuleMetadataUsesName = (PythonEnvironment.pythonModuleMetadataUsesName m),
+      PythonEnvironment.pythonModuleMetadataUsesNode = (PythonEnvironment.pythonModuleMetadataUsesNode m),
+      PythonEnvironment.pythonModuleMetadataUsesNothing = (PythonEnvironment.pythonModuleMetadataUsesNothing m),
+      PythonEnvironment.pythonModuleMetadataUsesRight = (PythonEnvironment.pythonModuleMetadataUsesRight m),
+      PythonEnvironment.pythonModuleMetadataUsesTypeVar = (PythonEnvironment.pythonModuleMetadataUsesTypeVar m)}
 
-setMetaUsesFrozenDict :: Environment_.PythonModuleMetadata -> Bool -> Environment_.PythonModuleMetadata
+setMetaUsesFrozenDict :: PythonEnvironment.PythonModuleMetadata -> Bool -> PythonEnvironment.PythonModuleMetadata
 setMetaUsesFrozenDict m b =
-    Environment_.PythonModuleMetadata {
-      Environment_.pythonModuleMetadataNamespaces = (Environment_.pythonModuleMetadataNamespaces m),
-      Environment_.pythonModuleMetadataTypeVariables = (Environment_.pythonModuleMetadataTypeVariables m),
-      Environment_.pythonModuleMetadataUsesAnnotated = (Environment_.pythonModuleMetadataUsesAnnotated m),
-      Environment_.pythonModuleMetadataUsesCallable = (Environment_.pythonModuleMetadataUsesCallable m),
-      Environment_.pythonModuleMetadataUsesCast = (Environment_.pythonModuleMetadataUsesCast m),
-      Environment_.pythonModuleMetadataUsesLruCache = (Environment_.pythonModuleMetadataUsesLruCache m),
-      Environment_.pythonModuleMetadataUsesTypeAlias = (Environment_.pythonModuleMetadataUsesTypeAlias m),
-      Environment_.pythonModuleMetadataUsesDataclass = (Environment_.pythonModuleMetadataUsesDataclass m),
-      Environment_.pythonModuleMetadataUsesDecimal = (Environment_.pythonModuleMetadataUsesDecimal m),
-      Environment_.pythonModuleMetadataUsesEither = (Environment_.pythonModuleMetadataUsesEither m),
-      Environment_.pythonModuleMetadataUsesEnum = (Environment_.pythonModuleMetadataUsesEnum m),
-      Environment_.pythonModuleMetadataUsesFrozenDict = b,
-      Environment_.pythonModuleMetadataUsesFrozenList = (Environment_.pythonModuleMetadataUsesFrozenList m),
-      Environment_.pythonModuleMetadataUsesGeneric = (Environment_.pythonModuleMetadataUsesGeneric m),
-      Environment_.pythonModuleMetadataUsesJust = (Environment_.pythonModuleMetadataUsesJust m),
-      Environment_.pythonModuleMetadataUsesLeft = (Environment_.pythonModuleMetadataUsesLeft m),
-      Environment_.pythonModuleMetadataUsesMaybe = (Environment_.pythonModuleMetadataUsesMaybe m),
-      Environment_.pythonModuleMetadataUsesName = (Environment_.pythonModuleMetadataUsesName m),
-      Environment_.pythonModuleMetadataUsesNode = (Environment_.pythonModuleMetadataUsesNode m),
-      Environment_.pythonModuleMetadataUsesNothing = (Environment_.pythonModuleMetadataUsesNothing m),
-      Environment_.pythonModuleMetadataUsesRight = (Environment_.pythonModuleMetadataUsesRight m),
-      Environment_.pythonModuleMetadataUsesTypeVar = (Environment_.pythonModuleMetadataUsesTypeVar m)}
+    PythonEnvironment.PythonModuleMetadata {
+      PythonEnvironment.pythonModuleMetadataNamespaces = (PythonEnvironment.pythonModuleMetadataNamespaces m),
+      PythonEnvironment.pythonModuleMetadataTypeVariables = (PythonEnvironment.pythonModuleMetadataTypeVariables m),
+      PythonEnvironment.pythonModuleMetadataUsesAnnotated = (PythonEnvironment.pythonModuleMetadataUsesAnnotated m),
+      PythonEnvironment.pythonModuleMetadataUsesCallable = (PythonEnvironment.pythonModuleMetadataUsesCallable m),
+      PythonEnvironment.pythonModuleMetadataUsesCast = (PythonEnvironment.pythonModuleMetadataUsesCast m),
+      PythonEnvironment.pythonModuleMetadataUsesLruCache = (PythonEnvironment.pythonModuleMetadataUsesLruCache m),
+      PythonEnvironment.pythonModuleMetadataUsesTypeAlias = (PythonEnvironment.pythonModuleMetadataUsesTypeAlias m),
+      PythonEnvironment.pythonModuleMetadataUsesDataclass = (PythonEnvironment.pythonModuleMetadataUsesDataclass m),
+      PythonEnvironment.pythonModuleMetadataUsesDecimal = (PythonEnvironment.pythonModuleMetadataUsesDecimal m),
+      PythonEnvironment.pythonModuleMetadataUsesEither = (PythonEnvironment.pythonModuleMetadataUsesEither m),
+      PythonEnvironment.pythonModuleMetadataUsesEnum = (PythonEnvironment.pythonModuleMetadataUsesEnum m),
+      PythonEnvironment.pythonModuleMetadataUsesFrozenDict = b,
+      PythonEnvironment.pythonModuleMetadataUsesFrozenList = (PythonEnvironment.pythonModuleMetadataUsesFrozenList m),
+      PythonEnvironment.pythonModuleMetadataUsesGeneric = (PythonEnvironment.pythonModuleMetadataUsesGeneric m),
+      PythonEnvironment.pythonModuleMetadataUsesJust = (PythonEnvironment.pythonModuleMetadataUsesJust m),
+      PythonEnvironment.pythonModuleMetadataUsesLeft = (PythonEnvironment.pythonModuleMetadataUsesLeft m),
+      PythonEnvironment.pythonModuleMetadataUsesMaybe = (PythonEnvironment.pythonModuleMetadataUsesMaybe m),
+      PythonEnvironment.pythonModuleMetadataUsesName = (PythonEnvironment.pythonModuleMetadataUsesName m),
+      PythonEnvironment.pythonModuleMetadataUsesNode = (PythonEnvironment.pythonModuleMetadataUsesNode m),
+      PythonEnvironment.pythonModuleMetadataUsesNothing = (PythonEnvironment.pythonModuleMetadataUsesNothing m),
+      PythonEnvironment.pythonModuleMetadataUsesRight = (PythonEnvironment.pythonModuleMetadataUsesRight m),
+      PythonEnvironment.pythonModuleMetadataUsesTypeVar = (PythonEnvironment.pythonModuleMetadataUsesTypeVar m)}
 
-setMetaUsesFrozenList :: Environment_.PythonModuleMetadata -> Bool -> Environment_.PythonModuleMetadata
+setMetaUsesFrozenList :: PythonEnvironment.PythonModuleMetadata -> Bool -> PythonEnvironment.PythonModuleMetadata
 setMetaUsesFrozenList m b =
-    Environment_.PythonModuleMetadata {
-      Environment_.pythonModuleMetadataNamespaces = (Environment_.pythonModuleMetadataNamespaces m),
-      Environment_.pythonModuleMetadataTypeVariables = (Environment_.pythonModuleMetadataTypeVariables m),
-      Environment_.pythonModuleMetadataUsesAnnotated = (Environment_.pythonModuleMetadataUsesAnnotated m),
-      Environment_.pythonModuleMetadataUsesCallable = (Environment_.pythonModuleMetadataUsesCallable m),
-      Environment_.pythonModuleMetadataUsesCast = (Environment_.pythonModuleMetadataUsesCast m),
-      Environment_.pythonModuleMetadataUsesLruCache = (Environment_.pythonModuleMetadataUsesLruCache m),
-      Environment_.pythonModuleMetadataUsesTypeAlias = (Environment_.pythonModuleMetadataUsesTypeAlias m),
-      Environment_.pythonModuleMetadataUsesDataclass = (Environment_.pythonModuleMetadataUsesDataclass m),
-      Environment_.pythonModuleMetadataUsesDecimal = (Environment_.pythonModuleMetadataUsesDecimal m),
-      Environment_.pythonModuleMetadataUsesEither = (Environment_.pythonModuleMetadataUsesEither m),
-      Environment_.pythonModuleMetadataUsesEnum = (Environment_.pythonModuleMetadataUsesEnum m),
-      Environment_.pythonModuleMetadataUsesFrozenDict = (Environment_.pythonModuleMetadataUsesFrozenDict m),
-      Environment_.pythonModuleMetadataUsesFrozenList = b,
-      Environment_.pythonModuleMetadataUsesGeneric = (Environment_.pythonModuleMetadataUsesGeneric m),
-      Environment_.pythonModuleMetadataUsesJust = (Environment_.pythonModuleMetadataUsesJust m),
-      Environment_.pythonModuleMetadataUsesLeft = (Environment_.pythonModuleMetadataUsesLeft m),
-      Environment_.pythonModuleMetadataUsesMaybe = (Environment_.pythonModuleMetadataUsesMaybe m),
-      Environment_.pythonModuleMetadataUsesName = (Environment_.pythonModuleMetadataUsesName m),
-      Environment_.pythonModuleMetadataUsesNode = (Environment_.pythonModuleMetadataUsesNode m),
-      Environment_.pythonModuleMetadataUsesNothing = (Environment_.pythonModuleMetadataUsesNothing m),
-      Environment_.pythonModuleMetadataUsesRight = (Environment_.pythonModuleMetadataUsesRight m),
-      Environment_.pythonModuleMetadataUsesTypeVar = (Environment_.pythonModuleMetadataUsesTypeVar m)}
+    PythonEnvironment.PythonModuleMetadata {
+      PythonEnvironment.pythonModuleMetadataNamespaces = (PythonEnvironment.pythonModuleMetadataNamespaces m),
+      PythonEnvironment.pythonModuleMetadataTypeVariables = (PythonEnvironment.pythonModuleMetadataTypeVariables m),
+      PythonEnvironment.pythonModuleMetadataUsesAnnotated = (PythonEnvironment.pythonModuleMetadataUsesAnnotated m),
+      PythonEnvironment.pythonModuleMetadataUsesCallable = (PythonEnvironment.pythonModuleMetadataUsesCallable m),
+      PythonEnvironment.pythonModuleMetadataUsesCast = (PythonEnvironment.pythonModuleMetadataUsesCast m),
+      PythonEnvironment.pythonModuleMetadataUsesLruCache = (PythonEnvironment.pythonModuleMetadataUsesLruCache m),
+      PythonEnvironment.pythonModuleMetadataUsesTypeAlias = (PythonEnvironment.pythonModuleMetadataUsesTypeAlias m),
+      PythonEnvironment.pythonModuleMetadataUsesDataclass = (PythonEnvironment.pythonModuleMetadataUsesDataclass m),
+      PythonEnvironment.pythonModuleMetadataUsesDecimal = (PythonEnvironment.pythonModuleMetadataUsesDecimal m),
+      PythonEnvironment.pythonModuleMetadataUsesEither = (PythonEnvironment.pythonModuleMetadataUsesEither m),
+      PythonEnvironment.pythonModuleMetadataUsesEnum = (PythonEnvironment.pythonModuleMetadataUsesEnum m),
+      PythonEnvironment.pythonModuleMetadataUsesFrozenDict = (PythonEnvironment.pythonModuleMetadataUsesFrozenDict m),
+      PythonEnvironment.pythonModuleMetadataUsesFrozenList = b,
+      PythonEnvironment.pythonModuleMetadataUsesGeneric = (PythonEnvironment.pythonModuleMetadataUsesGeneric m),
+      PythonEnvironment.pythonModuleMetadataUsesJust = (PythonEnvironment.pythonModuleMetadataUsesJust m),
+      PythonEnvironment.pythonModuleMetadataUsesLeft = (PythonEnvironment.pythonModuleMetadataUsesLeft m),
+      PythonEnvironment.pythonModuleMetadataUsesMaybe = (PythonEnvironment.pythonModuleMetadataUsesMaybe m),
+      PythonEnvironment.pythonModuleMetadataUsesName = (PythonEnvironment.pythonModuleMetadataUsesName m),
+      PythonEnvironment.pythonModuleMetadataUsesNode = (PythonEnvironment.pythonModuleMetadataUsesNode m),
+      PythonEnvironment.pythonModuleMetadataUsesNothing = (PythonEnvironment.pythonModuleMetadataUsesNothing m),
+      PythonEnvironment.pythonModuleMetadataUsesRight = (PythonEnvironment.pythonModuleMetadataUsesRight m),
+      PythonEnvironment.pythonModuleMetadataUsesTypeVar = (PythonEnvironment.pythonModuleMetadataUsesTypeVar m)}
 
-setMetaUsesGeneric :: Environment_.PythonModuleMetadata -> Bool -> Environment_.PythonModuleMetadata
+setMetaUsesGeneric :: PythonEnvironment.PythonModuleMetadata -> Bool -> PythonEnvironment.PythonModuleMetadata
 setMetaUsesGeneric m b =
-    Environment_.PythonModuleMetadata {
-      Environment_.pythonModuleMetadataNamespaces = (Environment_.pythonModuleMetadataNamespaces m),
-      Environment_.pythonModuleMetadataTypeVariables = (Environment_.pythonModuleMetadataTypeVariables m),
-      Environment_.pythonModuleMetadataUsesAnnotated = (Environment_.pythonModuleMetadataUsesAnnotated m),
-      Environment_.pythonModuleMetadataUsesCallable = (Environment_.pythonModuleMetadataUsesCallable m),
-      Environment_.pythonModuleMetadataUsesCast = (Environment_.pythonModuleMetadataUsesCast m),
-      Environment_.pythonModuleMetadataUsesLruCache = (Environment_.pythonModuleMetadataUsesLruCache m),
-      Environment_.pythonModuleMetadataUsesTypeAlias = (Environment_.pythonModuleMetadataUsesTypeAlias m),
-      Environment_.pythonModuleMetadataUsesDataclass = (Environment_.pythonModuleMetadataUsesDataclass m),
-      Environment_.pythonModuleMetadataUsesDecimal = (Environment_.pythonModuleMetadataUsesDecimal m),
-      Environment_.pythonModuleMetadataUsesEither = (Environment_.pythonModuleMetadataUsesEither m),
-      Environment_.pythonModuleMetadataUsesEnum = (Environment_.pythonModuleMetadataUsesEnum m),
-      Environment_.pythonModuleMetadataUsesFrozenDict = (Environment_.pythonModuleMetadataUsesFrozenDict m),
-      Environment_.pythonModuleMetadataUsesFrozenList = (Environment_.pythonModuleMetadataUsesFrozenList m),
-      Environment_.pythonModuleMetadataUsesGeneric = b,
-      Environment_.pythonModuleMetadataUsesJust = (Environment_.pythonModuleMetadataUsesJust m),
-      Environment_.pythonModuleMetadataUsesLeft = (Environment_.pythonModuleMetadataUsesLeft m),
-      Environment_.pythonModuleMetadataUsesMaybe = (Environment_.pythonModuleMetadataUsesMaybe m),
-      Environment_.pythonModuleMetadataUsesName = (Environment_.pythonModuleMetadataUsesName m),
-      Environment_.pythonModuleMetadataUsesNode = (Environment_.pythonModuleMetadataUsesNode m),
-      Environment_.pythonModuleMetadataUsesNothing = (Environment_.pythonModuleMetadataUsesNothing m),
-      Environment_.pythonModuleMetadataUsesRight = (Environment_.pythonModuleMetadataUsesRight m),
-      Environment_.pythonModuleMetadataUsesTypeVar = (Environment_.pythonModuleMetadataUsesTypeVar m)}
+    PythonEnvironment.PythonModuleMetadata {
+      PythonEnvironment.pythonModuleMetadataNamespaces = (PythonEnvironment.pythonModuleMetadataNamespaces m),
+      PythonEnvironment.pythonModuleMetadataTypeVariables = (PythonEnvironment.pythonModuleMetadataTypeVariables m),
+      PythonEnvironment.pythonModuleMetadataUsesAnnotated = (PythonEnvironment.pythonModuleMetadataUsesAnnotated m),
+      PythonEnvironment.pythonModuleMetadataUsesCallable = (PythonEnvironment.pythonModuleMetadataUsesCallable m),
+      PythonEnvironment.pythonModuleMetadataUsesCast = (PythonEnvironment.pythonModuleMetadataUsesCast m),
+      PythonEnvironment.pythonModuleMetadataUsesLruCache = (PythonEnvironment.pythonModuleMetadataUsesLruCache m),
+      PythonEnvironment.pythonModuleMetadataUsesTypeAlias = (PythonEnvironment.pythonModuleMetadataUsesTypeAlias m),
+      PythonEnvironment.pythonModuleMetadataUsesDataclass = (PythonEnvironment.pythonModuleMetadataUsesDataclass m),
+      PythonEnvironment.pythonModuleMetadataUsesDecimal = (PythonEnvironment.pythonModuleMetadataUsesDecimal m),
+      PythonEnvironment.pythonModuleMetadataUsesEither = (PythonEnvironment.pythonModuleMetadataUsesEither m),
+      PythonEnvironment.pythonModuleMetadataUsesEnum = (PythonEnvironment.pythonModuleMetadataUsesEnum m),
+      PythonEnvironment.pythonModuleMetadataUsesFrozenDict = (PythonEnvironment.pythonModuleMetadataUsesFrozenDict m),
+      PythonEnvironment.pythonModuleMetadataUsesFrozenList = (PythonEnvironment.pythonModuleMetadataUsesFrozenList m),
+      PythonEnvironment.pythonModuleMetadataUsesGeneric = b,
+      PythonEnvironment.pythonModuleMetadataUsesJust = (PythonEnvironment.pythonModuleMetadataUsesJust m),
+      PythonEnvironment.pythonModuleMetadataUsesLeft = (PythonEnvironment.pythonModuleMetadataUsesLeft m),
+      PythonEnvironment.pythonModuleMetadataUsesMaybe = (PythonEnvironment.pythonModuleMetadataUsesMaybe m),
+      PythonEnvironment.pythonModuleMetadataUsesName = (PythonEnvironment.pythonModuleMetadataUsesName m),
+      PythonEnvironment.pythonModuleMetadataUsesNode = (PythonEnvironment.pythonModuleMetadataUsesNode m),
+      PythonEnvironment.pythonModuleMetadataUsesNothing = (PythonEnvironment.pythonModuleMetadataUsesNothing m),
+      PythonEnvironment.pythonModuleMetadataUsesRight = (PythonEnvironment.pythonModuleMetadataUsesRight m),
+      PythonEnvironment.pythonModuleMetadataUsesTypeVar = (PythonEnvironment.pythonModuleMetadataUsesTypeVar m)}
 
-setMetaUsesJust :: Environment_.PythonModuleMetadata -> Bool -> Environment_.PythonModuleMetadata
+setMetaUsesJust :: PythonEnvironment.PythonModuleMetadata -> Bool -> PythonEnvironment.PythonModuleMetadata
 setMetaUsesJust m b =
-    Environment_.PythonModuleMetadata {
-      Environment_.pythonModuleMetadataNamespaces = (Environment_.pythonModuleMetadataNamespaces m),
-      Environment_.pythonModuleMetadataTypeVariables = (Environment_.pythonModuleMetadataTypeVariables m),
-      Environment_.pythonModuleMetadataUsesAnnotated = (Environment_.pythonModuleMetadataUsesAnnotated m),
-      Environment_.pythonModuleMetadataUsesCallable = (Environment_.pythonModuleMetadataUsesCallable m),
-      Environment_.pythonModuleMetadataUsesCast = (Environment_.pythonModuleMetadataUsesCast m),
-      Environment_.pythonModuleMetadataUsesLruCache = (Environment_.pythonModuleMetadataUsesLruCache m),
-      Environment_.pythonModuleMetadataUsesTypeAlias = (Environment_.pythonModuleMetadataUsesTypeAlias m),
-      Environment_.pythonModuleMetadataUsesDataclass = (Environment_.pythonModuleMetadataUsesDataclass m),
-      Environment_.pythonModuleMetadataUsesDecimal = (Environment_.pythonModuleMetadataUsesDecimal m),
-      Environment_.pythonModuleMetadataUsesEither = (Environment_.pythonModuleMetadataUsesEither m),
-      Environment_.pythonModuleMetadataUsesEnum = (Environment_.pythonModuleMetadataUsesEnum m),
-      Environment_.pythonModuleMetadataUsesFrozenDict = (Environment_.pythonModuleMetadataUsesFrozenDict m),
-      Environment_.pythonModuleMetadataUsesFrozenList = (Environment_.pythonModuleMetadataUsesFrozenList m),
-      Environment_.pythonModuleMetadataUsesGeneric = (Environment_.pythonModuleMetadataUsesGeneric m),
-      Environment_.pythonModuleMetadataUsesJust = b,
-      Environment_.pythonModuleMetadataUsesLeft = (Environment_.pythonModuleMetadataUsesLeft m),
-      Environment_.pythonModuleMetadataUsesMaybe = (Environment_.pythonModuleMetadataUsesMaybe m),
-      Environment_.pythonModuleMetadataUsesName = (Environment_.pythonModuleMetadataUsesName m),
-      Environment_.pythonModuleMetadataUsesNode = (Environment_.pythonModuleMetadataUsesNode m),
-      Environment_.pythonModuleMetadataUsesNothing = (Environment_.pythonModuleMetadataUsesNothing m),
-      Environment_.pythonModuleMetadataUsesRight = (Environment_.pythonModuleMetadataUsesRight m),
-      Environment_.pythonModuleMetadataUsesTypeVar = (Environment_.pythonModuleMetadataUsesTypeVar m)}
+    PythonEnvironment.PythonModuleMetadata {
+      PythonEnvironment.pythonModuleMetadataNamespaces = (PythonEnvironment.pythonModuleMetadataNamespaces m),
+      PythonEnvironment.pythonModuleMetadataTypeVariables = (PythonEnvironment.pythonModuleMetadataTypeVariables m),
+      PythonEnvironment.pythonModuleMetadataUsesAnnotated = (PythonEnvironment.pythonModuleMetadataUsesAnnotated m),
+      PythonEnvironment.pythonModuleMetadataUsesCallable = (PythonEnvironment.pythonModuleMetadataUsesCallable m),
+      PythonEnvironment.pythonModuleMetadataUsesCast = (PythonEnvironment.pythonModuleMetadataUsesCast m),
+      PythonEnvironment.pythonModuleMetadataUsesLruCache = (PythonEnvironment.pythonModuleMetadataUsesLruCache m),
+      PythonEnvironment.pythonModuleMetadataUsesTypeAlias = (PythonEnvironment.pythonModuleMetadataUsesTypeAlias m),
+      PythonEnvironment.pythonModuleMetadataUsesDataclass = (PythonEnvironment.pythonModuleMetadataUsesDataclass m),
+      PythonEnvironment.pythonModuleMetadataUsesDecimal = (PythonEnvironment.pythonModuleMetadataUsesDecimal m),
+      PythonEnvironment.pythonModuleMetadataUsesEither = (PythonEnvironment.pythonModuleMetadataUsesEither m),
+      PythonEnvironment.pythonModuleMetadataUsesEnum = (PythonEnvironment.pythonModuleMetadataUsesEnum m),
+      PythonEnvironment.pythonModuleMetadataUsesFrozenDict = (PythonEnvironment.pythonModuleMetadataUsesFrozenDict m),
+      PythonEnvironment.pythonModuleMetadataUsesFrozenList = (PythonEnvironment.pythonModuleMetadataUsesFrozenList m),
+      PythonEnvironment.pythonModuleMetadataUsesGeneric = (PythonEnvironment.pythonModuleMetadataUsesGeneric m),
+      PythonEnvironment.pythonModuleMetadataUsesJust = b,
+      PythonEnvironment.pythonModuleMetadataUsesLeft = (PythonEnvironment.pythonModuleMetadataUsesLeft m),
+      PythonEnvironment.pythonModuleMetadataUsesMaybe = (PythonEnvironment.pythonModuleMetadataUsesMaybe m),
+      PythonEnvironment.pythonModuleMetadataUsesName = (PythonEnvironment.pythonModuleMetadataUsesName m),
+      PythonEnvironment.pythonModuleMetadataUsesNode = (PythonEnvironment.pythonModuleMetadataUsesNode m),
+      PythonEnvironment.pythonModuleMetadataUsesNothing = (PythonEnvironment.pythonModuleMetadataUsesNothing m),
+      PythonEnvironment.pythonModuleMetadataUsesRight = (PythonEnvironment.pythonModuleMetadataUsesRight m),
+      PythonEnvironment.pythonModuleMetadataUsesTypeVar = (PythonEnvironment.pythonModuleMetadataUsesTypeVar m)}
 
-setMetaUsesLeft :: Environment_.PythonModuleMetadata -> Bool -> Environment_.PythonModuleMetadata
+setMetaUsesLeft :: PythonEnvironment.PythonModuleMetadata -> Bool -> PythonEnvironment.PythonModuleMetadata
 setMetaUsesLeft m b =
-    Environment_.PythonModuleMetadata {
-      Environment_.pythonModuleMetadataNamespaces = (Environment_.pythonModuleMetadataNamespaces m),
-      Environment_.pythonModuleMetadataTypeVariables = (Environment_.pythonModuleMetadataTypeVariables m),
-      Environment_.pythonModuleMetadataUsesAnnotated = (Environment_.pythonModuleMetadataUsesAnnotated m),
-      Environment_.pythonModuleMetadataUsesCallable = (Environment_.pythonModuleMetadataUsesCallable m),
-      Environment_.pythonModuleMetadataUsesCast = (Environment_.pythonModuleMetadataUsesCast m),
-      Environment_.pythonModuleMetadataUsesLruCache = (Environment_.pythonModuleMetadataUsesLruCache m),
-      Environment_.pythonModuleMetadataUsesTypeAlias = (Environment_.pythonModuleMetadataUsesTypeAlias m),
-      Environment_.pythonModuleMetadataUsesDataclass = (Environment_.pythonModuleMetadataUsesDataclass m),
-      Environment_.pythonModuleMetadataUsesDecimal = (Environment_.pythonModuleMetadataUsesDecimal m),
-      Environment_.pythonModuleMetadataUsesEither = (Environment_.pythonModuleMetadataUsesEither m),
-      Environment_.pythonModuleMetadataUsesEnum = (Environment_.pythonModuleMetadataUsesEnum m),
-      Environment_.pythonModuleMetadataUsesFrozenDict = (Environment_.pythonModuleMetadataUsesFrozenDict m),
-      Environment_.pythonModuleMetadataUsesFrozenList = (Environment_.pythonModuleMetadataUsesFrozenList m),
-      Environment_.pythonModuleMetadataUsesGeneric = (Environment_.pythonModuleMetadataUsesGeneric m),
-      Environment_.pythonModuleMetadataUsesJust = (Environment_.pythonModuleMetadataUsesJust m),
-      Environment_.pythonModuleMetadataUsesLeft = b,
-      Environment_.pythonModuleMetadataUsesMaybe = (Environment_.pythonModuleMetadataUsesMaybe m),
-      Environment_.pythonModuleMetadataUsesName = (Environment_.pythonModuleMetadataUsesName m),
-      Environment_.pythonModuleMetadataUsesNode = (Environment_.pythonModuleMetadataUsesNode m),
-      Environment_.pythonModuleMetadataUsesNothing = (Environment_.pythonModuleMetadataUsesNothing m),
-      Environment_.pythonModuleMetadataUsesRight = (Environment_.pythonModuleMetadataUsesRight m),
-      Environment_.pythonModuleMetadataUsesTypeVar = (Environment_.pythonModuleMetadataUsesTypeVar m)}
+    PythonEnvironment.PythonModuleMetadata {
+      PythonEnvironment.pythonModuleMetadataNamespaces = (PythonEnvironment.pythonModuleMetadataNamespaces m),
+      PythonEnvironment.pythonModuleMetadataTypeVariables = (PythonEnvironment.pythonModuleMetadataTypeVariables m),
+      PythonEnvironment.pythonModuleMetadataUsesAnnotated = (PythonEnvironment.pythonModuleMetadataUsesAnnotated m),
+      PythonEnvironment.pythonModuleMetadataUsesCallable = (PythonEnvironment.pythonModuleMetadataUsesCallable m),
+      PythonEnvironment.pythonModuleMetadataUsesCast = (PythonEnvironment.pythonModuleMetadataUsesCast m),
+      PythonEnvironment.pythonModuleMetadataUsesLruCache = (PythonEnvironment.pythonModuleMetadataUsesLruCache m),
+      PythonEnvironment.pythonModuleMetadataUsesTypeAlias = (PythonEnvironment.pythonModuleMetadataUsesTypeAlias m),
+      PythonEnvironment.pythonModuleMetadataUsesDataclass = (PythonEnvironment.pythonModuleMetadataUsesDataclass m),
+      PythonEnvironment.pythonModuleMetadataUsesDecimal = (PythonEnvironment.pythonModuleMetadataUsesDecimal m),
+      PythonEnvironment.pythonModuleMetadataUsesEither = (PythonEnvironment.pythonModuleMetadataUsesEither m),
+      PythonEnvironment.pythonModuleMetadataUsesEnum = (PythonEnvironment.pythonModuleMetadataUsesEnum m),
+      PythonEnvironment.pythonModuleMetadataUsesFrozenDict = (PythonEnvironment.pythonModuleMetadataUsesFrozenDict m),
+      PythonEnvironment.pythonModuleMetadataUsesFrozenList = (PythonEnvironment.pythonModuleMetadataUsesFrozenList m),
+      PythonEnvironment.pythonModuleMetadataUsesGeneric = (PythonEnvironment.pythonModuleMetadataUsesGeneric m),
+      PythonEnvironment.pythonModuleMetadataUsesJust = (PythonEnvironment.pythonModuleMetadataUsesJust m),
+      PythonEnvironment.pythonModuleMetadataUsesLeft = b,
+      PythonEnvironment.pythonModuleMetadataUsesMaybe = (PythonEnvironment.pythonModuleMetadataUsesMaybe m),
+      PythonEnvironment.pythonModuleMetadataUsesName = (PythonEnvironment.pythonModuleMetadataUsesName m),
+      PythonEnvironment.pythonModuleMetadataUsesNode = (PythonEnvironment.pythonModuleMetadataUsesNode m),
+      PythonEnvironment.pythonModuleMetadataUsesNothing = (PythonEnvironment.pythonModuleMetadataUsesNothing m),
+      PythonEnvironment.pythonModuleMetadataUsesRight = (PythonEnvironment.pythonModuleMetadataUsesRight m),
+      PythonEnvironment.pythonModuleMetadataUsesTypeVar = (PythonEnvironment.pythonModuleMetadataUsesTypeVar m)}
 
-setMetaUsesLruCache :: Bool -> Environment_.PythonModuleMetadata -> Environment_.PythonModuleMetadata
+setMetaUsesLruCache :: Bool -> PythonEnvironment.PythonModuleMetadata -> PythonEnvironment.PythonModuleMetadata
 setMetaUsesLruCache b m =
-    Environment_.PythonModuleMetadata {
-      Environment_.pythonModuleMetadataNamespaces = (Environment_.pythonModuleMetadataNamespaces m),
-      Environment_.pythonModuleMetadataTypeVariables = (Environment_.pythonModuleMetadataTypeVariables m),
-      Environment_.pythonModuleMetadataUsesAnnotated = (Environment_.pythonModuleMetadataUsesAnnotated m),
-      Environment_.pythonModuleMetadataUsesCallable = (Environment_.pythonModuleMetadataUsesCallable m),
-      Environment_.pythonModuleMetadataUsesCast = (Environment_.pythonModuleMetadataUsesCast m),
-      Environment_.pythonModuleMetadataUsesLruCache = b,
-      Environment_.pythonModuleMetadataUsesTypeAlias = (Environment_.pythonModuleMetadataUsesTypeAlias m),
-      Environment_.pythonModuleMetadataUsesDataclass = (Environment_.pythonModuleMetadataUsesDataclass m),
-      Environment_.pythonModuleMetadataUsesDecimal = (Environment_.pythonModuleMetadataUsesDecimal m),
-      Environment_.pythonModuleMetadataUsesEither = (Environment_.pythonModuleMetadataUsesEither m),
-      Environment_.pythonModuleMetadataUsesEnum = (Environment_.pythonModuleMetadataUsesEnum m),
-      Environment_.pythonModuleMetadataUsesFrozenDict = (Environment_.pythonModuleMetadataUsesFrozenDict m),
-      Environment_.pythonModuleMetadataUsesFrozenList = (Environment_.pythonModuleMetadataUsesFrozenList m),
-      Environment_.pythonModuleMetadataUsesGeneric = (Environment_.pythonModuleMetadataUsesGeneric m),
-      Environment_.pythonModuleMetadataUsesJust = (Environment_.pythonModuleMetadataUsesJust m),
-      Environment_.pythonModuleMetadataUsesLeft = (Environment_.pythonModuleMetadataUsesLeft m),
-      Environment_.pythonModuleMetadataUsesMaybe = (Environment_.pythonModuleMetadataUsesMaybe m),
-      Environment_.pythonModuleMetadataUsesName = (Environment_.pythonModuleMetadataUsesName m),
-      Environment_.pythonModuleMetadataUsesNode = (Environment_.pythonModuleMetadataUsesNode m),
-      Environment_.pythonModuleMetadataUsesNothing = (Environment_.pythonModuleMetadataUsesNothing m),
-      Environment_.pythonModuleMetadataUsesRight = (Environment_.pythonModuleMetadataUsesRight m),
-      Environment_.pythonModuleMetadataUsesTypeVar = (Environment_.pythonModuleMetadataUsesTypeVar m)}
+    PythonEnvironment.PythonModuleMetadata {
+      PythonEnvironment.pythonModuleMetadataNamespaces = (PythonEnvironment.pythonModuleMetadataNamespaces m),
+      PythonEnvironment.pythonModuleMetadataTypeVariables = (PythonEnvironment.pythonModuleMetadataTypeVariables m),
+      PythonEnvironment.pythonModuleMetadataUsesAnnotated = (PythonEnvironment.pythonModuleMetadataUsesAnnotated m),
+      PythonEnvironment.pythonModuleMetadataUsesCallable = (PythonEnvironment.pythonModuleMetadataUsesCallable m),
+      PythonEnvironment.pythonModuleMetadataUsesCast = (PythonEnvironment.pythonModuleMetadataUsesCast m),
+      PythonEnvironment.pythonModuleMetadataUsesLruCache = b,
+      PythonEnvironment.pythonModuleMetadataUsesTypeAlias = (PythonEnvironment.pythonModuleMetadataUsesTypeAlias m),
+      PythonEnvironment.pythonModuleMetadataUsesDataclass = (PythonEnvironment.pythonModuleMetadataUsesDataclass m),
+      PythonEnvironment.pythonModuleMetadataUsesDecimal = (PythonEnvironment.pythonModuleMetadataUsesDecimal m),
+      PythonEnvironment.pythonModuleMetadataUsesEither = (PythonEnvironment.pythonModuleMetadataUsesEither m),
+      PythonEnvironment.pythonModuleMetadataUsesEnum = (PythonEnvironment.pythonModuleMetadataUsesEnum m),
+      PythonEnvironment.pythonModuleMetadataUsesFrozenDict = (PythonEnvironment.pythonModuleMetadataUsesFrozenDict m),
+      PythonEnvironment.pythonModuleMetadataUsesFrozenList = (PythonEnvironment.pythonModuleMetadataUsesFrozenList m),
+      PythonEnvironment.pythonModuleMetadataUsesGeneric = (PythonEnvironment.pythonModuleMetadataUsesGeneric m),
+      PythonEnvironment.pythonModuleMetadataUsesJust = (PythonEnvironment.pythonModuleMetadataUsesJust m),
+      PythonEnvironment.pythonModuleMetadataUsesLeft = (PythonEnvironment.pythonModuleMetadataUsesLeft m),
+      PythonEnvironment.pythonModuleMetadataUsesMaybe = (PythonEnvironment.pythonModuleMetadataUsesMaybe m),
+      PythonEnvironment.pythonModuleMetadataUsesName = (PythonEnvironment.pythonModuleMetadataUsesName m),
+      PythonEnvironment.pythonModuleMetadataUsesNode = (PythonEnvironment.pythonModuleMetadataUsesNode m),
+      PythonEnvironment.pythonModuleMetadataUsesNothing = (PythonEnvironment.pythonModuleMetadataUsesNothing m),
+      PythonEnvironment.pythonModuleMetadataUsesRight = (PythonEnvironment.pythonModuleMetadataUsesRight m),
+      PythonEnvironment.pythonModuleMetadataUsesTypeVar = (PythonEnvironment.pythonModuleMetadataUsesTypeVar m)}
 
-setMetaUsesMaybe :: Environment_.PythonModuleMetadata -> Bool -> Environment_.PythonModuleMetadata
+setMetaUsesMaybe :: PythonEnvironment.PythonModuleMetadata -> Bool -> PythonEnvironment.PythonModuleMetadata
 setMetaUsesMaybe m b =
-    Environment_.PythonModuleMetadata {
-      Environment_.pythonModuleMetadataNamespaces = (Environment_.pythonModuleMetadataNamespaces m),
-      Environment_.pythonModuleMetadataTypeVariables = (Environment_.pythonModuleMetadataTypeVariables m),
-      Environment_.pythonModuleMetadataUsesAnnotated = (Environment_.pythonModuleMetadataUsesAnnotated m),
-      Environment_.pythonModuleMetadataUsesCallable = (Environment_.pythonModuleMetadataUsesCallable m),
-      Environment_.pythonModuleMetadataUsesCast = (Environment_.pythonModuleMetadataUsesCast m),
-      Environment_.pythonModuleMetadataUsesLruCache = (Environment_.pythonModuleMetadataUsesLruCache m),
-      Environment_.pythonModuleMetadataUsesTypeAlias = (Environment_.pythonModuleMetadataUsesTypeAlias m),
-      Environment_.pythonModuleMetadataUsesDataclass = (Environment_.pythonModuleMetadataUsesDataclass m),
-      Environment_.pythonModuleMetadataUsesDecimal = (Environment_.pythonModuleMetadataUsesDecimal m),
-      Environment_.pythonModuleMetadataUsesEither = (Environment_.pythonModuleMetadataUsesEither m),
-      Environment_.pythonModuleMetadataUsesEnum = (Environment_.pythonModuleMetadataUsesEnum m),
-      Environment_.pythonModuleMetadataUsesFrozenDict = (Environment_.pythonModuleMetadataUsesFrozenDict m),
-      Environment_.pythonModuleMetadataUsesFrozenList = (Environment_.pythonModuleMetadataUsesFrozenList m),
-      Environment_.pythonModuleMetadataUsesGeneric = (Environment_.pythonModuleMetadataUsesGeneric m),
-      Environment_.pythonModuleMetadataUsesJust = (Environment_.pythonModuleMetadataUsesJust m),
-      Environment_.pythonModuleMetadataUsesLeft = (Environment_.pythonModuleMetadataUsesLeft m),
-      Environment_.pythonModuleMetadataUsesMaybe = b,
-      Environment_.pythonModuleMetadataUsesName = (Environment_.pythonModuleMetadataUsesName m),
-      Environment_.pythonModuleMetadataUsesNode = (Environment_.pythonModuleMetadataUsesNode m),
-      Environment_.pythonModuleMetadataUsesNothing = (Environment_.pythonModuleMetadataUsesNothing m),
-      Environment_.pythonModuleMetadataUsesRight = (Environment_.pythonModuleMetadataUsesRight m),
-      Environment_.pythonModuleMetadataUsesTypeVar = (Environment_.pythonModuleMetadataUsesTypeVar m)}
+    PythonEnvironment.PythonModuleMetadata {
+      PythonEnvironment.pythonModuleMetadataNamespaces = (PythonEnvironment.pythonModuleMetadataNamespaces m),
+      PythonEnvironment.pythonModuleMetadataTypeVariables = (PythonEnvironment.pythonModuleMetadataTypeVariables m),
+      PythonEnvironment.pythonModuleMetadataUsesAnnotated = (PythonEnvironment.pythonModuleMetadataUsesAnnotated m),
+      PythonEnvironment.pythonModuleMetadataUsesCallable = (PythonEnvironment.pythonModuleMetadataUsesCallable m),
+      PythonEnvironment.pythonModuleMetadataUsesCast = (PythonEnvironment.pythonModuleMetadataUsesCast m),
+      PythonEnvironment.pythonModuleMetadataUsesLruCache = (PythonEnvironment.pythonModuleMetadataUsesLruCache m),
+      PythonEnvironment.pythonModuleMetadataUsesTypeAlias = (PythonEnvironment.pythonModuleMetadataUsesTypeAlias m),
+      PythonEnvironment.pythonModuleMetadataUsesDataclass = (PythonEnvironment.pythonModuleMetadataUsesDataclass m),
+      PythonEnvironment.pythonModuleMetadataUsesDecimal = (PythonEnvironment.pythonModuleMetadataUsesDecimal m),
+      PythonEnvironment.pythonModuleMetadataUsesEither = (PythonEnvironment.pythonModuleMetadataUsesEither m),
+      PythonEnvironment.pythonModuleMetadataUsesEnum = (PythonEnvironment.pythonModuleMetadataUsesEnum m),
+      PythonEnvironment.pythonModuleMetadataUsesFrozenDict = (PythonEnvironment.pythonModuleMetadataUsesFrozenDict m),
+      PythonEnvironment.pythonModuleMetadataUsesFrozenList = (PythonEnvironment.pythonModuleMetadataUsesFrozenList m),
+      PythonEnvironment.pythonModuleMetadataUsesGeneric = (PythonEnvironment.pythonModuleMetadataUsesGeneric m),
+      PythonEnvironment.pythonModuleMetadataUsesJust = (PythonEnvironment.pythonModuleMetadataUsesJust m),
+      PythonEnvironment.pythonModuleMetadataUsesLeft = (PythonEnvironment.pythonModuleMetadataUsesLeft m),
+      PythonEnvironment.pythonModuleMetadataUsesMaybe = b,
+      PythonEnvironment.pythonModuleMetadataUsesName = (PythonEnvironment.pythonModuleMetadataUsesName m),
+      PythonEnvironment.pythonModuleMetadataUsesNode = (PythonEnvironment.pythonModuleMetadataUsesNode m),
+      PythonEnvironment.pythonModuleMetadataUsesNothing = (PythonEnvironment.pythonModuleMetadataUsesNothing m),
+      PythonEnvironment.pythonModuleMetadataUsesRight = (PythonEnvironment.pythonModuleMetadataUsesRight m),
+      PythonEnvironment.pythonModuleMetadataUsesTypeVar = (PythonEnvironment.pythonModuleMetadataUsesTypeVar m)}
 
-setMetaUsesName :: Environment_.PythonModuleMetadata -> Bool -> Environment_.PythonModuleMetadata
+setMetaUsesName :: PythonEnvironment.PythonModuleMetadata -> Bool -> PythonEnvironment.PythonModuleMetadata
 setMetaUsesName m b =
-    Environment_.PythonModuleMetadata {
-      Environment_.pythonModuleMetadataNamespaces = (Environment_.pythonModuleMetadataNamespaces m),
-      Environment_.pythonModuleMetadataTypeVariables = (Environment_.pythonModuleMetadataTypeVariables m),
-      Environment_.pythonModuleMetadataUsesAnnotated = (Environment_.pythonModuleMetadataUsesAnnotated m),
-      Environment_.pythonModuleMetadataUsesCallable = (Environment_.pythonModuleMetadataUsesCallable m),
-      Environment_.pythonModuleMetadataUsesCast = (Environment_.pythonModuleMetadataUsesCast m),
-      Environment_.pythonModuleMetadataUsesLruCache = (Environment_.pythonModuleMetadataUsesLruCache m),
-      Environment_.pythonModuleMetadataUsesTypeAlias = (Environment_.pythonModuleMetadataUsesTypeAlias m),
-      Environment_.pythonModuleMetadataUsesDataclass = (Environment_.pythonModuleMetadataUsesDataclass m),
-      Environment_.pythonModuleMetadataUsesDecimal = (Environment_.pythonModuleMetadataUsesDecimal m),
-      Environment_.pythonModuleMetadataUsesEither = (Environment_.pythonModuleMetadataUsesEither m),
-      Environment_.pythonModuleMetadataUsesEnum = (Environment_.pythonModuleMetadataUsesEnum m),
-      Environment_.pythonModuleMetadataUsesFrozenDict = (Environment_.pythonModuleMetadataUsesFrozenDict m),
-      Environment_.pythonModuleMetadataUsesFrozenList = (Environment_.pythonModuleMetadataUsesFrozenList m),
-      Environment_.pythonModuleMetadataUsesGeneric = (Environment_.pythonModuleMetadataUsesGeneric m),
-      Environment_.pythonModuleMetadataUsesJust = (Environment_.pythonModuleMetadataUsesJust m),
-      Environment_.pythonModuleMetadataUsesLeft = (Environment_.pythonModuleMetadataUsesLeft m),
-      Environment_.pythonModuleMetadataUsesMaybe = (Environment_.pythonModuleMetadataUsesMaybe m),
-      Environment_.pythonModuleMetadataUsesName = b,
-      Environment_.pythonModuleMetadataUsesNode = (Environment_.pythonModuleMetadataUsesNode m),
-      Environment_.pythonModuleMetadataUsesNothing = (Environment_.pythonModuleMetadataUsesNothing m),
-      Environment_.pythonModuleMetadataUsesRight = (Environment_.pythonModuleMetadataUsesRight m),
-      Environment_.pythonModuleMetadataUsesTypeVar = (Environment_.pythonModuleMetadataUsesTypeVar m)}
+    PythonEnvironment.PythonModuleMetadata {
+      PythonEnvironment.pythonModuleMetadataNamespaces = (PythonEnvironment.pythonModuleMetadataNamespaces m),
+      PythonEnvironment.pythonModuleMetadataTypeVariables = (PythonEnvironment.pythonModuleMetadataTypeVariables m),
+      PythonEnvironment.pythonModuleMetadataUsesAnnotated = (PythonEnvironment.pythonModuleMetadataUsesAnnotated m),
+      PythonEnvironment.pythonModuleMetadataUsesCallable = (PythonEnvironment.pythonModuleMetadataUsesCallable m),
+      PythonEnvironment.pythonModuleMetadataUsesCast = (PythonEnvironment.pythonModuleMetadataUsesCast m),
+      PythonEnvironment.pythonModuleMetadataUsesLruCache = (PythonEnvironment.pythonModuleMetadataUsesLruCache m),
+      PythonEnvironment.pythonModuleMetadataUsesTypeAlias = (PythonEnvironment.pythonModuleMetadataUsesTypeAlias m),
+      PythonEnvironment.pythonModuleMetadataUsesDataclass = (PythonEnvironment.pythonModuleMetadataUsesDataclass m),
+      PythonEnvironment.pythonModuleMetadataUsesDecimal = (PythonEnvironment.pythonModuleMetadataUsesDecimal m),
+      PythonEnvironment.pythonModuleMetadataUsesEither = (PythonEnvironment.pythonModuleMetadataUsesEither m),
+      PythonEnvironment.pythonModuleMetadataUsesEnum = (PythonEnvironment.pythonModuleMetadataUsesEnum m),
+      PythonEnvironment.pythonModuleMetadataUsesFrozenDict = (PythonEnvironment.pythonModuleMetadataUsesFrozenDict m),
+      PythonEnvironment.pythonModuleMetadataUsesFrozenList = (PythonEnvironment.pythonModuleMetadataUsesFrozenList m),
+      PythonEnvironment.pythonModuleMetadataUsesGeneric = (PythonEnvironment.pythonModuleMetadataUsesGeneric m),
+      PythonEnvironment.pythonModuleMetadataUsesJust = (PythonEnvironment.pythonModuleMetadataUsesJust m),
+      PythonEnvironment.pythonModuleMetadataUsesLeft = (PythonEnvironment.pythonModuleMetadataUsesLeft m),
+      PythonEnvironment.pythonModuleMetadataUsesMaybe = (PythonEnvironment.pythonModuleMetadataUsesMaybe m),
+      PythonEnvironment.pythonModuleMetadataUsesName = b,
+      PythonEnvironment.pythonModuleMetadataUsesNode = (PythonEnvironment.pythonModuleMetadataUsesNode m),
+      PythonEnvironment.pythonModuleMetadataUsesNothing = (PythonEnvironment.pythonModuleMetadataUsesNothing m),
+      PythonEnvironment.pythonModuleMetadataUsesRight = (PythonEnvironment.pythonModuleMetadataUsesRight m),
+      PythonEnvironment.pythonModuleMetadataUsesTypeVar = (PythonEnvironment.pythonModuleMetadataUsesTypeVar m)}
 
-setMetaUsesNode :: Environment_.PythonModuleMetadata -> Bool -> Environment_.PythonModuleMetadata
+setMetaUsesNode :: PythonEnvironment.PythonModuleMetadata -> Bool -> PythonEnvironment.PythonModuleMetadata
 setMetaUsesNode m b =
-    Environment_.PythonModuleMetadata {
-      Environment_.pythonModuleMetadataNamespaces = (Environment_.pythonModuleMetadataNamespaces m),
-      Environment_.pythonModuleMetadataTypeVariables = (Environment_.pythonModuleMetadataTypeVariables m),
-      Environment_.pythonModuleMetadataUsesAnnotated = (Environment_.pythonModuleMetadataUsesAnnotated m),
-      Environment_.pythonModuleMetadataUsesCallable = (Environment_.pythonModuleMetadataUsesCallable m),
-      Environment_.pythonModuleMetadataUsesCast = (Environment_.pythonModuleMetadataUsesCast m),
-      Environment_.pythonModuleMetadataUsesLruCache = (Environment_.pythonModuleMetadataUsesLruCache m),
-      Environment_.pythonModuleMetadataUsesTypeAlias = (Environment_.pythonModuleMetadataUsesTypeAlias m),
-      Environment_.pythonModuleMetadataUsesDataclass = (Environment_.pythonModuleMetadataUsesDataclass m),
-      Environment_.pythonModuleMetadataUsesDecimal = (Environment_.pythonModuleMetadataUsesDecimal m),
-      Environment_.pythonModuleMetadataUsesEither = (Environment_.pythonModuleMetadataUsesEither m),
-      Environment_.pythonModuleMetadataUsesEnum = (Environment_.pythonModuleMetadataUsesEnum m),
-      Environment_.pythonModuleMetadataUsesFrozenDict = (Environment_.pythonModuleMetadataUsesFrozenDict m),
-      Environment_.pythonModuleMetadataUsesFrozenList = (Environment_.pythonModuleMetadataUsesFrozenList m),
-      Environment_.pythonModuleMetadataUsesGeneric = (Environment_.pythonModuleMetadataUsesGeneric m),
-      Environment_.pythonModuleMetadataUsesJust = (Environment_.pythonModuleMetadataUsesJust m),
-      Environment_.pythonModuleMetadataUsesLeft = (Environment_.pythonModuleMetadataUsesLeft m),
-      Environment_.pythonModuleMetadataUsesMaybe = (Environment_.pythonModuleMetadataUsesMaybe m),
-      Environment_.pythonModuleMetadataUsesName = (Environment_.pythonModuleMetadataUsesName m),
-      Environment_.pythonModuleMetadataUsesNode = b,
-      Environment_.pythonModuleMetadataUsesNothing = (Environment_.pythonModuleMetadataUsesNothing m),
-      Environment_.pythonModuleMetadataUsesRight = (Environment_.pythonModuleMetadataUsesRight m),
-      Environment_.pythonModuleMetadataUsesTypeVar = (Environment_.pythonModuleMetadataUsesTypeVar m)}
+    PythonEnvironment.PythonModuleMetadata {
+      PythonEnvironment.pythonModuleMetadataNamespaces = (PythonEnvironment.pythonModuleMetadataNamespaces m),
+      PythonEnvironment.pythonModuleMetadataTypeVariables = (PythonEnvironment.pythonModuleMetadataTypeVariables m),
+      PythonEnvironment.pythonModuleMetadataUsesAnnotated = (PythonEnvironment.pythonModuleMetadataUsesAnnotated m),
+      PythonEnvironment.pythonModuleMetadataUsesCallable = (PythonEnvironment.pythonModuleMetadataUsesCallable m),
+      PythonEnvironment.pythonModuleMetadataUsesCast = (PythonEnvironment.pythonModuleMetadataUsesCast m),
+      PythonEnvironment.pythonModuleMetadataUsesLruCache = (PythonEnvironment.pythonModuleMetadataUsesLruCache m),
+      PythonEnvironment.pythonModuleMetadataUsesTypeAlias = (PythonEnvironment.pythonModuleMetadataUsesTypeAlias m),
+      PythonEnvironment.pythonModuleMetadataUsesDataclass = (PythonEnvironment.pythonModuleMetadataUsesDataclass m),
+      PythonEnvironment.pythonModuleMetadataUsesDecimal = (PythonEnvironment.pythonModuleMetadataUsesDecimal m),
+      PythonEnvironment.pythonModuleMetadataUsesEither = (PythonEnvironment.pythonModuleMetadataUsesEither m),
+      PythonEnvironment.pythonModuleMetadataUsesEnum = (PythonEnvironment.pythonModuleMetadataUsesEnum m),
+      PythonEnvironment.pythonModuleMetadataUsesFrozenDict = (PythonEnvironment.pythonModuleMetadataUsesFrozenDict m),
+      PythonEnvironment.pythonModuleMetadataUsesFrozenList = (PythonEnvironment.pythonModuleMetadataUsesFrozenList m),
+      PythonEnvironment.pythonModuleMetadataUsesGeneric = (PythonEnvironment.pythonModuleMetadataUsesGeneric m),
+      PythonEnvironment.pythonModuleMetadataUsesJust = (PythonEnvironment.pythonModuleMetadataUsesJust m),
+      PythonEnvironment.pythonModuleMetadataUsesLeft = (PythonEnvironment.pythonModuleMetadataUsesLeft m),
+      PythonEnvironment.pythonModuleMetadataUsesMaybe = (PythonEnvironment.pythonModuleMetadataUsesMaybe m),
+      PythonEnvironment.pythonModuleMetadataUsesName = (PythonEnvironment.pythonModuleMetadataUsesName m),
+      PythonEnvironment.pythonModuleMetadataUsesNode = b,
+      PythonEnvironment.pythonModuleMetadataUsesNothing = (PythonEnvironment.pythonModuleMetadataUsesNothing m),
+      PythonEnvironment.pythonModuleMetadataUsesRight = (PythonEnvironment.pythonModuleMetadataUsesRight m),
+      PythonEnvironment.pythonModuleMetadataUsesTypeVar = (PythonEnvironment.pythonModuleMetadataUsesTypeVar m)}
 
-setMetaUsesNothing :: Environment_.PythonModuleMetadata -> Bool -> Environment_.PythonModuleMetadata
+setMetaUsesNothing :: PythonEnvironment.PythonModuleMetadata -> Bool -> PythonEnvironment.PythonModuleMetadata
 setMetaUsesNothing m b =
-    Environment_.PythonModuleMetadata {
-      Environment_.pythonModuleMetadataNamespaces = (Environment_.pythonModuleMetadataNamespaces m),
-      Environment_.pythonModuleMetadataTypeVariables = (Environment_.pythonModuleMetadataTypeVariables m),
-      Environment_.pythonModuleMetadataUsesAnnotated = (Environment_.pythonModuleMetadataUsesAnnotated m),
-      Environment_.pythonModuleMetadataUsesCallable = (Environment_.pythonModuleMetadataUsesCallable m),
-      Environment_.pythonModuleMetadataUsesCast = (Environment_.pythonModuleMetadataUsesCast m),
-      Environment_.pythonModuleMetadataUsesLruCache = (Environment_.pythonModuleMetadataUsesLruCache m),
-      Environment_.pythonModuleMetadataUsesTypeAlias = (Environment_.pythonModuleMetadataUsesTypeAlias m),
-      Environment_.pythonModuleMetadataUsesDataclass = (Environment_.pythonModuleMetadataUsesDataclass m),
-      Environment_.pythonModuleMetadataUsesDecimal = (Environment_.pythonModuleMetadataUsesDecimal m),
-      Environment_.pythonModuleMetadataUsesEither = (Environment_.pythonModuleMetadataUsesEither m),
-      Environment_.pythonModuleMetadataUsesEnum = (Environment_.pythonModuleMetadataUsesEnum m),
-      Environment_.pythonModuleMetadataUsesFrozenDict = (Environment_.pythonModuleMetadataUsesFrozenDict m),
-      Environment_.pythonModuleMetadataUsesFrozenList = (Environment_.pythonModuleMetadataUsesFrozenList m),
-      Environment_.pythonModuleMetadataUsesGeneric = (Environment_.pythonModuleMetadataUsesGeneric m),
-      Environment_.pythonModuleMetadataUsesJust = (Environment_.pythonModuleMetadataUsesJust m),
-      Environment_.pythonModuleMetadataUsesLeft = (Environment_.pythonModuleMetadataUsesLeft m),
-      Environment_.pythonModuleMetadataUsesMaybe = (Environment_.pythonModuleMetadataUsesMaybe m),
-      Environment_.pythonModuleMetadataUsesName = (Environment_.pythonModuleMetadataUsesName m),
-      Environment_.pythonModuleMetadataUsesNode = (Environment_.pythonModuleMetadataUsesNode m),
-      Environment_.pythonModuleMetadataUsesNothing = b,
-      Environment_.pythonModuleMetadataUsesRight = (Environment_.pythonModuleMetadataUsesRight m),
-      Environment_.pythonModuleMetadataUsesTypeVar = (Environment_.pythonModuleMetadataUsesTypeVar m)}
+    PythonEnvironment.PythonModuleMetadata {
+      PythonEnvironment.pythonModuleMetadataNamespaces = (PythonEnvironment.pythonModuleMetadataNamespaces m),
+      PythonEnvironment.pythonModuleMetadataTypeVariables = (PythonEnvironment.pythonModuleMetadataTypeVariables m),
+      PythonEnvironment.pythonModuleMetadataUsesAnnotated = (PythonEnvironment.pythonModuleMetadataUsesAnnotated m),
+      PythonEnvironment.pythonModuleMetadataUsesCallable = (PythonEnvironment.pythonModuleMetadataUsesCallable m),
+      PythonEnvironment.pythonModuleMetadataUsesCast = (PythonEnvironment.pythonModuleMetadataUsesCast m),
+      PythonEnvironment.pythonModuleMetadataUsesLruCache = (PythonEnvironment.pythonModuleMetadataUsesLruCache m),
+      PythonEnvironment.pythonModuleMetadataUsesTypeAlias = (PythonEnvironment.pythonModuleMetadataUsesTypeAlias m),
+      PythonEnvironment.pythonModuleMetadataUsesDataclass = (PythonEnvironment.pythonModuleMetadataUsesDataclass m),
+      PythonEnvironment.pythonModuleMetadataUsesDecimal = (PythonEnvironment.pythonModuleMetadataUsesDecimal m),
+      PythonEnvironment.pythonModuleMetadataUsesEither = (PythonEnvironment.pythonModuleMetadataUsesEither m),
+      PythonEnvironment.pythonModuleMetadataUsesEnum = (PythonEnvironment.pythonModuleMetadataUsesEnum m),
+      PythonEnvironment.pythonModuleMetadataUsesFrozenDict = (PythonEnvironment.pythonModuleMetadataUsesFrozenDict m),
+      PythonEnvironment.pythonModuleMetadataUsesFrozenList = (PythonEnvironment.pythonModuleMetadataUsesFrozenList m),
+      PythonEnvironment.pythonModuleMetadataUsesGeneric = (PythonEnvironment.pythonModuleMetadataUsesGeneric m),
+      PythonEnvironment.pythonModuleMetadataUsesJust = (PythonEnvironment.pythonModuleMetadataUsesJust m),
+      PythonEnvironment.pythonModuleMetadataUsesLeft = (PythonEnvironment.pythonModuleMetadataUsesLeft m),
+      PythonEnvironment.pythonModuleMetadataUsesMaybe = (PythonEnvironment.pythonModuleMetadataUsesMaybe m),
+      PythonEnvironment.pythonModuleMetadataUsesName = (PythonEnvironment.pythonModuleMetadataUsesName m),
+      PythonEnvironment.pythonModuleMetadataUsesNode = (PythonEnvironment.pythonModuleMetadataUsesNode m),
+      PythonEnvironment.pythonModuleMetadataUsesNothing = b,
+      PythonEnvironment.pythonModuleMetadataUsesRight = (PythonEnvironment.pythonModuleMetadataUsesRight m),
+      PythonEnvironment.pythonModuleMetadataUsesTypeVar = (PythonEnvironment.pythonModuleMetadataUsesTypeVar m)}
 
-setMetaUsesRight :: Environment_.PythonModuleMetadata -> Bool -> Environment_.PythonModuleMetadata
+setMetaUsesRight :: PythonEnvironment.PythonModuleMetadata -> Bool -> PythonEnvironment.PythonModuleMetadata
 setMetaUsesRight m b =
-    Environment_.PythonModuleMetadata {
-      Environment_.pythonModuleMetadataNamespaces = (Environment_.pythonModuleMetadataNamespaces m),
-      Environment_.pythonModuleMetadataTypeVariables = (Environment_.pythonModuleMetadataTypeVariables m),
-      Environment_.pythonModuleMetadataUsesAnnotated = (Environment_.pythonModuleMetadataUsesAnnotated m),
-      Environment_.pythonModuleMetadataUsesCallable = (Environment_.pythonModuleMetadataUsesCallable m),
-      Environment_.pythonModuleMetadataUsesCast = (Environment_.pythonModuleMetadataUsesCast m),
-      Environment_.pythonModuleMetadataUsesLruCache = (Environment_.pythonModuleMetadataUsesLruCache m),
-      Environment_.pythonModuleMetadataUsesTypeAlias = (Environment_.pythonModuleMetadataUsesTypeAlias m),
-      Environment_.pythonModuleMetadataUsesDataclass = (Environment_.pythonModuleMetadataUsesDataclass m),
-      Environment_.pythonModuleMetadataUsesDecimal = (Environment_.pythonModuleMetadataUsesDecimal m),
-      Environment_.pythonModuleMetadataUsesEither = (Environment_.pythonModuleMetadataUsesEither m),
-      Environment_.pythonModuleMetadataUsesEnum = (Environment_.pythonModuleMetadataUsesEnum m),
-      Environment_.pythonModuleMetadataUsesFrozenDict = (Environment_.pythonModuleMetadataUsesFrozenDict m),
-      Environment_.pythonModuleMetadataUsesFrozenList = (Environment_.pythonModuleMetadataUsesFrozenList m),
-      Environment_.pythonModuleMetadataUsesGeneric = (Environment_.pythonModuleMetadataUsesGeneric m),
-      Environment_.pythonModuleMetadataUsesJust = (Environment_.pythonModuleMetadataUsesJust m),
-      Environment_.pythonModuleMetadataUsesLeft = (Environment_.pythonModuleMetadataUsesLeft m),
-      Environment_.pythonModuleMetadataUsesMaybe = (Environment_.pythonModuleMetadataUsesMaybe m),
-      Environment_.pythonModuleMetadataUsesName = (Environment_.pythonModuleMetadataUsesName m),
-      Environment_.pythonModuleMetadataUsesNode = (Environment_.pythonModuleMetadataUsesNode m),
-      Environment_.pythonModuleMetadataUsesNothing = (Environment_.pythonModuleMetadataUsesNothing m),
-      Environment_.pythonModuleMetadataUsesRight = b,
-      Environment_.pythonModuleMetadataUsesTypeVar = (Environment_.pythonModuleMetadataUsesTypeVar m)}
+    PythonEnvironment.PythonModuleMetadata {
+      PythonEnvironment.pythonModuleMetadataNamespaces = (PythonEnvironment.pythonModuleMetadataNamespaces m),
+      PythonEnvironment.pythonModuleMetadataTypeVariables = (PythonEnvironment.pythonModuleMetadataTypeVariables m),
+      PythonEnvironment.pythonModuleMetadataUsesAnnotated = (PythonEnvironment.pythonModuleMetadataUsesAnnotated m),
+      PythonEnvironment.pythonModuleMetadataUsesCallable = (PythonEnvironment.pythonModuleMetadataUsesCallable m),
+      PythonEnvironment.pythonModuleMetadataUsesCast = (PythonEnvironment.pythonModuleMetadataUsesCast m),
+      PythonEnvironment.pythonModuleMetadataUsesLruCache = (PythonEnvironment.pythonModuleMetadataUsesLruCache m),
+      PythonEnvironment.pythonModuleMetadataUsesTypeAlias = (PythonEnvironment.pythonModuleMetadataUsesTypeAlias m),
+      PythonEnvironment.pythonModuleMetadataUsesDataclass = (PythonEnvironment.pythonModuleMetadataUsesDataclass m),
+      PythonEnvironment.pythonModuleMetadataUsesDecimal = (PythonEnvironment.pythonModuleMetadataUsesDecimal m),
+      PythonEnvironment.pythonModuleMetadataUsesEither = (PythonEnvironment.pythonModuleMetadataUsesEither m),
+      PythonEnvironment.pythonModuleMetadataUsesEnum = (PythonEnvironment.pythonModuleMetadataUsesEnum m),
+      PythonEnvironment.pythonModuleMetadataUsesFrozenDict = (PythonEnvironment.pythonModuleMetadataUsesFrozenDict m),
+      PythonEnvironment.pythonModuleMetadataUsesFrozenList = (PythonEnvironment.pythonModuleMetadataUsesFrozenList m),
+      PythonEnvironment.pythonModuleMetadataUsesGeneric = (PythonEnvironment.pythonModuleMetadataUsesGeneric m),
+      PythonEnvironment.pythonModuleMetadataUsesJust = (PythonEnvironment.pythonModuleMetadataUsesJust m),
+      PythonEnvironment.pythonModuleMetadataUsesLeft = (PythonEnvironment.pythonModuleMetadataUsesLeft m),
+      PythonEnvironment.pythonModuleMetadataUsesMaybe = (PythonEnvironment.pythonModuleMetadataUsesMaybe m),
+      PythonEnvironment.pythonModuleMetadataUsesName = (PythonEnvironment.pythonModuleMetadataUsesName m),
+      PythonEnvironment.pythonModuleMetadataUsesNode = (PythonEnvironment.pythonModuleMetadataUsesNode m),
+      PythonEnvironment.pythonModuleMetadataUsesNothing = (PythonEnvironment.pythonModuleMetadataUsesNothing m),
+      PythonEnvironment.pythonModuleMetadataUsesRight = b,
+      PythonEnvironment.pythonModuleMetadataUsesTypeVar = (PythonEnvironment.pythonModuleMetadataUsesTypeVar m)}
 
-setMetaUsesTypeAlias :: Environment_.PythonModuleMetadata -> Bool -> Environment_.PythonModuleMetadata
+setMetaUsesTypeAlias :: PythonEnvironment.PythonModuleMetadata -> Bool -> PythonEnvironment.PythonModuleMetadata
 setMetaUsesTypeAlias m b =
-    Environment_.PythonModuleMetadata {
-      Environment_.pythonModuleMetadataNamespaces = (Environment_.pythonModuleMetadataNamespaces m),
-      Environment_.pythonModuleMetadataTypeVariables = (Environment_.pythonModuleMetadataTypeVariables m),
-      Environment_.pythonModuleMetadataUsesAnnotated = (Environment_.pythonModuleMetadataUsesAnnotated m),
-      Environment_.pythonModuleMetadataUsesCallable = (Environment_.pythonModuleMetadataUsesCallable m),
-      Environment_.pythonModuleMetadataUsesCast = (Environment_.pythonModuleMetadataUsesCast m),
-      Environment_.pythonModuleMetadataUsesLruCache = (Environment_.pythonModuleMetadataUsesLruCache m),
-      Environment_.pythonModuleMetadataUsesTypeAlias = b,
-      Environment_.pythonModuleMetadataUsesDataclass = (Environment_.pythonModuleMetadataUsesDataclass m),
-      Environment_.pythonModuleMetadataUsesDecimal = (Environment_.pythonModuleMetadataUsesDecimal m),
-      Environment_.pythonModuleMetadataUsesEither = (Environment_.pythonModuleMetadataUsesEither m),
-      Environment_.pythonModuleMetadataUsesEnum = (Environment_.pythonModuleMetadataUsesEnum m),
-      Environment_.pythonModuleMetadataUsesFrozenDict = (Environment_.pythonModuleMetadataUsesFrozenDict m),
-      Environment_.pythonModuleMetadataUsesFrozenList = (Environment_.pythonModuleMetadataUsesFrozenList m),
-      Environment_.pythonModuleMetadataUsesGeneric = (Environment_.pythonModuleMetadataUsesGeneric m),
-      Environment_.pythonModuleMetadataUsesJust = (Environment_.pythonModuleMetadataUsesJust m),
-      Environment_.pythonModuleMetadataUsesLeft = (Environment_.pythonModuleMetadataUsesLeft m),
-      Environment_.pythonModuleMetadataUsesMaybe = (Environment_.pythonModuleMetadataUsesMaybe m),
-      Environment_.pythonModuleMetadataUsesName = (Environment_.pythonModuleMetadataUsesName m),
-      Environment_.pythonModuleMetadataUsesNode = (Environment_.pythonModuleMetadataUsesNode m),
-      Environment_.pythonModuleMetadataUsesNothing = (Environment_.pythonModuleMetadataUsesNothing m),
-      Environment_.pythonModuleMetadataUsesRight = (Environment_.pythonModuleMetadataUsesRight m),
-      Environment_.pythonModuleMetadataUsesTypeVar = (Environment_.pythonModuleMetadataUsesTypeVar m)}
+    PythonEnvironment.PythonModuleMetadata {
+      PythonEnvironment.pythonModuleMetadataNamespaces = (PythonEnvironment.pythonModuleMetadataNamespaces m),
+      PythonEnvironment.pythonModuleMetadataTypeVariables = (PythonEnvironment.pythonModuleMetadataTypeVariables m),
+      PythonEnvironment.pythonModuleMetadataUsesAnnotated = (PythonEnvironment.pythonModuleMetadataUsesAnnotated m),
+      PythonEnvironment.pythonModuleMetadataUsesCallable = (PythonEnvironment.pythonModuleMetadataUsesCallable m),
+      PythonEnvironment.pythonModuleMetadataUsesCast = (PythonEnvironment.pythonModuleMetadataUsesCast m),
+      PythonEnvironment.pythonModuleMetadataUsesLruCache = (PythonEnvironment.pythonModuleMetadataUsesLruCache m),
+      PythonEnvironment.pythonModuleMetadataUsesTypeAlias = b,
+      PythonEnvironment.pythonModuleMetadataUsesDataclass = (PythonEnvironment.pythonModuleMetadataUsesDataclass m),
+      PythonEnvironment.pythonModuleMetadataUsesDecimal = (PythonEnvironment.pythonModuleMetadataUsesDecimal m),
+      PythonEnvironment.pythonModuleMetadataUsesEither = (PythonEnvironment.pythonModuleMetadataUsesEither m),
+      PythonEnvironment.pythonModuleMetadataUsesEnum = (PythonEnvironment.pythonModuleMetadataUsesEnum m),
+      PythonEnvironment.pythonModuleMetadataUsesFrozenDict = (PythonEnvironment.pythonModuleMetadataUsesFrozenDict m),
+      PythonEnvironment.pythonModuleMetadataUsesFrozenList = (PythonEnvironment.pythonModuleMetadataUsesFrozenList m),
+      PythonEnvironment.pythonModuleMetadataUsesGeneric = (PythonEnvironment.pythonModuleMetadataUsesGeneric m),
+      PythonEnvironment.pythonModuleMetadataUsesJust = (PythonEnvironment.pythonModuleMetadataUsesJust m),
+      PythonEnvironment.pythonModuleMetadataUsesLeft = (PythonEnvironment.pythonModuleMetadataUsesLeft m),
+      PythonEnvironment.pythonModuleMetadataUsesMaybe = (PythonEnvironment.pythonModuleMetadataUsesMaybe m),
+      PythonEnvironment.pythonModuleMetadataUsesName = (PythonEnvironment.pythonModuleMetadataUsesName m),
+      PythonEnvironment.pythonModuleMetadataUsesNode = (PythonEnvironment.pythonModuleMetadataUsesNode m),
+      PythonEnvironment.pythonModuleMetadataUsesNothing = (PythonEnvironment.pythonModuleMetadataUsesNothing m),
+      PythonEnvironment.pythonModuleMetadataUsesRight = (PythonEnvironment.pythonModuleMetadataUsesRight m),
+      PythonEnvironment.pythonModuleMetadataUsesTypeVar = (PythonEnvironment.pythonModuleMetadataUsesTypeVar m)}
 
-setMetaUsesTypeVar :: Environment_.PythonModuleMetadata -> Bool -> Environment_.PythonModuleMetadata
+setMetaUsesTypeVar :: PythonEnvironment.PythonModuleMetadata -> Bool -> PythonEnvironment.PythonModuleMetadata
 setMetaUsesTypeVar m b =
-    Environment_.PythonModuleMetadata {
-      Environment_.pythonModuleMetadataNamespaces = (Environment_.pythonModuleMetadataNamespaces m),
-      Environment_.pythonModuleMetadataTypeVariables = (Environment_.pythonModuleMetadataTypeVariables m),
-      Environment_.pythonModuleMetadataUsesAnnotated = (Environment_.pythonModuleMetadataUsesAnnotated m),
-      Environment_.pythonModuleMetadataUsesCallable = (Environment_.pythonModuleMetadataUsesCallable m),
-      Environment_.pythonModuleMetadataUsesCast = (Environment_.pythonModuleMetadataUsesCast m),
-      Environment_.pythonModuleMetadataUsesLruCache = (Environment_.pythonModuleMetadataUsesLruCache m),
-      Environment_.pythonModuleMetadataUsesTypeAlias = (Environment_.pythonModuleMetadataUsesTypeAlias m),
-      Environment_.pythonModuleMetadataUsesDataclass = (Environment_.pythonModuleMetadataUsesDataclass m),
-      Environment_.pythonModuleMetadataUsesDecimal = (Environment_.pythonModuleMetadataUsesDecimal m),
-      Environment_.pythonModuleMetadataUsesEither = (Environment_.pythonModuleMetadataUsesEither m),
-      Environment_.pythonModuleMetadataUsesEnum = (Environment_.pythonModuleMetadataUsesEnum m),
-      Environment_.pythonModuleMetadataUsesFrozenDict = (Environment_.pythonModuleMetadataUsesFrozenDict m),
-      Environment_.pythonModuleMetadataUsesFrozenList = (Environment_.pythonModuleMetadataUsesFrozenList m),
-      Environment_.pythonModuleMetadataUsesGeneric = (Environment_.pythonModuleMetadataUsesGeneric m),
-      Environment_.pythonModuleMetadataUsesJust = (Environment_.pythonModuleMetadataUsesJust m),
-      Environment_.pythonModuleMetadataUsesLeft = (Environment_.pythonModuleMetadataUsesLeft m),
-      Environment_.pythonModuleMetadataUsesMaybe = (Environment_.pythonModuleMetadataUsesMaybe m),
-      Environment_.pythonModuleMetadataUsesName = (Environment_.pythonModuleMetadataUsesName m),
-      Environment_.pythonModuleMetadataUsesNode = (Environment_.pythonModuleMetadataUsesNode m),
-      Environment_.pythonModuleMetadataUsesNothing = (Environment_.pythonModuleMetadataUsesNothing m),
-      Environment_.pythonModuleMetadataUsesRight = (Environment_.pythonModuleMetadataUsesRight m),
-      Environment_.pythonModuleMetadataUsesTypeVar = b}
+    PythonEnvironment.PythonModuleMetadata {
+      PythonEnvironment.pythonModuleMetadataNamespaces = (PythonEnvironment.pythonModuleMetadataNamespaces m),
+      PythonEnvironment.pythonModuleMetadataTypeVariables = (PythonEnvironment.pythonModuleMetadataTypeVariables m),
+      PythonEnvironment.pythonModuleMetadataUsesAnnotated = (PythonEnvironment.pythonModuleMetadataUsesAnnotated m),
+      PythonEnvironment.pythonModuleMetadataUsesCallable = (PythonEnvironment.pythonModuleMetadataUsesCallable m),
+      PythonEnvironment.pythonModuleMetadataUsesCast = (PythonEnvironment.pythonModuleMetadataUsesCast m),
+      PythonEnvironment.pythonModuleMetadataUsesLruCache = (PythonEnvironment.pythonModuleMetadataUsesLruCache m),
+      PythonEnvironment.pythonModuleMetadataUsesTypeAlias = (PythonEnvironment.pythonModuleMetadataUsesTypeAlias m),
+      PythonEnvironment.pythonModuleMetadataUsesDataclass = (PythonEnvironment.pythonModuleMetadataUsesDataclass m),
+      PythonEnvironment.pythonModuleMetadataUsesDecimal = (PythonEnvironment.pythonModuleMetadataUsesDecimal m),
+      PythonEnvironment.pythonModuleMetadataUsesEither = (PythonEnvironment.pythonModuleMetadataUsesEither m),
+      PythonEnvironment.pythonModuleMetadataUsesEnum = (PythonEnvironment.pythonModuleMetadataUsesEnum m),
+      PythonEnvironment.pythonModuleMetadataUsesFrozenDict = (PythonEnvironment.pythonModuleMetadataUsesFrozenDict m),
+      PythonEnvironment.pythonModuleMetadataUsesFrozenList = (PythonEnvironment.pythonModuleMetadataUsesFrozenList m),
+      PythonEnvironment.pythonModuleMetadataUsesGeneric = (PythonEnvironment.pythonModuleMetadataUsesGeneric m),
+      PythonEnvironment.pythonModuleMetadataUsesJust = (PythonEnvironment.pythonModuleMetadataUsesJust m),
+      PythonEnvironment.pythonModuleMetadataUsesLeft = (PythonEnvironment.pythonModuleMetadataUsesLeft m),
+      PythonEnvironment.pythonModuleMetadataUsesMaybe = (PythonEnvironment.pythonModuleMetadataUsesMaybe m),
+      PythonEnvironment.pythonModuleMetadataUsesName = (PythonEnvironment.pythonModuleMetadataUsesName m),
+      PythonEnvironment.pythonModuleMetadataUsesNode = (PythonEnvironment.pythonModuleMetadataUsesNode m),
+      PythonEnvironment.pythonModuleMetadataUsesNothing = (PythonEnvironment.pythonModuleMetadataUsesNothing m),
+      PythonEnvironment.pythonModuleMetadataUsesRight = (PythonEnvironment.pythonModuleMetadataUsesRight m),
+      PythonEnvironment.pythonModuleMetadataUsesTypeVar = b}
 
 -- | Determine if a binding should be thunked based on its complexity and triviality
 shouldThunkBinding :: Graph.Graph -> Core.Binding -> Bool
@@ -2551,7 +2551,7 @@ standardImportStatement modName symbols =
         Syntax.importFromAsNameAs = Nothing}) symbols))})
 
 -- | The target Python version for code generation
-targetPythonVersion :: Environment_.PythonVersion
+targetPythonVersion :: PythonEnvironment.PythonVersion
 targetPythonVersion = Utils.targetPythonVersion
 
 -- | Calculate term arity with proper primitive handling
@@ -2570,14 +2570,14 @@ tvarStatement name =
       Utils.doubleQuotedString (Syntax.unName name)])
 
 -- | Version-aware type alias statement generation
-typeAliasStatementFor :: Environment_.PythonEnvironment -> Syntax.Name -> [Syntax.TypeParameter] -> Maybe String -> Syntax.Expression -> Syntax.Statement
+typeAliasStatementFor :: PythonEnvironment.PythonEnvironment -> Syntax.Name -> [Syntax.TypeParameter] -> Maybe String -> Syntax.Expression -> Syntax.Statement
 typeAliasStatementFor env name tparams mcomment tyexpr =
-    Logic.ifElse (useInlineTypeParamsFor (Environment_.pythonEnvironmentVersion env)) (Utils.typeAliasStatement name tparams mcomment tyexpr) (Utils.typeAliasStatement310 name tparams mcomment tyexpr)
+    Logic.ifElse (useInlineTypeParamsFor (PythonEnvironment.pythonEnvironmentVersion env)) (Utils.typeAliasStatement name tparams mcomment tyexpr) (Utils.typeAliasStatement310 name tparams mcomment tyexpr)
 
 -- | Version-aware union type statement generation
-unionTypeStatementsFor :: Environment_.PythonEnvironment -> Syntax.Name -> [Syntax.TypeParameter] -> Maybe String -> Syntax.Expression -> [Syntax.Statement] -> [Syntax.Statement]
+unionTypeStatementsFor :: PythonEnvironment.PythonEnvironment -> Syntax.Name -> [Syntax.TypeParameter] -> Maybe String -> Syntax.Expression -> [Syntax.Statement] -> [Syntax.Statement]
 unionTypeStatementsFor env name tparams mcomment tyexpr extraStmts =
-    Logic.ifElse (useInlineTypeParamsFor (Environment_.pythonEnvironmentVersion env)) (Lists.concat2 [
+    Logic.ifElse (useInlineTypeParamsFor (PythonEnvironment.pythonEnvironmentVersion env)) (Lists.concat2 [
       Utils.typeAliasStatement name tparams mcomment tyexpr] extraStmts) (Utils.unionTypeClassStatements310 name mcomment tyexpr extraStmts)
 
 -- | Create an expression that calls hydra.dsl.python.unsupported(message) at runtime
@@ -2611,8 +2611,8 @@ useInlineTypeParams :: Bool
 useInlineTypeParams = useInlineTypeParamsFor Utils.targetPythonVersion
 
 -- | Version-aware inline type parameters
-useInlineTypeParamsFor :: Environment_.PythonVersion -> Bool
-useInlineTypeParamsFor version = Equality.equal version Environment_.PythonVersionPython312
+useInlineTypeParamsFor :: PythonEnvironment.PythonVersion -> Bool
+useInlineTypeParamsFor version = Equality.equal version PythonEnvironment.PythonVersionPython312
 
 -- | Create args for variant (Node[type], Generic[tparams])
 variantArgs :: Syntax.Expression -> [Core.Name] -> Syntax.Args
@@ -2623,7 +2623,7 @@ variantArgs ptype tparams =
       (genericArg tparams)])
 
 -- | Create a ClosedPattern for a variant based on its characteristics
-variantClosedPattern :: Environment_.PythonEnvironment -> Core.Name -> Core.Name -> Syntax.Name -> t0 -> Bool -> Core.Name -> Bool -> Syntax.ClosedPattern
+variantClosedPattern :: PythonEnvironment.PythonEnvironment -> Core.Name -> Core.Name -> Syntax.Name -> t0 -> Bool -> Core.Name -> Bool -> Syntax.ClosedPattern
 variantClosedPattern env typeName fieldName pyVariantName rowType isEnum varName shouldCapture =
     Logic.ifElse isEnum (enumVariantPattern env typeName fieldName) (Logic.ifElse (Logic.not shouldCapture) (classVariantPatternUnit pyVariantName) (classVariantPatternWithCapture env pyVariantName varName))
 
@@ -2638,7 +2638,7 @@ wildcardCaseBlock stmt =
           stmt]])}
 
 -- | Execute a computation with definitions in scope
-withDefinitions :: Environment_.PythonEnvironment -> [Packaging.Definition] -> (Environment_.PythonEnvironment -> t0) -> t0
+withDefinitions :: PythonEnvironment.PythonEnvironment -> [Packaging.Definition] -> (PythonEnvironment.PythonEnvironment -> t0) -> t0
 withDefinitions env defs body =
 
       let bindings =
@@ -2656,15 +2656,15 @@ withDefinitions env defs body =
       in (withLet env dummyLet body)
 
 -- | Execute a computation with lambda context (adds lambda parameter to Graph)
-withLambda :: Environment_.PythonEnvironment -> Core.Lambda -> (Environment_.PythonEnvironment -> t0) -> t0
+withLambda :: PythonEnvironment.PythonEnvironment -> Core.Lambda -> (PythonEnvironment.PythonEnvironment -> t0) -> t0
 withLambda = Environment.withLambdaContext pythonEnvironmentGetGraph pythonEnvironmentSetGraph
 
 -- | Execute a computation with let context (adds let bindings to Graph)
-withLet :: Environment_.PythonEnvironment -> Core.Let -> (Environment_.PythonEnvironment -> t0) -> t0
+withLet :: PythonEnvironment.PythonEnvironment -> Core.Let -> (PythonEnvironment.PythonEnvironment -> t0) -> t0
 withLet = Environment.withLetContext pythonEnvironmentGetGraph pythonEnvironmentSetGraph pythonBindingMetadata
 
 -- | Execute a computation with inline let context (for walrus operators)
-withLetInline :: Environment_.PythonEnvironment -> Core.Let -> (Environment_.PythonEnvironment -> t0) -> t0
+withLetInline :: PythonEnvironment.PythonEnvironment -> Core.Let -> (PythonEnvironment.PythonEnvironment -> t0) -> t0
 withLetInline env lt body =
 
       let bindingNames = Lists.map (\b -> Core.bindingName b) (Core.letBindings lt)
@@ -2672,18 +2672,18 @@ withLetInline env lt body =
           noMetadata = \tc -> \b -> Nothing
       in (Environment.withLetContext pythonEnvironmentGetGraph pythonEnvironmentSetGraph noMetadata env lt (\innerEnv ->
         let updatedEnv =
-                Environment_.PythonEnvironment {
-                  Environment_.pythonEnvironmentNamespaces = (Environment_.pythonEnvironmentNamespaces innerEnv),
-                  Environment_.pythonEnvironmentBoundTypeVariables = (Environment_.pythonEnvironmentBoundTypeVariables innerEnv),
-                  Environment_.pythonEnvironmentGraph = (Environment_.pythonEnvironmentGraph innerEnv),
-                  Environment_.pythonEnvironmentNullaryBindings = (Environment_.pythonEnvironmentNullaryBindings innerEnv),
-                  Environment_.pythonEnvironmentVersion = (Environment_.pythonEnvironmentVersion innerEnv),
-                  Environment_.pythonEnvironmentSkipCasts = (Environment_.pythonEnvironmentSkipCasts innerEnv),
-                  Environment_.pythonEnvironmentInlineVariables = (Sets.union inlineVars (Environment_.pythonEnvironmentInlineVariables innerEnv))}
+                PythonEnvironment.PythonEnvironment {
+                  PythonEnvironment.pythonEnvironmentNamespaces = (PythonEnvironment.pythonEnvironmentNamespaces innerEnv),
+                  PythonEnvironment.pythonEnvironmentBoundTypeVariables = (PythonEnvironment.pythonEnvironmentBoundTypeVariables innerEnv),
+                  PythonEnvironment.pythonEnvironmentGraph = (PythonEnvironment.pythonEnvironmentGraph innerEnv),
+                  PythonEnvironment.pythonEnvironmentNullaryBindings = (PythonEnvironment.pythonEnvironmentNullaryBindings innerEnv),
+                  PythonEnvironment.pythonEnvironmentVersion = (PythonEnvironment.pythonEnvironmentVersion innerEnv),
+                  PythonEnvironment.pythonEnvironmentSkipCasts = (PythonEnvironment.pythonEnvironmentSkipCasts innerEnv),
+                  PythonEnvironment.pythonEnvironmentInlineVariables = (Sets.union inlineVars (PythonEnvironment.pythonEnvironmentInlineVariables innerEnv))}
         in (body updatedEnv)))
 
 -- | Execute a computation with type lambda context
-withTypeLambda :: Environment_.PythonEnvironment -> Core.TypeLambda -> (Environment_.PythonEnvironment -> t0) -> t0
+withTypeLambda :: PythonEnvironment.PythonEnvironment -> Core.TypeLambda -> (PythonEnvironment.PythonEnvironment -> t0) -> t0
 withTypeLambda = Environment.withTypeLambdaContext pythonEnvironmentGetGraph pythonEnvironmentSetGraph
 
 -- | Wrap a Python expression in a nullary lambda (thunk) for lazy evaluation

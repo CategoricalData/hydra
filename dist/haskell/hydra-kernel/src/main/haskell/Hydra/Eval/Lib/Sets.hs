@@ -6,7 +6,7 @@ module Hydra.Eval.Lib.Sets where
 
 import qualified Hydra.Core as Core
 import qualified Hydra.Errors as Errors
-import qualified Hydra.Extract.Core as Core_
+import qualified Hydra.Extract.Core as ExtractCore
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lib.Eithers as Eithers
 import qualified Hydra.Lib.Lists as Lists
@@ -16,7 +16,7 @@ import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pur
 -- | Interpreter-friendly set difference.
 difference :: t0 -> Graph.Graph -> Core.Term -> Core.Term -> Either Errors.Error Core.Term
 difference cx g set1Term set2Term =
-    Eithers.bind (Core_.set g set1Term) (\elements -> Right (Lists.foldl (\acc -> \el -> Core.TermApplication (Core.Application {
+    Eithers.bind (ExtractCore.set g set1Term) (\elements -> Right (Lists.foldl (\acc -> \el -> Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermApplication (Core.Application {
           Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.logic.ifElse")),
@@ -35,7 +35,7 @@ difference cx g set1Term set2Term =
 -- | Interpreter-friendly set intersection.
 intersection :: t0 -> Graph.Graph -> Core.Term -> Core.Term -> Either Errors.Error Core.Term
 intersection cx g set1Term set2Term =
-    Eithers.bind (Core_.set g set1Term) (\elements -> Right (Lists.foldl (\acc -> \el -> Core.TermApplication (Core.Application {
+    Eithers.bind (ExtractCore.set g set1Term) (\elements -> Right (Lists.foldl (\acc -> \el -> Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermApplication (Core.Application {
           Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.logic.ifElse")),
@@ -54,7 +54,7 @@ intersection cx g set1Term set2Term =
 -- | Interpreter-friendly map for Set terms.
 map :: t0 -> Graph.Graph -> Core.Term -> Core.Term -> Either Errors.Error Core.Term
 map cx g fun setTerm =
-    Eithers.bind (Core_.set g setTerm) (\elements -> Right (Core.TermApplication (Core.Application {
+    Eithers.bind (ExtractCore.set g setTerm) (\elements -> Right (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.sets.fromList")),
       Core.applicationArgument = (Core.TermList (Lists.map (\el -> Core.TermApplication (Core.Application {
         Core.applicationFunction = fun,
@@ -63,7 +63,7 @@ map cx g fun setTerm =
 -- | Interpreter-friendly set union.
 union :: t0 -> Graph.Graph -> Core.Term -> Core.Term -> Either Errors.Error Core.Term
 union cx g set1Term set2Term =
-    Eithers.bind (Core_.set g set1Term) (\elements -> Right (Lists.foldl (\acc -> \el -> Core.TermApplication (Core.Application {
+    Eithers.bind (ExtractCore.set g set1Term) (\elements -> Right (Lists.foldl (\acc -> \el -> Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.sets.insert")),
         Core.applicationArgument = el})),
@@ -72,7 +72,7 @@ union cx g set1Term set2Term =
 -- | Interpreter-friendly unions for list of Set terms.
 unions :: t0 -> Graph.Graph -> Core.Term -> Either Errors.Error Core.Term
 unions cx g listTerm =
-    Eithers.bind (Core_.list g listTerm) (\elements -> Right (Lists.foldl (\acc -> \s -> Core.TermApplication (Core.Application {
+    Eithers.bind (ExtractCore.list g listTerm) (\elements -> Right (Lists.foldl (\acc -> \s -> Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.sets.union")),
         Core.applicationArgument = acc})),

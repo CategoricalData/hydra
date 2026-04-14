@@ -5,7 +5,7 @@
 module Hydra.Encode.Error.Checking where
 
 import qualified Hydra.Core as Core
-import qualified Hydra.Encode.Core as Core_
+import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Encode.Paths as Paths
 import qualified Hydra.Encode.Typing as Typing
 import qualified Hydra.Encode.Variants as Variants
@@ -99,10 +99,10 @@ notAForallTypeError x =
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = (Core_.type_ (Checking.notAForallTypeErrorType x))},
+          Core.fieldTerm = (EncodeCore.type_ (Checking.notAForallTypeErrorType x))},
         Core.Field {
           Core.fieldName = (Core.Name "typeArguments"),
-          Core.fieldTerm = ((\xs -> Core.TermList (Lists.map Core_.type_ xs)) (Checking.notAForallTypeErrorTypeArguments x))}]})
+          Core.fieldTerm = ((\xs -> Core.TermList (Lists.map EncodeCore.type_ xs)) (Checking.notAForallTypeErrorTypeArguments x))}]})
 
 notAFunctionTypeError :: Checking.NotAFunctionTypeError -> Core.Term
 notAFunctionTypeError x =
@@ -111,7 +111,7 @@ notAFunctionTypeError x =
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = (Core_.type_ (Checking.notAFunctionTypeErrorType x))}]})
+          Core.fieldTerm = (EncodeCore.type_ (Checking.notAFunctionTypeErrorType x))}]})
 
 otherCheckingError :: Checking.OtherCheckingError -> Core.Term
 otherCheckingError x =
@@ -132,7 +132,7 @@ typeArityMismatchError x =
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = (Core_.type_ (Checking.typeArityMismatchErrorType x))},
+          Core.fieldTerm = (EncodeCore.type_ (Checking.typeArityMismatchErrorType x))},
         Core.Field {
           Core.fieldName = (Core.Name "expectedArity"),
           Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 x2))) (Checking.typeArityMismatchErrorExpectedArity x))},
@@ -141,7 +141,7 @@ typeArityMismatchError x =
           Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 x2))) (Checking.typeArityMismatchErrorActualArity x))},
         Core.Field {
           Core.fieldName = (Core.Name "typeArguments"),
-          Core.fieldTerm = ((\xs -> Core.TermList (Lists.map Core_.type_ xs)) (Checking.typeArityMismatchErrorTypeArguments x))}]})
+          Core.fieldTerm = ((\xs -> Core.TermList (Lists.map EncodeCore.type_ xs)) (Checking.typeArityMismatchErrorTypeArguments x))}]})
 
 typeMismatchError :: Checking.TypeMismatchError -> Core.Term
 typeMismatchError x =
@@ -150,10 +150,10 @@ typeMismatchError x =
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "expectedType"),
-          Core.fieldTerm = (Core_.type_ (Checking.typeMismatchErrorExpectedType x))},
+          Core.fieldTerm = (EncodeCore.type_ (Checking.typeMismatchErrorExpectedType x))},
         Core.Field {
           Core.fieldName = (Core.Name "actualType"),
-          Core.fieldTerm = (Core_.type_ (Checking.typeMismatchErrorActualType x))}]})
+          Core.fieldTerm = (EncodeCore.type_ (Checking.typeMismatchErrorActualType x))}]})
 
 unboundTypeVariablesError :: Checking.UnboundTypeVariablesError -> Core.Term
 unboundTypeVariablesError x =
@@ -162,10 +162,10 @@ unboundTypeVariablesError x =
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "variables"),
-          Core.fieldTerm = ((\s -> Core.TermSet (Sets.map Core_.name s)) (Checking.unboundTypeVariablesErrorVariables x))},
+          Core.fieldTerm = ((\s -> Core.TermSet (Sets.map EncodeCore.name s)) (Checking.unboundTypeVariablesErrorVariables x))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = (Core_.type_ (Checking.unboundTypeVariablesErrorType x))}]})
+          Core.fieldTerm = (EncodeCore.type_ (Checking.unboundTypeVariablesErrorType x))}]})
 
 undefinedTermVariableCheckingError :: Checking.UndefinedTermVariableCheckingError -> Core.Term
 undefinedTermVariableCheckingError x =
@@ -177,7 +177,7 @@ undefinedTermVariableCheckingError x =
           Core.fieldTerm = (Paths.subtermPath (Checking.undefinedTermVariableCheckingErrorPath x))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Core_.name (Checking.undefinedTermVariableCheckingErrorName x))}]})
+          Core.fieldTerm = (EncodeCore.name (Checking.undefinedTermVariableCheckingErrorName x))}]})
 
 unequalTypesError :: Checking.UnequalTypesError -> Core.Term
 unequalTypesError x =
@@ -186,7 +186,7 @@ unequalTypesError x =
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "types"),
-          Core.fieldTerm = ((\xs -> Core.TermList (Lists.map Core_.type_ xs)) (Checking.unequalTypesErrorTypes x))},
+          Core.fieldTerm = ((\xs -> Core.TermList (Lists.map EncodeCore.type_ xs)) (Checking.unequalTypesErrorTypes x))},
         Core.Field {
           Core.fieldName = (Core.Name "description"),
           Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Checking.unequalTypesErrorDescription x))}]})
@@ -213,7 +213,7 @@ untypedLetBindingError x =
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "binding"),
-          Core.fieldTerm = (Core_.binding (Checking.untypedLetBindingErrorBinding x))}]})
+          Core.fieldTerm = (EncodeCore.binding (Checking.untypedLetBindingErrorBinding x))}]})
 
 untypedTermVariableCheckingError :: Checking.UntypedTermVariableCheckingError -> Core.Term
 untypedTermVariableCheckingError x =
@@ -225,4 +225,4 @@ untypedTermVariableCheckingError x =
           Core.fieldTerm = (Paths.subtermPath (Checking.untypedTermVariableCheckingErrorPath x))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Core_.name (Checking.untypedTermVariableCheckingErrorName x))}]})
+          Core.fieldTerm = (EncodeCore.name (Checking.untypedTermVariableCheckingErrorName x))}]})

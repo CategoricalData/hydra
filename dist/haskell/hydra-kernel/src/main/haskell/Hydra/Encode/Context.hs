@@ -6,7 +6,7 @@ module Hydra.Encode.Context where
 
 import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
-import qualified Hydra.Encode.Core as Core_
+import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Maps as Maps
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
@@ -24,7 +24,7 @@ context x =
           Core.fieldTerm = ((\xs -> Core.TermList (Lists.map (\x2 -> Core.TermLiteral (Core.LiteralString x2)) xs)) (Context.contextMessages x))},
         Core.Field {
           Core.fieldName = (Core.Name "other"),
-          Core.fieldTerm = ((\m -> Core.TermMap (Maps.bimap Core_.name Core_.term m)) (Context.contextOther x))}]})
+          Core.fieldTerm = ((\m -> Core.TermMap (Maps.bimap EncodeCore.name EncodeCore.term m)) (Context.contextOther x))}]})
 
 inContext :: (t0 -> Core.Term) -> Context.InContext t0 -> Core.Term
 inContext e x =

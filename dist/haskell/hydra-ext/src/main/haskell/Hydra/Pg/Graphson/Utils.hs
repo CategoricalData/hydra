@@ -6,7 +6,7 @@ module Hydra.Pg.Graphson.Utils where
 
 import qualified Hydra.Core as Core
 import qualified Hydra.Errors as Errors
-import qualified Hydra.Json.Model as Model
+import qualified Hydra.Json.Model as JsonModel
 import qualified Hydra.Lib.Eithers as Eithers
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Literals as Literals
@@ -15,53 +15,53 @@ import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Pg.Graphson.Construct as Construct
 import qualified Hydra.Pg.Graphson.Syntax as Syntax
-import qualified Hydra.Pg.Model as Model_
+import qualified Hydra.Pg.Model as PgModel
 import qualified Hydra.Strip as Strip
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 
 -- | Convert a list of property graph elements to a list of vertices with their adjacent edges
-elementsToVerticesWithAdjacentEdges :: Ord t0 => ([Model_.Element t0] -> [Model_.VertexWithAdjacentEdges t0])
+elementsToVerticesWithAdjacentEdges :: Ord t0 => ([PgModel.Element t0] -> [PgModel.VertexWithAdjacentEdges t0])
 elementsToVerticesWithAdjacentEdges els =
 
       let partitioned =
               Lists.foldl (\acc -> \el -> (\x -> case x of
-                Model_.ElementVertex v0 -> (Lists.cons v0 (Pairs.first acc), (Pairs.second acc))
-                Model_.ElementEdge v0 -> (Pairs.first acc, (Lists.cons v0 (Pairs.second acc)))) el) ([], []) els
+                PgModel.ElementVertex v0 -> (Lists.cons v0 (Pairs.first acc), (Pairs.second acc))
+                PgModel.ElementEdge v0 -> (Pairs.first acc, (Lists.cons v0 (Pairs.second acc)))) el) ([], []) els
           vertices = Lists.reverse (Pairs.first partitioned)
           edges = Lists.reverse (Pairs.second partitioned)
           vertexMap0 =
-                  Maps.fromList (Lists.map (\v -> (Model_.vertexId v, Model_.VertexWithAdjacentEdges {
-                    Model_.vertexWithAdjacentEdgesVertex = v,
-                    Model_.vertexWithAdjacentEdgesIns = [],
-                    Model_.vertexWithAdjacentEdgesOuts = []})) vertices)
+                  Maps.fromList (Lists.map (\v -> (PgModel.vertexId v, PgModel.VertexWithAdjacentEdges {
+                    PgModel.vertexWithAdjacentEdgesVertex = v,
+                    PgModel.vertexWithAdjacentEdgesIns = [],
+                    PgModel.vertexWithAdjacentEdgesOuts = []})) vertices)
           vertexMap1 =
                   Lists.foldl (\vmap -> \edge ->
-                    let label = Model_.edgeLabel edge
-                        edgeId = Model_.edgeId edge
-                        outV = Model_.edgeOut edge
-                        inV = Model_.edgeIn edge
-                        props = Model_.edgeProperties edge
+                    let label = PgModel.edgeLabel edge
+                        edgeId = PgModel.edgeId edge
+                        outV = PgModel.edgeOut edge
+                        inV = PgModel.edgeIn edge
+                        props = PgModel.edgeProperties edge
                         adjEdgeOut =
-                                Model_.AdjacentEdge {
-                                  Model_.adjacentEdgeLabel = label,
-                                  Model_.adjacentEdgeId = edgeId,
-                                  Model_.adjacentEdgeVertex = inV,
-                                  Model_.adjacentEdgeProperties = props}
+                                PgModel.AdjacentEdge {
+                                  PgModel.adjacentEdgeLabel = label,
+                                  PgModel.adjacentEdgeId = edgeId,
+                                  PgModel.adjacentEdgeVertex = inV,
+                                  PgModel.adjacentEdgeProperties = props}
                         adjEdgeIn =
-                                Model_.AdjacentEdge {
-                                  Model_.adjacentEdgeLabel = label,
-                                  Model_.adjacentEdgeId = edgeId,
-                                  Model_.adjacentEdgeVertex = outV,
-                                  Model_.adjacentEdgeProperties = props}
+                                PgModel.AdjacentEdge {
+                                  PgModel.adjacentEdgeLabel = label,
+                                  PgModel.adjacentEdgeId = edgeId,
+                                  PgModel.adjacentEdgeVertex = outV,
+                                  PgModel.adjacentEdgeProperties = props}
                         vmap1 =
-                                Maybes.maybe vmap (\vae -> Maps.insert outV (Model_.VertexWithAdjacentEdges {
-                                  Model_.vertexWithAdjacentEdgesVertex = (Model_.vertexWithAdjacentEdgesVertex vae),
-                                  Model_.vertexWithAdjacentEdgesIns = (Model_.vertexWithAdjacentEdgesIns vae),
-                                  Model_.vertexWithAdjacentEdgesOuts = (Lists.cons adjEdgeOut (Model_.vertexWithAdjacentEdgesOuts vae))}) vmap) (Maps.lookup outV vmap)
-                    in (Maybes.maybe vmap1 (\vae -> Maps.insert inV (Model_.VertexWithAdjacentEdges {
-                      Model_.vertexWithAdjacentEdgesVertex = (Model_.vertexWithAdjacentEdgesVertex vae),
-                      Model_.vertexWithAdjacentEdgesIns = (Lists.cons adjEdgeIn (Model_.vertexWithAdjacentEdgesIns vae)),
-                      Model_.vertexWithAdjacentEdgesOuts = (Model_.vertexWithAdjacentEdgesOuts vae)}) vmap1) (Maps.lookup inV vmap1))) vertexMap0 edges
+                                Maybes.maybe vmap (\vae -> Maps.insert outV (PgModel.VertexWithAdjacentEdges {
+                                  PgModel.vertexWithAdjacentEdgesVertex = (PgModel.vertexWithAdjacentEdgesVertex vae),
+                                  PgModel.vertexWithAdjacentEdgesIns = (PgModel.vertexWithAdjacentEdgesIns vae),
+                                  PgModel.vertexWithAdjacentEdgesOuts = (Lists.cons adjEdgeOut (PgModel.vertexWithAdjacentEdgesOuts vae))}) vmap) (Maps.lookup outV vmap)
+                    in (Maybes.maybe vmap1 (\vae -> Maps.insert inV (PgModel.VertexWithAdjacentEdges {
+                      PgModel.vertexWithAdjacentEdgesVertex = (PgModel.vertexWithAdjacentEdgesVertex vae),
+                      PgModel.vertexWithAdjacentEdgesIns = (Lists.cons adjEdgeIn (PgModel.vertexWithAdjacentEdgesIns vae)),
+                      PgModel.vertexWithAdjacentEdgesOuts = (PgModel.vertexWithAdjacentEdgesOuts vae)}) vmap1) (Maps.lookup inV vmap1))) vertexMap0 edges
       in (Maps.elems vertexMap1)
 
 -- | Encode a String value as a GraphSON Value
@@ -91,6 +91,6 @@ encodeTermValue term =
       _ -> Left (Errors.ErrorOther (Errors.OtherError "unsupported term variant for GraphSON encoding"))
 
 -- | Convert property graph elements to a list of GraphSON JSON values
-pgElementsToGraphson :: Ord t0 => ((t0 -> Either t1 Syntax.Value) -> [Model_.Element t0] -> Either t1 [Model.Value])
+pgElementsToGraphson :: Ord t0 => ((t0 -> Either t1 Syntax.Value) -> [PgModel.Element t0] -> Either t1 [JsonModel.Value])
 pgElementsToGraphson encodeValue els =
     Eithers.mapList (Construct.pgVertexWithAdjacentEdgesToJson encodeValue) (elementsToVerticesWithAdjacentEdges els)

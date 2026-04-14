@@ -16,7 +16,7 @@ import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
-import qualified Hydra.Show.Core as Core_
+import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Strip as Strip
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Map as M
@@ -191,7 +191,7 @@ toJson types tname typ term =
           in (Maybes.maybe (toJsonUntyped term) (\resolvedType -> toJson types v0 resolvedType term) lookedUp)
         _ -> Left (Strings.cat [
           "unsupported type for JSON encoding: ",
-          (Core_.type_ typ)])
+          (ShowCore.type_ typ)])
 
 -- | Encode a Hydra term to a JSON value without type information. Falls back to array-wrapped Maybe encoding.
 toJsonUntyped :: Core.Term -> Either String Model.Value
@@ -259,4 +259,4 @@ toJsonUntyped term =
             ("@right", v)])) encodedR)) v0
         _ -> Left (Strings.cat [
           "unsupported term variant for JSON encoding: ",
-          (Core_.term term)])
+          (ShowCore.term term)])

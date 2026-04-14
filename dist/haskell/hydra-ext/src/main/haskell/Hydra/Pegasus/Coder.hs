@@ -26,7 +26,7 @@ import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Pegasus.Pdl as Pdl
 import qualified Hydra.Pegasus.Serde as Serde
 import qualified Hydra.Serialization as Serialization
-import qualified Hydra.Show.Core as Core_
+import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Strip as Strip
 import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
@@ -51,8 +51,8 @@ doc s =
 encode :: t0 -> Graph.Graph -> M.Map Packaging.Namespace String -> Core.Type -> Either Errors.Error Pdl.Schema
 encode cx g aliases t =
     case (Strip.deannotateType t) of
-      Core.TypeRecord v0 -> Logic.ifElse (Lists.null v0) (encode cx g aliases (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))) (Eithers.bind (encodeType cx g aliases t) (\res -> Eithers.either (\schema -> Right schema) (\_ -> Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "type resolved to an unsupported nested named schema: " (Core_.type_ t))))) res))
-      _ -> Eithers.bind (encodeType cx g aliases t) (\res -> Eithers.either (\schema -> Right schema) (\_ -> Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "type resolved to an unsupported nested named schema: " (Core_.type_ t))))) res)
+      Core.TypeRecord v0 -> Logic.ifElse (Lists.null v0) (encode cx g aliases (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))) (Eithers.bind (encodeType cx g aliases t) (\res -> Eithers.either (\schema -> Right schema) (\_ -> Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "type resolved to an unsupported nested named schema: " (ShowCore.type_ t))))) res))
+      _ -> Eithers.bind (encodeType cx g aliases t) (\res -> Eithers.either (\schema -> Right schema) (\_ -> Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "type resolved to an unsupported nested named schema: " (ShowCore.type_ t))))) res)
 
 encodeEnumField :: t0 -> Graph.Graph -> Core.FieldType -> Either Errors.Error Pdl.EnumField
 encodeEnumField cx g ft =
@@ -121,13 +121,13 @@ encodeType cx g aliases typ =
         Core.LiteralTypeFloat v1 -> case v1 of
           Core.FloatTypeFloat32 -> Right (Left (Pdl.SchemaPrimitive Pdl.PrimitiveTypeFloat))
           Core.FloatTypeFloat64 -> Right (Left (Pdl.SchemaPrimitive Pdl.PrimitiveTypeDouble))
-          _ -> Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "Expected " (Strings.cat2 "float32 or float64" (Strings.cat2 ", found: " (Core_.type_ typ))))))
+          _ -> Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "Expected " (Strings.cat2 "float32 or float64" (Strings.cat2 ", found: " (ShowCore.type_ typ))))))
         Core.LiteralTypeInteger v1 -> case v1 of
           Core.IntegerTypeInt32 -> Right (Left (Pdl.SchemaPrimitive Pdl.PrimitiveTypeInt))
           Core.IntegerTypeInt64 -> Right (Left (Pdl.SchemaPrimitive Pdl.PrimitiveTypeLong))
-          _ -> Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "Expected " (Strings.cat2 "int32 or int64" (Strings.cat2 ", found: " (Core_.type_ typ))))))
+          _ -> Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "Expected " (Strings.cat2 "int32 or int64" (Strings.cat2 ", found: " (ShowCore.type_ typ))))))
         Core.LiteralTypeString -> Right (Left (Pdl.SchemaPrimitive Pdl.PrimitiveTypeString))
-        _ -> Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "Expected " (Strings.cat2 "PDL-supported literal type" (Strings.cat2 ", found: " (Core_.type_ typ))))))
+        _ -> Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "Expected " (Strings.cat2 "PDL-supported literal type" (Strings.cat2 ", found: " (ShowCore.type_ typ))))))
       Core.TypeMap v0 -> Eithers.bind (encode cx g aliases (Core.mapTypeValues v0)) (\inner -> Right (Left (Pdl.SchemaMap inner)))
       Core.TypePair v0 -> Eithers.bind (encode cx g aliases (Core.pairTypeFirst v0)) (\firstSchema -> Eithers.bind (encode cx g aliases (Core.pairTypeSecond v0)) (\secondSchema ->
         let firstField =
@@ -158,7 +158,7 @@ encodeType cx g aliases typ =
         Pdl.recordSchemaIncludes = []}))))
       Core.TypeUnion v0 -> Logic.ifElse (Lists.foldl (\b -> \t -> Logic.and b (Equality.equal (Strip.deannotateType t) Core.TypeUnit)) True (Lists.map (\f -> Core.fieldTypeType f) v0)) (Eithers.bind (Eithers.mapList (encodeEnumField cx g) v0) (\fs -> Right (Right (Pdl.NamedSchemaTypeEnum (Pdl.EnumSchema {
         Pdl.enumSchemaFields = fs}))))) (Eithers.bind (Eithers.mapList (encodeUnionField cx g aliases) v0) (\members -> Right (Left (Pdl.SchemaUnion (Pdl.UnionSchema members)))))
-      _ -> Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "Expected " (Strings.cat2 "PDL-supported type" (Strings.cat2 ", found: " (Core_.type_ typ))))))
+      _ -> Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "Expected " (Strings.cat2 "PDL-supported type" (Strings.cat2 ", found: " (ShowCore.type_ typ))))))
 
 encodeUnionField :: t0 -> Graph.Graph -> M.Map Packaging.Namespace String -> Core.FieldType -> Either Errors.Error Pdl.UnionMember
 encodeUnionField cx g aliases ft =

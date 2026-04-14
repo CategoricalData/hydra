@@ -8,10 +8,10 @@ import qualified Hydra.Classes as Classes
 import qualified Hydra.Constants as Constants
 import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
-import qualified Hydra.Decode.Core as Core_
-import qualified Hydra.Encode.Core as Core__
+import qualified Hydra.Decode.Core as DecodeCore
+import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Errors as Errors
-import qualified Hydra.Extract.Core as Core___
+import qualified Hydra.Extract.Core as ExtractCore
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lib.Eithers as Eithers
 import qualified Hydra.Lib.Equality as Equality
@@ -22,7 +22,7 @@ import qualified Hydra.Lib.Math as Math
 import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
-import qualified Hydra.Show.Core as Core____
+import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Strip as Strip
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Map as M
@@ -76,7 +76,7 @@ getCount key cx =
 -- | Get the debug ID from context (Either version)
 getDebugId :: Context.Context -> Either Errors.Error (Maybe String)
 getDebugId cx =
-    Maybes.maybe (Right Nothing) (\term -> Eithers.map Maybes.pure (Core___.string (Graph.Graph {
+    Maybes.maybe (Right Nothing) (\term -> Eithers.map Maybes.pure (ExtractCore.string (Graph.Graph {
       Graph.graphBoundTerms = Maps.empty,
       Graph.graphBoundTypes = Maps.empty,
       Graph.graphClassConstraints = Maps.empty,
@@ -89,7 +89,7 @@ getDebugId cx =
 -- | Get description from annotations map (Either version)
 getDescription :: t0 -> Graph.Graph -> M.Map Core.Name Core.Term -> Either Errors.Error (Maybe String)
 getDescription cx graph anns =
-    Maybes.maybe (Right Nothing) (\term -> Eithers.map Maybes.pure (Core___.string graph term)) (Maps.lookup (Core.Name "description") anns)
+    Maybes.maybe (Right Nothing) (\term -> Eithers.map Maybes.pure (ExtractCore.string graph term)) (Maps.lookup (Core.Name "description") anns)
 
 -- | Get a term annotation
 getTermAnnotation :: Core.Name -> Core.Term -> Maybe Core.Term
@@ -109,7 +109,7 @@ getTermDescription cx graph term =
 -- | Get type from annotations
 getType :: Graph.Graph -> M.Map Core.Name Core.Term -> Either Errors.DecodingError (Maybe Core.Type)
 getType graph anns =
-    Maybes.maybe (Right Nothing) (\dat -> Eithers.map Maybes.pure (Core_.type_ graph dat)) (Maps.lookup Constants.key_type anns)
+    Maybes.maybe (Right Nothing) (\dat -> Eithers.map Maybes.pure (DecodeCore.type_ graph dat)) (Maps.lookup Constants.key_type anns)
 
 -- | Get a type annotation
 getTypeAnnotation :: Core.Name -> Core.Type -> Maybe Core.Term
@@ -125,10 +125,10 @@ getTypeClasses cx graph term =
                         Maps.fromList [
                           (Core.Name "equality", Classes.TypeClassEquality),
                           (Core.Name "ordering", Classes.TypeClassOrdering)]
-                in (Eithers.bind (Core___.unitVariant (Core.Name "hydra.classes.TypeClass") graph term2) (\fn -> Maybes.maybe (Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
+                in (Eithers.bind (ExtractCore.unitVariant (Core.Name "hydra.classes.TypeClass") graph term2) (\fn -> Maybes.maybe (Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
                   Errors.unexpectedShapeErrorExpected = "type class",
-                  Errors.unexpectedShapeErrorActual = (Core____.term term2)})))) (\x -> Right x) (Maps.lookup fn byName)))
-      in (Maybes.maybe (Right Maps.empty) (\term2 -> Core___.map (\t -> Eithers.bimap (\de -> Errors.ErrorDecoding de) (\x -> x) (Core_.name graph t)) (Core___.setOf decodeClass graph) graph term2) (getTermAnnotation Constants.key_classes term))
+                  Errors.unexpectedShapeErrorActual = (ShowCore.term term2)})))) (\x -> Right x) (Maps.lookup fn byName)))
+      in (Maybes.maybe (Right Maps.empty) (\term2 -> ExtractCore.map (\t -> Eithers.bimap (\de -> Errors.ErrorDecoding de) (\x -> x) (DecodeCore.name graph t)) (ExtractCore.setOf decodeClass graph) graph term2) (getTermAnnotation Constants.key_classes term))
 
 -- | Get type description (Either version)
 getTypeDescription :: t0 -> Graph.Graph -> Core.Type -> Either Errors.Error (Maybe String)
@@ -143,7 +143,7 @@ hasFlag :: Context.Context -> Core.Name -> Either Errors.Error Bool
 hasFlag cx flag =
 
       let term = getAttrWithDefault flag (Core.TermLiteral (Core.LiteralBoolean False)) cx
-      in (Core___.boolean (Graph.Graph {
+      in (ExtractCore.boolean (Graph.Graph {
         Graph.graphBoundTerms = Maps.empty,
         Graph.graphBoundTypes = Maps.empty,
         Graph.graphClassConstraints = Maps.empty,
@@ -237,7 +237,7 @@ setTermDescription d =
 
 -- | Set type in annotations
 setType :: Maybe Core.Type -> M.Map Core.Name Core.Term -> M.Map Core.Name Core.Term
-setType mt = setAnnotation Constants.key_type (Maybes.map Core__.type_ mt)
+setType mt = setAnnotation Constants.key_type (Maybes.map EncodeCore.type_ mt)
 
 -- | Set type annotation
 setTypeAnnotation :: Core.Name -> Maybe Core.Term -> Core.Type -> Core.Type
@@ -269,7 +269,7 @@ setTypeClasses m term =
                   \nameClasses ->
                     let name = Pairs.first nameClasses
                         classes = Pairs.second nameClasses
-                    in (Core__.name name, (Core.TermSet (Sets.fromList (Lists.map encodeClass (Sets.toList classes)))))
+                    in (EncodeCore.name name, (Core.TermSet (Sets.fromList (Lists.map encodeClass (Sets.toList classes)))))
           encoded = Logic.ifElse (Maps.null m) Nothing (Just (Core.TermMap (Maps.fromList (Lists.map encodePair (Maps.toList m)))))
       in (setTermAnnotation Constants.key_classes encoded term)
 

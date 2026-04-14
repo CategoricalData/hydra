@@ -5,7 +5,7 @@
 module Hydra.Encode.Tabular where
 
 import qualified Hydra.Core as Core
-import qualified Hydra.Encode.Core as Core_
+import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Encode.Relational as Relational
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Maybes as Maybes
@@ -22,7 +22,7 @@ columnType x =
           Core.fieldTerm = (Relational.columnName (Tabular.columnTypeName x))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = (Core_.type_ (Tabular.columnTypeType x))}]})
+          Core.fieldTerm = (EncodeCore.type_ (Tabular.columnTypeType x))}]})
 
 dataRow :: (t0 -> Core.Term) -> Tabular.DataRow t0 -> Core.Term
 dataRow v x =

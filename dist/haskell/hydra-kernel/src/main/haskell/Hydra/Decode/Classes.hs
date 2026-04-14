@@ -7,7 +7,7 @@ module Hydra.Decode.Classes where
 import qualified Hydra.Classes as Classes
 import qualified Hydra.Core as Core
 import qualified Hydra.Errors as Errors
-import qualified Hydra.Extract.Core as Core_
+import qualified Hydra.Extract.Core as ExtractCore
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lib.Eithers as Eithers
 import qualified Hydra.Lib.Maps as Maps
@@ -24,10 +24,10 @@ typeClass cx raw =
             fterm = Core.fieldTerm field
             variantMap =
                     Maps.fromList [
-                      (Core.Name "equality", (\input -> Eithers.map (\t -> Classes.TypeClassEquality) (Core_.decodeUnit cx input))),
-                      (Core.Name "ordering", (\input -> Eithers.map (\t -> Classes.TypeClassOrdering) (Core_.decodeUnit cx input)))]
+                      (Core.Name "equality", (\input -> Eithers.map (\t -> Classes.TypeClassEquality) (ExtractCore.decodeUnit cx input))),
+                      (Core.Name "ordering", (\input -> Eithers.map (\t -> Classes.TypeClassOrdering) (ExtractCore.decodeUnit cx input)))]
         in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),
           " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
-      _ -> Left (Errors.DecodingError "expected union")) (Core_.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
