@@ -8,10 +8,10 @@ import qualified Hydra.Annotations as Annotations
 import qualified Hydra.Constants as Constants
 import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
-import qualified Hydra.Decode.Core as Core_
-import qualified Hydra.Encode.Core as Core__
+import qualified Hydra.Decode.Core as DecodeCore
+import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Errors as Errors
-import qualified Hydra.Extract.Core as Core___
+import qualified Hydra.Extract.Core as ExtractCore
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lib.Eithers as Eithers
 import qualified Hydra.Lib.Lists as Lists
@@ -158,7 +158,7 @@ encodeTerm subject term cx g =
       Core.TermMap v0 -> Eithers.map (\_r -> ([
         Syntax.Description {
           Syntax.descriptionSubject = (Utils.resourceToNode subject),
-          Syntax.descriptionGraph = (Syntax.Graph (Sets.fromList (Lists.concat (Pairs.first _r))))}], (Pairs.second _r))) (foldAccumResult (\_cx0 -> \kv -> Eithers.bind (Core___.string g (Strip.deannotateTerm (Pairs.first kv))) (\_ks ->
+          Syntax.descriptionGraph = (Syntax.Graph (Sets.fromList (Lists.concat (Pairs.first _r))))}], (Pairs.second _r))) (foldAccumResult (\_cx0 -> \kv -> Eithers.bind (ExtractCore.string g (Strip.deannotateTerm (Pairs.first kv))) (\_ks ->
         let pair2 = Utils.nextBlankNode _cx0
             node2 = Pairs.first pair2
             cx2 = Pairs.second pair2
@@ -250,7 +250,7 @@ shaclCoder mod cx g =
                   let schemaTerm = Core.TermVariable (Core.Name "hydra.core.Type")
                       dataTerm =
                               Annotations.normalizeTermAnnotations (Core.TermAnnotated (Core.AnnotatedTerm {
-                                Core.annotatedTermBody = (Core__.type_ typ),
+                                Core.annotatedTermBody = (EncodeCore.type_ typ),
                                 Core.annotatedTermAnnotation = (Maps.fromList [
                                   (Constants.key_type, schemaTerm)])}))
                   in Core.Binding {
@@ -262,7 +262,7 @@ shaclCoder mod cx g =
                       Core.typeSchemeConstraints = Nothing}))}) (Packaging.typeDefinitionName v0) (Core.typeSchemeType (Packaging.typeDefinitionType v0)))
                 _ -> Nothing) (Packaging.moduleDefinitions mod))
           toShape =
-                  \el -> Eithers.bind (Eithers.bimap (\_de -> Errors.ErrorOther (Errors.OtherError (Errors.unDecodingError _de))) (\_t -> _t) (Core_.type_ g (Core.bindingTerm el))) (\_typ -> Eithers.map (\_cp -> Model.Definition {
+                  \el -> Eithers.bind (Eithers.bimap (\_de -> Errors.ErrorOther (Errors.OtherError (Errors.unDecodingError _de))) (\_t -> _t) (DecodeCore.type_ g (Core.bindingTerm el))) (\_typ -> Eithers.map (\_cp -> Model.Definition {
                     Model.definitionIri = (elementIri el),
                     Model.definitionTarget = (Model.ShapeNode (Model.NodeShape {
                       Model.nodeShapeCommon = _cp}))}) (encodeType (Core.bindingName el) _typ cx))

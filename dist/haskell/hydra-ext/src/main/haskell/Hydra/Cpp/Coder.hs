@@ -26,7 +26,7 @@ import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Predicates as Predicates
 import qualified Hydra.Resolution as Resolution
 import qualified Hydra.Serialization as Serialization
-import qualified Hydra.Show.Core as Core_
+import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Strip as Strip
 import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
@@ -489,7 +489,7 @@ encodeTypeDefinition cx g name typ =
         Core.TypeRecord v0 -> encodeRecordType cx g name v0 Nothing
         Core.TypeUnion v0 -> encodeUnionType cx g name v0 Nothing
         Core.TypeWrap v0 -> encodeWrappedType cx g name v0 Nothing
-        _ -> Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "unexpected type in definition: " (Core_.type_ typ))))
+        _ -> Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "unexpected type in definition: " (ShowCore.type_ typ))))
 
 encodeUnionType :: t0 -> t1 -> Core.Name -> [Core.FieldType] -> t2 -> Either Errors.Error [Syntax.Declaration]
 encodeUnionType cx g name rt comment =

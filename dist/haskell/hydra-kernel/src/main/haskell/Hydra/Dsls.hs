@@ -7,8 +7,8 @@ module Hydra.Dsls where
 import qualified Hydra.Annotations as Annotations
 import qualified Hydra.Constants as Constants
 import qualified Hydra.Core as Core
-import qualified Hydra.Decode.Core as Core_
-import qualified Hydra.Encode.Core as Core__
+import qualified Hydra.Decode.Core as DecodeCore
+import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Formatting as Formatting
 import qualified Hydra.Graph as Graph
@@ -82,7 +82,7 @@ dslModule cx graph mod =
         let schemaTerm = Core.TermVariable (Core.Name "hydra.core.Type")
             dataTerm =
                     Annotations.normalizeTermAnnotations (Core.TermAnnotated (Core.AnnotatedTerm {
-                      Core.annotatedTermBody = (Core__.type_ typ),
+                      Core.annotatedTermBody = (EncodeCore.type_ typ),
                       Core.annotatedTermAnnotation = (Maps.fromList [
                         (Constants.key_type, schemaTerm)])}))
         in Core.Binding {
@@ -154,7 +154,7 @@ generateBindingsForType :: t0 -> Graph.Graph -> Core.Binding -> Either Errors.De
 generateBindingsForType cx graph b =
 
       let typeName = Core.bindingName b
-      in (Eithers.bind (Core_.type_ graph (Core.bindingTerm b)) (\rawType ->
+      in (Eithers.bind (DecodeCore.type_ graph (Core.bindingTerm b)) (\rawType ->
         let typ = Strip.deannotateTypeParameters (Strip.deannotateType rawType)
         in (Right (case typ of
           Core.TypeRecord v0 -> Lists.concat [

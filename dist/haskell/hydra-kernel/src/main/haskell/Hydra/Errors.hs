@@ -6,7 +6,7 @@ module Hydra.Errors where
 
 import qualified Hydra.Core as Core
 import qualified Hydra.Error.Checking as Checking
-import qualified Hydra.Error.Core as Core_
+import qualified Hydra.Error.Core as ErrorCore
 import qualified Hydra.Paths as Paths
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 
@@ -30,9 +30,9 @@ data Error =
   -- | An error that occurred during decoding of a term
   ErrorDecoding DecodingError |
   -- | A duplicate binding name error
-  ErrorDuplicateBinding Core_.DuplicateBindingError |
+  ErrorDuplicateBinding ErrorCore.DuplicateBindingError |
   -- | A duplicate field name error
-  ErrorDuplicateField Core_.DuplicateFieldError |
+  ErrorDuplicateField ErrorCore.DuplicateFieldError |
   -- | An error that occurred while extracting a value from a term
   ErrorExtraction ExtractionError |
   -- | A type inference error
@@ -42,15 +42,15 @@ data Error =
   -- | A name-resolution error
   ErrorResolution ResolutionError |
   -- | A reference to an undefined field
-  ErrorUndefinedField Core_.UndefinedFieldError |
+  ErrorUndefinedField ErrorCore.UndefinedFieldError |
   -- | A reference to an undefined term variable
-  ErrorUndefinedTermVariable Core_.UndefinedTermVariableError |
+  ErrorUndefinedTermVariable ErrorCore.UndefinedTermVariableError |
   -- | A term variable whose type is not known
-  ErrorUntypedTermVariable Core_.UntypedTermVariableError |
+  ErrorUntypedTermVariable ErrorCore.UntypedTermVariableError |
   -- | An unexpected term variant
-  ErrorUnexpectedTermVariant Core_.UnexpectedTermVariantError |
+  ErrorUnexpectedTermVariant ErrorCore.UnexpectedTermVariantError |
   -- | An unexpected type variant
-  ErrorUnexpectedTypeVariant Core_.UnexpectedTypeVariantError |
+  ErrorUnexpectedTypeVariant ErrorCore.UnexpectedTypeVariantError |
   -- | A type unification error
   ErrorUnification UnificationError
   deriving (Eq, Ord, Read, Show)

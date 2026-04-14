@@ -9,7 +9,7 @@ import qualified Hydra.Errors as Errors
 import qualified Hydra.Formatting as Formatting
 import qualified Hydra.Java.Environment as Environment
 import qualified Hydra.Java.Language as Language
-import qualified Hydra.Java.Names as Names
+import qualified Hydra.Java.Names as JavaNames
 import qualified Hydra.Java.Syntax as Syntax
 import qualified Hydra.Lib.Eithers as Eithers
 import qualified Hydra.Lib.Equality as Equality
@@ -22,7 +22,7 @@ import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
-import qualified Hydra.Names as Names_
+import qualified Hydra.Names as Names
 import qualified Hydra.Packaging as Packaging
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 
@@ -731,7 +731,7 @@ javaVariableDeclaratorId id =
       Syntax.variableDeclaratorIdDims = Nothing}
 
 javaVariableName :: Core.Name -> Syntax.Identifier
-javaVariableName name = javaIdentifier (Names_.localNameOf name)
+javaVariableName name = javaIdentifier (Names.localNameOf name)
 
 lookupJavaVarName :: Environment.Aliases -> Core.Name -> Core.Name
 lookupJavaVarName aliases name =
@@ -810,7 +810,7 @@ nameToJavaClassType aliases qualify args name mlocal =
 nameToJavaName :: Environment.Aliases -> Core.Name -> Syntax.Identifier
 nameToJavaName aliases name =
 
-      let qn = Names_.qualifyName name
+      let qn = Names.qualifyName name
           ns_ = Packaging.qualifiedNameNamespace qn
           local = Packaging.qualifiedNameLocal qn
       in (Logic.ifElse (isEscaped (Core.unName name)) (Syntax.Identifier (sanitizeJavaName local)) (Maybes.cases ns_ (Syntax.Identifier local) (\gname ->
@@ -830,11 +830,11 @@ nameToJavaTypeIdentifier aliases qualify name = Pairs.first (nameToQualifiedJava
 nameToQualifiedJavaName :: Environment.Aliases -> Bool -> Core.Name -> Maybe String -> (Syntax.TypeIdentifier, Syntax.ClassTypeQualifier)
 nameToQualifiedJavaName aliases qualify name mlocal =
 
-      let qn = Names_.qualifyName name
+      let qn = Names.qualifyName name
           ns_ = Packaging.qualifiedNameNamespace qn
           local = Packaging.qualifiedNameLocal qn
           alias =
-                  Maybes.cases ns_ Nothing (\n -> Just (Maybes.cases (Maps.lookup n (Environment.aliasesPackages aliases)) (Names.javaPackageName (Strings.splitOn "." (Packaging.unNamespace n))) (\id -> id)))
+                  Maybes.cases ns_ Nothing (\n -> Just (Maybes.cases (Maps.lookup n (Environment.aliasesPackages aliases)) (JavaNames.javaPackageName (Strings.splitOn "." (Packaging.unNamespace n))) (\id -> id)))
           pkg =
                   Logic.ifElse qualify (Maybes.cases alias Syntax.ClassTypeQualifierNone (\p -> Syntax.ClassTypeQualifierPackage p)) Syntax.ClassTypeQualifierNone
           jid =
@@ -868,7 +868,7 @@ toAcceptMethod abstract vtparams =
                 Syntax.MethodModifierAbstract] [
                 Syntax.MethodModifierPublic]
           tparams = [
-                javaTypeParameter Names.visitorReturnParameter]
+                javaTypeParameter JavaNames.visitorReturnParameter]
           anns = Logic.ifElse abstract [] [
                 overrideAnnotation]
           typeArgs = Lists.map (\tp -> Syntax.TypeArgumentReference (typeParameterToReferenceType tp)) vtparams
@@ -876,17 +876,17 @@ toAcceptMethod abstract vtparams =
                   javaClassTypeToJavaType (Syntax.ClassType {
                     Syntax.classTypeAnnotations = [],
                     Syntax.classTypeQualifier = Syntax.ClassTypeQualifierNone,
-                    Syntax.classTypeIdentifier = (javaTypeIdentifier Names.visitorName),
+                    Syntax.classTypeIdentifier = (javaTypeIdentifier JavaNames.visitorName),
                     Syntax.classTypeArguments = (Lists.concat2 typeArgs [
                       Syntax.TypeArgumentReference visitorTypeVariable])})
           param = javaTypeToJavaFormalParameter ref (Core.Name "visitor")
           result = javaTypeToJavaResult (Syntax.TypeReference visitorTypeVariable)
           returnExpr =
-                  javaMethodInvocationToJavaExpression (methodInvocationStatic (Syntax.Identifier "visitor") (Syntax.Identifier Names.visitMethodName) [
+                  javaMethodInvocationToJavaExpression (methodInvocationStatic (Syntax.Identifier "visitor") (Syntax.Identifier JavaNames.visitMethodName) [
                     javaThis])
           body = Logic.ifElse abstract Nothing (Just [
                 Syntax.BlockStatementStatement (javaReturnStatement (Just returnExpr))])
-      in (methodDeclaration mods tparams anns Names.acceptMethodName [
+      in (methodDeclaration mods tparams anns JavaNames.acceptMethodName [
         param] result body)
 
 toAssignStmt :: Core.Name -> Syntax.Statement
@@ -970,13 +970,13 @@ variableToJavaIdentifier name =
 variantClassName :: Bool -> Core.Name -> Core.Name -> Core.Name
 variantClassName qualify elName fname =
 
-      let qn = Names_.qualifyName elName
+      let qn = Names.qualifyName elName
           ns_ = Packaging.qualifiedNameNamespace qn
           local = Packaging.qualifiedNameLocal qn
           flocal = Formatting.capitalize (Core.unName fname)
           local1 =
                   Logic.ifElse qualify (Strings.cat2 (Strings.cat2 local ".") flocal) (Logic.ifElse (Equality.equal flocal local) (Strings.cat2 flocal "_") flocal)
-      in (Names_.unqualifyName (Packaging.QualifiedName {
+      in (Names.unqualifyName (Packaging.QualifiedName {
         Packaging.qualifiedNameNamespace = ns_,
         Packaging.qualifiedNameLocal = local1}))
 

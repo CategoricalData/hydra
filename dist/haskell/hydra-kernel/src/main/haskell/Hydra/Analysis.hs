@@ -10,9 +10,9 @@ import qualified Hydra.Coders as Coders
 import qualified Hydra.Constants as Constants
 import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
-import qualified Hydra.Decode.Core as Core_
+import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Dependencies as Dependencies
-import qualified Hydra.Encode.Core as Core__
+import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lib.Eithers as Eithers
@@ -123,10 +123,10 @@ dependencyNamespaces cx graph binds withPrims withNoms withSchema els =
                 in (Logic.ifElse (Predicates.isEncodedType deannotatedTerm) (Eithers.map (\typ -> Sets.unions [
                   dataNames,
                   schemaNames,
-                  (Dependencies.typeDependencyNames True typ)]) (Eithers.bimap (\_e -> Errors.ErrorDecoding _e) (\_a -> _a) (Core_.type_ graph term))) (Logic.ifElse (Predicates.isEncodedTerm deannotatedTerm) (Eithers.map (\decodedTerm -> Sets.unions [
+                  (Dependencies.typeDependencyNames True typ)]) (Eithers.bimap (\_e -> Errors.ErrorDecoding _e) (\_a -> _a) (DecodeCore.type_ graph term))) (Logic.ifElse (Predicates.isEncodedTerm deannotatedTerm) (Eithers.map (\decodedTerm -> Sets.unions [
                   dataNames,
                   schemaNames,
-                  (Dependencies.termDependencyNames binds withPrims withNoms decodedTerm)]) (Eithers.bimap (\_e -> Errors.ErrorDecoding _e) (\_a -> _a) (Core_.term graph term))) (Right (Sets.unions [
+                  (Dependencies.termDependencyNames binds withPrims withNoms decodedTerm)]) (Eithers.bimap (\_e -> Errors.ErrorDecoding _e) (\_a -> _a) (DecodeCore.term graph term))) (Right (Sets.unions [
                   dataNames,
                   schemaNames]))))
       in (Eithers.map (\namesList -> Sets.fromList (Maybes.cat (Lists.map Names.namespaceOf (Sets.toList (Sets.unions namesList))))) (Eithers.mapList depNames els))
@@ -277,7 +277,7 @@ moduleDependencyNamespaces cx graph binds withPrims withNoms withSchema mod =
                   let schemaTerm = Core.TermVariable (Core.Name "hydra.core.Type")
                       dataTerm =
                               Annotations.normalizeTermAnnotations (Core.TermAnnotated (Core.AnnotatedTerm {
-                                Core.annotatedTermBody = (Core__.type_ typ),
+                                Core.annotatedTermBody = (EncodeCore.type_ typ),
                                 Core.annotatedTermAnnotation = (Maps.fromList [
                                   (Constants.key_type, schemaTerm)])}))
                   in Core.Binding {

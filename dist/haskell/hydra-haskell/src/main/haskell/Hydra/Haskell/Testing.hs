@@ -7,7 +7,7 @@ module Hydra.Haskell.Testing where
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Constants as Constants
 import qualified Hydra.Core as Core
-import qualified Hydra.Decode.Core as Core_
+import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Dependencies as Dependencies
 import qualified Hydra.Formatting as Formatting
 import qualified Hydra.Graph as Graph
@@ -120,7 +120,7 @@ buildTestModule testModule testGroup testBody namespaces =
 -- | Collect variable names from encoded terms within a single term node
 collectNames :: Graph.Graph -> S.Set Core.Name -> Core.Term -> S.Set Core.Name
 collectNames graf names t =
-    Logic.ifElse (Predicates.isEncodedTerm (Strip.deannotateTerm t)) (Eithers.either (\_ -> names) (\decodedTerm -> Sets.union names (Dependencies.termDependencyNames True True True decodedTerm)) (Eithers.bimap (\_e -> _e) (\_a -> _a) (Core_.term graf t))) names
+    Logic.ifElse (Predicates.isEncodedTerm (Strip.deannotateTerm t)) (Eithers.either (\_ -> names) (\decodedTerm -> Sets.union names (Dependencies.termDependencyNames True True True decodedTerm)) (Eithers.bimap (\_e -> _e) (\_a -> _a) (DecodeCore.term graf t))) names
 
 -- | Collect all test cases from a test group recursively
 collectTestCases :: Testing.TestGroup -> [Testing.TestCaseWithMetadata]

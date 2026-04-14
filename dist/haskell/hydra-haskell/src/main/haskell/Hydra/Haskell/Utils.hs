@@ -16,6 +16,7 @@ import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
+import qualified Hydra.Lib.Math as Math
 import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
@@ -80,28 +81,61 @@ namespacesForModule :: Packaging.Module -> t0 -> Graph.Graph -> Either Errors.Er
 namespacesForModule mod cx g =
     Eithers.bind (Analysis.moduleDependencyNamespaces cx g True True True True mod) (\nss ->
       let ns = Packaging.moduleNamespace mod
-          toModuleName =
-                  \namespace ->
-                    let namespaceStr = Packaging.unNamespace namespace
-                        parts = Strings.splitOn "." namespaceStr
-                        lastPart = Lists.last parts
-                        capitalized = Formatting.capitalize lastPart
-                    in (Syntax.ModuleName capitalized)
-          toPair = \name -> (name, (toModuleName name))
-          addPair =
-                  \state -> \namePair ->
-                    let currentMap = Pairs.first state
-                        currentSet = Pairs.second state
-                        name = Pairs.first namePair
-                        alias = Pairs.second namePair
-                        aliasStr = Syntax.unModuleName alias
-                    in (Logic.ifElse (Sets.member alias currentSet) (addPair state (name, (Syntax.ModuleName (Strings.cat2 aliasStr "_")))) (Maps.insert name alias currentMap, (Sets.insert alias currentSet)))
-          focusPair = toPair ns
+          segmentsOf = \namespace -> Strings.splitOn "." (Packaging.unNamespace namespace)
+          aliasFromSuffix =
+                  \segs -> \n ->
+                    let dropCount = Math.sub (Lists.length segs) n
+                        suffix = Lists.drop dropCount segs
+                        capitalizedSuffix = Lists.map Formatting.capitalize suffix
+                    in (Syntax.ModuleName (Strings.cat capitalizedSuffix))
+          toModuleName = \namespace -> aliasFromSuffix (segmentsOf namespace) 1
+          focusPair = (ns, (toModuleName ns))
           nssAsList = Sets.toList nss
-          nssPairs = Lists.map toPair nssAsList
-          emptyState = (Maps.empty, Sets.empty)
-          finalState = Lists.foldl addPair emptyState nssPairs
-          resultMap = Pairs.first finalState
+          segsMap = Maps.fromList (Lists.map (\nm -> (nm, (segmentsOf nm))) nssAsList)
+          maxSegs =
+                  Lists.foldl (\a -> \b -> Logic.ifElse (Equality.gt a b) a b) 1 (Lists.map (\nm -> Lists.length (segmentsOf nm)) nssAsList)
+          initialState = Maps.fromList (Lists.map (\nm -> (nm, 1)) nssAsList)
+          segsFor = \nm -> Maybes.fromMaybe [] (Maps.lookup nm segsMap)
+          takenFor = \state -> \nm -> Maybes.fromMaybe 1 (Maps.lookup nm state)
+          growStep =
+                  \state -> \_ign ->
+                    let aliasEntries =
+                            Lists.map (\nm ->
+                              let segs = segsFor nm
+                                  n = takenFor state nm
+                                  segCount = Lists.length segs
+                                  aliasStr = Syntax.unModuleName (aliasFromSuffix segs n)
+                              in (nm, (n, (segCount, aliasStr)))) nssAsList
+                        aliasCounts =
+                                Lists.foldl (\m -> \e ->
+                                  let k = Pairs.second (Pairs.second (Pairs.second e))
+                                  in (Maps.insert k (Math.add 1 (Maybes.fromMaybe 0 (Maps.lookup k m))) m)) Maps.empty aliasEntries
+                        aliasMinSegs =
+                                Lists.foldl (\m -> \e ->
+                                  let segCount = Pairs.first (Pairs.second (Pairs.second e))
+                                      k = Pairs.second (Pairs.second (Pairs.second e))
+                                      existing = Maps.lookup k m
+                                  in (Maps.insert k (Maybes.cases existing segCount (\prev -> Logic.ifElse (Equality.lt segCount prev) segCount prev)) m)) Maps.empty aliasEntries
+                        aliasMinSegsCount =
+                                Lists.foldl (\m -> \e ->
+                                  let segCount = Pairs.first (Pairs.second (Pairs.second e))
+                                      k = Pairs.second (Pairs.second (Pairs.second e))
+                                      minSegs = Maybes.fromMaybe segCount (Maps.lookup k aliasMinSegs)
+                                  in (Logic.ifElse (Equality.equal segCount minSegs) (Maps.insert k (Math.add 1 (Maybes.fromMaybe 0 (Maps.lookup k m))) m) m)) Maps.empty aliasEntries
+                    in (Maps.fromList (Lists.map (\e ->
+                      let nm = Pairs.first e
+                          n = Pairs.first (Pairs.second e)
+                          segCount = Pairs.first (Pairs.second (Pairs.second e))
+                          aliasStr = Pairs.second (Pairs.second (Pairs.second e))
+                          count = Maybes.fromMaybe 0 (Maps.lookup aliasStr aliasCounts)
+                          minSegs = Maybes.fromMaybe segCount (Maps.lookup aliasStr aliasMinSegs)
+                          minSegsCount = Maybes.fromMaybe 0 (Maps.lookup aliasStr aliasMinSegsCount)
+                          canGrow =
+                                  Logic.and (Equality.gt count 1) (Logic.and (Equality.gt segCount n) (Logic.or (Equality.gt segCount minSegs) (Equality.gt minSegsCount 1)))
+                          newN = Logic.ifElse canGrow (Math.add n 1) n
+                      in (nm, newN)) aliasEntries))
+          finalState = Lists.foldl growStep initialState (Lists.replicate maxSegs ())
+          resultMap = Maps.fromList (Lists.map (\nm -> (nm, (aliasFromSuffix (segsFor nm) (takenFor finalState nm)))) nssAsList)
       in (Right (Packaging.Namespaces {
         Packaging.namespacesFocus = focusPair,
         Packaging.namespacesMapping = resultMap})))

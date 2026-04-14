@@ -5,8 +5,8 @@
 module Hydra.Environment where
 
 import qualified Hydra.Core as Core
-import qualified Hydra.Decode.Core as Core_
-import qualified Hydra.Encode.Core as Core__
+import qualified Hydra.Decode.Core as DecodeCore
+import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lexical as Lexical
@@ -50,7 +50,7 @@ graphAsTerm bindings body = Core.TermLet (graphAsLet bindings body)
 graphAsTypes :: Graph.Graph -> [Core.Binding] -> Either Errors.DecodingError (M.Map Core.Name Core.Type)
 graphAsTypes graph els =
 
-      let toPair = \el -> Eithers.map (\typ -> (Core.bindingName el, typ)) (Core_.type_ graph (Core.bindingTerm el))
+      let toPair = \el -> Eithers.map (\typ -> (Core.bindingName el, typ)) (DecodeCore.type_ graph (Core.bindingTerm el))
       in (Eithers.map Maps.fromList (Eithers.mapList toPair els))
 
 -- | Partition a list of definitions into type definitions and term definitions
@@ -102,8 +102,8 @@ schemaGraphToTypingEnvironment g =
                   Core.typeSchemeVariables = (Lists.reverse vars),
                   Core.typeSchemeType = typ,
                   Core.typeSchemeConstraints = Nothing}
-          decodeType = \term -> Eithers.bimap (\_e -> Errors.ErrorDecoding _e) (\_a -> _a) (Core_.type_ g term)
-          decodeTypeScheme = \term -> Eithers.bimap (\_e -> Errors.ErrorDecoding _e) (\_a -> _a) (Core_.typeScheme g term)
+          decodeType = \term -> Eithers.bimap (\_e -> Errors.ErrorDecoding _e) (\_a -> _a) (DecodeCore.type_ g term)
+          decodeTypeScheme = \term -> Eithers.bimap (\_e -> Errors.ErrorDecoding _e) (\_a -> _a) (DecodeCore.typeScheme g term)
           toPair =
                   \el ->
                     let forTerm =
@@ -136,7 +136,7 @@ typesToDefinitions typeMap =
                 let name = Pairs.first pair
                 in Core.Binding {
                   Core.bindingName = name,
-                  Core.bindingTerm = (Core__.type_ (Pairs.second pair)),
+                  Core.bindingTerm = (EncodeCore.type_ (Pairs.second pair)),
                   Core.bindingType = Nothing}
       in (Lists.map toElement (Maps.toList typeMap))
 

@@ -8,9 +8,9 @@ import qualified Hydra.Arity as Arity
 import qualified Hydra.Checking as Checking
 import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
-import qualified Hydra.Encode.Core as Core_
+import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Errors as Errors
-import qualified Hydra.Extract.Core as Core__
+import qualified Hydra.Extract.Core as ExtractCore
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lexical as Lexical
 import qualified Hydra.Lib.Eithers as Eithers
@@ -27,7 +27,7 @@ import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Resolution as Resolution
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Scoping as Scoping
-import qualified Hydra.Show.Errors as Errors_
+import qualified Hydra.Show.Errors as ShowErrors
 import qualified Hydra.Strip as Strip
 import qualified Hydra.Variables as Variables
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
@@ -146,7 +146,7 @@ etaExpandTerm tx0 term0 =
                           fullyApplied =
                                   Maybes.maybe fullyAppliedRaw (\ct -> Core.TermAnnotated (Core.AnnotatedTerm {
                                     Core.annotatedTermBody = fullyAppliedRaw,
-                                    Core.annotatedTermAnnotation = (Maps.singleton (Core.Name "type") (Core_.type_ ct))})) codomainType
+                                    Core.annotatedTermAnnotation = (Maps.singleton (Core.Name "type") (EncodeCore.type_ ct))})) codomainType
                           indexedDomains = Lists.zip indices domains
                       in (Lists.foldl (\body -> \idPair ->
                         let i = Pairs.first idPair
@@ -459,20 +459,20 @@ reduceTerm cx graph eager term =
                   \fun -> \args -> Logic.ifElse (Lists.null args) fun (applyToArguments (Core.TermApplication (Core.Application {
                     Core.applicationFunction = fun,
                     Core.applicationArgument = (Lists.head args)})) (Lists.tail args))
-          mapErrorToString = \e -> Errors.ErrorOther (Errors.OtherError (Errors_.error e))
+          mapErrorToString = \e -> Errors.ErrorOther (Errors.OtherError (ShowErrors.error e))
           applyElimination =
                   \elm -> \reducedArg -> case elm of
-                    Core.EliminationRecord v0 -> Eithers.bind (Core__.record (Core.projectionTypeName v0) graph (Strip.deannotateTerm reducedArg)) (\fields ->
+                    Core.EliminationRecord v0 -> Eithers.bind (ExtractCore.record (Core.projectionTypeName v0) graph (Strip.deannotateTerm reducedArg)) (\fields ->
                       let matchingFields = Lists.filter (\f -> Equality.equal (Core.fieldName f) (Core.projectionField v0)) fields
                       in (Logic.ifElse (Lists.null matchingFields) (Left (Errors.ErrorResolution (Errors.ResolutionErrorNoMatchingField (Errors.NoMatchingFieldError {
                         Errors.noMatchingFieldErrorFieldName = (Core.projectionField v0)})))) (Right (Core.fieldTerm (Lists.head matchingFields)))))
-                    Core.EliminationUnion v0 -> Eithers.bind (Core__.injection (Core.caseStatementTypeName v0) graph reducedArg) (\field ->
+                    Core.EliminationUnion v0 -> Eithers.bind (ExtractCore.injection (Core.caseStatementTypeName v0) graph reducedArg) (\field ->
                       let matchingFields = Lists.filter (\f -> Equality.equal (Core.fieldName f) (Core.fieldName field)) (Core.caseStatementCases v0)
                       in (Logic.ifElse (Lists.null matchingFields) (Maybes.maybe (Left (Errors.ErrorResolution (Errors.ResolutionErrorNoMatchingField (Errors.NoMatchingFieldError {
                         Errors.noMatchingFieldErrorFieldName = (Core.fieldName field)})))) (\x -> Right x) (Core.caseStatementDefault v0)) (Right (Core.TermApplication (Core.Application {
                         Core.applicationFunction = (Core.fieldTerm (Lists.head matchingFields)),
                         Core.applicationArgument = (Core.fieldTerm field)})))))
-                    Core.EliminationWrap v0 -> Core__.wrap v0 graph reducedArg
+                    Core.EliminationWrap v0 -> ExtractCore.wrap v0 graph reducedArg
           applyIfNullary =
                   \eager2 -> \original -> \args ->
                     let stripped = Strip.deannotateTerm original

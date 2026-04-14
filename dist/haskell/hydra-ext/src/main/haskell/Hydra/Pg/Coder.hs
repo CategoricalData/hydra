@@ -9,7 +9,7 @@ import qualified Hydra.Coders as Coders
 import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Errors as Errors
-import qualified Hydra.Extract.Core as Core_
+import qualified Hydra.Extract.Core as ExtractCore
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lib.Eithers as Eithers
 import qualified Hydra.Lib.Equality as Equality
@@ -177,7 +177,7 @@ encodeProperty cx fields adapter =
 
 -- | Extract a string from a term
 extractString :: t0 -> Graph.Graph -> Core.Term -> Either Errors.Error String
-extractString cx g t = Core_.string g t
+extractString cx g t = ExtractCore.string g t
 
 -- | Find adjacent edge adapters for a given direction
 findAdjacenEdgeAdapters :: Context.Context -> Graph.Graph -> Mapping.Schema t0 t1 t2 -> t1 -> t1 -> Model.VertexLabel -> Model.Direction -> [Core.FieldType] -> Either Errors.Error [(Model.Direction, (Core.FieldType, (Model.EdgeLabel, (Coders.Adapter Core.Type (Model.ElementTypeTree t1) Core.Term (Model.ElementTree t2)))))]

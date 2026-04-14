@@ -15,7 +15,7 @@ import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Rewriting as Rewriting
-import qualified Hydra.Show.Core as Core_
+import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Strip as Strip
 import qualified Hydra.Substitution as Substitution
 import qualified Hydra.Typing as Typing
@@ -37,7 +37,7 @@ joinTypes cx left right comment =
                   Left (Errors.UnificationError {
                     Errors.unificationErrorLeftType = sleft,
                     Errors.unificationErrorRightType = sright,
-                    Errors.unificationErrorMessage = (Strings.cat2 (Strings.cat2 (Strings.cat2 "cannot unify " (Core_.type_ sleft)) " with ") (Core_.type_ sright))})
+                    Errors.unificationErrorMessage = (Strings.cat2 (Strings.cat2 (Strings.cat2 "cannot unify " (ShowCore.type_ sleft)) " with ") (ShowCore.type_ sright))})
           assertEqual = Logic.ifElse (Equality.equal sleft sright) (Right []) cannotUnify
           joinList =
                   \lefts -> \rights -> Logic.ifElse (Equality.equal (Lists.length lefts) (Lists.length rights)) (Right (Lists.zipWith joinOne lefts rights)) cannotUnify
@@ -123,7 +123,7 @@ unifyTypeConstraints cx schemaTypes constraints =
                             \v -> \t -> Logic.ifElse (variableOccursInType v t) (Left (Errors.UnificationError {
                               Errors.unificationErrorLeftType = sleft,
                               Errors.unificationErrorRightType = sright,
-                              Errors.unificationErrorMessage = (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 "Variable " (Core.unName v)) " appears free in type ") (Core_.type_ t)) " (") comment) ")")})) (bind v t)
+                              Errors.unificationErrorMessage = (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 "Variable " (Core.unName v)) " appears free in type ") (ShowCore.type_ t)) " (") comment) ")")})) (bind v t)
                     noVars =
 
                               let withConstraints = \constraints2 -> unifyTypeConstraints cx schemaTypes (Lists.concat2 constraints2 rest)

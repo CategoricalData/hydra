@@ -7,7 +7,7 @@ module Hydra.Eval.Lib.Lists where
 import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Errors as Errors
-import qualified Hydra.Extract.Core as Core_
+import qualified Hydra.Extract.Core as ExtractCore
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lib.Eithers as Eithers
 import qualified Hydra.Lib.Lists as Lists
@@ -19,7 +19,7 @@ import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pur
 -- | Interpreter-friendly applicative apply for List terms.
 apply :: t0 -> Graph.Graph -> Core.Term -> Core.Term -> Either Errors.Error Core.Term
 apply cx g funsTerm argsTerm =
-    Eithers.bind (Core_.list g funsTerm) (\funs -> Eithers.bind (Core_.list g argsTerm) (\arguments ->
+    Eithers.bind (ExtractCore.list g funsTerm) (\funs -> Eithers.bind (ExtractCore.list g argsTerm) (\arguments ->
       let applyOne =
               \f -> Lists.map (\arg -> Core.TermApplication (Core.Application {
                 Core.applicationFunction = f,
@@ -29,7 +29,7 @@ apply cx g funsTerm argsTerm =
 -- | Interpreter-friendly monadic bind for List terms.
 bind :: t0 -> Graph.Graph -> Core.Term -> Core.Term -> Either Errors.Error Core.Term
 bind cx g listTerm funTerm =
-    Eithers.bind (Core_.list g listTerm) (\elements -> Right (Core.TermApplication (Core.Application {
+    Eithers.bind (ExtractCore.list g listTerm) (\elements -> Right (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.concat")),
       Core.applicationArgument = (Core.TermList (Lists.map (\el -> Core.TermApplication (Core.Application {
         Core.applicationFunction = funTerm,
@@ -71,7 +71,7 @@ elem cx g x listTerm =
 -- | Interpreter-friendly filter for List terms.
 filter :: t0 -> Graph.Graph -> Core.Term -> Core.Term -> Either Errors.Error Core.Term
 filter cx g predTerm listTerm =
-    Eithers.bind (Core_.list g listTerm) (\elements -> Right (Core.TermApplication (Core.Application {
+    Eithers.bind (ExtractCore.list g listTerm) (\elements -> Right (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.concat")),
       Core.applicationArgument = (Core.TermList (Lists.map (\el -> Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermApplication (Core.Application {
@@ -97,7 +97,7 @@ find cx g predTerm listTerm =
 -- | Interpreter-friendly left fold for List terms.
 foldl :: Context.Context -> Graph.Graph -> Core.Term -> Core.Term -> Core.Term -> Either Errors.Error Core.Term
 foldl cx g funTerm initTerm listTerm =
-    Eithers.bind (Core_.list g listTerm) (\elements -> Lists.foldl (\acc -> \el -> Eithers.bind acc (\reducedAcc -> Reduction.reduceTerm cx g True (Core.TermApplication (Core.Application {
+    Eithers.bind (ExtractCore.list g listTerm) (\elements -> Lists.foldl (\acc -> \el -> Eithers.bind acc (\reducedAcc -> Reduction.reduceTerm cx g True (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermApplication (Core.Application {
         Core.applicationFunction = funTerm,
         Core.applicationArgument = reducedAcc})),
@@ -106,7 +106,7 @@ foldl cx g funTerm initTerm listTerm =
 -- | Interpreter-friendly right fold for List terms.
 foldr :: Context.Context -> Graph.Graph -> Core.Term -> Core.Term -> Core.Term -> Either Errors.Error Core.Term
 foldr cx g funTerm initTerm listTerm =
-    Eithers.bind (Core_.list g listTerm) (\elements -> Lists.foldr (\el -> \acc -> Eithers.bind acc (\reducedAcc -> Reduction.reduceTerm cx g True (Core.TermApplication (Core.Application {
+    Eithers.bind (ExtractCore.list g listTerm) (\elements -> Lists.foldr (\el -> \acc -> Eithers.bind acc (\reducedAcc -> Reduction.reduceTerm cx g True (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermApplication (Core.Application {
         Core.applicationFunction = funTerm,
         Core.applicationArgument = el})),
@@ -214,26 +214,26 @@ intercalate cx g sep listsTerm =
 -- | Interpreter-friendly intersperse for List terms.
 intersperse :: t0 -> Graph.Graph -> Core.Term -> Core.Term -> Either Errors.Error Core.Term
 intersperse cx g sep listTerm =
-    Eithers.bind (Core_.list g listTerm) (\elements -> Right (Logic.ifElse (Lists.null elements) (Core.TermList []) (Core.TermList (Lists.cons (Lists.head elements) (Lists.concat (Lists.map (\el -> [
+    Eithers.bind (ExtractCore.list g listTerm) (\elements -> Right (Logic.ifElse (Lists.null elements) (Core.TermList []) (Core.TermList (Lists.cons (Lists.head elements) (Lists.concat (Lists.map (\el -> [
       sep,
       el]) (Lists.tail elements)))))))
 
 -- | Interpreter-friendly map for List terms.
 map :: t0 -> Graph.Graph -> Core.Term -> Core.Term -> Either Errors.Error Core.Term
 map cx g funTerm listTerm =
-    Eithers.bind (Core_.list g listTerm) (\elements -> Right (Core.TermList (Lists.reverse (Lists.foldl (\acc -> \el -> Lists.cons (Core.TermApplication (Core.Application {
+    Eithers.bind (ExtractCore.list g listTerm) (\elements -> Right (Core.TermList (Lists.reverse (Lists.foldl (\acc -> \el -> Lists.cons (Core.TermApplication (Core.Application {
       Core.applicationFunction = funTerm,
       Core.applicationArgument = el})) acc) [] elements))))
 
 -- | Interpreter-friendly maybeHead for List terms.
 maybeHead :: t0 -> Graph.Graph -> Core.Term -> Either Errors.Error Core.Term
 maybeHead cx g listTerm =
-    Eithers.bind (Core_.list g listTerm) (\elements -> Right (Logic.ifElse (Lists.null elements) (Core.TermMaybe Nothing) (Core.TermMaybe (Just (Lists.head elements)))))
+    Eithers.bind (ExtractCore.list g listTerm) (\elements -> Right (Logic.ifElse (Lists.null elements) (Core.TermMaybe Nothing) (Core.TermMaybe (Just (Lists.head elements)))))
 
 -- | Interpreter-friendly nub for List terms.
 nub :: t0 -> Graph.Graph -> Core.Term -> Either Errors.Error Core.Term
 nub cx g listTerm =
-    Eithers.bind (Core_.list g listTerm) (\elements -> Right (Core.TermApplication (Core.Application {
+    Eithers.bind (ExtractCore.list g listTerm) (\elements -> Right (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermApplication (Core.Application {
           Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.foldl")),
@@ -265,7 +265,7 @@ nub cx g listTerm =
 -- | Interpreter-friendly partition for List terms.
 partition :: t0 -> Graph.Graph -> Core.Term -> Core.Term -> Either Errors.Error Core.Term
 partition cx g predTerm listTerm =
-    Eithers.bind (Core_.list g listTerm) (\elements ->
+    Eithers.bind (ExtractCore.list g listTerm) (\elements ->
       let initialState = Core.TermPair (Core.TermList [], (Core.TermList []))
           finalState =
                   Lists.foldl (\acc -> \el ->
@@ -322,7 +322,7 @@ replicate cx g n x =
 -- | Interpreter-friendly safeHead for List terms.
 safeHead :: t0 -> Graph.Graph -> Core.Term -> Either Errors.Error Core.Term
 safeHead cx g listTerm =
-    Eithers.bind (Core_.list g listTerm) (\elements -> Right (Logic.ifElse (Lists.null elements) (Core.TermMaybe Nothing) (Core.TermMaybe (Just (Lists.head elements)))))
+    Eithers.bind (ExtractCore.list g listTerm) (\elements -> Right (Logic.ifElse (Lists.null elements) (Core.TermMaybe Nothing) (Core.TermMaybe (Just (Lists.head elements)))))
 
 -- | Interpreter-friendly singleton for List terms.
 singleton :: t0 -> t1 -> Core.Term -> Either t2 Core.Term
@@ -341,7 +341,7 @@ sort cx g listTerm =
 -- | Interpreter-friendly sortOn for List terms.
 sortOn :: t0 -> Graph.Graph -> Core.Term -> Core.Term -> Either Errors.Error Core.Term
 sortOn cx g projTerm listTerm =
-    Eithers.bind (Core_.list g listTerm) (\elements -> Right (Lists.foldl (\sorted -> \x ->
+    Eithers.bind (ExtractCore.list g listTerm) (\elements -> Right (Lists.foldl (\sorted -> \x ->
       let splitResult =
               Core.TermApplication (Core.Application {
                 Core.applicationFunction = (Core.TermApplication (Core.Application {
@@ -380,7 +380,7 @@ sortOn cx g projTerm listTerm =
 -- | Interpreter-friendly span for List terms.
 span :: t0 -> Graph.Graph -> Core.Term -> Core.Term -> Either Errors.Error Core.Term
 span cx g predTerm listTerm =
-    Eithers.bind (Core_.list g listTerm) (\elements ->
+    Eithers.bind (ExtractCore.list g listTerm) (\elements ->
       let initialState =
               Core.TermPair (Core.TermPair (Core.TermLiteral (Core.LiteralBoolean True), (Core.TermList [])), (Core.TermList []))
           finalState =
@@ -435,7 +435,7 @@ span cx g predTerm listTerm =
 -- | Interpreter-friendly zipWith for List terms.
 zipWith :: t0 -> Graph.Graph -> Core.Term -> Core.Term -> Core.Term -> Either Errors.Error Core.Term
 zipWith cx g funTerm listTerm1 listTerm2 =
-    Eithers.bind (Core_.list g listTerm1) (\elements1 -> Eithers.bind (Core_.list g listTerm2) (\elements2 -> Right (Core.TermList (Lists.map (\p ->
+    Eithers.bind (ExtractCore.list g listTerm1) (\elements1 -> Eithers.bind (ExtractCore.list g listTerm2) (\elements2 -> Right (Core.TermList (Lists.map (\p ->
       let a = Pairs.first p
           b = Pairs.second p
       in (Core.TermApplication (Core.Application {

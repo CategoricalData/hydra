@@ -5,7 +5,7 @@
 module Hydra.Encode.Phantoms where
 
 import qualified Hydra.Core as Core
-import qualified Hydra.Encode.Core as Core_
+import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Phantoms as Phantoms
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 
@@ -16,7 +16,7 @@ tBinding a x =
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Core_.name (Phantoms.tBindingName x))},
+          Core.fieldTerm = (EncodeCore.name (Phantoms.tBindingName x))},
         Core.Field {
           Core.fieldName = (Core.Name "term"),
           Core.fieldTerm = (tTerm a (Phantoms.tBindingTerm x))}]})
@@ -25,7 +25,7 @@ tTerm :: t0 -> Phantoms.TTerm t1 -> Core.Term
 tTerm a x =
     Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.phantoms.TTerm"),
-      Core.wrappedTermBody = (Core_.term (Phantoms.unTTerm x))})
+      Core.wrappedTermBody = (EncodeCore.term (Phantoms.unTTerm x))})
 
 tTermDefinition :: t0 -> Phantoms.TTermDefinition t1 -> Core.Term
 tTermDefinition a x =
@@ -34,7 +34,7 @@ tTermDefinition a x =
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Core_.name (Phantoms.tTermDefinitionName x))},
+          Core.fieldTerm = (EncodeCore.name (Phantoms.tTermDefinitionName x))},
         Core.Field {
           Core.fieldName = (Core.Name "term"),
           Core.fieldTerm = (tTerm a (Phantoms.tTermDefinitionTerm x))}]})

@@ -15,7 +15,7 @@ import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
-import qualified Hydra.Show.Core as Core_
+import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Strip as Strip
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Map as M
@@ -264,7 +264,7 @@ fromJson types tname typ value =
             (Core.unName v0)])) (\resolvedType -> fromJson types v0 resolvedType value) lookedUp)
         _ -> Left (Strings.cat [
           "unsupported type for JSON decoding: ",
-          (Core_.type_ typ)])
+          (ShowCore.type_ typ)])
 
 -- | Parse a special float sentinel string to a float64. Returns Nothing for unrecognized strings.
 parseSpecialFloat :: String -> Maybe Double

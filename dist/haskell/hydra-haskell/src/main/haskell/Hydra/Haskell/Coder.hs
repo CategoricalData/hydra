@@ -13,7 +13,7 @@ import qualified Hydra.Constants as Constants
 import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Dependencies as Dependencies
-import qualified Hydra.Encode.Core as Core_
+import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Formatting as Formatting
 import qualified Hydra.Graph as Graph
@@ -40,7 +40,7 @@ import qualified Hydra.Predicates as Predicates
 import qualified Hydra.Resolution as Resolution
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Serialization as Serialization
-import qualified Hydra.Show.Core as Core__
+import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Strip as Strip
 import qualified Hydra.Util as Util
 import qualified Hydra.Variables as Variables
@@ -244,7 +244,7 @@ encodeLiteral l cx =
       Core.LiteralString v0 -> Right (Utils.hslit (Syntax.LiteralString v0))
       _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
         Errors.unexpectedShapeErrorExpected = "supported literal",
-        Errors.unexpectedShapeErrorActual = (Core__.literal l)})))
+        Errors.unexpectedShapeErrorActual = (ShowCore.literal l)})))
 
 -- | Encode a Hydra term as a Haskell expression
 encodeTerm :: Int -> Packaging.Namespaces Syntax.ModuleName -> Core.Term -> t0 -> Graph.Graph -> Either Errors.Error Syntax.Expression
@@ -351,7 +351,7 @@ encodeTerm depth namespaces term cx g =
           in (Eithers.bind (encode term_) (\rhs -> Right (Utils.hsapp lhs rhs)))
         _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
           Errors.unexpectedShapeErrorExpected = "supported term",
-          Errors.unexpectedShapeErrorActual = (Core__.term term)})))
+          Errors.unexpectedShapeErrorActual = (ShowCore.term term)})))
 
 -- | Encode a Hydra type as a Haskell type
 encodeType :: Packaging.Namespaces Syntax.ModuleName -> Core.Type -> t0 -> t1 -> Either Errors.Error Syntax.Type
@@ -400,11 +400,11 @@ encodeType namespaces typ cx g =
             Core.IntegerTypeInt64 -> Right (Syntax.TypeVariable (Utils.rawName "I.Int64"))
             _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
               Errors.unexpectedShapeErrorExpected = "supported integer type",
-              Errors.unexpectedShapeErrorActual = (Core__.integerType v1)})))
+              Errors.unexpectedShapeErrorActual = (ShowCore.integerType v1)})))
           Core.LiteralTypeString -> Right (Syntax.TypeVariable (Utils.rawName "String"))
           _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
             Errors.unexpectedShapeErrorExpected = "supported literal type",
-            Errors.unexpectedShapeErrorActual = (Core__.literalType v0)})))
+            Errors.unexpectedShapeErrorActual = (ShowCore.literalType v0)})))
         Core.TypeMap v0 ->
           let kt = Core.mapTypeKeys v0
               vt = Core.mapTypeValues v0
@@ -429,7 +429,7 @@ encodeType namespaces typ cx g =
         Core.TypeWrap _ -> ref (Core.Name "placeholder")
         _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
           Errors.unexpectedShapeErrorExpected = "supported type",
-          Errors.unexpectedShapeErrorActual = (Core__.type_ typ)})))
+          Errors.unexpectedShapeErrorActual = (ShowCore.type_ typ)})))
 
 -- | Encode a Hydra type as a Haskell type with typeclass assertions
 encodeTypeWithClassAssertions :: Packaging.Namespaces Syntax.ModuleName -> M.Map Core.Name (S.Set Classes.TypeClass) -> Core.Type -> t0 -> t1 -> Either Errors.Error Syntax.Type
@@ -800,7 +800,7 @@ typeDecl namespaces name typ cx g =
                     "_",
                     (Names.localNameOf name_),
                     "_type_"]
-          rawTerm = Core_.type_ typ
+          rawTerm = EncodeCore.type_ typ
           rewrite =
                   \recurse -> \term ->
                     let variantResult =
