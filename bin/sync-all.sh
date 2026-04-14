@@ -31,6 +31,16 @@ set -euo pipefail
 #   ./bin/sync-all.sh --targets hydra,java,python,lisp       # Include Lisp dialects
 #   ./bin/sync-all.sh --targets clojure,scheme               # Only specific Lisp dialects
 #   ./bin/sync-all.sh --help                                 # Show this help
+#
+# Targets covered by --targets all:
+#   hydra, java, python, scala, clojure, common-lisp, emacs-lisp, scheme
+#
+# Targets that exist as DSL sources but are NOT part of --targets all:
+#   coq, javascript, rust
+# These languages have generation-only support (DSL sources in packages/hydra-coq,
+# packages/hydra-javascript, etc.) but no full runtime implementation, no test
+# suite, and no dedicated sync-<lang>.sh script. They will silently drift unless
+# regenerated manually via the appropriate Stack exec.
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 HYDRA_ROOT="$( cd "$SCRIPT_DIR/.." && pwd )"
