@@ -21,6 +21,7 @@ import Data.Int
 import qualified Data.ByteString as B
 import qualified Data.List as L
 import qualified Data.Map as M
+import qualified Data.Scientific as Sci
 import qualified Data.Set as S
 import qualified Data.Maybe as Y
 import Hydra.Strip (removeTermAnnotations)
@@ -109,6 +110,12 @@ comparison = TermCoder (TypeVariable _Comparison) encode decode
   where
     encode _cx g = ExtractUtil.comparison _cx g
     decode _cx = Right . Terms.comparison
+
+decimal :: TermCoder Sci.Scientific
+decimal = TermCoder Types.decimal encode decode
+  where
+    encode _cx g = ExtractCore.decimal g
+    decode _cx = Right . Terms.decimal
 
 either_ :: TermCoder x -> TermCoder y -> TermCoder (Prelude.Either x y)
 either_ xCoder yCoder = TermCoder (Types.either_ (termCoderType xCoder) (termCoderType yCoder)) encode decode
