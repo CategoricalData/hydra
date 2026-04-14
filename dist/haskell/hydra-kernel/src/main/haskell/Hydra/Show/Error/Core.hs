@@ -5,54 +5,54 @@
 module Hydra.Show.Error.Core where
 
 import qualified Hydra.Core as Core
-import qualified Hydra.Error.Core as Core_
+import qualified Hydra.Error.Core as ErrorCore
 import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Lib.Strings as Strings
-import qualified Hydra.Show.Core as Core__
+import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Show.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 
 -- | Show a constant condition error as a string
-constantConditionError :: Core_.ConstantConditionError -> String
+constantConditionError :: ErrorCore.ConstantConditionError -> String
 constantConditionError e =
     Strings.cat [
       "constant condition: ifElse with literal ",
-      (Literals.showBoolean (Core_.constantConditionErrorValue e))]
+      (Literals.showBoolean (ErrorCore.constantConditionErrorValue e))]
 
 -- | Show a duplicate binding error as a string
-duplicateBindingError :: Core_.DuplicateBindingError -> String
+duplicateBindingError :: ErrorCore.DuplicateBindingError -> String
 duplicateBindingError e =
     Strings.cat [
       "duplicate binding: ",
-      (Core.unName (Core_.duplicateBindingErrorName e))]
+      (Core.unName (ErrorCore.duplicateBindingErrorName e))]
 
 -- | Show a duplicate field error as a string
-duplicateFieldError :: Core_.DuplicateFieldError -> String
+duplicateFieldError :: ErrorCore.DuplicateFieldError -> String
 duplicateFieldError e =
     Strings.cat [
       "duplicate field: ",
-      (Core.unName (Core_.duplicateFieldErrorName e))]
+      (Core.unName (ErrorCore.duplicateFieldErrorName e))]
 
 -- | Show a duplicate record type field names error as a string
-duplicateRecordTypeFieldNamesError :: Core_.DuplicateRecordTypeFieldNamesError -> String
+duplicateRecordTypeFieldNamesError :: ErrorCore.DuplicateRecordTypeFieldNamesError -> String
 duplicateRecordTypeFieldNamesError e =
     Strings.cat [
       "duplicate field in record type: ",
-      (Core.unName (Core_.duplicateRecordTypeFieldNamesErrorName e))]
+      (Core.unName (ErrorCore.duplicateRecordTypeFieldNamesErrorName e))]
 
 -- | Show a duplicate union type field names error as a string
-duplicateUnionTypeFieldNamesError :: Core_.DuplicateUnionTypeFieldNamesError -> String
+duplicateUnionTypeFieldNamesError :: ErrorCore.DuplicateUnionTypeFieldNamesError -> String
 duplicateUnionTypeFieldNamesError e =
     Strings.cat [
       "duplicate field in union type: ",
-      (Core.unName (Core_.duplicateUnionTypeFieldNamesErrorName e))]
+      (Core.unName (ErrorCore.duplicateUnionTypeFieldNamesErrorName e))]
 
 -- | Show an empty case statement error as a string
-emptyCaseStatementError :: Core_.EmptyCaseStatementError -> String
+emptyCaseStatementError :: ErrorCore.EmptyCaseStatementError -> String
 emptyCaseStatementError e =
     Strings.cat [
       "empty case statement for type: ",
-      (Core.unName (Core_.emptyCaseStatementErrorTypeName e))]
+      (Core.unName (ErrorCore.emptyCaseStatementErrorTypeName e))]
 
 -- | Show an empty let bindings error as a string
 emptyLetBindingsError :: t0 -> String
@@ -79,85 +79,85 @@ emptyUnionTypeError :: t0 -> String
 emptyUnionTypeError e = "union type with no alternatives (use TypeVoid instead)"
 
 -- | Show an invalid forall parameter name error as a string
-invalidForallParameterNameError :: Core_.InvalidForallParameterNameError -> String
+invalidForallParameterNameError :: ErrorCore.InvalidForallParameterNameError -> String
 invalidForallParameterNameError e =
     Strings.cat [
       "invalid forall parameter name: ",
-      (Core.unName (Core_.invalidForallParameterNameErrorName e))]
+      (Core.unName (ErrorCore.invalidForallParameterNameErrorName e))]
 
 -- | Show an invalid lambda parameter name error as a string
-invalidLambdaParameterNameError :: Core_.InvalidLambdaParameterNameError -> String
+invalidLambdaParameterNameError :: ErrorCore.InvalidLambdaParameterNameError -> String
 invalidLambdaParameterNameError e =
     Strings.cat [
       "invalid lambda parameter name: ",
-      (Core.unName (Core_.invalidLambdaParameterNameErrorName e))]
+      (Core.unName (ErrorCore.invalidLambdaParameterNameErrorName e))]
 
 -- | Show an invalid let binding name error as a string
-invalidLetBindingNameError :: Core_.InvalidLetBindingNameError -> String
+invalidLetBindingNameError :: ErrorCore.InvalidLetBindingNameError -> String
 invalidLetBindingNameError e =
     Strings.cat [
       "invalid let binding name: ",
-      (Core.unName (Core_.invalidLetBindingNameErrorName e))]
+      (Core.unName (ErrorCore.invalidLetBindingNameErrorName e))]
 
 -- | Show an invalid term error as a string
-invalidTermError :: Core_.InvalidTermError -> String
+invalidTermError :: ErrorCore.InvalidTermError -> String
 invalidTermError e =
     Strings.cat2 "invalid term: " (case e of
-      Core_.InvalidTermErrorConstantCondition v0 -> constantConditionError v0
-      Core_.InvalidTermErrorDuplicateBinding v0 -> duplicateBindingError v0
-      Core_.InvalidTermErrorDuplicateField v0 -> duplicateFieldError v0
-      Core_.InvalidTermErrorEmptyCaseStatement v0 -> emptyCaseStatementError v0
-      Core_.InvalidTermErrorEmptyLetBindings v0 -> emptyLetBindingsError v0
-      Core_.InvalidTermErrorEmptyTermAnnotation v0 -> emptyTermAnnotationError v0
-      Core_.InvalidTermErrorEmptyTypeNameInTerm v0 -> emptyTypeNameInTermError v0
-      Core_.InvalidTermErrorInvalidLambdaParameterName v0 -> invalidLambdaParameterNameError v0
-      Core_.InvalidTermErrorInvalidLetBindingName v0 -> invalidLetBindingNameError v0
-      Core_.InvalidTermErrorInvalidTypeLambdaParameterName v0 -> invalidTypeLambdaParameterNameError v0
-      Core_.InvalidTermErrorNestedTermAnnotation v0 -> nestedTermAnnotationError v0
-      Core_.InvalidTermErrorRedundantWrapUnwrap v0 -> redundantWrapUnwrapError v0
-      Core_.InvalidTermErrorSelfApplication v0 -> selfApplicationError v0
-      Core_.InvalidTermErrorTermVariableShadowing v0 -> termVariableShadowingError v0
-      Core_.InvalidTermErrorTypeVariableShadowingInTypeLambda v0 -> typeVariableShadowingInTypeLambdaError v0
-      Core_.InvalidTermErrorUndefinedTermVariable v0 -> undefinedTermVariableError v0
-      Core_.InvalidTermErrorUndefinedTypeVariableInBindingType v0 -> undefinedTypeVariableInBindingTypeError v0
-      Core_.InvalidTermErrorUndefinedTypeVariableInLambdaDomain v0 -> undefinedTypeVariableInLambdaDomainError v0
-      Core_.InvalidTermErrorUndefinedTypeVariableInTypeApplication v0 -> undefinedTypeVariableInTypeApplicationError v0
-      Core_.InvalidTermErrorUnknownPrimitiveName v0 -> unknownPrimitiveNameError v0
-      Core_.InvalidTermErrorUnnecessaryIdentityApplication v0 -> unnecessaryIdentityApplicationError v0
-      Core_.InvalidTermErrorUntypedTermVariable v0 -> untypedTermVariableError v0)
+      ErrorCore.InvalidTermErrorConstantCondition v0 -> constantConditionError v0
+      ErrorCore.InvalidTermErrorDuplicateBinding v0 -> duplicateBindingError v0
+      ErrorCore.InvalidTermErrorDuplicateField v0 -> duplicateFieldError v0
+      ErrorCore.InvalidTermErrorEmptyCaseStatement v0 -> emptyCaseStatementError v0
+      ErrorCore.InvalidTermErrorEmptyLetBindings v0 -> emptyLetBindingsError v0
+      ErrorCore.InvalidTermErrorEmptyTermAnnotation v0 -> emptyTermAnnotationError v0
+      ErrorCore.InvalidTermErrorEmptyTypeNameInTerm v0 -> emptyTypeNameInTermError v0
+      ErrorCore.InvalidTermErrorInvalidLambdaParameterName v0 -> invalidLambdaParameterNameError v0
+      ErrorCore.InvalidTermErrorInvalidLetBindingName v0 -> invalidLetBindingNameError v0
+      ErrorCore.InvalidTermErrorInvalidTypeLambdaParameterName v0 -> invalidTypeLambdaParameterNameError v0
+      ErrorCore.InvalidTermErrorNestedTermAnnotation v0 -> nestedTermAnnotationError v0
+      ErrorCore.InvalidTermErrorRedundantWrapUnwrap v0 -> redundantWrapUnwrapError v0
+      ErrorCore.InvalidTermErrorSelfApplication v0 -> selfApplicationError v0
+      ErrorCore.InvalidTermErrorTermVariableShadowing v0 -> termVariableShadowingError v0
+      ErrorCore.InvalidTermErrorTypeVariableShadowingInTypeLambda v0 -> typeVariableShadowingInTypeLambdaError v0
+      ErrorCore.InvalidTermErrorUndefinedTermVariable v0 -> undefinedTermVariableError v0
+      ErrorCore.InvalidTermErrorUndefinedTypeVariableInBindingType v0 -> undefinedTypeVariableInBindingTypeError v0
+      ErrorCore.InvalidTermErrorUndefinedTypeVariableInLambdaDomain v0 -> undefinedTypeVariableInLambdaDomainError v0
+      ErrorCore.InvalidTermErrorUndefinedTypeVariableInTypeApplication v0 -> undefinedTypeVariableInTypeApplicationError v0
+      ErrorCore.InvalidTermErrorUnknownPrimitiveName v0 -> unknownPrimitiveNameError v0
+      ErrorCore.InvalidTermErrorUnnecessaryIdentityApplication v0 -> unnecessaryIdentityApplicationError v0
+      ErrorCore.InvalidTermErrorUntypedTermVariable v0 -> untypedTermVariableError v0)
 
 -- | Show an invalid type error as a string
-invalidTypeError :: Core_.InvalidTypeError -> String
+invalidTypeError :: ErrorCore.InvalidTypeError -> String
 invalidTypeError e =
     Strings.cat2 "invalid type: " (case e of
-      Core_.InvalidTypeErrorDuplicateRecordTypeFieldNames v0 -> duplicateRecordTypeFieldNamesError v0
-      Core_.InvalidTypeErrorDuplicateUnionTypeFieldNames v0 -> duplicateUnionTypeFieldNamesError v0
-      Core_.InvalidTypeErrorEmptyRecordType v0 -> emptyRecordTypeError v0
-      Core_.InvalidTypeErrorEmptyTypeAnnotation v0 -> emptyTypeAnnotationError v0
-      Core_.InvalidTypeErrorEmptyUnionType v0 -> emptyUnionTypeError v0
-      Core_.InvalidTypeErrorInvalidForallParameterName v0 -> invalidForallParameterNameError v0
-      Core_.InvalidTypeErrorInvalidTypeSchemeVariableName v0 -> invalidTypeSchemeVariableNameError v0
-      Core_.InvalidTypeErrorNestedTypeAnnotation v0 -> nestedTypeAnnotationError v0
-      Core_.InvalidTypeErrorNonComparableMapKeyType v0 -> nonComparableMapKeyTypeError v0
-      Core_.InvalidTypeErrorNonComparableSetElementType v0 -> nonComparableSetElementTypeError v0
-      Core_.InvalidTypeErrorSingleVariantUnion v0 -> singleVariantUnionError v0
-      Core_.InvalidTypeErrorTypeVariableShadowingInForall v0 -> typeVariableShadowingInForallError v0
-      Core_.InvalidTypeErrorUndefinedTypeVariable v0 -> undefinedTypeVariableError v0
-      Core_.InvalidTypeErrorVoidInNonBottomPosition v0 -> voidInNonBottomPositionError v0)
+      ErrorCore.InvalidTypeErrorDuplicateRecordTypeFieldNames v0 -> duplicateRecordTypeFieldNamesError v0
+      ErrorCore.InvalidTypeErrorDuplicateUnionTypeFieldNames v0 -> duplicateUnionTypeFieldNamesError v0
+      ErrorCore.InvalidTypeErrorEmptyRecordType v0 -> emptyRecordTypeError v0
+      ErrorCore.InvalidTypeErrorEmptyTypeAnnotation v0 -> emptyTypeAnnotationError v0
+      ErrorCore.InvalidTypeErrorEmptyUnionType v0 -> emptyUnionTypeError v0
+      ErrorCore.InvalidTypeErrorInvalidForallParameterName v0 -> invalidForallParameterNameError v0
+      ErrorCore.InvalidTypeErrorInvalidTypeSchemeVariableName v0 -> invalidTypeSchemeVariableNameError v0
+      ErrorCore.InvalidTypeErrorNestedTypeAnnotation v0 -> nestedTypeAnnotationError v0
+      ErrorCore.InvalidTypeErrorNonComparableMapKeyType v0 -> nonComparableMapKeyTypeError v0
+      ErrorCore.InvalidTypeErrorNonComparableSetElementType v0 -> nonComparableSetElementTypeError v0
+      ErrorCore.InvalidTypeErrorSingleVariantUnion v0 -> singleVariantUnionError v0
+      ErrorCore.InvalidTypeErrorTypeVariableShadowingInForall v0 -> typeVariableShadowingInForallError v0
+      ErrorCore.InvalidTypeErrorUndefinedTypeVariable v0 -> undefinedTypeVariableError v0
+      ErrorCore.InvalidTypeErrorVoidInNonBottomPosition v0 -> voidInNonBottomPositionError v0)
 
 -- | Show an invalid type lambda parameter name error as a string
-invalidTypeLambdaParameterNameError :: Core_.InvalidTypeLambdaParameterNameError -> String
+invalidTypeLambdaParameterNameError :: ErrorCore.InvalidTypeLambdaParameterNameError -> String
 invalidTypeLambdaParameterNameError e =
     Strings.cat [
       "invalid type lambda parameter name: ",
-      (Core.unName (Core_.invalidTypeLambdaParameterNameErrorName e))]
+      (Core.unName (ErrorCore.invalidTypeLambdaParameterNameErrorName e))]
 
 -- | Show an invalid type scheme variable name error as a string
-invalidTypeSchemeVariableNameError :: Core_.InvalidTypeSchemeVariableNameError -> String
+invalidTypeSchemeVariableNameError :: ErrorCore.InvalidTypeSchemeVariableNameError -> String
 invalidTypeSchemeVariableNameError e =
     Strings.cat [
       "invalid type scheme variable name: ",
-      (Core.unName (Core_.invalidTypeSchemeVariableNameErrorName e))]
+      (Core.unName (ErrorCore.invalidTypeSchemeVariableNameErrorName e))]
 
 -- | Show a nested term annotation error as a string
 nestedTermAnnotationError :: t0 -> String
@@ -168,67 +168,67 @@ nestedTypeAnnotationError :: t0 -> String
 nestedTypeAnnotationError e = "nested type annotations should be merged"
 
 -- | Show a non-comparable map key type error as a string
-nonComparableMapKeyTypeError :: Core_.NonComparableMapKeyTypeError -> String
+nonComparableMapKeyTypeError :: ErrorCore.NonComparableMapKeyTypeError -> String
 nonComparableMapKeyTypeError e =
     Strings.cat [
       "map key type contains a function type: ",
-      (Core__.type_ (Core_.nonComparableMapKeyTypeErrorKeyType e))]
+      (ShowCore.type_ (ErrorCore.nonComparableMapKeyTypeErrorKeyType e))]
 
 -- | Show a non-comparable set element type error as a string
-nonComparableSetElementTypeError :: Core_.NonComparableSetElementTypeError -> String
+nonComparableSetElementTypeError :: ErrorCore.NonComparableSetElementTypeError -> String
 nonComparableSetElementTypeError e =
     Strings.cat [
       "set element type contains a function type: ",
-      (Core__.type_ (Core_.nonComparableSetElementTypeErrorElementType e))]
+      (ShowCore.type_ (ErrorCore.nonComparableSetElementTypeErrorElementType e))]
 
 -- | Show a redundant wrap/unwrap error as a string
-redundantWrapUnwrapError :: Core_.RedundantWrapUnwrapError -> String
+redundantWrapUnwrapError :: ErrorCore.RedundantWrapUnwrapError -> String
 redundantWrapUnwrapError e =
     Strings.cat [
       "redundant wrap/unwrap for type: ",
-      (Core.unName (Core_.redundantWrapUnwrapErrorTypeName e))]
+      (Core.unName (ErrorCore.redundantWrapUnwrapErrorTypeName e))]
 
 -- | Show a self-application error as a string
-selfApplicationError :: Core_.SelfApplicationError -> String
+selfApplicationError :: ErrorCore.SelfApplicationError -> String
 selfApplicationError e =
     Strings.cat [
       "self-application of variable: ",
-      (Core.unName (Core_.selfApplicationErrorName e))]
+      (Core.unName (ErrorCore.selfApplicationErrorName e))]
 
 -- | Show a single variant union error as a string
-singleVariantUnionError :: Core_.SingleVariantUnionError -> String
+singleVariantUnionError :: ErrorCore.SingleVariantUnionError -> String
 singleVariantUnionError e =
     Strings.cat [
       "union type with single variant: ",
-      (Core.unName (Core_.singleVariantUnionErrorFieldName e))]
+      (Core.unName (ErrorCore.singleVariantUnionErrorFieldName e))]
 
 -- | Show a term variable shadowing error as a string
-termVariableShadowingError :: Core_.TermVariableShadowingError -> String
+termVariableShadowingError :: ErrorCore.TermVariableShadowingError -> String
 termVariableShadowingError e =
     Strings.cat [
       "variable shadowing: ",
-      (Core.unName (Core_.termVariableShadowingErrorName e))]
+      (Core.unName (ErrorCore.termVariableShadowingErrorName e))]
 
 -- | Show a type variable shadowing in forall error as a string
-typeVariableShadowingInForallError :: Core_.TypeVariableShadowingInForallError -> String
+typeVariableShadowingInForallError :: ErrorCore.TypeVariableShadowingInForallError -> String
 typeVariableShadowingInForallError e =
     Strings.cat [
       "type variable shadowing in forall: ",
-      (Core.unName (Core_.typeVariableShadowingInForallErrorName e))]
+      (Core.unName (ErrorCore.typeVariableShadowingInForallErrorName e))]
 
 -- | Show a type variable shadowing in type lambda error as a string
-typeVariableShadowingInTypeLambdaError :: Core_.TypeVariableShadowingInTypeLambdaError -> String
+typeVariableShadowingInTypeLambdaError :: ErrorCore.TypeVariableShadowingInTypeLambdaError -> String
 typeVariableShadowingInTypeLambdaError e =
     Strings.cat [
       "type variable shadowing in type lambda: ",
-      (Core.unName (Core_.typeVariableShadowingInTypeLambdaErrorName e))]
+      (Core.unName (ErrorCore.typeVariableShadowingInTypeLambdaErrorName e))]
 
 -- | Show an undefined field error as a string
-undefinedFieldError :: Core_.UndefinedFieldError -> String
+undefinedFieldError :: ErrorCore.UndefinedFieldError -> String
 undefinedFieldError e =
 
-      let fname = Core_.undefinedFieldErrorFieldName e
-          tname = Core_.undefinedFieldErrorTypeName e
+      let fname = ErrorCore.undefinedFieldErrorFieldName e
+          tname = ErrorCore.undefinedFieldErrorTypeName e
       in (Strings.cat [
         "no such field \"",
         (Core.unName fname),
@@ -237,81 +237,81 @@ undefinedFieldError e =
         "\""])
 
 -- | Show an undefined term variable error as a string
-undefinedTermVariableError :: Core_.UndefinedTermVariableError -> String
+undefinedTermVariableError :: ErrorCore.UndefinedTermVariableError -> String
 undefinedTermVariableError e =
     Strings.cat [
       "undefined term variable: ",
-      (Core.unName (Core_.undefinedTermVariableErrorName e))]
+      (Core.unName (ErrorCore.undefinedTermVariableErrorName e))]
 
 -- | Show an undefined type variable error as a string
-undefinedTypeVariableError :: Core_.UndefinedTypeVariableError -> String
+undefinedTypeVariableError :: ErrorCore.UndefinedTypeVariableError -> String
 undefinedTypeVariableError e =
     Strings.cat [
       "undefined type variable: ",
-      (Core.unName (Core_.undefinedTypeVariableErrorName e))]
+      (Core.unName (ErrorCore.undefinedTypeVariableErrorName e))]
 
 -- | Show an undefined type variable in binding type error as a string
-undefinedTypeVariableInBindingTypeError :: Core_.UndefinedTypeVariableInBindingTypeError -> String
+undefinedTypeVariableInBindingTypeError :: ErrorCore.UndefinedTypeVariableInBindingTypeError -> String
 undefinedTypeVariableInBindingTypeError e =
     Strings.cat [
       "undefined type variable in binding type: ",
-      (Core.unName (Core_.undefinedTypeVariableInBindingTypeErrorName e))]
+      (Core.unName (ErrorCore.undefinedTypeVariableInBindingTypeErrorName e))]
 
 -- | Show an undefined type variable in lambda domain error as a string
-undefinedTypeVariableInLambdaDomainError :: Core_.UndefinedTypeVariableInLambdaDomainError -> String
+undefinedTypeVariableInLambdaDomainError :: ErrorCore.UndefinedTypeVariableInLambdaDomainError -> String
 undefinedTypeVariableInLambdaDomainError e =
     Strings.cat [
       "undefined type variable in lambda domain: ",
-      (Core.unName (Core_.undefinedTypeVariableInLambdaDomainErrorName e))]
+      (Core.unName (ErrorCore.undefinedTypeVariableInLambdaDomainErrorName e))]
 
 -- | Show an undefined type variable in type application error as a string
-undefinedTypeVariableInTypeApplicationError :: Core_.UndefinedTypeVariableInTypeApplicationError -> String
+undefinedTypeVariableInTypeApplicationError :: ErrorCore.UndefinedTypeVariableInTypeApplicationError -> String
 undefinedTypeVariableInTypeApplicationError e =
     Strings.cat [
       "undefined type variable in type application: ",
-      (Core.unName (Core_.undefinedTypeVariableInTypeApplicationErrorName e))]
+      (Core.unName (ErrorCore.undefinedTypeVariableInTypeApplicationErrorName e))]
 
 -- | Show an unexpected term variant error as a string
-unexpectedTermVariantError :: Core_.UnexpectedTermVariantError -> String
+unexpectedTermVariantError :: ErrorCore.UnexpectedTermVariantError -> String
 unexpectedTermVariantError e =
 
-      let expected = Core_.unexpectedTermVariantErrorExpectedVariant e
-          actual = Core_.unexpectedTermVariantErrorActualTerm e
+      let expected = ErrorCore.unexpectedTermVariantErrorExpectedVariant e
+          actual = ErrorCore.unexpectedTermVariantErrorActualTerm e
       in (Strings.cat [
         "expected ",
         (Variants.termVariant expected),
         " term but found ",
-        (Core__.term actual)])
+        (ShowCore.term actual)])
 
 -- | Show an unexpected type variant error as a string
-unexpectedTypeVariantError :: Core_.UnexpectedTypeVariantError -> String
+unexpectedTypeVariantError :: ErrorCore.UnexpectedTypeVariantError -> String
 unexpectedTypeVariantError e =
 
-      let expected = Core_.unexpectedTypeVariantErrorExpectedVariant e
-          actual = Core_.unexpectedTypeVariantErrorActualType e
+      let expected = ErrorCore.unexpectedTypeVariantErrorExpectedVariant e
+          actual = ErrorCore.unexpectedTypeVariantErrorActualType e
       in (Strings.cat [
         "expected ",
         (Variants.typeVariant expected),
         " type but found ",
-        (Core__.type_ actual)])
+        (ShowCore.type_ actual)])
 
 -- | Show an unknown primitive name error as a string
-unknownPrimitiveNameError :: Core_.UnknownPrimitiveNameError -> String
+unknownPrimitiveNameError :: ErrorCore.UnknownPrimitiveNameError -> String
 unknownPrimitiveNameError e =
     Strings.cat [
       "unknown primitive: ",
-      (Core.unName (Core_.unknownPrimitiveNameErrorName e))]
+      (Core.unName (ErrorCore.unknownPrimitiveNameErrorName e))]
 
 -- | Show an unnecessary identity application error as a string
 unnecessaryIdentityApplicationError :: t0 -> String
 unnecessaryIdentityApplicationError e = "unnecessary application of identity lambda"
 
 -- | Show an untyped term variable error as a string
-untypedTermVariableError :: Core_.UntypedTermVariableError -> String
+untypedTermVariableError :: ErrorCore.UntypedTermVariableError -> String
 untypedTermVariableError e =
     Strings.cat [
       "untyped term variable: ",
-      (Core.unName (Core_.untypedTermVariableErrorName e))]
+      (Core.unName (ErrorCore.untypedTermVariableErrorName e))]
 
 -- | Show a void in non-bottom position error as a string
 voidInNonBottomPositionError :: t0 -> String

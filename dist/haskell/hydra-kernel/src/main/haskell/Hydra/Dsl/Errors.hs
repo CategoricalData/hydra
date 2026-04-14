@@ -6,7 +6,7 @@ module Hydra.Dsl.Errors where
 
 import qualified Hydra.Core as Core
 import qualified Hydra.Error.Checking as Checking
-import qualified Hydra.Error.Core as Core_
+import qualified Hydra.Error.Core as ErrorCore
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Paths as Paths
 import qualified Hydra.Phantoms as Phantoms
@@ -34,7 +34,7 @@ errorDecoding x =
         Core.fieldName = (Core.Name "decoding"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-errorDuplicateBinding :: Phantoms.TTerm Core_.DuplicateBindingError -> Phantoms.TTerm Errors.Error
+errorDuplicateBinding :: Phantoms.TTerm ErrorCore.DuplicateBindingError -> Phantoms.TTerm Errors.Error
 errorDuplicateBinding x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.errors.Error"),
@@ -42,7 +42,7 @@ errorDuplicateBinding x =
         Core.fieldName = (Core.Name "duplicateBinding"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-errorDuplicateField :: Phantoms.TTerm Core_.DuplicateFieldError -> Phantoms.TTerm Errors.Error
+errorDuplicateField :: Phantoms.TTerm ErrorCore.DuplicateFieldError -> Phantoms.TTerm Errors.Error
 errorDuplicateField x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.errors.Error"),
@@ -82,7 +82,7 @@ errorResolution x =
         Core.fieldName = (Core.Name "resolution"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-errorUndefinedField :: Phantoms.TTerm Core_.UndefinedFieldError -> Phantoms.TTerm Errors.Error
+errorUndefinedField :: Phantoms.TTerm ErrorCore.UndefinedFieldError -> Phantoms.TTerm Errors.Error
 errorUndefinedField x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.errors.Error"),
@@ -90,7 +90,7 @@ errorUndefinedField x =
         Core.fieldName = (Core.Name "undefinedField"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-errorUndefinedTermVariable :: Phantoms.TTerm Core_.UndefinedTermVariableError -> Phantoms.TTerm Errors.Error
+errorUndefinedTermVariable :: Phantoms.TTerm ErrorCore.UndefinedTermVariableError -> Phantoms.TTerm Errors.Error
 errorUndefinedTermVariable x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.errors.Error"),
@@ -98,7 +98,7 @@ errorUndefinedTermVariable x =
         Core.fieldName = (Core.Name "undefinedTermVariable"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-errorUnexpectedTermVariant :: Phantoms.TTerm Core_.UnexpectedTermVariantError -> Phantoms.TTerm Errors.Error
+errorUnexpectedTermVariant :: Phantoms.TTerm ErrorCore.UnexpectedTermVariantError -> Phantoms.TTerm Errors.Error
 errorUnexpectedTermVariant x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.errors.Error"),
@@ -106,7 +106,7 @@ errorUnexpectedTermVariant x =
         Core.fieldName = (Core.Name "unexpectedTermVariant"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-errorUnexpectedTypeVariant :: Phantoms.TTerm Core_.UnexpectedTypeVariantError -> Phantoms.TTerm Errors.Error
+errorUnexpectedTypeVariant :: Phantoms.TTerm ErrorCore.UnexpectedTypeVariantError -> Phantoms.TTerm Errors.Error
 errorUnexpectedTypeVariant x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.errors.Error"),
@@ -122,7 +122,7 @@ errorUnification x =
         Core.fieldName = (Core.Name "unification"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-errorUntypedTermVariable :: Phantoms.TTerm Core_.UntypedTermVariableError -> Phantoms.TTerm Errors.Error
+errorUntypedTermVariable :: Phantoms.TTerm ErrorCore.UntypedTermVariableError -> Phantoms.TTerm Errors.Error
 errorUntypedTermVariable x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.errors.Error"),

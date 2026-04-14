@@ -6,7 +6,7 @@ module Hydra.Test.Hoisting.Let where
 
 import qualified Hydra.Core as Core
 import qualified Hydra.Hoisting as Hoisting
-import qualified Hydra.Show.Core as Core_
+import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Testing as Testing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 
@@ -25,7 +25,7 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "nested let inside lambda: binding hoisted with lambda capture",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Core_.let_ (Hoisting.hoistAllLetBindings (Core.Let {
+                Testing.universalTestCaseActual = (ShowCore.let_ (Hoisting.hoistAllLetBindings (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "f"),
@@ -51,7 +51,7 @@ allTests =
                   Core.letBody = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
                     Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 10)))}))}))),
-                Testing.universalTestCaseExpected = (Core_.let_ (Core.Let {
+                Testing.universalTestCaseExpected = (ShowCore.let_ (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "f"),
@@ -85,7 +85,7 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "type application: nested let outside lambda CAN be hoisted",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Core_.let_ (Hoisting.hoistAllLetBindings (Core.Let {
+                Testing.universalTestCaseActual = (ShowCore.let_ (Hoisting.hoistAllLetBindings (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "f"),
@@ -109,7 +109,7 @@ allTests =
                   Core.letBody = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
                     Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 10)))}))}))),
-                Testing.universalTestCaseExpected = (Core_.let_ (Core.Let {
+                Testing.universalTestCaseExpected = (ShowCore.let_ (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "f"),
@@ -141,7 +141,7 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "no polymorphic bindings: simple let unchanged",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Core_.let_ (Hoisting.hoistPolymorphicLetBindings (\b -> True) (Core.Let {
+                Testing.universalTestCaseActual = (ShowCore.let_ (Hoisting.hoistPolymorphicLetBindings (\b -> True) (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "x"),
@@ -151,7 +151,7 @@ allTests =
                         Core.typeSchemeType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
                         Core.typeSchemeConstraints = Nothing}))}],
                   Core.letBody = (Core.TermVariable (Core.Name "x"))}))),
-                Testing.universalTestCaseExpected = (Core_.let_ (Core.Let {
+                Testing.universalTestCaseExpected = (ShowCore.let_ (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "x"),
@@ -166,7 +166,7 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "no polymorphic bindings: multiple monomorphic bindings",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Core_.let_ (Hoisting.hoistPolymorphicLetBindings (\b -> True) (Core.Let {
+                Testing.universalTestCaseActual = (ShowCore.let_ (Hoisting.hoistPolymorphicLetBindings (\b -> True) (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "x"),
@@ -187,7 +187,7 @@ allTests =
                       Core.applicationFunction = (Core.TermVariable (Core.Name "pair")),
                       Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}))),
-                Testing.universalTestCaseExpected = (Core_.let_ (Core.Let {
+                Testing.universalTestCaseExpected = (ShowCore.let_ (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "x"),
@@ -213,7 +213,7 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "single polymorphic binding: already at top level",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Core_.let_ (Hoisting.hoistPolymorphicLetBindings (\b -> True) (Core.Let {
+                Testing.universalTestCaseActual = (ShowCore.let_ (Hoisting.hoistPolymorphicLetBindings (\b -> True) (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "id"),
@@ -231,7 +231,7 @@ allTests =
                   Core.letBody = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "id")),
                     Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}))}))),
-                Testing.universalTestCaseExpected = (Core_.let_ (Core.Let {
+                Testing.universalTestCaseExpected = (ShowCore.let_ (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "id"),
@@ -254,7 +254,7 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "polymorphic binding inside lambda: no capture",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Core_.let_ (Hoisting.hoistPolymorphicLetBindings (\b -> True) (Core.Let {
+                Testing.universalTestCaseActual = (ShowCore.let_ (Hoisting.hoistPolymorphicLetBindings (\b -> True) (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "f"),
@@ -288,7 +288,7 @@ allTests =
                   Core.letBody = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
                     Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}))}))),
-                Testing.universalTestCaseExpected = (Core_.let_ (Core.Let {
+                Testing.universalTestCaseExpected = (ShowCore.let_ (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "f"),
@@ -327,7 +327,7 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "polymorphic binding captures lambda variable: wrapped in lambda",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Core_.let_ (Hoisting.hoistPolymorphicLetBindings (\b -> True) (Core.Let {
+                Testing.universalTestCaseActual = (ShowCore.let_ (Hoisting.hoistPolymorphicLetBindings (\b -> True) (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "f"),
@@ -369,7 +369,7 @@ allTests =
                   Core.letBody = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
                     Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "hello"))}))}))),
-                Testing.universalTestCaseExpected = (Core_.let_ (Core.Let {
+                Testing.universalTestCaseExpected = (ShowCore.let_ (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "f"),
@@ -423,7 +423,7 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "polymorphic binding captures multiple lambda variables",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Core_.let_ (Hoisting.hoistPolymorphicLetBindings (\b -> True) (Core.Let {
+                Testing.universalTestCaseActual = (ShowCore.let_ (Hoisting.hoistPolymorphicLetBindings (\b -> True) (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "f"),
@@ -470,7 +470,7 @@ allTests =
                       Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
                       Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))})),
                     Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))}))}))),
-                Testing.universalTestCaseExpected = (Core_.let_ (Core.Let {
+                Testing.universalTestCaseExpected = (ShowCore.let_ (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "f"),
@@ -536,7 +536,7 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "polymorphic binding captures some but not all lambda variables",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Core_.let_ (Hoisting.hoistPolymorphicLetBindings (\b -> True) (Core.Let {
+                Testing.universalTestCaseActual = (ShowCore.let_ (Hoisting.hoistPolymorphicLetBindings (\b -> True) (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "f"),
@@ -585,7 +585,7 @@ allTests =
                       Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
                       Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))})),
                     Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))}))}))),
-                Testing.universalTestCaseExpected = (Core_.let_ (Core.Let {
+                Testing.universalTestCaseExpected = (ShowCore.let_ (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "f"),
@@ -646,7 +646,7 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "polymorphic binding captures both lambda-bound and let-bound variables",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Core_.let_ (Hoisting.hoistPolymorphicLetBindings (\b -> True) (Core.Let {
+                Testing.universalTestCaseActual = (ShowCore.let_ (Hoisting.hoistPolymorphicLetBindings (\b -> True) (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "f"),
@@ -695,7 +695,7 @@ allTests =
                   Core.letBody = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
                     Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 10)))}))}))),
-                Testing.universalTestCaseExpected = (Core_.let_ (Core.Let {
+                Testing.universalTestCaseExpected = (ShowCore.let_ (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "f"),
@@ -765,7 +765,7 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "sibling polymorphic bindings inside lambda: one calls the other",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Core_.let_ (Hoisting.hoistPolymorphicLetBindings (\b -> True) (Core.Let {
+                Testing.universalTestCaseActual = (ShowCore.let_ (Hoisting.hoistPolymorphicLetBindings (\b -> True) (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "wrapper"),
@@ -818,7 +818,7 @@ allTests =
                   Core.letBody = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "wrapper")),
                     Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 10)))}))}))),
-                Testing.universalTestCaseExpected = (Core_.let_ (Core.Let {
+                Testing.universalTestCaseExpected = (ShowCore.let_ (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "wrapper"),
@@ -892,7 +892,7 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "sibling polymorphic bindings inside lambda: h passes its own args to g",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Core_.let_ (Hoisting.hoistPolymorphicLetBindings (\b -> True) (Core.Let {
+                Testing.universalTestCaseActual = (ShowCore.let_ (Hoisting.hoistPolymorphicLetBindings (\b -> True) (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "wrapper"),
@@ -963,7 +963,7 @@ allTests =
                   Core.letBody = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "wrapper")),
                     Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 10)))}))}))),
-                Testing.universalTestCaseExpected = (Core_.let_ (Core.Let {
+                Testing.universalTestCaseExpected = (ShowCore.let_ (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "wrapper"),
@@ -1055,7 +1055,7 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "untyped binding: not hoisted",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Core_.let_ (Hoisting.hoistPolymorphicLetBindings (\b -> True) (Core.Let {
+                Testing.universalTestCaseActual = (ShowCore.let_ (Hoisting.hoistPolymorphicLetBindings (\b -> True) (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "x"),
@@ -1072,7 +1072,7 @@ allTests =
                         Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.math.add")),
                         Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
                       Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}))}))),
-                Testing.universalTestCaseExpected = (Core_.let_ (Core.Let {
+                Testing.universalTestCaseExpected = (ShowCore.let_ (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "x"),
@@ -1094,7 +1094,7 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "no name collision: distinct names after unshadowing",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Core_.let_ (Hoisting.hoistPolymorphicLetBindings (\b -> True) (Core.Let {
+                Testing.universalTestCaseActual = (ShowCore.let_ (Hoisting.hoistPolymorphicLetBindings (\b -> True) (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "id"),
@@ -1142,7 +1142,7 @@ allTests =
                   Core.letBody = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
                     Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}))}))),
-                Testing.universalTestCaseExpected = (Core_.let_ (Core.Let {
+                Testing.universalTestCaseExpected = (ShowCore.let_ (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "id"),
@@ -1195,7 +1195,7 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "nested polymorphic binding calls enclosing polymorphic binding",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Core_.let_ (Hoisting.hoistPolymorphicLetBindings (\b -> True) (Core.Let {
+                Testing.universalTestCaseActual = (ShowCore.let_ (Hoisting.hoistPolymorphicLetBindings (\b -> True) (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "wrapper"),
@@ -1253,7 +1253,7 @@ allTests =
                       Core.applicationFunction = (Core.TermVariable (Core.Name "wrapper")),
                       Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 10)))})),
                     Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 20)))}))}))),
-                Testing.universalTestCaseExpected = (Core_.let_ (Core.Let {
+                Testing.universalTestCaseExpected = (ShowCore.let_ (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "wrapper"),
@@ -1316,7 +1316,7 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "polymorphic binding captures monomorphic sibling in same let",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Core_.let_ (Hoisting.hoistPolymorphicLetBindings (\b -> True) (Core.Let {
+                Testing.universalTestCaseActual = (ShowCore.let_ (Hoisting.hoistPolymorphicLetBindings (\b -> True) (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "wrapper"),
@@ -1383,7 +1383,7 @@ allTests =
                       Core.applicationFunction = (Core.TermVariable (Core.Name "wrapper")),
                       Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))})),
                     Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))}))}))),
-                Testing.universalTestCaseExpected = (Core_.let_ (Core.Let {
+                Testing.universalTestCaseExpected = (ShowCore.let_ (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "wrapper"),
@@ -1471,7 +1471,7 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "nested lets: poly binding references poly sibling from outer let",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Core_.let_ (Hoisting.hoistPolymorphicLetBindings (\b -> True) (Core.Let {
+                Testing.universalTestCaseActual = (ShowCore.let_ (Hoisting.hoistPolymorphicLetBindings (\b -> True) (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "wrapper"),
@@ -1535,7 +1535,7 @@ allTests =
                   Core.letBody = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "wrapper")),
                     Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))}))}))),
-                Testing.universalTestCaseExpected = (Core_.let_ (Core.Let {
+                Testing.universalTestCaseExpected = (ShowCore.let_ (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "wrapper"),
@@ -1618,7 +1618,7 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "polymorphic binding with pair: type applications preserved",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Core_.let_ (Hoisting.hoistPolymorphicLetBindings (\b -> True) (Core.Let {
+                Testing.universalTestCaseActual = (ShowCore.let_ (Hoisting.hoistPolymorphicLetBindings (\b -> True) (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "f"),
@@ -1659,7 +1659,7 @@ allTests =
                   Core.letBody = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "name_x"))}))}))),
-                Testing.universalTestCaseExpected = (Core_.let_ (Core.Let {
+                Testing.universalTestCaseExpected = (ShowCore.let_ (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "f"),
@@ -1710,7 +1710,7 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "monomorphic binding captures type vars: replacement includes type applications",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Core_.let_ (Hoisting.hoistPolymorphicLetBindings (\b -> True) (Core.Let {
+                Testing.universalTestCaseActual = (ShowCore.let_ (Hoisting.hoistPolymorphicLetBindings (\b -> True) (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "f"),
@@ -1749,7 +1749,7 @@ allTests =
                           Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "b"))})),
                         Core.typeSchemeConstraints = Nothing}))}],
                   Core.letBody = (Core.TermVariable (Core.Name "f"))}))),
-                Testing.universalTestCaseExpected = (Core_.let_ (Core.Let {
+                Testing.universalTestCaseExpected = (ShowCore.let_ (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "f"),
@@ -1806,7 +1806,7 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "nested function types: all type variables must be declared",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Core_.let_ (Hoisting.hoistPolymorphicLetBindings (\b -> True) (Core.Let {
+                Testing.universalTestCaseActual = (ShowCore.let_ (Hoisting.hoistPolymorphicLetBindings (\b -> True) (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "f"),
@@ -1859,7 +1859,7 @@ allTests =
                               Core.functionTypeCodomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))}))})),
                         Core.typeSchemeConstraints = Nothing}))}],
                   Core.letBody = (Core.TermVariable (Core.Name "f"))}))),
-                Testing.universalTestCaseExpected = (Core_.let_ (Core.Let {
+                Testing.universalTestCaseExpected = (ShowCore.let_ (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "f"),
@@ -1921,7 +1921,7 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "type variable in return position only",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Core_.let_ (Hoisting.hoistPolymorphicLetBindings (\b -> True) (Core.Let {
+                Testing.universalTestCaseActual = (ShowCore.let_ (Hoisting.hoistPolymorphicLetBindings (\b -> True) (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "f"),
@@ -1948,7 +1948,7 @@ allTests =
                           Core.functionTypeCodomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})),
                         Core.typeSchemeConstraints = Nothing}))}],
                   Core.letBody = (Core.TermVariable (Core.Name "f"))}))),
-                Testing.universalTestCaseExpected = (Core_.let_ (Core.Let {
+                Testing.universalTestCaseExpected = (ShowCore.let_ (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "f"),
@@ -1980,7 +1980,7 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "type variables in deeply nested generics",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Core_.let_ (Hoisting.hoistPolymorphicLetBindings (\b -> True) (Core.Let {
+                Testing.universalTestCaseActual = (ShowCore.let_ (Hoisting.hoistPolymorphicLetBindings (\b -> True) (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "f"),
@@ -2017,7 +2017,7 @@ allTests =
                           Core.functionTypeCodomain = (Core.TypeLiteral Core.LiteralTypeString)})),
                         Core.typeSchemeConstraints = Nothing}))}],
                   Core.letBody = (Core.TermVariable (Core.Name "f"))}))),
-                Testing.universalTestCaseExpected = (Core_.let_ (Core.Let {
+                Testing.universalTestCaseExpected = (ShowCore.let_ (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "f"),
@@ -2063,7 +2063,7 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "multiple bindings with overlapping type variable names",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Core_.let_ (Hoisting.hoistPolymorphicLetBindings (\b -> True) (Core.Let {
+                Testing.universalTestCaseActual = (ShowCore.let_ (Hoisting.hoistPolymorphicLetBindings (\b -> True) (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "outer"),
@@ -2111,7 +2111,7 @@ allTests =
                             Core.functionTypeCodomain = (Core.TypeLiteral Core.LiteralTypeString)}))})),
                         Core.typeSchemeConstraints = Nothing}))}],
                   Core.letBody = (Core.TermVariable (Core.Name "outer"))}))),
-                Testing.universalTestCaseExpected = (Core_.let_ (Core.Let {
+                Testing.universalTestCaseExpected = (ShowCore.let_ (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "outer"),
@@ -2166,7 +2166,7 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "captured variable with type parameters",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Core_.let_ (Hoisting.hoistPolymorphicLetBindings (\b -> True) (Core.Let {
+                Testing.universalTestCaseActual = (ShowCore.let_ (Hoisting.hoistPolymorphicLetBindings (\b -> True) (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "f"),
@@ -2208,7 +2208,7 @@ allTests =
                   Core.letBody = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
                     Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "hello"))}))}))),
-                Testing.universalTestCaseExpected = (Core_.let_ (Core.Let {
+                Testing.universalTestCaseExpected = (ShowCore.let_ (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "f"),
@@ -2262,7 +2262,7 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "short type variable names are treated as type parameters",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Core_.let_ (Hoisting.hoistPolymorphicLetBindings (\b -> True) (Core.Let {
+                Testing.universalTestCaseActual = (ShowCore.let_ (Hoisting.hoistPolymorphicLetBindings (\b -> True) (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "f"),
@@ -2298,7 +2298,7 @@ allTests =
                             Core.functionTypeCodomain = (Core.TypeLiteral Core.LiteralTypeBoolean)}))})),
                         Core.typeSchemeConstraints = Nothing}))}],
                   Core.letBody = (Core.TermVariable (Core.Name "f"))}))),
-                Testing.universalTestCaseExpected = (Core_.let_ (Core.Let {
+                Testing.universalTestCaseExpected = (ShowCore.let_ (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "f"),
@@ -2343,7 +2343,7 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "numbered type variables like t0 t1 t2",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Core_.let_ (Hoisting.hoistPolymorphicLetBindings (\b -> True) (Core.Let {
+                Testing.universalTestCaseActual = (ShowCore.let_ (Hoisting.hoistPolymorphicLetBindings (\b -> True) (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "f"),
@@ -2379,7 +2379,7 @@ allTests =
                             Core.functionTypeCodomain = (Core.TypeLiteral Core.LiteralTypeBoolean)}))})),
                         Core.typeSchemeConstraints = Nothing}))}],
                   Core.letBody = (Core.TermVariable (Core.Name "f"))}))),
-                Testing.universalTestCaseExpected = (Core_.let_ (Core.Let {
+                Testing.universalTestCaseExpected = (ShowCore.let_ (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "f"),
@@ -2424,7 +2424,7 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "choose pattern from mutateTrace",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Core_.let_ (Hoisting.hoistPolymorphicLetBindings (\b -> True) (Core.Let {
+                Testing.universalTestCaseActual = (ShowCore.let_ (Hoisting.hoistPolymorphicLetBindings (\b -> True) (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "mutateTrace"),
@@ -2488,7 +2488,7 @@ allTests =
                               Core.functionTypeCodomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))}))})),
                         Core.typeSchemeConstraints = Nothing}))}],
                   Core.letBody = (Core.TermVariable (Core.Name "mutateTrace"))}))),
-                Testing.universalTestCaseExpected = (Core_.let_ (Core.Let {
+                Testing.universalTestCaseExpected = (ShowCore.let_ (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "mutateTrace"),

@@ -10,9 +10,9 @@ import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Dependencies as Dependencies
 import qualified Hydra.Error.Checking as Checking
-import qualified Hydra.Error.Core as Core_
+import qualified Hydra.Error.Core as ErrorCore
 import qualified Hydra.Errors as Errors
-import qualified Hydra.Extract.Core as Core__
+import qualified Hydra.Extract.Core as ExtractCore
 import qualified Hydra.Formatting as Formatting
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lexical as Lexical
@@ -32,7 +32,7 @@ import qualified Hydra.Reflect as Reflect
 import qualified Hydra.Resolution as Resolution
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Scoping as Scoping
-import qualified Hydra.Show.Core as Core___
+import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Strip as Strip
 import qualified Hydra.Substitution as Substitution
 import qualified Hydra.Typing as Typing
@@ -58,11 +58,11 @@ applyTypeArgumentsToType cx tx typeArgs t =
                 _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
                   Errors.unexpectedShapeErrorExpected = "forall type",
                   Errors.unexpectedShapeErrorActual = (Strings.cat [
-                    Core___.type_ t,
+                    ShowCore.type_ t,
                     ". Trying to apply ",
                     (Literals.showInt32 (Lists.length typeArgs)),
                     " type args: ",
-                    (Formatting.showList Core___.type_ typeArgs),
+                    (Formatting.showList ShowCore.type_ typeArgs),
                     ". Context has vars: {",
                     (Strings.intercalate ", " (Lists.map Core.unName (Maps.keys (Graph.graphBoundTypes tx)))),
                     "}"])})))
@@ -148,7 +148,7 @@ checkTypeSubst cx tx subst =
           badVars =
                   Sets.fromList (Lists.filter (\v -> Maybes.maybe False isNominal (Lexical.dereferenceSchemaType v (Graph.graphSchemaTypes tx))) (Sets.toList suspectVars))
           badPairs = Lists.filter (\p -> Sets.member (Pairs.first p) badVars) (Maps.toList s)
-          printPair = \p -> Strings.cat2 (Strings.cat2 (Core.unName (Pairs.first p)) " --> ") (Core___.type_ (Pairs.second p))
+          printPair = \p -> Strings.cat2 (Strings.cat2 (Core.unName (Pairs.first p)) " --> ") (ShowCore.type_ (Pairs.second p))
       in (Logic.ifElse (Sets.null badVars) (Right subst) (Left (Errors.ErrorChecking (Checking.CheckingErrorIncorrectUnification (Checking.IncorrectUnificationError {
         Checking.incorrectUnificationErrorSubstitution = subst})))))
 
@@ -280,7 +280,7 @@ typeOfCaseStatement cx tx typeArgs cs =
               fcodsResult =
                       Lists.foldl (\acc -> \t -> Eithers.bind acc (\accR ->
                         let cods = Pairs.first accR
-                        in (Eithers.bind (Core__.functionType t) (\ft -> Right (Lists.concat2 cods (Lists.pure (Core.functionTypeCodomain ft)), cx3))))) (Right ([], cx3)) tcterms
+                        in (Eithers.bind (ExtractCore.functionType t) (\ft -> Right (Lists.concat2 cods (Lists.pure (Core.functionTypeCodomain ft)), cx3))))) (Right ([], cx3)) tcterms
           in (Eithers.bind fcodsResult (\fcodsR ->
             let fcods = Pairs.first fcodsR
                 cods = Maybes.cat (Lists.cons tdflt (Lists.map Maybes.pure fcods))
@@ -324,7 +324,7 @@ typeOfInjection cx tx typeArgs injection =
             cx2 = Pairs.second schemaResult
             svars = Core.typeSchemeVariables schemaType
             sbody = Core.typeSchemeType schemaType
-        in (Eithers.bind (Core__.unionType tname sbody) (\sfields -> Eithers.bind (Resolution.findFieldType cx2 fname sfields) (\ftyp -> Right (Resolution.nominalApplication tname typeArgs, cx2))))))
+        in (Eithers.bind (ExtractCore.unionType tname sbody) (\sfields -> Eithers.bind (Resolution.findFieldType cx2 fname sfields) (\ftyp -> Right (Resolution.nominalApplication tname typeArgs, cx2))))))
 
 -- | Reconstruct the type of a lambda function (Either/Context version)
 typeOfLambda :: Context.Context -> Graph.Graph -> [Core.Type] -> Core.Lambda -> Either Errors.Error (Core.Type, Context.Context)
@@ -502,9 +502,9 @@ typeOfPrimitive :: Context.Context -> Graph.Graph -> [Core.Type] -> Core.Name ->
 typeOfPrimitive cx tx typeArgs name =
 
       let rawTs = Maybes.map (\_p -> Graph.primitiveType _p) (Maps.lookup name (Graph.graphPrimitives tx))
-      in (Maybes.maybe (Left (Errors.ErrorUndefinedTermVariable (Core_.UndefinedTermVariableError {
-        Core_.undefinedTermVariableErrorLocation = (Paths.SubtermPath []),
-        Core_.undefinedTermVariableErrorName = name}))) (\tsRaw ->
+      in (Maybes.maybe (Left (Errors.ErrorUndefinedTermVariable (ErrorCore.UndefinedTermVariableError {
+        ErrorCore.undefinedTermVariableErrorLocation = (Paths.SubtermPath []),
+        ErrorCore.undefinedTermVariableErrorName = name}))) (\tsRaw ->
         let instResult = Resolution.instantiateTypeScheme cx tsRaw
             ts = Pairs.first instResult
             cx2 = Pairs.second instResult
@@ -522,7 +522,7 @@ typeOfProjection cx tx typeArgs p =
             cx2 = Pairs.second schemaResult
             svars = Core.typeSchemeVariables schemaType
             sbody = Core.typeSchemeType schemaType
-        in (Eithers.bind (Core__.recordType tname sbody) (\sfields -> Eithers.bind (Resolution.findFieldType cx2 fname sfields) (\ftyp ->
+        in (Eithers.bind (ExtractCore.recordType tname sbody) (\sfields -> Eithers.bind (Resolution.findFieldType cx2 fname sfields) (\ftyp ->
           let subst = Typing.TypeSubst (Maps.fromList (Lists.zip svars typeArgs))
               sftyp = Substitution.substInType subst ftyp
           in (Right (Core.TypeFunction (Core.FunctionType {
@@ -617,7 +617,7 @@ typeOfUnwrap cx tx typeArgs tname =
           cx2 = Pairs.second schemaResult
           svars = Core.typeSchemeVariables schemaType
           sbody = Core.typeSchemeType schemaType
-      in (Eithers.bind (Core__.wrappedType tname sbody) (\wrapped ->
+      in (Eithers.bind (ExtractCore.wrappedType tname sbody) (\wrapped ->
         let subst = Typing.TypeSubst (Maps.fromList (Lists.zip svars typeArgs))
             swrapped = Substitution.substInType subst wrapped
         in (Right (Core.TypeFunction (Core.FunctionType {
@@ -636,9 +636,9 @@ typeOfVariable cx tx typeArgs name =
                         t = Pairs.first tResult
                         cx2 = Pairs.second tResult
                     in (Eithers.bind (applyTypeArgumentsToType cx2 tx typeArgs t) (\applied -> Right (applied, cx2)))
-      in (Maybes.maybe (Maybes.maybe (Left (Errors.ErrorUntypedTermVariable (Core_.UntypedTermVariableError {
-        Core_.untypedTermVariableErrorLocation = (Paths.SubtermPath []),
-        Core_.untypedTermVariableErrorName = name}))) forScheme (Maybes.map (\_p -> Graph.primitiveType _p) (Maps.lookup name (Graph.graphPrimitives tx)))) forScheme rawTypeScheme)
+      in (Maybes.maybe (Maybes.maybe (Left (Errors.ErrorUntypedTermVariable (ErrorCore.UntypedTermVariableError {
+        ErrorCore.untypedTermVariableErrorLocation = (Paths.SubtermPath []),
+        ErrorCore.untypedTermVariableErrorName = name}))) forScheme (Maybes.map (\_p -> Graph.primitiveType _p) (Maps.lookup name (Graph.graphPrimitives tx)))) forScheme rawTypeScheme)
 
 -- | Reconstruct the type of a wrapped term (Either/Context version)
 typeOfWrappedTerm :: Context.Context -> Graph.Graph -> [Core.Type] -> Core.WrappedTerm -> Either Errors.Error (Core.Type, Context.Context)

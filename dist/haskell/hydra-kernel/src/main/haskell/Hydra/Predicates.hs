@@ -8,7 +8,7 @@ import qualified Hydra.Arity as Arity
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
-import qualified Hydra.Decode.Core as Core_
+import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Dependencies as Dependencies
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Graph as Graph
@@ -183,7 +183,7 @@ typeDependencies cx graph withSchema transform name =
                           Context.contextTrace = (Lists.cons (Strings.cat2 "type dependencies of " (Core.unName name2)) (Context.contextTrace cx)),
                           Context.contextMessages = (Context.contextMessages cx),
                           Context.contextOther = (Context.contextOther cx)}
-                in (Eithers.bind (Lexical.requireBinding graph name2) (\el -> Eithers.bimap (\_e -> Errors.ErrorDecoding _e) (\_a -> _a) (Core_.type_ graph (Core.bindingTerm el))))
+                in (Eithers.bind (Lexical.requireBinding graph name2) (\el -> Eithers.bimap (\_e -> Errors.ErrorDecoding _e) (\_a -> _a) (DecodeCore.type_ graph (Core.bindingTerm el))))
           toPair = \name2 -> Eithers.map (\typ -> (name2, (transform typ))) (requireType name2)
           deps =
                   \seeds -> \names -> Logic.ifElse (Sets.null seeds) (Right names) (Eithers.bind (Eithers.mapList toPair (Sets.toList seeds)) (\pairs ->

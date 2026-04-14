@@ -9,7 +9,7 @@ import qualified Hydra.Coders as Coders
 import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Errors as Errors
-import qualified Hydra.Extract.Core as Core_
+import qualified Hydra.Extract.Core as ExtractCore
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lib.Eithers as Eithers
 import qualified Hydra.Lib.Equality as Equality
@@ -23,7 +23,7 @@ import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Pg.Mapping as Mapping
 import qualified Hydra.Pg.Model as Model
 import qualified Hydra.Resolution as Resolution
-import qualified Hydra.Show.Core as Core__
+import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Strip as Strip
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Map as M
@@ -40,7 +40,7 @@ applyPattern cx firstLit pairs term =
 
 -- | Decode an edge label from a term
 decodeEdgeLabel :: t0 -> Graph.Graph -> Core.Term -> Either Errors.Error Model.EdgeLabel
-decodeEdgeLabel cx g t = Eithers.map (\_x -> Model.EdgeLabel _x) (Core_.string g t)
+decodeEdgeLabel cx g t = Eithers.map (\_x -> Model.EdgeLabel _x) (ExtractCore.string g t)
 
 -- | Decode an edge specification from a term
 decodeEdgeSpec :: t0 -> Graph.Graph -> Core.Term -> Either Errors.Error Mapping.EdgeSpec
@@ -61,7 +61,7 @@ decodeElementSpec cx g term =
 
 -- | Decode a property key from a term
 decodePropertyKey :: t0 -> Graph.Graph -> Core.Term -> Either Errors.Error Model.PropertyKey
-decodePropertyKey cx g t = Eithers.map (\_x -> Model.PropertyKey _x) (Core_.string g t)
+decodePropertyKey cx g t = Eithers.map (\_x -> Model.PropertyKey _x) (ExtractCore.string g t)
 
 -- | Decode a property specification from a term
 decodePropertySpec :: t0 -> Graph.Graph -> Core.Term -> Either Errors.Error Mapping.PropertySpec
@@ -78,14 +78,14 @@ decodeValueSpec cx g term =
         Core.LiteralString v1 -> Right (Mapping.ValueSpecPattern v1)
         _ -> readInjection cx g [
           (Core.Name "value", (\_ -> Right Mapping.ValueSpecValue)),
-          (Core.Name "pattern", (\t -> Eithers.map (\_x -> Mapping.ValueSpecPattern _x) (Core_.string g t)))] term
+          (Core.Name "pattern", (\t -> Eithers.map (\_x -> Mapping.ValueSpecPattern _x) (ExtractCore.string g t)))] term
       _ -> readInjection cx g [
         (Core.Name "value", (\_ -> Right Mapping.ValueSpecValue)),
-        (Core.Name "pattern", (\t -> Eithers.map (\_x -> Mapping.ValueSpecPattern _x) (Core_.string g t)))] term
+        (Core.Name "pattern", (\t -> Eithers.map (\_x -> Mapping.ValueSpecPattern _x) (ExtractCore.string g t)))] term
 
 -- | Decode a vertex label from a term
 decodeVertexLabel :: t0 -> Graph.Graph -> Core.Term -> Either Errors.Error Model.VertexLabel
-decodeVertexLabel cx g t = Eithers.map (\_x -> Model.VertexLabel _x) (Core_.string g t)
+decodeVertexLabel cx g t = Eithers.map (\_x -> Model.VertexLabel _x) (ExtractCore.string g t)
 
 -- | Decode a vertex specification from a term
 decodeVertexSpec :: t0 -> Graph.Graph -> Core.Term -> Either Errors.Error Mapping.VertexSpec
@@ -116,7 +116,7 @@ evalStep cx step term =
 
 -- | Extract a list from a term and apply a decoder to each element
 expectList :: t0 -> Graph.Graph -> (t0 -> Graph.Graph -> Core.Term -> Either Errors.Error t1) -> Core.Term -> Either Errors.Error [t1]
-expectList cx g f term = Eithers.bind (Core_.list g term) (\elems -> Eithers.mapList (f cx g) elems)
+expectList cx g f term = Eithers.bind (ExtractCore.list g term) (\elems -> Eithers.mapList (f cx g) elems)
 
 -- | Parse an edge id pattern from a value spec and schema
 parseEdgeIdPattern :: t0 -> t1 -> Mapping.Schema t2 t3 t4 -> Mapping.ValueSpec -> Either t5 (Context.Context -> Core.Term -> Either Errors.Error [t4])
@@ -205,7 +205,7 @@ readField cx fields fname fun =
 -- | Read an injection (union value) from a term
 readInjection :: t0 -> Graph.Graph -> [(Core.Name, (Core.Term -> Either Errors.Error t1))] -> Core.Term -> Either Errors.Error t1
 readInjection cx g cases encoded =
-    Eithers.bind (Core_.map (\k -> Eithers.map (\_n -> Core.Name _n) (Core_.string g k)) (\_v -> Right _v) g encoded) (\mp ->
+    Eithers.bind (ExtractCore.map (\k -> Eithers.map (\_n -> Core.Name _n) (ExtractCore.string g k)) (\_v -> Right _v) g encoded) (\mp ->
       let entries = Maps.toList mp
       in (Logic.ifElse (Lists.null entries) (Left (Errors.ErrorOther (Errors.OtherError "empty injection"))) (
         let f = Lists.head entries
@@ -217,7 +217,7 @@ readInjection cx g cases encoded =
 -- | Read a record from a term as a map of field names to values
 readRecord :: t0 -> Graph.Graph -> (M.Map Core.Name Core.Term -> Either Errors.Error t1) -> Core.Term -> Either Errors.Error t1
 readRecord cx g cons term =
-    Eithers.bind (Core_.map (\k -> Eithers.map (\_n -> Core.Name _n) (Core_.string g k)) (\_v -> Right _v) g term) cons
+    Eithers.bind (ExtractCore.map (\k -> Eithers.map (\_n -> Core.Name _n) (ExtractCore.string g k)) (\_v -> Right _v) g term) cons
 
 -- | Require exactly one result from a list-producing function
 requireUnique :: t0 -> String -> (t1 -> Either Errors.Error [t2]) -> t1 -> Either Errors.Error t2
@@ -255,10 +255,10 @@ termToString term =
         Core.LiteralBoolean v1 -> Logic.ifElse v1 "true" "false"
         Core.LiteralInteger v1 -> case v1 of
           Core.IntegerValueInt32 v2 -> Literals.showInt32 v2
-          _ -> Core__.term term
+          _ -> ShowCore.term term
         Core.LiteralFloat v1 -> case v1 of
           Core.FloatValueFloat64 v2 -> Literals.showFloat64 v2
-          _ -> Core__.term term
-        _ -> Core__.term term
+          _ -> ShowCore.term term
+        _ -> ShowCore.term term
       Core.TermMaybe v0 -> Maybes.maybe "nothing" (\t -> termToString t) v0
-      _ -> Core__.term term
+      _ -> ShowCore.term term

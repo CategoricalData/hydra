@@ -5,7 +5,7 @@
 module Hydra.Encode.Packaging where
 
 import qualified Hydra.Core as Core
-import qualified Hydra.Encode.Core as Core_
+import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Maybes as Maybes
@@ -115,13 +115,13 @@ termDefinition x =
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Core_.name (Packaging.termDefinitionName x))},
+          Core.fieldTerm = (EncodeCore.name (Packaging.termDefinitionName x))},
         Core.Field {
           Core.fieldName = (Core.Name "term"),
-          Core.fieldTerm = (Core_.term (Packaging.termDefinitionTerm x))},
+          Core.fieldTerm = (EncodeCore.term (Packaging.termDefinitionTerm x))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map Core_.typeScheme opt)) (Packaging.termDefinitionType x))}]})
+          Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map EncodeCore.typeScheme opt)) (Packaging.termDefinitionType x))}]})
 
 typeDefinition :: Packaging.TypeDefinition -> Core.Term
 typeDefinition x =
@@ -130,7 +130,7 @@ typeDefinition x =
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Core_.name (Packaging.typeDefinitionName x))},
+          Core.fieldTerm = (EncodeCore.name (Packaging.typeDefinitionName x))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = (Core_.typeScheme (Packaging.typeDefinitionType x))}]})
+          Core.fieldTerm = (EncodeCore.typeScheme (Packaging.typeDefinitionType x))}]})

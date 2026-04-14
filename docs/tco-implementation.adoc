@@ -28,7 +28,7 @@ replacing tail calls with parameter reassignment and `continue`.
 == The Hydra Core Term Model
 
 The term algebra is defined in
-`hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Types/Core.hs`.
+`packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Types/Core.hs`.
 The variants relevant to TCO are:
 
 [source,haskell]
@@ -108,10 +108,10 @@ Default::
 | Language | File (line)
 
 | Python
-| `hydra-ext/src/main/haskell/Hydra/Ext/Sources/Python/Coder.hs` (line ~1898)
+| `packages/hydra-python/src/main/haskell/Hydra/Sources/Python/Coder.hs` (line ~1898)
 
 | Java
-| `hydra-ext/src/main/haskell/Hydra/Ext/Sources/Java/Coder.hs` (line ~4859)
+| `packages/hydra-java/src/main/haskell/Hydra/Sources/Java/Coder.hs` (line ~4859)
 |===
 
 == Transformation: Recursion to Iteration
@@ -185,7 +185,7 @@ def deannotate_and_detype_term(t: hydra.core.Term) -> hydra.core.Term:
                 return t
 ----
 
-Other examples from generated output in `hydra-python/src/gen-main/python/hydra/`:
+Other examples from generated output in `dist/python/hydra-kernel/src/main/python/hydra/`:
 
 - `rewriting.py`: `deannotate_term`, `deannotate_type`,
   `deannotate_type_parameters`, `is_lambda`,
@@ -228,7 +228,7 @@ via `encodeTermTCO`.
 
 NOTE: The Java TCO code generates `while` with `cond = Nothing`,
 serialized as `while (true)` by the Java Serde module.
-The current generated Java output under `hydra-java/src/gen-main/java/hydra/`
+The current generated Java output under `dist/java/hydra-kernel/src/main/java/hydra/`
 uses Visitor-pattern recursive calls (not yet regenerated with TCO).
 The Python output has been regenerated and shows the `while True:` pattern throughout.
 
@@ -373,34 +373,34 @@ it reuses the existing local variables via reassignment.
 | Component | Path
 
 | Core term types
-| `hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Types/Core.hs`
+| `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Types/Core.hs`
 
 | Term reduction (beta, eta)
-| `hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Terms/Reduction.hs`
+| `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Terms/Reduction.hs`
 
 | Term rewriting (free vars, annotation stripping)
-| `hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Terms/Rewriting.hs`
+| `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Terms/Rewriting.hs`
 
 | Let-binding hoisting
-| `hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Terms/Hoisting.hs`
+| `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Terms/Hoisting.hs`
 
 | Python coder (TCO at ~line 1895)
-| `hydra-ext/src/main/haskell/Hydra/Ext/Sources/Python/Coder.hs`
+| `packages/hydra-python/src/main/haskell/Hydra/Sources/Python/Coder.hs`
 
 | Python coder (generated)
-| `hydra-ext/src/gen-main/haskell/Hydra/Ext/Python/Coder.hs`
+| `dist/haskell/hydra-ext/src/main/haskell/Hydra/Python/Coder.hs`
 
 | Java coder (TCO at ~line 4855)
-| `hydra-ext/src/main/haskell/Hydra/Ext/Sources/Java/Coder.hs`
+| `packages/hydra-java/src/main/haskell/Hydra/Sources/Java/Coder.hs`
 
 | Java coder (generated)
-| `hydra-ext/src/gen-main/haskell/Hydra/Ext/Java/Coder.hs`
+| `dist/haskell/hydra-ext/src/main/haskell/Hydra/Java/Coder.hs`
 
 | Generated Python (shows TCO output)
-| `hydra-python/src/gen-main/python/hydra/rewriting.py`
+| `dist/python/hydra-kernel/src/main/python/hydra/rewriting.py`
 
 | Generated Java (Visitor pattern, pre-TCO regen)
-| `hydra-java/src/gen-main/java/hydra/rewriting/Rewriting.java`
+| `dist/java/hydra-kernel/src/main/java/hydra/rewriting/Rewriting.java`
 |===
 
 == Summary

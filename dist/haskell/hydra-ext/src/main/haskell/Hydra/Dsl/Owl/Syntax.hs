@@ -5,13 +5,13 @@
 module Hydra.Dsl.Owl.Syntax where
 
 import qualified Hydra.Core as Core
-import qualified Hydra.Owl.Syntax as Syntax
+import qualified Hydra.Owl.Syntax as OwlSyntax
 import qualified Hydra.Phantoms as Phantoms
-import qualified Hydra.Rdf.Syntax as Syntax_
+import qualified Hydra.Rdf.Syntax as RdfSyntax
 import qualified Hydra.Xml.Schema as Schema
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 
-annotation :: Phantoms.TTerm [Syntax.Annotation] -> Phantoms.TTerm Syntax.AnnotationProperty -> Phantoms.TTerm Syntax.AnnotationValue -> Phantoms.TTerm Syntax.Annotation
+annotation :: Phantoms.TTerm [OwlSyntax.Annotation] -> Phantoms.TTerm OwlSyntax.AnnotationProperty -> Phantoms.TTerm OwlSyntax.AnnotationValue -> Phantoms.TTerm OwlSyntax.Annotation
 annotation annotations property value =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.Annotation"),
@@ -26,7 +26,7 @@ annotation annotations property value =
           Core.fieldName = (Core.Name "value"),
           Core.fieldTerm = (Phantoms.unTTerm value)}]}))
 
-annotationAnnotations :: Phantoms.TTerm Syntax.Annotation -> Phantoms.TTerm [Syntax.Annotation]
+annotationAnnotations :: Phantoms.TTerm OwlSyntax.Annotation -> Phantoms.TTerm [OwlSyntax.Annotation]
 annotationAnnotations x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -34,7 +34,7 @@ annotationAnnotations x =
         Core.projectionField = (Core.Name "annotations")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-annotationAssertion :: Phantoms.TTerm [Syntax.Annotation] -> Phantoms.TTerm Syntax.AnnotationProperty -> Phantoms.TTerm Syntax.AnnotationSubject -> Phantoms.TTerm Syntax.AnnotationValue -> Phantoms.TTerm Syntax.AnnotationAssertion
+annotationAssertion :: Phantoms.TTerm [OwlSyntax.Annotation] -> Phantoms.TTerm OwlSyntax.AnnotationProperty -> Phantoms.TTerm OwlSyntax.AnnotationSubject -> Phantoms.TTerm OwlSyntax.AnnotationValue -> Phantoms.TTerm OwlSyntax.AnnotationAssertion
 annotationAssertion annotations property subject value =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.AnnotationAssertion"),
@@ -52,7 +52,7 @@ annotationAssertion annotations property subject value =
           Core.fieldName = (Core.Name "value"),
           Core.fieldTerm = (Phantoms.unTTerm value)}]}))
 
-annotationAssertionAnnotations :: Phantoms.TTerm Syntax.AnnotationAssertion -> Phantoms.TTerm [Syntax.Annotation]
+annotationAssertionAnnotations :: Phantoms.TTerm OwlSyntax.AnnotationAssertion -> Phantoms.TTerm [OwlSyntax.Annotation]
 annotationAssertionAnnotations x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -60,7 +60,7 @@ annotationAssertionAnnotations x =
         Core.projectionField = (Core.Name "annotations")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-annotationAssertionProperty :: Phantoms.TTerm Syntax.AnnotationAssertion -> Phantoms.TTerm Syntax.AnnotationProperty
+annotationAssertionProperty :: Phantoms.TTerm OwlSyntax.AnnotationAssertion -> Phantoms.TTerm OwlSyntax.AnnotationProperty
 annotationAssertionProperty x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -68,7 +68,7 @@ annotationAssertionProperty x =
         Core.projectionField = (Core.Name "property")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-annotationAssertionSubject :: Phantoms.TTerm Syntax.AnnotationAssertion -> Phantoms.TTerm Syntax.AnnotationSubject
+annotationAssertionSubject :: Phantoms.TTerm OwlSyntax.AnnotationAssertion -> Phantoms.TTerm OwlSyntax.AnnotationSubject
 annotationAssertionSubject x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -76,7 +76,7 @@ annotationAssertionSubject x =
         Core.projectionField = (Core.Name "subject")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-annotationAssertionValue :: Phantoms.TTerm Syntax.AnnotationAssertion -> Phantoms.TTerm Syntax.AnnotationValue
+annotationAssertionValue :: Phantoms.TTerm OwlSyntax.AnnotationAssertion -> Phantoms.TTerm OwlSyntax.AnnotationValue
 annotationAssertionValue x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -84,7 +84,7 @@ annotationAssertionValue x =
         Core.projectionField = (Core.Name "value")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-annotationAssertionWithAnnotations :: Phantoms.TTerm Syntax.AnnotationAssertion -> Phantoms.TTerm [Syntax.Annotation] -> Phantoms.TTerm Syntax.AnnotationAssertion
+annotationAssertionWithAnnotations :: Phantoms.TTerm OwlSyntax.AnnotationAssertion -> Phantoms.TTerm [OwlSyntax.Annotation] -> Phantoms.TTerm OwlSyntax.AnnotationAssertion
 annotationAssertionWithAnnotations original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.AnnotationAssertion"),
@@ -114,7 +114,7 @@ annotationAssertionWithAnnotations original newVal =
               Core.projectionField = (Core.Name "value")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-annotationAssertionWithProperty :: Phantoms.TTerm Syntax.AnnotationAssertion -> Phantoms.TTerm Syntax.AnnotationProperty -> Phantoms.TTerm Syntax.AnnotationAssertion
+annotationAssertionWithProperty :: Phantoms.TTerm OwlSyntax.AnnotationAssertion -> Phantoms.TTerm OwlSyntax.AnnotationProperty -> Phantoms.TTerm OwlSyntax.AnnotationAssertion
 annotationAssertionWithProperty original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.AnnotationAssertion"),
@@ -144,7 +144,7 @@ annotationAssertionWithProperty original newVal =
               Core.projectionField = (Core.Name "value")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-annotationAssertionWithSubject :: Phantoms.TTerm Syntax.AnnotationAssertion -> Phantoms.TTerm Syntax.AnnotationSubject -> Phantoms.TTerm Syntax.AnnotationAssertion
+annotationAssertionWithSubject :: Phantoms.TTerm OwlSyntax.AnnotationAssertion -> Phantoms.TTerm OwlSyntax.AnnotationSubject -> Phantoms.TTerm OwlSyntax.AnnotationAssertion
 annotationAssertionWithSubject original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.AnnotationAssertion"),
@@ -174,7 +174,7 @@ annotationAssertionWithSubject original newVal =
               Core.projectionField = (Core.Name "value")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-annotationAssertionWithValue :: Phantoms.TTerm Syntax.AnnotationAssertion -> Phantoms.TTerm Syntax.AnnotationValue -> Phantoms.TTerm Syntax.AnnotationAssertion
+annotationAssertionWithValue :: Phantoms.TTerm OwlSyntax.AnnotationAssertion -> Phantoms.TTerm OwlSyntax.AnnotationValue -> Phantoms.TTerm OwlSyntax.AnnotationAssertion
 annotationAssertionWithValue original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.AnnotationAssertion"),
@@ -204,7 +204,7 @@ annotationAssertionWithValue original newVal =
           Core.fieldName = (Core.Name "value"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-annotationAxiomAnnotationAssertion :: Phantoms.TTerm Syntax.AnnotationAssertion -> Phantoms.TTerm Syntax.AnnotationAxiom
+annotationAxiomAnnotationAssertion :: Phantoms.TTerm OwlSyntax.AnnotationAssertion -> Phantoms.TTerm OwlSyntax.AnnotationAxiom
 annotationAxiomAnnotationAssertion x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.AnnotationAxiom"),
@@ -212,7 +212,7 @@ annotationAxiomAnnotationAssertion x =
         Core.fieldName = (Core.Name "annotationAssertion"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-annotationAxiomAnnotationPropertyDomain :: Phantoms.TTerm Syntax.AnnotationPropertyDomain -> Phantoms.TTerm Syntax.AnnotationAxiom
+annotationAxiomAnnotationPropertyDomain :: Phantoms.TTerm OwlSyntax.AnnotationPropertyDomain -> Phantoms.TTerm OwlSyntax.AnnotationAxiom
 annotationAxiomAnnotationPropertyDomain x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.AnnotationAxiom"),
@@ -220,7 +220,7 @@ annotationAxiomAnnotationPropertyDomain x =
         Core.fieldName = (Core.Name "annotationPropertyDomain"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-annotationAxiomAnnotationPropertyRange :: Phantoms.TTerm Syntax.AnnotationPropertyRange -> Phantoms.TTerm Syntax.AnnotationAxiom
+annotationAxiomAnnotationPropertyRange :: Phantoms.TTerm OwlSyntax.AnnotationPropertyRange -> Phantoms.TTerm OwlSyntax.AnnotationAxiom
 annotationAxiomAnnotationPropertyRange x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.AnnotationAxiom"),
@@ -228,7 +228,7 @@ annotationAxiomAnnotationPropertyRange x =
         Core.fieldName = (Core.Name "annotationPropertyRange"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-annotationAxiomSubAnnotationPropertyOf :: Phantoms.TTerm Syntax.SubAnnotationPropertyOf -> Phantoms.TTerm Syntax.AnnotationAxiom
+annotationAxiomSubAnnotationPropertyOf :: Phantoms.TTerm OwlSyntax.SubAnnotationPropertyOf -> Phantoms.TTerm OwlSyntax.AnnotationAxiom
 annotationAxiomSubAnnotationPropertyOf x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.AnnotationAxiom"),
@@ -236,7 +236,7 @@ annotationAxiomSubAnnotationPropertyOf x =
         Core.fieldName = (Core.Name "subAnnotationPropertyOf"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-annotationProperty :: Phantoms.TTerm Syntax.Annotation -> Phantoms.TTerm Syntax.AnnotationProperty
+annotationProperty :: Phantoms.TTerm OwlSyntax.Annotation -> Phantoms.TTerm OwlSyntax.AnnotationProperty
 annotationProperty x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -244,7 +244,7 @@ annotationProperty x =
         Core.projectionField = (Core.Name "property")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-annotationPropertyDomain :: Phantoms.TTerm [Syntax.Annotation] -> Phantoms.TTerm Syntax.AnnotationProperty -> Phantoms.TTerm Syntax_.Iri -> Phantoms.TTerm Syntax.AnnotationPropertyDomain
+annotationPropertyDomain :: Phantoms.TTerm [OwlSyntax.Annotation] -> Phantoms.TTerm OwlSyntax.AnnotationProperty -> Phantoms.TTerm RdfSyntax.Iri -> Phantoms.TTerm OwlSyntax.AnnotationPropertyDomain
 annotationPropertyDomain annotations property iri =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.AnnotationPropertyDomain"),
@@ -259,7 +259,7 @@ annotationPropertyDomain annotations property iri =
           Core.fieldName = (Core.Name "iri"),
           Core.fieldTerm = (Phantoms.unTTerm iri)}]}))
 
-annotationPropertyDomainAnnotations :: Phantoms.TTerm Syntax.AnnotationPropertyDomain -> Phantoms.TTerm [Syntax.Annotation]
+annotationPropertyDomainAnnotations :: Phantoms.TTerm OwlSyntax.AnnotationPropertyDomain -> Phantoms.TTerm [OwlSyntax.Annotation]
 annotationPropertyDomainAnnotations x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -267,7 +267,7 @@ annotationPropertyDomainAnnotations x =
         Core.projectionField = (Core.Name "annotations")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-annotationPropertyDomainIri :: Phantoms.TTerm Syntax.AnnotationPropertyDomain -> Phantoms.TTerm Syntax_.Iri
+annotationPropertyDomainIri :: Phantoms.TTerm OwlSyntax.AnnotationPropertyDomain -> Phantoms.TTerm RdfSyntax.Iri
 annotationPropertyDomainIri x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -275,7 +275,7 @@ annotationPropertyDomainIri x =
         Core.projectionField = (Core.Name "iri")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-annotationPropertyDomainProperty :: Phantoms.TTerm Syntax.AnnotationPropertyDomain -> Phantoms.TTerm Syntax.AnnotationProperty
+annotationPropertyDomainProperty :: Phantoms.TTerm OwlSyntax.AnnotationPropertyDomain -> Phantoms.TTerm OwlSyntax.AnnotationProperty
 annotationPropertyDomainProperty x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -283,7 +283,7 @@ annotationPropertyDomainProperty x =
         Core.projectionField = (Core.Name "property")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-annotationPropertyDomainWithAnnotations :: Phantoms.TTerm Syntax.AnnotationPropertyDomain -> Phantoms.TTerm [Syntax.Annotation] -> Phantoms.TTerm Syntax.AnnotationPropertyDomain
+annotationPropertyDomainWithAnnotations :: Phantoms.TTerm OwlSyntax.AnnotationPropertyDomain -> Phantoms.TTerm [OwlSyntax.Annotation] -> Phantoms.TTerm OwlSyntax.AnnotationPropertyDomain
 annotationPropertyDomainWithAnnotations original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.AnnotationPropertyDomain"),
@@ -306,7 +306,7 @@ annotationPropertyDomainWithAnnotations original newVal =
               Core.projectionField = (Core.Name "iri")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-annotationPropertyDomainWithIri :: Phantoms.TTerm Syntax.AnnotationPropertyDomain -> Phantoms.TTerm Syntax_.Iri -> Phantoms.TTerm Syntax.AnnotationPropertyDomain
+annotationPropertyDomainWithIri :: Phantoms.TTerm OwlSyntax.AnnotationPropertyDomain -> Phantoms.TTerm RdfSyntax.Iri -> Phantoms.TTerm OwlSyntax.AnnotationPropertyDomain
 annotationPropertyDomainWithIri original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.AnnotationPropertyDomain"),
@@ -329,7 +329,7 @@ annotationPropertyDomainWithIri original newVal =
           Core.fieldName = (Core.Name "iri"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-annotationPropertyDomainWithProperty :: Phantoms.TTerm Syntax.AnnotationPropertyDomain -> Phantoms.TTerm Syntax.AnnotationProperty -> Phantoms.TTerm Syntax.AnnotationPropertyDomain
+annotationPropertyDomainWithProperty :: Phantoms.TTerm OwlSyntax.AnnotationPropertyDomain -> Phantoms.TTerm OwlSyntax.AnnotationProperty -> Phantoms.TTerm OwlSyntax.AnnotationPropertyDomain
 annotationPropertyDomainWithProperty original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.AnnotationPropertyDomain"),
@@ -352,7 +352,7 @@ annotationPropertyDomainWithProperty original newVal =
               Core.projectionField = (Core.Name "iri")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-annotationPropertyRange :: Phantoms.TTerm [Syntax.Annotation] -> Phantoms.TTerm Syntax.AnnotationProperty -> Phantoms.TTerm Syntax_.Iri -> Phantoms.TTerm Syntax.AnnotationPropertyRange
+annotationPropertyRange :: Phantoms.TTerm [OwlSyntax.Annotation] -> Phantoms.TTerm OwlSyntax.AnnotationProperty -> Phantoms.TTerm RdfSyntax.Iri -> Phantoms.TTerm OwlSyntax.AnnotationPropertyRange
 annotationPropertyRange annotations property iri =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.AnnotationPropertyRange"),
@@ -367,7 +367,7 @@ annotationPropertyRange annotations property iri =
           Core.fieldName = (Core.Name "iri"),
           Core.fieldTerm = (Phantoms.unTTerm iri)}]}))
 
-annotationPropertyRangeAnnotations :: Phantoms.TTerm Syntax.AnnotationPropertyRange -> Phantoms.TTerm [Syntax.Annotation]
+annotationPropertyRangeAnnotations :: Phantoms.TTerm OwlSyntax.AnnotationPropertyRange -> Phantoms.TTerm [OwlSyntax.Annotation]
 annotationPropertyRangeAnnotations x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -375,7 +375,7 @@ annotationPropertyRangeAnnotations x =
         Core.projectionField = (Core.Name "annotations")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-annotationPropertyRangeIri :: Phantoms.TTerm Syntax.AnnotationPropertyRange -> Phantoms.TTerm Syntax_.Iri
+annotationPropertyRangeIri :: Phantoms.TTerm OwlSyntax.AnnotationPropertyRange -> Phantoms.TTerm RdfSyntax.Iri
 annotationPropertyRangeIri x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -383,7 +383,7 @@ annotationPropertyRangeIri x =
         Core.projectionField = (Core.Name "iri")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-annotationPropertyRangeProperty :: Phantoms.TTerm Syntax.AnnotationPropertyRange -> Phantoms.TTerm Syntax.AnnotationProperty
+annotationPropertyRangeProperty :: Phantoms.TTerm OwlSyntax.AnnotationPropertyRange -> Phantoms.TTerm OwlSyntax.AnnotationProperty
 annotationPropertyRangeProperty x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -391,7 +391,7 @@ annotationPropertyRangeProperty x =
         Core.projectionField = (Core.Name "property")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-annotationPropertyRangeWithAnnotations :: Phantoms.TTerm Syntax.AnnotationPropertyRange -> Phantoms.TTerm [Syntax.Annotation] -> Phantoms.TTerm Syntax.AnnotationPropertyRange
+annotationPropertyRangeWithAnnotations :: Phantoms.TTerm OwlSyntax.AnnotationPropertyRange -> Phantoms.TTerm [OwlSyntax.Annotation] -> Phantoms.TTerm OwlSyntax.AnnotationPropertyRange
 annotationPropertyRangeWithAnnotations original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.AnnotationPropertyRange"),
@@ -414,7 +414,7 @@ annotationPropertyRangeWithAnnotations original newVal =
               Core.projectionField = (Core.Name "iri")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-annotationPropertyRangeWithIri :: Phantoms.TTerm Syntax.AnnotationPropertyRange -> Phantoms.TTerm Syntax_.Iri -> Phantoms.TTerm Syntax.AnnotationPropertyRange
+annotationPropertyRangeWithIri :: Phantoms.TTerm OwlSyntax.AnnotationPropertyRange -> Phantoms.TTerm RdfSyntax.Iri -> Phantoms.TTerm OwlSyntax.AnnotationPropertyRange
 annotationPropertyRangeWithIri original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.AnnotationPropertyRange"),
@@ -437,7 +437,7 @@ annotationPropertyRangeWithIri original newVal =
           Core.fieldName = (Core.Name "iri"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-annotationPropertyRangeWithProperty :: Phantoms.TTerm Syntax.AnnotationPropertyRange -> Phantoms.TTerm Syntax.AnnotationProperty -> Phantoms.TTerm Syntax.AnnotationPropertyRange
+annotationPropertyRangeWithProperty :: Phantoms.TTerm OwlSyntax.AnnotationPropertyRange -> Phantoms.TTerm OwlSyntax.AnnotationProperty -> Phantoms.TTerm OwlSyntax.AnnotationPropertyRange
 annotationPropertyRangeWithProperty original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.AnnotationPropertyRange"),
@@ -460,13 +460,13 @@ annotationPropertyRangeWithProperty original newVal =
               Core.projectionField = (Core.Name "iri")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-annotationProperty_ :: Phantoms.TTerm () -> Phantoms.TTerm Syntax.AnnotationProperty
+annotationProperty_ :: Phantoms.TTerm () -> Phantoms.TTerm OwlSyntax.AnnotationProperty
 annotationProperty_ x =
     Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.owl.syntax.AnnotationProperty"),
       Core.wrappedTermBody = (Phantoms.unTTerm x)}))
 
-annotationSubjectAnonymousIndividual :: Phantoms.TTerm Syntax.AnonymousIndividual -> Phantoms.TTerm Syntax.AnnotationSubject
+annotationSubjectAnonymousIndividual :: Phantoms.TTerm OwlSyntax.AnonymousIndividual -> Phantoms.TTerm OwlSyntax.AnnotationSubject
 annotationSubjectAnonymousIndividual x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.AnnotationSubject"),
@@ -474,7 +474,7 @@ annotationSubjectAnonymousIndividual x =
         Core.fieldName = (Core.Name "anonymousIndividual"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-annotationSubjectIri :: Phantoms.TTerm Syntax_.Iri -> Phantoms.TTerm Syntax.AnnotationSubject
+annotationSubjectIri :: Phantoms.TTerm RdfSyntax.Iri -> Phantoms.TTerm OwlSyntax.AnnotationSubject
 annotationSubjectIri x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.AnnotationSubject"),
@@ -482,7 +482,7 @@ annotationSubjectIri x =
         Core.fieldName = (Core.Name "iri"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-annotationValue :: Phantoms.TTerm Syntax.Annotation -> Phantoms.TTerm Syntax.AnnotationValue
+annotationValue :: Phantoms.TTerm OwlSyntax.Annotation -> Phantoms.TTerm OwlSyntax.AnnotationValue
 annotationValue x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -490,7 +490,7 @@ annotationValue x =
         Core.projectionField = (Core.Name "value")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-annotationValueAnonymousIndividual :: Phantoms.TTerm Syntax.AnonymousIndividual -> Phantoms.TTerm Syntax.AnnotationValue
+annotationValueAnonymousIndividual :: Phantoms.TTerm OwlSyntax.AnonymousIndividual -> Phantoms.TTerm OwlSyntax.AnnotationValue
 annotationValueAnonymousIndividual x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.AnnotationValue"),
@@ -498,7 +498,7 @@ annotationValueAnonymousIndividual x =
         Core.fieldName = (Core.Name "anonymousIndividual"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-annotationValueIri :: Phantoms.TTerm Syntax_.Iri -> Phantoms.TTerm Syntax.AnnotationValue
+annotationValueIri :: Phantoms.TTerm RdfSyntax.Iri -> Phantoms.TTerm OwlSyntax.AnnotationValue
 annotationValueIri x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.AnnotationValue"),
@@ -506,7 +506,7 @@ annotationValueIri x =
         Core.fieldName = (Core.Name "iri"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-annotationValueLiteral :: Phantoms.TTerm Syntax_.Literal -> Phantoms.TTerm Syntax.AnnotationValue
+annotationValueLiteral :: Phantoms.TTerm RdfSyntax.Literal -> Phantoms.TTerm OwlSyntax.AnnotationValue
 annotationValueLiteral x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.AnnotationValue"),
@@ -514,7 +514,7 @@ annotationValueLiteral x =
         Core.fieldName = (Core.Name "literal"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-annotationWithAnnotations :: Phantoms.TTerm Syntax.Annotation -> Phantoms.TTerm [Syntax.Annotation] -> Phantoms.TTerm Syntax.Annotation
+annotationWithAnnotations :: Phantoms.TTerm OwlSyntax.Annotation -> Phantoms.TTerm [OwlSyntax.Annotation] -> Phantoms.TTerm OwlSyntax.Annotation
 annotationWithAnnotations original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.Annotation"),
@@ -537,7 +537,7 @@ annotationWithAnnotations original newVal =
               Core.projectionField = (Core.Name "value")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-annotationWithProperty :: Phantoms.TTerm Syntax.Annotation -> Phantoms.TTerm Syntax.AnnotationProperty -> Phantoms.TTerm Syntax.Annotation
+annotationWithProperty :: Phantoms.TTerm OwlSyntax.Annotation -> Phantoms.TTerm OwlSyntax.AnnotationProperty -> Phantoms.TTerm OwlSyntax.Annotation
 annotationWithProperty original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.Annotation"),
@@ -560,7 +560,7 @@ annotationWithProperty original newVal =
               Core.projectionField = (Core.Name "value")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-annotationWithValue :: Phantoms.TTerm Syntax.Annotation -> Phantoms.TTerm Syntax.AnnotationValue -> Phantoms.TTerm Syntax.Annotation
+annotationWithValue :: Phantoms.TTerm OwlSyntax.Annotation -> Phantoms.TTerm OwlSyntax.AnnotationValue -> Phantoms.TTerm OwlSyntax.Annotation
 annotationWithValue original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.Annotation"),
@@ -583,13 +583,13 @@ annotationWithValue original newVal =
           Core.fieldName = (Core.Name "value"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-anonymousIndividual :: Phantoms.TTerm () -> Phantoms.TTerm Syntax.AnonymousIndividual
+anonymousIndividual :: Phantoms.TTerm () -> Phantoms.TTerm OwlSyntax.AnonymousIndividual
 anonymousIndividual x =
     Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.owl.syntax.AnonymousIndividual"),
       Core.wrappedTermBody = (Phantoms.unTTerm x)}))
 
-assertionClassAssertion :: Phantoms.TTerm Syntax.ClassAssertion -> Phantoms.TTerm Syntax.Assertion
+assertionClassAssertion :: Phantoms.TTerm OwlSyntax.ClassAssertion -> Phantoms.TTerm OwlSyntax.Assertion
 assertionClassAssertion x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.Assertion"),
@@ -597,7 +597,7 @@ assertionClassAssertion x =
         Core.fieldName = (Core.Name "classAssertion"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-assertionDataPropertyAssertion :: Phantoms.TTerm Syntax.DataPropertyAssertion -> Phantoms.TTerm Syntax.Assertion
+assertionDataPropertyAssertion :: Phantoms.TTerm OwlSyntax.DataPropertyAssertion -> Phantoms.TTerm OwlSyntax.Assertion
 assertionDataPropertyAssertion x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.Assertion"),
@@ -605,7 +605,7 @@ assertionDataPropertyAssertion x =
         Core.fieldName = (Core.Name "dataPropertyAssertion"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-assertionDifferentIndividuals :: Phantoms.TTerm Syntax.DifferentIndividuals -> Phantoms.TTerm Syntax.Assertion
+assertionDifferentIndividuals :: Phantoms.TTerm OwlSyntax.DifferentIndividuals -> Phantoms.TTerm OwlSyntax.Assertion
 assertionDifferentIndividuals x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.Assertion"),
@@ -613,7 +613,7 @@ assertionDifferentIndividuals x =
         Core.fieldName = (Core.Name "differentIndividuals"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-assertionNegativeDataPropertyAssertion :: Phantoms.TTerm Syntax.NegativeDataPropertyAssertion -> Phantoms.TTerm Syntax.Assertion
+assertionNegativeDataPropertyAssertion :: Phantoms.TTerm OwlSyntax.NegativeDataPropertyAssertion -> Phantoms.TTerm OwlSyntax.Assertion
 assertionNegativeDataPropertyAssertion x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.Assertion"),
@@ -621,7 +621,7 @@ assertionNegativeDataPropertyAssertion x =
         Core.fieldName = (Core.Name "negativeDataPropertyAssertion"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-assertionNegativeObjectPropertyAssertion :: Phantoms.TTerm Syntax.NegativeObjectPropertyAssertion -> Phantoms.TTerm Syntax.Assertion
+assertionNegativeObjectPropertyAssertion :: Phantoms.TTerm OwlSyntax.NegativeObjectPropertyAssertion -> Phantoms.TTerm OwlSyntax.Assertion
 assertionNegativeObjectPropertyAssertion x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.Assertion"),
@@ -629,7 +629,7 @@ assertionNegativeObjectPropertyAssertion x =
         Core.fieldName = (Core.Name "negativeObjectPropertyAssertion"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-assertionObjectPropertyAssertion :: Phantoms.TTerm Syntax.ObjectPropertyAssertion -> Phantoms.TTerm Syntax.Assertion
+assertionObjectPropertyAssertion :: Phantoms.TTerm OwlSyntax.ObjectPropertyAssertion -> Phantoms.TTerm OwlSyntax.Assertion
 assertionObjectPropertyAssertion x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.Assertion"),
@@ -637,7 +637,7 @@ assertionObjectPropertyAssertion x =
         Core.fieldName = (Core.Name "objectPropertyAssertion"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-assertionSameIndividual :: Phantoms.TTerm Syntax.SameIndividual -> Phantoms.TTerm Syntax.Assertion
+assertionSameIndividual :: Phantoms.TTerm OwlSyntax.SameIndividual -> Phantoms.TTerm OwlSyntax.Assertion
 assertionSameIndividual x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.Assertion"),
@@ -645,7 +645,7 @@ assertionSameIndividual x =
         Core.fieldName = (Core.Name "sameIndividual"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-asymmetricObjectProperty :: Phantoms.TTerm [Syntax.Annotation] -> Phantoms.TTerm Syntax.ObjectPropertyExpression -> Phantoms.TTerm Syntax.AsymmetricObjectProperty
+asymmetricObjectProperty :: Phantoms.TTerm [OwlSyntax.Annotation] -> Phantoms.TTerm OwlSyntax.ObjectPropertyExpression -> Phantoms.TTerm OwlSyntax.AsymmetricObjectProperty
 asymmetricObjectProperty annotations property =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.AsymmetricObjectProperty"),
@@ -657,7 +657,7 @@ asymmetricObjectProperty annotations property =
           Core.fieldName = (Core.Name "property"),
           Core.fieldTerm = (Phantoms.unTTerm property)}]}))
 
-asymmetricObjectPropertyAnnotations :: Phantoms.TTerm Syntax.AsymmetricObjectProperty -> Phantoms.TTerm [Syntax.Annotation]
+asymmetricObjectPropertyAnnotations :: Phantoms.TTerm OwlSyntax.AsymmetricObjectProperty -> Phantoms.TTerm [OwlSyntax.Annotation]
 asymmetricObjectPropertyAnnotations x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -665,7 +665,7 @@ asymmetricObjectPropertyAnnotations x =
         Core.projectionField = (Core.Name "annotations")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-asymmetricObjectPropertyProperty :: Phantoms.TTerm Syntax.AsymmetricObjectProperty -> Phantoms.TTerm Syntax.ObjectPropertyExpression
+asymmetricObjectPropertyProperty :: Phantoms.TTerm OwlSyntax.AsymmetricObjectProperty -> Phantoms.TTerm OwlSyntax.ObjectPropertyExpression
 asymmetricObjectPropertyProperty x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -673,7 +673,7 @@ asymmetricObjectPropertyProperty x =
         Core.projectionField = (Core.Name "property")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-asymmetricObjectPropertyWithAnnotations :: Phantoms.TTerm Syntax.AsymmetricObjectProperty -> Phantoms.TTerm [Syntax.Annotation] -> Phantoms.TTerm Syntax.AsymmetricObjectProperty
+asymmetricObjectPropertyWithAnnotations :: Phantoms.TTerm OwlSyntax.AsymmetricObjectProperty -> Phantoms.TTerm [OwlSyntax.Annotation] -> Phantoms.TTerm OwlSyntax.AsymmetricObjectProperty
 asymmetricObjectPropertyWithAnnotations original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.AsymmetricObjectProperty"),
@@ -689,7 +689,7 @@ asymmetricObjectPropertyWithAnnotations original newVal =
               Core.projectionField = (Core.Name "property")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-asymmetricObjectPropertyWithProperty :: Phantoms.TTerm Syntax.AsymmetricObjectProperty -> Phantoms.TTerm Syntax.ObjectPropertyExpression -> Phantoms.TTerm Syntax.AsymmetricObjectProperty
+asymmetricObjectPropertyWithProperty :: Phantoms.TTerm OwlSyntax.AsymmetricObjectProperty -> Phantoms.TTerm OwlSyntax.ObjectPropertyExpression -> Phantoms.TTerm OwlSyntax.AsymmetricObjectProperty
 asymmetricObjectPropertyWithProperty original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.AsymmetricObjectProperty"),
@@ -705,7 +705,7 @@ asymmetricObjectPropertyWithProperty original newVal =
           Core.fieldName = (Core.Name "property"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-axiomAnnotationAxiom :: Phantoms.TTerm Syntax.AnnotationAxiom -> Phantoms.TTerm Syntax.Axiom
+axiomAnnotationAxiom :: Phantoms.TTerm OwlSyntax.AnnotationAxiom -> Phantoms.TTerm OwlSyntax.Axiom
 axiomAnnotationAxiom x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.Axiom"),
@@ -713,7 +713,7 @@ axiomAnnotationAxiom x =
         Core.fieldName = (Core.Name "annotationAxiom"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-axiomAssertion :: Phantoms.TTerm Syntax.Assertion -> Phantoms.TTerm Syntax.Axiom
+axiomAssertion :: Phantoms.TTerm OwlSyntax.Assertion -> Phantoms.TTerm OwlSyntax.Axiom
 axiomAssertion x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.Axiom"),
@@ -721,7 +721,7 @@ axiomAssertion x =
         Core.fieldName = (Core.Name "assertion"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-axiomClassAxiom :: Phantoms.TTerm Syntax.ClassAxiom -> Phantoms.TTerm Syntax.Axiom
+axiomClassAxiom :: Phantoms.TTerm OwlSyntax.ClassAxiom -> Phantoms.TTerm OwlSyntax.Axiom
 axiomClassAxiom x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.Axiom"),
@@ -729,7 +729,7 @@ axiomClassAxiom x =
         Core.fieldName = (Core.Name "classAxiom"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-axiomDataPropertyAxiom :: Phantoms.TTerm Syntax.DataPropertyAxiom -> Phantoms.TTerm Syntax.Axiom
+axiomDataPropertyAxiom :: Phantoms.TTerm OwlSyntax.DataPropertyAxiom -> Phantoms.TTerm OwlSyntax.Axiom
 axiomDataPropertyAxiom x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.Axiom"),
@@ -737,7 +737,7 @@ axiomDataPropertyAxiom x =
         Core.fieldName = (Core.Name "dataPropertyAxiom"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-axiomDatatypeDefinition :: Phantoms.TTerm Syntax.DatatypeDefinition -> Phantoms.TTerm Syntax.Axiom
+axiomDatatypeDefinition :: Phantoms.TTerm OwlSyntax.DatatypeDefinition -> Phantoms.TTerm OwlSyntax.Axiom
 axiomDatatypeDefinition x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.Axiom"),
@@ -745,7 +745,7 @@ axiomDatatypeDefinition x =
         Core.fieldName = (Core.Name "datatypeDefinition"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-axiomDeclaration :: Phantoms.TTerm Syntax.Declaration -> Phantoms.TTerm Syntax.Axiom
+axiomDeclaration :: Phantoms.TTerm OwlSyntax.Declaration -> Phantoms.TTerm OwlSyntax.Axiom
 axiomDeclaration x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.Axiom"),
@@ -753,7 +753,7 @@ axiomDeclaration x =
         Core.fieldName = (Core.Name "declaration"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-axiomHasKey :: Phantoms.TTerm Syntax.HasKey -> Phantoms.TTerm Syntax.Axiom
+axiomHasKey :: Phantoms.TTerm OwlSyntax.HasKey -> Phantoms.TTerm OwlSyntax.Axiom
 axiomHasKey x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.Axiom"),
@@ -761,7 +761,7 @@ axiomHasKey x =
         Core.fieldName = (Core.Name "hasKey"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-axiomObjectPropertyAxiom :: Phantoms.TTerm Syntax.ObjectPropertyAxiom -> Phantoms.TTerm Syntax.Axiom
+axiomObjectPropertyAxiom :: Phantoms.TTerm OwlSyntax.ObjectPropertyAxiom -> Phantoms.TTerm OwlSyntax.Axiom
 axiomObjectPropertyAxiom x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.Axiom"),
@@ -769,13 +769,13 @@ axiomObjectPropertyAxiom x =
         Core.fieldName = (Core.Name "objectPropertyAxiom"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-class_ :: Phantoms.TTerm () -> Phantoms.TTerm Syntax.Class
+class_ :: Phantoms.TTerm () -> Phantoms.TTerm OwlSyntax.Class
 class_ x =
     Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.owl.syntax.Class"),
       Core.wrappedTermBody = (Phantoms.unTTerm x)}))
 
-classAssertion :: Phantoms.TTerm [Syntax.Annotation] -> Phantoms.TTerm Syntax.ClassExpression -> Phantoms.TTerm Syntax.Individual -> Phantoms.TTerm Syntax.ClassAssertion
+classAssertion :: Phantoms.TTerm [OwlSyntax.Annotation] -> Phantoms.TTerm OwlSyntax.ClassExpression -> Phantoms.TTerm OwlSyntax.Individual -> Phantoms.TTerm OwlSyntax.ClassAssertion
 classAssertion annotations class_ individual =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.ClassAssertion"),
@@ -790,7 +790,7 @@ classAssertion annotations class_ individual =
           Core.fieldName = (Core.Name "individual"),
           Core.fieldTerm = (Phantoms.unTTerm individual)}]}))
 
-classAssertionAnnotations :: Phantoms.TTerm Syntax.ClassAssertion -> Phantoms.TTerm [Syntax.Annotation]
+classAssertionAnnotations :: Phantoms.TTerm OwlSyntax.ClassAssertion -> Phantoms.TTerm [OwlSyntax.Annotation]
 classAssertionAnnotations x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -798,7 +798,7 @@ classAssertionAnnotations x =
         Core.projectionField = (Core.Name "annotations")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-classAssertionClass :: Phantoms.TTerm Syntax.ClassAssertion -> Phantoms.TTerm Syntax.ClassExpression
+classAssertionClass :: Phantoms.TTerm OwlSyntax.ClassAssertion -> Phantoms.TTerm OwlSyntax.ClassExpression
 classAssertionClass x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -806,7 +806,7 @@ classAssertionClass x =
         Core.projectionField = (Core.Name "class")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-classAssertionIndividual :: Phantoms.TTerm Syntax.ClassAssertion -> Phantoms.TTerm Syntax.Individual
+classAssertionIndividual :: Phantoms.TTerm OwlSyntax.ClassAssertion -> Phantoms.TTerm OwlSyntax.Individual
 classAssertionIndividual x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -814,7 +814,7 @@ classAssertionIndividual x =
         Core.projectionField = (Core.Name "individual")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-classAssertionWithAnnotations :: Phantoms.TTerm Syntax.ClassAssertion -> Phantoms.TTerm [Syntax.Annotation] -> Phantoms.TTerm Syntax.ClassAssertion
+classAssertionWithAnnotations :: Phantoms.TTerm OwlSyntax.ClassAssertion -> Phantoms.TTerm [OwlSyntax.Annotation] -> Phantoms.TTerm OwlSyntax.ClassAssertion
 classAssertionWithAnnotations original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.ClassAssertion"),
@@ -837,7 +837,7 @@ classAssertionWithAnnotations original newVal =
               Core.projectionField = (Core.Name "individual")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-classAssertionWithClass :: Phantoms.TTerm Syntax.ClassAssertion -> Phantoms.TTerm Syntax.ClassExpression -> Phantoms.TTerm Syntax.ClassAssertion
+classAssertionWithClass :: Phantoms.TTerm OwlSyntax.ClassAssertion -> Phantoms.TTerm OwlSyntax.ClassExpression -> Phantoms.TTerm OwlSyntax.ClassAssertion
 classAssertionWithClass original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.ClassAssertion"),
@@ -860,7 +860,7 @@ classAssertionWithClass original newVal =
               Core.projectionField = (Core.Name "individual")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-classAssertionWithIndividual :: Phantoms.TTerm Syntax.ClassAssertion -> Phantoms.TTerm Syntax.Individual -> Phantoms.TTerm Syntax.ClassAssertion
+classAssertionWithIndividual :: Phantoms.TTerm OwlSyntax.ClassAssertion -> Phantoms.TTerm OwlSyntax.Individual -> Phantoms.TTerm OwlSyntax.ClassAssertion
 classAssertionWithIndividual original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.ClassAssertion"),
@@ -883,7 +883,7 @@ classAssertionWithIndividual original newVal =
           Core.fieldName = (Core.Name "individual"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-classAxiomDisjointClasses :: Phantoms.TTerm Syntax.DisjointClasses -> Phantoms.TTerm Syntax.ClassAxiom
+classAxiomDisjointClasses :: Phantoms.TTerm OwlSyntax.DisjointClasses -> Phantoms.TTerm OwlSyntax.ClassAxiom
 classAxiomDisjointClasses x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.ClassAxiom"),
@@ -891,7 +891,7 @@ classAxiomDisjointClasses x =
         Core.fieldName = (Core.Name "disjointClasses"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-classAxiomDisjointUnion :: Phantoms.TTerm Syntax.DisjointUnion -> Phantoms.TTerm Syntax.ClassAxiom
+classAxiomDisjointUnion :: Phantoms.TTerm OwlSyntax.DisjointUnion -> Phantoms.TTerm OwlSyntax.ClassAxiom
 classAxiomDisjointUnion x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.ClassAxiom"),
@@ -899,7 +899,7 @@ classAxiomDisjointUnion x =
         Core.fieldName = (Core.Name "disjointUnion"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-classAxiomEquivalentClasses :: Phantoms.TTerm Syntax.EquivalentClasses -> Phantoms.TTerm Syntax.ClassAxiom
+classAxiomEquivalentClasses :: Phantoms.TTerm OwlSyntax.EquivalentClasses -> Phantoms.TTerm OwlSyntax.ClassAxiom
 classAxiomEquivalentClasses x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.ClassAxiom"),
@@ -907,7 +907,7 @@ classAxiomEquivalentClasses x =
         Core.fieldName = (Core.Name "equivalentClasses"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-classAxiomSubClassOf :: Phantoms.TTerm Syntax.SubClassOf -> Phantoms.TTerm Syntax.ClassAxiom
+classAxiomSubClassOf :: Phantoms.TTerm OwlSyntax.SubClassOf -> Phantoms.TTerm OwlSyntax.ClassAxiom
 classAxiomSubClassOf x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.ClassAxiom"),
@@ -915,7 +915,7 @@ classAxiomSubClassOf x =
         Core.fieldName = (Core.Name "subClassOf"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-classExpressionClass :: Phantoms.TTerm Syntax.Class -> Phantoms.TTerm Syntax.ClassExpression
+classExpressionClass :: Phantoms.TTerm OwlSyntax.Class -> Phantoms.TTerm OwlSyntax.ClassExpression
 classExpressionClass x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.ClassExpression"),
@@ -923,7 +923,7 @@ classExpressionClass x =
         Core.fieldName = (Core.Name "class"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-classExpressionDataAllValuesFrom :: Phantoms.TTerm Syntax.DataAllValuesFrom -> Phantoms.TTerm Syntax.ClassExpression
+classExpressionDataAllValuesFrom :: Phantoms.TTerm OwlSyntax.DataAllValuesFrom -> Phantoms.TTerm OwlSyntax.ClassExpression
 classExpressionDataAllValuesFrom x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.ClassExpression"),
@@ -931,7 +931,7 @@ classExpressionDataAllValuesFrom x =
         Core.fieldName = (Core.Name "dataAllValuesFrom"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-classExpressionDataExactCardinality :: Phantoms.TTerm Syntax.DataExactCardinality -> Phantoms.TTerm Syntax.ClassExpression
+classExpressionDataExactCardinality :: Phantoms.TTerm OwlSyntax.DataExactCardinality -> Phantoms.TTerm OwlSyntax.ClassExpression
 classExpressionDataExactCardinality x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.ClassExpression"),
@@ -939,7 +939,7 @@ classExpressionDataExactCardinality x =
         Core.fieldName = (Core.Name "dataExactCardinality"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-classExpressionDataHasValue :: Phantoms.TTerm Syntax.DataHasValue -> Phantoms.TTerm Syntax.ClassExpression
+classExpressionDataHasValue :: Phantoms.TTerm OwlSyntax.DataHasValue -> Phantoms.TTerm OwlSyntax.ClassExpression
 classExpressionDataHasValue x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.ClassExpression"),
@@ -947,7 +947,7 @@ classExpressionDataHasValue x =
         Core.fieldName = (Core.Name "dataHasValue"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-classExpressionDataMaxCardinality :: Phantoms.TTerm Syntax.DataMaxCardinality -> Phantoms.TTerm Syntax.ClassExpression
+classExpressionDataMaxCardinality :: Phantoms.TTerm OwlSyntax.DataMaxCardinality -> Phantoms.TTerm OwlSyntax.ClassExpression
 classExpressionDataMaxCardinality x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.ClassExpression"),
@@ -955,7 +955,7 @@ classExpressionDataMaxCardinality x =
         Core.fieldName = (Core.Name "dataMaxCardinality"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-classExpressionDataMinCardinality :: Phantoms.TTerm Syntax.DataMinCardinality -> Phantoms.TTerm Syntax.ClassExpression
+classExpressionDataMinCardinality :: Phantoms.TTerm OwlSyntax.DataMinCardinality -> Phantoms.TTerm OwlSyntax.ClassExpression
 classExpressionDataMinCardinality x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.ClassExpression"),
@@ -963,7 +963,7 @@ classExpressionDataMinCardinality x =
         Core.fieldName = (Core.Name "dataMinCardinality"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-classExpressionDataSomeValuesFrom :: Phantoms.TTerm Syntax.DataSomeValuesFrom -> Phantoms.TTerm Syntax.ClassExpression
+classExpressionDataSomeValuesFrom :: Phantoms.TTerm OwlSyntax.DataSomeValuesFrom -> Phantoms.TTerm OwlSyntax.ClassExpression
 classExpressionDataSomeValuesFrom x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.ClassExpression"),
@@ -971,7 +971,7 @@ classExpressionDataSomeValuesFrom x =
         Core.fieldName = (Core.Name "dataSomeValuesFrom"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-classExpressionObjectAllValuesFrom :: Phantoms.TTerm Syntax.ObjectAllValuesFrom -> Phantoms.TTerm Syntax.ClassExpression
+classExpressionObjectAllValuesFrom :: Phantoms.TTerm OwlSyntax.ObjectAllValuesFrom -> Phantoms.TTerm OwlSyntax.ClassExpression
 classExpressionObjectAllValuesFrom x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.ClassExpression"),
@@ -979,7 +979,7 @@ classExpressionObjectAllValuesFrom x =
         Core.fieldName = (Core.Name "objectAllValuesFrom"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-classExpressionObjectExactCardinality :: Phantoms.TTerm Syntax.ObjectExactCardinality -> Phantoms.TTerm Syntax.ClassExpression
+classExpressionObjectExactCardinality :: Phantoms.TTerm OwlSyntax.ObjectExactCardinality -> Phantoms.TTerm OwlSyntax.ClassExpression
 classExpressionObjectExactCardinality x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.ClassExpression"),
@@ -987,7 +987,7 @@ classExpressionObjectExactCardinality x =
         Core.fieldName = (Core.Name "objectExactCardinality"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-classExpressionObjectHasSelf :: Phantoms.TTerm Syntax.ObjectHasSelf -> Phantoms.TTerm Syntax.ClassExpression
+classExpressionObjectHasSelf :: Phantoms.TTerm OwlSyntax.ObjectHasSelf -> Phantoms.TTerm OwlSyntax.ClassExpression
 classExpressionObjectHasSelf x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.ClassExpression"),
@@ -995,7 +995,7 @@ classExpressionObjectHasSelf x =
         Core.fieldName = (Core.Name "objectHasSelf"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-classExpressionObjectHasValue :: Phantoms.TTerm Syntax.ObjectHasValue -> Phantoms.TTerm Syntax.ClassExpression
+classExpressionObjectHasValue :: Phantoms.TTerm OwlSyntax.ObjectHasValue -> Phantoms.TTerm OwlSyntax.ClassExpression
 classExpressionObjectHasValue x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.ClassExpression"),
@@ -1003,7 +1003,7 @@ classExpressionObjectHasValue x =
         Core.fieldName = (Core.Name "objectHasValue"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-classExpressionObjectIntersectionOf :: Phantoms.TTerm Syntax.ObjectIntersectionOf -> Phantoms.TTerm Syntax.ClassExpression
+classExpressionObjectIntersectionOf :: Phantoms.TTerm OwlSyntax.ObjectIntersectionOf -> Phantoms.TTerm OwlSyntax.ClassExpression
 classExpressionObjectIntersectionOf x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.ClassExpression"),
@@ -1011,7 +1011,7 @@ classExpressionObjectIntersectionOf x =
         Core.fieldName = (Core.Name "objectIntersectionOf"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-classExpressionObjectMaxCardinality :: Phantoms.TTerm Syntax.ObjectMaxCardinality -> Phantoms.TTerm Syntax.ClassExpression
+classExpressionObjectMaxCardinality :: Phantoms.TTerm OwlSyntax.ObjectMaxCardinality -> Phantoms.TTerm OwlSyntax.ClassExpression
 classExpressionObjectMaxCardinality x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.ClassExpression"),
@@ -1019,7 +1019,7 @@ classExpressionObjectMaxCardinality x =
         Core.fieldName = (Core.Name "objectMaxCardinality"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-classExpressionObjectMinCardinality :: Phantoms.TTerm Syntax.ObjectMinCardinality -> Phantoms.TTerm Syntax.ClassExpression
+classExpressionObjectMinCardinality :: Phantoms.TTerm OwlSyntax.ObjectMinCardinality -> Phantoms.TTerm OwlSyntax.ClassExpression
 classExpressionObjectMinCardinality x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.ClassExpression"),
@@ -1027,7 +1027,7 @@ classExpressionObjectMinCardinality x =
         Core.fieldName = (Core.Name "objectMinCardinality"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-classExpressionObjectOneOf :: Phantoms.TTerm Syntax.ObjectOneOf -> Phantoms.TTerm Syntax.ClassExpression
+classExpressionObjectOneOf :: Phantoms.TTerm OwlSyntax.ObjectOneOf -> Phantoms.TTerm OwlSyntax.ClassExpression
 classExpressionObjectOneOf x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.ClassExpression"),
@@ -1035,7 +1035,7 @@ classExpressionObjectOneOf x =
         Core.fieldName = (Core.Name "objectOneOf"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-classExpressionObjectSomeValuesFrom :: Phantoms.TTerm Syntax.ObjectSomeValuesFrom -> Phantoms.TTerm Syntax.ClassExpression
+classExpressionObjectSomeValuesFrom :: Phantoms.TTerm OwlSyntax.ObjectSomeValuesFrom -> Phantoms.TTerm OwlSyntax.ClassExpression
 classExpressionObjectSomeValuesFrom x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.ClassExpression"),
@@ -1043,7 +1043,7 @@ classExpressionObjectSomeValuesFrom x =
         Core.fieldName = (Core.Name "objectSomeValuesFrom"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-classExpressionObjectUnionOf :: Phantoms.TTerm Syntax.ObjectUnionOf -> Phantoms.TTerm Syntax.ClassExpression
+classExpressionObjectUnionOf :: Phantoms.TTerm OwlSyntax.ObjectUnionOf -> Phantoms.TTerm OwlSyntax.ClassExpression
 classExpressionObjectUnionOf x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.ClassExpression"),
@@ -1051,7 +1051,7 @@ classExpressionObjectUnionOf x =
         Core.fieldName = (Core.Name "objectUnionOf"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-dataAllValuesFrom :: Phantoms.TTerm [Syntax.DataPropertyExpression] -> Phantoms.TTerm Syntax.DataRange -> Phantoms.TTerm Syntax.DataAllValuesFrom
+dataAllValuesFrom :: Phantoms.TTerm [OwlSyntax.DataPropertyExpression] -> Phantoms.TTerm OwlSyntax.DataRange -> Phantoms.TTerm OwlSyntax.DataAllValuesFrom
 dataAllValuesFrom property range =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.DataAllValuesFrom"),
@@ -1063,7 +1063,7 @@ dataAllValuesFrom property range =
           Core.fieldName = (Core.Name "range"),
           Core.fieldTerm = (Phantoms.unTTerm range)}]}))
 
-dataAllValuesFromProperty :: Phantoms.TTerm Syntax.DataAllValuesFrom -> Phantoms.TTerm [Syntax.DataPropertyExpression]
+dataAllValuesFromProperty :: Phantoms.TTerm OwlSyntax.DataAllValuesFrom -> Phantoms.TTerm [OwlSyntax.DataPropertyExpression]
 dataAllValuesFromProperty x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -1071,7 +1071,7 @@ dataAllValuesFromProperty x =
         Core.projectionField = (Core.Name "property")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-dataAllValuesFromRange :: Phantoms.TTerm Syntax.DataAllValuesFrom -> Phantoms.TTerm Syntax.DataRange
+dataAllValuesFromRange :: Phantoms.TTerm OwlSyntax.DataAllValuesFrom -> Phantoms.TTerm OwlSyntax.DataRange
 dataAllValuesFromRange x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -1079,7 +1079,7 @@ dataAllValuesFromRange x =
         Core.projectionField = (Core.Name "range")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-dataAllValuesFromWithProperty :: Phantoms.TTerm Syntax.DataAllValuesFrom -> Phantoms.TTerm [Syntax.DataPropertyExpression] -> Phantoms.TTerm Syntax.DataAllValuesFrom
+dataAllValuesFromWithProperty :: Phantoms.TTerm OwlSyntax.DataAllValuesFrom -> Phantoms.TTerm [OwlSyntax.DataPropertyExpression] -> Phantoms.TTerm OwlSyntax.DataAllValuesFrom
 dataAllValuesFromWithProperty original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.DataAllValuesFrom"),
@@ -1095,7 +1095,7 @@ dataAllValuesFromWithProperty original newVal =
               Core.projectionField = (Core.Name "range")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-dataAllValuesFromWithRange :: Phantoms.TTerm Syntax.DataAllValuesFrom -> Phantoms.TTerm Syntax.DataRange -> Phantoms.TTerm Syntax.DataAllValuesFrom
+dataAllValuesFromWithRange :: Phantoms.TTerm OwlSyntax.DataAllValuesFrom -> Phantoms.TTerm OwlSyntax.DataRange -> Phantoms.TTerm OwlSyntax.DataAllValuesFrom
 dataAllValuesFromWithRange original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.DataAllValuesFrom"),
@@ -1111,13 +1111,13 @@ dataAllValuesFromWithRange original newVal =
           Core.fieldName = (Core.Name "range"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-dataComplementOf :: Phantoms.TTerm Syntax.DataRange -> Phantoms.TTerm Syntax.DataComplementOf
+dataComplementOf :: Phantoms.TTerm OwlSyntax.DataRange -> Phantoms.TTerm OwlSyntax.DataComplementOf
 dataComplementOf x =
     Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.owl.syntax.DataComplementOf"),
       Core.wrappedTermBody = (Phantoms.unTTerm x)}))
 
-dataExactCardinality :: Phantoms.TTerm Integer -> Phantoms.TTerm Syntax.DataPropertyExpression -> Phantoms.TTerm [Syntax.DataRange] -> Phantoms.TTerm Syntax.DataExactCardinality
+dataExactCardinality :: Phantoms.TTerm Integer -> Phantoms.TTerm OwlSyntax.DataPropertyExpression -> Phantoms.TTerm [OwlSyntax.DataRange] -> Phantoms.TTerm OwlSyntax.DataExactCardinality
 dataExactCardinality bound property range =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.DataExactCardinality"),
@@ -1132,7 +1132,7 @@ dataExactCardinality bound property range =
           Core.fieldName = (Core.Name "range"),
           Core.fieldTerm = (Phantoms.unTTerm range)}]}))
 
-dataExactCardinalityBound :: Phantoms.TTerm Syntax.DataExactCardinality -> Phantoms.TTerm Integer
+dataExactCardinalityBound :: Phantoms.TTerm OwlSyntax.DataExactCardinality -> Phantoms.TTerm Integer
 dataExactCardinalityBound x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -1140,7 +1140,7 @@ dataExactCardinalityBound x =
         Core.projectionField = (Core.Name "bound")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-dataExactCardinalityProperty :: Phantoms.TTerm Syntax.DataExactCardinality -> Phantoms.TTerm Syntax.DataPropertyExpression
+dataExactCardinalityProperty :: Phantoms.TTerm OwlSyntax.DataExactCardinality -> Phantoms.TTerm OwlSyntax.DataPropertyExpression
 dataExactCardinalityProperty x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -1148,7 +1148,7 @@ dataExactCardinalityProperty x =
         Core.projectionField = (Core.Name "property")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-dataExactCardinalityRange :: Phantoms.TTerm Syntax.DataExactCardinality -> Phantoms.TTerm [Syntax.DataRange]
+dataExactCardinalityRange :: Phantoms.TTerm OwlSyntax.DataExactCardinality -> Phantoms.TTerm [OwlSyntax.DataRange]
 dataExactCardinalityRange x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -1156,7 +1156,7 @@ dataExactCardinalityRange x =
         Core.projectionField = (Core.Name "range")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-dataExactCardinalityWithBound :: Phantoms.TTerm Syntax.DataExactCardinality -> Phantoms.TTerm Integer -> Phantoms.TTerm Syntax.DataExactCardinality
+dataExactCardinalityWithBound :: Phantoms.TTerm OwlSyntax.DataExactCardinality -> Phantoms.TTerm Integer -> Phantoms.TTerm OwlSyntax.DataExactCardinality
 dataExactCardinalityWithBound original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.DataExactCardinality"),
@@ -1179,7 +1179,7 @@ dataExactCardinalityWithBound original newVal =
               Core.projectionField = (Core.Name "range")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-dataExactCardinalityWithProperty :: Phantoms.TTerm Syntax.DataExactCardinality -> Phantoms.TTerm Syntax.DataPropertyExpression -> Phantoms.TTerm Syntax.DataExactCardinality
+dataExactCardinalityWithProperty :: Phantoms.TTerm OwlSyntax.DataExactCardinality -> Phantoms.TTerm OwlSyntax.DataPropertyExpression -> Phantoms.TTerm OwlSyntax.DataExactCardinality
 dataExactCardinalityWithProperty original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.DataExactCardinality"),
@@ -1202,7 +1202,7 @@ dataExactCardinalityWithProperty original newVal =
               Core.projectionField = (Core.Name "range")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-dataExactCardinalityWithRange :: Phantoms.TTerm Syntax.DataExactCardinality -> Phantoms.TTerm [Syntax.DataRange] -> Phantoms.TTerm Syntax.DataExactCardinality
+dataExactCardinalityWithRange :: Phantoms.TTerm OwlSyntax.DataExactCardinality -> Phantoms.TTerm [OwlSyntax.DataRange] -> Phantoms.TTerm OwlSyntax.DataExactCardinality
 dataExactCardinalityWithRange original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.DataExactCardinality"),
@@ -1225,7 +1225,7 @@ dataExactCardinalityWithRange original newVal =
           Core.fieldName = (Core.Name "range"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-dataHasValue :: Phantoms.TTerm Syntax.DataPropertyExpression -> Phantoms.TTerm Syntax_.Literal -> Phantoms.TTerm Syntax.DataHasValue
+dataHasValue :: Phantoms.TTerm OwlSyntax.DataPropertyExpression -> Phantoms.TTerm RdfSyntax.Literal -> Phantoms.TTerm OwlSyntax.DataHasValue
 dataHasValue property value =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.DataHasValue"),
@@ -1237,7 +1237,7 @@ dataHasValue property value =
           Core.fieldName = (Core.Name "value"),
           Core.fieldTerm = (Phantoms.unTTerm value)}]}))
 
-dataHasValueProperty :: Phantoms.TTerm Syntax.DataHasValue -> Phantoms.TTerm Syntax.DataPropertyExpression
+dataHasValueProperty :: Phantoms.TTerm OwlSyntax.DataHasValue -> Phantoms.TTerm OwlSyntax.DataPropertyExpression
 dataHasValueProperty x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -1245,7 +1245,7 @@ dataHasValueProperty x =
         Core.projectionField = (Core.Name "property")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-dataHasValueValue :: Phantoms.TTerm Syntax.DataHasValue -> Phantoms.TTerm Syntax_.Literal
+dataHasValueValue :: Phantoms.TTerm OwlSyntax.DataHasValue -> Phantoms.TTerm RdfSyntax.Literal
 dataHasValueValue x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -1253,7 +1253,7 @@ dataHasValueValue x =
         Core.projectionField = (Core.Name "value")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-dataHasValueWithProperty :: Phantoms.TTerm Syntax.DataHasValue -> Phantoms.TTerm Syntax.DataPropertyExpression -> Phantoms.TTerm Syntax.DataHasValue
+dataHasValueWithProperty :: Phantoms.TTerm OwlSyntax.DataHasValue -> Phantoms.TTerm OwlSyntax.DataPropertyExpression -> Phantoms.TTerm OwlSyntax.DataHasValue
 dataHasValueWithProperty original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.DataHasValue"),
@@ -1269,7 +1269,7 @@ dataHasValueWithProperty original newVal =
               Core.projectionField = (Core.Name "value")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-dataHasValueWithValue :: Phantoms.TTerm Syntax.DataHasValue -> Phantoms.TTerm Syntax_.Literal -> Phantoms.TTerm Syntax.DataHasValue
+dataHasValueWithValue :: Phantoms.TTerm OwlSyntax.DataHasValue -> Phantoms.TTerm RdfSyntax.Literal -> Phantoms.TTerm OwlSyntax.DataHasValue
 dataHasValueWithValue original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.DataHasValue"),
@@ -1285,13 +1285,13 @@ dataHasValueWithValue original newVal =
           Core.fieldName = (Core.Name "value"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-dataIntersectionOf :: Phantoms.TTerm [Syntax.DataRange] -> Phantoms.TTerm Syntax.DataIntersectionOf
+dataIntersectionOf :: Phantoms.TTerm [OwlSyntax.DataRange] -> Phantoms.TTerm OwlSyntax.DataIntersectionOf
 dataIntersectionOf x =
     Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.owl.syntax.DataIntersectionOf"),
       Core.wrappedTermBody = (Phantoms.unTTerm x)}))
 
-dataMaxCardinality :: Phantoms.TTerm Integer -> Phantoms.TTerm Syntax.DataPropertyExpression -> Phantoms.TTerm [Syntax.DataRange] -> Phantoms.TTerm Syntax.DataMaxCardinality
+dataMaxCardinality :: Phantoms.TTerm Integer -> Phantoms.TTerm OwlSyntax.DataPropertyExpression -> Phantoms.TTerm [OwlSyntax.DataRange] -> Phantoms.TTerm OwlSyntax.DataMaxCardinality
 dataMaxCardinality bound property range =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.DataMaxCardinality"),
@@ -1306,7 +1306,7 @@ dataMaxCardinality bound property range =
           Core.fieldName = (Core.Name "range"),
           Core.fieldTerm = (Phantoms.unTTerm range)}]}))
 
-dataMaxCardinalityBound :: Phantoms.TTerm Syntax.DataMaxCardinality -> Phantoms.TTerm Integer
+dataMaxCardinalityBound :: Phantoms.TTerm OwlSyntax.DataMaxCardinality -> Phantoms.TTerm Integer
 dataMaxCardinalityBound x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -1314,7 +1314,7 @@ dataMaxCardinalityBound x =
         Core.projectionField = (Core.Name "bound")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-dataMaxCardinalityProperty :: Phantoms.TTerm Syntax.DataMaxCardinality -> Phantoms.TTerm Syntax.DataPropertyExpression
+dataMaxCardinalityProperty :: Phantoms.TTerm OwlSyntax.DataMaxCardinality -> Phantoms.TTerm OwlSyntax.DataPropertyExpression
 dataMaxCardinalityProperty x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -1322,7 +1322,7 @@ dataMaxCardinalityProperty x =
         Core.projectionField = (Core.Name "property")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-dataMaxCardinalityRange :: Phantoms.TTerm Syntax.DataMaxCardinality -> Phantoms.TTerm [Syntax.DataRange]
+dataMaxCardinalityRange :: Phantoms.TTerm OwlSyntax.DataMaxCardinality -> Phantoms.TTerm [OwlSyntax.DataRange]
 dataMaxCardinalityRange x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -1330,7 +1330,7 @@ dataMaxCardinalityRange x =
         Core.projectionField = (Core.Name "range")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-dataMaxCardinalityWithBound :: Phantoms.TTerm Syntax.DataMaxCardinality -> Phantoms.TTerm Integer -> Phantoms.TTerm Syntax.DataMaxCardinality
+dataMaxCardinalityWithBound :: Phantoms.TTerm OwlSyntax.DataMaxCardinality -> Phantoms.TTerm Integer -> Phantoms.TTerm OwlSyntax.DataMaxCardinality
 dataMaxCardinalityWithBound original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.DataMaxCardinality"),
@@ -1353,7 +1353,7 @@ dataMaxCardinalityWithBound original newVal =
               Core.projectionField = (Core.Name "range")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-dataMaxCardinalityWithProperty :: Phantoms.TTerm Syntax.DataMaxCardinality -> Phantoms.TTerm Syntax.DataPropertyExpression -> Phantoms.TTerm Syntax.DataMaxCardinality
+dataMaxCardinalityWithProperty :: Phantoms.TTerm OwlSyntax.DataMaxCardinality -> Phantoms.TTerm OwlSyntax.DataPropertyExpression -> Phantoms.TTerm OwlSyntax.DataMaxCardinality
 dataMaxCardinalityWithProperty original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.DataMaxCardinality"),
@@ -1376,7 +1376,7 @@ dataMaxCardinalityWithProperty original newVal =
               Core.projectionField = (Core.Name "range")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-dataMaxCardinalityWithRange :: Phantoms.TTerm Syntax.DataMaxCardinality -> Phantoms.TTerm [Syntax.DataRange] -> Phantoms.TTerm Syntax.DataMaxCardinality
+dataMaxCardinalityWithRange :: Phantoms.TTerm OwlSyntax.DataMaxCardinality -> Phantoms.TTerm [OwlSyntax.DataRange] -> Phantoms.TTerm OwlSyntax.DataMaxCardinality
 dataMaxCardinalityWithRange original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.DataMaxCardinality"),
@@ -1399,7 +1399,7 @@ dataMaxCardinalityWithRange original newVal =
           Core.fieldName = (Core.Name "range"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-dataMinCardinality :: Phantoms.TTerm Integer -> Phantoms.TTerm Syntax.DataPropertyExpression -> Phantoms.TTerm [Syntax.DataRange] -> Phantoms.TTerm Syntax.DataMinCardinality
+dataMinCardinality :: Phantoms.TTerm Integer -> Phantoms.TTerm OwlSyntax.DataPropertyExpression -> Phantoms.TTerm [OwlSyntax.DataRange] -> Phantoms.TTerm OwlSyntax.DataMinCardinality
 dataMinCardinality bound property range =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.DataMinCardinality"),
@@ -1414,7 +1414,7 @@ dataMinCardinality bound property range =
           Core.fieldName = (Core.Name "range"),
           Core.fieldTerm = (Phantoms.unTTerm range)}]}))
 
-dataMinCardinalityBound :: Phantoms.TTerm Syntax.DataMinCardinality -> Phantoms.TTerm Integer
+dataMinCardinalityBound :: Phantoms.TTerm OwlSyntax.DataMinCardinality -> Phantoms.TTerm Integer
 dataMinCardinalityBound x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -1422,7 +1422,7 @@ dataMinCardinalityBound x =
         Core.projectionField = (Core.Name "bound")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-dataMinCardinalityProperty :: Phantoms.TTerm Syntax.DataMinCardinality -> Phantoms.TTerm Syntax.DataPropertyExpression
+dataMinCardinalityProperty :: Phantoms.TTerm OwlSyntax.DataMinCardinality -> Phantoms.TTerm OwlSyntax.DataPropertyExpression
 dataMinCardinalityProperty x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -1430,7 +1430,7 @@ dataMinCardinalityProperty x =
         Core.projectionField = (Core.Name "property")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-dataMinCardinalityRange :: Phantoms.TTerm Syntax.DataMinCardinality -> Phantoms.TTerm [Syntax.DataRange]
+dataMinCardinalityRange :: Phantoms.TTerm OwlSyntax.DataMinCardinality -> Phantoms.TTerm [OwlSyntax.DataRange]
 dataMinCardinalityRange x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -1438,7 +1438,7 @@ dataMinCardinalityRange x =
         Core.projectionField = (Core.Name "range")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-dataMinCardinalityWithBound :: Phantoms.TTerm Syntax.DataMinCardinality -> Phantoms.TTerm Integer -> Phantoms.TTerm Syntax.DataMinCardinality
+dataMinCardinalityWithBound :: Phantoms.TTerm OwlSyntax.DataMinCardinality -> Phantoms.TTerm Integer -> Phantoms.TTerm OwlSyntax.DataMinCardinality
 dataMinCardinalityWithBound original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.DataMinCardinality"),
@@ -1461,7 +1461,7 @@ dataMinCardinalityWithBound original newVal =
               Core.projectionField = (Core.Name "range")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-dataMinCardinalityWithProperty :: Phantoms.TTerm Syntax.DataMinCardinality -> Phantoms.TTerm Syntax.DataPropertyExpression -> Phantoms.TTerm Syntax.DataMinCardinality
+dataMinCardinalityWithProperty :: Phantoms.TTerm OwlSyntax.DataMinCardinality -> Phantoms.TTerm OwlSyntax.DataPropertyExpression -> Phantoms.TTerm OwlSyntax.DataMinCardinality
 dataMinCardinalityWithProperty original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.DataMinCardinality"),
@@ -1484,7 +1484,7 @@ dataMinCardinalityWithProperty original newVal =
               Core.projectionField = (Core.Name "range")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-dataMinCardinalityWithRange :: Phantoms.TTerm Syntax.DataMinCardinality -> Phantoms.TTerm [Syntax.DataRange] -> Phantoms.TTerm Syntax.DataMinCardinality
+dataMinCardinalityWithRange :: Phantoms.TTerm OwlSyntax.DataMinCardinality -> Phantoms.TTerm [OwlSyntax.DataRange] -> Phantoms.TTerm OwlSyntax.DataMinCardinality
 dataMinCardinalityWithRange original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.DataMinCardinality"),
@@ -1507,19 +1507,19 @@ dataMinCardinalityWithRange original newVal =
           Core.fieldName = (Core.Name "range"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-dataOneOf :: Phantoms.TTerm [Syntax_.Literal] -> Phantoms.TTerm Syntax.DataOneOf
+dataOneOf :: Phantoms.TTerm [RdfSyntax.Literal] -> Phantoms.TTerm OwlSyntax.DataOneOf
 dataOneOf x =
     Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.owl.syntax.DataOneOf"),
       Core.wrappedTermBody = (Phantoms.unTTerm x)}))
 
-dataProperty :: Phantoms.TTerm () -> Phantoms.TTerm Syntax.DataProperty
+dataProperty :: Phantoms.TTerm () -> Phantoms.TTerm OwlSyntax.DataProperty
 dataProperty x =
     Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.owl.syntax.DataProperty"),
       Core.wrappedTermBody = (Phantoms.unTTerm x)}))
 
-dataPropertyAssertion :: Phantoms.TTerm [Syntax.Annotation] -> Phantoms.TTerm Syntax.DataPropertyExpression -> Phantoms.TTerm Syntax.Individual -> Phantoms.TTerm Syntax.Individual -> Phantoms.TTerm Syntax.DataPropertyAssertion
+dataPropertyAssertion :: Phantoms.TTerm [OwlSyntax.Annotation] -> Phantoms.TTerm OwlSyntax.DataPropertyExpression -> Phantoms.TTerm OwlSyntax.Individual -> Phantoms.TTerm OwlSyntax.Individual -> Phantoms.TTerm OwlSyntax.DataPropertyAssertion
 dataPropertyAssertion annotations property source target =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.DataPropertyAssertion"),
@@ -1537,7 +1537,7 @@ dataPropertyAssertion annotations property source target =
           Core.fieldName = (Core.Name "target"),
           Core.fieldTerm = (Phantoms.unTTerm target)}]}))
 
-dataPropertyAssertionAnnotations :: Phantoms.TTerm Syntax.DataPropertyAssertion -> Phantoms.TTerm [Syntax.Annotation]
+dataPropertyAssertionAnnotations :: Phantoms.TTerm OwlSyntax.DataPropertyAssertion -> Phantoms.TTerm [OwlSyntax.Annotation]
 dataPropertyAssertionAnnotations x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -1545,7 +1545,7 @@ dataPropertyAssertionAnnotations x =
         Core.projectionField = (Core.Name "annotations")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-dataPropertyAssertionProperty :: Phantoms.TTerm Syntax.DataPropertyAssertion -> Phantoms.TTerm Syntax.DataPropertyExpression
+dataPropertyAssertionProperty :: Phantoms.TTerm OwlSyntax.DataPropertyAssertion -> Phantoms.TTerm OwlSyntax.DataPropertyExpression
 dataPropertyAssertionProperty x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -1553,7 +1553,7 @@ dataPropertyAssertionProperty x =
         Core.projectionField = (Core.Name "property")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-dataPropertyAssertionSource :: Phantoms.TTerm Syntax.DataPropertyAssertion -> Phantoms.TTerm Syntax.Individual
+dataPropertyAssertionSource :: Phantoms.TTerm OwlSyntax.DataPropertyAssertion -> Phantoms.TTerm OwlSyntax.Individual
 dataPropertyAssertionSource x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -1561,7 +1561,7 @@ dataPropertyAssertionSource x =
         Core.projectionField = (Core.Name "source")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-dataPropertyAssertionTarget :: Phantoms.TTerm Syntax.DataPropertyAssertion -> Phantoms.TTerm Syntax.Individual
+dataPropertyAssertionTarget :: Phantoms.TTerm OwlSyntax.DataPropertyAssertion -> Phantoms.TTerm OwlSyntax.Individual
 dataPropertyAssertionTarget x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -1569,7 +1569,7 @@ dataPropertyAssertionTarget x =
         Core.projectionField = (Core.Name "target")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-dataPropertyAssertionWithAnnotations :: Phantoms.TTerm Syntax.DataPropertyAssertion -> Phantoms.TTerm [Syntax.Annotation] -> Phantoms.TTerm Syntax.DataPropertyAssertion
+dataPropertyAssertionWithAnnotations :: Phantoms.TTerm OwlSyntax.DataPropertyAssertion -> Phantoms.TTerm [OwlSyntax.Annotation] -> Phantoms.TTerm OwlSyntax.DataPropertyAssertion
 dataPropertyAssertionWithAnnotations original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.DataPropertyAssertion"),
@@ -1599,7 +1599,7 @@ dataPropertyAssertionWithAnnotations original newVal =
               Core.projectionField = (Core.Name "target")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-dataPropertyAssertionWithProperty :: Phantoms.TTerm Syntax.DataPropertyAssertion -> Phantoms.TTerm Syntax.DataPropertyExpression -> Phantoms.TTerm Syntax.DataPropertyAssertion
+dataPropertyAssertionWithProperty :: Phantoms.TTerm OwlSyntax.DataPropertyAssertion -> Phantoms.TTerm OwlSyntax.DataPropertyExpression -> Phantoms.TTerm OwlSyntax.DataPropertyAssertion
 dataPropertyAssertionWithProperty original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.DataPropertyAssertion"),
@@ -1629,7 +1629,7 @@ dataPropertyAssertionWithProperty original newVal =
               Core.projectionField = (Core.Name "target")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-dataPropertyAssertionWithSource :: Phantoms.TTerm Syntax.DataPropertyAssertion -> Phantoms.TTerm Syntax.Individual -> Phantoms.TTerm Syntax.DataPropertyAssertion
+dataPropertyAssertionWithSource :: Phantoms.TTerm OwlSyntax.DataPropertyAssertion -> Phantoms.TTerm OwlSyntax.Individual -> Phantoms.TTerm OwlSyntax.DataPropertyAssertion
 dataPropertyAssertionWithSource original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.DataPropertyAssertion"),
@@ -1659,7 +1659,7 @@ dataPropertyAssertionWithSource original newVal =
               Core.projectionField = (Core.Name "target")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-dataPropertyAssertionWithTarget :: Phantoms.TTerm Syntax.DataPropertyAssertion -> Phantoms.TTerm Syntax.Individual -> Phantoms.TTerm Syntax.DataPropertyAssertion
+dataPropertyAssertionWithTarget :: Phantoms.TTerm OwlSyntax.DataPropertyAssertion -> Phantoms.TTerm OwlSyntax.Individual -> Phantoms.TTerm OwlSyntax.DataPropertyAssertion
 dataPropertyAssertionWithTarget original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.DataPropertyAssertion"),
@@ -1689,7 +1689,7 @@ dataPropertyAssertionWithTarget original newVal =
           Core.fieldName = (Core.Name "target"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-dataPropertyAxiomDataPropertyAxiom :: Phantoms.TTerm Syntax.DataPropertyAxiom -> Phantoms.TTerm Syntax.DataPropertyAxiom
+dataPropertyAxiomDataPropertyAxiom :: Phantoms.TTerm OwlSyntax.DataPropertyAxiom -> Phantoms.TTerm OwlSyntax.DataPropertyAxiom
 dataPropertyAxiomDataPropertyAxiom x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.DataPropertyAxiom"),
@@ -1697,7 +1697,7 @@ dataPropertyAxiomDataPropertyAxiom x =
         Core.fieldName = (Core.Name "dataPropertyAxiom"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-dataPropertyAxiomDataPropertyRange :: Phantoms.TTerm Syntax.DataPropertyRange -> Phantoms.TTerm Syntax.DataPropertyAxiom
+dataPropertyAxiomDataPropertyRange :: Phantoms.TTerm OwlSyntax.DataPropertyRange -> Phantoms.TTerm OwlSyntax.DataPropertyAxiom
 dataPropertyAxiomDataPropertyRange x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.DataPropertyAxiom"),
@@ -1705,7 +1705,7 @@ dataPropertyAxiomDataPropertyRange x =
         Core.fieldName = (Core.Name "dataPropertyRange"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-dataPropertyAxiomDisjointDataProperties :: Phantoms.TTerm Syntax.DisjointDataProperties -> Phantoms.TTerm Syntax.DataPropertyAxiom
+dataPropertyAxiomDisjointDataProperties :: Phantoms.TTerm OwlSyntax.DisjointDataProperties -> Phantoms.TTerm OwlSyntax.DataPropertyAxiom
 dataPropertyAxiomDisjointDataProperties x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.DataPropertyAxiom"),
@@ -1713,7 +1713,7 @@ dataPropertyAxiomDisjointDataProperties x =
         Core.fieldName = (Core.Name "disjointDataProperties"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-dataPropertyAxiomEquivalentDataProperties :: Phantoms.TTerm Syntax.EquivalentDataProperties -> Phantoms.TTerm Syntax.DataPropertyAxiom
+dataPropertyAxiomEquivalentDataProperties :: Phantoms.TTerm OwlSyntax.EquivalentDataProperties -> Phantoms.TTerm OwlSyntax.DataPropertyAxiom
 dataPropertyAxiomEquivalentDataProperties x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.DataPropertyAxiom"),
@@ -1721,7 +1721,7 @@ dataPropertyAxiomEquivalentDataProperties x =
         Core.fieldName = (Core.Name "equivalentDataProperties"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-dataPropertyAxiomFunctionalDataProperty :: Phantoms.TTerm Syntax.FunctionalDataProperty -> Phantoms.TTerm Syntax.DataPropertyAxiom
+dataPropertyAxiomFunctionalDataProperty :: Phantoms.TTerm OwlSyntax.FunctionalDataProperty -> Phantoms.TTerm OwlSyntax.DataPropertyAxiom
 dataPropertyAxiomFunctionalDataProperty x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.DataPropertyAxiom"),
@@ -1729,7 +1729,7 @@ dataPropertyAxiomFunctionalDataProperty x =
         Core.fieldName = (Core.Name "functionalDataProperty"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-dataPropertyAxiomSubDataPropertyOf :: Phantoms.TTerm Syntax.SubDataPropertyOf -> Phantoms.TTerm Syntax.DataPropertyAxiom
+dataPropertyAxiomSubDataPropertyOf :: Phantoms.TTerm OwlSyntax.SubDataPropertyOf -> Phantoms.TTerm OwlSyntax.DataPropertyAxiom
 dataPropertyAxiomSubDataPropertyOf x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.DataPropertyAxiom"),
@@ -1737,7 +1737,7 @@ dataPropertyAxiomSubDataPropertyOf x =
         Core.fieldName = (Core.Name "subDataPropertyOf"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-dataPropertyDomain :: Phantoms.TTerm [Syntax.Annotation] -> Phantoms.TTerm Syntax.DataPropertyExpression -> Phantoms.TTerm Syntax.ClassExpression -> Phantoms.TTerm Syntax.DataPropertyDomain
+dataPropertyDomain :: Phantoms.TTerm [OwlSyntax.Annotation] -> Phantoms.TTerm OwlSyntax.DataPropertyExpression -> Phantoms.TTerm OwlSyntax.ClassExpression -> Phantoms.TTerm OwlSyntax.DataPropertyDomain
 dataPropertyDomain annotations property domain =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.DataPropertyDomain"),
@@ -1752,7 +1752,7 @@ dataPropertyDomain annotations property domain =
           Core.fieldName = (Core.Name "domain"),
           Core.fieldTerm = (Phantoms.unTTerm domain)}]}))
 
-dataPropertyDomainAnnotations :: Phantoms.TTerm Syntax.DataPropertyDomain -> Phantoms.TTerm [Syntax.Annotation]
+dataPropertyDomainAnnotations :: Phantoms.TTerm OwlSyntax.DataPropertyDomain -> Phantoms.TTerm [OwlSyntax.Annotation]
 dataPropertyDomainAnnotations x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -1760,7 +1760,7 @@ dataPropertyDomainAnnotations x =
         Core.projectionField = (Core.Name "annotations")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-dataPropertyDomainDomain :: Phantoms.TTerm Syntax.DataPropertyDomain -> Phantoms.TTerm Syntax.ClassExpression
+dataPropertyDomainDomain :: Phantoms.TTerm OwlSyntax.DataPropertyDomain -> Phantoms.TTerm OwlSyntax.ClassExpression
 dataPropertyDomainDomain x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -1768,7 +1768,7 @@ dataPropertyDomainDomain x =
         Core.projectionField = (Core.Name "domain")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-dataPropertyDomainProperty :: Phantoms.TTerm Syntax.DataPropertyDomain -> Phantoms.TTerm Syntax.DataPropertyExpression
+dataPropertyDomainProperty :: Phantoms.TTerm OwlSyntax.DataPropertyDomain -> Phantoms.TTerm OwlSyntax.DataPropertyExpression
 dataPropertyDomainProperty x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -1776,7 +1776,7 @@ dataPropertyDomainProperty x =
         Core.projectionField = (Core.Name "property")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-dataPropertyDomainWithAnnotations :: Phantoms.TTerm Syntax.DataPropertyDomain -> Phantoms.TTerm [Syntax.Annotation] -> Phantoms.TTerm Syntax.DataPropertyDomain
+dataPropertyDomainWithAnnotations :: Phantoms.TTerm OwlSyntax.DataPropertyDomain -> Phantoms.TTerm [OwlSyntax.Annotation] -> Phantoms.TTerm OwlSyntax.DataPropertyDomain
 dataPropertyDomainWithAnnotations original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.DataPropertyDomain"),
@@ -1799,7 +1799,7 @@ dataPropertyDomainWithAnnotations original newVal =
               Core.projectionField = (Core.Name "domain")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-dataPropertyDomainWithDomain :: Phantoms.TTerm Syntax.DataPropertyDomain -> Phantoms.TTerm Syntax.ClassExpression -> Phantoms.TTerm Syntax.DataPropertyDomain
+dataPropertyDomainWithDomain :: Phantoms.TTerm OwlSyntax.DataPropertyDomain -> Phantoms.TTerm OwlSyntax.ClassExpression -> Phantoms.TTerm OwlSyntax.DataPropertyDomain
 dataPropertyDomainWithDomain original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.DataPropertyDomain"),
@@ -1822,7 +1822,7 @@ dataPropertyDomainWithDomain original newVal =
           Core.fieldName = (Core.Name "domain"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-dataPropertyDomainWithProperty :: Phantoms.TTerm Syntax.DataPropertyDomain -> Phantoms.TTerm Syntax.DataPropertyExpression -> Phantoms.TTerm Syntax.DataPropertyDomain
+dataPropertyDomainWithProperty :: Phantoms.TTerm OwlSyntax.DataPropertyDomain -> Phantoms.TTerm OwlSyntax.DataPropertyExpression -> Phantoms.TTerm OwlSyntax.DataPropertyDomain
 dataPropertyDomainWithProperty original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.DataPropertyDomain"),
@@ -1845,13 +1845,13 @@ dataPropertyDomainWithProperty original newVal =
               Core.projectionField = (Core.Name "domain")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-dataPropertyExpression :: Phantoms.TTerm Syntax.DataProperty -> Phantoms.TTerm Syntax.DataPropertyExpression
+dataPropertyExpression :: Phantoms.TTerm OwlSyntax.DataProperty -> Phantoms.TTerm OwlSyntax.DataPropertyExpression
 dataPropertyExpression x =
     Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.owl.syntax.DataPropertyExpression"),
       Core.wrappedTermBody = (Phantoms.unTTerm x)}))
 
-dataPropertyRange :: Phantoms.TTerm [Syntax.Annotation] -> Phantoms.TTerm Syntax.DataPropertyExpression -> Phantoms.TTerm Syntax.ClassExpression -> Phantoms.TTerm Syntax.DataPropertyRange
+dataPropertyRange :: Phantoms.TTerm [OwlSyntax.Annotation] -> Phantoms.TTerm OwlSyntax.DataPropertyExpression -> Phantoms.TTerm OwlSyntax.ClassExpression -> Phantoms.TTerm OwlSyntax.DataPropertyRange
 dataPropertyRange annotations property range =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.DataPropertyRange"),
@@ -1866,7 +1866,7 @@ dataPropertyRange annotations property range =
           Core.fieldName = (Core.Name "range"),
           Core.fieldTerm = (Phantoms.unTTerm range)}]}))
 
-dataPropertyRangeAnnotations :: Phantoms.TTerm Syntax.DataPropertyRange -> Phantoms.TTerm [Syntax.Annotation]
+dataPropertyRangeAnnotations :: Phantoms.TTerm OwlSyntax.DataPropertyRange -> Phantoms.TTerm [OwlSyntax.Annotation]
 dataPropertyRangeAnnotations x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -1874,7 +1874,7 @@ dataPropertyRangeAnnotations x =
         Core.projectionField = (Core.Name "annotations")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-dataPropertyRangeProperty :: Phantoms.TTerm Syntax.DataPropertyRange -> Phantoms.TTerm Syntax.DataPropertyExpression
+dataPropertyRangeProperty :: Phantoms.TTerm OwlSyntax.DataPropertyRange -> Phantoms.TTerm OwlSyntax.DataPropertyExpression
 dataPropertyRangeProperty x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -1882,7 +1882,7 @@ dataPropertyRangeProperty x =
         Core.projectionField = (Core.Name "property")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-dataPropertyRangeRange :: Phantoms.TTerm Syntax.DataPropertyRange -> Phantoms.TTerm Syntax.ClassExpression
+dataPropertyRangeRange :: Phantoms.TTerm OwlSyntax.DataPropertyRange -> Phantoms.TTerm OwlSyntax.ClassExpression
 dataPropertyRangeRange x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -1890,7 +1890,7 @@ dataPropertyRangeRange x =
         Core.projectionField = (Core.Name "range")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-dataPropertyRangeWithAnnotations :: Phantoms.TTerm Syntax.DataPropertyRange -> Phantoms.TTerm [Syntax.Annotation] -> Phantoms.TTerm Syntax.DataPropertyRange
+dataPropertyRangeWithAnnotations :: Phantoms.TTerm OwlSyntax.DataPropertyRange -> Phantoms.TTerm [OwlSyntax.Annotation] -> Phantoms.TTerm OwlSyntax.DataPropertyRange
 dataPropertyRangeWithAnnotations original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.DataPropertyRange"),
@@ -1913,7 +1913,7 @@ dataPropertyRangeWithAnnotations original newVal =
               Core.projectionField = (Core.Name "range")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-dataPropertyRangeWithProperty :: Phantoms.TTerm Syntax.DataPropertyRange -> Phantoms.TTerm Syntax.DataPropertyExpression -> Phantoms.TTerm Syntax.DataPropertyRange
+dataPropertyRangeWithProperty :: Phantoms.TTerm OwlSyntax.DataPropertyRange -> Phantoms.TTerm OwlSyntax.DataPropertyExpression -> Phantoms.TTerm OwlSyntax.DataPropertyRange
 dataPropertyRangeWithProperty original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.DataPropertyRange"),
@@ -1936,7 +1936,7 @@ dataPropertyRangeWithProperty original newVal =
               Core.projectionField = (Core.Name "range")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-dataPropertyRangeWithRange :: Phantoms.TTerm Syntax.DataPropertyRange -> Phantoms.TTerm Syntax.ClassExpression -> Phantoms.TTerm Syntax.DataPropertyRange
+dataPropertyRangeWithRange :: Phantoms.TTerm OwlSyntax.DataPropertyRange -> Phantoms.TTerm OwlSyntax.ClassExpression -> Phantoms.TTerm OwlSyntax.DataPropertyRange
 dataPropertyRangeWithRange original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.DataPropertyRange"),
@@ -1959,7 +1959,7 @@ dataPropertyRangeWithRange original newVal =
           Core.fieldName = (Core.Name "range"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-dataRangeDataComplementOf :: Phantoms.TTerm Syntax.DataComplementOf -> Phantoms.TTerm Syntax.DataRange
+dataRangeDataComplementOf :: Phantoms.TTerm OwlSyntax.DataComplementOf -> Phantoms.TTerm OwlSyntax.DataRange
 dataRangeDataComplementOf x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.DataRange"),
@@ -1967,7 +1967,7 @@ dataRangeDataComplementOf x =
         Core.fieldName = (Core.Name "dataComplementOf"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-dataRangeDataIntersectionOf :: Phantoms.TTerm Syntax.DataIntersectionOf -> Phantoms.TTerm Syntax.DataRange
+dataRangeDataIntersectionOf :: Phantoms.TTerm OwlSyntax.DataIntersectionOf -> Phantoms.TTerm OwlSyntax.DataRange
 dataRangeDataIntersectionOf x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.DataRange"),
@@ -1975,7 +1975,7 @@ dataRangeDataIntersectionOf x =
         Core.fieldName = (Core.Name "dataIntersectionOf"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-dataRangeDataOneOf :: Phantoms.TTerm Syntax.DataOneOf -> Phantoms.TTerm Syntax.DataRange
+dataRangeDataOneOf :: Phantoms.TTerm OwlSyntax.DataOneOf -> Phantoms.TTerm OwlSyntax.DataRange
 dataRangeDataOneOf x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.DataRange"),
@@ -1983,7 +1983,7 @@ dataRangeDataOneOf x =
         Core.fieldName = (Core.Name "dataOneOf"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-dataRangeDataUnionOf :: Phantoms.TTerm Syntax.DataUnionOf -> Phantoms.TTerm Syntax.DataRange
+dataRangeDataUnionOf :: Phantoms.TTerm OwlSyntax.DataUnionOf -> Phantoms.TTerm OwlSyntax.DataRange
 dataRangeDataUnionOf x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.DataRange"),
@@ -1991,7 +1991,7 @@ dataRangeDataUnionOf x =
         Core.fieldName = (Core.Name "dataUnionOf"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-dataRangeDatatype :: Phantoms.TTerm Syntax.Datatype -> Phantoms.TTerm Syntax.DataRange
+dataRangeDatatype :: Phantoms.TTerm OwlSyntax.Datatype -> Phantoms.TTerm OwlSyntax.DataRange
 dataRangeDatatype x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.DataRange"),
@@ -1999,7 +1999,7 @@ dataRangeDatatype x =
         Core.fieldName = (Core.Name "datatype"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-dataRangeDatatypeRestriction :: Phantoms.TTerm Syntax.DatatypeRestriction -> Phantoms.TTerm Syntax.DataRange
+dataRangeDatatypeRestriction :: Phantoms.TTerm OwlSyntax.DatatypeRestriction -> Phantoms.TTerm OwlSyntax.DataRange
 dataRangeDatatypeRestriction x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.DataRange"),
@@ -2007,7 +2007,7 @@ dataRangeDatatypeRestriction x =
         Core.fieldName = (Core.Name "datatypeRestriction"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-dataSomeValuesFrom :: Phantoms.TTerm [Syntax.DataPropertyExpression] -> Phantoms.TTerm Syntax.DataRange -> Phantoms.TTerm Syntax.DataSomeValuesFrom
+dataSomeValuesFrom :: Phantoms.TTerm [OwlSyntax.DataPropertyExpression] -> Phantoms.TTerm OwlSyntax.DataRange -> Phantoms.TTerm OwlSyntax.DataSomeValuesFrom
 dataSomeValuesFrom property range =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.DataSomeValuesFrom"),
@@ -2019,7 +2019,7 @@ dataSomeValuesFrom property range =
           Core.fieldName = (Core.Name "range"),
           Core.fieldTerm = (Phantoms.unTTerm range)}]}))
 
-dataSomeValuesFromProperty :: Phantoms.TTerm Syntax.DataSomeValuesFrom -> Phantoms.TTerm [Syntax.DataPropertyExpression]
+dataSomeValuesFromProperty :: Phantoms.TTerm OwlSyntax.DataSomeValuesFrom -> Phantoms.TTerm [OwlSyntax.DataPropertyExpression]
 dataSomeValuesFromProperty x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -2027,7 +2027,7 @@ dataSomeValuesFromProperty x =
         Core.projectionField = (Core.Name "property")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-dataSomeValuesFromRange :: Phantoms.TTerm Syntax.DataSomeValuesFrom -> Phantoms.TTerm Syntax.DataRange
+dataSomeValuesFromRange :: Phantoms.TTerm OwlSyntax.DataSomeValuesFrom -> Phantoms.TTerm OwlSyntax.DataRange
 dataSomeValuesFromRange x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -2035,7 +2035,7 @@ dataSomeValuesFromRange x =
         Core.projectionField = (Core.Name "range")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-dataSomeValuesFromWithProperty :: Phantoms.TTerm Syntax.DataSomeValuesFrom -> Phantoms.TTerm [Syntax.DataPropertyExpression] -> Phantoms.TTerm Syntax.DataSomeValuesFrom
+dataSomeValuesFromWithProperty :: Phantoms.TTerm OwlSyntax.DataSomeValuesFrom -> Phantoms.TTerm [OwlSyntax.DataPropertyExpression] -> Phantoms.TTerm OwlSyntax.DataSomeValuesFrom
 dataSomeValuesFromWithProperty original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.DataSomeValuesFrom"),
@@ -2051,7 +2051,7 @@ dataSomeValuesFromWithProperty original newVal =
               Core.projectionField = (Core.Name "range")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-dataSomeValuesFromWithRange :: Phantoms.TTerm Syntax.DataSomeValuesFrom -> Phantoms.TTerm Syntax.DataRange -> Phantoms.TTerm Syntax.DataSomeValuesFrom
+dataSomeValuesFromWithRange :: Phantoms.TTerm OwlSyntax.DataSomeValuesFrom -> Phantoms.TTerm OwlSyntax.DataRange -> Phantoms.TTerm OwlSyntax.DataSomeValuesFrom
 dataSomeValuesFromWithRange original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.DataSomeValuesFrom"),
@@ -2067,13 +2067,13 @@ dataSomeValuesFromWithRange original newVal =
           Core.fieldName = (Core.Name "range"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-dataUnionOf :: Phantoms.TTerm [Syntax.DataRange] -> Phantoms.TTerm Syntax.DataUnionOf
+dataUnionOf :: Phantoms.TTerm [OwlSyntax.DataRange] -> Phantoms.TTerm OwlSyntax.DataUnionOf
 dataUnionOf x =
     Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.owl.syntax.DataUnionOf"),
       Core.wrappedTermBody = (Phantoms.unTTerm x)}))
 
-datatypeDefinition :: Phantoms.TTerm [Syntax.Annotation] -> Phantoms.TTerm Syntax.Datatype -> Phantoms.TTerm Syntax.DataRange -> Phantoms.TTerm Syntax.DatatypeDefinition
+datatypeDefinition :: Phantoms.TTerm [OwlSyntax.Annotation] -> Phantoms.TTerm OwlSyntax.Datatype -> Phantoms.TTerm OwlSyntax.DataRange -> Phantoms.TTerm OwlSyntax.DatatypeDefinition
 datatypeDefinition annotations datatype range =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.DatatypeDefinition"),
@@ -2088,7 +2088,7 @@ datatypeDefinition annotations datatype range =
           Core.fieldName = (Core.Name "range"),
           Core.fieldTerm = (Phantoms.unTTerm range)}]}))
 
-datatypeDefinitionAnnotations :: Phantoms.TTerm Syntax.DatatypeDefinition -> Phantoms.TTerm [Syntax.Annotation]
+datatypeDefinitionAnnotations :: Phantoms.TTerm OwlSyntax.DatatypeDefinition -> Phantoms.TTerm [OwlSyntax.Annotation]
 datatypeDefinitionAnnotations x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -2096,7 +2096,7 @@ datatypeDefinitionAnnotations x =
         Core.projectionField = (Core.Name "annotations")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-datatypeDefinitionDatatype :: Phantoms.TTerm Syntax.DatatypeDefinition -> Phantoms.TTerm Syntax.Datatype
+datatypeDefinitionDatatype :: Phantoms.TTerm OwlSyntax.DatatypeDefinition -> Phantoms.TTerm OwlSyntax.Datatype
 datatypeDefinitionDatatype x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -2104,7 +2104,7 @@ datatypeDefinitionDatatype x =
         Core.projectionField = (Core.Name "datatype")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-datatypeDefinitionRange :: Phantoms.TTerm Syntax.DatatypeDefinition -> Phantoms.TTerm Syntax.DataRange
+datatypeDefinitionRange :: Phantoms.TTerm OwlSyntax.DatatypeDefinition -> Phantoms.TTerm OwlSyntax.DataRange
 datatypeDefinitionRange x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -2112,7 +2112,7 @@ datatypeDefinitionRange x =
         Core.projectionField = (Core.Name "range")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-datatypeDefinitionWithAnnotations :: Phantoms.TTerm Syntax.DatatypeDefinition -> Phantoms.TTerm [Syntax.Annotation] -> Phantoms.TTerm Syntax.DatatypeDefinition
+datatypeDefinitionWithAnnotations :: Phantoms.TTerm OwlSyntax.DatatypeDefinition -> Phantoms.TTerm [OwlSyntax.Annotation] -> Phantoms.TTerm OwlSyntax.DatatypeDefinition
 datatypeDefinitionWithAnnotations original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.DatatypeDefinition"),
@@ -2135,7 +2135,7 @@ datatypeDefinitionWithAnnotations original newVal =
               Core.projectionField = (Core.Name "range")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-datatypeDefinitionWithDatatype :: Phantoms.TTerm Syntax.DatatypeDefinition -> Phantoms.TTerm Syntax.Datatype -> Phantoms.TTerm Syntax.DatatypeDefinition
+datatypeDefinitionWithDatatype :: Phantoms.TTerm OwlSyntax.DatatypeDefinition -> Phantoms.TTerm OwlSyntax.Datatype -> Phantoms.TTerm OwlSyntax.DatatypeDefinition
 datatypeDefinitionWithDatatype original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.DatatypeDefinition"),
@@ -2158,7 +2158,7 @@ datatypeDefinitionWithDatatype original newVal =
               Core.projectionField = (Core.Name "range")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-datatypeDefinitionWithRange :: Phantoms.TTerm Syntax.DatatypeDefinition -> Phantoms.TTerm Syntax.DataRange -> Phantoms.TTerm Syntax.DatatypeDefinition
+datatypeDefinitionWithRange :: Phantoms.TTerm OwlSyntax.DatatypeDefinition -> Phantoms.TTerm OwlSyntax.DataRange -> Phantoms.TTerm OwlSyntax.DatatypeDefinition
 datatypeDefinitionWithRange original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.DatatypeDefinition"),
@@ -2181,7 +2181,7 @@ datatypeDefinitionWithRange original newVal =
           Core.fieldName = (Core.Name "range"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-datatypeOther :: Phantoms.TTerm Syntax_.Iri -> Phantoms.TTerm Syntax.Datatype
+datatypeOther :: Phantoms.TTerm RdfSyntax.Iri -> Phantoms.TTerm OwlSyntax.Datatype
 datatypeOther x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.Datatype"),
@@ -2189,7 +2189,7 @@ datatypeOther x =
         Core.fieldName = (Core.Name "other"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-datatypeRestriction :: Phantoms.TTerm Syntax.Datatype -> Phantoms.TTerm [Syntax.DatatypeRestriction_Constraint] -> Phantoms.TTerm Syntax.DatatypeRestriction
+datatypeRestriction :: Phantoms.TTerm OwlSyntax.Datatype -> Phantoms.TTerm [OwlSyntax.DatatypeRestriction_Constraint] -> Phantoms.TTerm OwlSyntax.DatatypeRestriction
 datatypeRestriction datatype constraints =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.DatatypeRestriction"),
@@ -2201,7 +2201,7 @@ datatypeRestriction datatype constraints =
           Core.fieldName = (Core.Name "constraints"),
           Core.fieldTerm = (Phantoms.unTTerm constraints)}]}))
 
-datatypeRestrictionConstraints :: Phantoms.TTerm Syntax.DatatypeRestriction -> Phantoms.TTerm [Syntax.DatatypeRestriction_Constraint]
+datatypeRestrictionConstraints :: Phantoms.TTerm OwlSyntax.DatatypeRestriction -> Phantoms.TTerm [OwlSyntax.DatatypeRestriction_Constraint]
 datatypeRestrictionConstraints x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -2209,7 +2209,7 @@ datatypeRestrictionConstraints x =
         Core.projectionField = (Core.Name "constraints")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-datatypeRestrictionDatatype :: Phantoms.TTerm Syntax.DatatypeRestriction -> Phantoms.TTerm Syntax.Datatype
+datatypeRestrictionDatatype :: Phantoms.TTerm OwlSyntax.DatatypeRestriction -> Phantoms.TTerm OwlSyntax.Datatype
 datatypeRestrictionDatatype x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -2217,7 +2217,7 @@ datatypeRestrictionDatatype x =
         Core.projectionField = (Core.Name "datatype")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-datatypeRestrictionWithConstraints :: Phantoms.TTerm Syntax.DatatypeRestriction -> Phantoms.TTerm [Syntax.DatatypeRestriction_Constraint] -> Phantoms.TTerm Syntax.DatatypeRestriction
+datatypeRestrictionWithConstraints :: Phantoms.TTerm OwlSyntax.DatatypeRestriction -> Phantoms.TTerm [OwlSyntax.DatatypeRestriction_Constraint] -> Phantoms.TTerm OwlSyntax.DatatypeRestriction
 datatypeRestrictionWithConstraints original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.DatatypeRestriction"),
@@ -2233,7 +2233,7 @@ datatypeRestrictionWithConstraints original newVal =
           Core.fieldName = (Core.Name "constraints"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-datatypeRestrictionWithDatatype :: Phantoms.TTerm Syntax.DatatypeRestriction -> Phantoms.TTerm Syntax.Datatype -> Phantoms.TTerm Syntax.DatatypeRestriction
+datatypeRestrictionWithDatatype :: Phantoms.TTerm OwlSyntax.DatatypeRestriction -> Phantoms.TTerm OwlSyntax.Datatype -> Phantoms.TTerm OwlSyntax.DatatypeRestriction
 datatypeRestrictionWithDatatype original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.DatatypeRestriction"),
@@ -2249,7 +2249,7 @@ datatypeRestrictionWithDatatype original newVal =
               Core.projectionField = (Core.Name "constraints")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-datatypeRestriction_ConstrainingFacetOther :: Phantoms.TTerm Syntax_.Iri -> Phantoms.TTerm Syntax.DatatypeRestriction_ConstrainingFacet
+datatypeRestriction_ConstrainingFacetOther :: Phantoms.TTerm RdfSyntax.Iri -> Phantoms.TTerm OwlSyntax.DatatypeRestriction_ConstrainingFacet
 datatypeRestriction_ConstrainingFacetOther x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.DatatypeRestriction_ConstrainingFacet"),
@@ -2257,7 +2257,7 @@ datatypeRestriction_ConstrainingFacetOther x =
         Core.fieldName = (Core.Name "other"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-datatypeRestriction_ConstrainingFacetXmlSchema :: Phantoms.TTerm Schema.ConstrainingFacet -> Phantoms.TTerm Syntax.DatatypeRestriction_ConstrainingFacet
+datatypeRestriction_ConstrainingFacetXmlSchema :: Phantoms.TTerm Schema.ConstrainingFacet -> Phantoms.TTerm OwlSyntax.DatatypeRestriction_ConstrainingFacet
 datatypeRestriction_ConstrainingFacetXmlSchema x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.DatatypeRestriction_ConstrainingFacet"),
@@ -2265,7 +2265,7 @@ datatypeRestriction_ConstrainingFacetXmlSchema x =
         Core.fieldName = (Core.Name "xmlSchema"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-datatypeRestriction_Constraint :: Phantoms.TTerm Syntax.DatatypeRestriction_ConstrainingFacet -> Phantoms.TTerm Syntax_.Literal -> Phantoms.TTerm Syntax.DatatypeRestriction_Constraint
+datatypeRestriction_Constraint :: Phantoms.TTerm OwlSyntax.DatatypeRestriction_ConstrainingFacet -> Phantoms.TTerm RdfSyntax.Literal -> Phantoms.TTerm OwlSyntax.DatatypeRestriction_Constraint
 datatypeRestriction_Constraint constrainingFacet restrictionValue =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.DatatypeRestriction_Constraint"),
@@ -2277,7 +2277,7 @@ datatypeRestriction_Constraint constrainingFacet restrictionValue =
           Core.fieldName = (Core.Name "restrictionValue"),
           Core.fieldTerm = (Phantoms.unTTerm restrictionValue)}]}))
 
-datatypeRestriction_ConstraintConstrainingFacet :: Phantoms.TTerm Syntax.DatatypeRestriction_Constraint -> Phantoms.TTerm Syntax.DatatypeRestriction_ConstrainingFacet
+datatypeRestriction_ConstraintConstrainingFacet :: Phantoms.TTerm OwlSyntax.DatatypeRestriction_Constraint -> Phantoms.TTerm OwlSyntax.DatatypeRestriction_ConstrainingFacet
 datatypeRestriction_ConstraintConstrainingFacet x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -2285,7 +2285,7 @@ datatypeRestriction_ConstraintConstrainingFacet x =
         Core.projectionField = (Core.Name "constrainingFacet")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-datatypeRestriction_ConstraintRestrictionValue :: Phantoms.TTerm Syntax.DatatypeRestriction_Constraint -> Phantoms.TTerm Syntax_.Literal
+datatypeRestriction_ConstraintRestrictionValue :: Phantoms.TTerm OwlSyntax.DatatypeRestriction_Constraint -> Phantoms.TTerm RdfSyntax.Literal
 datatypeRestriction_ConstraintRestrictionValue x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -2293,7 +2293,7 @@ datatypeRestriction_ConstraintRestrictionValue x =
         Core.projectionField = (Core.Name "restrictionValue")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-datatypeRestriction_ConstraintWithConstrainingFacet :: Phantoms.TTerm Syntax.DatatypeRestriction_Constraint -> Phantoms.TTerm Syntax.DatatypeRestriction_ConstrainingFacet -> Phantoms.TTerm Syntax.DatatypeRestriction_Constraint
+datatypeRestriction_ConstraintWithConstrainingFacet :: Phantoms.TTerm OwlSyntax.DatatypeRestriction_Constraint -> Phantoms.TTerm OwlSyntax.DatatypeRestriction_ConstrainingFacet -> Phantoms.TTerm OwlSyntax.DatatypeRestriction_Constraint
 datatypeRestriction_ConstraintWithConstrainingFacet original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.DatatypeRestriction_Constraint"),
@@ -2309,7 +2309,7 @@ datatypeRestriction_ConstraintWithConstrainingFacet original newVal =
               Core.projectionField = (Core.Name "restrictionValue")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-datatypeRestriction_ConstraintWithRestrictionValue :: Phantoms.TTerm Syntax.DatatypeRestriction_Constraint -> Phantoms.TTerm Syntax_.Literal -> Phantoms.TTerm Syntax.DatatypeRestriction_Constraint
+datatypeRestriction_ConstraintWithRestrictionValue :: Phantoms.TTerm OwlSyntax.DatatypeRestriction_Constraint -> Phantoms.TTerm RdfSyntax.Literal -> Phantoms.TTerm OwlSyntax.DatatypeRestriction_Constraint
 datatypeRestriction_ConstraintWithRestrictionValue original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.DatatypeRestriction_Constraint"),
@@ -2325,7 +2325,7 @@ datatypeRestriction_ConstraintWithRestrictionValue original newVal =
           Core.fieldName = (Core.Name "restrictionValue"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-datatypeXmlSchema :: Phantoms.TTerm Schema.Datatype -> Phantoms.TTerm Syntax.Datatype
+datatypeXmlSchema :: Phantoms.TTerm Schema.Datatype -> Phantoms.TTerm OwlSyntax.Datatype
 datatypeXmlSchema x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.Datatype"),
@@ -2333,7 +2333,7 @@ datatypeXmlSchema x =
         Core.fieldName = (Core.Name "xmlSchema"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-declaration :: Phantoms.TTerm [Syntax.Annotation] -> Phantoms.TTerm Syntax.Entity -> Phantoms.TTerm Syntax.Declaration
+declaration :: Phantoms.TTerm [OwlSyntax.Annotation] -> Phantoms.TTerm OwlSyntax.Entity -> Phantoms.TTerm OwlSyntax.Declaration
 declaration annotations entity =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.Declaration"),
@@ -2345,7 +2345,7 @@ declaration annotations entity =
           Core.fieldName = (Core.Name "entity"),
           Core.fieldTerm = (Phantoms.unTTerm entity)}]}))
 
-declarationAnnotations :: Phantoms.TTerm Syntax.Declaration -> Phantoms.TTerm [Syntax.Annotation]
+declarationAnnotations :: Phantoms.TTerm OwlSyntax.Declaration -> Phantoms.TTerm [OwlSyntax.Annotation]
 declarationAnnotations x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -2353,7 +2353,7 @@ declarationAnnotations x =
         Core.projectionField = (Core.Name "annotations")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-declarationEntity :: Phantoms.TTerm Syntax.Declaration -> Phantoms.TTerm Syntax.Entity
+declarationEntity :: Phantoms.TTerm OwlSyntax.Declaration -> Phantoms.TTerm OwlSyntax.Entity
 declarationEntity x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -2361,7 +2361,7 @@ declarationEntity x =
         Core.projectionField = (Core.Name "entity")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-declarationWithAnnotations :: Phantoms.TTerm Syntax.Declaration -> Phantoms.TTerm [Syntax.Annotation] -> Phantoms.TTerm Syntax.Declaration
+declarationWithAnnotations :: Phantoms.TTerm OwlSyntax.Declaration -> Phantoms.TTerm [OwlSyntax.Annotation] -> Phantoms.TTerm OwlSyntax.Declaration
 declarationWithAnnotations original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.Declaration"),
@@ -2377,7 +2377,7 @@ declarationWithAnnotations original newVal =
               Core.projectionField = (Core.Name "entity")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-declarationWithEntity :: Phantoms.TTerm Syntax.Declaration -> Phantoms.TTerm Syntax.Entity -> Phantoms.TTerm Syntax.Declaration
+declarationWithEntity :: Phantoms.TTerm OwlSyntax.Declaration -> Phantoms.TTerm OwlSyntax.Entity -> Phantoms.TTerm OwlSyntax.Declaration
 declarationWithEntity original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.Declaration"),
@@ -2393,7 +2393,7 @@ declarationWithEntity original newVal =
           Core.fieldName = (Core.Name "entity"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-differentIndividuals :: Phantoms.TTerm [Syntax.Annotation] -> Phantoms.TTerm [Syntax.Individual] -> Phantoms.TTerm Syntax.DifferentIndividuals
+differentIndividuals :: Phantoms.TTerm [OwlSyntax.Annotation] -> Phantoms.TTerm [OwlSyntax.Individual] -> Phantoms.TTerm OwlSyntax.DifferentIndividuals
 differentIndividuals annotations individuals =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.DifferentIndividuals"),
@@ -2405,7 +2405,7 @@ differentIndividuals annotations individuals =
           Core.fieldName = (Core.Name "individuals"),
           Core.fieldTerm = (Phantoms.unTTerm individuals)}]}))
 
-differentIndividualsAnnotations :: Phantoms.TTerm Syntax.DifferentIndividuals -> Phantoms.TTerm [Syntax.Annotation]
+differentIndividualsAnnotations :: Phantoms.TTerm OwlSyntax.DifferentIndividuals -> Phantoms.TTerm [OwlSyntax.Annotation]
 differentIndividualsAnnotations x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -2413,7 +2413,7 @@ differentIndividualsAnnotations x =
         Core.projectionField = (Core.Name "annotations")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-differentIndividualsIndividuals :: Phantoms.TTerm Syntax.DifferentIndividuals -> Phantoms.TTerm [Syntax.Individual]
+differentIndividualsIndividuals :: Phantoms.TTerm OwlSyntax.DifferentIndividuals -> Phantoms.TTerm [OwlSyntax.Individual]
 differentIndividualsIndividuals x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -2421,7 +2421,7 @@ differentIndividualsIndividuals x =
         Core.projectionField = (Core.Name "individuals")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-differentIndividualsWithAnnotations :: Phantoms.TTerm Syntax.DifferentIndividuals -> Phantoms.TTerm [Syntax.Annotation] -> Phantoms.TTerm Syntax.DifferentIndividuals
+differentIndividualsWithAnnotations :: Phantoms.TTerm OwlSyntax.DifferentIndividuals -> Phantoms.TTerm [OwlSyntax.Annotation] -> Phantoms.TTerm OwlSyntax.DifferentIndividuals
 differentIndividualsWithAnnotations original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.DifferentIndividuals"),
@@ -2437,7 +2437,7 @@ differentIndividualsWithAnnotations original newVal =
               Core.projectionField = (Core.Name "individuals")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-differentIndividualsWithIndividuals :: Phantoms.TTerm Syntax.DifferentIndividuals -> Phantoms.TTerm [Syntax.Individual] -> Phantoms.TTerm Syntax.DifferentIndividuals
+differentIndividualsWithIndividuals :: Phantoms.TTerm OwlSyntax.DifferentIndividuals -> Phantoms.TTerm [OwlSyntax.Individual] -> Phantoms.TTerm OwlSyntax.DifferentIndividuals
 differentIndividualsWithIndividuals original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.DifferentIndividuals"),
@@ -2453,7 +2453,7 @@ differentIndividualsWithIndividuals original newVal =
           Core.fieldName = (Core.Name "individuals"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-disjointClasses :: Phantoms.TTerm [Syntax.Annotation] -> Phantoms.TTerm [Syntax.ClassExpression] -> Phantoms.TTerm Syntax.DisjointClasses
+disjointClasses :: Phantoms.TTerm [OwlSyntax.Annotation] -> Phantoms.TTerm [OwlSyntax.ClassExpression] -> Phantoms.TTerm OwlSyntax.DisjointClasses
 disjointClasses annotations classes =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.DisjointClasses"),
@@ -2465,7 +2465,7 @@ disjointClasses annotations classes =
           Core.fieldName = (Core.Name "classes"),
           Core.fieldTerm = (Phantoms.unTTerm classes)}]}))
 
-disjointClassesAnnotations :: Phantoms.TTerm Syntax.DisjointClasses -> Phantoms.TTerm [Syntax.Annotation]
+disjointClassesAnnotations :: Phantoms.TTerm OwlSyntax.DisjointClasses -> Phantoms.TTerm [OwlSyntax.Annotation]
 disjointClassesAnnotations x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -2473,7 +2473,7 @@ disjointClassesAnnotations x =
         Core.projectionField = (Core.Name "annotations")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-disjointClassesClasses :: Phantoms.TTerm Syntax.DisjointClasses -> Phantoms.TTerm [Syntax.ClassExpression]
+disjointClassesClasses :: Phantoms.TTerm OwlSyntax.DisjointClasses -> Phantoms.TTerm [OwlSyntax.ClassExpression]
 disjointClassesClasses x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -2481,7 +2481,7 @@ disjointClassesClasses x =
         Core.projectionField = (Core.Name "classes")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-disjointClassesWithAnnotations :: Phantoms.TTerm Syntax.DisjointClasses -> Phantoms.TTerm [Syntax.Annotation] -> Phantoms.TTerm Syntax.DisjointClasses
+disjointClassesWithAnnotations :: Phantoms.TTerm OwlSyntax.DisjointClasses -> Phantoms.TTerm [OwlSyntax.Annotation] -> Phantoms.TTerm OwlSyntax.DisjointClasses
 disjointClassesWithAnnotations original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.DisjointClasses"),
@@ -2497,7 +2497,7 @@ disjointClassesWithAnnotations original newVal =
               Core.projectionField = (Core.Name "classes")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-disjointClassesWithClasses :: Phantoms.TTerm Syntax.DisjointClasses -> Phantoms.TTerm [Syntax.ClassExpression] -> Phantoms.TTerm Syntax.DisjointClasses
+disjointClassesWithClasses :: Phantoms.TTerm OwlSyntax.DisjointClasses -> Phantoms.TTerm [OwlSyntax.ClassExpression] -> Phantoms.TTerm OwlSyntax.DisjointClasses
 disjointClassesWithClasses original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.DisjointClasses"),
@@ -2513,7 +2513,7 @@ disjointClassesWithClasses original newVal =
           Core.fieldName = (Core.Name "classes"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-disjointDataProperties :: Phantoms.TTerm [Syntax.Annotation] -> Phantoms.TTerm [Syntax.DataPropertyExpression] -> Phantoms.TTerm Syntax.DisjointDataProperties
+disjointDataProperties :: Phantoms.TTerm [OwlSyntax.Annotation] -> Phantoms.TTerm [OwlSyntax.DataPropertyExpression] -> Phantoms.TTerm OwlSyntax.DisjointDataProperties
 disjointDataProperties annotations properties =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.DisjointDataProperties"),
@@ -2525,7 +2525,7 @@ disjointDataProperties annotations properties =
           Core.fieldName = (Core.Name "properties"),
           Core.fieldTerm = (Phantoms.unTTerm properties)}]}))
 
-disjointDataPropertiesAnnotations :: Phantoms.TTerm Syntax.DisjointDataProperties -> Phantoms.TTerm [Syntax.Annotation]
+disjointDataPropertiesAnnotations :: Phantoms.TTerm OwlSyntax.DisjointDataProperties -> Phantoms.TTerm [OwlSyntax.Annotation]
 disjointDataPropertiesAnnotations x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -2533,7 +2533,7 @@ disjointDataPropertiesAnnotations x =
         Core.projectionField = (Core.Name "annotations")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-disjointDataPropertiesProperties :: Phantoms.TTerm Syntax.DisjointDataProperties -> Phantoms.TTerm [Syntax.DataPropertyExpression]
+disjointDataPropertiesProperties :: Phantoms.TTerm OwlSyntax.DisjointDataProperties -> Phantoms.TTerm [OwlSyntax.DataPropertyExpression]
 disjointDataPropertiesProperties x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -2541,7 +2541,7 @@ disjointDataPropertiesProperties x =
         Core.projectionField = (Core.Name "properties")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-disjointDataPropertiesWithAnnotations :: Phantoms.TTerm Syntax.DisjointDataProperties -> Phantoms.TTerm [Syntax.Annotation] -> Phantoms.TTerm Syntax.DisjointDataProperties
+disjointDataPropertiesWithAnnotations :: Phantoms.TTerm OwlSyntax.DisjointDataProperties -> Phantoms.TTerm [OwlSyntax.Annotation] -> Phantoms.TTerm OwlSyntax.DisjointDataProperties
 disjointDataPropertiesWithAnnotations original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.DisjointDataProperties"),
@@ -2557,7 +2557,7 @@ disjointDataPropertiesWithAnnotations original newVal =
               Core.projectionField = (Core.Name "properties")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-disjointDataPropertiesWithProperties :: Phantoms.TTerm Syntax.DisjointDataProperties -> Phantoms.TTerm [Syntax.DataPropertyExpression] -> Phantoms.TTerm Syntax.DisjointDataProperties
+disjointDataPropertiesWithProperties :: Phantoms.TTerm OwlSyntax.DisjointDataProperties -> Phantoms.TTerm [OwlSyntax.DataPropertyExpression] -> Phantoms.TTerm OwlSyntax.DisjointDataProperties
 disjointDataPropertiesWithProperties original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.DisjointDataProperties"),
@@ -2573,7 +2573,7 @@ disjointDataPropertiesWithProperties original newVal =
           Core.fieldName = (Core.Name "properties"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-disjointObjectProperties :: Phantoms.TTerm [Syntax.Annotation] -> Phantoms.TTerm [Syntax.ObjectPropertyExpression] -> Phantoms.TTerm Syntax.DisjointObjectProperties
+disjointObjectProperties :: Phantoms.TTerm [OwlSyntax.Annotation] -> Phantoms.TTerm [OwlSyntax.ObjectPropertyExpression] -> Phantoms.TTerm OwlSyntax.DisjointObjectProperties
 disjointObjectProperties annotations properties =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.DisjointObjectProperties"),
@@ -2585,7 +2585,7 @@ disjointObjectProperties annotations properties =
           Core.fieldName = (Core.Name "properties"),
           Core.fieldTerm = (Phantoms.unTTerm properties)}]}))
 
-disjointObjectPropertiesAnnotations :: Phantoms.TTerm Syntax.DisjointObjectProperties -> Phantoms.TTerm [Syntax.Annotation]
+disjointObjectPropertiesAnnotations :: Phantoms.TTerm OwlSyntax.DisjointObjectProperties -> Phantoms.TTerm [OwlSyntax.Annotation]
 disjointObjectPropertiesAnnotations x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -2593,7 +2593,7 @@ disjointObjectPropertiesAnnotations x =
         Core.projectionField = (Core.Name "annotations")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-disjointObjectPropertiesProperties :: Phantoms.TTerm Syntax.DisjointObjectProperties -> Phantoms.TTerm [Syntax.ObjectPropertyExpression]
+disjointObjectPropertiesProperties :: Phantoms.TTerm OwlSyntax.DisjointObjectProperties -> Phantoms.TTerm [OwlSyntax.ObjectPropertyExpression]
 disjointObjectPropertiesProperties x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -2601,7 +2601,7 @@ disjointObjectPropertiesProperties x =
         Core.projectionField = (Core.Name "properties")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-disjointObjectPropertiesWithAnnotations :: Phantoms.TTerm Syntax.DisjointObjectProperties -> Phantoms.TTerm [Syntax.Annotation] -> Phantoms.TTerm Syntax.DisjointObjectProperties
+disjointObjectPropertiesWithAnnotations :: Phantoms.TTerm OwlSyntax.DisjointObjectProperties -> Phantoms.TTerm [OwlSyntax.Annotation] -> Phantoms.TTerm OwlSyntax.DisjointObjectProperties
 disjointObjectPropertiesWithAnnotations original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.DisjointObjectProperties"),
@@ -2617,7 +2617,7 @@ disjointObjectPropertiesWithAnnotations original newVal =
               Core.projectionField = (Core.Name "properties")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-disjointObjectPropertiesWithProperties :: Phantoms.TTerm Syntax.DisjointObjectProperties -> Phantoms.TTerm [Syntax.ObjectPropertyExpression] -> Phantoms.TTerm Syntax.DisjointObjectProperties
+disjointObjectPropertiesWithProperties :: Phantoms.TTerm OwlSyntax.DisjointObjectProperties -> Phantoms.TTerm [OwlSyntax.ObjectPropertyExpression] -> Phantoms.TTerm OwlSyntax.DisjointObjectProperties
 disjointObjectPropertiesWithProperties original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.DisjointObjectProperties"),
@@ -2633,7 +2633,7 @@ disjointObjectPropertiesWithProperties original newVal =
           Core.fieldName = (Core.Name "properties"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-disjointUnion :: Phantoms.TTerm [Syntax.Annotation] -> Phantoms.TTerm Syntax.Class -> Phantoms.TTerm [Syntax.ClassExpression] -> Phantoms.TTerm Syntax.DisjointUnion
+disjointUnion :: Phantoms.TTerm [OwlSyntax.Annotation] -> Phantoms.TTerm OwlSyntax.Class -> Phantoms.TTerm [OwlSyntax.ClassExpression] -> Phantoms.TTerm OwlSyntax.DisjointUnion
 disjointUnion annotations class_ classes =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.DisjointUnion"),
@@ -2648,7 +2648,7 @@ disjointUnion annotations class_ classes =
           Core.fieldName = (Core.Name "classes"),
           Core.fieldTerm = (Phantoms.unTTerm classes)}]}))
 
-disjointUnionAnnotations :: Phantoms.TTerm Syntax.DisjointUnion -> Phantoms.TTerm [Syntax.Annotation]
+disjointUnionAnnotations :: Phantoms.TTerm OwlSyntax.DisjointUnion -> Phantoms.TTerm [OwlSyntax.Annotation]
 disjointUnionAnnotations x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -2656,7 +2656,7 @@ disjointUnionAnnotations x =
         Core.projectionField = (Core.Name "annotations")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-disjointUnionClass :: Phantoms.TTerm Syntax.DisjointUnion -> Phantoms.TTerm Syntax.Class
+disjointUnionClass :: Phantoms.TTerm OwlSyntax.DisjointUnion -> Phantoms.TTerm OwlSyntax.Class
 disjointUnionClass x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -2664,7 +2664,7 @@ disjointUnionClass x =
         Core.projectionField = (Core.Name "class")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-disjointUnionClasses :: Phantoms.TTerm Syntax.DisjointUnion -> Phantoms.TTerm [Syntax.ClassExpression]
+disjointUnionClasses :: Phantoms.TTerm OwlSyntax.DisjointUnion -> Phantoms.TTerm [OwlSyntax.ClassExpression]
 disjointUnionClasses x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -2672,7 +2672,7 @@ disjointUnionClasses x =
         Core.projectionField = (Core.Name "classes")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-disjointUnionWithAnnotations :: Phantoms.TTerm Syntax.DisjointUnion -> Phantoms.TTerm [Syntax.Annotation] -> Phantoms.TTerm Syntax.DisjointUnion
+disjointUnionWithAnnotations :: Phantoms.TTerm OwlSyntax.DisjointUnion -> Phantoms.TTerm [OwlSyntax.Annotation] -> Phantoms.TTerm OwlSyntax.DisjointUnion
 disjointUnionWithAnnotations original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.DisjointUnion"),
@@ -2695,7 +2695,7 @@ disjointUnionWithAnnotations original newVal =
               Core.projectionField = (Core.Name "classes")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-disjointUnionWithClass :: Phantoms.TTerm Syntax.DisjointUnion -> Phantoms.TTerm Syntax.Class -> Phantoms.TTerm Syntax.DisjointUnion
+disjointUnionWithClass :: Phantoms.TTerm OwlSyntax.DisjointUnion -> Phantoms.TTerm OwlSyntax.Class -> Phantoms.TTerm OwlSyntax.DisjointUnion
 disjointUnionWithClass original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.DisjointUnion"),
@@ -2718,7 +2718,7 @@ disjointUnionWithClass original newVal =
               Core.projectionField = (Core.Name "classes")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-disjointUnionWithClasses :: Phantoms.TTerm Syntax.DisjointUnion -> Phantoms.TTerm [Syntax.ClassExpression] -> Phantoms.TTerm Syntax.DisjointUnion
+disjointUnionWithClasses :: Phantoms.TTerm OwlSyntax.DisjointUnion -> Phantoms.TTerm [OwlSyntax.ClassExpression] -> Phantoms.TTerm OwlSyntax.DisjointUnion
 disjointUnionWithClasses original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.DisjointUnion"),
@@ -2741,7 +2741,7 @@ disjointUnionWithClasses original newVal =
           Core.fieldName = (Core.Name "classes"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-entityAnnotationProperty :: Phantoms.TTerm Syntax.AnnotationProperty -> Phantoms.TTerm Syntax.Entity
+entityAnnotationProperty :: Phantoms.TTerm OwlSyntax.AnnotationProperty -> Phantoms.TTerm OwlSyntax.Entity
 entityAnnotationProperty x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.Entity"),
@@ -2749,7 +2749,7 @@ entityAnnotationProperty x =
         Core.fieldName = (Core.Name "annotationProperty"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-entityClass :: Phantoms.TTerm Syntax.Class -> Phantoms.TTerm Syntax.Entity
+entityClass :: Phantoms.TTerm OwlSyntax.Class -> Phantoms.TTerm OwlSyntax.Entity
 entityClass x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.Entity"),
@@ -2757,7 +2757,7 @@ entityClass x =
         Core.fieldName = (Core.Name "class"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-entityDataProperty :: Phantoms.TTerm Syntax.DataProperty -> Phantoms.TTerm Syntax.Entity
+entityDataProperty :: Phantoms.TTerm OwlSyntax.DataProperty -> Phantoms.TTerm OwlSyntax.Entity
 entityDataProperty x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.Entity"),
@@ -2765,7 +2765,7 @@ entityDataProperty x =
         Core.fieldName = (Core.Name "dataProperty"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-entityDatatype :: Phantoms.TTerm Syntax.Datatype -> Phantoms.TTerm Syntax.Entity
+entityDatatype :: Phantoms.TTerm OwlSyntax.Datatype -> Phantoms.TTerm OwlSyntax.Entity
 entityDatatype x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.Entity"),
@@ -2773,7 +2773,7 @@ entityDatatype x =
         Core.fieldName = (Core.Name "datatype"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-entityNamedIndividual :: Phantoms.TTerm Syntax.NamedIndividual -> Phantoms.TTerm Syntax.Entity
+entityNamedIndividual :: Phantoms.TTerm OwlSyntax.NamedIndividual -> Phantoms.TTerm OwlSyntax.Entity
 entityNamedIndividual x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.Entity"),
@@ -2781,7 +2781,7 @@ entityNamedIndividual x =
         Core.fieldName = (Core.Name "namedIndividual"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-entityObjectProperty :: Phantoms.TTerm Syntax.ObjectProperty -> Phantoms.TTerm Syntax.Entity
+entityObjectProperty :: Phantoms.TTerm OwlSyntax.ObjectProperty -> Phantoms.TTerm OwlSyntax.Entity
 entityObjectProperty x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.Entity"),
@@ -2789,7 +2789,7 @@ entityObjectProperty x =
         Core.fieldName = (Core.Name "objectProperty"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-equivalentClasses :: Phantoms.TTerm [Syntax.Annotation] -> Phantoms.TTerm [Syntax.ClassExpression] -> Phantoms.TTerm Syntax.EquivalentClasses
+equivalentClasses :: Phantoms.TTerm [OwlSyntax.Annotation] -> Phantoms.TTerm [OwlSyntax.ClassExpression] -> Phantoms.TTerm OwlSyntax.EquivalentClasses
 equivalentClasses annotations classes =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.EquivalentClasses"),
@@ -2801,7 +2801,7 @@ equivalentClasses annotations classes =
           Core.fieldName = (Core.Name "classes"),
           Core.fieldTerm = (Phantoms.unTTerm classes)}]}))
 
-equivalentClassesAnnotations :: Phantoms.TTerm Syntax.EquivalentClasses -> Phantoms.TTerm [Syntax.Annotation]
+equivalentClassesAnnotations :: Phantoms.TTerm OwlSyntax.EquivalentClasses -> Phantoms.TTerm [OwlSyntax.Annotation]
 equivalentClassesAnnotations x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -2809,7 +2809,7 @@ equivalentClassesAnnotations x =
         Core.projectionField = (Core.Name "annotations")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-equivalentClassesClasses :: Phantoms.TTerm Syntax.EquivalentClasses -> Phantoms.TTerm [Syntax.ClassExpression]
+equivalentClassesClasses :: Phantoms.TTerm OwlSyntax.EquivalentClasses -> Phantoms.TTerm [OwlSyntax.ClassExpression]
 equivalentClassesClasses x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -2817,7 +2817,7 @@ equivalentClassesClasses x =
         Core.projectionField = (Core.Name "classes")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-equivalentClassesWithAnnotations :: Phantoms.TTerm Syntax.EquivalentClasses -> Phantoms.TTerm [Syntax.Annotation] -> Phantoms.TTerm Syntax.EquivalentClasses
+equivalentClassesWithAnnotations :: Phantoms.TTerm OwlSyntax.EquivalentClasses -> Phantoms.TTerm [OwlSyntax.Annotation] -> Phantoms.TTerm OwlSyntax.EquivalentClasses
 equivalentClassesWithAnnotations original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.EquivalentClasses"),
@@ -2833,7 +2833,7 @@ equivalentClassesWithAnnotations original newVal =
               Core.projectionField = (Core.Name "classes")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-equivalentClassesWithClasses :: Phantoms.TTerm Syntax.EquivalentClasses -> Phantoms.TTerm [Syntax.ClassExpression] -> Phantoms.TTerm Syntax.EquivalentClasses
+equivalentClassesWithClasses :: Phantoms.TTerm OwlSyntax.EquivalentClasses -> Phantoms.TTerm [OwlSyntax.ClassExpression] -> Phantoms.TTerm OwlSyntax.EquivalentClasses
 equivalentClassesWithClasses original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.EquivalentClasses"),
@@ -2849,7 +2849,7 @@ equivalentClassesWithClasses original newVal =
           Core.fieldName = (Core.Name "classes"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-equivalentDataProperties :: Phantoms.TTerm [Syntax.Annotation] -> Phantoms.TTerm [Syntax.DataPropertyExpression] -> Phantoms.TTerm Syntax.EquivalentDataProperties
+equivalentDataProperties :: Phantoms.TTerm [OwlSyntax.Annotation] -> Phantoms.TTerm [OwlSyntax.DataPropertyExpression] -> Phantoms.TTerm OwlSyntax.EquivalentDataProperties
 equivalentDataProperties annotations properties =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.EquivalentDataProperties"),
@@ -2861,7 +2861,7 @@ equivalentDataProperties annotations properties =
           Core.fieldName = (Core.Name "properties"),
           Core.fieldTerm = (Phantoms.unTTerm properties)}]}))
 
-equivalentDataPropertiesAnnotations :: Phantoms.TTerm Syntax.EquivalentDataProperties -> Phantoms.TTerm [Syntax.Annotation]
+equivalentDataPropertiesAnnotations :: Phantoms.TTerm OwlSyntax.EquivalentDataProperties -> Phantoms.TTerm [OwlSyntax.Annotation]
 equivalentDataPropertiesAnnotations x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -2869,7 +2869,7 @@ equivalentDataPropertiesAnnotations x =
         Core.projectionField = (Core.Name "annotations")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-equivalentDataPropertiesProperties :: Phantoms.TTerm Syntax.EquivalentDataProperties -> Phantoms.TTerm [Syntax.DataPropertyExpression]
+equivalentDataPropertiesProperties :: Phantoms.TTerm OwlSyntax.EquivalentDataProperties -> Phantoms.TTerm [OwlSyntax.DataPropertyExpression]
 equivalentDataPropertiesProperties x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -2877,7 +2877,7 @@ equivalentDataPropertiesProperties x =
         Core.projectionField = (Core.Name "properties")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-equivalentDataPropertiesWithAnnotations :: Phantoms.TTerm Syntax.EquivalentDataProperties -> Phantoms.TTerm [Syntax.Annotation] -> Phantoms.TTerm Syntax.EquivalentDataProperties
+equivalentDataPropertiesWithAnnotations :: Phantoms.TTerm OwlSyntax.EquivalentDataProperties -> Phantoms.TTerm [OwlSyntax.Annotation] -> Phantoms.TTerm OwlSyntax.EquivalentDataProperties
 equivalentDataPropertiesWithAnnotations original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.EquivalentDataProperties"),
@@ -2893,7 +2893,7 @@ equivalentDataPropertiesWithAnnotations original newVal =
               Core.projectionField = (Core.Name "properties")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-equivalentDataPropertiesWithProperties :: Phantoms.TTerm Syntax.EquivalentDataProperties -> Phantoms.TTerm [Syntax.DataPropertyExpression] -> Phantoms.TTerm Syntax.EquivalentDataProperties
+equivalentDataPropertiesWithProperties :: Phantoms.TTerm OwlSyntax.EquivalentDataProperties -> Phantoms.TTerm [OwlSyntax.DataPropertyExpression] -> Phantoms.TTerm OwlSyntax.EquivalentDataProperties
 equivalentDataPropertiesWithProperties original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.EquivalentDataProperties"),
@@ -2909,7 +2909,7 @@ equivalentDataPropertiesWithProperties original newVal =
           Core.fieldName = (Core.Name "properties"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-equivalentObjectProperties :: Phantoms.TTerm [Syntax.Annotation] -> Phantoms.TTerm [Syntax.ObjectPropertyExpression] -> Phantoms.TTerm Syntax.EquivalentObjectProperties
+equivalentObjectProperties :: Phantoms.TTerm [OwlSyntax.Annotation] -> Phantoms.TTerm [OwlSyntax.ObjectPropertyExpression] -> Phantoms.TTerm OwlSyntax.EquivalentObjectProperties
 equivalentObjectProperties annotations properties =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.EquivalentObjectProperties"),
@@ -2921,7 +2921,7 @@ equivalentObjectProperties annotations properties =
           Core.fieldName = (Core.Name "properties"),
           Core.fieldTerm = (Phantoms.unTTerm properties)}]}))
 
-equivalentObjectPropertiesAnnotations :: Phantoms.TTerm Syntax.EquivalentObjectProperties -> Phantoms.TTerm [Syntax.Annotation]
+equivalentObjectPropertiesAnnotations :: Phantoms.TTerm OwlSyntax.EquivalentObjectProperties -> Phantoms.TTerm [OwlSyntax.Annotation]
 equivalentObjectPropertiesAnnotations x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -2929,7 +2929,7 @@ equivalentObjectPropertiesAnnotations x =
         Core.projectionField = (Core.Name "annotations")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-equivalentObjectPropertiesProperties :: Phantoms.TTerm Syntax.EquivalentObjectProperties -> Phantoms.TTerm [Syntax.ObjectPropertyExpression]
+equivalentObjectPropertiesProperties :: Phantoms.TTerm OwlSyntax.EquivalentObjectProperties -> Phantoms.TTerm [OwlSyntax.ObjectPropertyExpression]
 equivalentObjectPropertiesProperties x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -2937,7 +2937,7 @@ equivalentObjectPropertiesProperties x =
         Core.projectionField = (Core.Name "properties")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-equivalentObjectPropertiesWithAnnotations :: Phantoms.TTerm Syntax.EquivalentObjectProperties -> Phantoms.TTerm [Syntax.Annotation] -> Phantoms.TTerm Syntax.EquivalentObjectProperties
+equivalentObjectPropertiesWithAnnotations :: Phantoms.TTerm OwlSyntax.EquivalentObjectProperties -> Phantoms.TTerm [OwlSyntax.Annotation] -> Phantoms.TTerm OwlSyntax.EquivalentObjectProperties
 equivalentObjectPropertiesWithAnnotations original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.EquivalentObjectProperties"),
@@ -2953,7 +2953,7 @@ equivalentObjectPropertiesWithAnnotations original newVal =
               Core.projectionField = (Core.Name "properties")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-equivalentObjectPropertiesWithProperties :: Phantoms.TTerm Syntax.EquivalentObjectProperties -> Phantoms.TTerm [Syntax.ObjectPropertyExpression] -> Phantoms.TTerm Syntax.EquivalentObjectProperties
+equivalentObjectPropertiesWithProperties :: Phantoms.TTerm OwlSyntax.EquivalentObjectProperties -> Phantoms.TTerm [OwlSyntax.ObjectPropertyExpression] -> Phantoms.TTerm OwlSyntax.EquivalentObjectProperties
 equivalentObjectPropertiesWithProperties original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.EquivalentObjectProperties"),
@@ -2969,7 +2969,7 @@ equivalentObjectPropertiesWithProperties original newVal =
           Core.fieldName = (Core.Name "properties"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-functionalDataProperty :: Phantoms.TTerm [Syntax.Annotation] -> Phantoms.TTerm Syntax.DataPropertyExpression -> Phantoms.TTerm Syntax.FunctionalDataProperty
+functionalDataProperty :: Phantoms.TTerm [OwlSyntax.Annotation] -> Phantoms.TTerm OwlSyntax.DataPropertyExpression -> Phantoms.TTerm OwlSyntax.FunctionalDataProperty
 functionalDataProperty annotations property =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.FunctionalDataProperty"),
@@ -2981,7 +2981,7 @@ functionalDataProperty annotations property =
           Core.fieldName = (Core.Name "property"),
           Core.fieldTerm = (Phantoms.unTTerm property)}]}))
 
-functionalDataPropertyAnnotations :: Phantoms.TTerm Syntax.FunctionalDataProperty -> Phantoms.TTerm [Syntax.Annotation]
+functionalDataPropertyAnnotations :: Phantoms.TTerm OwlSyntax.FunctionalDataProperty -> Phantoms.TTerm [OwlSyntax.Annotation]
 functionalDataPropertyAnnotations x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -2989,7 +2989,7 @@ functionalDataPropertyAnnotations x =
         Core.projectionField = (Core.Name "annotations")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-functionalDataPropertyProperty :: Phantoms.TTerm Syntax.FunctionalDataProperty -> Phantoms.TTerm Syntax.DataPropertyExpression
+functionalDataPropertyProperty :: Phantoms.TTerm OwlSyntax.FunctionalDataProperty -> Phantoms.TTerm OwlSyntax.DataPropertyExpression
 functionalDataPropertyProperty x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -2997,7 +2997,7 @@ functionalDataPropertyProperty x =
         Core.projectionField = (Core.Name "property")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-functionalDataPropertyWithAnnotations :: Phantoms.TTerm Syntax.FunctionalDataProperty -> Phantoms.TTerm [Syntax.Annotation] -> Phantoms.TTerm Syntax.FunctionalDataProperty
+functionalDataPropertyWithAnnotations :: Phantoms.TTerm OwlSyntax.FunctionalDataProperty -> Phantoms.TTerm [OwlSyntax.Annotation] -> Phantoms.TTerm OwlSyntax.FunctionalDataProperty
 functionalDataPropertyWithAnnotations original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.FunctionalDataProperty"),
@@ -3013,7 +3013,7 @@ functionalDataPropertyWithAnnotations original newVal =
               Core.projectionField = (Core.Name "property")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-functionalDataPropertyWithProperty :: Phantoms.TTerm Syntax.FunctionalDataProperty -> Phantoms.TTerm Syntax.DataPropertyExpression -> Phantoms.TTerm Syntax.FunctionalDataProperty
+functionalDataPropertyWithProperty :: Phantoms.TTerm OwlSyntax.FunctionalDataProperty -> Phantoms.TTerm OwlSyntax.DataPropertyExpression -> Phantoms.TTerm OwlSyntax.FunctionalDataProperty
 functionalDataPropertyWithProperty original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.FunctionalDataProperty"),
@@ -3029,7 +3029,7 @@ functionalDataPropertyWithProperty original newVal =
           Core.fieldName = (Core.Name "property"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-functionalObjectProperty :: Phantoms.TTerm [Syntax.Annotation] -> Phantoms.TTerm Syntax.ObjectPropertyExpression -> Phantoms.TTerm Syntax.FunctionalObjectProperty
+functionalObjectProperty :: Phantoms.TTerm [OwlSyntax.Annotation] -> Phantoms.TTerm OwlSyntax.ObjectPropertyExpression -> Phantoms.TTerm OwlSyntax.FunctionalObjectProperty
 functionalObjectProperty annotations property =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.FunctionalObjectProperty"),
@@ -3041,7 +3041,7 @@ functionalObjectProperty annotations property =
           Core.fieldName = (Core.Name "property"),
           Core.fieldTerm = (Phantoms.unTTerm property)}]}))
 
-functionalObjectPropertyAnnotations :: Phantoms.TTerm Syntax.FunctionalObjectProperty -> Phantoms.TTerm [Syntax.Annotation]
+functionalObjectPropertyAnnotations :: Phantoms.TTerm OwlSyntax.FunctionalObjectProperty -> Phantoms.TTerm [OwlSyntax.Annotation]
 functionalObjectPropertyAnnotations x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -3049,7 +3049,7 @@ functionalObjectPropertyAnnotations x =
         Core.projectionField = (Core.Name "annotations")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-functionalObjectPropertyProperty :: Phantoms.TTerm Syntax.FunctionalObjectProperty -> Phantoms.TTerm Syntax.ObjectPropertyExpression
+functionalObjectPropertyProperty :: Phantoms.TTerm OwlSyntax.FunctionalObjectProperty -> Phantoms.TTerm OwlSyntax.ObjectPropertyExpression
 functionalObjectPropertyProperty x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -3057,7 +3057,7 @@ functionalObjectPropertyProperty x =
         Core.projectionField = (Core.Name "property")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-functionalObjectPropertyWithAnnotations :: Phantoms.TTerm Syntax.FunctionalObjectProperty -> Phantoms.TTerm [Syntax.Annotation] -> Phantoms.TTerm Syntax.FunctionalObjectProperty
+functionalObjectPropertyWithAnnotations :: Phantoms.TTerm OwlSyntax.FunctionalObjectProperty -> Phantoms.TTerm [OwlSyntax.Annotation] -> Phantoms.TTerm OwlSyntax.FunctionalObjectProperty
 functionalObjectPropertyWithAnnotations original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.FunctionalObjectProperty"),
@@ -3073,7 +3073,7 @@ functionalObjectPropertyWithAnnotations original newVal =
               Core.projectionField = (Core.Name "property")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-functionalObjectPropertyWithProperty :: Phantoms.TTerm Syntax.FunctionalObjectProperty -> Phantoms.TTerm Syntax.ObjectPropertyExpression -> Phantoms.TTerm Syntax.FunctionalObjectProperty
+functionalObjectPropertyWithProperty :: Phantoms.TTerm OwlSyntax.FunctionalObjectProperty -> Phantoms.TTerm OwlSyntax.ObjectPropertyExpression -> Phantoms.TTerm OwlSyntax.FunctionalObjectProperty
 functionalObjectPropertyWithProperty original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.FunctionalObjectProperty"),
@@ -3089,7 +3089,7 @@ functionalObjectPropertyWithProperty original newVal =
           Core.fieldName = (Core.Name "property"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-hasKey :: Phantoms.TTerm [Syntax.Annotation] -> Phantoms.TTerm Syntax.ClassExpression -> Phantoms.TTerm [Syntax.ObjectPropertyExpression] -> Phantoms.TTerm [Syntax.DataPropertyExpression] -> Phantoms.TTerm Syntax.HasKey
+hasKey :: Phantoms.TTerm [OwlSyntax.Annotation] -> Phantoms.TTerm OwlSyntax.ClassExpression -> Phantoms.TTerm [OwlSyntax.ObjectPropertyExpression] -> Phantoms.TTerm [OwlSyntax.DataPropertyExpression] -> Phantoms.TTerm OwlSyntax.HasKey
 hasKey annotations class_ objectProperties dataProperties =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.HasKey"),
@@ -3107,7 +3107,7 @@ hasKey annotations class_ objectProperties dataProperties =
           Core.fieldName = (Core.Name "dataProperties"),
           Core.fieldTerm = (Phantoms.unTTerm dataProperties)}]}))
 
-hasKeyAnnotations :: Phantoms.TTerm Syntax.HasKey -> Phantoms.TTerm [Syntax.Annotation]
+hasKeyAnnotations :: Phantoms.TTerm OwlSyntax.HasKey -> Phantoms.TTerm [OwlSyntax.Annotation]
 hasKeyAnnotations x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -3115,7 +3115,7 @@ hasKeyAnnotations x =
         Core.projectionField = (Core.Name "annotations")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-hasKeyClass :: Phantoms.TTerm Syntax.HasKey -> Phantoms.TTerm Syntax.ClassExpression
+hasKeyClass :: Phantoms.TTerm OwlSyntax.HasKey -> Phantoms.TTerm OwlSyntax.ClassExpression
 hasKeyClass x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -3123,7 +3123,7 @@ hasKeyClass x =
         Core.projectionField = (Core.Name "class")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-hasKeyDataProperties :: Phantoms.TTerm Syntax.HasKey -> Phantoms.TTerm [Syntax.DataPropertyExpression]
+hasKeyDataProperties :: Phantoms.TTerm OwlSyntax.HasKey -> Phantoms.TTerm [OwlSyntax.DataPropertyExpression]
 hasKeyDataProperties x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -3131,7 +3131,7 @@ hasKeyDataProperties x =
         Core.projectionField = (Core.Name "dataProperties")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-hasKeyObjectProperties :: Phantoms.TTerm Syntax.HasKey -> Phantoms.TTerm [Syntax.ObjectPropertyExpression]
+hasKeyObjectProperties :: Phantoms.TTerm OwlSyntax.HasKey -> Phantoms.TTerm [OwlSyntax.ObjectPropertyExpression]
 hasKeyObjectProperties x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -3139,7 +3139,7 @@ hasKeyObjectProperties x =
         Core.projectionField = (Core.Name "objectProperties")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-hasKeyWithAnnotations :: Phantoms.TTerm Syntax.HasKey -> Phantoms.TTerm [Syntax.Annotation] -> Phantoms.TTerm Syntax.HasKey
+hasKeyWithAnnotations :: Phantoms.TTerm OwlSyntax.HasKey -> Phantoms.TTerm [OwlSyntax.Annotation] -> Phantoms.TTerm OwlSyntax.HasKey
 hasKeyWithAnnotations original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.HasKey"),
@@ -3169,7 +3169,7 @@ hasKeyWithAnnotations original newVal =
               Core.projectionField = (Core.Name "dataProperties")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-hasKeyWithClass :: Phantoms.TTerm Syntax.HasKey -> Phantoms.TTerm Syntax.ClassExpression -> Phantoms.TTerm Syntax.HasKey
+hasKeyWithClass :: Phantoms.TTerm OwlSyntax.HasKey -> Phantoms.TTerm OwlSyntax.ClassExpression -> Phantoms.TTerm OwlSyntax.HasKey
 hasKeyWithClass original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.HasKey"),
@@ -3199,7 +3199,7 @@ hasKeyWithClass original newVal =
               Core.projectionField = (Core.Name "dataProperties")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-hasKeyWithDataProperties :: Phantoms.TTerm Syntax.HasKey -> Phantoms.TTerm [Syntax.DataPropertyExpression] -> Phantoms.TTerm Syntax.HasKey
+hasKeyWithDataProperties :: Phantoms.TTerm OwlSyntax.HasKey -> Phantoms.TTerm [OwlSyntax.DataPropertyExpression] -> Phantoms.TTerm OwlSyntax.HasKey
 hasKeyWithDataProperties original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.HasKey"),
@@ -3229,7 +3229,7 @@ hasKeyWithDataProperties original newVal =
           Core.fieldName = (Core.Name "dataProperties"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-hasKeyWithObjectProperties :: Phantoms.TTerm Syntax.HasKey -> Phantoms.TTerm [Syntax.ObjectPropertyExpression] -> Phantoms.TTerm Syntax.HasKey
+hasKeyWithObjectProperties :: Phantoms.TTerm OwlSyntax.HasKey -> Phantoms.TTerm [OwlSyntax.ObjectPropertyExpression] -> Phantoms.TTerm OwlSyntax.HasKey
 hasKeyWithObjectProperties original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.HasKey"),
@@ -3259,7 +3259,7 @@ hasKeyWithObjectProperties original newVal =
               Core.projectionField = (Core.Name "dataProperties")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-individualAnonymous :: Phantoms.TTerm Syntax.AnonymousIndividual -> Phantoms.TTerm Syntax.Individual
+individualAnonymous :: Phantoms.TTerm OwlSyntax.AnonymousIndividual -> Phantoms.TTerm OwlSyntax.Individual
 individualAnonymous x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.Individual"),
@@ -3267,7 +3267,7 @@ individualAnonymous x =
         Core.fieldName = (Core.Name "anonymous"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-individualNamed :: Phantoms.TTerm Syntax.NamedIndividual -> Phantoms.TTerm Syntax.Individual
+individualNamed :: Phantoms.TTerm OwlSyntax.NamedIndividual -> Phantoms.TTerm OwlSyntax.Individual
 individualNamed x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.Individual"),
@@ -3275,7 +3275,7 @@ individualNamed x =
         Core.fieldName = (Core.Name "named"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-inverseFunctionalObjectProperty :: Phantoms.TTerm [Syntax.Annotation] -> Phantoms.TTerm Syntax.ObjectPropertyExpression -> Phantoms.TTerm Syntax.InverseFunctionalObjectProperty
+inverseFunctionalObjectProperty :: Phantoms.TTerm [OwlSyntax.Annotation] -> Phantoms.TTerm OwlSyntax.ObjectPropertyExpression -> Phantoms.TTerm OwlSyntax.InverseFunctionalObjectProperty
 inverseFunctionalObjectProperty annotations property =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.InverseFunctionalObjectProperty"),
@@ -3287,7 +3287,7 @@ inverseFunctionalObjectProperty annotations property =
           Core.fieldName = (Core.Name "property"),
           Core.fieldTerm = (Phantoms.unTTerm property)}]}))
 
-inverseFunctionalObjectPropertyAnnotations :: Phantoms.TTerm Syntax.InverseFunctionalObjectProperty -> Phantoms.TTerm [Syntax.Annotation]
+inverseFunctionalObjectPropertyAnnotations :: Phantoms.TTerm OwlSyntax.InverseFunctionalObjectProperty -> Phantoms.TTerm [OwlSyntax.Annotation]
 inverseFunctionalObjectPropertyAnnotations x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -3295,7 +3295,7 @@ inverseFunctionalObjectPropertyAnnotations x =
         Core.projectionField = (Core.Name "annotations")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-inverseFunctionalObjectPropertyProperty :: Phantoms.TTerm Syntax.InverseFunctionalObjectProperty -> Phantoms.TTerm Syntax.ObjectPropertyExpression
+inverseFunctionalObjectPropertyProperty :: Phantoms.TTerm OwlSyntax.InverseFunctionalObjectProperty -> Phantoms.TTerm OwlSyntax.ObjectPropertyExpression
 inverseFunctionalObjectPropertyProperty x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -3303,7 +3303,7 @@ inverseFunctionalObjectPropertyProperty x =
         Core.projectionField = (Core.Name "property")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-inverseFunctionalObjectPropertyWithAnnotations :: Phantoms.TTerm Syntax.InverseFunctionalObjectProperty -> Phantoms.TTerm [Syntax.Annotation] -> Phantoms.TTerm Syntax.InverseFunctionalObjectProperty
+inverseFunctionalObjectPropertyWithAnnotations :: Phantoms.TTerm OwlSyntax.InverseFunctionalObjectProperty -> Phantoms.TTerm [OwlSyntax.Annotation] -> Phantoms.TTerm OwlSyntax.InverseFunctionalObjectProperty
 inverseFunctionalObjectPropertyWithAnnotations original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.InverseFunctionalObjectProperty"),
@@ -3319,7 +3319,7 @@ inverseFunctionalObjectPropertyWithAnnotations original newVal =
               Core.projectionField = (Core.Name "property")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-inverseFunctionalObjectPropertyWithProperty :: Phantoms.TTerm Syntax.InverseFunctionalObjectProperty -> Phantoms.TTerm Syntax.ObjectPropertyExpression -> Phantoms.TTerm Syntax.InverseFunctionalObjectProperty
+inverseFunctionalObjectPropertyWithProperty :: Phantoms.TTerm OwlSyntax.InverseFunctionalObjectProperty -> Phantoms.TTerm OwlSyntax.ObjectPropertyExpression -> Phantoms.TTerm OwlSyntax.InverseFunctionalObjectProperty
 inverseFunctionalObjectPropertyWithProperty original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.InverseFunctionalObjectProperty"),
@@ -3335,7 +3335,7 @@ inverseFunctionalObjectPropertyWithProperty original newVal =
           Core.fieldName = (Core.Name "property"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-inverseObjectProperties :: Phantoms.TTerm [Syntax.Annotation] -> Phantoms.TTerm Syntax.ObjectPropertyExpression -> Phantoms.TTerm Syntax.ObjectPropertyExpression -> Phantoms.TTerm Syntax.InverseObjectProperties
+inverseObjectProperties :: Phantoms.TTerm [OwlSyntax.Annotation] -> Phantoms.TTerm OwlSyntax.ObjectPropertyExpression -> Phantoms.TTerm OwlSyntax.ObjectPropertyExpression -> Phantoms.TTerm OwlSyntax.InverseObjectProperties
 inverseObjectProperties annotations property1 property2 =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.InverseObjectProperties"),
@@ -3350,7 +3350,7 @@ inverseObjectProperties annotations property1 property2 =
           Core.fieldName = (Core.Name "property2"),
           Core.fieldTerm = (Phantoms.unTTerm property2)}]}))
 
-inverseObjectPropertiesAnnotations :: Phantoms.TTerm Syntax.InverseObjectProperties -> Phantoms.TTerm [Syntax.Annotation]
+inverseObjectPropertiesAnnotations :: Phantoms.TTerm OwlSyntax.InverseObjectProperties -> Phantoms.TTerm [OwlSyntax.Annotation]
 inverseObjectPropertiesAnnotations x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -3358,7 +3358,7 @@ inverseObjectPropertiesAnnotations x =
         Core.projectionField = (Core.Name "annotations")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-inverseObjectPropertiesProperty1 :: Phantoms.TTerm Syntax.InverseObjectProperties -> Phantoms.TTerm Syntax.ObjectPropertyExpression
+inverseObjectPropertiesProperty1 :: Phantoms.TTerm OwlSyntax.InverseObjectProperties -> Phantoms.TTerm OwlSyntax.ObjectPropertyExpression
 inverseObjectPropertiesProperty1 x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -3366,7 +3366,7 @@ inverseObjectPropertiesProperty1 x =
         Core.projectionField = (Core.Name "property1")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-inverseObjectPropertiesProperty2 :: Phantoms.TTerm Syntax.InverseObjectProperties -> Phantoms.TTerm Syntax.ObjectPropertyExpression
+inverseObjectPropertiesProperty2 :: Phantoms.TTerm OwlSyntax.InverseObjectProperties -> Phantoms.TTerm OwlSyntax.ObjectPropertyExpression
 inverseObjectPropertiesProperty2 x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -3374,7 +3374,7 @@ inverseObjectPropertiesProperty2 x =
         Core.projectionField = (Core.Name "property2")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-inverseObjectPropertiesWithAnnotations :: Phantoms.TTerm Syntax.InverseObjectProperties -> Phantoms.TTerm [Syntax.Annotation] -> Phantoms.TTerm Syntax.InverseObjectProperties
+inverseObjectPropertiesWithAnnotations :: Phantoms.TTerm OwlSyntax.InverseObjectProperties -> Phantoms.TTerm [OwlSyntax.Annotation] -> Phantoms.TTerm OwlSyntax.InverseObjectProperties
 inverseObjectPropertiesWithAnnotations original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.InverseObjectProperties"),
@@ -3397,7 +3397,7 @@ inverseObjectPropertiesWithAnnotations original newVal =
               Core.projectionField = (Core.Name "property2")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-inverseObjectPropertiesWithProperty1 :: Phantoms.TTerm Syntax.InverseObjectProperties -> Phantoms.TTerm Syntax.ObjectPropertyExpression -> Phantoms.TTerm Syntax.InverseObjectProperties
+inverseObjectPropertiesWithProperty1 :: Phantoms.TTerm OwlSyntax.InverseObjectProperties -> Phantoms.TTerm OwlSyntax.ObjectPropertyExpression -> Phantoms.TTerm OwlSyntax.InverseObjectProperties
 inverseObjectPropertiesWithProperty1 original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.InverseObjectProperties"),
@@ -3420,7 +3420,7 @@ inverseObjectPropertiesWithProperty1 original newVal =
               Core.projectionField = (Core.Name "property2")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-inverseObjectPropertiesWithProperty2 :: Phantoms.TTerm Syntax.InverseObjectProperties -> Phantoms.TTerm Syntax.ObjectPropertyExpression -> Phantoms.TTerm Syntax.InverseObjectProperties
+inverseObjectPropertiesWithProperty2 :: Phantoms.TTerm OwlSyntax.InverseObjectProperties -> Phantoms.TTerm OwlSyntax.ObjectPropertyExpression -> Phantoms.TTerm OwlSyntax.InverseObjectProperties
 inverseObjectPropertiesWithProperty2 original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.InverseObjectProperties"),
@@ -3443,13 +3443,13 @@ inverseObjectPropertiesWithProperty2 original newVal =
           Core.fieldName = (Core.Name "property2"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-inverseObjectProperty :: Phantoms.TTerm Syntax.ObjectProperty -> Phantoms.TTerm Syntax.InverseObjectProperty
+inverseObjectProperty :: Phantoms.TTerm OwlSyntax.ObjectProperty -> Phantoms.TTerm OwlSyntax.InverseObjectProperty
 inverseObjectProperty x =
     Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.owl.syntax.InverseObjectProperty"),
       Core.wrappedTermBody = (Phantoms.unTTerm x)}))
 
-irreflexiveObjectProperty :: Phantoms.TTerm [Syntax.Annotation] -> Phantoms.TTerm Syntax.ObjectPropertyExpression -> Phantoms.TTerm Syntax.IrreflexiveObjectProperty
+irreflexiveObjectProperty :: Phantoms.TTerm [OwlSyntax.Annotation] -> Phantoms.TTerm OwlSyntax.ObjectPropertyExpression -> Phantoms.TTerm OwlSyntax.IrreflexiveObjectProperty
 irreflexiveObjectProperty annotations property =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.IrreflexiveObjectProperty"),
@@ -3461,7 +3461,7 @@ irreflexiveObjectProperty annotations property =
           Core.fieldName = (Core.Name "property"),
           Core.fieldTerm = (Phantoms.unTTerm property)}]}))
 
-irreflexiveObjectPropertyAnnotations :: Phantoms.TTerm Syntax.IrreflexiveObjectProperty -> Phantoms.TTerm [Syntax.Annotation]
+irreflexiveObjectPropertyAnnotations :: Phantoms.TTerm OwlSyntax.IrreflexiveObjectProperty -> Phantoms.TTerm [OwlSyntax.Annotation]
 irreflexiveObjectPropertyAnnotations x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -3469,7 +3469,7 @@ irreflexiveObjectPropertyAnnotations x =
         Core.projectionField = (Core.Name "annotations")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-irreflexiveObjectPropertyProperty :: Phantoms.TTerm Syntax.IrreflexiveObjectProperty -> Phantoms.TTerm Syntax.ObjectPropertyExpression
+irreflexiveObjectPropertyProperty :: Phantoms.TTerm OwlSyntax.IrreflexiveObjectProperty -> Phantoms.TTerm OwlSyntax.ObjectPropertyExpression
 irreflexiveObjectPropertyProperty x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -3477,7 +3477,7 @@ irreflexiveObjectPropertyProperty x =
         Core.projectionField = (Core.Name "property")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-irreflexiveObjectPropertyWithAnnotations :: Phantoms.TTerm Syntax.IrreflexiveObjectProperty -> Phantoms.TTerm [Syntax.Annotation] -> Phantoms.TTerm Syntax.IrreflexiveObjectProperty
+irreflexiveObjectPropertyWithAnnotations :: Phantoms.TTerm OwlSyntax.IrreflexiveObjectProperty -> Phantoms.TTerm [OwlSyntax.Annotation] -> Phantoms.TTerm OwlSyntax.IrreflexiveObjectProperty
 irreflexiveObjectPropertyWithAnnotations original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.IrreflexiveObjectProperty"),
@@ -3493,7 +3493,7 @@ irreflexiveObjectPropertyWithAnnotations original newVal =
               Core.projectionField = (Core.Name "property")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-irreflexiveObjectPropertyWithProperty :: Phantoms.TTerm Syntax.IrreflexiveObjectProperty -> Phantoms.TTerm Syntax.ObjectPropertyExpression -> Phantoms.TTerm Syntax.IrreflexiveObjectProperty
+irreflexiveObjectPropertyWithProperty :: Phantoms.TTerm OwlSyntax.IrreflexiveObjectProperty -> Phantoms.TTerm OwlSyntax.ObjectPropertyExpression -> Phantoms.TTerm OwlSyntax.IrreflexiveObjectProperty
 irreflexiveObjectPropertyWithProperty original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.IrreflexiveObjectProperty"),
@@ -3509,13 +3509,13 @@ irreflexiveObjectPropertyWithProperty original newVal =
           Core.fieldName = (Core.Name "property"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-namedIndividual :: Phantoms.TTerm () -> Phantoms.TTerm Syntax.NamedIndividual
+namedIndividual :: Phantoms.TTerm () -> Phantoms.TTerm OwlSyntax.NamedIndividual
 namedIndividual x =
     Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.owl.syntax.NamedIndividual"),
       Core.wrappedTermBody = (Phantoms.unTTerm x)}))
 
-negativeDataPropertyAssertion :: Phantoms.TTerm [Syntax.Annotation] -> Phantoms.TTerm Syntax.DataPropertyExpression -> Phantoms.TTerm Syntax.Individual -> Phantoms.TTerm Syntax.Individual -> Phantoms.TTerm Syntax.NegativeDataPropertyAssertion
+negativeDataPropertyAssertion :: Phantoms.TTerm [OwlSyntax.Annotation] -> Phantoms.TTerm OwlSyntax.DataPropertyExpression -> Phantoms.TTerm OwlSyntax.Individual -> Phantoms.TTerm OwlSyntax.Individual -> Phantoms.TTerm OwlSyntax.NegativeDataPropertyAssertion
 negativeDataPropertyAssertion annotations property source target =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.NegativeDataPropertyAssertion"),
@@ -3533,7 +3533,7 @@ negativeDataPropertyAssertion annotations property source target =
           Core.fieldName = (Core.Name "target"),
           Core.fieldTerm = (Phantoms.unTTerm target)}]}))
 
-negativeDataPropertyAssertionAnnotations :: Phantoms.TTerm Syntax.NegativeDataPropertyAssertion -> Phantoms.TTerm [Syntax.Annotation]
+negativeDataPropertyAssertionAnnotations :: Phantoms.TTerm OwlSyntax.NegativeDataPropertyAssertion -> Phantoms.TTerm [OwlSyntax.Annotation]
 negativeDataPropertyAssertionAnnotations x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -3541,7 +3541,7 @@ negativeDataPropertyAssertionAnnotations x =
         Core.projectionField = (Core.Name "annotations")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-negativeDataPropertyAssertionProperty :: Phantoms.TTerm Syntax.NegativeDataPropertyAssertion -> Phantoms.TTerm Syntax.DataPropertyExpression
+negativeDataPropertyAssertionProperty :: Phantoms.TTerm OwlSyntax.NegativeDataPropertyAssertion -> Phantoms.TTerm OwlSyntax.DataPropertyExpression
 negativeDataPropertyAssertionProperty x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -3549,7 +3549,7 @@ negativeDataPropertyAssertionProperty x =
         Core.projectionField = (Core.Name "property")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-negativeDataPropertyAssertionSource :: Phantoms.TTerm Syntax.NegativeDataPropertyAssertion -> Phantoms.TTerm Syntax.Individual
+negativeDataPropertyAssertionSource :: Phantoms.TTerm OwlSyntax.NegativeDataPropertyAssertion -> Phantoms.TTerm OwlSyntax.Individual
 negativeDataPropertyAssertionSource x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -3557,7 +3557,7 @@ negativeDataPropertyAssertionSource x =
         Core.projectionField = (Core.Name "source")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-negativeDataPropertyAssertionTarget :: Phantoms.TTerm Syntax.NegativeDataPropertyAssertion -> Phantoms.TTerm Syntax.Individual
+negativeDataPropertyAssertionTarget :: Phantoms.TTerm OwlSyntax.NegativeDataPropertyAssertion -> Phantoms.TTerm OwlSyntax.Individual
 negativeDataPropertyAssertionTarget x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -3565,7 +3565,7 @@ negativeDataPropertyAssertionTarget x =
         Core.projectionField = (Core.Name "target")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-negativeDataPropertyAssertionWithAnnotations :: Phantoms.TTerm Syntax.NegativeDataPropertyAssertion -> Phantoms.TTerm [Syntax.Annotation] -> Phantoms.TTerm Syntax.NegativeDataPropertyAssertion
+negativeDataPropertyAssertionWithAnnotations :: Phantoms.TTerm OwlSyntax.NegativeDataPropertyAssertion -> Phantoms.TTerm [OwlSyntax.Annotation] -> Phantoms.TTerm OwlSyntax.NegativeDataPropertyAssertion
 negativeDataPropertyAssertionWithAnnotations original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.NegativeDataPropertyAssertion"),
@@ -3595,7 +3595,7 @@ negativeDataPropertyAssertionWithAnnotations original newVal =
               Core.projectionField = (Core.Name "target")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-negativeDataPropertyAssertionWithProperty :: Phantoms.TTerm Syntax.NegativeDataPropertyAssertion -> Phantoms.TTerm Syntax.DataPropertyExpression -> Phantoms.TTerm Syntax.NegativeDataPropertyAssertion
+negativeDataPropertyAssertionWithProperty :: Phantoms.TTerm OwlSyntax.NegativeDataPropertyAssertion -> Phantoms.TTerm OwlSyntax.DataPropertyExpression -> Phantoms.TTerm OwlSyntax.NegativeDataPropertyAssertion
 negativeDataPropertyAssertionWithProperty original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.NegativeDataPropertyAssertion"),
@@ -3625,7 +3625,7 @@ negativeDataPropertyAssertionWithProperty original newVal =
               Core.projectionField = (Core.Name "target")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-negativeDataPropertyAssertionWithSource :: Phantoms.TTerm Syntax.NegativeDataPropertyAssertion -> Phantoms.TTerm Syntax.Individual -> Phantoms.TTerm Syntax.NegativeDataPropertyAssertion
+negativeDataPropertyAssertionWithSource :: Phantoms.TTerm OwlSyntax.NegativeDataPropertyAssertion -> Phantoms.TTerm OwlSyntax.Individual -> Phantoms.TTerm OwlSyntax.NegativeDataPropertyAssertion
 negativeDataPropertyAssertionWithSource original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.NegativeDataPropertyAssertion"),
@@ -3655,7 +3655,7 @@ negativeDataPropertyAssertionWithSource original newVal =
               Core.projectionField = (Core.Name "target")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-negativeDataPropertyAssertionWithTarget :: Phantoms.TTerm Syntax.NegativeDataPropertyAssertion -> Phantoms.TTerm Syntax.Individual -> Phantoms.TTerm Syntax.NegativeDataPropertyAssertion
+negativeDataPropertyAssertionWithTarget :: Phantoms.TTerm OwlSyntax.NegativeDataPropertyAssertion -> Phantoms.TTerm OwlSyntax.Individual -> Phantoms.TTerm OwlSyntax.NegativeDataPropertyAssertion
 negativeDataPropertyAssertionWithTarget original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.NegativeDataPropertyAssertion"),
@@ -3685,7 +3685,7 @@ negativeDataPropertyAssertionWithTarget original newVal =
           Core.fieldName = (Core.Name "target"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-negativeObjectPropertyAssertion :: Phantoms.TTerm [Syntax.Annotation] -> Phantoms.TTerm Syntax.ObjectPropertyExpression -> Phantoms.TTerm Syntax.Individual -> Phantoms.TTerm Syntax.Individual -> Phantoms.TTerm Syntax.NegativeObjectPropertyAssertion
+negativeObjectPropertyAssertion :: Phantoms.TTerm [OwlSyntax.Annotation] -> Phantoms.TTerm OwlSyntax.ObjectPropertyExpression -> Phantoms.TTerm OwlSyntax.Individual -> Phantoms.TTerm OwlSyntax.Individual -> Phantoms.TTerm OwlSyntax.NegativeObjectPropertyAssertion
 negativeObjectPropertyAssertion annotations property source target =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.NegativeObjectPropertyAssertion"),
@@ -3703,7 +3703,7 @@ negativeObjectPropertyAssertion annotations property source target =
           Core.fieldName = (Core.Name "target"),
           Core.fieldTerm = (Phantoms.unTTerm target)}]}))
 
-negativeObjectPropertyAssertionAnnotations :: Phantoms.TTerm Syntax.NegativeObjectPropertyAssertion -> Phantoms.TTerm [Syntax.Annotation]
+negativeObjectPropertyAssertionAnnotations :: Phantoms.TTerm OwlSyntax.NegativeObjectPropertyAssertion -> Phantoms.TTerm [OwlSyntax.Annotation]
 negativeObjectPropertyAssertionAnnotations x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -3711,7 +3711,7 @@ negativeObjectPropertyAssertionAnnotations x =
         Core.projectionField = (Core.Name "annotations")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-negativeObjectPropertyAssertionProperty :: Phantoms.TTerm Syntax.NegativeObjectPropertyAssertion -> Phantoms.TTerm Syntax.ObjectPropertyExpression
+negativeObjectPropertyAssertionProperty :: Phantoms.TTerm OwlSyntax.NegativeObjectPropertyAssertion -> Phantoms.TTerm OwlSyntax.ObjectPropertyExpression
 negativeObjectPropertyAssertionProperty x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -3719,7 +3719,7 @@ negativeObjectPropertyAssertionProperty x =
         Core.projectionField = (Core.Name "property")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-negativeObjectPropertyAssertionSource :: Phantoms.TTerm Syntax.NegativeObjectPropertyAssertion -> Phantoms.TTerm Syntax.Individual
+negativeObjectPropertyAssertionSource :: Phantoms.TTerm OwlSyntax.NegativeObjectPropertyAssertion -> Phantoms.TTerm OwlSyntax.Individual
 negativeObjectPropertyAssertionSource x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -3727,7 +3727,7 @@ negativeObjectPropertyAssertionSource x =
         Core.projectionField = (Core.Name "source")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-negativeObjectPropertyAssertionTarget :: Phantoms.TTerm Syntax.NegativeObjectPropertyAssertion -> Phantoms.TTerm Syntax.Individual
+negativeObjectPropertyAssertionTarget :: Phantoms.TTerm OwlSyntax.NegativeObjectPropertyAssertion -> Phantoms.TTerm OwlSyntax.Individual
 negativeObjectPropertyAssertionTarget x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -3735,7 +3735,7 @@ negativeObjectPropertyAssertionTarget x =
         Core.projectionField = (Core.Name "target")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-negativeObjectPropertyAssertionWithAnnotations :: Phantoms.TTerm Syntax.NegativeObjectPropertyAssertion -> Phantoms.TTerm [Syntax.Annotation] -> Phantoms.TTerm Syntax.NegativeObjectPropertyAssertion
+negativeObjectPropertyAssertionWithAnnotations :: Phantoms.TTerm OwlSyntax.NegativeObjectPropertyAssertion -> Phantoms.TTerm [OwlSyntax.Annotation] -> Phantoms.TTerm OwlSyntax.NegativeObjectPropertyAssertion
 negativeObjectPropertyAssertionWithAnnotations original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.NegativeObjectPropertyAssertion"),
@@ -3765,7 +3765,7 @@ negativeObjectPropertyAssertionWithAnnotations original newVal =
               Core.projectionField = (Core.Name "target")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-negativeObjectPropertyAssertionWithProperty :: Phantoms.TTerm Syntax.NegativeObjectPropertyAssertion -> Phantoms.TTerm Syntax.ObjectPropertyExpression -> Phantoms.TTerm Syntax.NegativeObjectPropertyAssertion
+negativeObjectPropertyAssertionWithProperty :: Phantoms.TTerm OwlSyntax.NegativeObjectPropertyAssertion -> Phantoms.TTerm OwlSyntax.ObjectPropertyExpression -> Phantoms.TTerm OwlSyntax.NegativeObjectPropertyAssertion
 negativeObjectPropertyAssertionWithProperty original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.NegativeObjectPropertyAssertion"),
@@ -3795,7 +3795,7 @@ negativeObjectPropertyAssertionWithProperty original newVal =
               Core.projectionField = (Core.Name "target")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-negativeObjectPropertyAssertionWithSource :: Phantoms.TTerm Syntax.NegativeObjectPropertyAssertion -> Phantoms.TTerm Syntax.Individual -> Phantoms.TTerm Syntax.NegativeObjectPropertyAssertion
+negativeObjectPropertyAssertionWithSource :: Phantoms.TTerm OwlSyntax.NegativeObjectPropertyAssertion -> Phantoms.TTerm OwlSyntax.Individual -> Phantoms.TTerm OwlSyntax.NegativeObjectPropertyAssertion
 negativeObjectPropertyAssertionWithSource original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.NegativeObjectPropertyAssertion"),
@@ -3825,7 +3825,7 @@ negativeObjectPropertyAssertionWithSource original newVal =
               Core.projectionField = (Core.Name "target")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-negativeObjectPropertyAssertionWithTarget :: Phantoms.TTerm Syntax.NegativeObjectPropertyAssertion -> Phantoms.TTerm Syntax.Individual -> Phantoms.TTerm Syntax.NegativeObjectPropertyAssertion
+negativeObjectPropertyAssertionWithTarget :: Phantoms.TTerm OwlSyntax.NegativeObjectPropertyAssertion -> Phantoms.TTerm OwlSyntax.Individual -> Phantoms.TTerm OwlSyntax.NegativeObjectPropertyAssertion
 negativeObjectPropertyAssertionWithTarget original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.NegativeObjectPropertyAssertion"),
@@ -3855,7 +3855,7 @@ negativeObjectPropertyAssertionWithTarget original newVal =
           Core.fieldName = (Core.Name "target"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-objectAllValuesFrom :: Phantoms.TTerm Syntax.ObjectPropertyExpression -> Phantoms.TTerm Syntax.ClassExpression -> Phantoms.TTerm Syntax.ObjectAllValuesFrom
+objectAllValuesFrom :: Phantoms.TTerm OwlSyntax.ObjectPropertyExpression -> Phantoms.TTerm OwlSyntax.ClassExpression -> Phantoms.TTerm OwlSyntax.ObjectAllValuesFrom
 objectAllValuesFrom property class_ =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.ObjectAllValuesFrom"),
@@ -3867,7 +3867,7 @@ objectAllValuesFrom property class_ =
           Core.fieldName = (Core.Name "class"),
           Core.fieldTerm = (Phantoms.unTTerm class_)}]}))
 
-objectAllValuesFromClass :: Phantoms.TTerm Syntax.ObjectAllValuesFrom -> Phantoms.TTerm Syntax.ClassExpression
+objectAllValuesFromClass :: Phantoms.TTerm OwlSyntax.ObjectAllValuesFrom -> Phantoms.TTerm OwlSyntax.ClassExpression
 objectAllValuesFromClass x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -3875,7 +3875,7 @@ objectAllValuesFromClass x =
         Core.projectionField = (Core.Name "class")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-objectAllValuesFromProperty :: Phantoms.TTerm Syntax.ObjectAllValuesFrom -> Phantoms.TTerm Syntax.ObjectPropertyExpression
+objectAllValuesFromProperty :: Phantoms.TTerm OwlSyntax.ObjectAllValuesFrom -> Phantoms.TTerm OwlSyntax.ObjectPropertyExpression
 objectAllValuesFromProperty x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -3883,7 +3883,7 @@ objectAllValuesFromProperty x =
         Core.projectionField = (Core.Name "property")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-objectAllValuesFromWithClass :: Phantoms.TTerm Syntax.ObjectAllValuesFrom -> Phantoms.TTerm Syntax.ClassExpression -> Phantoms.TTerm Syntax.ObjectAllValuesFrom
+objectAllValuesFromWithClass :: Phantoms.TTerm OwlSyntax.ObjectAllValuesFrom -> Phantoms.TTerm OwlSyntax.ClassExpression -> Phantoms.TTerm OwlSyntax.ObjectAllValuesFrom
 objectAllValuesFromWithClass original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.ObjectAllValuesFrom"),
@@ -3899,7 +3899,7 @@ objectAllValuesFromWithClass original newVal =
           Core.fieldName = (Core.Name "class"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-objectAllValuesFromWithProperty :: Phantoms.TTerm Syntax.ObjectAllValuesFrom -> Phantoms.TTerm Syntax.ObjectPropertyExpression -> Phantoms.TTerm Syntax.ObjectAllValuesFrom
+objectAllValuesFromWithProperty :: Phantoms.TTerm OwlSyntax.ObjectAllValuesFrom -> Phantoms.TTerm OwlSyntax.ObjectPropertyExpression -> Phantoms.TTerm OwlSyntax.ObjectAllValuesFrom
 objectAllValuesFromWithProperty original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.ObjectAllValuesFrom"),
@@ -3915,13 +3915,13 @@ objectAllValuesFromWithProperty original newVal =
               Core.projectionField = (Core.Name "class")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-objectComplementOf :: Phantoms.TTerm Syntax.ClassExpression -> Phantoms.TTerm Syntax.ObjectComplementOf
+objectComplementOf :: Phantoms.TTerm OwlSyntax.ClassExpression -> Phantoms.TTerm OwlSyntax.ObjectComplementOf
 objectComplementOf x =
     Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.owl.syntax.ObjectComplementOf"),
       Core.wrappedTermBody = (Phantoms.unTTerm x)}))
 
-objectExactCardinality :: Phantoms.TTerm Integer -> Phantoms.TTerm Syntax.ObjectPropertyExpression -> Phantoms.TTerm [Syntax.ClassExpression] -> Phantoms.TTerm Syntax.ObjectExactCardinality
+objectExactCardinality :: Phantoms.TTerm Integer -> Phantoms.TTerm OwlSyntax.ObjectPropertyExpression -> Phantoms.TTerm [OwlSyntax.ClassExpression] -> Phantoms.TTerm OwlSyntax.ObjectExactCardinality
 objectExactCardinality bound property class_ =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.ObjectExactCardinality"),
@@ -3936,7 +3936,7 @@ objectExactCardinality bound property class_ =
           Core.fieldName = (Core.Name "class"),
           Core.fieldTerm = (Phantoms.unTTerm class_)}]}))
 
-objectExactCardinalityBound :: Phantoms.TTerm Syntax.ObjectExactCardinality -> Phantoms.TTerm Integer
+objectExactCardinalityBound :: Phantoms.TTerm OwlSyntax.ObjectExactCardinality -> Phantoms.TTerm Integer
 objectExactCardinalityBound x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -3944,7 +3944,7 @@ objectExactCardinalityBound x =
         Core.projectionField = (Core.Name "bound")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-objectExactCardinalityClass :: Phantoms.TTerm Syntax.ObjectExactCardinality -> Phantoms.TTerm [Syntax.ClassExpression]
+objectExactCardinalityClass :: Phantoms.TTerm OwlSyntax.ObjectExactCardinality -> Phantoms.TTerm [OwlSyntax.ClassExpression]
 objectExactCardinalityClass x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -3952,7 +3952,7 @@ objectExactCardinalityClass x =
         Core.projectionField = (Core.Name "class")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-objectExactCardinalityProperty :: Phantoms.TTerm Syntax.ObjectExactCardinality -> Phantoms.TTerm Syntax.ObjectPropertyExpression
+objectExactCardinalityProperty :: Phantoms.TTerm OwlSyntax.ObjectExactCardinality -> Phantoms.TTerm OwlSyntax.ObjectPropertyExpression
 objectExactCardinalityProperty x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -3960,7 +3960,7 @@ objectExactCardinalityProperty x =
         Core.projectionField = (Core.Name "property")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-objectExactCardinalityWithBound :: Phantoms.TTerm Syntax.ObjectExactCardinality -> Phantoms.TTerm Integer -> Phantoms.TTerm Syntax.ObjectExactCardinality
+objectExactCardinalityWithBound :: Phantoms.TTerm OwlSyntax.ObjectExactCardinality -> Phantoms.TTerm Integer -> Phantoms.TTerm OwlSyntax.ObjectExactCardinality
 objectExactCardinalityWithBound original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.ObjectExactCardinality"),
@@ -3983,7 +3983,7 @@ objectExactCardinalityWithBound original newVal =
               Core.projectionField = (Core.Name "class")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-objectExactCardinalityWithClass :: Phantoms.TTerm Syntax.ObjectExactCardinality -> Phantoms.TTerm [Syntax.ClassExpression] -> Phantoms.TTerm Syntax.ObjectExactCardinality
+objectExactCardinalityWithClass :: Phantoms.TTerm OwlSyntax.ObjectExactCardinality -> Phantoms.TTerm [OwlSyntax.ClassExpression] -> Phantoms.TTerm OwlSyntax.ObjectExactCardinality
 objectExactCardinalityWithClass original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.ObjectExactCardinality"),
@@ -4006,7 +4006,7 @@ objectExactCardinalityWithClass original newVal =
           Core.fieldName = (Core.Name "class"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-objectExactCardinalityWithProperty :: Phantoms.TTerm Syntax.ObjectExactCardinality -> Phantoms.TTerm Syntax.ObjectPropertyExpression -> Phantoms.TTerm Syntax.ObjectExactCardinality
+objectExactCardinalityWithProperty :: Phantoms.TTerm OwlSyntax.ObjectExactCardinality -> Phantoms.TTerm OwlSyntax.ObjectPropertyExpression -> Phantoms.TTerm OwlSyntax.ObjectExactCardinality
 objectExactCardinalityWithProperty original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.ObjectExactCardinality"),
@@ -4029,13 +4029,13 @@ objectExactCardinalityWithProperty original newVal =
               Core.projectionField = (Core.Name "class")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-objectHasSelf :: Phantoms.TTerm Syntax.ObjectPropertyExpression -> Phantoms.TTerm Syntax.ObjectHasSelf
+objectHasSelf :: Phantoms.TTerm OwlSyntax.ObjectPropertyExpression -> Phantoms.TTerm OwlSyntax.ObjectHasSelf
 objectHasSelf x =
     Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.owl.syntax.ObjectHasSelf"),
       Core.wrappedTermBody = (Phantoms.unTTerm x)}))
 
-objectHasValue :: Phantoms.TTerm Syntax.ObjectPropertyExpression -> Phantoms.TTerm Syntax.Individual -> Phantoms.TTerm Syntax.ObjectHasValue
+objectHasValue :: Phantoms.TTerm OwlSyntax.ObjectPropertyExpression -> Phantoms.TTerm OwlSyntax.Individual -> Phantoms.TTerm OwlSyntax.ObjectHasValue
 objectHasValue property individual =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.ObjectHasValue"),
@@ -4047,7 +4047,7 @@ objectHasValue property individual =
           Core.fieldName = (Core.Name "individual"),
           Core.fieldTerm = (Phantoms.unTTerm individual)}]}))
 
-objectHasValueIndividual :: Phantoms.TTerm Syntax.ObjectHasValue -> Phantoms.TTerm Syntax.Individual
+objectHasValueIndividual :: Phantoms.TTerm OwlSyntax.ObjectHasValue -> Phantoms.TTerm OwlSyntax.Individual
 objectHasValueIndividual x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -4055,7 +4055,7 @@ objectHasValueIndividual x =
         Core.projectionField = (Core.Name "individual")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-objectHasValueProperty :: Phantoms.TTerm Syntax.ObjectHasValue -> Phantoms.TTerm Syntax.ObjectPropertyExpression
+objectHasValueProperty :: Phantoms.TTerm OwlSyntax.ObjectHasValue -> Phantoms.TTerm OwlSyntax.ObjectPropertyExpression
 objectHasValueProperty x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -4063,7 +4063,7 @@ objectHasValueProperty x =
         Core.projectionField = (Core.Name "property")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-objectHasValueWithIndividual :: Phantoms.TTerm Syntax.ObjectHasValue -> Phantoms.TTerm Syntax.Individual -> Phantoms.TTerm Syntax.ObjectHasValue
+objectHasValueWithIndividual :: Phantoms.TTerm OwlSyntax.ObjectHasValue -> Phantoms.TTerm OwlSyntax.Individual -> Phantoms.TTerm OwlSyntax.ObjectHasValue
 objectHasValueWithIndividual original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.ObjectHasValue"),
@@ -4079,7 +4079,7 @@ objectHasValueWithIndividual original newVal =
           Core.fieldName = (Core.Name "individual"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-objectHasValueWithProperty :: Phantoms.TTerm Syntax.ObjectHasValue -> Phantoms.TTerm Syntax.ObjectPropertyExpression -> Phantoms.TTerm Syntax.ObjectHasValue
+objectHasValueWithProperty :: Phantoms.TTerm OwlSyntax.ObjectHasValue -> Phantoms.TTerm OwlSyntax.ObjectPropertyExpression -> Phantoms.TTerm OwlSyntax.ObjectHasValue
 objectHasValueWithProperty original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.ObjectHasValue"),
@@ -4095,13 +4095,13 @@ objectHasValueWithProperty original newVal =
               Core.projectionField = (Core.Name "individual")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-objectIntersectionOf :: Phantoms.TTerm [Syntax.ClassExpression] -> Phantoms.TTerm Syntax.ObjectIntersectionOf
+objectIntersectionOf :: Phantoms.TTerm [OwlSyntax.ClassExpression] -> Phantoms.TTerm OwlSyntax.ObjectIntersectionOf
 objectIntersectionOf x =
     Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.owl.syntax.ObjectIntersectionOf"),
       Core.wrappedTermBody = (Phantoms.unTTerm x)}))
 
-objectMaxCardinality :: Phantoms.TTerm Integer -> Phantoms.TTerm Syntax.ObjectPropertyExpression -> Phantoms.TTerm [Syntax.ClassExpression] -> Phantoms.TTerm Syntax.ObjectMaxCardinality
+objectMaxCardinality :: Phantoms.TTerm Integer -> Phantoms.TTerm OwlSyntax.ObjectPropertyExpression -> Phantoms.TTerm [OwlSyntax.ClassExpression] -> Phantoms.TTerm OwlSyntax.ObjectMaxCardinality
 objectMaxCardinality bound property class_ =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.ObjectMaxCardinality"),
@@ -4116,7 +4116,7 @@ objectMaxCardinality bound property class_ =
           Core.fieldName = (Core.Name "class"),
           Core.fieldTerm = (Phantoms.unTTerm class_)}]}))
 
-objectMaxCardinalityBound :: Phantoms.TTerm Syntax.ObjectMaxCardinality -> Phantoms.TTerm Integer
+objectMaxCardinalityBound :: Phantoms.TTerm OwlSyntax.ObjectMaxCardinality -> Phantoms.TTerm Integer
 objectMaxCardinalityBound x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -4124,7 +4124,7 @@ objectMaxCardinalityBound x =
         Core.projectionField = (Core.Name "bound")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-objectMaxCardinalityClass :: Phantoms.TTerm Syntax.ObjectMaxCardinality -> Phantoms.TTerm [Syntax.ClassExpression]
+objectMaxCardinalityClass :: Phantoms.TTerm OwlSyntax.ObjectMaxCardinality -> Phantoms.TTerm [OwlSyntax.ClassExpression]
 objectMaxCardinalityClass x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -4132,7 +4132,7 @@ objectMaxCardinalityClass x =
         Core.projectionField = (Core.Name "class")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-objectMaxCardinalityProperty :: Phantoms.TTerm Syntax.ObjectMaxCardinality -> Phantoms.TTerm Syntax.ObjectPropertyExpression
+objectMaxCardinalityProperty :: Phantoms.TTerm OwlSyntax.ObjectMaxCardinality -> Phantoms.TTerm OwlSyntax.ObjectPropertyExpression
 objectMaxCardinalityProperty x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -4140,7 +4140,7 @@ objectMaxCardinalityProperty x =
         Core.projectionField = (Core.Name "property")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-objectMaxCardinalityWithBound :: Phantoms.TTerm Syntax.ObjectMaxCardinality -> Phantoms.TTerm Integer -> Phantoms.TTerm Syntax.ObjectMaxCardinality
+objectMaxCardinalityWithBound :: Phantoms.TTerm OwlSyntax.ObjectMaxCardinality -> Phantoms.TTerm Integer -> Phantoms.TTerm OwlSyntax.ObjectMaxCardinality
 objectMaxCardinalityWithBound original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.ObjectMaxCardinality"),
@@ -4163,7 +4163,7 @@ objectMaxCardinalityWithBound original newVal =
               Core.projectionField = (Core.Name "class")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-objectMaxCardinalityWithClass :: Phantoms.TTerm Syntax.ObjectMaxCardinality -> Phantoms.TTerm [Syntax.ClassExpression] -> Phantoms.TTerm Syntax.ObjectMaxCardinality
+objectMaxCardinalityWithClass :: Phantoms.TTerm OwlSyntax.ObjectMaxCardinality -> Phantoms.TTerm [OwlSyntax.ClassExpression] -> Phantoms.TTerm OwlSyntax.ObjectMaxCardinality
 objectMaxCardinalityWithClass original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.ObjectMaxCardinality"),
@@ -4186,7 +4186,7 @@ objectMaxCardinalityWithClass original newVal =
           Core.fieldName = (Core.Name "class"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-objectMaxCardinalityWithProperty :: Phantoms.TTerm Syntax.ObjectMaxCardinality -> Phantoms.TTerm Syntax.ObjectPropertyExpression -> Phantoms.TTerm Syntax.ObjectMaxCardinality
+objectMaxCardinalityWithProperty :: Phantoms.TTerm OwlSyntax.ObjectMaxCardinality -> Phantoms.TTerm OwlSyntax.ObjectPropertyExpression -> Phantoms.TTerm OwlSyntax.ObjectMaxCardinality
 objectMaxCardinalityWithProperty original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.ObjectMaxCardinality"),
@@ -4209,7 +4209,7 @@ objectMaxCardinalityWithProperty original newVal =
               Core.projectionField = (Core.Name "class")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-objectMinCardinality :: Phantoms.TTerm Integer -> Phantoms.TTerm Syntax.ObjectPropertyExpression -> Phantoms.TTerm [Syntax.ClassExpression] -> Phantoms.TTerm Syntax.ObjectMinCardinality
+objectMinCardinality :: Phantoms.TTerm Integer -> Phantoms.TTerm OwlSyntax.ObjectPropertyExpression -> Phantoms.TTerm [OwlSyntax.ClassExpression] -> Phantoms.TTerm OwlSyntax.ObjectMinCardinality
 objectMinCardinality bound property class_ =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.ObjectMinCardinality"),
@@ -4224,7 +4224,7 @@ objectMinCardinality bound property class_ =
           Core.fieldName = (Core.Name "class"),
           Core.fieldTerm = (Phantoms.unTTerm class_)}]}))
 
-objectMinCardinalityBound :: Phantoms.TTerm Syntax.ObjectMinCardinality -> Phantoms.TTerm Integer
+objectMinCardinalityBound :: Phantoms.TTerm OwlSyntax.ObjectMinCardinality -> Phantoms.TTerm Integer
 objectMinCardinalityBound x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -4232,7 +4232,7 @@ objectMinCardinalityBound x =
         Core.projectionField = (Core.Name "bound")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-objectMinCardinalityClass :: Phantoms.TTerm Syntax.ObjectMinCardinality -> Phantoms.TTerm [Syntax.ClassExpression]
+objectMinCardinalityClass :: Phantoms.TTerm OwlSyntax.ObjectMinCardinality -> Phantoms.TTerm [OwlSyntax.ClassExpression]
 objectMinCardinalityClass x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -4240,7 +4240,7 @@ objectMinCardinalityClass x =
         Core.projectionField = (Core.Name "class")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-objectMinCardinalityProperty :: Phantoms.TTerm Syntax.ObjectMinCardinality -> Phantoms.TTerm Syntax.ObjectPropertyExpression
+objectMinCardinalityProperty :: Phantoms.TTerm OwlSyntax.ObjectMinCardinality -> Phantoms.TTerm OwlSyntax.ObjectPropertyExpression
 objectMinCardinalityProperty x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -4248,7 +4248,7 @@ objectMinCardinalityProperty x =
         Core.projectionField = (Core.Name "property")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-objectMinCardinalityWithBound :: Phantoms.TTerm Syntax.ObjectMinCardinality -> Phantoms.TTerm Integer -> Phantoms.TTerm Syntax.ObjectMinCardinality
+objectMinCardinalityWithBound :: Phantoms.TTerm OwlSyntax.ObjectMinCardinality -> Phantoms.TTerm Integer -> Phantoms.TTerm OwlSyntax.ObjectMinCardinality
 objectMinCardinalityWithBound original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.ObjectMinCardinality"),
@@ -4271,7 +4271,7 @@ objectMinCardinalityWithBound original newVal =
               Core.projectionField = (Core.Name "class")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-objectMinCardinalityWithClass :: Phantoms.TTerm Syntax.ObjectMinCardinality -> Phantoms.TTerm [Syntax.ClassExpression] -> Phantoms.TTerm Syntax.ObjectMinCardinality
+objectMinCardinalityWithClass :: Phantoms.TTerm OwlSyntax.ObjectMinCardinality -> Phantoms.TTerm [OwlSyntax.ClassExpression] -> Phantoms.TTerm OwlSyntax.ObjectMinCardinality
 objectMinCardinalityWithClass original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.ObjectMinCardinality"),
@@ -4294,7 +4294,7 @@ objectMinCardinalityWithClass original newVal =
           Core.fieldName = (Core.Name "class"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-objectMinCardinalityWithProperty :: Phantoms.TTerm Syntax.ObjectMinCardinality -> Phantoms.TTerm Syntax.ObjectPropertyExpression -> Phantoms.TTerm Syntax.ObjectMinCardinality
+objectMinCardinalityWithProperty :: Phantoms.TTerm OwlSyntax.ObjectMinCardinality -> Phantoms.TTerm OwlSyntax.ObjectPropertyExpression -> Phantoms.TTerm OwlSyntax.ObjectMinCardinality
 objectMinCardinalityWithProperty original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.ObjectMinCardinality"),
@@ -4317,19 +4317,19 @@ objectMinCardinalityWithProperty original newVal =
               Core.projectionField = (Core.Name "class")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-objectOneOf :: Phantoms.TTerm [Syntax.Individual] -> Phantoms.TTerm Syntax.ObjectOneOf
+objectOneOf :: Phantoms.TTerm [OwlSyntax.Individual] -> Phantoms.TTerm OwlSyntax.ObjectOneOf
 objectOneOf x =
     Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.owl.syntax.ObjectOneOf"),
       Core.wrappedTermBody = (Phantoms.unTTerm x)}))
 
-objectProperty :: Phantoms.TTerm () -> Phantoms.TTerm Syntax.ObjectProperty
+objectProperty :: Phantoms.TTerm () -> Phantoms.TTerm OwlSyntax.ObjectProperty
 objectProperty x =
     Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.owl.syntax.ObjectProperty"),
       Core.wrappedTermBody = (Phantoms.unTTerm x)}))
 
-objectPropertyAssertion :: Phantoms.TTerm [Syntax.Annotation] -> Phantoms.TTerm Syntax.ObjectPropertyExpression -> Phantoms.TTerm Syntax.Individual -> Phantoms.TTerm Syntax.Individual -> Phantoms.TTerm Syntax.ObjectPropertyAssertion
+objectPropertyAssertion :: Phantoms.TTerm [OwlSyntax.Annotation] -> Phantoms.TTerm OwlSyntax.ObjectPropertyExpression -> Phantoms.TTerm OwlSyntax.Individual -> Phantoms.TTerm OwlSyntax.Individual -> Phantoms.TTerm OwlSyntax.ObjectPropertyAssertion
 objectPropertyAssertion annotations property source target =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.ObjectPropertyAssertion"),
@@ -4347,7 +4347,7 @@ objectPropertyAssertion annotations property source target =
           Core.fieldName = (Core.Name "target"),
           Core.fieldTerm = (Phantoms.unTTerm target)}]}))
 
-objectPropertyAssertionAnnotations :: Phantoms.TTerm Syntax.ObjectPropertyAssertion -> Phantoms.TTerm [Syntax.Annotation]
+objectPropertyAssertionAnnotations :: Phantoms.TTerm OwlSyntax.ObjectPropertyAssertion -> Phantoms.TTerm [OwlSyntax.Annotation]
 objectPropertyAssertionAnnotations x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -4355,7 +4355,7 @@ objectPropertyAssertionAnnotations x =
         Core.projectionField = (Core.Name "annotations")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-objectPropertyAssertionProperty :: Phantoms.TTerm Syntax.ObjectPropertyAssertion -> Phantoms.TTerm Syntax.ObjectPropertyExpression
+objectPropertyAssertionProperty :: Phantoms.TTerm OwlSyntax.ObjectPropertyAssertion -> Phantoms.TTerm OwlSyntax.ObjectPropertyExpression
 objectPropertyAssertionProperty x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -4363,7 +4363,7 @@ objectPropertyAssertionProperty x =
         Core.projectionField = (Core.Name "property")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-objectPropertyAssertionSource :: Phantoms.TTerm Syntax.ObjectPropertyAssertion -> Phantoms.TTerm Syntax.Individual
+objectPropertyAssertionSource :: Phantoms.TTerm OwlSyntax.ObjectPropertyAssertion -> Phantoms.TTerm OwlSyntax.Individual
 objectPropertyAssertionSource x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -4371,7 +4371,7 @@ objectPropertyAssertionSource x =
         Core.projectionField = (Core.Name "source")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-objectPropertyAssertionTarget :: Phantoms.TTerm Syntax.ObjectPropertyAssertion -> Phantoms.TTerm Syntax.Individual
+objectPropertyAssertionTarget :: Phantoms.TTerm OwlSyntax.ObjectPropertyAssertion -> Phantoms.TTerm OwlSyntax.Individual
 objectPropertyAssertionTarget x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -4379,7 +4379,7 @@ objectPropertyAssertionTarget x =
         Core.projectionField = (Core.Name "target")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-objectPropertyAssertionWithAnnotations :: Phantoms.TTerm Syntax.ObjectPropertyAssertion -> Phantoms.TTerm [Syntax.Annotation] -> Phantoms.TTerm Syntax.ObjectPropertyAssertion
+objectPropertyAssertionWithAnnotations :: Phantoms.TTerm OwlSyntax.ObjectPropertyAssertion -> Phantoms.TTerm [OwlSyntax.Annotation] -> Phantoms.TTerm OwlSyntax.ObjectPropertyAssertion
 objectPropertyAssertionWithAnnotations original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.ObjectPropertyAssertion"),
@@ -4409,7 +4409,7 @@ objectPropertyAssertionWithAnnotations original newVal =
               Core.projectionField = (Core.Name "target")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-objectPropertyAssertionWithProperty :: Phantoms.TTerm Syntax.ObjectPropertyAssertion -> Phantoms.TTerm Syntax.ObjectPropertyExpression -> Phantoms.TTerm Syntax.ObjectPropertyAssertion
+objectPropertyAssertionWithProperty :: Phantoms.TTerm OwlSyntax.ObjectPropertyAssertion -> Phantoms.TTerm OwlSyntax.ObjectPropertyExpression -> Phantoms.TTerm OwlSyntax.ObjectPropertyAssertion
 objectPropertyAssertionWithProperty original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.ObjectPropertyAssertion"),
@@ -4439,7 +4439,7 @@ objectPropertyAssertionWithProperty original newVal =
               Core.projectionField = (Core.Name "target")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-objectPropertyAssertionWithSource :: Phantoms.TTerm Syntax.ObjectPropertyAssertion -> Phantoms.TTerm Syntax.Individual -> Phantoms.TTerm Syntax.ObjectPropertyAssertion
+objectPropertyAssertionWithSource :: Phantoms.TTerm OwlSyntax.ObjectPropertyAssertion -> Phantoms.TTerm OwlSyntax.Individual -> Phantoms.TTerm OwlSyntax.ObjectPropertyAssertion
 objectPropertyAssertionWithSource original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.ObjectPropertyAssertion"),
@@ -4469,7 +4469,7 @@ objectPropertyAssertionWithSource original newVal =
               Core.projectionField = (Core.Name "target")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-objectPropertyAssertionWithTarget :: Phantoms.TTerm Syntax.ObjectPropertyAssertion -> Phantoms.TTerm Syntax.Individual -> Phantoms.TTerm Syntax.ObjectPropertyAssertion
+objectPropertyAssertionWithTarget :: Phantoms.TTerm OwlSyntax.ObjectPropertyAssertion -> Phantoms.TTerm OwlSyntax.Individual -> Phantoms.TTerm OwlSyntax.ObjectPropertyAssertion
 objectPropertyAssertionWithTarget original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.ObjectPropertyAssertion"),
@@ -4499,7 +4499,7 @@ objectPropertyAssertionWithTarget original newVal =
           Core.fieldName = (Core.Name "target"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-objectPropertyAxiomAsymmetricObjectProperty :: Phantoms.TTerm Syntax.AsymmetricObjectProperty -> Phantoms.TTerm Syntax.ObjectPropertyAxiom
+objectPropertyAxiomAsymmetricObjectProperty :: Phantoms.TTerm OwlSyntax.AsymmetricObjectProperty -> Phantoms.TTerm OwlSyntax.ObjectPropertyAxiom
 objectPropertyAxiomAsymmetricObjectProperty x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.ObjectPropertyAxiom"),
@@ -4507,7 +4507,7 @@ objectPropertyAxiomAsymmetricObjectProperty x =
         Core.fieldName = (Core.Name "asymmetricObjectProperty"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-objectPropertyAxiomDisjointObjectProperties :: Phantoms.TTerm Syntax.DisjointObjectProperties -> Phantoms.TTerm Syntax.ObjectPropertyAxiom
+objectPropertyAxiomDisjointObjectProperties :: Phantoms.TTerm OwlSyntax.DisjointObjectProperties -> Phantoms.TTerm OwlSyntax.ObjectPropertyAxiom
 objectPropertyAxiomDisjointObjectProperties x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.ObjectPropertyAxiom"),
@@ -4515,7 +4515,7 @@ objectPropertyAxiomDisjointObjectProperties x =
         Core.fieldName = (Core.Name "disjointObjectProperties"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-objectPropertyAxiomEquivalentObjectProperties :: Phantoms.TTerm Syntax.EquivalentObjectProperties -> Phantoms.TTerm Syntax.ObjectPropertyAxiom
+objectPropertyAxiomEquivalentObjectProperties :: Phantoms.TTerm OwlSyntax.EquivalentObjectProperties -> Phantoms.TTerm OwlSyntax.ObjectPropertyAxiom
 objectPropertyAxiomEquivalentObjectProperties x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.ObjectPropertyAxiom"),
@@ -4523,7 +4523,7 @@ objectPropertyAxiomEquivalentObjectProperties x =
         Core.fieldName = (Core.Name "equivalentObjectProperties"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-objectPropertyAxiomFunctionalObjectProperty :: Phantoms.TTerm Syntax.FunctionalObjectProperty -> Phantoms.TTerm Syntax.ObjectPropertyAxiom
+objectPropertyAxiomFunctionalObjectProperty :: Phantoms.TTerm OwlSyntax.FunctionalObjectProperty -> Phantoms.TTerm OwlSyntax.ObjectPropertyAxiom
 objectPropertyAxiomFunctionalObjectProperty x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.ObjectPropertyAxiom"),
@@ -4531,7 +4531,7 @@ objectPropertyAxiomFunctionalObjectProperty x =
         Core.fieldName = (Core.Name "functionalObjectProperty"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-objectPropertyAxiomInverseFunctionalObjectProperty :: Phantoms.TTerm Syntax.InverseFunctionalObjectProperty -> Phantoms.TTerm Syntax.ObjectPropertyAxiom
+objectPropertyAxiomInverseFunctionalObjectProperty :: Phantoms.TTerm OwlSyntax.InverseFunctionalObjectProperty -> Phantoms.TTerm OwlSyntax.ObjectPropertyAxiom
 objectPropertyAxiomInverseFunctionalObjectProperty x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.ObjectPropertyAxiom"),
@@ -4539,7 +4539,7 @@ objectPropertyAxiomInverseFunctionalObjectProperty x =
         Core.fieldName = (Core.Name "inverseFunctionalObjectProperty"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-objectPropertyAxiomInverseObjectProperties :: Phantoms.TTerm Syntax.InverseObjectProperties -> Phantoms.TTerm Syntax.ObjectPropertyAxiom
+objectPropertyAxiomInverseObjectProperties :: Phantoms.TTerm OwlSyntax.InverseObjectProperties -> Phantoms.TTerm OwlSyntax.ObjectPropertyAxiom
 objectPropertyAxiomInverseObjectProperties x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.ObjectPropertyAxiom"),
@@ -4547,7 +4547,7 @@ objectPropertyAxiomInverseObjectProperties x =
         Core.fieldName = (Core.Name "inverseObjectProperties"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-objectPropertyAxiomIrreflexiveObjectProperty :: Phantoms.TTerm Syntax.IrreflexiveObjectProperty -> Phantoms.TTerm Syntax.ObjectPropertyAxiom
+objectPropertyAxiomIrreflexiveObjectProperty :: Phantoms.TTerm OwlSyntax.IrreflexiveObjectProperty -> Phantoms.TTerm OwlSyntax.ObjectPropertyAxiom
 objectPropertyAxiomIrreflexiveObjectProperty x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.ObjectPropertyAxiom"),
@@ -4555,7 +4555,7 @@ objectPropertyAxiomIrreflexiveObjectProperty x =
         Core.fieldName = (Core.Name "irreflexiveObjectProperty"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-objectPropertyAxiomObjectPropertyDomain :: Phantoms.TTerm Syntax.ObjectPropertyDomain -> Phantoms.TTerm Syntax.ObjectPropertyAxiom
+objectPropertyAxiomObjectPropertyDomain :: Phantoms.TTerm OwlSyntax.ObjectPropertyDomain -> Phantoms.TTerm OwlSyntax.ObjectPropertyAxiom
 objectPropertyAxiomObjectPropertyDomain x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.ObjectPropertyAxiom"),
@@ -4563,7 +4563,7 @@ objectPropertyAxiomObjectPropertyDomain x =
         Core.fieldName = (Core.Name "objectPropertyDomain"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-objectPropertyAxiomObjectPropertyRange :: Phantoms.TTerm Syntax.ObjectPropertyRange -> Phantoms.TTerm Syntax.ObjectPropertyAxiom
+objectPropertyAxiomObjectPropertyRange :: Phantoms.TTerm OwlSyntax.ObjectPropertyRange -> Phantoms.TTerm OwlSyntax.ObjectPropertyAxiom
 objectPropertyAxiomObjectPropertyRange x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.ObjectPropertyAxiom"),
@@ -4571,7 +4571,7 @@ objectPropertyAxiomObjectPropertyRange x =
         Core.fieldName = (Core.Name "objectPropertyRange"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-objectPropertyAxiomReflexiveObjectProperty :: Phantoms.TTerm Syntax.ReflexiveObjectProperty -> Phantoms.TTerm Syntax.ObjectPropertyAxiom
+objectPropertyAxiomReflexiveObjectProperty :: Phantoms.TTerm OwlSyntax.ReflexiveObjectProperty -> Phantoms.TTerm OwlSyntax.ObjectPropertyAxiom
 objectPropertyAxiomReflexiveObjectProperty x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.ObjectPropertyAxiom"),
@@ -4579,7 +4579,7 @@ objectPropertyAxiomReflexiveObjectProperty x =
         Core.fieldName = (Core.Name "reflexiveObjectProperty"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-objectPropertyAxiomSubObjectPropertyOf :: Phantoms.TTerm Syntax.SubObjectPropertyOf -> Phantoms.TTerm Syntax.ObjectPropertyAxiom
+objectPropertyAxiomSubObjectPropertyOf :: Phantoms.TTerm OwlSyntax.SubObjectPropertyOf -> Phantoms.TTerm OwlSyntax.ObjectPropertyAxiom
 objectPropertyAxiomSubObjectPropertyOf x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.ObjectPropertyAxiom"),
@@ -4587,7 +4587,7 @@ objectPropertyAxiomSubObjectPropertyOf x =
         Core.fieldName = (Core.Name "subObjectPropertyOf"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-objectPropertyAxiomSymmetricObjectProperty :: Phantoms.TTerm Syntax.SymmetricObjectProperty -> Phantoms.TTerm Syntax.ObjectPropertyAxiom
+objectPropertyAxiomSymmetricObjectProperty :: Phantoms.TTerm OwlSyntax.SymmetricObjectProperty -> Phantoms.TTerm OwlSyntax.ObjectPropertyAxiom
 objectPropertyAxiomSymmetricObjectProperty x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.ObjectPropertyAxiom"),
@@ -4595,7 +4595,7 @@ objectPropertyAxiomSymmetricObjectProperty x =
         Core.fieldName = (Core.Name "symmetricObjectProperty"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-objectPropertyAxiomTransitiveObjectProperty :: Phantoms.TTerm Syntax.TransitiveObjectProperty -> Phantoms.TTerm Syntax.ObjectPropertyAxiom
+objectPropertyAxiomTransitiveObjectProperty :: Phantoms.TTerm OwlSyntax.TransitiveObjectProperty -> Phantoms.TTerm OwlSyntax.ObjectPropertyAxiom
 objectPropertyAxiomTransitiveObjectProperty x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.ObjectPropertyAxiom"),
@@ -4603,7 +4603,7 @@ objectPropertyAxiomTransitiveObjectProperty x =
         Core.fieldName = (Core.Name "transitiveObjectProperty"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-objectPropertyDomain :: Phantoms.TTerm [Syntax.Annotation] -> Phantoms.TTerm Syntax.ObjectPropertyExpression -> Phantoms.TTerm Syntax.ClassExpression -> Phantoms.TTerm Syntax.ObjectPropertyDomain
+objectPropertyDomain :: Phantoms.TTerm [OwlSyntax.Annotation] -> Phantoms.TTerm OwlSyntax.ObjectPropertyExpression -> Phantoms.TTerm OwlSyntax.ClassExpression -> Phantoms.TTerm OwlSyntax.ObjectPropertyDomain
 objectPropertyDomain annotations property domain =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.ObjectPropertyDomain"),
@@ -4618,7 +4618,7 @@ objectPropertyDomain annotations property domain =
           Core.fieldName = (Core.Name "domain"),
           Core.fieldTerm = (Phantoms.unTTerm domain)}]}))
 
-objectPropertyDomainAnnotations :: Phantoms.TTerm Syntax.ObjectPropertyDomain -> Phantoms.TTerm [Syntax.Annotation]
+objectPropertyDomainAnnotations :: Phantoms.TTerm OwlSyntax.ObjectPropertyDomain -> Phantoms.TTerm [OwlSyntax.Annotation]
 objectPropertyDomainAnnotations x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -4626,7 +4626,7 @@ objectPropertyDomainAnnotations x =
         Core.projectionField = (Core.Name "annotations")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-objectPropertyDomainDomain :: Phantoms.TTerm Syntax.ObjectPropertyDomain -> Phantoms.TTerm Syntax.ClassExpression
+objectPropertyDomainDomain :: Phantoms.TTerm OwlSyntax.ObjectPropertyDomain -> Phantoms.TTerm OwlSyntax.ClassExpression
 objectPropertyDomainDomain x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -4634,7 +4634,7 @@ objectPropertyDomainDomain x =
         Core.projectionField = (Core.Name "domain")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-objectPropertyDomainProperty :: Phantoms.TTerm Syntax.ObjectPropertyDomain -> Phantoms.TTerm Syntax.ObjectPropertyExpression
+objectPropertyDomainProperty :: Phantoms.TTerm OwlSyntax.ObjectPropertyDomain -> Phantoms.TTerm OwlSyntax.ObjectPropertyExpression
 objectPropertyDomainProperty x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -4642,7 +4642,7 @@ objectPropertyDomainProperty x =
         Core.projectionField = (Core.Name "property")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-objectPropertyDomainWithAnnotations :: Phantoms.TTerm Syntax.ObjectPropertyDomain -> Phantoms.TTerm [Syntax.Annotation] -> Phantoms.TTerm Syntax.ObjectPropertyDomain
+objectPropertyDomainWithAnnotations :: Phantoms.TTerm OwlSyntax.ObjectPropertyDomain -> Phantoms.TTerm [OwlSyntax.Annotation] -> Phantoms.TTerm OwlSyntax.ObjectPropertyDomain
 objectPropertyDomainWithAnnotations original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.ObjectPropertyDomain"),
@@ -4665,7 +4665,7 @@ objectPropertyDomainWithAnnotations original newVal =
               Core.projectionField = (Core.Name "domain")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-objectPropertyDomainWithDomain :: Phantoms.TTerm Syntax.ObjectPropertyDomain -> Phantoms.TTerm Syntax.ClassExpression -> Phantoms.TTerm Syntax.ObjectPropertyDomain
+objectPropertyDomainWithDomain :: Phantoms.TTerm OwlSyntax.ObjectPropertyDomain -> Phantoms.TTerm OwlSyntax.ClassExpression -> Phantoms.TTerm OwlSyntax.ObjectPropertyDomain
 objectPropertyDomainWithDomain original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.ObjectPropertyDomain"),
@@ -4688,7 +4688,7 @@ objectPropertyDomainWithDomain original newVal =
           Core.fieldName = (Core.Name "domain"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-objectPropertyDomainWithProperty :: Phantoms.TTerm Syntax.ObjectPropertyDomain -> Phantoms.TTerm Syntax.ObjectPropertyExpression -> Phantoms.TTerm Syntax.ObjectPropertyDomain
+objectPropertyDomainWithProperty :: Phantoms.TTerm OwlSyntax.ObjectPropertyDomain -> Phantoms.TTerm OwlSyntax.ObjectPropertyExpression -> Phantoms.TTerm OwlSyntax.ObjectPropertyDomain
 objectPropertyDomainWithProperty original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.ObjectPropertyDomain"),
@@ -4711,7 +4711,7 @@ objectPropertyDomainWithProperty original newVal =
               Core.projectionField = (Core.Name "domain")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-objectPropertyExpressionInverseObject :: Phantoms.TTerm Syntax.InverseObjectProperty -> Phantoms.TTerm Syntax.ObjectPropertyExpression
+objectPropertyExpressionInverseObject :: Phantoms.TTerm OwlSyntax.InverseObjectProperty -> Phantoms.TTerm OwlSyntax.ObjectPropertyExpression
 objectPropertyExpressionInverseObject x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.ObjectPropertyExpression"),
@@ -4719,7 +4719,7 @@ objectPropertyExpressionInverseObject x =
         Core.fieldName = (Core.Name "inverseObject"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-objectPropertyExpressionObject :: Phantoms.TTerm Syntax.ObjectProperty -> Phantoms.TTerm Syntax.ObjectPropertyExpression
+objectPropertyExpressionObject :: Phantoms.TTerm OwlSyntax.ObjectProperty -> Phantoms.TTerm OwlSyntax.ObjectPropertyExpression
 objectPropertyExpressionObject x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.owl.syntax.ObjectPropertyExpression"),
@@ -4727,7 +4727,7 @@ objectPropertyExpressionObject x =
         Core.fieldName = (Core.Name "object"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-objectPropertyRange :: Phantoms.TTerm [Syntax.Annotation] -> Phantoms.TTerm Syntax.ObjectPropertyExpression -> Phantoms.TTerm Syntax.ClassExpression -> Phantoms.TTerm Syntax.ObjectPropertyRange
+objectPropertyRange :: Phantoms.TTerm [OwlSyntax.Annotation] -> Phantoms.TTerm OwlSyntax.ObjectPropertyExpression -> Phantoms.TTerm OwlSyntax.ClassExpression -> Phantoms.TTerm OwlSyntax.ObjectPropertyRange
 objectPropertyRange annotations property range =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.ObjectPropertyRange"),
@@ -4742,7 +4742,7 @@ objectPropertyRange annotations property range =
           Core.fieldName = (Core.Name "range"),
           Core.fieldTerm = (Phantoms.unTTerm range)}]}))
 
-objectPropertyRangeAnnotations :: Phantoms.TTerm Syntax.ObjectPropertyRange -> Phantoms.TTerm [Syntax.Annotation]
+objectPropertyRangeAnnotations :: Phantoms.TTerm OwlSyntax.ObjectPropertyRange -> Phantoms.TTerm [OwlSyntax.Annotation]
 objectPropertyRangeAnnotations x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -4750,7 +4750,7 @@ objectPropertyRangeAnnotations x =
         Core.projectionField = (Core.Name "annotations")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-objectPropertyRangeProperty :: Phantoms.TTerm Syntax.ObjectPropertyRange -> Phantoms.TTerm Syntax.ObjectPropertyExpression
+objectPropertyRangeProperty :: Phantoms.TTerm OwlSyntax.ObjectPropertyRange -> Phantoms.TTerm OwlSyntax.ObjectPropertyExpression
 objectPropertyRangeProperty x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -4758,7 +4758,7 @@ objectPropertyRangeProperty x =
         Core.projectionField = (Core.Name "property")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-objectPropertyRangeRange :: Phantoms.TTerm Syntax.ObjectPropertyRange -> Phantoms.TTerm Syntax.ClassExpression
+objectPropertyRangeRange :: Phantoms.TTerm OwlSyntax.ObjectPropertyRange -> Phantoms.TTerm OwlSyntax.ClassExpression
 objectPropertyRangeRange x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -4766,7 +4766,7 @@ objectPropertyRangeRange x =
         Core.projectionField = (Core.Name "range")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-objectPropertyRangeWithAnnotations :: Phantoms.TTerm Syntax.ObjectPropertyRange -> Phantoms.TTerm [Syntax.Annotation] -> Phantoms.TTerm Syntax.ObjectPropertyRange
+objectPropertyRangeWithAnnotations :: Phantoms.TTerm OwlSyntax.ObjectPropertyRange -> Phantoms.TTerm [OwlSyntax.Annotation] -> Phantoms.TTerm OwlSyntax.ObjectPropertyRange
 objectPropertyRangeWithAnnotations original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.ObjectPropertyRange"),
@@ -4789,7 +4789,7 @@ objectPropertyRangeWithAnnotations original newVal =
               Core.projectionField = (Core.Name "range")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-objectPropertyRangeWithProperty :: Phantoms.TTerm Syntax.ObjectPropertyRange -> Phantoms.TTerm Syntax.ObjectPropertyExpression -> Phantoms.TTerm Syntax.ObjectPropertyRange
+objectPropertyRangeWithProperty :: Phantoms.TTerm OwlSyntax.ObjectPropertyRange -> Phantoms.TTerm OwlSyntax.ObjectPropertyExpression -> Phantoms.TTerm OwlSyntax.ObjectPropertyRange
 objectPropertyRangeWithProperty original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.ObjectPropertyRange"),
@@ -4812,7 +4812,7 @@ objectPropertyRangeWithProperty original newVal =
               Core.projectionField = (Core.Name "range")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-objectPropertyRangeWithRange :: Phantoms.TTerm Syntax.ObjectPropertyRange -> Phantoms.TTerm Syntax.ClassExpression -> Phantoms.TTerm Syntax.ObjectPropertyRange
+objectPropertyRangeWithRange :: Phantoms.TTerm OwlSyntax.ObjectPropertyRange -> Phantoms.TTerm OwlSyntax.ClassExpression -> Phantoms.TTerm OwlSyntax.ObjectPropertyRange
 objectPropertyRangeWithRange original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.ObjectPropertyRange"),
@@ -4835,7 +4835,7 @@ objectPropertyRangeWithRange original newVal =
           Core.fieldName = (Core.Name "range"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-objectSomeValuesFrom :: Phantoms.TTerm Syntax.ObjectPropertyExpression -> Phantoms.TTerm Syntax.ClassExpression -> Phantoms.TTerm Syntax.ObjectSomeValuesFrom
+objectSomeValuesFrom :: Phantoms.TTerm OwlSyntax.ObjectPropertyExpression -> Phantoms.TTerm OwlSyntax.ClassExpression -> Phantoms.TTerm OwlSyntax.ObjectSomeValuesFrom
 objectSomeValuesFrom property class_ =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.ObjectSomeValuesFrom"),
@@ -4847,7 +4847,7 @@ objectSomeValuesFrom property class_ =
           Core.fieldName = (Core.Name "class"),
           Core.fieldTerm = (Phantoms.unTTerm class_)}]}))
 
-objectSomeValuesFromClass :: Phantoms.TTerm Syntax.ObjectSomeValuesFrom -> Phantoms.TTerm Syntax.ClassExpression
+objectSomeValuesFromClass :: Phantoms.TTerm OwlSyntax.ObjectSomeValuesFrom -> Phantoms.TTerm OwlSyntax.ClassExpression
 objectSomeValuesFromClass x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -4855,7 +4855,7 @@ objectSomeValuesFromClass x =
         Core.projectionField = (Core.Name "class")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-objectSomeValuesFromProperty :: Phantoms.TTerm Syntax.ObjectSomeValuesFrom -> Phantoms.TTerm Syntax.ObjectPropertyExpression
+objectSomeValuesFromProperty :: Phantoms.TTerm OwlSyntax.ObjectSomeValuesFrom -> Phantoms.TTerm OwlSyntax.ObjectPropertyExpression
 objectSomeValuesFromProperty x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -4863,7 +4863,7 @@ objectSomeValuesFromProperty x =
         Core.projectionField = (Core.Name "property")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-objectSomeValuesFromWithClass :: Phantoms.TTerm Syntax.ObjectSomeValuesFrom -> Phantoms.TTerm Syntax.ClassExpression -> Phantoms.TTerm Syntax.ObjectSomeValuesFrom
+objectSomeValuesFromWithClass :: Phantoms.TTerm OwlSyntax.ObjectSomeValuesFrom -> Phantoms.TTerm OwlSyntax.ClassExpression -> Phantoms.TTerm OwlSyntax.ObjectSomeValuesFrom
 objectSomeValuesFromWithClass original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.ObjectSomeValuesFrom"),
@@ -4879,7 +4879,7 @@ objectSomeValuesFromWithClass original newVal =
           Core.fieldName = (Core.Name "class"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-objectSomeValuesFromWithProperty :: Phantoms.TTerm Syntax.ObjectSomeValuesFrom -> Phantoms.TTerm Syntax.ObjectPropertyExpression -> Phantoms.TTerm Syntax.ObjectSomeValuesFrom
+objectSomeValuesFromWithProperty :: Phantoms.TTerm OwlSyntax.ObjectSomeValuesFrom -> Phantoms.TTerm OwlSyntax.ObjectPropertyExpression -> Phantoms.TTerm OwlSyntax.ObjectSomeValuesFrom
 objectSomeValuesFromWithProperty original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.ObjectSomeValuesFrom"),
@@ -4895,13 +4895,13 @@ objectSomeValuesFromWithProperty original newVal =
               Core.projectionField = (Core.Name "class")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-objectUnionOf :: Phantoms.TTerm [Syntax.ClassExpression] -> Phantoms.TTerm Syntax.ObjectUnionOf
+objectUnionOf :: Phantoms.TTerm [OwlSyntax.ClassExpression] -> Phantoms.TTerm OwlSyntax.ObjectUnionOf
 objectUnionOf x =
     Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.owl.syntax.ObjectUnionOf"),
       Core.wrappedTermBody = (Phantoms.unTTerm x)}))
 
-ontology :: Phantoms.TTerm [Syntax.Ontology] -> Phantoms.TTerm [Syntax.Annotation] -> Phantoms.TTerm [Syntax.Axiom] -> Phantoms.TTerm Syntax.Ontology
+ontology :: Phantoms.TTerm [OwlSyntax.Ontology] -> Phantoms.TTerm [OwlSyntax.Annotation] -> Phantoms.TTerm [OwlSyntax.Axiom] -> Phantoms.TTerm OwlSyntax.Ontology
 ontology directImports annotations axioms =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.Ontology"),
@@ -4916,7 +4916,7 @@ ontology directImports annotations axioms =
           Core.fieldName = (Core.Name "axioms"),
           Core.fieldTerm = (Phantoms.unTTerm axioms)}]}))
 
-ontologyAnnotations :: Phantoms.TTerm Syntax.Ontology -> Phantoms.TTerm [Syntax.Annotation]
+ontologyAnnotations :: Phantoms.TTerm OwlSyntax.Ontology -> Phantoms.TTerm [OwlSyntax.Annotation]
 ontologyAnnotations x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -4924,7 +4924,7 @@ ontologyAnnotations x =
         Core.projectionField = (Core.Name "annotations")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-ontologyAxioms :: Phantoms.TTerm Syntax.Ontology -> Phantoms.TTerm [Syntax.Axiom]
+ontologyAxioms :: Phantoms.TTerm OwlSyntax.Ontology -> Phantoms.TTerm [OwlSyntax.Axiom]
 ontologyAxioms x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -4932,7 +4932,7 @@ ontologyAxioms x =
         Core.projectionField = (Core.Name "axioms")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-ontologyDirectImports :: Phantoms.TTerm Syntax.Ontology -> Phantoms.TTerm [Syntax.Ontology]
+ontologyDirectImports :: Phantoms.TTerm OwlSyntax.Ontology -> Phantoms.TTerm [OwlSyntax.Ontology]
 ontologyDirectImports x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -4940,7 +4940,7 @@ ontologyDirectImports x =
         Core.projectionField = (Core.Name "directImports")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-ontologyWithAnnotations :: Phantoms.TTerm Syntax.Ontology -> Phantoms.TTerm [Syntax.Annotation] -> Phantoms.TTerm Syntax.Ontology
+ontologyWithAnnotations :: Phantoms.TTerm OwlSyntax.Ontology -> Phantoms.TTerm [OwlSyntax.Annotation] -> Phantoms.TTerm OwlSyntax.Ontology
 ontologyWithAnnotations original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.Ontology"),
@@ -4963,7 +4963,7 @@ ontologyWithAnnotations original newVal =
               Core.projectionField = (Core.Name "axioms")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-ontologyWithAxioms :: Phantoms.TTerm Syntax.Ontology -> Phantoms.TTerm [Syntax.Axiom] -> Phantoms.TTerm Syntax.Ontology
+ontologyWithAxioms :: Phantoms.TTerm OwlSyntax.Ontology -> Phantoms.TTerm [OwlSyntax.Axiom] -> Phantoms.TTerm OwlSyntax.Ontology
 ontologyWithAxioms original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.Ontology"),
@@ -4986,7 +4986,7 @@ ontologyWithAxioms original newVal =
           Core.fieldName = (Core.Name "axioms"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-ontologyWithDirectImports :: Phantoms.TTerm Syntax.Ontology -> Phantoms.TTerm [Syntax.Ontology] -> Phantoms.TTerm Syntax.Ontology
+ontologyWithDirectImports :: Phantoms.TTerm OwlSyntax.Ontology -> Phantoms.TTerm [OwlSyntax.Ontology] -> Phantoms.TTerm OwlSyntax.Ontology
 ontologyWithDirectImports original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.Ontology"),
@@ -5009,7 +5009,7 @@ ontologyWithDirectImports original newVal =
               Core.projectionField = (Core.Name "axioms")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-reflexiveObjectProperty :: Phantoms.TTerm [Syntax.Annotation] -> Phantoms.TTerm Syntax.ObjectPropertyExpression -> Phantoms.TTerm Syntax.ReflexiveObjectProperty
+reflexiveObjectProperty :: Phantoms.TTerm [OwlSyntax.Annotation] -> Phantoms.TTerm OwlSyntax.ObjectPropertyExpression -> Phantoms.TTerm OwlSyntax.ReflexiveObjectProperty
 reflexiveObjectProperty annotations property =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.ReflexiveObjectProperty"),
@@ -5021,7 +5021,7 @@ reflexiveObjectProperty annotations property =
           Core.fieldName = (Core.Name "property"),
           Core.fieldTerm = (Phantoms.unTTerm property)}]}))
 
-reflexiveObjectPropertyAnnotations :: Phantoms.TTerm Syntax.ReflexiveObjectProperty -> Phantoms.TTerm [Syntax.Annotation]
+reflexiveObjectPropertyAnnotations :: Phantoms.TTerm OwlSyntax.ReflexiveObjectProperty -> Phantoms.TTerm [OwlSyntax.Annotation]
 reflexiveObjectPropertyAnnotations x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -5029,7 +5029,7 @@ reflexiveObjectPropertyAnnotations x =
         Core.projectionField = (Core.Name "annotations")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-reflexiveObjectPropertyProperty :: Phantoms.TTerm Syntax.ReflexiveObjectProperty -> Phantoms.TTerm Syntax.ObjectPropertyExpression
+reflexiveObjectPropertyProperty :: Phantoms.TTerm OwlSyntax.ReflexiveObjectProperty -> Phantoms.TTerm OwlSyntax.ObjectPropertyExpression
 reflexiveObjectPropertyProperty x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -5037,7 +5037,7 @@ reflexiveObjectPropertyProperty x =
         Core.projectionField = (Core.Name "property")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-reflexiveObjectPropertyWithAnnotations :: Phantoms.TTerm Syntax.ReflexiveObjectProperty -> Phantoms.TTerm [Syntax.Annotation] -> Phantoms.TTerm Syntax.ReflexiveObjectProperty
+reflexiveObjectPropertyWithAnnotations :: Phantoms.TTerm OwlSyntax.ReflexiveObjectProperty -> Phantoms.TTerm [OwlSyntax.Annotation] -> Phantoms.TTerm OwlSyntax.ReflexiveObjectProperty
 reflexiveObjectPropertyWithAnnotations original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.ReflexiveObjectProperty"),
@@ -5053,7 +5053,7 @@ reflexiveObjectPropertyWithAnnotations original newVal =
               Core.projectionField = (Core.Name "property")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-reflexiveObjectPropertyWithProperty :: Phantoms.TTerm Syntax.ReflexiveObjectProperty -> Phantoms.TTerm Syntax.ObjectPropertyExpression -> Phantoms.TTerm Syntax.ReflexiveObjectProperty
+reflexiveObjectPropertyWithProperty :: Phantoms.TTerm OwlSyntax.ReflexiveObjectProperty -> Phantoms.TTerm OwlSyntax.ObjectPropertyExpression -> Phantoms.TTerm OwlSyntax.ReflexiveObjectProperty
 reflexiveObjectPropertyWithProperty original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.ReflexiveObjectProperty"),
@@ -5069,7 +5069,7 @@ reflexiveObjectPropertyWithProperty original newVal =
           Core.fieldName = (Core.Name "property"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-sameIndividual :: Phantoms.TTerm [Syntax.Annotation] -> Phantoms.TTerm [Syntax.Individual] -> Phantoms.TTerm Syntax.SameIndividual
+sameIndividual :: Phantoms.TTerm [OwlSyntax.Annotation] -> Phantoms.TTerm [OwlSyntax.Individual] -> Phantoms.TTerm OwlSyntax.SameIndividual
 sameIndividual annotations individuals =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.SameIndividual"),
@@ -5081,7 +5081,7 @@ sameIndividual annotations individuals =
           Core.fieldName = (Core.Name "individuals"),
           Core.fieldTerm = (Phantoms.unTTerm individuals)}]}))
 
-sameIndividualAnnotations :: Phantoms.TTerm Syntax.SameIndividual -> Phantoms.TTerm [Syntax.Annotation]
+sameIndividualAnnotations :: Phantoms.TTerm OwlSyntax.SameIndividual -> Phantoms.TTerm [OwlSyntax.Annotation]
 sameIndividualAnnotations x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -5089,7 +5089,7 @@ sameIndividualAnnotations x =
         Core.projectionField = (Core.Name "annotations")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-sameIndividualIndividuals :: Phantoms.TTerm Syntax.SameIndividual -> Phantoms.TTerm [Syntax.Individual]
+sameIndividualIndividuals :: Phantoms.TTerm OwlSyntax.SameIndividual -> Phantoms.TTerm [OwlSyntax.Individual]
 sameIndividualIndividuals x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -5097,7 +5097,7 @@ sameIndividualIndividuals x =
         Core.projectionField = (Core.Name "individuals")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-sameIndividualWithAnnotations :: Phantoms.TTerm Syntax.SameIndividual -> Phantoms.TTerm [Syntax.Annotation] -> Phantoms.TTerm Syntax.SameIndividual
+sameIndividualWithAnnotations :: Phantoms.TTerm OwlSyntax.SameIndividual -> Phantoms.TTerm [OwlSyntax.Annotation] -> Phantoms.TTerm OwlSyntax.SameIndividual
 sameIndividualWithAnnotations original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.SameIndividual"),
@@ -5113,7 +5113,7 @@ sameIndividualWithAnnotations original newVal =
               Core.projectionField = (Core.Name "individuals")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-sameIndividualWithIndividuals :: Phantoms.TTerm Syntax.SameIndividual -> Phantoms.TTerm [Syntax.Individual] -> Phantoms.TTerm Syntax.SameIndividual
+sameIndividualWithIndividuals :: Phantoms.TTerm OwlSyntax.SameIndividual -> Phantoms.TTerm [OwlSyntax.Individual] -> Phantoms.TTerm OwlSyntax.SameIndividual
 sameIndividualWithIndividuals original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.SameIndividual"),
@@ -5129,7 +5129,7 @@ sameIndividualWithIndividuals original newVal =
           Core.fieldName = (Core.Name "individuals"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-subAnnotationPropertyOf :: Phantoms.TTerm [Syntax.Annotation] -> Phantoms.TTerm Syntax.AnnotationProperty -> Phantoms.TTerm Syntax.AnnotationProperty -> Phantoms.TTerm Syntax.SubAnnotationPropertyOf
+subAnnotationPropertyOf :: Phantoms.TTerm [OwlSyntax.Annotation] -> Phantoms.TTerm OwlSyntax.AnnotationProperty -> Phantoms.TTerm OwlSyntax.AnnotationProperty -> Phantoms.TTerm OwlSyntax.SubAnnotationPropertyOf
 subAnnotationPropertyOf annotations subProperty superProperty =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.SubAnnotationPropertyOf"),
@@ -5144,7 +5144,7 @@ subAnnotationPropertyOf annotations subProperty superProperty =
           Core.fieldName = (Core.Name "superProperty"),
           Core.fieldTerm = (Phantoms.unTTerm superProperty)}]}))
 
-subAnnotationPropertyOfAnnotations :: Phantoms.TTerm Syntax.SubAnnotationPropertyOf -> Phantoms.TTerm [Syntax.Annotation]
+subAnnotationPropertyOfAnnotations :: Phantoms.TTerm OwlSyntax.SubAnnotationPropertyOf -> Phantoms.TTerm [OwlSyntax.Annotation]
 subAnnotationPropertyOfAnnotations x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -5152,7 +5152,7 @@ subAnnotationPropertyOfAnnotations x =
         Core.projectionField = (Core.Name "annotations")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-subAnnotationPropertyOfSubProperty :: Phantoms.TTerm Syntax.SubAnnotationPropertyOf -> Phantoms.TTerm Syntax.AnnotationProperty
+subAnnotationPropertyOfSubProperty :: Phantoms.TTerm OwlSyntax.SubAnnotationPropertyOf -> Phantoms.TTerm OwlSyntax.AnnotationProperty
 subAnnotationPropertyOfSubProperty x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -5160,7 +5160,7 @@ subAnnotationPropertyOfSubProperty x =
         Core.projectionField = (Core.Name "subProperty")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-subAnnotationPropertyOfSuperProperty :: Phantoms.TTerm Syntax.SubAnnotationPropertyOf -> Phantoms.TTerm Syntax.AnnotationProperty
+subAnnotationPropertyOfSuperProperty :: Phantoms.TTerm OwlSyntax.SubAnnotationPropertyOf -> Phantoms.TTerm OwlSyntax.AnnotationProperty
 subAnnotationPropertyOfSuperProperty x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -5168,7 +5168,7 @@ subAnnotationPropertyOfSuperProperty x =
         Core.projectionField = (Core.Name "superProperty")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-subAnnotationPropertyOfWithAnnotations :: Phantoms.TTerm Syntax.SubAnnotationPropertyOf -> Phantoms.TTerm [Syntax.Annotation] -> Phantoms.TTerm Syntax.SubAnnotationPropertyOf
+subAnnotationPropertyOfWithAnnotations :: Phantoms.TTerm OwlSyntax.SubAnnotationPropertyOf -> Phantoms.TTerm [OwlSyntax.Annotation] -> Phantoms.TTerm OwlSyntax.SubAnnotationPropertyOf
 subAnnotationPropertyOfWithAnnotations original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.SubAnnotationPropertyOf"),
@@ -5191,7 +5191,7 @@ subAnnotationPropertyOfWithAnnotations original newVal =
               Core.projectionField = (Core.Name "superProperty")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-subAnnotationPropertyOfWithSubProperty :: Phantoms.TTerm Syntax.SubAnnotationPropertyOf -> Phantoms.TTerm Syntax.AnnotationProperty -> Phantoms.TTerm Syntax.SubAnnotationPropertyOf
+subAnnotationPropertyOfWithSubProperty :: Phantoms.TTerm OwlSyntax.SubAnnotationPropertyOf -> Phantoms.TTerm OwlSyntax.AnnotationProperty -> Phantoms.TTerm OwlSyntax.SubAnnotationPropertyOf
 subAnnotationPropertyOfWithSubProperty original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.SubAnnotationPropertyOf"),
@@ -5214,7 +5214,7 @@ subAnnotationPropertyOfWithSubProperty original newVal =
               Core.projectionField = (Core.Name "superProperty")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-subAnnotationPropertyOfWithSuperProperty :: Phantoms.TTerm Syntax.SubAnnotationPropertyOf -> Phantoms.TTerm Syntax.AnnotationProperty -> Phantoms.TTerm Syntax.SubAnnotationPropertyOf
+subAnnotationPropertyOfWithSuperProperty :: Phantoms.TTerm OwlSyntax.SubAnnotationPropertyOf -> Phantoms.TTerm OwlSyntax.AnnotationProperty -> Phantoms.TTerm OwlSyntax.SubAnnotationPropertyOf
 subAnnotationPropertyOfWithSuperProperty original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.SubAnnotationPropertyOf"),
@@ -5237,7 +5237,7 @@ subAnnotationPropertyOfWithSuperProperty original newVal =
           Core.fieldName = (Core.Name "superProperty"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-subClassOf :: Phantoms.TTerm [Syntax.Annotation] -> Phantoms.TTerm Syntax.ClassExpression -> Phantoms.TTerm Syntax.ClassExpression -> Phantoms.TTerm Syntax.SubClassOf
+subClassOf :: Phantoms.TTerm [OwlSyntax.Annotation] -> Phantoms.TTerm OwlSyntax.ClassExpression -> Phantoms.TTerm OwlSyntax.ClassExpression -> Phantoms.TTerm OwlSyntax.SubClassOf
 subClassOf annotations subClass superClass =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.SubClassOf"),
@@ -5252,7 +5252,7 @@ subClassOf annotations subClass superClass =
           Core.fieldName = (Core.Name "superClass"),
           Core.fieldTerm = (Phantoms.unTTerm superClass)}]}))
 
-subClassOfAnnotations :: Phantoms.TTerm Syntax.SubClassOf -> Phantoms.TTerm [Syntax.Annotation]
+subClassOfAnnotations :: Phantoms.TTerm OwlSyntax.SubClassOf -> Phantoms.TTerm [OwlSyntax.Annotation]
 subClassOfAnnotations x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -5260,7 +5260,7 @@ subClassOfAnnotations x =
         Core.projectionField = (Core.Name "annotations")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-subClassOfSubClass :: Phantoms.TTerm Syntax.SubClassOf -> Phantoms.TTerm Syntax.ClassExpression
+subClassOfSubClass :: Phantoms.TTerm OwlSyntax.SubClassOf -> Phantoms.TTerm OwlSyntax.ClassExpression
 subClassOfSubClass x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -5268,7 +5268,7 @@ subClassOfSubClass x =
         Core.projectionField = (Core.Name "subClass")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-subClassOfSuperClass :: Phantoms.TTerm Syntax.SubClassOf -> Phantoms.TTerm Syntax.ClassExpression
+subClassOfSuperClass :: Phantoms.TTerm OwlSyntax.SubClassOf -> Phantoms.TTerm OwlSyntax.ClassExpression
 subClassOfSuperClass x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -5276,7 +5276,7 @@ subClassOfSuperClass x =
         Core.projectionField = (Core.Name "superClass")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-subClassOfWithAnnotations :: Phantoms.TTerm Syntax.SubClassOf -> Phantoms.TTerm [Syntax.Annotation] -> Phantoms.TTerm Syntax.SubClassOf
+subClassOfWithAnnotations :: Phantoms.TTerm OwlSyntax.SubClassOf -> Phantoms.TTerm [OwlSyntax.Annotation] -> Phantoms.TTerm OwlSyntax.SubClassOf
 subClassOfWithAnnotations original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.SubClassOf"),
@@ -5299,7 +5299,7 @@ subClassOfWithAnnotations original newVal =
               Core.projectionField = (Core.Name "superClass")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-subClassOfWithSubClass :: Phantoms.TTerm Syntax.SubClassOf -> Phantoms.TTerm Syntax.ClassExpression -> Phantoms.TTerm Syntax.SubClassOf
+subClassOfWithSubClass :: Phantoms.TTerm OwlSyntax.SubClassOf -> Phantoms.TTerm OwlSyntax.ClassExpression -> Phantoms.TTerm OwlSyntax.SubClassOf
 subClassOfWithSubClass original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.SubClassOf"),
@@ -5322,7 +5322,7 @@ subClassOfWithSubClass original newVal =
               Core.projectionField = (Core.Name "superClass")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-subClassOfWithSuperClass :: Phantoms.TTerm Syntax.SubClassOf -> Phantoms.TTerm Syntax.ClassExpression -> Phantoms.TTerm Syntax.SubClassOf
+subClassOfWithSuperClass :: Phantoms.TTerm OwlSyntax.SubClassOf -> Phantoms.TTerm OwlSyntax.ClassExpression -> Phantoms.TTerm OwlSyntax.SubClassOf
 subClassOfWithSuperClass original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.SubClassOf"),
@@ -5345,7 +5345,7 @@ subClassOfWithSuperClass original newVal =
           Core.fieldName = (Core.Name "superClass"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-subDataPropertyOf :: Phantoms.TTerm [Syntax.Annotation] -> Phantoms.TTerm Syntax.DataPropertyExpression -> Phantoms.TTerm Syntax.DataPropertyExpression -> Phantoms.TTerm Syntax.SubDataPropertyOf
+subDataPropertyOf :: Phantoms.TTerm [OwlSyntax.Annotation] -> Phantoms.TTerm OwlSyntax.DataPropertyExpression -> Phantoms.TTerm OwlSyntax.DataPropertyExpression -> Phantoms.TTerm OwlSyntax.SubDataPropertyOf
 subDataPropertyOf annotations subProperty superProperty =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.SubDataPropertyOf"),
@@ -5360,7 +5360,7 @@ subDataPropertyOf annotations subProperty superProperty =
           Core.fieldName = (Core.Name "superProperty"),
           Core.fieldTerm = (Phantoms.unTTerm superProperty)}]}))
 
-subDataPropertyOfAnnotations :: Phantoms.TTerm Syntax.SubDataPropertyOf -> Phantoms.TTerm [Syntax.Annotation]
+subDataPropertyOfAnnotations :: Phantoms.TTerm OwlSyntax.SubDataPropertyOf -> Phantoms.TTerm [OwlSyntax.Annotation]
 subDataPropertyOfAnnotations x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -5368,7 +5368,7 @@ subDataPropertyOfAnnotations x =
         Core.projectionField = (Core.Name "annotations")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-subDataPropertyOfSubProperty :: Phantoms.TTerm Syntax.SubDataPropertyOf -> Phantoms.TTerm Syntax.DataPropertyExpression
+subDataPropertyOfSubProperty :: Phantoms.TTerm OwlSyntax.SubDataPropertyOf -> Phantoms.TTerm OwlSyntax.DataPropertyExpression
 subDataPropertyOfSubProperty x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -5376,7 +5376,7 @@ subDataPropertyOfSubProperty x =
         Core.projectionField = (Core.Name "subProperty")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-subDataPropertyOfSuperProperty :: Phantoms.TTerm Syntax.SubDataPropertyOf -> Phantoms.TTerm Syntax.DataPropertyExpression
+subDataPropertyOfSuperProperty :: Phantoms.TTerm OwlSyntax.SubDataPropertyOf -> Phantoms.TTerm OwlSyntax.DataPropertyExpression
 subDataPropertyOfSuperProperty x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -5384,7 +5384,7 @@ subDataPropertyOfSuperProperty x =
         Core.projectionField = (Core.Name "superProperty")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-subDataPropertyOfWithAnnotations :: Phantoms.TTerm Syntax.SubDataPropertyOf -> Phantoms.TTerm [Syntax.Annotation] -> Phantoms.TTerm Syntax.SubDataPropertyOf
+subDataPropertyOfWithAnnotations :: Phantoms.TTerm OwlSyntax.SubDataPropertyOf -> Phantoms.TTerm [OwlSyntax.Annotation] -> Phantoms.TTerm OwlSyntax.SubDataPropertyOf
 subDataPropertyOfWithAnnotations original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.SubDataPropertyOf"),
@@ -5407,7 +5407,7 @@ subDataPropertyOfWithAnnotations original newVal =
               Core.projectionField = (Core.Name "superProperty")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-subDataPropertyOfWithSubProperty :: Phantoms.TTerm Syntax.SubDataPropertyOf -> Phantoms.TTerm Syntax.DataPropertyExpression -> Phantoms.TTerm Syntax.SubDataPropertyOf
+subDataPropertyOfWithSubProperty :: Phantoms.TTerm OwlSyntax.SubDataPropertyOf -> Phantoms.TTerm OwlSyntax.DataPropertyExpression -> Phantoms.TTerm OwlSyntax.SubDataPropertyOf
 subDataPropertyOfWithSubProperty original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.SubDataPropertyOf"),
@@ -5430,7 +5430,7 @@ subDataPropertyOfWithSubProperty original newVal =
               Core.projectionField = (Core.Name "superProperty")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-subDataPropertyOfWithSuperProperty :: Phantoms.TTerm Syntax.SubDataPropertyOf -> Phantoms.TTerm Syntax.DataPropertyExpression -> Phantoms.TTerm Syntax.SubDataPropertyOf
+subDataPropertyOfWithSuperProperty :: Phantoms.TTerm OwlSyntax.SubDataPropertyOf -> Phantoms.TTerm OwlSyntax.DataPropertyExpression -> Phantoms.TTerm OwlSyntax.SubDataPropertyOf
 subDataPropertyOfWithSuperProperty original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.SubDataPropertyOf"),
@@ -5453,7 +5453,7 @@ subDataPropertyOfWithSuperProperty original newVal =
           Core.fieldName = (Core.Name "superProperty"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-subObjectPropertyOf :: Phantoms.TTerm [Syntax.Annotation] -> Phantoms.TTerm [Syntax.ObjectPropertyExpression] -> Phantoms.TTerm Syntax.ObjectPropertyExpression -> Phantoms.TTerm Syntax.SubObjectPropertyOf
+subObjectPropertyOf :: Phantoms.TTerm [OwlSyntax.Annotation] -> Phantoms.TTerm [OwlSyntax.ObjectPropertyExpression] -> Phantoms.TTerm OwlSyntax.ObjectPropertyExpression -> Phantoms.TTerm OwlSyntax.SubObjectPropertyOf
 subObjectPropertyOf annotations subProperty superProperty =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.SubObjectPropertyOf"),
@@ -5468,7 +5468,7 @@ subObjectPropertyOf annotations subProperty superProperty =
           Core.fieldName = (Core.Name "superProperty"),
           Core.fieldTerm = (Phantoms.unTTerm superProperty)}]}))
 
-subObjectPropertyOfAnnotations :: Phantoms.TTerm Syntax.SubObjectPropertyOf -> Phantoms.TTerm [Syntax.Annotation]
+subObjectPropertyOfAnnotations :: Phantoms.TTerm OwlSyntax.SubObjectPropertyOf -> Phantoms.TTerm [OwlSyntax.Annotation]
 subObjectPropertyOfAnnotations x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -5476,7 +5476,7 @@ subObjectPropertyOfAnnotations x =
         Core.projectionField = (Core.Name "annotations")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-subObjectPropertyOfSubProperty :: Phantoms.TTerm Syntax.SubObjectPropertyOf -> Phantoms.TTerm [Syntax.ObjectPropertyExpression]
+subObjectPropertyOfSubProperty :: Phantoms.TTerm OwlSyntax.SubObjectPropertyOf -> Phantoms.TTerm [OwlSyntax.ObjectPropertyExpression]
 subObjectPropertyOfSubProperty x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -5484,7 +5484,7 @@ subObjectPropertyOfSubProperty x =
         Core.projectionField = (Core.Name "subProperty")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-subObjectPropertyOfSuperProperty :: Phantoms.TTerm Syntax.SubObjectPropertyOf -> Phantoms.TTerm Syntax.ObjectPropertyExpression
+subObjectPropertyOfSuperProperty :: Phantoms.TTerm OwlSyntax.SubObjectPropertyOf -> Phantoms.TTerm OwlSyntax.ObjectPropertyExpression
 subObjectPropertyOfSuperProperty x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -5492,7 +5492,7 @@ subObjectPropertyOfSuperProperty x =
         Core.projectionField = (Core.Name "superProperty")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-subObjectPropertyOfWithAnnotations :: Phantoms.TTerm Syntax.SubObjectPropertyOf -> Phantoms.TTerm [Syntax.Annotation] -> Phantoms.TTerm Syntax.SubObjectPropertyOf
+subObjectPropertyOfWithAnnotations :: Phantoms.TTerm OwlSyntax.SubObjectPropertyOf -> Phantoms.TTerm [OwlSyntax.Annotation] -> Phantoms.TTerm OwlSyntax.SubObjectPropertyOf
 subObjectPropertyOfWithAnnotations original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.SubObjectPropertyOf"),
@@ -5515,7 +5515,7 @@ subObjectPropertyOfWithAnnotations original newVal =
               Core.projectionField = (Core.Name "superProperty")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-subObjectPropertyOfWithSubProperty :: Phantoms.TTerm Syntax.SubObjectPropertyOf -> Phantoms.TTerm [Syntax.ObjectPropertyExpression] -> Phantoms.TTerm Syntax.SubObjectPropertyOf
+subObjectPropertyOfWithSubProperty :: Phantoms.TTerm OwlSyntax.SubObjectPropertyOf -> Phantoms.TTerm [OwlSyntax.ObjectPropertyExpression] -> Phantoms.TTerm OwlSyntax.SubObjectPropertyOf
 subObjectPropertyOfWithSubProperty original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.SubObjectPropertyOf"),
@@ -5538,7 +5538,7 @@ subObjectPropertyOfWithSubProperty original newVal =
               Core.projectionField = (Core.Name "superProperty")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-subObjectPropertyOfWithSuperProperty :: Phantoms.TTerm Syntax.SubObjectPropertyOf -> Phantoms.TTerm Syntax.ObjectPropertyExpression -> Phantoms.TTerm Syntax.SubObjectPropertyOf
+subObjectPropertyOfWithSuperProperty :: Phantoms.TTerm OwlSyntax.SubObjectPropertyOf -> Phantoms.TTerm OwlSyntax.ObjectPropertyExpression -> Phantoms.TTerm OwlSyntax.SubObjectPropertyOf
 subObjectPropertyOfWithSuperProperty original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.SubObjectPropertyOf"),
@@ -5561,7 +5561,7 @@ subObjectPropertyOfWithSuperProperty original newVal =
           Core.fieldName = (Core.Name "superProperty"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-symmetricObjectProperty :: Phantoms.TTerm [Syntax.Annotation] -> Phantoms.TTerm Syntax.ObjectPropertyExpression -> Phantoms.TTerm Syntax.SymmetricObjectProperty
+symmetricObjectProperty :: Phantoms.TTerm [OwlSyntax.Annotation] -> Phantoms.TTerm OwlSyntax.ObjectPropertyExpression -> Phantoms.TTerm OwlSyntax.SymmetricObjectProperty
 symmetricObjectProperty annotations property =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.SymmetricObjectProperty"),
@@ -5573,7 +5573,7 @@ symmetricObjectProperty annotations property =
           Core.fieldName = (Core.Name "property"),
           Core.fieldTerm = (Phantoms.unTTerm property)}]}))
 
-symmetricObjectPropertyAnnotations :: Phantoms.TTerm Syntax.SymmetricObjectProperty -> Phantoms.TTerm [Syntax.Annotation]
+symmetricObjectPropertyAnnotations :: Phantoms.TTerm OwlSyntax.SymmetricObjectProperty -> Phantoms.TTerm [OwlSyntax.Annotation]
 symmetricObjectPropertyAnnotations x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -5581,7 +5581,7 @@ symmetricObjectPropertyAnnotations x =
         Core.projectionField = (Core.Name "annotations")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-symmetricObjectPropertyProperty :: Phantoms.TTerm Syntax.SymmetricObjectProperty -> Phantoms.TTerm Syntax.ObjectPropertyExpression
+symmetricObjectPropertyProperty :: Phantoms.TTerm OwlSyntax.SymmetricObjectProperty -> Phantoms.TTerm OwlSyntax.ObjectPropertyExpression
 symmetricObjectPropertyProperty x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -5589,7 +5589,7 @@ symmetricObjectPropertyProperty x =
         Core.projectionField = (Core.Name "property")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-symmetricObjectPropertyWithAnnotations :: Phantoms.TTerm Syntax.SymmetricObjectProperty -> Phantoms.TTerm [Syntax.Annotation] -> Phantoms.TTerm Syntax.SymmetricObjectProperty
+symmetricObjectPropertyWithAnnotations :: Phantoms.TTerm OwlSyntax.SymmetricObjectProperty -> Phantoms.TTerm [OwlSyntax.Annotation] -> Phantoms.TTerm OwlSyntax.SymmetricObjectProperty
 symmetricObjectPropertyWithAnnotations original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.SymmetricObjectProperty"),
@@ -5605,7 +5605,7 @@ symmetricObjectPropertyWithAnnotations original newVal =
               Core.projectionField = (Core.Name "property")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-symmetricObjectPropertyWithProperty :: Phantoms.TTerm Syntax.SymmetricObjectProperty -> Phantoms.TTerm Syntax.ObjectPropertyExpression -> Phantoms.TTerm Syntax.SymmetricObjectProperty
+symmetricObjectPropertyWithProperty :: Phantoms.TTerm OwlSyntax.SymmetricObjectProperty -> Phantoms.TTerm OwlSyntax.ObjectPropertyExpression -> Phantoms.TTerm OwlSyntax.SymmetricObjectProperty
 symmetricObjectPropertyWithProperty original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.SymmetricObjectProperty"),
@@ -5621,7 +5621,7 @@ symmetricObjectPropertyWithProperty original newVal =
           Core.fieldName = (Core.Name "property"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-transitiveObjectProperty :: Phantoms.TTerm [Syntax.Annotation] -> Phantoms.TTerm Syntax.ObjectPropertyExpression -> Phantoms.TTerm Syntax.TransitiveObjectProperty
+transitiveObjectProperty :: Phantoms.TTerm [OwlSyntax.Annotation] -> Phantoms.TTerm OwlSyntax.ObjectPropertyExpression -> Phantoms.TTerm OwlSyntax.TransitiveObjectProperty
 transitiveObjectProperty annotations property =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.TransitiveObjectProperty"),
@@ -5633,7 +5633,7 @@ transitiveObjectProperty annotations property =
           Core.fieldName = (Core.Name "property"),
           Core.fieldTerm = (Phantoms.unTTerm property)}]}))
 
-transitiveObjectPropertyAnnotations :: Phantoms.TTerm Syntax.TransitiveObjectProperty -> Phantoms.TTerm [Syntax.Annotation]
+transitiveObjectPropertyAnnotations :: Phantoms.TTerm OwlSyntax.TransitiveObjectProperty -> Phantoms.TTerm [OwlSyntax.Annotation]
 transitiveObjectPropertyAnnotations x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -5641,7 +5641,7 @@ transitiveObjectPropertyAnnotations x =
         Core.projectionField = (Core.Name "annotations")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-transitiveObjectPropertyProperty :: Phantoms.TTerm Syntax.TransitiveObjectProperty -> Phantoms.TTerm Syntax.ObjectPropertyExpression
+transitiveObjectPropertyProperty :: Phantoms.TTerm OwlSyntax.TransitiveObjectProperty -> Phantoms.TTerm OwlSyntax.ObjectPropertyExpression
 transitiveObjectPropertyProperty x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -5649,7 +5649,7 @@ transitiveObjectPropertyProperty x =
         Core.projectionField = (Core.Name "property")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-transitiveObjectPropertyWithAnnotations :: Phantoms.TTerm Syntax.TransitiveObjectProperty -> Phantoms.TTerm [Syntax.Annotation] -> Phantoms.TTerm Syntax.TransitiveObjectProperty
+transitiveObjectPropertyWithAnnotations :: Phantoms.TTerm OwlSyntax.TransitiveObjectProperty -> Phantoms.TTerm [OwlSyntax.Annotation] -> Phantoms.TTerm OwlSyntax.TransitiveObjectProperty
 transitiveObjectPropertyWithAnnotations original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.TransitiveObjectProperty"),
@@ -5665,7 +5665,7 @@ transitiveObjectPropertyWithAnnotations original newVal =
               Core.projectionField = (Core.Name "property")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-transitiveObjectPropertyWithProperty :: Phantoms.TTerm Syntax.TransitiveObjectProperty -> Phantoms.TTerm Syntax.ObjectPropertyExpression -> Phantoms.TTerm Syntax.TransitiveObjectProperty
+transitiveObjectPropertyWithProperty :: Phantoms.TTerm OwlSyntax.TransitiveObjectProperty -> Phantoms.TTerm OwlSyntax.ObjectPropertyExpression -> Phantoms.TTerm OwlSyntax.TransitiveObjectProperty
 transitiveObjectPropertyWithProperty original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.owl.syntax.TransitiveObjectProperty"),
@@ -5681,103 +5681,103 @@ transitiveObjectPropertyWithProperty original newVal =
           Core.fieldName = (Core.Name "property"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-unAnnotationProperty :: Phantoms.TTerm Syntax.AnnotationProperty -> Phantoms.TTerm ()
+unAnnotationProperty :: Phantoms.TTerm OwlSyntax.AnnotationProperty -> Phantoms.TTerm ()
 unAnnotationProperty x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.owl.syntax.AnnotationProperty")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-unAnonymousIndividual :: Phantoms.TTerm Syntax.AnonymousIndividual -> Phantoms.TTerm ()
+unAnonymousIndividual :: Phantoms.TTerm OwlSyntax.AnonymousIndividual -> Phantoms.TTerm ()
 unAnonymousIndividual x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.owl.syntax.AnonymousIndividual")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-unClass :: Phantoms.TTerm Syntax.Class -> Phantoms.TTerm ()
+unClass :: Phantoms.TTerm OwlSyntax.Class -> Phantoms.TTerm ()
 unClass x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.owl.syntax.Class")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-unDataComplementOf :: Phantoms.TTerm Syntax.DataComplementOf -> Phantoms.TTerm Syntax.DataRange
+unDataComplementOf :: Phantoms.TTerm OwlSyntax.DataComplementOf -> Phantoms.TTerm OwlSyntax.DataRange
 unDataComplementOf x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.owl.syntax.DataComplementOf")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-unDataIntersectionOf :: Phantoms.TTerm Syntax.DataIntersectionOf -> Phantoms.TTerm [Syntax.DataRange]
+unDataIntersectionOf :: Phantoms.TTerm OwlSyntax.DataIntersectionOf -> Phantoms.TTerm [OwlSyntax.DataRange]
 unDataIntersectionOf x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.owl.syntax.DataIntersectionOf")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-unDataOneOf :: Phantoms.TTerm Syntax.DataOneOf -> Phantoms.TTerm [Syntax_.Literal]
+unDataOneOf :: Phantoms.TTerm OwlSyntax.DataOneOf -> Phantoms.TTerm [RdfSyntax.Literal]
 unDataOneOf x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.owl.syntax.DataOneOf")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-unDataProperty :: Phantoms.TTerm Syntax.DataProperty -> Phantoms.TTerm ()
+unDataProperty :: Phantoms.TTerm OwlSyntax.DataProperty -> Phantoms.TTerm ()
 unDataProperty x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.owl.syntax.DataProperty")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-unDataPropertyExpression :: Phantoms.TTerm Syntax.DataPropertyExpression -> Phantoms.TTerm Syntax.DataProperty
+unDataPropertyExpression :: Phantoms.TTerm OwlSyntax.DataPropertyExpression -> Phantoms.TTerm OwlSyntax.DataProperty
 unDataPropertyExpression x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.owl.syntax.DataPropertyExpression")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-unDataUnionOf :: Phantoms.TTerm Syntax.DataUnionOf -> Phantoms.TTerm [Syntax.DataRange]
+unDataUnionOf :: Phantoms.TTerm OwlSyntax.DataUnionOf -> Phantoms.TTerm [OwlSyntax.DataRange]
 unDataUnionOf x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.owl.syntax.DataUnionOf")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-unInverseObjectProperty :: Phantoms.TTerm Syntax.InverseObjectProperty -> Phantoms.TTerm Syntax.ObjectProperty
+unInverseObjectProperty :: Phantoms.TTerm OwlSyntax.InverseObjectProperty -> Phantoms.TTerm OwlSyntax.ObjectProperty
 unInverseObjectProperty x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.owl.syntax.InverseObjectProperty")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-unNamedIndividual :: Phantoms.TTerm Syntax.NamedIndividual -> Phantoms.TTerm ()
+unNamedIndividual :: Phantoms.TTerm OwlSyntax.NamedIndividual -> Phantoms.TTerm ()
 unNamedIndividual x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.owl.syntax.NamedIndividual")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-unObjectComplementOf :: Phantoms.TTerm Syntax.ObjectComplementOf -> Phantoms.TTerm Syntax.ClassExpression
+unObjectComplementOf :: Phantoms.TTerm OwlSyntax.ObjectComplementOf -> Phantoms.TTerm OwlSyntax.ClassExpression
 unObjectComplementOf x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.owl.syntax.ObjectComplementOf")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-unObjectHasSelf :: Phantoms.TTerm Syntax.ObjectHasSelf -> Phantoms.TTerm Syntax.ObjectPropertyExpression
+unObjectHasSelf :: Phantoms.TTerm OwlSyntax.ObjectHasSelf -> Phantoms.TTerm OwlSyntax.ObjectPropertyExpression
 unObjectHasSelf x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.owl.syntax.ObjectHasSelf")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-unObjectIntersectionOf :: Phantoms.TTerm Syntax.ObjectIntersectionOf -> Phantoms.TTerm [Syntax.ClassExpression]
+unObjectIntersectionOf :: Phantoms.TTerm OwlSyntax.ObjectIntersectionOf -> Phantoms.TTerm [OwlSyntax.ClassExpression]
 unObjectIntersectionOf x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.owl.syntax.ObjectIntersectionOf")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-unObjectOneOf :: Phantoms.TTerm Syntax.ObjectOneOf -> Phantoms.TTerm [Syntax.Individual]
+unObjectOneOf :: Phantoms.TTerm OwlSyntax.ObjectOneOf -> Phantoms.TTerm [OwlSyntax.Individual]
 unObjectOneOf x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.owl.syntax.ObjectOneOf")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-unObjectProperty :: Phantoms.TTerm Syntax.ObjectProperty -> Phantoms.TTerm ()
+unObjectProperty :: Phantoms.TTerm OwlSyntax.ObjectProperty -> Phantoms.TTerm ()
 unObjectProperty x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.owl.syntax.ObjectProperty")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-unObjectUnionOf :: Phantoms.TTerm Syntax.ObjectUnionOf -> Phantoms.TTerm [Syntax.ClassExpression]
+unObjectUnionOf :: Phantoms.TTerm OwlSyntax.ObjectUnionOf -> Phantoms.TTerm [OwlSyntax.ClassExpression]
 unObjectUnionOf x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.owl.syntax.ObjectUnionOf")),

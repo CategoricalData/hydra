@@ -8,10 +8,10 @@ import qualified Hydra.Annotations as Annotations
 import qualified Hydra.Constants as Constants
 import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
-import qualified Hydra.Decode.Core as Core_
-import qualified Hydra.Encode.Core as Core__
+import qualified Hydra.Decode.Core as DecodeCore
+import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Errors as Errors
-import qualified Hydra.Extract.Core as Core___
+import qualified Hydra.Extract.Core as ExtractCore
 import qualified Hydra.Formatting as Formatting
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lib.Eithers as Eithers
@@ -82,7 +82,7 @@ collectTypeVariablesFromType typ =
 -- | Transform a type binding into a decoder binding
 decodeBinding :: t0 -> Graph.Graph -> Core.Binding -> Either Errors.DecodingError Core.Binding
 decodeBinding cx graph b =
-    Eithers.bind (Core_.type_ graph (Core.bindingTerm b)) (\typ -> Right (Core.Binding {
+    Eithers.bind (DecodeCore.type_ graph (Core.bindingTerm b)) (\typ -> Right (Core.Binding {
       Core.bindingName = (decodeBindingName (Core.bindingName b)),
       Core.bindingTerm = (decodeTypeNamed (Core.bindingName b) typ),
       Core.bindingType = (Just (decoderTypeSchemeNamed (Core.bindingName b) typ))}))
@@ -1063,7 +1063,7 @@ decodeModule cx graph mod =
         let schemaTerm = Core.TermVariable (Core.Name "hydra.core.Type")
             dataTerm =
                     Annotations.normalizeTermAnnotations (Core.TermAnnotated (Core.AnnotatedTerm {
-                      Core.annotatedTermBody = (Core__.type_ typ),
+                      Core.annotatedTermBody = (EncodeCore.type_ typ),
                       Core.annotatedTermAnnotation = (Maps.fromList [
                         (Constants.key_type, schemaTerm)])}))
         in Core.Binding {

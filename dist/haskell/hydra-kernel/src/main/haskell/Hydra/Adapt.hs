@@ -17,14 +17,14 @@ import qualified Hydra.Lexical as Lexical
 import qualified Hydra.Lib.Eithers as Eithers
 import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Lists as Lists
-import qualified Hydra.Lib.Literals as Literals
+import qualified Hydra.Lib.Literals as LibLiterals
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
-import qualified Hydra.Literals as Literals_
+import qualified Hydra.Literals as Literals
 import qualified Hydra.Names as Names
 import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Reduction as Reduction
@@ -32,7 +32,7 @@ import qualified Hydra.Reflect as Reflect
 import qualified Hydra.Resolution as Resolution
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Scoping as Scoping
-import qualified Hydra.Show.Core as Core_
+import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Strip as Strip
 import qualified Hydra.Variables as Variables
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
@@ -148,13 +148,13 @@ adaptLiteral :: Core.LiteralType -> Core.Literal -> Core.Literal
 adaptLiteral lt l =
     case l of
       Core.LiteralBinary v0 -> case lt of
-        Core.LiteralTypeString -> Core.LiteralString (Literals.binaryToString v0)
+        Core.LiteralTypeString -> Core.LiteralString (LibLiterals.binaryToString v0)
       Core.LiteralBoolean v0 -> case lt of
-        Core.LiteralTypeInteger v1 -> Core.LiteralInteger (Literals_.bigintToIntegerValue v1 (Logic.ifElse v0 1 0))
+        Core.LiteralTypeInteger v1 -> Core.LiteralInteger (Literals.bigintToIntegerValue v1 (Logic.ifElse v0 1 0))
       Core.LiteralFloat v0 -> case lt of
-        Core.LiteralTypeFloat v1 -> Core.LiteralFloat (Literals_.bigfloatToFloatValue v1 (Literals_.floatValueToBigfloat v0))
+        Core.LiteralTypeFloat v1 -> Core.LiteralFloat (Literals.bigfloatToFloatValue v1 (Literals.floatValueToBigfloat v0))
       Core.LiteralInteger v0 -> case lt of
-        Core.LiteralTypeInteger v1 -> Core.LiteralInteger (Literals_.bigintToIntegerValue v1 (Literals_.integerValueToBigint v0))
+        Core.LiteralTypeInteger v1 -> Core.LiteralInteger (Literals.bigintToIntegerValue v1 (Literals.integerValueToBigint v0))
 
 -- | Attempt to adapt a literal type using the given language constraints
 adaptLiteralType :: Coders.LanguageConstraints -> Core.LiteralType -> Maybe Core.LiteralType
@@ -179,7 +179,7 @@ adaptLiteralTypesMap constraints =
 -- | Adapt a literal value using the given language constraints
 adaptLiteralValue :: Ord t0 => (M.Map t0 Core.LiteralType -> t0 -> Core.Literal -> Core.Literal)
 adaptLiteralValue litmap lt l =
-    Maybes.maybe (Core.LiteralString (Core_.literal l)) (\lt2 -> adaptLiteral lt2 l) (Maps.lookup lt litmap)
+    Maybes.maybe (Core.LiteralString (ShowCore.literal l)) (\lt2 -> adaptLiteral lt2 l) (Maps.lookup lt litmap)
 
 -- | Rewrite callback for adapting nested let binding TypeSchemes in a term
 adaptNestedTypes :: Coders.LanguageConstraints -> M.Map Core.LiteralType Core.LiteralType -> (t0 -> Either Errors.Error Core.Term) -> t0 -> Either Errors.Error Core.Term
@@ -233,7 +233,7 @@ adaptTerm constraints litmap cx graph term0 =
                     Core.typeApplicationTermBody = (Core.typeApplicationTermBody v0),
                     Core.typeApplicationTermType = atyp})))
                   Core.TermTypeLambda _ -> Right term1
-                  _ -> Eithers.bind (tryTerm term1) (\mterm -> Maybes.maybe (Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "no alternatives for term: " (Core_.term term1))))) (\term2 -> Right term2) mterm)))
+                  _ -> Eithers.bind (tryTerm term1) (\mterm -> Maybes.maybe (Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "no alternatives for term: " (ShowCore.term term1))))) (\term2 -> Right term2) mterm)))
       in (Rewriting.rewriteTermM rewrite term0)
 
 -- | Adapt a term using the constraints of a given language
@@ -263,7 +263,7 @@ adaptType constraints litmap type0 =
                     let supportedVariant = Sets.member (Reflect.typeVariant typ) (Coders.languageConstraintsTypeVariants constraints)
                     in (Logic.ifElse supportedVariant (forSupported typ) (forUnsupported typ))
           rewrite =
-                  \recurse -> \typ -> Eithers.bind (recurse typ) (\type1 -> Maybes.maybe (Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "no alternatives for type: " (Core_.type_ typ))))) (\type2 -> Right type2) (tryType type1))
+                  \recurse -> \typ -> Eithers.bind (recurse typ) (\type1 -> Maybes.maybe (Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "no alternatives for type: " (ShowCore.type_ typ))))) (\type2 -> Right type2) (tryType type1))
       in (Rewriting.rewriteTypeM rewrite type0)
 
 -- | Adapt a type using the constraints of a given language
@@ -401,7 +401,7 @@ prepareFloatType :: Core.FloatType -> (Core.FloatType, ((Core.FloatValue -> Core
 prepareFloatType ft =
     case ft of
       Core.FloatTypeBigfloat -> (Core.FloatTypeFloat64, ((\v -> case v of
-        Core.FloatValueBigfloat v1 -> Core.FloatValueFloat64 (Literals.bigfloatToFloat64 v1)
+        Core.FloatValueBigfloat v1 -> Core.FloatValueFloat64 (LibLiterals.bigfloatToFloat64 v1)
         _ -> v), (Sets.fromList [
         "replace arbitrary-precision floating-point numbers with 64-bit floating-point numbers (doubles)"])))
       _ -> prepareSame ft
@@ -411,19 +411,19 @@ prepareIntegerType :: Core.IntegerType -> (Core.IntegerType, ((Core.IntegerValue
 prepareIntegerType it =
     case it of
       Core.IntegerTypeBigint -> (Core.IntegerTypeInt64, ((\v -> case v of
-        Core.IntegerValueBigint v1 -> Core.IntegerValueInt64 (Literals.bigintToInt64 v1)
+        Core.IntegerValueBigint v1 -> Core.IntegerValueInt64 (LibLiterals.bigintToInt64 v1)
         _ -> v), (Sets.fromList [
         "replace arbitrary-precision integers with 64-bit integers"])))
       Core.IntegerTypeUint8 -> (Core.IntegerTypeInt8, ((\v -> case v of
-        Core.IntegerValueUint8 v1 -> Core.IntegerValueInt8 (Literals.bigintToInt8 (Literals.uint8ToBigint v1))
+        Core.IntegerValueUint8 v1 -> Core.IntegerValueInt8 (LibLiterals.bigintToInt8 (LibLiterals.uint8ToBigint v1))
         _ -> v), (Sets.fromList [
         "replace unsigned 8-bit integers with signed 8-bit integers"])))
       Core.IntegerTypeUint32 -> (Core.IntegerTypeInt32, ((\v -> case v of
-        Core.IntegerValueUint32 v1 -> Core.IntegerValueInt32 (Literals.bigintToInt32 (Literals.uint32ToBigint v1))
+        Core.IntegerValueUint32 v1 -> Core.IntegerValueInt32 (LibLiterals.bigintToInt32 (LibLiterals.uint32ToBigint v1))
         _ -> v), (Sets.fromList [
         "replace unsigned 32-bit integers with signed 32-bit integers"])))
       Core.IntegerTypeUint64 -> (Core.IntegerTypeInt64, ((\v -> case v of
-        Core.IntegerValueUint64 v1 -> Core.IntegerValueInt64 (Literals.bigintToInt64 (Literals.uint64ToBigint v1))
+        Core.IntegerValueUint64 v1 -> Core.IntegerValueInt64 (LibLiterals.bigintToInt64 (LibLiterals.uint64ToBigint v1))
         _ -> v), (Sets.fromList [
         "replace unsigned 64-bit integers with signed 64-bit integers"])))
       _ -> prepareSame it
@@ -433,7 +433,7 @@ prepareLiteralType :: Core.LiteralType -> (Core.LiteralType, ((Core.Literal -> C
 prepareLiteralType at =
     case at of
       Core.LiteralTypeBinary -> (Core.LiteralTypeString, ((\v -> case v of
-        Core.LiteralBinary v1 -> Core.LiteralString (Literals.binaryToString v1)
+        Core.LiteralBinary v1 -> Core.LiteralString (LibLiterals.binaryToString v1)
         _ -> v), (Sets.fromList [
         "replace binary strings with character strings"])))
       Core.LiteralTypeFloat v0 ->
