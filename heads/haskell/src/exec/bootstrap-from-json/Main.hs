@@ -39,13 +39,17 @@ import Hydra.Java.Coder (moduleToJava)
 import Hydra.Java.Language (javaLanguage)
 import Hydra.Python.Coder (moduleToPython)
 import Hydra.Python.Language (pythonLanguage)
+import Hydra.Scala.Coder (moduleToScala)
+import Hydra.Scala.Language (scalaLanguage)
 import Hydra.Lisp.Language (lispLanguage)
 import qualified Hydra.Lisp.Syntax as LispSyntax
 import qualified Hydra.Sources.Test.TestSuite as TestSuite
 
 import Control.Exception (catch, IOException)
-import Control.Monad (when)
-import Data.List (isPrefixOf, partition)
+import Control.Monad (when, forM)
+import qualified Control.Monad as CM
+import Data.List (isPrefixOf, partition, sortOn, groupBy)
+import Data.Function (on)
 import Data.Time.Clock (getCurrentTime, diffUTCTime, UTCTime)
 import System.Directory (listDirectory, doesFileExist)
 import System.Environment (getArgs)
@@ -81,32 +85,36 @@ countFiles dir ext = go dir
       return (sum counts)
 
 data Options = Options
-  { optTarget          :: String
-  , optOutput          :: Maybe FilePath
-  , optIncludeCoders   :: Bool
-  , optIncludeDsls     :: Bool
-  , optIncludeTests    :: Bool
-  , optIncludeGenTests :: Bool  -- deprecated; ignored
-  , optKernelOnly      :: Bool
-  , optTypesOnly       :: Bool
-  , optExtJavaOnly     :: Bool
-  , optJsonDir         :: Maybe FilePath
-  , optExtJsonDir      :: Maybe FilePath
+  { optTarget             :: String
+  , optOutput             :: Maybe FilePath
+  , optIncludeCoders      :: Bool
+  , optIncludeDsls        :: Bool
+  , optIncludeTests       :: Bool
+  , optIncludeGenTests    :: Bool  -- deprecated; ignored
+  , optKernelOnly         :: Bool
+  , optTypesOnly          :: Bool
+  , optExtJavaOnly        :: Bool
+  , optPackageSplit       :: Bool
+  , optSynthesizeSources  :: Bool
+  , optJsonDir            :: Maybe FilePath
+  , optExtJsonDir         :: Maybe FilePath
   }
 
 defaultOptions :: Options
 defaultOptions = Options
-  { optTarget          = ""
-  , optOutput          = Nothing
-  , optIncludeCoders   = False
-  , optIncludeDsls     = False
-  , optIncludeTests    = False
-  , optIncludeGenTests = False
-  , optKernelOnly      = False
-  , optTypesOnly       = False
-  , optExtJavaOnly     = False
-  , optJsonDir         = Nothing
-  , optExtJsonDir      = Nothing
+  { optTarget             = ""
+  , optOutput             = Nothing
+  , optIncludeCoders      = False
+  , optIncludeDsls        = False
+  , optIncludeTests       = False
+  , optIncludeGenTests    = False
+  , optKernelOnly         = False
+  , optTypesOnly          = False
+  , optExtJavaOnly        = False
+  , optPackageSplit       = False
+  , optSynthesizeSources  = False
+  , optJsonDir            = Nothing
+  , optExtJsonDir         = Nothing
   }
 
 parseArgs :: [String] -> Either String Options
@@ -125,6 +133,8 @@ parseArgs = go defaultOptions
     go opts ("--types-only" : rest) = go (opts { optTypesOnly = True }) rest
     go opts ("--ext-only" : rest) = go (opts { optExtJavaOnly = True }) rest
     go opts ("--ext-java-only" : rest) = go (opts { optExtJavaOnly = True }) rest  -- legacy alias
+    go opts ("--package-split" : rest) = go (opts { optPackageSplit = True }) rest
+    go opts ("--synthesize-sources" : rest) = go (opts { optSynthesizeSources = True }) rest
     go opts ("--json-dir" : d : rest) = go (opts { optJsonDir = Just d }) rest
     go opts ("--ext-json-dir" : d : rest) = go (opts { optExtJsonDir = Just d }) rest
     go _ (arg : _) = Left $ "Unknown argument: " ++ arg
@@ -143,9 +153,81 @@ usage = unlines
   , "  --types-only           Only generate type-defining modules"
   , "  --ext-only             Only generate hydraExtDemoModules from ext manifest"
   , "  --ext-java-only        Legacy alias for --ext-only"
+  , "  --package-split        Route each module to <output>/<package>/src/main/<lang>/"
+  , "                         based on namespace prefix instead of a single output dir."
+  , "  --synthesize-sources   Also synthesize decoder/encoder DSL source modules"
+  , "                         (Hydra.Sources.Decode.*, Hydra.Sources.Encode.*) from"
+  , "                         the loaded kernel type modules."
   , "  --json-dir <dir>       Override kernel JSON directory"
   , "  --ext-json-dir <dir>   Override ext JSON directory (for --include-coders)"
   ]
+
+-- | Map a module namespace to the package that owns it.
+--
+-- This is a temporary hardcoded mapping for Step 1 of the DSL→JSON→Haskell
+-- conversion. See feature_290_packaging-plan.md, "Sync system redesign /
+-- Package manifests". Eventually this should be derived from each package's
+-- package.json (or its Manifest.hs), but for now a prefix table is enough.
+--
+-- The ordering matters: more specific prefixes must come before less
+-- specific ones. The fallback "hydra-kernel" covers all namespaces that
+-- don't match any explicit prefix.
+namespaceToPackage :: Namespace -> String
+namespaceToPackage (Namespace ns) = go packagePrefixes
+  where
+    go []                 = "hydra-kernel"
+    go ((prefix, pkg) : rest)
+      | prefix `isPrefixOf` ns = pkg
+      | otherwise              = go rest
+
+packagePrefixes :: [(String, String)]
+packagePrefixes =
+  [ -- Coder packages (main runtime modules)
+    ("hydra.haskell.",              "hydra-haskell")
+  , ("hydra.java.",                 "hydra-java")
+  , ("hydra.python.",               "hydra-python")
+  , ("hydra.scala.",                "hydra-scala")
+  , ("hydra.lisp.",                 "hydra-lisp")
+  , ("hydra.coq.",                  "hydra-coq")
+  , ("hydra.javaScript.",           "hydra-javascript")
+    -- DSL wrapper modules for coder packages
+  , ("hydra.dsl.haskell.",          "hydra-haskell")
+  , ("hydra.dsl.java.",             "hydra-java")
+  , ("hydra.dsl.python.",           "hydra-python")
+  , ("hydra.dsl.scala.",            "hydra-scala")
+  , ("hydra.dsl.lisp.",             "hydra-lisp")
+  , ("hydra.dsl.coq.",              "hydra-coq")
+  , ("hydra.dsl.javaScript.",       "hydra-javascript")
+    -- Synthesized decoder source modules for coder packages
+  , ("hydra.sources.decode.haskell.",    "hydra-haskell")
+  , ("hydra.sources.decode.java.",       "hydra-java")
+  , ("hydra.sources.decode.python.",     "hydra-python")
+  , ("hydra.sources.decode.scala.",      "hydra-scala")
+  , ("hydra.sources.decode.lisp.",       "hydra-lisp")
+  , ("hydra.sources.decode.coq.",        "hydra-coq")
+  , ("hydra.sources.decode.javaScript.", "hydra-javascript")
+    -- Synthesized encoder source modules for coder packages
+  , ("hydra.sources.encode.haskell.",    "hydra-haskell")
+  , ("hydra.sources.encode.java.",       "hydra-java")
+  , ("hydra.sources.encode.python.",     "hydra-python")
+  , ("hydra.sources.encode.scala.",      "hydra-scala")
+  , ("hydra.sources.encode.lisp.",       "hydra-lisp")
+  , ("hydra.sources.encode.coq.",        "hydra-coq")
+  , ("hydra.sources.encode.javaScript.", "hydra-javascript")
+  ]
+
+-- | Partition a list of modules by owning package, returning a list of
+--   (packageName, modules) groups. The groups are sorted by package name
+--   for deterministic output ordering.
+groupByPackage :: [Module] -> [(String, [Module])]
+groupByPackage mods =
+    fmap collapse
+      $ groupBy ((==) `on` fst)
+      $ sortOn fst
+      $ fmap (\m -> (namespaceToPackage (moduleNamespace m), m)) mods
+  where
+    collapse [] = ("", [])  -- unreachable; groupBy never returns empty inner lists
+    collapse grp@((pkg, _) : _) = (pkg, fmap snd grp)
 
 main :: IO ()
 main = do
@@ -165,6 +247,7 @@ main = do
         "haskell"     -> ".hs"
         "java"        -> ".java"
         "python"      -> ".py"
+        "scala"       -> ".scala"
         "clojure"     -> ".clj"
         "scheme"      -> ".scm"
         "common-lisp" -> ".lisp"
@@ -176,6 +259,7 @@ main = do
         "haskell"     -> "/tmp/hydra-bootstrapping-demo/haskell-to-haskell"
         "java"        -> "../../dist/java/hydra-kernel"
         "python"      -> "../../dist/python/hydra-kernel"
+        "scala"       -> "../../dist/scala/hydra-kernel"
         "clojure"     -> "../../dist/clojure/hydra-kernel"
         "scheme"      -> "../../dist/scheme/hydra-kernel"
         "common-lisp" -> "../../dist/common-lisp/hydra-kernel"
@@ -184,6 +268,13 @@ main = do
   let outBase = maybe defaultOutput id (optOutput opts)
   let outMain = outBase FP.</> ("src/main/" ++ target)
   let outTest = outBase FP.</> ("src/test/" ++ target)
+
+  -- When --package-split is set, compute a per-package (main, test) output path.
+  -- Callers pass the parent directory of the package dirs as --output, e.g.
+  -- --output ../../dist/haskell, and each module is routed to
+  -- ../../dist/haskell/<package>/src/{main,test}/<lang>/.
+  let packageOutMain pkg = outBase FP.</> pkg FP.</> ("src/main/" ++ target)
+  let packageOutTest pkg = outBase FP.</> pkg FP.</> ("src/test/" ++ target)
 
   -- JSON directories (relative to hydra-ext working directory)
   let kernelJsonDir = maybe "../../dist/json/hydra-kernel/src/main/json" id (optJsonDir opts)
@@ -194,6 +285,7 @@ main = do
         "haskell"     -> "Haskell"
         "java"        -> "Java"
         "python"      -> "Python"
+        "scala"       -> "Scala"
         "clojure"     -> "Clojure"
         "scheme"      -> "Scheme"
         "common-lisp" -> "Common Lisp"
@@ -277,6 +369,41 @@ main = do
     putStrLn $ "Filtering to type modules: " ++ show (length allMainMods) ++ " of " ++ show (length filtered1)
     putStrLn ""
 
+  -- Optionally synthesize decoder/encoder DSL source modules over the loaded
+  -- type modules, and add them to the modules-to-generate set. The
+  -- synthesized modules carry no type annotations, so we run inference over
+  -- them before handing them to the generator (which skips inference on the
+  -- loaded modules).
+  synthesizedSourceMods <- if optSynthesizeSources opts
+    then do
+      -- Decoder/encoder synthesis runs over a subset of the loaded kernel
+      -- type modules. To produce the same output as the historical
+      -- Sources.All.kernelTypesModules (a hand-curated list), we filter to
+      -- modules that define native types and exclude any namespaces that are
+      -- part of a coder package or the yaml runtime.
+      let isSynthInput m =
+            let nsStr = unNamespace (moduleNamespace m)
+                isCoder = any (\(pfx, _) -> pfx `isPrefixOf` nsStr) packagePrefixes
+                isYaml  = "hydra.yaml." `isPrefixOf` nsStr
+                hasType = any isNativeType (moduleBindings m)
+            in hasType && not isCoder && not isYaml
+      let typeMods = Prelude.filter isSynthInput allMainMods
+      putStrLn $ "Synthesizing decoder/encoder source modules from "
+        ++ show (length typeMods) ++ " type modules..."
+      decSrc <- generateDecoderSourceModules allMainMods typeMods
+      encSrc <- generateEncoderSourceModules allMainMods typeMods
+      putStrLn $ "  Synthesized " ++ show (length decSrc) ++ " decoder source modules"
+      putStrLn $ "  Synthesized " ++ show (length encSrc) ++ " encoder source modules"
+      -- Run inference on the synthesized modules; the generator call below uses
+      -- doInfer=False, which would fail on these untyped bindings otherwise.
+      let synthesized = decSrc ++ encSrc
+      let inferUniverse = allMainMods ++ synthesized
+      inferred <- inferModulesIO inferUniverse synthesized
+      putStrLn $ "  Inferred types for " ++ show (length inferred) ++ " synthesized modules"
+      putStrLn ""
+      return inferred
+    else return []
+
   -- When --ext-only (or legacy --ext-java-only) is used, load the ext demo modules
   -- from JSON and generate only those (using allMainMods as the universe for type resolution)
   (modsToGenerate, allModsFinal) <- if optExtJavaOnly opts
@@ -292,10 +419,14 @@ main = do
       return (extMods, allMainMods ++ extMods)
     else return (allMainMods, allMainMods)
 
+  -- Prepend synthesized source modules to modsToGenerate (deduping by namespace
+  -- to keep ordering stable). They go into the same universe as the main modules.
+  let modsToGenerate' = modsToGenerate ++ synthesizedSourceMods
+  let allModsFinal'   = allModsFinal ++ synthesizedSourceMods
 
   -- Generate main modules
   let stepNum = if optIncludeCoders opts then "3" else "2"
-  putStrLn $ "Step " ++ stepNum ++ ": Mapping " ++ show (length modsToGenerate) ++ " modules to " ++ targetCap ++ "..."
+  putStrLn $ "Step " ++ stepNum ++ ": Mapping " ++ show (length modsToGenerate') ++ " modules to " ++ targetCap ++ "..."
 
   genStart <- getCurrentTime
   let lispDialectAndExt = case target of
@@ -309,15 +440,29 @@ main = do
         Just (dialect, lispExt) -> Just (moduleToLispDialect dialect lispExt)
         Nothing -> Nothing
 
-  mainFileCount <- case target of
-    "haskell" -> generateSources moduleToHaskell haskellLanguage False False False False outMain allModsFinal modsToGenerate
-    "java"    -> generateSources moduleToJava    javaLanguage    False True False True   outMain allModsFinal modsToGenerate
-    "python"  -> generateSources moduleToPython  pythonLanguage  False True True False   outMain allModsFinal modsToGenerate
-    _ | Just gen <- lispGenerator ->
-          generateSources gen lispLanguage True False False False outMain allModsFinal modsToGenerate
-    _ -> do
-      putStrLn $ "Unknown target: " ++ target
-      exitFailure
+  -- Dispatch to the appropriate coder + language bindings.
+  let genForDir :: FilePath -> [Module] -> IO Int
+      genForDir dir mods = case target of
+        "haskell" -> generateSources moduleToHaskell haskellLanguage False False False False dir allModsFinal' mods
+        "java"    -> generateSources moduleToJava    javaLanguage    False True False True   dir allModsFinal' mods
+        "python"  -> generateSources moduleToPython  pythonLanguage  False True True False   dir allModsFinal' mods
+        "scala"   -> generateSources moduleToScala   scalaLanguage   False True False False  dir allModsFinal' mods
+        _ | Just gen <- lispGenerator ->
+              generateSources gen lispLanguage True False False False dir allModsFinal' mods
+        _ -> do
+          putStrLn $ "Unknown target: " ++ target
+          exitFailure
+
+  mainFileCount <- if optPackageSplit opts
+    then do
+      -- Partition modules by owning package and generate each group to its own dir.
+      let groups = groupByPackage modsToGenerate'
+      counts <- CM.forM groups $ \(pkg, pkgMods) -> do
+        let dir = packageOutMain pkg
+        putStrLn $ "  " ++ pkg ++ ": " ++ show (length pkgMods) ++ " modules → " ++ dir
+        genForDir dir pkgMods
+      return (sum counts)
+    else genForDir outMain modsToGenerate'
   genEnd <- getCurrentTime
 
   putStrLn $ "  Generated " ++ show mainFileCount ++ " files."
@@ -355,13 +500,26 @@ main = do
 
       putStrLn $ "Mapping test modules to " ++ targetCap ++ "..."
 
+      -- Dispatch helper for the test source set.
+      let genTestForDir :: FilePath -> [Module] -> IO Int
+          genTestForDir dir mods = case target of
+            "haskell" -> generateSources moduleToHaskell haskellLanguage False False False False dir allUniverse mods
+            "java"    -> generateSources moduleToJava    javaLanguage    False True False True   dir allUniverse mods
+            "python"  -> generateSources moduleToPython  pythonLanguage  False True True False   dir allUniverse mods
+            "scala"   -> generateSources moduleToScala   scalaLanguage   False True False False  dir allUniverse mods
+            _ | Just gen <- lispGenerator -> generateSources gen lispLanguage False False False False dir allUniverse mods
+            _ -> return 0
+
       testStart <- getCurrentTime
-      count <- case target of
-        "haskell" -> generateSources moduleToHaskell haskellLanguage False False False False outTest allUniverse testMods
-        "java"    -> generateSources     moduleToJava    javaLanguage    False True False True   outTest allUniverse testMods
-        "python"  -> generateSources moduleToPython  pythonLanguage  False True True False   outTest allUniverse testMods
-        _ | Just gen <- lispGenerator -> generateSources gen lispLanguage False False False False outTest allUniverse testMods
-        _ -> return 0
+      count <- if optPackageSplit opts
+        then do
+          let groups = groupByPackage testMods
+          counts <- CM.forM groups $ \(pkg, pkgMods) -> do
+            let dir = packageOutTest pkg
+            putStrLn $ "  " ++ pkg ++ ": " ++ show (length pkgMods) ++ " test modules → " ++ dir
+            genTestForDir dir pkgMods
+          return (sum counts)
+        else genTestForDir outTest testMods
       testEnd <- getCurrentTime
 
       putStrLn $ "  Generated " ++ show count ++ " test files."

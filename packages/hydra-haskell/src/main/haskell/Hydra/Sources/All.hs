@@ -1,4 +1,9 @@
--- | Aggregates all Hydra source modules (kernel, test, and extension modules)
+-- | Aggregates Hydra source modules via per-package manifest modules.
+--
+-- The per-package sublists (kernelModules, haskellModules, jsonModules,
+-- otherModules) are defined in terms of imports from each package's
+-- Manifest module. See feature_290_packaging-plan.md, "Sync system redesign
+-- / Package manifests".
 
 module Hydra.Sources.All(
   module Hydra.Sources.All,
@@ -12,27 +17,10 @@ import Hydra.Sources.Kernel.Terms.All
 import Hydra.Sources.Kernel.Types.All
 import Hydra.Sources.Test.All
 
-import qualified Hydra.Sources.Haskell.Syntax as HaskellSyntax
-import qualified Hydra.Sources.Haskell.Coder as HaskellCoder
-import qualified Hydra.Sources.Haskell.Environment as HaskellEnvironment
-import qualified Hydra.Sources.Haskell.Language as HaskellLanguage
-import qualified Hydra.Sources.Haskell.Operators as HaskellOperators
-import qualified Hydra.Sources.Haskell.Serde as HaskellSerde
-import qualified Hydra.Sources.Haskell.Testing as HaskellTesting
-import qualified Hydra.Sources.Haskell.Utils as HaskellUtils
-import qualified Hydra.Sources.Json.Bootstrap as JsonBootstrap
-import qualified Hydra.Sources.Json.Decode as JsonDecode
-import qualified Hydra.Sources.Json.Decoding as JsonDecoding
-import qualified Hydra.Sources.Json.Encode as JsonEncode
-import qualified Hydra.Sources.Json.Extract as JsonExtract
-import qualified Hydra.Sources.Json.Parser as JsonParser
-import qualified Hydra.Sources.Json.Writer as JsonWriter
-import qualified Hydra.Sources.Json.Yaml.Decode as JsonYamlDecode
-import qualified Hydra.Sources.Json.Yaml.Encode as JsonYamlEncode
-import qualified Hydra.Sources.Test.Transform as TestTransform
-import qualified Hydra.Sources.Test.Utils as TestUtils
+import qualified Hydra.Sources.Kernel.Manifest as KernelManifest
+import qualified Hydra.Sources.Haskell.Manifest as HaskellManifest
+
 import qualified Hydra.Sources.Kernel.Terms.Dsls as Dsls
-import qualified Hydra.Sources.Yaml.Model as YamlModel
 
 
 mainModules :: [Module]
@@ -44,34 +32,18 @@ mainModules = kernelModules ++ haskellModules ++ jsonModules ++ otherModules
 dslSourceModules :: [Module]
 dslSourceModules = [Dsls.module_]
 
+-- | Kernel types and terms plus JSON runtime.
+--
+-- Note: this is the subset used by update-json-kernel. It is a strict subset
+-- of KernelManifest.mainModules (which also includes otherModules).
 kernelModules :: [Module]
 kernelModules = kernelTypesModules ++ kernelTermsModules ++ jsonModules
 
 haskellModules :: [Module]
-haskellModules = [
-  HaskellSyntax.module_,
-  HaskellCoder.module_,
-  HaskellEnvironment.module_,
-  HaskellLanguage.module_,
-  HaskellOperators.module_,
-  HaskellSerde.module_,
-  HaskellTesting.module_,
-  HaskellUtils.module_]
+haskellModules = HaskellManifest.mainModules
 
 jsonModules :: [Module]
-jsonModules = [
-  JsonBootstrap.module_,
-  JsonDecode.module_,
-  JsonDecoding.module_,
-  JsonEncode.module_,
-  JsonExtract.module_,
-  JsonParser.module_,
-  JsonWriter.module_]
+jsonModules = KernelManifest.jsonModules
 
 otherModules :: [Module]
-otherModules = [
-  TestTransform.module_,
-  TestUtils.module_,
-  YamlModel.module_,
-  JsonYamlDecode.module_,
-  JsonYamlEncode.module_]
+otherModules = KernelManifest.otherModules

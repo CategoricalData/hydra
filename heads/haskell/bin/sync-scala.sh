@@ -69,24 +69,13 @@ stack build
 step 2 $TOTAL_STEPS "Generating Scala source modules"
 echo ""
 stack exec update-scala -- $RTS_FLAGS
-python3 "$HYDRA_SCALA_DIR/bin/break-long-lines.py"
-
-# Fix Scala 3 reserved word 'macro' in generated enum cases and pattern matches
-if [ -d "$DIST_SCALA/src/main/scala" ]; then
-    echo "  Post-processing: escaping 'macro' keyword..."
-    sed_inplace_find "$DIST_SCALA/src/main/scala" -name '*.scala' -- 's/case macro(/case `macro`(/g'
-    sed_inplace_find "$DIST_SCALA/src/main/scala" -name '*.scala' -- 's/\.macro(/.`macro`(/g'
-fi
 
 step 3 $TOTAL_STEPS "Generating Scala test modules"
 echo ""
 stack exec update-scala-tests -- $RTS_FLAGS
 
-# Post-process generated test files (break long lines, fix escapes)
+# Post-process generated test files
 if [ -d "$DIST_SCALA/src/test/scala" ]; then
-    echo "  Post-processing: escaping 'macro' keyword in tests..."
-    sed_inplace_find "$DIST_SCALA/src/test/scala" -name '*.scala' -- 's/case macro(/case `macro`(/g'
-    sed_inplace_find "$DIST_SCALA/src/test/scala" -name '*.scala' -- 's/\.macro(/.`macro`(/g'
     # Replace unresolved inference type variables (T0-T99) with Any.
     # These appear in type parameter positions like [T0], [Int, T1], [T2, String].
     echo "  Post-processing: replacing inference type variables with Any..."

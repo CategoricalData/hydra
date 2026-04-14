@@ -39,11 +39,13 @@ case class NotAFunctionTypeError(`type`: hydra.core.Type)
 
 case class OtherCheckingError(path: hydra.paths.SubtermPath, message: scala.Predef.String)
 
-case class TypeArityMismatchError(`type`: hydra.core.Type, expectedArity: Int, actualArity: Int, typeArguments: Seq[hydra.core.Type])
+case class TypeArityMismatchError(`type`: hydra.core.Type, expectedArity: Int, actualArity: Int,
+   typeArguments: Seq[hydra.core.Type])
 
 case class TypeMismatchError(expectedType: hydra.core.Type, actualType: hydra.core.Type)
 
-case class UnboundTypeVariablesError(variables: scala.collection.immutable.Set[hydra.core.Name], `type`: hydra.core.Type)
+case class UnboundTypeVariablesError(variables: scala.collection.immutable.Set[hydra.core.Name],
+   `type`: hydra.core.Type)
 
 case class UndefinedTermVariableCheckingError(path: hydra.paths.SubtermPath, name: hydra.core.Name)
 

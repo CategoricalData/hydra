@@ -41,11 +41,14 @@ def isComplexTerm(tc: hydra.graph.Graph)(t: hydra.core.Term): Boolean =
 
 def isComplexVariable(tc: hydra.graph.Graph)(name: hydra.core.Name): Boolean =
   {
-  lazy val metaLookup: Option[hydra.core.Term] = hydra.lib.maps.lookup[hydra.core.Name, hydra.core.Term](name)(tc.metadata)
+  lazy val metaLookup: Option[hydra.core.Term] = hydra.lib.maps.lookup[hydra.core.Name,
+     hydra.core.Term](name)(tc.metadata)
   hydra.lib.logic.ifElse[Boolean](hydra.lib.maybes.isJust[hydra.core.Term](metaLookup))(true)(hydra.lib.logic.ifElse[Boolean](hydra.lib.sets.member[hydra.core.Name](name)(tc.lambdaVariables))(true)({
-    lazy val typeLookup: Option[hydra.core.TypeScheme] = hydra.lib.maps.lookup[hydra.core.Name, hydra.core.TypeScheme](name)(tc.boundTypes)
+    lazy val typeLookup: Option[hydra.core.TypeScheme] = hydra.lib.maps.lookup[hydra.core.Name,
+       hydra.core.TypeScheme](name)(tc.boundTypes)
     hydra.lib.maybes.maybe[Boolean, hydra.core.TypeScheme]({
-      lazy val primLookup: Option[hydra.graph.Primitive] = hydra.lib.maps.lookup[hydra.core.Name, hydra.graph.Primitive](name)(tc.primitives)
+      lazy val primLookup: Option[hydra.graph.Primitive] = hydra.lib.maps.lookup[hydra.core.Name,
+         hydra.graph.Primitive](name)(tc.primitives)
       hydra.lib.maybes.maybe[Boolean, hydra.graph.Primitive](true)((prim: hydra.graph.Primitive) =>
         hydra.lib.equality.gt[Int](hydra.arity.typeSchemeArity(prim.`type`))(0))(primLookup)
     })((ts: hydra.core.TypeScheme) =>
@@ -66,7 +69,8 @@ def isEncodedType(t: hydra.core.Term): Boolean =
   case _ => false
 
 def isEnumRowType(rt: Seq[hydra.core.FieldType]): Boolean =
-  hydra.lib.lists.foldl[Boolean, Boolean](hydra.lib.logic.and)(true)(hydra.lib.lists.map[hydra.core.FieldType, Boolean]((f: hydra.core.FieldType) =>
+  hydra.lib.lists.foldl[Boolean, Boolean](hydra.lib.logic.and)(true)(hydra.lib.lists.map[hydra.core.FieldType,
+     Boolean]((f: hydra.core.FieldType) =>
   hydra.predicates.isUnitType(hydra.strip.deannotateType(f.`type`)))(rt))
 
 def isEnumType(typ: hydra.core.Type): Boolean =
@@ -82,28 +86,34 @@ def isNominalType(typ: hydra.core.Type): Boolean =
   case hydra.core.Type.forall(v_Type_forall_fa) => hydra.predicates.isNominalType(v_Type_forall_fa.body)
   case _ => false
 
-def isSerializable(cx: hydra.context.Context)(graph: hydra.graph.Graph)(el: hydra.core.Binding): Either[hydra.errors.Error, Boolean] =
+def isSerializable(cx: hydra.context.Context)(graph: hydra.graph.Graph)(el: hydra.core.Binding): Either[hydra.errors.Error,
+   Boolean] =
   {
   def variants(typ: hydra.core.Type): Seq[hydra.variants.TypeVariant] =
     hydra.lib.lists.map[hydra.core.Type, hydra.variants.TypeVariant](hydra.reflect.typeVariant)(hydra.rewriting.foldOverType(hydra.coders.TraversalOrder.pre)((m: Seq[hydra.core.Type]) =>
     (t: hydra.core.Type) => hydra.lib.lists.cons[hydra.core.Type](t)(m))(Seq())(typ))
-  hydra.lib.eithers.map[Map[hydra.core.Name, hydra.core.Type], Boolean, hydra.errors.Error]((deps: Map[hydra.core.Name, hydra.core.Type]) =>
+  hydra.lib.eithers.map[Map[hydra.core.Name, hydra.core.Type], Boolean, hydra.errors.Error]((deps: Map[hydra.core.Name,
+     hydra.core.Type]) =>
     {
     lazy val allVariants: scala.collection.immutable.Set[hydra.variants.TypeVariant] = hydra.lib.sets.fromList[hydra.variants.TypeVariant](hydra.lib.lists.concat[hydra.variants.TypeVariant](hydra.lib.lists.map[hydra.core.Type,
-       Seq[hydra.variants.TypeVariant]](variants)(hydra.lib.maps.elems[hydra.core.Name, hydra.core.Type](deps))))
+       Seq[hydra.variants.TypeVariant]](variants)(hydra.lib.maps.elems[hydra.core.Name,
+       hydra.core.Type](deps))))
     hydra.lib.logic.not(hydra.lib.sets.member[hydra.variants.TypeVariant](hydra.variants.TypeVariant.function)(allVariants))
   })(hydra.predicates.typeDependencies(cx)(graph)(false)(hydra.lib.equality.identity[hydra.core.Type])(el.name))
 }
 
-def isSerializableByName(cx: hydra.context.Context)(graph: hydra.graph.Graph)(name: hydra.core.Name): Either[hydra.errors.Error, Boolean] =
+def isSerializableByName(cx: hydra.context.Context)(graph: hydra.graph.Graph)(name: hydra.core.Name): Either[hydra.errors.Error,
+   Boolean] =
   {
   def variants(typ: hydra.core.Type): Seq[hydra.variants.TypeVariant] =
     hydra.lib.lists.map[hydra.core.Type, hydra.variants.TypeVariant](hydra.reflect.typeVariant)(hydra.rewriting.foldOverType(hydra.coders.TraversalOrder.pre)((m: Seq[hydra.core.Type]) =>
     (t: hydra.core.Type) => hydra.lib.lists.cons[hydra.core.Type](t)(m))(Seq())(typ))
-  hydra.lib.eithers.map[Map[hydra.core.Name, hydra.core.Type], Boolean, hydra.errors.Error]((deps: Map[hydra.core.Name, hydra.core.Type]) =>
+  hydra.lib.eithers.map[Map[hydra.core.Name, hydra.core.Type], Boolean, hydra.errors.Error]((deps: Map[hydra.core.Name,
+     hydra.core.Type]) =>
     {
     lazy val allVariants: scala.collection.immutable.Set[hydra.variants.TypeVariant] = hydra.lib.sets.fromList[hydra.variants.TypeVariant](hydra.lib.lists.concat[hydra.variants.TypeVariant](hydra.lib.lists.map[hydra.core.Type,
-       Seq[hydra.variants.TypeVariant]](variants)(hydra.lib.maps.elems[hydra.core.Name, hydra.core.Type](deps))))
+       Seq[hydra.variants.TypeVariant]](variants)(hydra.lib.maps.elems[hydra.core.Name,
+       hydra.core.Type](deps))))
     hydra.lib.logic.not(hydra.lib.sets.member[hydra.variants.TypeVariant](hydra.variants.TypeVariant.function)(allVariants))
   })(hydra.predicates.typeDependencies(cx)(graph)(false)(hydra.lib.equality.identity[hydra.core.Type])(name))
 }
@@ -131,7 +141,8 @@ def isTrivialTerm(t: hydra.core.Term): Boolean =
         case _ => false
     }
   }
-  case hydra.core.Term.maybe(v_Term_maybe_opt) => hydra.lib.maybes.maybe[Boolean, hydra.core.Term](true)((inner: hydra.core.Term) => hydra.predicates.isTrivialTerm(inner))(v_Term_maybe_opt)
+  case hydra.core.Term.maybe(v_Term_maybe_opt) => hydra.lib.maybes.maybe[Boolean,
+     hydra.core.Term](true)((inner: hydra.core.Term) => hydra.predicates.isTrivialTerm(inner))(v_Term_maybe_opt)
   case hydra.core.Term.record(v_Term_record_rec) => hydra.lib.lists.foldl[Boolean, hydra.core.Field]((acc: Boolean) =>
     (fld: hydra.core.Field) =>
     hydra.lib.logic.and(acc)(hydra.predicates.isTrivialTerm(fld.term)))(true)(v_Term_record_rec.fields)
@@ -166,26 +177,28 @@ def typeDependencies(cx: hydra.context.Context)(graph: hydra.graph.Graph)(withSc
     lazy val cx1: hydra.context.Context = hydra.context.Context(hydra.lib.lists.cons[scala.Predef.String](hydra.lib.strings.cat2("type dependencies of ")(name2))(cx.trace),
        (cx.messages), (cx.other))
     hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Binding, hydra.core.Type](hydra.lexical.requireBinding(graph)(name2))((el: hydra.core.Binding) =>
-      hydra.lib.eithers.bimap[hydra.errors.DecodingError, hydra.core.Type, hydra.errors.Error, hydra.core.Type]((_e: hydra.errors.DecodingError) => hydra.errors.Error.decoding(_e))((_a: hydra.core.Type) => _a)(hydra.decode.core.`type`(graph)(el.term)))
+      hydra.lib.eithers.bimap[hydra.errors.DecodingError, hydra.core.Type, hydra.errors.Error,
+         hydra.core.Type]((_e: hydra.errors.DecodingError) => hydra.errors.Error.decoding(_e))((_a: hydra.core.Type) => _a)(hydra.decode.core.`type`(graph)(el.term)))
   }
   def toPair(name2: hydra.core.Name): Either[hydra.errors.Error, Tuple2[hydra.core.Name, hydra.core.Type]] =
-    hydra.lib.eithers.map[hydra.core.Type, Tuple2[hydra.core.Name, hydra.core.Type], hydra.errors.Error]((typ: hydra.core.Type) => Tuple2(name2,
-       transform(typ)))(requireType(name2))
-  def deps(seeds: scala.collection.immutable.Set[hydra.core.Name])(names: Map[hydra.core.Name, hydra.core.Type]): Either[hydra.errors.Error,
-     Map[hydra.core.Name, hydra.core.Type]] =
+    hydra.lib.eithers.map[hydra.core.Type, Tuple2[hydra.core.Name, hydra.core.Type],
+       hydra.errors.Error]((typ: hydra.core.Type) => Tuple2(name2, transform(typ)))(requireType(name2))
+  def deps(seeds: scala.collection.immutable.Set[hydra.core.Name])(names: Map[hydra.core.Name,
+     hydra.core.Type]): Either[hydra.errors.Error, Map[hydra.core.Name, hydra.core.Type]] =
     hydra.lib.logic.ifElse[Either[hydra.errors.Error, Map[hydra.core.Name, hydra.core.Type]]](hydra.lib.sets.`null`[hydra.core.Name](seeds))(Right(names))(hydra.lib.eithers.bind[hydra.errors.Error,
        Seq[Tuple2[hydra.core.Name, hydra.core.Type]], Map[hydra.core.Name, hydra.core.Type]](hydra.lib.eithers.mapList[hydra.core.Name,
        Tuple2[hydra.core.Name, hydra.core.Type], hydra.errors.Error](toPair)(hydra.lib.sets.toList[hydra.core.Name](seeds)))((pairs: Seq[Tuple2[hydra.core.Name,
        hydra.core.Type]]) =>
     {
-    lazy val newNames: Map[hydra.core.Name, hydra.core.Type] = hydra.lib.maps.union[hydra.core.Name, hydra.core.Type](names)(hydra.lib.maps.fromList[hydra.core.Name,
-       hydra.core.Type](pairs))
+    lazy val newNames: Map[hydra.core.Name, hydra.core.Type] = hydra.lib.maps.union[hydra.core.Name,
+       hydra.core.Type](names)(hydra.lib.maps.fromList[hydra.core.Name, hydra.core.Type](pairs))
     {
       lazy val refs: scala.collection.immutable.Set[hydra.core.Name] = hydra.lib.lists.foldl[scala.collection.immutable.Set[hydra.core.Name],
          scala.collection.immutable.Set[hydra.core.Name]](hydra.lib.sets.union[hydra.core.Name])(hydra.lib.sets.empty[hydra.core.Name])(hydra.lib.lists.map[Tuple2[hydra.core.Name,
          hydra.core.Type], scala.collection.immutable.Set[hydra.core.Name]]((pair: Tuple2[hydra.core.Name,
          hydra.core.Type]) =>
-        hydra.dependencies.typeDependencyNames(withSchema)(hydra.lib.pairs.second[hydra.core.Name, hydra.core.Type](pair)))(pairs))
+        hydra.dependencies.typeDependencyNames(withSchema)(hydra.lib.pairs.second[hydra.core.Name,
+           hydra.core.Type](pair)))(pairs))
       {
         lazy val visited: scala.collection.immutable.Set[hydra.core.Name] = hydra.lib.sets.fromList[hydra.core.Name](hydra.lib.maps.keys[hydra.core.Name,
            hydra.core.Type](names))

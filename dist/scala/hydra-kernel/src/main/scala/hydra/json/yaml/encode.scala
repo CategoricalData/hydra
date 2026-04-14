@@ -12,8 +12,9 @@ def jsonToYaml(value: hydra.json.model.Value): hydra.yaml.model.Node =
   case hydra.json.model.Value.`null` => hydra.yaml.model.Node.scalar(hydra.yaml.model.Scalar.`null`)
   case hydra.json.model.Value.number(v_Value_number_n) => hydra.yaml.model.Node.scalar(hydra.yaml.model.Scalar.float(v_Value_number_n))
   case hydra.json.model.Value.`object`(v_Value_object_obj) => hydra.yaml.model.Node.mapping(hydra.lib.maps.fromList[hydra.yaml.model.Node,
-     hydra.yaml.model.Node](hydra.lib.lists.map[Tuple2[scala.Predef.String, hydra.json.model.Value], Tuple2[hydra.yaml.model.Node,
-     hydra.yaml.model.Node]]((kv: Tuple2[scala.Predef.String, hydra.json.model.Value]) =>
+     hydra.yaml.model.Node](hydra.lib.lists.map[Tuple2[scala.Predef.String, hydra.json.model.Value],
+     Tuple2[hydra.yaml.model.Node, hydra.yaml.model.Node]]((kv: Tuple2[scala.Predef.String,
+     hydra.json.model.Value]) =>
     Tuple2(hydra.yaml.model.Node.scalar(hydra.yaml.model.Scalar.str(hydra.lib.pairs.first[scala.Predef.String,
        hydra.json.model.Value](kv))), hydra.json.yaml.encode.jsonToYaml(hydra.lib.pairs.second[scala.Predef.String,
        hydra.json.model.Value](kv))))(hydra.lib.maps.toList[scala.Predef.String, hydra.json.model.Value](v_Value_object_obj))))

@@ -1,7 +1,7 @@
 module Main where
 
 import Hydra.Generation (writeModulesJson, writeDslJson)
-import Hydra.Sources.All (mainModules, kernelTypesModules)
+import Hydra.Sources.All (mainModules, dslSourceModules, kernelModules, kernelTypesModules, haskellModules, jsonModules, otherModules)
 import Hydra.Sources.Eval.Lib.All (evalLibModules)
 import System.Environment (getArgs)
 import System.Exit (exitFailure)
@@ -11,10 +11,10 @@ import Control.Exception (catch, SomeException)
 main :: IO ()
 main = do
   outputDir <- parseOutputDir "../../dist/json/hydra-kernel/src/main/json"
-  let allMods = mainModules ++ evalLibModules
+  let allMods = mainModules ++ evalLibModules ++ dslSourceModules
   putStrLn "=== Generate Hydra main modules JSON ==="
   putStrLn ""
-  putStrLn $ "Generating " ++ show (length allMods) ++ " main + eval lib modules to JSON..."
+  putStrLn $ "Generating " ++ show (length allMods) ++ " main + eval lib + dsl source modules to JSON..."
   putStrLn ""
 
   result <- catch (writeModulesJson True outputDir allMods allMods >> return True)
@@ -24,7 +24,13 @@ main = do
 
   putStrLn ""
   putStrLn "Generating DSL modules to JSON..."
-  dslResult <- catch (writeDslJson outputDir mainModules kernelTypesModules >> return True)
+  -- Mirror writeDslHaskell's input set: generate DSL modules for the full
+  -- kernel-side universe (kernel types + JSON + other + haskell coder), not
+  -- just kernelTypesModules. This is needed so that DSL modules like
+  -- Hydra.Dsl.Yaml.Model and Hydra.Dsl.Haskell.Syntax get exported to JSON
+  -- alongside everything else.
+  let dslInputMods = kernelModules ++ jsonModules ++ otherModules ++ haskellModules
+  dslResult <- catch (writeDslJson outputDir mainModules dslInputMods >> return True)
                      (\e -> do
                        putStrLn $ "Error generating DSL JSON: " ++ show (e :: SomeException)
                        return False)
