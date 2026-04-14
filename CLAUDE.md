@@ -14,7 +14,7 @@ Hydra is self-hosting: the kernel is defined in Haskell-based DSLs and code-gene
 into five complete implementations: Haskell, Java, Python, Scala, and Lisp.
 The Lisp implementation covers four dialects: Clojure, Scheme, Common Lisp, and Emacs Lisp.
 All five implementations pass the common test suite.
-Version is tracked in the `VERSION` file at the repo root.
+Version is tracked in the `VERSION` file at the worktree root.
 
 Key use cases: graph construction (TinkerPop, RDF, SHACL, GQL), data integration
 (coders for Protobuf, Avro, JSON, YAML, GraphQL, PDL, CSV/TSV, RDF), and computational
@@ -43,10 +43,18 @@ For the longer-form discussion, see [Code organization](https://github.com/Categ
 
 At the beginning of every new session, follow these steps **before doing any other work**:
 
-1. **Identify the current branch**: Run `git branch --show-current`.
+1. **Verify you are inside a worktree**: Your working directory should be
+   `hydra/worktrees/<branch>/`.
+   If you are at `hydra/` itself, `hydra/hydra.git/`, or `hydra/wiki/`,
+   stop and ask the user which worktree to operate in.
+   Never run build or sync commands from outside a worktree.
 
-2. **Load or create the branch plan document**: Look for a Markdown file at the repo root
-   named after the current branch (e.g., `main-plan.md`, `feature_249_java_version-plan.md`).
+2. **Identify the current branch**: Run `git branch --show-current`.
+   It should match the name of the worktree directory.
+
+3. **Load or create the branch plan document**: Look for a Markdown file at the
+   worktree root named after the current branch
+   (e.g., `integration-plan.md`, `feature_249_java_version-plan.md`).
    - If it exists, read it to understand the current state of work.
    - If it does not exist, create it:
      - **Feature branches** (`feature_NNN_*`): Fetch the GitHub issue and draft a plan
@@ -54,9 +62,9 @@ At the beginning of every new session, follow these steps **before doing any oth
      - **Other branches**: Create a minimal plan summarizing purpose and in-progress work.
    - These plan documents are not checked in to Git.
 
-3. **Discuss the plan with the user**: Present it, incorporate feedback, update the file.
+4. **Discuss the plan with the user**: Present it, incorporate feedback, update the file.
 
-4. **Consult task-specific references as needed** (see the [document index](#document-index)
+5. **Consult task-specific references as needed** (see the [document index](#document-index)
    below and the [task routing](#task-routing) section).
 
 ### During the session
@@ -83,8 +91,28 @@ Before ending a session:
 
 ## Project structure
 
+The Hydra repository uses a **bare repo plus worktrees** layout so that
+multiple Claude sessions (and humans) can work on different feature branches
+in parallel without stepping on each other.
+The top-level directory `hydra/` is not a git working tree itself;
+it contains a bare repo, a `worktrees/` directory with one checkout per active
+branch, and a local checkout of the GitHub wiki:
+
 ```
 hydra/
+  hydra.git/          # Bare repo (the shared object store); never edit manually
+  worktrees/          # One working tree per active branch
+    integration/      # The integration branch — main line of development
+    feature_NNN_*/    # Active feature branches (one worktree each)
+    ...
+  wiki/               # Local checkout of the GitHub wiki (separate Git repo)
+```
+
+Each worktree under `worktrees/` is a normal git working tree with the full
+Hydra source laid out as follows:
+
+```
+worktrees/<branch>/
   packages/           # Language-independent package definitions and DSL sources
     hydra-kernel/     # Kernel types, terms, DSL sources, and package manifest
     hydra-haskell/    # Haskell coder DSL sources + generated Haskell coder output
@@ -116,12 +144,46 @@ hydra/
   demos/              # Example applications (not published)
   bindings/           # Host-specific third-party integrations (future)
   docs/               # Documentation, recipes, guides
-  wiki/               # Local checkout of the GitHub wiki (separate repo)
+  <branch>-plan.md    # Untracked branch plan (see Session procedures below)
 ```
+
+Your current working directory is always inside one worktree —
+e.g. `hydra/worktrees/integration/` or `hydra/worktrees/feature_290_packaging/`.
+Every build, test, and sync command runs from there.
+Build artifacts (`.stack-work/`, `build/`, `.gradle/`) live per worktree and
+are not shared across branches.
+The `wiki/` directory is a sibling of `worktrees/`, not inside any worktree,
+because it tracks a separate Git repository (the GitHub wiki).
 
 For detailed code organization, see the
 [Code organization](https://github.com/CategoricalData/hydra/wiki/Code-organization) wiki page
 and [docs/implementation.md](docs/implementation.md).
+
+### Working with worktrees
+
+Day-to-day git operations work normally inside a worktree —
+`git status`, `git commit`, `git push`, `git log` all behave as expected.
+A few things to know:
+
+- **One branch per worktree**: git refuses to check out the same branch in two
+  worktrees simultaneously. This is a feature: it prevents two Claude sessions
+  from racing on the same branch. If a branch is already checked out elsewhere,
+  either work on it in that worktree or add a new worktree for a different branch.
+- **Shared object store**: commits made in any worktree are immediately visible
+  from every other worktree (`git log` in worktree A will see a commit made in
+  worktree B). You only ever push or fetch from *one* worktree;
+  the result is global.
+- **Adding a new worktree**: from inside any existing worktree or from the
+  bare repo, run
+  `git worktree add ../<branch-name> <branch-name>`
+  (from `hydra/worktrees/<existing>/`) or
+  `git -C hydra/hydra.git worktree add worktrees/<branch-name> <branch-name>`
+  (from `hydra/`).
+- **Removing a worktree**: use `git worktree remove <path>`,
+  not `rm -rf`. Manual removal leaves dangling metadata in `hydra.git/worktrees/`.
+  If you did remove one by hand, run `git worktree prune` to clean up.
+- **Never edit files under `hydra.git/` directly.** It is the shared
+  object store and should only be modified by git commands themselves.
 
 ### Sync workflow
 
@@ -226,7 +288,7 @@ Use this table to find the right doc for common tasks:
 
 The user may issue these shorthand commands inline (e.g. "now /sync-all()").
 All commands use `/name()` syntax, with optional arguments inside the parentheses.
-All commands run from the repo root.
+All commands run from the worktree root (e.g. `hydra/worktrees/integration/`).
 If a command fails, investigate and fix the issue, then re-run the failing step
 and all subsequent steps. Do not re-run steps that have already succeeded.
 For long-running commands (sync, bootstrap, or any task exceeding a few minutes),
