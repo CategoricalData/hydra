@@ -425,6 +425,7 @@ encodeLiteral = define "encodeLiteral" $
   "lit" ~> cases _Literal (var "lit") Nothing [
     _Literal_binary>>: "b" ~> right $ Json.valueString $ Literals.binaryToString $ var "b",
     _Literal_boolean>>: "b" ~> right $ Json.valueBoolean $ var "b",
+    _Literal_decimal>>: "d" ~> right $ Json.valueNumber $ Literals.decimalToFloat64 $ var "d",
     _Literal_float>>: "f" ~> encodeFloat @@ var "f",
     _Literal_integer>>: "i" ~> encodeInteger @@ var "i",
     _Literal_string>>: "s" ~> right $ Json.valueString $ var "s"]

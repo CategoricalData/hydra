@@ -548,6 +548,7 @@ decodeLiteralType = define "decodeLiteralType" $
   cases _LiteralType (var "lt") Nothing [
     _LiteralType_binary>>: constant decodeBinary,
     _LiteralType_boolean>>: constant decodeBoolean,
+    _LiteralType_decimal>>: constant decodeDecimal,
     _LiteralType_float>>: "ft" ~> decodeFloat (var "ft"),
     _LiteralType_integer>>: "it" ~> decodeInteger (var "it"),
     _LiteralType_string>>: constant decodeString]
@@ -566,6 +567,11 @@ decodeLiteralType = define "decodeLiteralType" $
     decodeBoolean = decodeLiteral $ DC.match _Literal
       (just $ leftError (string "expected boolean literal")) [
       DC.field _Literal_boolean $ DC.lambda "b" $ DC.right $ DC.var "b"]
+
+    -- Decode decimal: Term -> Either DecodingError Scientific
+    decodeDecimal = decodeLiteral $ DC.match _Literal
+      (just $ leftError (string "expected decimal literal")) [
+      DC.field _Literal_decimal $ DC.lambda "d" $ DC.right $ DC.var "d"]
 
     -- Decode float: Term -> Either DecodingError <specific float type>
     decodeFloat ft = cases _FloatType ft Nothing [

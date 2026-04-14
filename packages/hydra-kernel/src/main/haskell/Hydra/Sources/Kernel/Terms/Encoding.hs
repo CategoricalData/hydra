@@ -476,6 +476,8 @@ encodeLiteralType = define "encodeLiteralType" $
       DC.lambda "x" $ termLiteral $ DC.injection _Literal (DC.field _Literal_binary (DC.var "x")),
     _LiteralType_boolean>>: constant $
       DC.lambda "x" $ termLiteral $ DC.injection _Literal (DC.field _Literal_boolean (DC.var "x")),
+    _LiteralType_decimal>>: constant $
+      DC.lambda "x" $ termLiteral $ DC.injection _Literal (DC.field _Literal_decimal (DC.var "x")),
     _LiteralType_string>>: constant $
       DC.lambda "x" $ termLiteral $ DC.injection _Literal (DC.field _Literal_string (DC.var "x")),
     -- For integer types, wrap in Term.literal.integer with the specific integer variant
