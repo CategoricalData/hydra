@@ -720,7 +720,7 @@ encodeTerm = def "encodeTerm" $
           (Eithers.mapList ("e" ~> asTerm encodeTerm @@ var "cx" @@ var "g" @@ var "e") (Sets.toList (var "s")))
           ("sels" ~>
             right (ScalaUtilsSource.sapply @@ (ScalaUtilsSource.sname @@ string "scala.collection.immutable.Set") @@ var "sels"))),
-      _Term_union>>: ("inj" ~> lets [
+      _Term_inject>>: ("inj" ~> lets [
         "sn">: project _Injection _Injection_typeName @@ var "inj",
         "fn">: project _Field _Field_name @@ (project _Injection _Injection_field @@ var "inj"),
         "ft">: project _Field _Field_term @@ (project _Injection _Injection_field @@ var "inj"),

@@ -274,8 +274,8 @@ checkTerm = define "checkTerm" $
             (var "bindings")))
           noError],
 
-    -- T5: TermUnion (injection) — check for empty type name
-    _Term_union>>: "inj" ~>
+    -- T5: TermInject (injection) — check for empty type name
+    _Term_inject>>: "inj" ~>
       "tname" <~ Core.injectionTypeName (var "inj") $
       Logic.ifElse (Equality.equal (Core.unName $ var "tname") (string ""))
         (mkJust $ inject _InvalidTermError _InvalidTermError_emptyTypeNameInTerm $

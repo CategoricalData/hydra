@@ -198,7 +198,7 @@ isDisabled tcase = tag_disabled `L.elem` Testing.testCaseWithMetadataTags tcase
 isDisabledForMinimalInference tcase = tag_disabledForMinimalInference `L.elem` Testing.testCaseWithMetadataTags tcase
 
 mapTerm :: [(TTerm Term, TTerm Term)] -> TTerm Term
-mapTerm pairs = TTerm $ TermUnion $ Injection _Term $ Field _Term_map $ TermMap $ M.fromList [(unTTerm k, unTTerm v) | (k, v) <- pairs]
+mapTerm pairs = TTerm $ TermInject $ Injection _Term $ Field _Term_map $ TermMap $ M.fromList [(unTTerm k, unTTerm v) | (k, v) <- pairs]
 
 mapTermEmpty :: TTerm (M.Map k v)
 mapTermEmpty = TTerm $ TermMap M.empty

@@ -520,7 +520,7 @@ encodeTerm = def "encodeTerm" $
          right (rustCall @@ (rustExprPath @@ string "BTreeSet::from") @@
            list [inject R._Expression R._Expression_array $
              inject R._ArrayExpr R._ArrayExpr_elements (var "sels")]),
-     _Term_union>>: lambda "inj" $
+     _Term_inject>>: lambda "inj" $
        "tname" <~ (Formatting.capitalize @@ (Names.localNameOf @@ Core.injectionTypeName (var "inj"))) $
        "field" <~ Core.injectionField (var "inj") $
        "fname" <~ (Formatting.capitalize @@ Core.unName (Core.fieldName (var "field"))) $

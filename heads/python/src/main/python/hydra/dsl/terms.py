@@ -37,7 +37,7 @@ from hydra.core import (
     TermSet,
     TermTypeApplication,
     TermTypeLambda,
-    TermUnion,
+    TermInject,
     TermUnit,
     TermUnwrap,
     TermVariable,
@@ -229,7 +229,7 @@ def inject(tname: Name, fname: Name, term: Term) -> Term:
     This creates a "Result" union with the "success" variant containing value 42.
     Use this to construct values of union types at runtime.
     """
-    return TermUnion(Injection(tname, Field(fname, term)))
+    return TermInject(Injection(tname, Field(fname, term)))
 
 
 def int16(value: int) -> Term:

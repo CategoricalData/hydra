@@ -80,9 +80,9 @@ public class TermsTest {
         assertEquals(name("LatLon"), ((Term.Record) bayAreaLatLon).value.typeName);
         assertEquals(float32(-122.4194f), ((Term.Record) bayAreaLatLon).value.fields.get(1).term);
 
-        assertTrue(bayAreaLocation instanceof Term.Union);
-        assertEquals(name("Location"), ((Term.Union) bayAreaLocation).value.typeName);
-        assertEquals(name("latlon"), ((Term.Union) bayAreaLocation).value.field.name);
+        assertTrue(bayAreaLocation instanceof Term.Inject);
+        assertEquals(name("Location"), ((Term.Inject) bayAreaLocation).value.typeName);
+        assertEquals(name("latlon"), ((Term.Inject) bayAreaLocation).value.field.name);
 
         assertTrue(Strings.length() instanceof Term.Variable);
         assertEquals(name("hydra.lib.strings.length"),

@@ -109,7 +109,7 @@ typeScriptLanguage = define "typeScriptLanguage" $
     Variants.termVariantMap,
     Variants.termVariantMaybe,
     Variants.termVariantRecord,
-    Variants.termVariantUnion],
+    Variants.termVariantInject],
   "typeVariants">: Sets.fromList $ list [
     Variants.typeVariantList,
     Variants.typeVariantLiteral,

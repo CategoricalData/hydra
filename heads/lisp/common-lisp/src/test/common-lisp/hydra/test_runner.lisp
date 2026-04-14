@@ -16,7 +16,7 @@
 
 (defun meta-injection-p (term)
   "Check if term is a meta-encoded union injection (:union Injection)."
-  (and (consp term) (eq (first term) :union)
+  (and (consp term) (eq (first term) :inject)
        (consp (second term))
        (assoc :type_name (second term))))
 
@@ -582,31 +582,31 @@
                  (body (annotated_term-body at))
                  (ann (annotated_term-annotation at))
                  (ann-term (if (and (consp ann) (eq (first ann) :map)) ann (list :map ann))))
-            (list :union (make-injection "hydra.core.Term"
+            (list :inject (make-injection "hydra.core.Term"
                     (make-field "annotated"
                       (list :record (make-record "hydra.core.AnnotatedTerm"
                         (list (make-field "body" (term-to-meta body))
                               (make-field "annotation" (term-to-meta-map ann-term))))))))))
         (:literal
           (let ((lit (second term)))
-            (list :union (make-injection "hydra.core.Term"
+            (list :inject (make-injection "hydra.core.Term"
                     (make-field "literal" (literal-to-meta lit))))))
         (:application
           (let ((app (second term)))
-            (list :union (make-injection "hydra.core.Term"
+            (list :inject (make-injection "hydra.core.Term"
                     (make-field "application"
                       (list :record (make-record "hydra.core.Application"
                         (list (make-field "function" (term-to-meta (application-function app)))
                               (make-field "argument" (term-to-meta (application-argument app)))))))))))
         (:variable
           (let ((name (second term)))
-            (list :union (make-injection "hydra.core.Term"
+            (list :inject (make-injection "hydra.core.Term"
                     (make-field "variable"
                       (list :wrap (make-wrapped_term "hydra.core.Name"
                               (list :literal (list :string name)))))))))
         (:wrap
           (let ((wt (second term)))
-            (list :union (make-injection "hydra.core.Term"
+            (list :inject (make-injection "hydra.core.Term"
                     (make-field "wrap"
                       (list :record (make-record "hydra.core.WrappedTerm"
                         (list (make-field "typeName"
@@ -614,17 +614,17 @@
                                         (list :literal (list :string (wrapped_term-type_name wt))))))
                               (make-field "body" (term-to-meta (wrapped_term-body wt)))))))))))
         (:maybe
-          (list :union (make-injection "hydra.core.Term"
+          (list :inject (make-injection "hydra.core.Term"
                   (make-field "maybe"
                     (if (second term)
                         (list :maybe (term-to-meta (second term)))
                         (list :maybe nil))))))
         (:list
-          (list :union (make-injection "hydra.core.Term"
+          (list :inject (make-injection "hydra.core.Term"
                   (make-field "list"
                     (list :list (mapcar #'term-to-meta (second term)))))))
         (:map
-          (list :union (make-injection "hydra.core.Term"
+          (list :inject (make-injection "hydra.core.Term"
                   (make-field "map" (term-to-meta-map term)))))
         (otherwise term)))))
 
@@ -633,31 +633,31 @@
   (if (not (consp lit)) lit
     (let ((tag (first lit)))
       (case tag
-        (:string (list :union (make-injection "hydra.core.Literal"
+        (:string (list :inject (make-injection "hydra.core.Literal"
                         (make-field "string" (list :literal lit)))))
-        (:boolean (list :union (make-injection "hydra.core.Literal"
+        (:boolean (list :inject (make-injection "hydra.core.Literal"
                          (make-field "boolean" (list :literal lit)))))
         (:integer (integer-to-meta (second lit)))
         (:float (float-to-meta (second lit)))
-        (otherwise (list :union (make-injection "hydra.core.Literal"
+        (otherwise (list :inject (make-injection "hydra.core.Literal"
                           (make-field (string-downcase (symbol-name tag))
                             (list :literal lit)))))))))
 
 (defun integer-to-meta (ival)
   (if (not (consp ival)) ival
     (let ((tag (first ival)))
-      (list :union (make-injection "hydra.core.Literal"
+      (list :inject (make-injection "hydra.core.Literal"
               (make-field "integer"
-                (list :union (make-injection "hydra.core.IntegerValue"
+                (list :inject (make-injection "hydra.core.IntegerValue"
                         (make-field (string-downcase (symbol-name tag))
                           (list :literal (list :integer ival)))))))))))
 
 (defun float-to-meta (fval)
   (if (not (consp fval)) fval
     (let ((tag (first fval)))
-      (list :union (make-injection "hydra.core.Literal"
+      (list :inject (make-injection "hydra.core.Literal"
               (make-field "float"
-                (list :union (make-injection "hydra.core.FloatValue"
+                (list :inject (make-injection "hydra.core.FloatValue"
                         (make-field (string-downcase (symbol-name tag))
                           (list :literal (list :float fval)))))))))))
 

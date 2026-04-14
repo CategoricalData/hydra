@@ -1604,7 +1604,7 @@ decodeTypeFromTerm = def "decodeTypeFromTerm" $
   lambda "term" $
     cases _Term (Strip.deannotateTerm @@ var "term")
       (Just nothing) [
-      _Term_union>>: lambda "inj" $
+      _Term_inject>>: lambda "inj" $
         Logic.ifElse
           (Equality.equal (Core.injectionTypeName (var "inj")) (Core.name (string "hydra.core.Type")))
           ("fname" <~ Core.unName (Core.fieldName (Core.injectionField (var "inj"))) $
@@ -1674,7 +1674,7 @@ decodeTypeFromTerm = def "decodeTypeFromTerm" $
                      (Equality.equal (var "fname") (string "literal"))
                      (cases _Term (var "fterm")
                        (Just nothing) [
-                       _Term_union>>: lambda "litInj" $
+                       _Term_inject>>: lambda "litInj" $
                          Logic.ifElse
                            (Equality.equal (Core.unName (Core.fieldName (Core.injectionField (var "litInj")))) (string "string"))
                            (just (Core.typeLiteral (inject _LiteralType _LiteralType_string unit)))
@@ -2961,8 +2961,8 @@ encodeTermInternal = def "encodeTermInternal" $
                   @@ Core.typeLambdaBody (var "tl")])) $
           encodeTerm @@ var "env2" @@ var "annotatedBody" @@ var "cx" @@ var "g"),
 
-      -- TermUnion: new Variant(args)
-      _Term_union>>: lambda "inj" $
+      -- TermInject: new Variant(args)
+      _Term_inject>>: lambda "inj" $
         "injTypeName" <~ Core.injectionTypeName (var "inj") $
         "injField" <~ Core.injectionField (var "inj") $
         "injFieldName" <~ Core.fieldName (var "injField") $

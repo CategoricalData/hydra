@@ -322,7 +322,7 @@ evalStep = define "evalStep" $
             (left $ Error.errorOther $ Error.otherError $ string "No such field " ++ var "step" ++ string " in record")
             ("t" ~> right (list [var "t"]))
             (Maps.lookup (Core.name $ var "step") (Resolution.fieldMap @@ (Core.recordFields $ var "rec"))),
-        _Term_union>>: "inj" ~>
+        _Term_inject>>: "inj" ~>
           Logic.ifElse (Equality.equal (Core.unName $ Core.fieldName $ Core.injectionField $ var "inj") (var "step"))
             (evalStep @@ var "cx" @@ var "step" @@ (Core.fieldTerm $ Core.injectionField $ var "inj"))
             (right (list ([] :: [TTerm Term]))),

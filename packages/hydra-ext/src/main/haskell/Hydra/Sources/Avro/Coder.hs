@@ -323,10 +323,10 @@ avroHydraAdapter = define "avroHydraAdapter" $
                   @@ (lambda "_cx" $ lambda "jv" $
                     cases JM._Value (var "jv") Nothing [
                       JM._Value_string>>: lambda "s" $
-                        right (Core.termUnion (Core.injection (var "hydraName") (Core.field (Core.name (var "s")) Core.termUnit)))])
+                        right (Core.termInject (Core.injection (var "hydraName") (Core.field (Core.name (var "s")) Core.termUnit)))])
                   @@ (lambda "_cx" $ lambda "t" $
                     cases _Term (var "t") Nothing [
-                      _Term_union>>: lambda "inj" $ lets [
+                      _Term_inject>>: lambda "inj" $ lets [
                         "fld">: project _Injection _Injection_field @@ var "inj",
                         "fn">: project _Field _Field_name @@ var "fld"] $
                         right (inject JM._Value JM._Value_string (unwrap _Name @@ var "fn"))]),
