@@ -145,7 +145,7 @@ goLanguage = define "goLanguage" $
       Variants.termVariantSet, -- map[T]struct{} or custom Set type
       Variants.termVariantTypeApplication, -- generics T[U]
       Variants.termVariantTypeLambda, -- generic functions func[T any](...)
-      Variants.termVariantUnion, -- interface with sealed marker method
+      Variants.termVariantInject, -- interface with sealed marker method
       Variants.termVariantUnit, -- struct{}
       Variants.termVariantVariable,
       Variants.termVariantWrap], -- type aliases / named types

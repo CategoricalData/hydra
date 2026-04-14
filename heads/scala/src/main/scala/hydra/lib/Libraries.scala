@@ -193,7 +193,7 @@ object Libraries:
       case hydra.util.Comparison.lessThan => "lessThan"
       case hydra.util.Comparison.equalTo => "equalTo"
       case hydra.util.Comparison.greaterThan => "greaterThan"
-    Term.union(Injection("hydra.util.Comparison", Field(fieldName, mkUnit)))
+    Term.inject(Injection("hydra.util.Comparison", Field(fieldName, mkUnit)))
 
   // --- Primitive constructors ---
 

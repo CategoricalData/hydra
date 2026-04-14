@@ -141,7 +141,7 @@ csharpLanguage = define "csharpLanguage" $
     Variants.termVariantMaybe,
     Variants.termVariantRecord,
     Variants.termVariantSet,
-    Variants.termVariantUnion,
+    Variants.termVariantInject,
     Variants.termVariantVariable,
     Variants.termVariantWrap],
   "typeVariants">: Sets.fromList $ list [ -- TODO: verify whether all are supported

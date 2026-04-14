@@ -849,11 +849,11 @@ decodeUnionTypeNamed = define "decodeUnionTypeNamed" $
     DC.pair
       (DC.wrap _Name $ DC.string $ Core.unName $ Core.fieldTypeName $ var "ft")
       (DC.lambda "input" $ DC.primitive _eithers_map
-        @@@ (DC.lambda "t" $ Core.termUnion $ Core.injection (var "ename") $ Core.field (Core.fieldTypeName $ var "ft") $ DC.var "t")
+        @@@ (DC.lambda "t" $ Core.termInject $ Core.injection (var "ename") $ Core.field (Core.fieldTypeName $ var "ft") $ DC.var "t")
         @@@ ((decodeType @@ (Core.fieldTypeType $ var "ft")) @@@ DC.var "cx" @@@ DC.var "input"))) $
   deannotateAndMatch
     (just $ leftError $ string "expected union") [
-    DC.field _Term_union $ DC.lambda "inj" $ DC.lets [
+    DC.field _Term_inject $ DC.lambda "inj" $ DC.lets [
       ("field", DC.project _Injection _Injection_field @@@ DC.var "inj"),
       ("fname", DC.project _Field _Field_name @@@ DC.var "field"),
       ("fterm", DC.project _Field _Field_term @@@ DC.var "field"),

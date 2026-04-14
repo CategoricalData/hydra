@@ -200,7 +200,7 @@ schemaGraphToTypingEnvironment = define "schemaGraphToTypingEnvironment" $
           (Equality.equal (Core.recordTypeName (var "r")) (Core.nameLift _TypeScheme))
           (Eithers.map (unaryFunction just) (var "decodeTypeScheme" @@ Core.bindingTerm (var "el")))
           (right nothing),
-      _Term_union>>: "i" ~>
+      _Term_inject>>: "i" ~>
         Logic.ifElse (Equality.equal (Core.injectionTypeName (var "i")) (Core.nameLift _Type))
           (Eithers.map
             ("decoded" ~> just (var "toTypeScheme" @@ list ([] :: [TTerm Name]) @@ var "decoded"))

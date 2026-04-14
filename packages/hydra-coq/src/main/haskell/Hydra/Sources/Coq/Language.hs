@@ -86,7 +86,7 @@ coqLanguage = define "coqLanguage" $ lets [
       Variants.termVariantPair,
       Variants.termVariantRecord,
       Variants.termVariantSet,
-      Variants.termVariantUnion,
+      Variants.termVariantInject,
       Variants.termVariantUnit,
       Variants.termVariantVariable,
       Variants.termVariantWrap],

@@ -126,7 +126,7 @@ identity = lambda "x_" $ var "x_"
 -- This creates a "Result" union with the "success" variant containing value 42
 -- Use this to construct values of union types at runtime
 inject :: Name -> Name -> Term -> Term
-inject tname fname term = TermUnion $ Injection tname $ Field fname term
+inject tname fname term = TermInject $ Injection tname $ Field fname term
 
 -- | Create a unit variant of a union (convenience function)
 -- Example: injectUnit (Name "Result") (Name "success")

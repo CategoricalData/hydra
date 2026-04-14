@@ -464,8 +464,8 @@ eliminateUnitVar = def "eliminateUnitVar" $
             (Lists.map (var "rewriteField" @@ var "recurse") (Core.recordFields $ var "rec")),
         _Term_set>>: "s" ~>
           Core.termSet $ Sets.map (var "recurse") (var "s"),
-        _Term_union>>: "inj" ~>
-          Core.termUnion $ Core.injection
+        _Term_inject>>: "inj" ~>
+          Core.termInject $ Core.injection
             (Core.injectionTypeName $ var "inj")
             (var "rewriteField" @@ var "recurse" @@ Core.injectionField (var "inj")),
         _Term_maybe>>: "mt" ~>
@@ -1596,8 +1596,8 @@ encodeTermInline = def "encodeTermInline" $
         withTypeLambda @@ var "env" @@ var "tl" @@
           ("env2" ~> encodeTermInline @@ var "cx" @@ var "env2" @@ var "noCast" @@ var "body"),
 
-      -- TermUnion (Injection)
-      _Term_union>>: "inj" ~>
+      -- TermInject (Injection)
+      _Term_inject>>: "inj" ~>
         "tname" <~ Core.injectionTypeName (var "inj") $
         "field" <~ Core.injectionField (var "inj") $
         "rt" <<~ (Resolution.requireUnionType @@ var "cx" @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "tname") $
@@ -2292,7 +2292,7 @@ extendMetaForTerm = def "extendMetaForTerm" $
             (constant $ setMetaUsesJust @@ var "meta" @@ true)
             (var "m"),
         -- Union injections require cast() for proper typing
-        _Term_union>>: constant $
+        _Term_inject>>: constant $
           setMetaUsesCast @@ true @@ var "meta"]) $
     Rewriting.foldOverTerm @@ Coders.traversalOrderPre @@ var "step" @@ var "meta0" @@ var "term"
 

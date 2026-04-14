@@ -325,7 +325,7 @@ termDependencyNames = define "termDependencyNames" $
       _Term_project>>: "proj" ~> var "nominal" @@ (Core.projectionTypeName $ var "proj"),
       _Term_unwrap>>: "name" ~> var "nominal" @@ var "name",
       _Term_record>>: "record" ~> var "nominal" @@ (Core.recordTypeName $ var "record"),
-      _Term_union>>: "injection" ~> var "nominal" @@ (Core.injectionTypeName $ var "injection"),
+      _Term_inject>>: "injection" ~> var "nominal" @@ (Core.injectionTypeName $ var "injection"),
       _Term_variable>>: "name" ~> var "var" @@ var "name",
       _Term_wrap>>: "wrappedTerm" ~> var "nominal" @@ (Core.wrappedTermTypeName $ var "wrappedTerm")]) $
   Rewriting.foldOverTerm @@ Coders.traversalOrderPre @@ var "addNames" @@ Sets.empty @@ var "term0"

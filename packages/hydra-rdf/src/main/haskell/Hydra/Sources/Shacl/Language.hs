@@ -112,7 +112,7 @@ shaclLanguage = define "shaclLanguage" $
     Variants.termVariantMaybe,
     Variants.termVariantRecord,
     Variants.termVariantSet,
-    Variants.termVariantUnion],
+    Variants.termVariantInject],
   "typeVariants">: Sets.fromList $ list [
     Variants.typeVariantAnnotated,
     Variants.typeVariantList,

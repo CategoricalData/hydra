@@ -27,7 +27,7 @@
                (list (make-hydra_core_binding name val '()))
                body)))
 (define (t-inject type-name field-name term)
-  (list 'union (make-hydra_core_injection type-name
+  (list 'inject (make-hydra_core_injection type-name
                  (make-hydra_core_field field-name term))))
 (define (t-record type-name fields)
   (list 'record (make-hydra_core_record type-name fields)))
@@ -408,30 +408,30 @@
                   (body (hydra_core_annotated_term-body at))
                   (ann (hydra_core_annotated_term-annotation at))
                   (ann-term (if (and (pair? ann) (eq? (car ann) 'map)) ann (list 'map ann))))
-             (list 'union (make-hydra_core_injection "hydra.core.Term"
+             (list 'inject (make-hydra_core_injection "hydra.core.Term"
                (make-hydra_core_field "annotated"
                  (list 'record (make-hydra_core_record "hydra.core.AnnotatedTerm"
                    (list (make-hydra_core_field "body" (term-to-meta body))
                          (make-hydra_core_field "annotation" (term-to-meta-map ann-term))))))))))
           ((eq? tag 'literal)
-           (list 'union (make-hydra_core_injection "hydra.core.Term"
+           (list 'inject (make-hydra_core_injection "hydra.core.Term"
              (make-hydra_core_field "literal" (literal-to-meta (cadr term))))))
           ((eq? tag 'application)
            (let ((app (cadr term)))
-             (list 'union (make-hydra_core_injection "hydra.core.Term"
+             (list 'inject (make-hydra_core_injection "hydra.core.Term"
                (make-hydra_core_field "application"
                  (list 'record (make-hydra_core_record "hydra.core.Application"
                    (list (make-hydra_core_field "function" (term-to-meta (hydra_core_application-function app)))
                          (make-hydra_core_field "argument" (term-to-meta (hydra_core_application-argument app)))))))))))
           ((eq? tag 'variable)
            (let ((name (cadr term)))
-             (list 'union (make-hydra_core_injection "hydra.core.Term"
+             (list 'inject (make-hydra_core_injection "hydra.core.Term"
                (make-hydra_core_field "variable"
                  (list 'wrap (make-hydra_core_wrapped_term "hydra.core.Name"
                    (list 'literal (list 'string name)))))))))
           ((eq? tag 'wrap)
            (let ((wt (cadr term)))
-             (list 'union (make-hydra_core_injection "hydra.core.Term"
+             (list 'inject (make-hydra_core_injection "hydra.core.Term"
                (make-hydra_core_field "wrap"
                  (list 'record (make-hydra_core_record "hydra.core.WrappedTerm"
                    (list (make-hydra_core_field "typeName"
@@ -439,17 +439,17 @@
                              (list 'literal (list 'string (hydra_core_wrapped_term-type_name wt))))))
                          (make-hydra_core_field "body" (term-to-meta (hydra_core_wrapped_term-body wt)))))))))))
           ((eq? tag 'maybe)
-           (list 'union (make-hydra_core_injection "hydra.core.Term"
+           (list 'inject (make-hydra_core_injection "hydra.core.Term"
              (make-hydra_core_field "maybe"
                (if (cadr term)
                    (list 'maybe (term-to-meta (cadr term)))
                    (list 'maybe '()))))))
           ((eq? tag 'list)
-           (list 'union (make-hydra_core_injection "hydra.core.Term"
+           (list 'inject (make-hydra_core_injection "hydra.core.Term"
              (make-hydra_core_field "list"
                (list 'list (map term-to-meta (cadr term)))))))
           ((eq? tag 'map)
-           (list 'union (make-hydra_core_injection "hydra.core.Term"
+           (list 'inject (make-hydra_core_injection "hydra.core.Term"
              (make-hydra_core_field "map" (term-to-meta-map term)))))
           (else term)))))
 
@@ -458,10 +458,10 @@
       (let ((tag (car lit)))
         (cond
           ((eq? tag 'string)
-           (list 'union (make-hydra_core_injection "hydra.core.Literal"
+           (list 'inject (make-hydra_core_injection "hydra.core.Literal"
              (make-hydra_core_field "string" (list 'literal (list 'string (cadr lit)))))))
           ((eq? tag 'boolean)
-           (list 'union (make-hydra_core_injection "hydra.core.Literal"
+           (list 'inject (make-hydra_core_injection "hydra.core.Literal"
              (make-hydra_core_field "boolean" (list 'literal (list 'boolean (cadr lit)))))))
           ((eq? tag 'integer) (integer-to-meta (cadr lit)))
           ((eq? tag 'float) (float-to-meta (cadr lit)))
@@ -470,18 +470,18 @@
 (define (integer-to-meta ival)
   (if (not (pair? ival)) ival
       (let ((tag (car ival)))
-        (list 'union (make-hydra_core_injection "hydra.core.Literal"
+        (list 'inject (make-hydra_core_injection "hydra.core.Literal"
           (make-hydra_core_field "integer"
-            (list 'union (make-hydra_core_injection "hydra.core.IntegerValue"
+            (list 'inject (make-hydra_core_injection "hydra.core.IntegerValue"
               (make-hydra_core_field (symbol->string tag)
                 (list 'literal (list 'integer ival)))))))))))
 
 (define (float-to-meta fval)
   (if (not (pair? fval)) fval
       (let ((tag (car fval)))
-        (list 'union (make-hydra_core_injection "hydra.core.Literal"
+        (list 'inject (make-hydra_core_injection "hydra.core.Literal"
           (make-hydra_core_field "float"
-            (list 'union (make-hydra_core_injection "hydra.core.FloatValue"
+            (list 'inject (make-hydra_core_injection "hydra.core.FloatValue"
               (make-hydra_core_field (symbol->string tag)
                 (list 'literal (list 'float fval)))))))))))
 

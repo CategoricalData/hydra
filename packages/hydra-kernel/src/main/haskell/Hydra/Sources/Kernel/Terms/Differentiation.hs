@@ -222,7 +222,7 @@ differentiateTerm = define "differentiateTerm" $
     _Term_map>>: constant $ f64 0.0,
     _Term_either>>: constant $ f64 0.0,
     _Term_maybe>>: constant $ f64 0.0,
-    _Term_union>>: constant $ f64 0.0,
+    _Term_inject>>: constant $ f64 0.0,
     _Term_wrap>>: constant $ f64 0.0]
 
 -- | Differentiate a binary primitive application.

@@ -303,7 +303,7 @@ emptyTypeNameTests = define "emptyTypeNameTests" $
       (record (nm "") [(nm "x", int32 1)])
       emptyTypeNameErr,
     untypedCase "injection with empty type name"
-      (TTerm $ TermUnion $ Injection (Name "") (Field (Name "x") (TermLiteral $ LiteralInteger $ IntegerValueInt32 1)))
+      (TTerm $ TermInject $ Injection (Name "") (Field (Name "x") (TermLiteral $ LiteralInteger $ IntegerValueInt32 1)))
       emptyTypeNameErr,
     untypedCase "projection with empty type name"
       (projTerm "" "x")

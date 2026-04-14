@@ -288,7 +288,7 @@
               ((or (eq c :eq) (and (numberp c) (zerop c))) "equalTo")
               ((or (eq c :gt) (and (numberp c) (> c 0))) "greaterThan")
               (t (error "not a comparison: %S" c)))))
-        (list :right (list :union (make-hydra_core_injection "hydra.util.Comparison"
+        (list :right (list :inject (make-hydra_core_injection "hydra.util.Comparison"
                                     (make-hydra_core_field variant-name (list :unit))))))))))
 
 ;; Function coders
