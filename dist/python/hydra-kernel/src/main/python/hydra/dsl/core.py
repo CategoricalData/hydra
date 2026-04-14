@@ -158,20 +158,20 @@ def field_with_name(original: hydra.phantoms.TTerm[hydra.core.Field], new_val: h
 def field_with_term(original: hydra.phantoms.TTerm[hydra.core.Field], new_val: hydra.phantoms.TTerm[hydra.core.Term]) -> hydra.phantoms.TTerm:
     return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.Field"), (hydra.core.Field(hydra.core.Name("name"), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermProject(hydra.core.Projection(hydra.core.Name("hydra.core.Field"), hydra.core.Name("name")))), original.value)))), hydra.core.Field(hydra.core.Name("term"), new_val.value))))))
 
-float_type_bigfloat = hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.FloatType"), hydra.core.Field(hydra.core.Name("bigfloat"), cast(hydra.core.Term, hydra.core.TermUnit()))))))
+float_type_bigfloat = hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.core.FloatType"), hydra.core.Field(hydra.core.Name("bigfloat"), cast(hydra.core.Term, hydra.core.TermUnit()))))))
 
-float_type_float32 = hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.FloatType"), hydra.core.Field(hydra.core.Name("float32"), cast(hydra.core.Term, hydra.core.TermUnit()))))))
+float_type_float32 = hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.core.FloatType"), hydra.core.Field(hydra.core.Name("float32"), cast(hydra.core.Term, hydra.core.TermUnit()))))))
 
-float_type_float64 = hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.FloatType"), hydra.core.Field(hydra.core.Name("float64"), cast(hydra.core.Term, hydra.core.TermUnit()))))))
+float_type_float64 = hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.core.FloatType"), hydra.core.Field(hydra.core.Name("float64"), cast(hydra.core.Term, hydra.core.TermUnit()))))))
 
 def float_value_bigfloat(x: hydra.phantoms.TTerm[Decimal]) -> hydra.phantoms.TTerm:
-    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.FloatValue"), hydra.core.Field(hydra.core.Name("bigfloat"), x.value)))))
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.core.FloatValue"), hydra.core.Field(hydra.core.Name("bigfloat"), x.value)))))
 
 def float_value_float32(x: hydra.phantoms.TTerm[float]) -> hydra.phantoms.TTerm:
-    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.FloatValue"), hydra.core.Field(hydra.core.Name("float32"), x.value)))))
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.core.FloatValue"), hydra.core.Field(hydra.core.Name("float32"), x.value)))))
 
 def float_value_float64(x: hydra.phantoms.TTerm[float]) -> hydra.phantoms.TTerm:
-    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.FloatValue"), hydra.core.Field(hydra.core.Name("float64"), x.value)))))
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.core.FloatValue"), hydra.core.Field(hydra.core.Name("float64"), x.value)))))
 
 def forall_type(parameter: hydra.phantoms.TTerm[hydra.core.Name], body: hydra.phantoms.TTerm[hydra.core.Type]) -> hydra.phantoms.TTerm:
     return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.ForallType"), (hydra.core.Field(hydra.core.Name("parameter"), parameter.value), hydra.core.Field(hydra.core.Name("body"), body.value))))))
@@ -218,50 +218,50 @@ def injection_with_field(original: hydra.phantoms.TTerm[hydra.core.Injection], n
 def injection_with_type_name(original: hydra.phantoms.TTerm[hydra.core.Injection], new_val: hydra.phantoms.TTerm[hydra.core.Name]) -> hydra.phantoms.TTerm:
     return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.Injection"), (hydra.core.Field(hydra.core.Name("typeName"), new_val.value), hydra.core.Field(hydra.core.Name("field"), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermProject(hydra.core.Projection(hydra.core.Name("hydra.core.Injection"), hydra.core.Name("field")))), original.value)))))))))
 
-integer_type_bigint = hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.IntegerType"), hydra.core.Field(hydra.core.Name("bigint"), cast(hydra.core.Term, hydra.core.TermUnit()))))))
+integer_type_bigint = hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.core.IntegerType"), hydra.core.Field(hydra.core.Name("bigint"), cast(hydra.core.Term, hydra.core.TermUnit()))))))
 
-integer_type_int16 = hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.IntegerType"), hydra.core.Field(hydra.core.Name("int16"), cast(hydra.core.Term, hydra.core.TermUnit()))))))
+integer_type_int16 = hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.core.IntegerType"), hydra.core.Field(hydra.core.Name("int16"), cast(hydra.core.Term, hydra.core.TermUnit()))))))
 
-integer_type_int32 = hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.IntegerType"), hydra.core.Field(hydra.core.Name("int32"), cast(hydra.core.Term, hydra.core.TermUnit()))))))
+integer_type_int32 = hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.core.IntegerType"), hydra.core.Field(hydra.core.Name("int32"), cast(hydra.core.Term, hydra.core.TermUnit()))))))
 
-integer_type_int64 = hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.IntegerType"), hydra.core.Field(hydra.core.Name("int64"), cast(hydra.core.Term, hydra.core.TermUnit()))))))
+integer_type_int64 = hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.core.IntegerType"), hydra.core.Field(hydra.core.Name("int64"), cast(hydra.core.Term, hydra.core.TermUnit()))))))
 
-integer_type_int8 = hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.IntegerType"), hydra.core.Field(hydra.core.Name("int8"), cast(hydra.core.Term, hydra.core.TermUnit()))))))
+integer_type_int8 = hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.core.IntegerType"), hydra.core.Field(hydra.core.Name("int8"), cast(hydra.core.Term, hydra.core.TermUnit()))))))
 
-integer_type_uint16 = hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.IntegerType"), hydra.core.Field(hydra.core.Name("uint16"), cast(hydra.core.Term, hydra.core.TermUnit()))))))
+integer_type_uint16 = hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.core.IntegerType"), hydra.core.Field(hydra.core.Name("uint16"), cast(hydra.core.Term, hydra.core.TermUnit()))))))
 
-integer_type_uint32 = hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.IntegerType"), hydra.core.Field(hydra.core.Name("uint32"), cast(hydra.core.Term, hydra.core.TermUnit()))))))
+integer_type_uint32 = hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.core.IntegerType"), hydra.core.Field(hydra.core.Name("uint32"), cast(hydra.core.Term, hydra.core.TermUnit()))))))
 
-integer_type_uint64 = hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.IntegerType"), hydra.core.Field(hydra.core.Name("uint64"), cast(hydra.core.Term, hydra.core.TermUnit()))))))
+integer_type_uint64 = hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.core.IntegerType"), hydra.core.Field(hydra.core.Name("uint64"), cast(hydra.core.Term, hydra.core.TermUnit()))))))
 
-integer_type_uint8 = hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.IntegerType"), hydra.core.Field(hydra.core.Name("uint8"), cast(hydra.core.Term, hydra.core.TermUnit()))))))
+integer_type_uint8 = hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.core.IntegerType"), hydra.core.Field(hydra.core.Name("uint8"), cast(hydra.core.Term, hydra.core.TermUnit()))))))
 
 def integer_value_bigint(x: hydra.phantoms.TTerm[int]) -> hydra.phantoms.TTerm:
-    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.IntegerValue"), hydra.core.Field(hydra.core.Name("bigint"), x.value)))))
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.core.IntegerValue"), hydra.core.Field(hydra.core.Name("bigint"), x.value)))))
 
 def integer_value_int16(x: hydra.phantoms.TTerm[int]) -> hydra.phantoms.TTerm:
-    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.IntegerValue"), hydra.core.Field(hydra.core.Name("int16"), x.value)))))
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.core.IntegerValue"), hydra.core.Field(hydra.core.Name("int16"), x.value)))))
 
 def integer_value_int32(x: hydra.phantoms.TTerm[int]) -> hydra.phantoms.TTerm:
-    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.IntegerValue"), hydra.core.Field(hydra.core.Name("int32"), x.value)))))
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.core.IntegerValue"), hydra.core.Field(hydra.core.Name("int32"), x.value)))))
 
 def integer_value_int64(x: hydra.phantoms.TTerm[int]) -> hydra.phantoms.TTerm:
-    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.IntegerValue"), hydra.core.Field(hydra.core.Name("int64"), x.value)))))
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.core.IntegerValue"), hydra.core.Field(hydra.core.Name("int64"), x.value)))))
 
 def integer_value_int8(x: hydra.phantoms.TTerm[int]) -> hydra.phantoms.TTerm:
-    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.IntegerValue"), hydra.core.Field(hydra.core.Name("int8"), x.value)))))
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.core.IntegerValue"), hydra.core.Field(hydra.core.Name("int8"), x.value)))))
 
 def integer_value_uint16(x: hydra.phantoms.TTerm[int]) -> hydra.phantoms.TTerm:
-    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.IntegerValue"), hydra.core.Field(hydra.core.Name("uint16"), x.value)))))
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.core.IntegerValue"), hydra.core.Field(hydra.core.Name("uint16"), x.value)))))
 
 def integer_value_uint32(x: hydra.phantoms.TTerm[int]) -> hydra.phantoms.TTerm:
-    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.IntegerValue"), hydra.core.Field(hydra.core.Name("uint32"), x.value)))))
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.core.IntegerValue"), hydra.core.Field(hydra.core.Name("uint32"), x.value)))))
 
 def integer_value_uint64(x: hydra.phantoms.TTerm[int]) -> hydra.phantoms.TTerm:
-    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.IntegerValue"), hydra.core.Field(hydra.core.Name("uint64"), x.value)))))
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.core.IntegerValue"), hydra.core.Field(hydra.core.Name("uint64"), x.value)))))
 
 def integer_value_uint8(x: hydra.phantoms.TTerm[int]) -> hydra.phantoms.TTerm:
-    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.IntegerValue"), hydra.core.Field(hydra.core.Name("uint8"), x.value)))))
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.core.IntegerValue"), hydra.core.Field(hydra.core.Name("uint8"), x.value)))))
 
 def lambda_(parameter: hydra.phantoms.TTerm[hydra.core.Name], domain: hydra.phantoms.TTerm[Maybe[hydra.core.Type]], body: hydra.phantoms.TTerm[hydra.core.Term]) -> hydra.phantoms.TTerm:
     return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.Lambda"), (hydra.core.Field(hydra.core.Name("parameter"), parameter.value), hydra.core.Field(hydra.core.Name("domain"), domain.value), hydra.core.Field(hydra.core.Name("body"), body.value))))))
@@ -300,31 +300,31 @@ def let_with_body(original: hydra.phantoms.TTerm[hydra.core.Let], new_val: hydra
     return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.Let"), (hydra.core.Field(hydra.core.Name("bindings"), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermProject(hydra.core.Projection(hydra.core.Name("hydra.core.Let"), hydra.core.Name("bindings")))), original.value)))), hydra.core.Field(hydra.core.Name("body"), new_val.value))))))
 
 def literal_binary(x: hydra.phantoms.TTerm[bytes]) -> hydra.phantoms.TTerm:
-    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Literal"), hydra.core.Field(hydra.core.Name("binary"), x.value)))))
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.core.Literal"), hydra.core.Field(hydra.core.Name("binary"), x.value)))))
 
 def literal_boolean(x: hydra.phantoms.TTerm[bool]) -> hydra.phantoms.TTerm:
-    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Literal"), hydra.core.Field(hydra.core.Name("boolean"), x.value)))))
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.core.Literal"), hydra.core.Field(hydra.core.Name("boolean"), x.value)))))
 
 def literal_float(x: hydra.phantoms.TTerm[hydra.core.FloatValue]) -> hydra.phantoms.TTerm:
-    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Literal"), hydra.core.Field(hydra.core.Name("float"), x.value)))))
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.core.Literal"), hydra.core.Field(hydra.core.Name("float"), x.value)))))
 
 def literal_integer(x: hydra.phantoms.TTerm[hydra.core.IntegerValue]) -> hydra.phantoms.TTerm:
-    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Literal"), hydra.core.Field(hydra.core.Name("integer"), x.value)))))
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.core.Literal"), hydra.core.Field(hydra.core.Name("integer"), x.value)))))
 
 def literal_string(x: hydra.phantoms.TTerm[str]) -> hydra.phantoms.TTerm:
-    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Literal"), hydra.core.Field(hydra.core.Name("string"), x.value)))))
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.core.Literal"), hydra.core.Field(hydra.core.Name("string"), x.value)))))
 
-literal_type_binary = hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.LiteralType"), hydra.core.Field(hydra.core.Name("binary"), cast(hydra.core.Term, hydra.core.TermUnit()))))))
+literal_type_binary = hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.core.LiteralType"), hydra.core.Field(hydra.core.Name("binary"), cast(hydra.core.Term, hydra.core.TermUnit()))))))
 
-literal_type_boolean = hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.LiteralType"), hydra.core.Field(hydra.core.Name("boolean"), cast(hydra.core.Term, hydra.core.TermUnit()))))))
+literal_type_boolean = hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.core.LiteralType"), hydra.core.Field(hydra.core.Name("boolean"), cast(hydra.core.Term, hydra.core.TermUnit()))))))
 
 def literal_type_float(x: hydra.phantoms.TTerm[hydra.core.FloatType]) -> hydra.phantoms.TTerm:
-    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.LiteralType"), hydra.core.Field(hydra.core.Name("float"), x.value)))))
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.core.LiteralType"), hydra.core.Field(hydra.core.Name("float"), x.value)))))
 
 def literal_type_integer(x: hydra.phantoms.TTerm[hydra.core.IntegerType]) -> hydra.phantoms.TTerm:
-    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.LiteralType"), hydra.core.Field(hydra.core.Name("integer"), x.value)))))
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.core.LiteralType"), hydra.core.Field(hydra.core.Name("integer"), x.value)))))
 
-literal_type_string = hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.LiteralType"), hydra.core.Field(hydra.core.Name("string"), cast(hydra.core.Term, hydra.core.TermUnit()))))))
+literal_type_string = hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.core.LiteralType"), hydra.core.Field(hydra.core.Name("string"), cast(hydra.core.Term, hydra.core.TermUnit()))))))
 
 def map_type(keys: hydra.phantoms.TTerm[hydra.core.Type], values: hydra.phantoms.TTerm[hydra.core.Type]) -> hydra.phantoms.TTerm:
     return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.MapType"), (hydra.core.Field(hydra.core.Name("keys"), keys.value), hydra.core.Field(hydra.core.Name("values"), values.value))))))
@@ -390,72 +390,72 @@ def record_with_type_name(original: hydra.phantoms.TTerm[hydra.core.Record], new
     return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.Record"), (hydra.core.Field(hydra.core.Name("typeName"), new_val.value), hydra.core.Field(hydra.core.Name("fields"), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermProject(hydra.core.Projection(hydra.core.Name("hydra.core.Record"), hydra.core.Name("fields")))), original.value)))))))))
 
 def term_annotated(x: hydra.phantoms.TTerm[hydra.core.AnnotatedTerm]) -> hydra.phantoms.TTerm:
-    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("annotated"), x.value)))))
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("annotated"), x.value)))))
 
 def term_application(x: hydra.phantoms.TTerm[hydra.core.Application]) -> hydra.phantoms.TTerm:
-    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("application"), x.value)))))
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("application"), x.value)))))
 
 def term_cases(x: hydra.phantoms.TTerm[hydra.core.CaseStatement]) -> hydra.phantoms.TTerm:
-    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("cases"), x.value)))))
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("cases"), x.value)))))
 
 def term_either(x: hydra.phantoms.TTerm[Either[hydra.core.Term, hydra.core.Term]]) -> hydra.phantoms.TTerm:
-    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("either"), x.value)))))
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("either"), x.value)))))
+
+def term_inject(x: hydra.phantoms.TTerm[hydra.core.Injection]) -> hydra.phantoms.TTerm:
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("inject"), x.value)))))
 
 def term_lambda(x: hydra.phantoms.TTerm[hydra.core.Lambda]) -> hydra.phantoms.TTerm:
-    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("lambda"), x.value)))))
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("lambda"), x.value)))))
 
 def term_let(x: hydra.phantoms.TTerm[hydra.core.Let]) -> hydra.phantoms.TTerm:
-    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("let"), x.value)))))
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("let"), x.value)))))
 
 def term_list(x: hydra.phantoms.TTerm[frozenlist[hydra.core.Term]]) -> hydra.phantoms.TTerm:
-    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("list"), x.value)))))
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("list"), x.value)))))
 
 def term_literal(x: hydra.phantoms.TTerm[hydra.core.Literal]) -> hydra.phantoms.TTerm:
-    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("literal"), x.value)))))
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("literal"), x.value)))))
 
 def term_map(x: hydra.phantoms.TTerm[FrozenDict[hydra.core.Term, hydra.core.Term]]) -> hydra.phantoms.TTerm:
-    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("map"), x.value)))))
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("map"), x.value)))))
 
 def term_maybe(x: hydra.phantoms.TTerm[Maybe[hydra.core.Term]]) -> hydra.phantoms.TTerm:
-    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("maybe"), x.value)))))
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("maybe"), x.value)))))
 
 def term_pair(x: hydra.phantoms.TTerm[tuple[hydra.core.Term, hydra.core.Term]]) -> hydra.phantoms.TTerm:
-    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("pair"), x.value)))))
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("pair"), x.value)))))
 
 def term_project(x: hydra.phantoms.TTerm[hydra.core.Projection]) -> hydra.phantoms.TTerm:
-    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("project"), x.value)))))
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("project"), x.value)))))
 
 def term_record(x: hydra.phantoms.TTerm[hydra.core.Record]) -> hydra.phantoms.TTerm:
-    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("record"), x.value)))))
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("record"), x.value)))))
 
 def term_set(x: hydra.phantoms.TTerm[frozenset[hydra.core.Term]]) -> hydra.phantoms.TTerm:
-    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("set"), x.value)))))
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("set"), x.value)))))
 
 def term_type_application(x: hydra.phantoms.TTerm[hydra.core.TypeApplicationTerm]) -> hydra.phantoms.TTerm:
-    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("typeApplication"), x.value)))))
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("typeApplication"), x.value)))))
 
 def term_type_lambda(x: hydra.phantoms.TTerm[hydra.core.TypeLambda]) -> hydra.phantoms.TTerm:
-    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("typeLambda"), x.value)))))
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("typeLambda"), x.value)))))
 
-def term_union(x: hydra.phantoms.TTerm[hydra.core.Injection]) -> hydra.phantoms.TTerm:
-    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("union"), x.value)))))
-
-term_unit = hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("unit"), cast(hydra.core.Term, hydra.core.TermUnit()))))))
+term_unit = hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("unit"), cast(hydra.core.Term, hydra.core.TermUnit()))))))
 
 def term_unwrap(x: hydra.phantoms.TTerm[hydra.core.Name]) -> hydra.phantoms.TTerm:
-    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("unwrap"), x.value)))))
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("unwrap"), x.value)))))
 
 def term_variable(x: hydra.phantoms.TTerm[hydra.core.Name]) -> hydra.phantoms.TTerm:
-    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("variable"), x.value)))))
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("variable"), x.value)))))
 
 def term_wrap(x: hydra.phantoms.TTerm[hydra.core.WrappedTerm]) -> hydra.phantoms.TTerm:
-    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("wrap"), x.value)))))
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("wrap"), x.value)))))
 
 def type_annotated(x: hydra.phantoms.TTerm[hydra.core.AnnotatedType]) -> hydra.phantoms.TTerm:
-    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("annotated"), x.value)))))
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("annotated"), x.value)))))
 
 def type_application(x: hydra.phantoms.TTerm[hydra.core.ApplicationType]) -> hydra.phantoms.TTerm:
-    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("application"), x.value)))))
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("application"), x.value)))))
 
 def type_application_term(body: hydra.phantoms.TTerm[hydra.core.Term], type: hydra.phantoms.TTerm[hydra.core.Type]) -> hydra.phantoms.TTerm:
     return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.TypeApplicationTerm"), (hydra.core.Field(hydra.core.Name("body"), body.value), hydra.core.Field(hydra.core.Name("type"), type.value))))))
@@ -473,13 +473,13 @@ def type_application_term_with_type(original: hydra.phantoms.TTerm[hydra.core.Ty
     return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.TypeApplicationTerm"), (hydra.core.Field(hydra.core.Name("body"), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermProject(hydra.core.Projection(hydra.core.Name("hydra.core.TypeApplicationTerm"), hydra.core.Name("body")))), original.value)))), hydra.core.Field(hydra.core.Name("type"), new_val.value))))))
 
 def type_either(x: hydra.phantoms.TTerm[hydra.core.EitherType]) -> hydra.phantoms.TTerm:
-    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("either"), x.value)))))
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("either"), x.value)))))
 
 def type_forall(x: hydra.phantoms.TTerm[hydra.core.ForallType]) -> hydra.phantoms.TTerm:
-    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("forall"), x.value)))))
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("forall"), x.value)))))
 
 def type_function(x: hydra.phantoms.TTerm[hydra.core.FunctionType]) -> hydra.phantoms.TTerm:
-    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("function"), x.value)))))
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("function"), x.value)))))
 
 def type_lambda(parameter: hydra.phantoms.TTerm[hydra.core.Name], body: hydra.phantoms.TTerm[hydra.core.Term]) -> hydra.phantoms.TTerm:
     return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.TypeLambda"), (hydra.core.Field(hydra.core.Name("parameter"), parameter.value), hydra.core.Field(hydra.core.Name("body"), body.value))))))
@@ -497,22 +497,22 @@ def type_lambda_with_parameter(original: hydra.phantoms.TTerm[hydra.core.TypeLam
     return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.TypeLambda"), (hydra.core.Field(hydra.core.Name("parameter"), new_val.value), hydra.core.Field(hydra.core.Name("body"), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermProject(hydra.core.Projection(hydra.core.Name("hydra.core.TypeLambda"), hydra.core.Name("body")))), original.value)))))))))
 
 def type_list(x: hydra.phantoms.TTerm[hydra.core.Type]) -> hydra.phantoms.TTerm:
-    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("list"), x.value)))))
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("list"), x.value)))))
 
 def type_literal(x: hydra.phantoms.TTerm[hydra.core.LiteralType]) -> hydra.phantoms.TTerm:
-    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("literal"), x.value)))))
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("literal"), x.value)))))
 
 def type_map(x: hydra.phantoms.TTerm[hydra.core.MapType]) -> hydra.phantoms.TTerm:
-    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("map"), x.value)))))
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("map"), x.value)))))
 
 def type_maybe(x: hydra.phantoms.TTerm[hydra.core.Type]) -> hydra.phantoms.TTerm:
-    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("maybe"), x.value)))))
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("maybe"), x.value)))))
 
 def type_pair(x: hydra.phantoms.TTerm[hydra.core.PairType]) -> hydra.phantoms.TTerm:
-    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("pair"), x.value)))))
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("pair"), x.value)))))
 
 def type_record(x: hydra.phantoms.TTerm[frozenlist[hydra.core.FieldType]]) -> hydra.phantoms.TTerm:
-    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("record"), x.value)))))
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("record"), x.value)))))
 
 def type_scheme(variables: hydra.phantoms.TTerm[frozenlist[hydra.core.Name]], type: hydra.phantoms.TTerm[hydra.core.Type], constraints: hydra.phantoms.TTerm[Maybe[FrozenDict[hydra.core.Name, hydra.core.TypeVariableMetadata]]]) -> hydra.phantoms.TTerm:
     return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.TypeScheme"), (hydra.core.Field(hydra.core.Name("variables"), variables.value), hydra.core.Field(hydra.core.Name("type"), type.value), hydra.core.Field(hydra.core.Name("constraints"), constraints.value))))))
@@ -536,15 +536,15 @@ def type_scheme_with_variables(original: hydra.phantoms.TTerm[hydra.core.TypeSch
     return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.TypeScheme"), (hydra.core.Field(hydra.core.Name("variables"), new_val.value), hydra.core.Field(hydra.core.Name("type"), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermProject(hydra.core.Projection(hydra.core.Name("hydra.core.TypeScheme"), hydra.core.Name("type")))), original.value)))), hydra.core.Field(hydra.core.Name("constraints"), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermProject(hydra.core.Projection(hydra.core.Name("hydra.core.TypeScheme"), hydra.core.Name("constraints")))), original.value)))))))))
 
 def type_set(x: hydra.phantoms.TTerm[hydra.core.Type]) -> hydra.phantoms.TTerm:
-    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("set"), x.value)))))
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("set"), x.value)))))
 
 def type_union(x: hydra.phantoms.TTerm[frozenlist[hydra.core.FieldType]]) -> hydra.phantoms.TTerm:
-    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("union"), x.value)))))
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("union"), x.value)))))
 
-type_unit = hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("unit"), cast(hydra.core.Term, hydra.core.TermUnit()))))))
+type_unit = hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("unit"), cast(hydra.core.Term, hydra.core.TermUnit()))))))
 
 def type_variable(x: hydra.phantoms.TTerm[hydra.core.Name]) -> hydra.phantoms.TTerm:
-    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("variable"), x.value)))))
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("variable"), x.value)))))
 
 def type_variable_metadata(classes: hydra.phantoms.TTerm[frozenset[hydra.core.Name]]) -> hydra.phantoms.TTerm:
     return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.TypeVariableMetadata"), (hydra.core.Field(hydra.core.Name("classes"), classes.value),)))))
@@ -555,10 +555,10 @@ def type_variable_metadata_classes(x: hydra.phantoms.TTerm[hydra.core.TypeVariab
 def type_variable_metadata_with_classes(original: hydra.phantoms.TTerm[hydra.core.TypeVariableMetadata], new_val: hydra.phantoms.TTerm[frozenset[hydra.core.Name]]) -> hydra.phantoms.TTerm:
     return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.TypeVariableMetadata"), (hydra.core.Field(hydra.core.Name("classes"), new_val.value),)))))
 
-type_void = hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("void"), cast(hydra.core.Term, hydra.core.TermUnit()))))))
+type_void = hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("void"), cast(hydra.core.Term, hydra.core.TermUnit()))))))
 
 def type_wrap(x: hydra.phantoms.TTerm[hydra.core.Type]) -> hydra.phantoms.TTerm:
-    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("wrap"), x.value)))))
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("wrap"), x.value)))))
 
 def un_name(x: hydra.phantoms.TTerm[hydra.core.Name]) -> hydra.phantoms.TTerm:
     return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermUnwrap(hydra.core.Name("hydra.core.Name"))), x.value))))

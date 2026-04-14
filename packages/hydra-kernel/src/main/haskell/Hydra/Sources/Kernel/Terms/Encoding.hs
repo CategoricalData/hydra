@@ -447,7 +447,7 @@ encodeFieldValue = define "encodeFieldValue" $
     -- Note: use "y" instead of "v" to avoid shadowing type variable parameters named "v"
     DC.lambda "y" $
       -- Build Term.union containing an encoded Injection with the encoded value
-      DC.injection _Term (DC.field _Term_union
+      DC.injection _Term (DC.field _Term_inject
         (encodeInjection @@ var "typeName" @@ var "fieldName"
           @@ ((encodeType @@ var "fieldType") @@@ DC.var "y")))
 
@@ -738,7 +738,7 @@ encodeIntegerValue :: TTermDefinition (IntegerType -> Term -> Term)
 encodeIntegerValue = define "encodeIntegerValue" $
   doc "Encode an integer value based on its integer type" $
   "intType" ~> "valTerm" ~>
-    Core.termUnion $ Core.injection
+    Core.termInject $ Core.injection
       (Core.nameLift _IntegerValue)
       (Core.field (intTypeToFieldName @@ var "intType") (var "valTerm"))
   where
@@ -760,7 +760,7 @@ encodeFloatValue :: TTermDefinition (FloatType -> Term -> Term)
 encodeFloatValue = define "encodeFloatValue" $
   doc "Encode a float value based on its float type" $
   "floatType" ~> "valTerm" ~>
-    Core.termUnion $ Core.injection
+    Core.termInject $ Core.injection
       (Core.nameLift _FloatValue)
       (Core.field (floatTypeToFieldName @@ var "floatType") (var "valTerm"))
   where

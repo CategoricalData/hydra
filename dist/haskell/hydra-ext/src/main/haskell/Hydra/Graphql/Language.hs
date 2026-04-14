@@ -45,7 +45,7 @@ graphqlLanguage =
           Variants.TermVariantLiteral,
           Variants.TermVariantMaybe,
           Variants.TermVariantRecord,
-          Variants.TermVariantUnion]
+          Variants.TermVariantInject]
     typeVariants =
         Sets.fromList [
           Variants.TypeVariantApplication,

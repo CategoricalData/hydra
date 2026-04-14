@@ -269,27 +269,27 @@ public interface Core {
   }
 
   static hydra.phantoms.TTerm<hydra.core.FloatType> floatTypeBigfloat() {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.FloatType"), new hydra.core.Field(new hydra.core.Name("bigfloat"), new hydra.core.Term.Unit()))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.FloatType"), new hydra.core.Field(new hydra.core.Name("bigfloat"), new hydra.core.Term.Unit()))));
   }
 
   static hydra.phantoms.TTerm<hydra.core.FloatType> floatTypeFloat32() {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.FloatType"), new hydra.core.Field(new hydra.core.Name("float32"), new hydra.core.Term.Unit()))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.FloatType"), new hydra.core.Field(new hydra.core.Name("float32"), new hydra.core.Term.Unit()))));
   }
 
   static hydra.phantoms.TTerm<hydra.core.FloatType> floatTypeFloat64() {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.FloatType"), new hydra.core.Field(new hydra.core.Name("float64"), new hydra.core.Term.Unit()))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.FloatType"), new hydra.core.Field(new hydra.core.Name("float64"), new hydra.core.Term.Unit()))));
   }
 
   static hydra.phantoms.TTerm<hydra.core.FloatValue> floatValueBigfloat(hydra.phantoms.TTerm<java.math.BigDecimal> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.FloatValue"), new hydra.core.Field(new hydra.core.Name("bigfloat"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.FloatValue"), new hydra.core.Field(new hydra.core.Name("bigfloat"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.core.FloatValue> floatValueFloat32(hydra.phantoms.TTerm<Float> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.FloatValue"), new hydra.core.Field(new hydra.core.Name("float32"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.FloatValue"), new hydra.core.Field(new hydra.core.Name("float32"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.core.FloatValue> floatValueFloat64(hydra.phantoms.TTerm<Double> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.FloatValue"), new hydra.core.Field(new hydra.core.Name("float64"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.FloatValue"), new hydra.core.Field(new hydra.core.Name("float64"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.core.ForallType> forallType(hydra.phantoms.TTerm<hydra.core.Name> parameter, hydra.phantoms.TTerm<hydra.core.Type> body) {
@@ -371,75 +371,75 @@ public interface Core {
   }
 
   static hydra.phantoms.TTerm<hydra.core.IntegerType> integerTypeBigint() {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.IntegerType"), new hydra.core.Field(new hydra.core.Name("bigint"), new hydra.core.Term.Unit()))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.IntegerType"), new hydra.core.Field(new hydra.core.Name("bigint"), new hydra.core.Term.Unit()))));
   }
 
   static hydra.phantoms.TTerm<hydra.core.IntegerType> integerTypeInt16() {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.IntegerType"), new hydra.core.Field(new hydra.core.Name("int16"), new hydra.core.Term.Unit()))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.IntegerType"), new hydra.core.Field(new hydra.core.Name("int16"), new hydra.core.Term.Unit()))));
   }
 
   static hydra.phantoms.TTerm<hydra.core.IntegerType> integerTypeInt32() {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.IntegerType"), new hydra.core.Field(new hydra.core.Name("int32"), new hydra.core.Term.Unit()))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.IntegerType"), new hydra.core.Field(new hydra.core.Name("int32"), new hydra.core.Term.Unit()))));
   }
 
   static hydra.phantoms.TTerm<hydra.core.IntegerType> integerTypeInt64() {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.IntegerType"), new hydra.core.Field(new hydra.core.Name("int64"), new hydra.core.Term.Unit()))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.IntegerType"), new hydra.core.Field(new hydra.core.Name("int64"), new hydra.core.Term.Unit()))));
   }
 
   static hydra.phantoms.TTerm<hydra.core.IntegerType> integerTypeInt8() {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.IntegerType"), new hydra.core.Field(new hydra.core.Name("int8"), new hydra.core.Term.Unit()))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.IntegerType"), new hydra.core.Field(new hydra.core.Name("int8"), new hydra.core.Term.Unit()))));
   }
 
   static hydra.phantoms.TTerm<hydra.core.IntegerType> integerTypeUint16() {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.IntegerType"), new hydra.core.Field(new hydra.core.Name("uint16"), new hydra.core.Term.Unit()))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.IntegerType"), new hydra.core.Field(new hydra.core.Name("uint16"), new hydra.core.Term.Unit()))));
   }
 
   static hydra.phantoms.TTerm<hydra.core.IntegerType> integerTypeUint32() {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.IntegerType"), new hydra.core.Field(new hydra.core.Name("uint32"), new hydra.core.Term.Unit()))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.IntegerType"), new hydra.core.Field(new hydra.core.Name("uint32"), new hydra.core.Term.Unit()))));
   }
 
   static hydra.phantoms.TTerm<hydra.core.IntegerType> integerTypeUint64() {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.IntegerType"), new hydra.core.Field(new hydra.core.Name("uint64"), new hydra.core.Term.Unit()))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.IntegerType"), new hydra.core.Field(new hydra.core.Name("uint64"), new hydra.core.Term.Unit()))));
   }
 
   static hydra.phantoms.TTerm<hydra.core.IntegerType> integerTypeUint8() {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.IntegerType"), new hydra.core.Field(new hydra.core.Name("uint8"), new hydra.core.Term.Unit()))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.IntegerType"), new hydra.core.Field(new hydra.core.Name("uint8"), new hydra.core.Term.Unit()))));
   }
 
   static hydra.phantoms.TTerm<hydra.core.IntegerValue> integerValueBigint(hydra.phantoms.TTerm<java.math.BigInteger> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.IntegerValue"), new hydra.core.Field(new hydra.core.Name("bigint"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.IntegerValue"), new hydra.core.Field(new hydra.core.Name("bigint"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.core.IntegerValue> integerValueInt16(hydra.phantoms.TTerm<Short> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.IntegerValue"), new hydra.core.Field(new hydra.core.Name("int16"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.IntegerValue"), new hydra.core.Field(new hydra.core.Name("int16"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.core.IntegerValue> integerValueInt32(hydra.phantoms.TTerm<Integer> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.IntegerValue"), new hydra.core.Field(new hydra.core.Name("int32"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.IntegerValue"), new hydra.core.Field(new hydra.core.Name("int32"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.core.IntegerValue> integerValueInt64(hydra.phantoms.TTerm<Long> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.IntegerValue"), new hydra.core.Field(new hydra.core.Name("int64"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.IntegerValue"), new hydra.core.Field(new hydra.core.Name("int64"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.core.IntegerValue> integerValueInt8(hydra.phantoms.TTerm<Byte> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.IntegerValue"), new hydra.core.Field(new hydra.core.Name("int8"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.IntegerValue"), new hydra.core.Field(new hydra.core.Name("int8"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.core.IntegerValue> integerValueUint16(hydra.phantoms.TTerm<Character> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.IntegerValue"), new hydra.core.Field(new hydra.core.Name("uint16"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.IntegerValue"), new hydra.core.Field(new hydra.core.Name("uint16"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.core.IntegerValue> integerValueUint32(hydra.phantoms.TTerm<Long> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.IntegerValue"), new hydra.core.Field(new hydra.core.Name("uint32"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.IntegerValue"), new hydra.core.Field(new hydra.core.Name("uint32"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.core.IntegerValue> integerValueUint64(hydra.phantoms.TTerm<java.math.BigInteger> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.IntegerValue"), new hydra.core.Field(new hydra.core.Name("uint64"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.IntegerValue"), new hydra.core.Field(new hydra.core.Name("uint64"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.core.IntegerValue> integerValueUint8(hydra.phantoms.TTerm<Short> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.IntegerValue"), new hydra.core.Field(new hydra.core.Name("uint8"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.IntegerValue"), new hydra.core.Field(new hydra.core.Name("uint8"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.core.Lambda> lambda(hydra.phantoms.TTerm<hydra.core.Name> parameter, hydra.phantoms.TTerm<hydra.util.Maybe<hydra.core.Type>> domain, hydra.phantoms.TTerm<hydra.core.Term> body) {
@@ -509,43 +509,43 @@ public interface Core {
   }
 
   static hydra.phantoms.TTerm<hydra.core.Literal> literalBinary(hydra.phantoms.TTerm<byte[]> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Literal"), new hydra.core.Field(new hydra.core.Name("binary"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.Literal"), new hydra.core.Field(new hydra.core.Name("binary"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.core.Literal> literalBoolean(hydra.phantoms.TTerm<Boolean> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Literal"), new hydra.core.Field(new hydra.core.Name("boolean"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.Literal"), new hydra.core.Field(new hydra.core.Name("boolean"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.core.Literal> literalFloat(hydra.phantoms.TTerm<hydra.core.FloatValue> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Literal"), new hydra.core.Field(new hydra.core.Name("float"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.Literal"), new hydra.core.Field(new hydra.core.Name("float"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.core.Literal> literalInteger(hydra.phantoms.TTerm<hydra.core.IntegerValue> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Literal"), new hydra.core.Field(new hydra.core.Name("integer"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.Literal"), new hydra.core.Field(new hydra.core.Name("integer"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.core.Literal> literalString(hydra.phantoms.TTerm<String> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Literal"), new hydra.core.Field(new hydra.core.Name("string"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.Literal"), new hydra.core.Field(new hydra.core.Name("string"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.core.LiteralType> literalTypeBinary() {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.LiteralType"), new hydra.core.Field(new hydra.core.Name("binary"), new hydra.core.Term.Unit()))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.LiteralType"), new hydra.core.Field(new hydra.core.Name("binary"), new hydra.core.Term.Unit()))));
   }
 
   static hydra.phantoms.TTerm<hydra.core.LiteralType> literalTypeBoolean() {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.LiteralType"), new hydra.core.Field(new hydra.core.Name("boolean"), new hydra.core.Term.Unit()))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.LiteralType"), new hydra.core.Field(new hydra.core.Name("boolean"), new hydra.core.Term.Unit()))));
   }
 
   static hydra.phantoms.TTerm<hydra.core.LiteralType> literalTypeFloat(hydra.phantoms.TTerm<hydra.core.FloatType> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.LiteralType"), new hydra.core.Field(new hydra.core.Name("float"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.LiteralType"), new hydra.core.Field(new hydra.core.Name("float"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.core.LiteralType> literalTypeInteger(hydra.phantoms.TTerm<hydra.core.IntegerType> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.LiteralType"), new hydra.core.Field(new hydra.core.Name("integer"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.LiteralType"), new hydra.core.Field(new hydra.core.Name("integer"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.core.LiteralType> literalTypeString() {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.LiteralType"), new hydra.core.Field(new hydra.core.Name("string"), new hydra.core.Term.Unit()))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.LiteralType"), new hydra.core.Field(new hydra.core.Name("string"), new hydra.core.Term.Unit()))));
   }
 
   static hydra.phantoms.TTerm<hydra.core.MapType> mapType(hydra.phantoms.TTerm<hydra.core.Type> keys, hydra.phantoms.TTerm<hydra.core.Type> values) {
@@ -657,95 +657,95 @@ public interface Core {
   }
 
   static hydra.phantoms.TTerm<hydra.core.Term> termAnnotated(hydra.phantoms.TTerm<hydra.core.AnnotatedTerm> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("annotated"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("annotated"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.core.Term> termApplication(hydra.phantoms.TTerm<hydra.core.Application> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("application"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("application"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.core.Term> termCases(hydra.phantoms.TTerm<hydra.core.CaseStatement> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("cases"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("cases"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.core.Term> termEither(hydra.phantoms.TTerm<hydra.util.Either<hydra.core.Term, hydra.core.Term>> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("either"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("either"), (x).value))));
+  }
+
+  static hydra.phantoms.TTerm<hydra.core.Term> termInject(hydra.phantoms.TTerm<hydra.core.Injection> x) {
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("inject"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.core.Term> termLambda(hydra.phantoms.TTerm<hydra.core.Lambda> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("lambda"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("lambda"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.core.Term> termLet(hydra.phantoms.TTerm<hydra.core.Let> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("let"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("let"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.core.Term> termList(hydra.phantoms.TTerm<java.util.List<hydra.core.Term>> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("list"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("list"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.core.Term> termLiteral(hydra.phantoms.TTerm<hydra.core.Literal> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("literal"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("literal"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.core.Term> termMap(hydra.phantoms.TTerm<java.util.Map<hydra.core.Term, hydra.core.Term>> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("map"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("map"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.core.Term> termMaybe(hydra.phantoms.TTerm<hydra.util.Maybe<hydra.core.Term>> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("maybe"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("maybe"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.core.Term> termPair(hydra.phantoms.TTerm<hydra.util.Pair<hydra.core.Term, hydra.core.Term>> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("pair"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("pair"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.core.Term> termProject(hydra.phantoms.TTerm<hydra.core.Projection> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("project"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("project"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.core.Term> termRecord(hydra.phantoms.TTerm<hydra.core.Record> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("record"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("record"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.core.Term> termSet(hydra.phantoms.TTerm<java.util.Set<hydra.core.Term>> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("set"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("set"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.core.Term> termTypeApplication(hydra.phantoms.TTerm<hydra.core.TypeApplicationTerm> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("typeApplication"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("typeApplication"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.core.Term> termTypeLambda(hydra.phantoms.TTerm<hydra.core.TypeLambda> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("typeLambda"), (x).value))));
-  }
-
-  static hydra.phantoms.TTerm<hydra.core.Term> termUnion(hydra.phantoms.TTerm<hydra.core.Injection> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("union"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("typeLambda"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.core.Term> termUnit() {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("unit"), new hydra.core.Term.Unit()))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("unit"), new hydra.core.Term.Unit()))));
   }
 
   static hydra.phantoms.TTerm<hydra.core.Term> termUnwrap(hydra.phantoms.TTerm<hydra.core.Name> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("unwrap"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("unwrap"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.core.Term> termVariable(hydra.phantoms.TTerm<hydra.core.Name> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("variable"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("variable"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.core.Term> termWrap(hydra.phantoms.TTerm<hydra.core.WrappedTerm> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("wrap"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("wrap"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.core.Type> typeAnnotated(hydra.phantoms.TTerm<hydra.core.AnnotatedType> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Type"), new hydra.core.Field(new hydra.core.Name("annotated"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.Type"), new hydra.core.Field(new hydra.core.Name("annotated"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.core.Type> typeApplication(hydra.phantoms.TTerm<hydra.core.ApplicationType> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Type"), new hydra.core.Field(new hydra.core.Name("application"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.Type"), new hydra.core.Field(new hydra.core.Name("application"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.core.TypeApplicationTerm> typeApplicationTerm(hydra.phantoms.TTerm<hydra.core.Term> body, hydra.phantoms.TTerm<hydra.core.Type> type) {
@@ -775,15 +775,15 @@ public interface Core {
   }
 
   static hydra.phantoms.TTerm<hydra.core.Type> typeEither(hydra.phantoms.TTerm<hydra.core.EitherType> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Type"), new hydra.core.Field(new hydra.core.Name("either"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.Type"), new hydra.core.Field(new hydra.core.Name("either"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.core.Type> typeForall(hydra.phantoms.TTerm<hydra.core.ForallType> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Type"), new hydra.core.Field(new hydra.core.Name("forall"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.Type"), new hydra.core.Field(new hydra.core.Name("forall"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.core.Type> typeFunction(hydra.phantoms.TTerm<hydra.core.FunctionType> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Type"), new hydra.core.Field(new hydra.core.Name("function"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.Type"), new hydra.core.Field(new hydra.core.Name("function"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.core.TypeLambda> typeLambda(hydra.phantoms.TTerm<hydra.core.Name> parameter, hydra.phantoms.TTerm<hydra.core.Term> body) {
@@ -813,27 +813,27 @@ public interface Core {
   }
 
   static hydra.phantoms.TTerm<hydra.core.Type> typeList(hydra.phantoms.TTerm<hydra.core.Type> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Type"), new hydra.core.Field(new hydra.core.Name("list"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.Type"), new hydra.core.Field(new hydra.core.Name("list"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.core.Type> typeLiteral(hydra.phantoms.TTerm<hydra.core.LiteralType> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Type"), new hydra.core.Field(new hydra.core.Name("literal"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.Type"), new hydra.core.Field(new hydra.core.Name("literal"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.core.Type> typeMap(hydra.phantoms.TTerm<hydra.core.MapType> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Type"), new hydra.core.Field(new hydra.core.Name("map"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.Type"), new hydra.core.Field(new hydra.core.Name("map"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.core.Type> typeMaybe(hydra.phantoms.TTerm<hydra.core.Type> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Type"), new hydra.core.Field(new hydra.core.Name("maybe"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.Type"), new hydra.core.Field(new hydra.core.Name("maybe"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.core.Type> typePair(hydra.phantoms.TTerm<hydra.core.PairType> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Type"), new hydra.core.Field(new hydra.core.Name("pair"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.Type"), new hydra.core.Field(new hydra.core.Name("pair"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.core.Type> typeRecord(hydra.phantoms.TTerm<java.util.List<hydra.core.FieldType>> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Type"), new hydra.core.Field(new hydra.core.Name("record"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.Type"), new hydra.core.Field(new hydra.core.Name("record"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.core.TypeScheme> typeScheme(hydra.phantoms.TTerm<java.util.List<hydra.core.Name>> variables, hydra.phantoms.TTerm<hydra.core.Type> type, hydra.phantoms.TTerm<hydra.util.Maybe<java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>>> constraints) {
@@ -877,19 +877,19 @@ public interface Core {
   }
 
   static hydra.phantoms.TTerm<hydra.core.Type> typeSet(hydra.phantoms.TTerm<hydra.core.Type> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Type"), new hydra.core.Field(new hydra.core.Name("set"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.Type"), new hydra.core.Field(new hydra.core.Name("set"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.core.Type> typeUnion(hydra.phantoms.TTerm<java.util.List<hydra.core.FieldType>> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Type"), new hydra.core.Field(new hydra.core.Name("union"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.Type"), new hydra.core.Field(new hydra.core.Name("union"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.core.Type> typeUnit() {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Type"), new hydra.core.Field(new hydra.core.Name("unit"), new hydra.core.Term.Unit()))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.Type"), new hydra.core.Field(new hydra.core.Name("unit"), new hydra.core.Term.Unit()))));
   }
 
   static hydra.phantoms.TTerm<hydra.core.Type> typeVariable(hydra.phantoms.TTerm<hydra.core.Name> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Type"), new hydra.core.Field(new hydra.core.Name("variable"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.Type"), new hydra.core.Field(new hydra.core.Name("variable"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.core.TypeVariableMetadata> typeVariableMetadata(hydra.phantoms.TTerm<java.util.Set<hydra.core.Name>> classes) {
@@ -905,11 +905,11 @@ public interface Core {
   }
 
   static hydra.phantoms.TTerm<hydra.core.Type> typeVoid() {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Type"), new hydra.core.Field(new hydra.core.Name("void"), new hydra.core.Term.Unit()))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.Type"), new hydra.core.Field(new hydra.core.Name("void"), new hydra.core.Term.Unit()))));
   }
 
   static hydra.phantoms.TTerm<hydra.core.Type> typeWrap(hydra.phantoms.TTerm<hydra.core.Type> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Type"), new hydra.core.Field(new hydra.core.Name("wrap"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.core.Type"), new hydra.core.Field(new hydra.core.Name("wrap"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<String> unName(hydra.phantoms.TTerm<hydra.core.Name> x) {

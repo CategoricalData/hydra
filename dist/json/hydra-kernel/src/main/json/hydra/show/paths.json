@@ -345,7 +345,7 @@
                           {
                             "name": "dontCareStep",
                             "term": {
-                              "union": {
+                              "inject": {
                                 "field": {"name": "annotatedBody", "term": {"unit": {}}},
                                 "typeName": "hydra.paths.SubtermStep"}},
                             "type": {"type": {"variable": "hydra.paths.SubtermStep"}, "variables": []}},
@@ -1099,7 +1099,7 @@
                                                                                     "body": {
                                                                                       "pair": {
                                                                                         "@first": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "letBody", "term": {"unit": {}}},
                                                                                             "typeName": "hydra.paths.SubtermStep"}},
                                                                                         "@second": {"variable": "env"}}},

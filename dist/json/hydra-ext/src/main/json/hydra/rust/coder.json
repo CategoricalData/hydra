@@ -18,7 +18,7 @@
         "term": {
           "lambda": {
             "body": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "path",
                   "term": {
@@ -36,7 +36,7 @@
                                     {
                                       "name": "arguments",
                                       "term": {
-                                        "union": {
+                                        "inject": {
                                           "field": {"name": "none", "term": {"unit": {}}},
                                           "typeName": "hydra.rust.syntax.GenericArguments"}}}],
                                   "typeName": "hydra.rust.syntax.PathSegment"}}]}}],
@@ -56,7 +56,7 @@
         "term": {
           "lambda": {
             "body": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "path",
                   "term": {
@@ -79,7 +79,7 @@
                                             {
                                               "name": "arguments",
                                               "term": {
-                                                "union": {
+                                                "inject": {
                                                   "field": {"name": "none", "term": {"unit": {}}},
                                                   "typeName": "hydra.rust.syntax.GenericArguments"}}}],
                                           "typeName": "hydra.rust.syntax.PathSegment"}},
@@ -110,7 +110,7 @@
             "body": {
               "lambda": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "path",
                       "term": {
@@ -128,7 +128,7 @@
                                         {
                                           "name": "arguments",
                                           "term": {
-                                            "union": {
+                                            "inject": {
                                               "field": {
                                                 "name": "angleBracketed",
                                                 "term": {
@@ -139,7 +139,7 @@
                                                         "term": {
                                                           "list": [
                                                             {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {"name": "type", "term": {"variable": "arg"}},
                                                                 "typeName": "hydra.rust.syntax.GenericArg"}}]}}],
                                                     "typeName": "hydra.rust.syntax.AngleBracketedArgs"}}},
@@ -170,7 +170,7 @@
                 "body": {
                   "lambda": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
                           "name": "path",
                           "term": {
@@ -188,7 +188,7 @@
                                             {
                                               "name": "arguments",
                                               "term": {
-                                                "union": {
+                                                "inject": {
                                                   "field": {
                                                     "name": "angleBracketed",
                                                     "term": {
@@ -199,11 +199,11 @@
                                                             "term": {
                                                               "list": [
                                                                 {
-                                                                  "union": {
+                                                                  "inject": {
                                                                     "field": {"name": "type", "term": {"variable": "arg1"}},
                                                                     "typeName": "hydra.rust.syntax.GenericArg"}},
                                                                 {
-                                                                  "union": {
+                                                                  "inject": {
                                                                     "field": {"name": "type", "term": {"variable": "arg2"}},
                                                                     "typeName": "hydra.rust.syntax.GenericArg"}}]}}],
                                                         "typeName": "hydra.rust.syntax.AngleBracketedArgs"}}},
@@ -233,7 +233,7 @@
       "term": {
         "name": "hydra.rust.coder.rustUnit",
         "term": {
-          "union": {
+          "inject": {
             "field": {"name": "unit", "term": {"unit": {}}},
             "typeName": "hydra.rust.syntax.Type"}},
         "type": {"type": {"variable": "hydra.rust.syntax.Type"}, "variables": []}}},
@@ -243,7 +243,7 @@
         "term": {
           "lambda": {
             "body": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "path",
                   "term": {
@@ -261,7 +261,7 @@
                                     {
                                       "name": "arguments",
                                       "term": {
-                                        "union": {
+                                        "inject": {
                                           "field": {"name": "none", "term": {"unit": {}}},
                                           "typeName": "hydra.rust.syntax.GenericArguments"}}}],
                                   "typeName": "hydra.rust.syntax.PathSegment"}}]}}],
@@ -283,7 +283,7 @@
             "body": {
               "lambda": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "call",
                       "term": {
@@ -314,7 +314,7 @@
             "body": {
               "lambda": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "block",
                       "term": {
@@ -345,7 +345,7 @@
             "body": {
               "lambda": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "let",
                       "term": {
@@ -354,7 +354,7 @@
                             {
                               "name": "pattern",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {
                                     "name": "identifier",
                                     "term": {
@@ -401,7 +401,7 @@
             "body": {
               "lambda": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "closure",
                       "term": {
@@ -423,7 +423,7 @@
                                                 {
                                                   "name": "pattern",
                                                   "term": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {
                                                         "name": "identifier",
                                                         "term": {
@@ -696,11 +696,11 @@
                         "term": {
                           "lambda": {
                             "body": {
-                              "union": {
+                              "inject": {
                                 "field": {
                                   "name": "literal",
                                   "term": {
-                                    "union": {
+                                    "inject": {
                                       "field": {"name": "bool", "term": {"variable": "b"}},
                                       "typeName": "hydra.rust.syntax.Literal"}}},
                                 "typeName": "hydra.rust.syntax.Expression"}},
@@ -711,11 +711,11 @@
                         "term": {
                           "lambda": {
                             "body": {
-                              "union": {
+                              "inject": {
                                 "field": {
                                   "name": "literal",
                                   "term": {
-                                    "union": {
+                                    "inject": {
                                       "field": {"name": "string", "term": {"variable": "s"}},
                                       "typeName": "hydra.rust.syntax.Literal"}}},
                                 "typeName": "hydra.rust.syntax.Expression"}},
@@ -736,11 +736,11 @@
                                         "term": {
                                           "lambda": {
                                             "body": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "literal",
                                                   "term": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {
                                                         "name": "float",
                                                         "term": {
@@ -766,11 +766,11 @@
                                         "term": {
                                           "lambda": {
                                             "body": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "literal",
                                                   "term": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {
                                                         "name": "float",
                                                         "term": {
@@ -791,11 +791,11 @@
                                         "term": {
                                           "lambda": {
                                             "body": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "literal",
                                                   "term": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {
                                                         "name": "float",
                                                         "term": {
@@ -834,11 +834,11 @@
                                         "term": {
                                           "lambda": {
                                             "body": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "literal",
                                                   "term": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {
                                                         "name": "integer",
                                                         "term": {
@@ -861,11 +861,11 @@
                                         "term": {
                                           "lambda": {
                                             "body": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "literal",
                                                   "term": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {
                                                         "name": "integer",
                                                         "term": {
@@ -888,11 +888,11 @@
                                         "term": {
                                           "lambda": {
                                             "body": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "literal",
                                                   "term": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {
                                                         "name": "integer",
                                                         "term": {
@@ -915,11 +915,11 @@
                                         "term": {
                                           "lambda": {
                                             "body": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "literal",
                                                   "term": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {
                                                         "name": "integer",
                                                         "term": {
@@ -942,11 +942,11 @@
                                         "term": {
                                           "lambda": {
                                             "body": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "literal",
                                                   "term": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {
                                                         "name": "integer",
                                                         "term": {
@@ -969,11 +969,11 @@
                                         "term": {
                                           "lambda": {
                                             "body": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "literal",
                                                   "term": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {
                                                         "name": "integer",
                                                         "term": {
@@ -996,11 +996,11 @@
                                         "term": {
                                           "lambda": {
                                             "body": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "literal",
                                                   "term": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {
                                                         "name": "integer",
                                                         "term": {
@@ -1023,11 +1023,11 @@
                                         "term": {
                                           "lambda": {
                                             "body": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "literal",
                                                   "term": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {
                                                         "name": "integer",
                                                         "term": {
@@ -1050,11 +1050,11 @@
                                         "term": {
                                           "lambda": {
                                             "body": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "literal",
                                                   "term": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {
                                                         "name": "integer",
                                                         "term": {
@@ -1562,7 +1562,7 @@
                                                                         "body": {
                                                                           "either": {
                                                                             "@right": {
-                                                                              "union": {
+                                                                              "inject": {
                                                                                 "field": {
                                                                                   "name": "tuple",
                                                                                   "term": {"list": [{"variable": "ft"}, {"variable": "st"}]}},
@@ -1658,13 +1658,13 @@
                                                                             "@right": {
                                                                               "application": {
                                                                                 "argument": {
-                                                                                  "union": {
+                                                                                  "inject": {
                                                                                     "field": {
                                                                                       "name": "dynTrait",
                                                                                       "term": {
                                                                                         "list": [
                                                                                           {
-                                                                                            "union": {
+                                                                                            "inject": {
                                                                                               "field": {
                                                                                                 "name": "trait",
                                                                                                 "term": {
@@ -1682,7 +1682,7 @@
                                                                                                                   {
                                                                                                                     "name": "arguments",
                                                                                                                     "term": {
-                                                                                                                      "union": {
+                                                                                                                      "inject": {
                                                                                                                         "field": {
                                                                                                                           "name": "parenthesized",
                                                                                                                           "term": {
@@ -1783,7 +1783,7 @@
                                                         "body": {
                                                           "either": {
                                                             "@left": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {
                                                                   "name": "other",
                                                                   "term": {
@@ -1806,7 +1806,7 @@
                                                         "body": {
                                                           "either": {
                                                             "@left": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {
                                                                   "name": "other",
                                                                   "term": {
@@ -1829,7 +1829,7 @@
                                                         "body": {
                                                           "either": {
                                                             "@left": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {
                                                                   "name": "other",
                                                                   "term": {
@@ -2549,11 +2549,11 @@
                                                                     "argument": {
                                                                       "list": [
                                                                         {
-                                                                          "union": {
+                                                                          "inject": {
                                                                             "field": {
                                                                               "name": "array",
                                                                               "term": {
-                                                                                "union": {
+                                                                                "inject": {
                                                                                   "field": {"name": "elements", "term": {"variable": "sels"}},
                                                                                   "typeName": "hydra.rust.syntax.ArrayExpr"}}},
                                                                             "typeName": "hydra.rust.syntax.Expression"}}]},
@@ -2647,11 +2647,11 @@
                                                                     "argument": {
                                                                       "list": [
                                                                         {
-                                                                          "union": {
+                                                                          "inject": {
                                                                             "field": {
                                                                               "name": "array",
                                                                               "term": {
-                                                                                "union": {
+                                                                                "inject": {
                                                                                   "field": {"name": "elements", "term": {"variable": "pairs"}},
                                                                                   "typeName": "hydra.rust.syntax.ArrayExpr"}}},
                                                                             "typeName": "hydra.rust.syntax.Expression"}}]},
@@ -2699,7 +2699,7 @@
                                                                                         "body": {
                                                                                           "either": {
                                                                                             "@right": {
-                                                                                              "union": {
+                                                                                              "inject": {
                                                                                                 "field": {
                                                                                                   "name": "tuple",
                                                                                                   "term": {"list": [{"variable": "k"}, {"variable": "v"}]}},
@@ -2927,7 +2927,7 @@
                                                                     "body": {
                                                                       "either": {
                                                                         "@right": {
-                                                                          "union": {
+                                                                          "inject": {
                                                                             "field": {
                                                                               "name": "tuple",
                                                                               "term": {"list": [{"variable": "f"}, {"variable": "s"}]}},
@@ -3052,7 +3052,7 @@
                                                                     "body": {
                                                                       "either": {
                                                                         "@right": {
-                                                                          "union": {
+                                                                          "inject": {
                                                                             "field": {
                                                                               "name": "struct",
                                                                               "term": {
@@ -3083,7 +3083,7 @@
                                                                                                         {
                                                                                                           "name": "arguments",
                                                                                                           "term": {
-                                                                                                            "union": {
+                                                                                                            "inject": {
                                                                                                               "field": {"name": "none", "term": {"unit": {}}},
                                                                                                               "typeName": "hydra.rust.syntax.GenericArguments"}}}],
                                                                                                       "typeName": "hydra.rust.syntax.PathSegment"}}]}}],
@@ -3220,11 +3220,11 @@
                                                                     "argument": {
                                                                       "list": [
                                                                         {
-                                                                          "union": {
+                                                                          "inject": {
                                                                             "field": {
                                                                               "name": "array",
                                                                               "term": {
-                                                                                "union": {
+                                                                                "inject": {
                                                                                   "field": {"name": "elements", "term": {"variable": "sels"}},
                                                                                   "typeName": "hydra.rust.syntax.ArrayExpr"}}},
                                                                             "typeName": "hydra.rust.syntax.Expression"}}]},
@@ -3288,7 +3288,7 @@
                                             "domain": {"set": {"variable": "hydra.core.Term"}},
                                             "parameter": "s"}}},
                                       {
-                                        "name": "union",
+                                        "name": "inject",
                                         "term": {
                                           "lambda": {
                                             "body": {
@@ -3505,7 +3505,7 @@
                                                     "body": {
                                                       "either": {
                                                         "@right": {
-                                                          "union": {
+                                                          "inject": {
                                                             "field": {
                                                               "name": "tuple",
                                                               "term": {
@@ -3632,7 +3632,7 @@
                                             "body": {
                                               "either": {
                                                 "@left": {
-                                                  "union": {
+                                                  "inject": {
                                                     "field": {
                                                       "name": "other",
                                                       "term": {
@@ -3712,7 +3712,7 @@
                                                             "body": {
                                                               "either": {
                                                                 "@right": {
-                                                                  "union": {
+                                                                  "inject": {
                                                                     "field": {
                                                                       "name": "fieldAccess",
                                                                       "term": {
@@ -3767,7 +3767,7 @@
                                                         "@right": {
                                                           "application": {
                                                             "argument": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {
                                                                   "name": "fieldAccess",
                                                                   "term": {
@@ -3906,7 +3906,7 @@
                                                                                     "body": {
                                                                                       "either": {
                                                                                         "@right": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {
                                                                                               "name": "match",
                                                                                               "term": {
@@ -3961,7 +3961,7 @@
                                                                                 "@right": {
                                                                                   "application": {
                                                                                     "argument": {
-                                                                                      "union": {
+                                                                                      "inject": {
                                                                                         "field": {
                                                                                           "name": "match",
                                                                                           "term": {
@@ -4023,7 +4023,7 @@
                                                                                                       {
                                                                                                         "name": "pattern",
                                                                                                         "term": {
-                                                                                                          "union": {
+                                                                                                          "inject": {
                                                                                                             "field": {"name": "wildcard", "term": {"unit": {}}},
                                                                                                             "typeName": "hydra.rust.syntax.Pattern"}}},
                                                                                                       {
@@ -4050,7 +4050,7 @@
                                                                             "argument": {
                                                                               "application": {
                                                                                 "argument": {
-                                                                                  "union": {
+                                                                                  "inject": {
                                                                                     "field": {
                                                                                       "name": "application",
                                                                                       "term": {
@@ -4060,7 +4060,7 @@
                                                                                             {
                                                                                               "name": "argument",
                                                                                               "term": {
-                                                                                                "union": {
+                                                                                                "inject": {
                                                                                                   "field": {
                                                                                                     "name": "variable",
                                                                                                     "term": {
@@ -4178,7 +4178,7 @@
                                                                                                   {
                                                                                                     "name": "pattern",
                                                                                                     "term": {
-                                                                                                      "union": {
+                                                                                                      "inject": {
                                                                                                         "field": {
                                                                                                           "name": "tupleStruct",
                                                                                                           "term": {
@@ -4215,7 +4215,7 @@
                                                                                                                                     {
                                                                                                                                       "name": "arguments",
                                                                                                                                       "term": {
-                                                                                                                                        "union": {
+                                                                                                                                        "inject": {
                                                                                                                                           "field": {"name": "none", "term": {"unit": {}}},
                                                                                                                                           "typeName": "hydra.rust.syntax.GenericArguments"}}}],
                                                                                                                                   "typeName": "hydra.rust.syntax.PathSegment"}}]}}],
@@ -4225,7 +4225,7 @@
                                                                                                                   "term": {
                                                                                                                     "list": [
                                                                                                                       {
-                                                                                                                        "union": {
+                                                                                                                        "inject": {
                                                                                                                           "field": {
                                                                                                                             "name": "identifier",
                                                                                                                             "term": {
@@ -4260,7 +4260,7 @@
                                                                                 "argument": {
                                                                                   "application": {
                                                                                     "argument": {
-                                                                                      "union": {
+                                                                                      "inject": {
                                                                                         "field": {
                                                                                           "name": "application",
                                                                                           "term": {
@@ -4270,7 +4270,7 @@
                                                                                                 {
                                                                                                   "name": "argument",
                                                                                                   "term": {
-                                                                                                    "union": {
+                                                                                                    "inject": {
                                                                                                       "field": {
                                                                                                         "name": "variable",
                                                                                                         "term": {
@@ -4381,7 +4381,7 @@
                                                         "body": {
                                                           "either": {
                                                             "@right": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {
                                                                   "name": "tupleIndex",
                                                                   "term": {
@@ -4436,7 +4436,7 @@
                                                     "@right": {
                                                       "application": {
                                                         "argument": {
-                                                          "union": {
+                                                          "inject": {
                                                             "field": {
                                                               "name": "tupleIndex",
                                                               "term": {
@@ -4735,7 +4735,7 @@
                                                                                           {
                                                                                             "name": "body",
                                                                                             "term": {
-                                                                                              "union": {
+                                                                                              "inject": {
                                                                                                 "field": {"name": "struct", "term": {"variable": "sfields"}},
                                                                                                 "typeName": "hydra.rust.syntax.EnumVariantBody"}}},
                                                                                           {
@@ -4811,7 +4811,7 @@
                                                                                   {
                                                                                     "name": "body",
                                                                                     "term": {
-                                                                                      "union": {
+                                                                                      "inject": {
                                                                                         "field": {"name": "tuple", "term": {"list": [{"variable": "sftyp"}]}},
                                                                                         "typeName": "hydra.rust.syntax.EnumVariantBody"}}},
                                                                                   {
@@ -4872,7 +4872,7 @@
                                                                       {
                                                                         "name": "body",
                                                                         "term": {
-                                                                          "union": {
+                                                                          "inject": {
                                                                             "field": {"name": "unit", "term": {"unit": {}}},
                                                                             "typeName": "hydra.rust.syntax.EnumVariantBody"}}},
                                                                       {
@@ -5089,7 +5089,7 @@
                                                                               {
                                                                                 "name": "visibility",
                                                                                 "term": {
-                                                                                  "union": {
+                                                                                  "inject": {
                                                                                     "field": {"name": "public", "term": {"unit": {}}},
                                                                                     "typeName": "hydra.rust.syntax.Visibility"}}},
                                                                               {"name": "item", "term": {"variable": "item"}}],
@@ -5121,7 +5121,7 @@
                                                                                             "body": {
                                                                                               "either": {
                                                                                                 "@right": {
-                                                                                                  "union": {
+                                                                                                  "inject": {
                                                                                                     "field": {
                                                                                                       "name": "struct",
                                                                                                       "term": {
@@ -5138,7 +5138,7 @@
                                                                                                             {
                                                                                                               "name": "body",
                                                                                                               "term": {
-                                                                                                                "union": {
+                                                                                                                "inject": {
                                                                                                                   "field": {"name": "named", "term": {"variable": "sfields"}},
                                                                                                                   "typeName": "hydra.rust.syntax.StructBody"}}},
                                                                                                             {
@@ -5212,7 +5212,7 @@
                                                                                             "body": {
                                                                                               "either": {
                                                                                                 "@right": {
-                                                                                                  "union": {
+                                                                                                  "inject": {
                                                                                                     "field": {
                                                                                                       "name": "enum",
                                                                                                       "term": {
@@ -5298,7 +5298,7 @@
                                                                                             "body": {
                                                                                               "either": {
                                                                                                 "@right": {
-                                                                                                  "union": {
+                                                                                                  "inject": {
                                                                                                     "field": {
                                                                                                       "name": "struct",
                                                                                                       "term": {
@@ -5315,7 +5315,7 @@
                                                                                                             {
                                                                                                               "name": "body",
                                                                                                               "term": {
-                                                                                                                "union": {
+                                                                                                                "inject": {
                                                                                                                   "field": {
                                                                                                                     "name": "tuple",
                                                                                                                     "term": {
@@ -5382,7 +5382,7 @@
                                                                                     "body": {
                                                                                       "either": {
                                                                                         "@right": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {
                                                                                               "name": "typeAlias",
                                                                                               "term": {
@@ -5530,7 +5530,7 @@
                                                         "function": {
                                                           "application": {
                                                             "argument": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {
                                                                   "name": "variable",
                                                                   "term": {
@@ -5570,13 +5570,13 @@
                                                                               {
                                                                                 "name": "visibility",
                                                                                 "term": {
-                                                                                  "union": {
+                                                                                  "inject": {
                                                                                     "field": {"name": "public", "term": {"unit": {}}},
                                                                                     "typeName": "hydra.rust.syntax.Visibility"}}},
                                                                               {
                                                                                 "name": "item",
                                                                                 "term": {
-                                                                                  "union": {
+                                                                                  "inject": {
                                                                                     "field": {
                                                                                       "name": "fn",
                                                                                       "term": {
@@ -5850,7 +5850,7 @@
                                                                                         "function": {
                                                                                           "application": {
                                                                                             "argument": {
-                                                                                              "union": {
+                                                                                              "inject": {
                                                                                                 "field": {"name": "lowerSnake", "term": {"unit": {}}},
                                                                                                 "typeName": "hydra.util.CaseConvention"}},
                                                                                             "function": {"variable": "hydra.names.namespaceToFilePath"}}}}}}},

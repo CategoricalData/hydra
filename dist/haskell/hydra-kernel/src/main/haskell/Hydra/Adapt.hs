@@ -550,7 +550,7 @@ pushTypeAppsInward term =
                       Core.TermTypeLambda v0 -> Core.TermTypeLambda (Core.TypeLambda {
                         Core.typeLambdaParameter = (Core.typeLambdaParameter v0),
                         Core.typeLambdaBody = (go (Core.typeLambdaBody v0))})
-                      Core.TermUnion v0 -> Core.TermUnion (Core.Injection {
+                      Core.TermInject v0 -> Core.TermInject (Core.Injection {
                         Core.injectionTypeName = (Core.injectionTypeName v0),
                         Core.injectionField = (forField (Core.injectionField v0))})
                       Core.TermUnit -> Core.TermUnit
@@ -609,7 +609,7 @@ termAlternatives cx graph term =
         let term2 = Core.typeApplicationTermBody v0
         in (Right [
           term2])
-      Core.TermUnion v0 ->
+      Core.TermInject v0 ->
         let tname = Core.injectionTypeName v0
             field = Core.injectionField v0
             fname = Core.fieldName field

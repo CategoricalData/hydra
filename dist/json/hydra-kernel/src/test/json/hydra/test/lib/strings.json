@@ -50,7 +50,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -101,7 +101,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -148,7 +148,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -198,7 +198,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -250,7 +250,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -302,7 +302,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -355,7 +355,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -404,7 +404,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -455,7 +455,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -527,7 +527,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -579,7 +579,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -631,7 +631,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -683,7 +683,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -735,7 +735,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -787,7 +787,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -837,7 +837,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -906,7 +906,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -962,7 +962,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -1018,7 +1018,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -1076,7 +1076,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -1132,7 +1132,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -1190,7 +1190,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -1248,7 +1248,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -1325,7 +1325,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -1380,7 +1380,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -1430,7 +1430,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -1479,7 +1479,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -1532,7 +1532,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -1584,7 +1584,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -1635,7 +1635,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -1705,7 +1705,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -1759,7 +1759,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -1815,7 +1815,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -1869,7 +1869,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -1920,7 +1920,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -1972,7 +1972,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -2026,7 +2026,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -2077,7 +2077,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -2147,7 +2147,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -2200,7 +2200,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -2253,7 +2253,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -2308,7 +2308,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -2363,7 +2363,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -2418,7 +2418,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -2490,7 +2490,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -2555,7 +2555,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -2621,7 +2621,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -2690,7 +2690,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -2756,7 +2756,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -2821,7 +2821,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -2886,7 +2886,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -2954,7 +2954,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -3023,7 +3023,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -3088,7 +3088,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -3173,7 +3173,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -3186,7 +3186,7 @@
                                                               "argument": {
                                                                 "application": {
                                                                   "argument": {
-                                                                    "union": {
+                                                                    "inject": {
                                                                       "field": {
                                                                         "name": "application",
                                                                         "term": {
@@ -3195,7 +3195,7 @@
                                                                               {
                                                                                 "name": "function",
                                                                                 "term": {
-                                                                                  "union": {
+                                                                                  "inject": {
                                                                                     "field": {
                                                                                       "name": "application",
                                                                                       "term": {
@@ -3204,7 +3204,7 @@
                                                                                             {
                                                                                               "name": "function",
                                                                                               "term": {
-                                                                                                "union": {
+                                                                                                "inject": {
                                                                                                   "field": {
                                                                                                     "name": "variable",
                                                                                                     "term": {
@@ -3215,15 +3215,15 @@
                                                                                             {
                                                                                               "name": "argument",
                                                                                               "term": {
-                                                                                                "union": {
+                                                                                                "inject": {
                                                                                                   "field": {
                                                                                                     "name": "literal",
                                                                                                     "term": {
-                                                                                                      "union": {
+                                                                                                      "inject": {
                                                                                                         "field": {
                                                                                                           "name": "integer",
                                                                                                           "term": {
-                                                                                                            "union": {
+                                                                                                            "inject": {
                                                                                                               "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 0}}}},
                                                                                                               "typeName": "hydra.core.IntegerValue"}}},
                                                                                                         "typeName": "hydra.core.Literal"}}},
@@ -3233,11 +3233,11 @@
                                                                               {
                                                                                 "name": "argument",
                                                                                 "term": {
-                                                                                  "union": {
+                                                                                  "inject": {
                                                                                     "field": {
                                                                                       "name": "literal",
                                                                                       "term": {
-                                                                                        "union": {
+                                                                                        "inject": {
                                                                                           "field": {"name": "string", "term": {"literal": {"string": "hello"}}},
                                                                                           "typeName": "hydra.core.Literal"}}},
                                                                                     "typeName": "hydra.core.Term"}}}],
@@ -3285,20 +3285,20 @@
                                                           "term": {
                                                             "application": {
                                                               "argument": {
-                                                                "union": {
+                                                                "inject": {
                                                                   "field": {
                                                                     "name": "maybe",
                                                                     "term": {
                                                                       "maybe": {
-                                                                        "union": {
+                                                                        "inject": {
                                                                           "field": {
                                                                             "name": "literal",
                                                                             "term": {
-                                                                              "union": {
+                                                                              "inject": {
                                                                                 "field": {
                                                                                   "name": "integer",
                                                                                   "term": {
-                                                                                    "union": {
+                                                                                    "inject": {
                                                                                       "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 104}}}},
                                                                                       "typeName": "hydra.core.IntegerValue"}}},
                                                                                 "typeName": "hydra.core.Literal"}}},
@@ -3323,7 +3323,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -3336,7 +3336,7 @@
                                                               "argument": {
                                                                 "application": {
                                                                   "argument": {
-                                                                    "union": {
+                                                                    "inject": {
                                                                       "field": {
                                                                         "name": "application",
                                                                         "term": {
@@ -3345,7 +3345,7 @@
                                                                               {
                                                                                 "name": "function",
                                                                                 "term": {
-                                                                                  "union": {
+                                                                                  "inject": {
                                                                                     "field": {
                                                                                       "name": "application",
                                                                                       "term": {
@@ -3354,7 +3354,7 @@
                                                                                             {
                                                                                               "name": "function",
                                                                                               "term": {
-                                                                                                "union": {
+                                                                                                "inject": {
                                                                                                   "field": {
                                                                                                     "name": "variable",
                                                                                                     "term": {
@@ -3365,15 +3365,15 @@
                                                                                             {
                                                                                               "name": "argument",
                                                                                               "term": {
-                                                                                                "union": {
+                                                                                                "inject": {
                                                                                                   "field": {
                                                                                                     "name": "literal",
                                                                                                     "term": {
-                                                                                                      "union": {
+                                                                                                      "inject": {
                                                                                                         "field": {
                                                                                                           "name": "integer",
                                                                                                           "term": {
-                                                                                                            "union": {
+                                                                                                            "inject": {
                                                                                                               "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 2}}}},
                                                                                                               "typeName": "hydra.core.IntegerValue"}}},
                                                                                                         "typeName": "hydra.core.Literal"}}},
@@ -3383,11 +3383,11 @@
                                                                               {
                                                                                 "name": "argument",
                                                                                 "term": {
-                                                                                  "union": {
+                                                                                  "inject": {
                                                                                     "field": {
                                                                                       "name": "literal",
                                                                                       "term": {
-                                                                                        "union": {
+                                                                                        "inject": {
                                                                                           "field": {"name": "string", "term": {"literal": {"string": "hello"}}},
                                                                                           "typeName": "hydra.core.Literal"}}},
                                                                                     "typeName": "hydra.core.Term"}}}],
@@ -3435,20 +3435,20 @@
                                                           "term": {
                                                             "application": {
                                                               "argument": {
-                                                                "union": {
+                                                                "inject": {
                                                                   "field": {
                                                                     "name": "maybe",
                                                                     "term": {
                                                                       "maybe": {
-                                                                        "union": {
+                                                                        "inject": {
                                                                           "field": {
                                                                             "name": "literal",
                                                                             "term": {
-                                                                              "union": {
+                                                                              "inject": {
                                                                                 "field": {
                                                                                   "name": "integer",
                                                                                   "term": {
-                                                                                    "union": {
+                                                                                    "inject": {
                                                                                       "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 108}}}},
                                                                                       "typeName": "hydra.core.IntegerValue"}}},
                                                                                 "typeName": "hydra.core.Literal"}}},
@@ -3473,7 +3473,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -3486,7 +3486,7 @@
                                                               "argument": {
                                                                 "application": {
                                                                   "argument": {
-                                                                    "union": {
+                                                                    "inject": {
                                                                       "field": {
                                                                         "name": "application",
                                                                         "term": {
@@ -3495,7 +3495,7 @@
                                                                               {
                                                                                 "name": "function",
                                                                                 "term": {
-                                                                                  "union": {
+                                                                                  "inject": {
                                                                                     "field": {
                                                                                       "name": "application",
                                                                                       "term": {
@@ -3504,7 +3504,7 @@
                                                                                             {
                                                                                               "name": "function",
                                                                                               "term": {
-                                                                                                "union": {
+                                                                                                "inject": {
                                                                                                   "field": {
                                                                                                     "name": "variable",
                                                                                                     "term": {
@@ -3515,15 +3515,15 @@
                                                                                             {
                                                                                               "name": "argument",
                                                                                               "term": {
-                                                                                                "union": {
+                                                                                                "inject": {
                                                                                                   "field": {
                                                                                                     "name": "literal",
                                                                                                     "term": {
-                                                                                                      "union": {
+                                                                                                      "inject": {
                                                                                                         "field": {
                                                                                                           "name": "integer",
                                                                                                           "term": {
-                                                                                                            "union": {
+                                                                                                            "inject": {
                                                                                                               "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 4}}}},
                                                                                                               "typeName": "hydra.core.IntegerValue"}}},
                                                                                                         "typeName": "hydra.core.Literal"}}},
@@ -3533,11 +3533,11 @@
                                                                               {
                                                                                 "name": "argument",
                                                                                 "term": {
-                                                                                  "union": {
+                                                                                  "inject": {
                                                                                     "field": {
                                                                                       "name": "literal",
                                                                                       "term": {
-                                                                                        "union": {
+                                                                                        "inject": {
                                                                                           "field": {"name": "string", "term": {"literal": {"string": "hello"}}},
                                                                                           "typeName": "hydra.core.Literal"}}},
                                                                                     "typeName": "hydra.core.Term"}}}],
@@ -3585,20 +3585,20 @@
                                                           "term": {
                                                             "application": {
                                                               "argument": {
-                                                                "union": {
+                                                                "inject": {
                                                                   "field": {
                                                                     "name": "maybe",
                                                                     "term": {
                                                                       "maybe": {
-                                                                        "union": {
+                                                                        "inject": {
                                                                           "field": {
                                                                             "name": "literal",
                                                                             "term": {
-                                                                              "union": {
+                                                                              "inject": {
                                                                                 "field": {
                                                                                   "name": "integer",
                                                                                   "term": {
-                                                                                    "union": {
+                                                                                    "inject": {
                                                                                       "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 111}}}},
                                                                                       "typeName": "hydra.core.IntegerValue"}}},
                                                                                 "typeName": "hydra.core.Literal"}}},
@@ -3623,7 +3623,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -3636,7 +3636,7 @@
                                                               "argument": {
                                                                 "application": {
                                                                   "argument": {
-                                                                    "union": {
+                                                                    "inject": {
                                                                       "field": {
                                                                         "name": "application",
                                                                         "term": {
@@ -3645,7 +3645,7 @@
                                                                               {
                                                                                 "name": "function",
                                                                                 "term": {
-                                                                                  "union": {
+                                                                                  "inject": {
                                                                                     "field": {
                                                                                       "name": "application",
                                                                                       "term": {
@@ -3654,7 +3654,7 @@
                                                                                             {
                                                                                               "name": "function",
                                                                                               "term": {
-                                                                                                "union": {
+                                                                                                "inject": {
                                                                                                   "field": {
                                                                                                     "name": "variable",
                                                                                                     "term": {
@@ -3665,15 +3665,15 @@
                                                                                             {
                                                                                               "name": "argument",
                                                                                               "term": {
-                                                                                                "union": {
+                                                                                                "inject": {
                                                                                                   "field": {
                                                                                                     "name": "literal",
                                                                                                     "term": {
-                                                                                                      "union": {
+                                                                                                      "inject": {
                                                                                                         "field": {
                                                                                                           "name": "integer",
                                                                                                           "term": {
-                                                                                                            "union": {
+                                                                                                            "inject": {
                                                                                                               "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 5}}}},
                                                                                                               "typeName": "hydra.core.IntegerValue"}}},
                                                                                                         "typeName": "hydra.core.Literal"}}},
@@ -3683,11 +3683,11 @@
                                                                               {
                                                                                 "name": "argument",
                                                                                 "term": {
-                                                                                  "union": {
+                                                                                  "inject": {
                                                                                     "field": {
                                                                                       "name": "literal",
                                                                                       "term": {
-                                                                                        "union": {
+                                                                                        "inject": {
                                                                                           "field": {"name": "string", "term": {"literal": {"string": "hello"}}},
                                                                                           "typeName": "hydra.core.Literal"}}},
                                                                                     "typeName": "hydra.core.Term"}}}],
@@ -3735,7 +3735,7 @@
                                                           "term": {
                                                             "application": {
                                                               "argument": {
-                                                                "union": {
+                                                                "inject": {
                                                                   "field": {
                                                                     "name": "maybe",
                                                                     "term": {
@@ -3760,7 +3760,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -3773,7 +3773,7 @@
                                                               "argument": {
                                                                 "application": {
                                                                   "argument": {
-                                                                    "union": {
+                                                                    "inject": {
                                                                       "field": {
                                                                         "name": "application",
                                                                         "term": {
@@ -3782,7 +3782,7 @@
                                                                               {
                                                                                 "name": "function",
                                                                                 "term": {
-                                                                                  "union": {
+                                                                                  "inject": {
                                                                                     "field": {
                                                                                       "name": "application",
                                                                                       "term": {
@@ -3791,7 +3791,7 @@
                                                                                             {
                                                                                               "name": "function",
                                                                                               "term": {
-                                                                                                "union": {
+                                                                                                "inject": {
                                                                                                   "field": {
                                                                                                     "name": "variable",
                                                                                                     "term": {
@@ -3802,15 +3802,15 @@
                                                                                             {
                                                                                               "name": "argument",
                                                                                               "term": {
-                                                                                                "union": {
+                                                                                                "inject": {
                                                                                                   "field": {
                                                                                                     "name": "literal",
                                                                                                     "term": {
-                                                                                                      "union": {
+                                                                                                      "inject": {
                                                                                                         "field": {
                                                                                                           "name": "integer",
                                                                                                           "term": {
-                                                                                                            "union": {
+                                                                                                            "inject": {
                                                                                                               "field": {"name": "int32", "term": {"literal": {"integer": {"int32": -1}}}},
                                                                                                               "typeName": "hydra.core.IntegerValue"}}},
                                                                                                         "typeName": "hydra.core.Literal"}}},
@@ -3820,11 +3820,11 @@
                                                                               {
                                                                                 "name": "argument",
                                                                                 "term": {
-                                                                                  "union": {
+                                                                                  "inject": {
                                                                                     "field": {
                                                                                       "name": "literal",
                                                                                       "term": {
-                                                                                        "union": {
+                                                                                        "inject": {
                                                                                           "field": {"name": "string", "term": {"literal": {"string": "hello"}}},
                                                                                           "typeName": "hydra.core.Literal"}}},
                                                                                     "typeName": "hydra.core.Term"}}}],
@@ -3872,7 +3872,7 @@
                                                           "term": {
                                                             "application": {
                                                               "argument": {
-                                                                "union": {
+                                                                "inject": {
                                                                   "field": {
                                                                     "name": "maybe",
                                                                     "term": {
@@ -3897,7 +3897,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -3910,7 +3910,7 @@
                                                               "argument": {
                                                                 "application": {
                                                                   "argument": {
-                                                                    "union": {
+                                                                    "inject": {
                                                                       "field": {
                                                                         "name": "application",
                                                                         "term": {
@@ -3919,7 +3919,7 @@
                                                                               {
                                                                                 "name": "function",
                                                                                 "term": {
-                                                                                  "union": {
+                                                                                  "inject": {
                                                                                     "field": {
                                                                                       "name": "application",
                                                                                       "term": {
@@ -3928,7 +3928,7 @@
                                                                                             {
                                                                                               "name": "function",
                                                                                               "term": {
-                                                                                                "union": {
+                                                                                                "inject": {
                                                                                                   "field": {
                                                                                                     "name": "variable",
                                                                                                     "term": {
@@ -3939,15 +3939,15 @@
                                                                                             {
                                                                                               "name": "argument",
                                                                                               "term": {
-                                                                                                "union": {
+                                                                                                "inject": {
                                                                                                   "field": {
                                                                                                     "name": "literal",
                                                                                                     "term": {
-                                                                                                      "union": {
+                                                                                                      "inject": {
                                                                                                         "field": {
                                                                                                           "name": "integer",
                                                                                                           "term": {
-                                                                                                            "union": {
+                                                                                                            "inject": {
                                                                                                               "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 0}}}},
                                                                                                               "typeName": "hydra.core.IntegerValue"}}},
                                                                                                         "typeName": "hydra.core.Literal"}}},
@@ -3957,11 +3957,11 @@
                                                                               {
                                                                                 "name": "argument",
                                                                                 "term": {
-                                                                                  "union": {
+                                                                                  "inject": {
                                                                                     "field": {
                                                                                       "name": "literal",
                                                                                       "term": {
-                                                                                        "union": {
+                                                                                        "inject": {
                                                                                           "field": {"name": "string", "term": {"literal": {"string": ""}}},
                                                                                           "typeName": "hydra.core.Literal"}}},
                                                                                     "typeName": "hydra.core.Term"}}}],
@@ -4009,7 +4009,7 @@
                                                           "term": {
                                                             "application": {
                                                               "argument": {
-                                                                "union": {
+                                                                "inject": {
                                                                   "field": {
                                                                     "name": "maybe",
                                                                     "term": {
@@ -4053,7 +4053,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -4106,7 +4106,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -4159,7 +4159,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -4212,7 +4212,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -4265,7 +4265,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -4318,7 +4318,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -4371,7 +4371,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -4443,7 +4443,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -4517,7 +4517,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -4591,7 +4591,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -4665,7 +4665,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -4735,7 +4735,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -4804,7 +4804,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -4875,7 +4875,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -4950,7 +4950,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -5020,7 +5020,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -5094,7 +5094,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -5168,7 +5168,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -5236,7 +5236,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -5311,7 +5311,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -5379,7 +5379,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -5447,7 +5447,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -5515,7 +5515,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -5584,7 +5584,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -5656,7 +5656,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -5747,7 +5747,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -5847,7 +5847,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -5944,7 +5944,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -6049,7 +6049,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -6152,7 +6152,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -6254,7 +6254,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -6355,7 +6355,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -6475,7 +6475,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -6522,7 +6522,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -6569,7 +6569,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -6616,7 +6616,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -6665,7 +6665,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -6714,7 +6714,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -6763,7 +6763,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -6829,7 +6829,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -6876,7 +6876,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -6923,7 +6923,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -6970,7 +6970,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -7019,7 +7019,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -7068,7 +7068,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -7117,7 +7117,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -7183,7 +7183,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -7234,7 +7234,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -7281,7 +7281,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -7329,7 +7329,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -7380,7 +7380,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {
@@ -7431,7 +7431,7 @@
                                           {
                                             "name": "case",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "universal",
                                                   "term": {

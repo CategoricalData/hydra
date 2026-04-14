@@ -463,7 +463,7 @@ def decodeUnionTypeNamed(ename: hydra.core.Name)(rt: Seq[hydra.core.FieldType]):
   def toVariantPair(ft: hydra.core.FieldType): hydra.core.Term =
     hydra.core.Term.pair(Tuple2(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.core.Name", hydra.core.Term.literal(hydra.core.Literal.string(ft.name)))),
        hydra.core.Term.lambda(hydra.core.Lambda("input", None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lib.eithers.map"),
-       hydra.core.Term.lambda(hydra.core.Lambda("t", None, hydra.core.Term.union(hydra.core.Injection(ename,
+       hydra.core.Term.lambda(hydra.core.Lambda("t", None, hydra.core.Term.inject(hydra.core.Injection(ename,
        hydra.core.Field(ft.name, hydra.core.Term.variable("t")))))))), hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.decoding.decodeType(ft.`type`),
        hydra.core.Term.variable("cx"))), hydra.core.Term.variable("input")))))))))
   hydra.core.Term.lambda(hydra.core.Lambda("cx", None, hydra.core.Term.lambda(hydra.core.Lambda("raw",
@@ -471,7 +471,7 @@ def decodeUnionTypeNamed(ename: hydra.core.Name)(rt: Seq[hydra.core.FieldType]):
      hydra.core.Term.lambda(hydra.core.Lambda("err", None, hydra.core.Term.either(Left(hydra.core.Term.variable("err"))))))),
      hydra.core.Term.lambda(hydra.core.Lambda("stripped", None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.cases(hydra.core.CaseStatement("hydra.core.Term",
      Some(hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.errors.DecodingError",
-     hydra.core.Term.literal(hydra.core.Literal.string("expected union"))))))), Seq(hydra.core.Field("union",
+     hydra.core.Term.literal(hydra.core.Literal.string("expected union"))))))), Seq(hydra.core.Field("inject",
      hydra.core.Term.lambda(hydra.core.Lambda("inj", None, hydra.core.Term.let(hydra.core.Let(Seq(hydra.core.Binding("field",
      hydra.core.Term.application(hydra.core.Application(hydra.core.Term.project(hydra.core.Projection("hydra.core.Injection",
      "field")), hydra.core.Term.variable("inj"))), None), hydra.core.Binding("fname", hydra.core.Term.application(hydra.core.Application(hydra.core.Term.project(hydra.core.Projection("hydra.core.Field",

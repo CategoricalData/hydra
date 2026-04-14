@@ -193,7 +193,7 @@ fromJson types tname typ value =
                   \key -> \val -> \ftype ->
                     let jsonVal = Maybes.fromMaybe Model.ValueNull val
                         decoded = fromJson types tname ftype jsonVal
-                    in (Eithers.map (\v -> Core.TermUnion (Core.Injection {
+                    in (Eithers.map (\v -> Core.TermInject (Core.Injection {
                       Core.injectionTypeName = tname,
                       Core.injectionField = Core.Field {
                         Core.fieldName = (Core.Name key),

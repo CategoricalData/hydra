@@ -40,12 +40,12 @@ public interface Mapping {
     return (v1).accept(new hydra.pg.mapping.ElementSpec.PartialVisitor<>() {
       @Override
       public hydra.core.Term visit(hydra.pg.mapping.ElementSpec.Vertex y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.pg.mapping.ElementSpec"), new hydra.core.Field(new hydra.core.Name("vertex"), hydra.encode.pg.Mapping.vertexSpec((y).value))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.pg.mapping.ElementSpec"), new hydra.core.Field(new hydra.core.Name("vertex"), hydra.encode.pg.Mapping.vertexSpec((y).value))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.pg.mapping.ElementSpec.Edge y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.pg.mapping.ElementSpec"), new hydra.core.Field(new hydra.core.Name("edge"), hydra.encode.pg.Mapping.edgeSpec((y).value))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.pg.mapping.ElementSpec"), new hydra.core.Field(new hydra.core.Name("edge"), hydra.encode.pg.Mapping.edgeSpec((y).value))));
       }
     });
   }
@@ -60,12 +60,12 @@ public interface Mapping {
     return (v1).accept(new hydra.pg.mapping.ValueSpec.PartialVisitor<>() {
       @Override
       public hydra.core.Term visit(hydra.pg.mapping.ValueSpec.Value y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.pg.mapping.ValueSpec"), new hydra.core.Field(new hydra.core.Name("value"), new hydra.core.Term.Unit())));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.pg.mapping.ValueSpec"), new hydra.core.Field(new hydra.core.Name("value"), new hydra.core.Term.Unit())));
       }
 
       @Override
       public hydra.core.Term visit(hydra.pg.mapping.ValueSpec.Pattern y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.pg.mapping.ValueSpec"), new hydra.core.Field(new hydra.core.Name("pattern"), new hydra.core.Term.Literal(new hydra.core.Literal.String_((y).value)))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.pg.mapping.ValueSpec"), new hydra.core.Field(new hydra.core.Name("pattern"), new hydra.core.Term.Literal(new hydra.core.Literal.String_((y).value)))));
       }
     });
   }

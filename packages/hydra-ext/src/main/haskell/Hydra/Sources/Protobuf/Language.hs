@@ -117,7 +117,7 @@ protobufLanguage = definition_ "protobufLanguage" $
     Variants.termVariantPair,
     Variants.termVariantRecord,
     Variants.termVariantSet,
-    Variants.termVariantUnion,
+    Variants.termVariantInject,
     Variants.termVariantUnit,
     Variants.termVariantWrap],
   "typeVariants">: Sets.fromList $ list [

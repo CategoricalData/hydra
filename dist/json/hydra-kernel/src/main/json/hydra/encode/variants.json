@@ -11,9 +11,9 @@
                 "term": {
                   "lambda": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
-                          "name": "union",
+                          "name": "inject",
                           "term": {
                             "record": {
                               "fields": [
@@ -42,7 +42,7 @@
                                               "function": {
                                                 "lambda": {
                                                   "body": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {"name": "unit", "term": {"unit": {}}},
                                                       "typeName": "hydra.core.Term"}},
                                                   "domain": {"unit": {}},
@@ -57,9 +57,9 @@
                 "term": {
                   "lambda": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
-                          "name": "union",
+                          "name": "inject",
                           "term": {
                             "record": {
                               "fields": [
@@ -88,7 +88,7 @@
                                               "function": {
                                                 "lambda": {
                                                   "body": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {"name": "unit", "term": {"unit": {}}},
                                                       "typeName": "hydra.core.Term"}},
                                                   "domain": {"unit": {}},
@@ -103,9 +103,9 @@
                 "term": {
                   "lambda": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
-                          "name": "union",
+                          "name": "inject",
                           "term": {
                             "record": {
                               "fields": [
@@ -134,7 +134,7 @@
                                               "function": {
                                                 "lambda": {
                                                   "body": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {"name": "unit", "term": {"unit": {}}},
                                                       "typeName": "hydra.core.Term"}},
                                                   "domain": {"unit": {}},
@@ -162,9 +162,9 @@
                 "term": {
                   "lambda": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
-                          "name": "union",
+                          "name": "inject",
                           "term": {
                             "record": {
                               "fields": [
@@ -193,7 +193,7 @@
                                               "function": {
                                                 "lambda": {
                                                   "body": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {"name": "unit", "term": {"unit": {}}},
                                                       "typeName": "hydra.core.Term"}},
                                                   "domain": {"unit": {}},
@@ -208,9 +208,9 @@
                 "term": {
                   "lambda": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
-                          "name": "union",
+                          "name": "inject",
                           "term": {
                             "record": {
                               "fields": [
@@ -239,7 +239,7 @@
                                               "function": {
                                                 "lambda": {
                                                   "body": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {"name": "unit", "term": {"unit": {}}},
                                                       "typeName": "hydra.core.Term"}},
                                                   "domain": {"unit": {}},
@@ -267,9 +267,9 @@
                 "term": {
                   "lambda": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
-                          "name": "union",
+                          "name": "inject",
                           "term": {
                             "record": {
                               "fields": [
@@ -298,7 +298,7 @@
                                               "function": {
                                                 "lambda": {
                                                   "body": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {"name": "unit", "term": {"unit": {}}},
                                                       "typeName": "hydra.core.Term"}},
                                                   "domain": {"unit": {}},
@@ -313,9 +313,9 @@
                 "term": {
                   "lambda": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
-                          "name": "union",
+                          "name": "inject",
                           "term": {
                             "record": {
                               "fields": [
@@ -344,7 +344,7 @@
                                               "function": {
                                                 "lambda": {
                                                   "body": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {"name": "unit", "term": {"unit": {}}},
                                                       "typeName": "hydra.core.Term"}},
                                                   "domain": {"unit": {}},
@@ -359,9 +359,9 @@
                 "term": {
                   "lambda": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
-                          "name": "union",
+                          "name": "inject",
                           "term": {
                             "record": {
                               "fields": [
@@ -390,7 +390,7 @@
                                               "function": {
                                                 "lambda": {
                                                   "body": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {"name": "unit", "term": {"unit": {}}},
                                                       "typeName": "hydra.core.Term"}},
                                                   "domain": {"unit": {}},
@@ -405,9 +405,9 @@
                 "term": {
                   "lambda": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
-                          "name": "union",
+                          "name": "inject",
                           "term": {
                             "record": {
                               "fields": [
@@ -436,7 +436,7 @@
                                               "function": {
                                                 "lambda": {
                                                   "body": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {"name": "unit", "term": {"unit": {}}},
                                                       "typeName": "hydra.core.Term"}},
                                                   "domain": {"unit": {}},
@@ -451,9 +451,9 @@
                 "term": {
                   "lambda": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
-                          "name": "union",
+                          "name": "inject",
                           "term": {
                             "record": {
                               "fields": [
@@ -482,7 +482,7 @@
                                               "function": {
                                                 "lambda": {
                                                   "body": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {"name": "unit", "term": {"unit": {}}},
                                                       "typeName": "hydra.core.Term"}},
                                                   "domain": {"unit": {}},
@@ -510,9 +510,9 @@
                 "term": {
                   "lambda": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
-                          "name": "union",
+                          "name": "inject",
                           "term": {
                             "record": {
                               "fields": [
@@ -541,7 +541,7 @@
                                               "function": {
                                                 "lambda": {
                                                   "body": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {"name": "unit", "term": {"unit": {}}},
                                                       "typeName": "hydra.core.Term"}},
                                                   "domain": {"unit": {}},
@@ -556,9 +556,9 @@
                 "term": {
                   "lambda": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
-                          "name": "union",
+                          "name": "inject",
                           "term": {
                             "record": {
                               "fields": [
@@ -587,7 +587,7 @@
                                               "function": {
                                                 "lambda": {
                                                   "body": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {"name": "unit", "term": {"unit": {}}},
                                                       "typeName": "hydra.core.Term"}},
                                                   "domain": {"unit": {}},
@@ -602,9 +602,9 @@
                 "term": {
                   "lambda": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
-                          "name": "union",
+                          "name": "inject",
                           "term": {
                             "record": {
                               "fields": [
@@ -633,7 +633,7 @@
                                               "function": {
                                                 "lambda": {
                                                   "body": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {"name": "unit", "term": {"unit": {}}},
                                                       "typeName": "hydra.core.Term"}},
                                                   "domain": {"unit": {}},
@@ -648,9 +648,9 @@
                 "term": {
                   "lambda": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
-                          "name": "union",
+                          "name": "inject",
                           "term": {
                             "record": {
                               "fields": [
@@ -679,7 +679,53 @@
                                               "function": {
                                                 "lambda": {
                                                   "body": {
-                                                    "union": {
+                                                    "inject": {
+                                                      "field": {"name": "unit", "term": {"unit": {}}},
+                                                      "typeName": "hydra.core.Term"}},
+                                                  "domain": {"unit": {}},
+                                                  "parameter": "_"}}}}}],
+                                      "typeName": "hydra.core.Field"}}}],
+                              "typeName": "hydra.core.Injection"}}},
+                        "typeName": "hydra.core.Term"}},
+                    "domain": {"unit": {}},
+                    "parameter": "y"}}},
+              {
+                "name": "inject",
+                "term": {
+                  "lambda": {
+                    "body": {
+                      "inject": {
+                        "field": {
+                          "name": "inject",
+                          "term": {
+                            "record": {
+                              "fields": [
+                                {
+                                  "name": "typeName",
+                                  "term": {
+                                    "wrap": {
+                                      "body": {"literal": {"string": "hydra.variants.TermVariant"}},
+                                      "typeName": "hydra.core.Name"}}},
+                                {
+                                  "name": "field",
+                                  "term": {
+                                    "record": {
+                                      "fields": [
+                                        {
+                                          "name": "name",
+                                          "term": {
+                                            "wrap": {
+                                              "body": {"literal": {"string": "inject"}},
+                                              "typeName": "hydra.core.Name"}}},
+                                        {
+                                          "name": "term",
+                                          "term": {
+                                            "application": {
+                                              "argument": {"variable": "y"},
+                                              "function": {
+                                                "lambda": {
+                                                  "body": {
+                                                    "inject": {
                                                       "field": {"name": "unit", "term": {"unit": {}}},
                                                       "typeName": "hydra.core.Term"}},
                                                   "domain": {"unit": {}},
@@ -694,9 +740,9 @@
                 "term": {
                   "lambda": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
-                          "name": "union",
+                          "name": "inject",
                           "term": {
                             "record": {
                               "fields": [
@@ -725,7 +771,7 @@
                                               "function": {
                                                 "lambda": {
                                                   "body": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {"name": "unit", "term": {"unit": {}}},
                                                       "typeName": "hydra.core.Term"}},
                                                   "domain": {"unit": {}},
@@ -740,9 +786,9 @@
                 "term": {
                   "lambda": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
-                          "name": "union",
+                          "name": "inject",
                           "term": {
                             "record": {
                               "fields": [
@@ -771,7 +817,7 @@
                                               "function": {
                                                 "lambda": {
                                                   "body": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {"name": "unit", "term": {"unit": {}}},
                                                       "typeName": "hydra.core.Term"}},
                                                   "domain": {"unit": {}},
@@ -786,9 +832,9 @@
                 "term": {
                   "lambda": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
-                          "name": "union",
+                          "name": "inject",
                           "term": {
                             "record": {
                               "fields": [
@@ -817,7 +863,7 @@
                                               "function": {
                                                 "lambda": {
                                                   "body": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {"name": "unit", "term": {"unit": {}}},
                                                       "typeName": "hydra.core.Term"}},
                                                   "domain": {"unit": {}},
@@ -832,9 +878,9 @@
                 "term": {
                   "lambda": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
-                          "name": "union",
+                          "name": "inject",
                           "term": {
                             "record": {
                               "fields": [
@@ -863,7 +909,7 @@
                                               "function": {
                                                 "lambda": {
                                                   "body": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {"name": "unit", "term": {"unit": {}}},
                                                       "typeName": "hydra.core.Term"}},
                                                   "domain": {"unit": {}},
@@ -878,9 +924,9 @@
                 "term": {
                   "lambda": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
-                          "name": "union",
+                          "name": "inject",
                           "term": {
                             "record": {
                               "fields": [
@@ -909,7 +955,7 @@
                                               "function": {
                                                 "lambda": {
                                                   "body": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {"name": "unit", "term": {"unit": {}}},
                                                       "typeName": "hydra.core.Term"}},
                                                   "domain": {"unit": {}},
@@ -924,9 +970,9 @@
                 "term": {
                   "lambda": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
-                          "name": "union",
+                          "name": "inject",
                           "term": {
                             "record": {
                               "fields": [
@@ -955,7 +1001,7 @@
                                               "function": {
                                                 "lambda": {
                                                   "body": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {"name": "unit", "term": {"unit": {}}},
                                                       "typeName": "hydra.core.Term"}},
                                                   "domain": {"unit": {}},
@@ -970,9 +1016,9 @@
                 "term": {
                   "lambda": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
-                          "name": "union",
+                          "name": "inject",
                           "term": {
                             "record": {
                               "fields": [
@@ -1001,7 +1047,7 @@
                                               "function": {
                                                 "lambda": {
                                                   "body": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {"name": "unit", "term": {"unit": {}}},
                                                       "typeName": "hydra.core.Term"}},
                                                   "domain": {"unit": {}},
@@ -1016,9 +1062,9 @@
                 "term": {
                   "lambda": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
-                          "name": "union",
+                          "name": "inject",
                           "term": {
                             "record": {
                               "fields": [
@@ -1047,7 +1093,7 @@
                                               "function": {
                                                 "lambda": {
                                                   "body": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {"name": "unit", "term": {"unit": {}}},
                                                       "typeName": "hydra.core.Term"}},
                                                   "domain": {"unit": {}},
@@ -1062,9 +1108,9 @@
                 "term": {
                   "lambda": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
-                          "name": "union",
+                          "name": "inject",
                           "term": {
                             "record": {
                               "fields": [
@@ -1093,7 +1139,7 @@
                                               "function": {
                                                 "lambda": {
                                                   "body": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {"name": "unit", "term": {"unit": {}}},
                                                       "typeName": "hydra.core.Term"}},
                                                   "domain": {"unit": {}},
@@ -1108,9 +1154,9 @@
                 "term": {
                   "lambda": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
-                          "name": "union",
+                          "name": "inject",
                           "term": {
                             "record": {
                               "fields": [
@@ -1139,7 +1185,7 @@
                                               "function": {
                                                 "lambda": {
                                                   "body": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {"name": "unit", "term": {"unit": {}}},
                                                       "typeName": "hydra.core.Term"}},
                                                   "domain": {"unit": {}},
@@ -1154,9 +1200,9 @@
                 "term": {
                   "lambda": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
-                          "name": "union",
+                          "name": "inject",
                           "term": {
                             "record": {
                               "fields": [
@@ -1185,7 +1231,7 @@
                                               "function": {
                                                 "lambda": {
                                                   "body": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {"name": "unit", "term": {"unit": {}}},
                                                       "typeName": "hydra.core.Term"}},
                                                   "domain": {"unit": {}},
@@ -1200,9 +1246,9 @@
                 "term": {
                   "lambda": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
-                          "name": "union",
+                          "name": "inject",
                           "term": {
                             "record": {
                               "fields": [
@@ -1231,53 +1277,7 @@
                                               "function": {
                                                 "lambda": {
                                                   "body": {
-                                                    "union": {
-                                                      "field": {"name": "unit", "term": {"unit": {}}},
-                                                      "typeName": "hydra.core.Term"}},
-                                                  "domain": {"unit": {}},
-                                                  "parameter": "_"}}}}}],
-                                      "typeName": "hydra.core.Field"}}}],
-                              "typeName": "hydra.core.Injection"}}},
-                        "typeName": "hydra.core.Term"}},
-                    "domain": {"unit": {}},
-                    "parameter": "y"}}},
-              {
-                "name": "union",
-                "term": {
-                  "lambda": {
-                    "body": {
-                      "union": {
-                        "field": {
-                          "name": "union",
-                          "term": {
-                            "record": {
-                              "fields": [
-                                {
-                                  "name": "typeName",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "hydra.variants.TermVariant"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                {
-                                  "name": "field",
-                                  "term": {
-                                    "record": {
-                                      "fields": [
-                                        {
-                                          "name": "name",
-                                          "term": {
-                                            "wrap": {
-                                              "body": {"literal": {"string": "union"}},
-                                              "typeName": "hydra.core.Name"}}},
-                                        {
-                                          "name": "term",
-                                          "term": {
-                                            "application": {
-                                              "argument": {"variable": "y"},
-                                              "function": {
-                                                "lambda": {
-                                                  "body": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {"name": "unit", "term": {"unit": {}}},
                                                       "typeName": "hydra.core.Term"}},
                                                   "domain": {"unit": {}},
@@ -1292,9 +1292,9 @@
                 "term": {
                   "lambda": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
-                          "name": "union",
+                          "name": "inject",
                           "term": {
                             "record": {
                               "fields": [
@@ -1323,7 +1323,7 @@
                                               "function": {
                                                 "lambda": {
                                                   "body": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {"name": "unit", "term": {"unit": {}}},
                                                       "typeName": "hydra.core.Term"}},
                                                   "domain": {"unit": {}},
@@ -1338,9 +1338,9 @@
                 "term": {
                   "lambda": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
-                          "name": "union",
+                          "name": "inject",
                           "term": {
                             "record": {
                               "fields": [
@@ -1369,7 +1369,7 @@
                                               "function": {
                                                 "lambda": {
                                                   "body": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {"name": "unit", "term": {"unit": {}}},
                                                       "typeName": "hydra.core.Term"}},
                                                   "domain": {"unit": {}},
@@ -1384,9 +1384,9 @@
                 "term": {
                   "lambda": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
-                          "name": "union",
+                          "name": "inject",
                           "term": {
                             "record": {
                               "fields": [
@@ -1415,7 +1415,7 @@
                                               "function": {
                                                 "lambda": {
                                                   "body": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {"name": "unit", "term": {"unit": {}}},
                                                       "typeName": "hydra.core.Term"}},
                                                   "domain": {"unit": {}},
@@ -1430,9 +1430,9 @@
                 "term": {
                   "lambda": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
-                          "name": "union",
+                          "name": "inject",
                           "term": {
                             "record": {
                               "fields": [
@@ -1461,7 +1461,7 @@
                                               "function": {
                                                 "lambda": {
                                                   "body": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {"name": "unit", "term": {"unit": {}}},
                                                       "typeName": "hydra.core.Term"}},
                                                   "domain": {"unit": {}},
@@ -1489,9 +1489,9 @@
                 "term": {
                   "lambda": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
-                          "name": "union",
+                          "name": "inject",
                           "term": {
                             "record": {
                               "fields": [
@@ -1520,7 +1520,7 @@
                                               "function": {
                                                 "lambda": {
                                                   "body": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {"name": "unit", "term": {"unit": {}}},
                                                       "typeName": "hydra.core.Term"}},
                                                   "domain": {"unit": {}},
@@ -1535,9 +1535,9 @@
                 "term": {
                   "lambda": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
-                          "name": "union",
+                          "name": "inject",
                           "term": {
                             "record": {
                               "fields": [
@@ -1566,7 +1566,7 @@
                                               "function": {
                                                 "lambda": {
                                                   "body": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {"name": "unit", "term": {"unit": {}}},
                                                       "typeName": "hydra.core.Term"}},
                                                   "domain": {"unit": {}},
@@ -1581,9 +1581,9 @@
                 "term": {
                   "lambda": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
-                          "name": "union",
+                          "name": "inject",
                           "term": {
                             "record": {
                               "fields": [
@@ -1612,7 +1612,7 @@
                                               "function": {
                                                 "lambda": {
                                                   "body": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {"name": "unit", "term": {"unit": {}}},
                                                       "typeName": "hydra.core.Term"}},
                                                   "domain": {"unit": {}},
@@ -1627,9 +1627,9 @@
                 "term": {
                   "lambda": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
-                          "name": "union",
+                          "name": "inject",
                           "term": {
                             "record": {
                               "fields": [
@@ -1658,7 +1658,7 @@
                                               "function": {
                                                 "lambda": {
                                                   "body": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {"name": "unit", "term": {"unit": {}}},
                                                       "typeName": "hydra.core.Term"}},
                                                   "domain": {"unit": {}},
@@ -1673,9 +1673,9 @@
                 "term": {
                   "lambda": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
-                          "name": "union",
+                          "name": "inject",
                           "term": {
                             "record": {
                               "fields": [
@@ -1704,7 +1704,7 @@
                                               "function": {
                                                 "lambda": {
                                                   "body": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {"name": "unit", "term": {"unit": {}}},
                                                       "typeName": "hydra.core.Term"}},
                                                   "domain": {"unit": {}},
@@ -1719,9 +1719,9 @@
                 "term": {
                   "lambda": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
-                          "name": "union",
+                          "name": "inject",
                           "term": {
                             "record": {
                               "fields": [
@@ -1750,7 +1750,7 @@
                                               "function": {
                                                 "lambda": {
                                                   "body": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {"name": "unit", "term": {"unit": {}}},
                                                       "typeName": "hydra.core.Term"}},
                                                   "domain": {"unit": {}},
@@ -1765,9 +1765,9 @@
                 "term": {
                   "lambda": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
-                          "name": "union",
+                          "name": "inject",
                           "term": {
                             "record": {
                               "fields": [
@@ -1796,7 +1796,7 @@
                                               "function": {
                                                 "lambda": {
                                                   "body": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {"name": "unit", "term": {"unit": {}}},
                                                       "typeName": "hydra.core.Term"}},
                                                   "domain": {"unit": {}},
@@ -1811,9 +1811,9 @@
                 "term": {
                   "lambda": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
-                          "name": "union",
+                          "name": "inject",
                           "term": {
                             "record": {
                               "fields": [
@@ -1842,7 +1842,7 @@
                                               "function": {
                                                 "lambda": {
                                                   "body": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {"name": "unit", "term": {"unit": {}}},
                                                       "typeName": "hydra.core.Term"}},
                                                   "domain": {"unit": {}},
@@ -1857,9 +1857,9 @@
                 "term": {
                   "lambda": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
-                          "name": "union",
+                          "name": "inject",
                           "term": {
                             "record": {
                               "fields": [
@@ -1888,7 +1888,7 @@
                                               "function": {
                                                 "lambda": {
                                                   "body": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {"name": "unit", "term": {"unit": {}}},
                                                       "typeName": "hydra.core.Term"}},
                                                   "domain": {"unit": {}},
@@ -1903,9 +1903,9 @@
                 "term": {
                   "lambda": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
-                          "name": "union",
+                          "name": "inject",
                           "term": {
                             "record": {
                               "fields": [
@@ -1934,7 +1934,7 @@
                                               "function": {
                                                 "lambda": {
                                                   "body": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {"name": "unit", "term": {"unit": {}}},
                                                       "typeName": "hydra.core.Term"}},
                                                   "domain": {"unit": {}},
@@ -1949,9 +1949,9 @@
                 "term": {
                   "lambda": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
-                          "name": "union",
+                          "name": "inject",
                           "term": {
                             "record": {
                               "fields": [
@@ -1980,7 +1980,7 @@
                                               "function": {
                                                 "lambda": {
                                                   "body": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {"name": "unit", "term": {"unit": {}}},
                                                       "typeName": "hydra.core.Term"}},
                                                   "domain": {"unit": {}},
@@ -1995,9 +1995,9 @@
                 "term": {
                   "lambda": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
-                          "name": "union",
+                          "name": "inject",
                           "term": {
                             "record": {
                               "fields": [
@@ -2026,7 +2026,7 @@
                                               "function": {
                                                 "lambda": {
                                                   "body": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {"name": "unit", "term": {"unit": {}}},
                                                       "typeName": "hydra.core.Term"}},
                                                   "domain": {"unit": {}},
@@ -2041,9 +2041,9 @@
                 "term": {
                   "lambda": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
-                          "name": "union",
+                          "name": "inject",
                           "term": {
                             "record": {
                               "fields": [
@@ -2072,7 +2072,7 @@
                                               "function": {
                                                 "lambda": {
                                                   "body": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {"name": "unit", "term": {"unit": {}}},
                                                       "typeName": "hydra.core.Term"}},
                                                   "domain": {"unit": {}},
@@ -2087,9 +2087,9 @@
                 "term": {
                   "lambda": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
-                          "name": "union",
+                          "name": "inject",
                           "term": {
                             "record": {
                               "fields": [
@@ -2118,7 +2118,7 @@
                                               "function": {
                                                 "lambda": {
                                                   "body": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {"name": "unit", "term": {"unit": {}}},
                                                       "typeName": "hydra.core.Term"}},
                                                   "domain": {"unit": {}},
@@ -2133,9 +2133,9 @@
                 "term": {
                   "lambda": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
-                          "name": "union",
+                          "name": "inject",
                           "term": {
                             "record": {
                               "fields": [
@@ -2164,7 +2164,7 @@
                                               "function": {
                                                 "lambda": {
                                                   "body": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {"name": "unit", "term": {"unit": {}}},
                                                       "typeName": "hydra.core.Term"}},
                                                   "domain": {"unit": {}},
@@ -2179,9 +2179,9 @@
                 "term": {
                   "lambda": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
-                          "name": "union",
+                          "name": "inject",
                           "term": {
                             "record": {
                               "fields": [
@@ -2210,7 +2210,7 @@
                                               "function": {
                                                 "lambda": {
                                                   "body": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {"name": "unit", "term": {"unit": {}}},
                                                       "typeName": "hydra.core.Term"}},
                                                   "domain": {"unit": {}},
@@ -2225,9 +2225,9 @@
                 "term": {
                   "lambda": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
-                          "name": "union",
+                          "name": "inject",
                           "term": {
                             "record": {
                               "fields": [
@@ -2256,7 +2256,7 @@
                                               "function": {
                                                 "lambda": {
                                                   "body": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {"name": "unit", "term": {"unit": {}}},
                                                       "typeName": "hydra.core.Term"}},
                                                   "domain": {"unit": {}},

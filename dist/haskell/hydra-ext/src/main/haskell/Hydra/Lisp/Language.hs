@@ -68,7 +68,7 @@ lispLanguage =
           Variants.TermVariantPair,
           Variants.TermVariantRecord,
           Variants.TermVariantSet,
-          Variants.TermVariantUnion,
+          Variants.TermVariantInject,
           Variants.TermVariantUnit,
           Variants.TermVariantVariable,
           Variants.TermVariantWrap]

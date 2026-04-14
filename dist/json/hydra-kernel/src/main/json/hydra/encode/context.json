@@ -6,7 +6,7 @@
         "term": {
           "lambda": {
             "body": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "record",
                   "term": {
@@ -42,7 +42,7 @@
                                           "function": {
                                             "lambda": {
                                               "body": {
-                                                "union": {
+                                                "inject": {
                                                   "field": {
                                                     "name": "list",
                                                     "term": {
@@ -53,11 +53,11 @@
                                                             "argument": {
                                                               "lambda": {
                                                                 "body": {
-                                                                  "union": {
+                                                                  "inject": {
                                                                     "field": {
                                                                       "name": "literal",
                                                                       "term": {
-                                                                        "union": {
+                                                                        "inject": {
                                                                           "field": {"name": "string", "term": {"variable": "x"}},
                                                                           "typeName": "hydra.core.Literal"}}},
                                                                     "typeName": "hydra.core.Term"}},
@@ -95,7 +95,7 @@
                                           "function": {
                                             "lambda": {
                                               "body": {
-                                                "union": {
+                                                "inject": {
                                                   "field": {
                                                     "name": "list",
                                                     "term": {
@@ -106,11 +106,11 @@
                                                             "argument": {
                                                               "lambda": {
                                                                 "body": {
-                                                                  "union": {
+                                                                  "inject": {
                                                                     "field": {
                                                                       "name": "literal",
                                                                       "term": {
-                                                                        "union": {
+                                                                        "inject": {
                                                                           "field": {"name": "string", "term": {"variable": "x"}},
                                                                           "typeName": "hydra.core.Literal"}}},
                                                                     "typeName": "hydra.core.Term"}},
@@ -147,7 +147,7 @@
                                           "function": {
                                             "lambda": {
                                               "body": {
-                                                "union": {
+                                                "inject": {
                                                   "field": {
                                                     "name": "map",
                                                     "term": {
@@ -199,7 +199,7 @@
                 "body": {
                   "lambda": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
                           "name": "record",
                           "term": {

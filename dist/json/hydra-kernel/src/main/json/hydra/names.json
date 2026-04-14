@@ -513,7 +513,7 @@
                                                                             "function": {
                                                                               "application": {
                                                                                 "argument": {
-                                                                                  "union": {
+                                                                                  "inject": {
                                                                                     "field": {"name": "camel", "term": {"unit": {}}},
                                                                                     "typeName": "hydra.util.CaseConvention"}},
                                                                                 "function": {"variable": "hydra.formatting.convertCase"}}}}}}},
@@ -587,7 +587,7 @@
                                                                 "function": {
                                                                   "application": {
                                                                     "argument": {
-                                                                      "union": {
+                                                                      "inject": {
                                                                         "field": {"name": "pascal", "term": {"unit": {}}},
                                                                         "typeName": "hydra.util.CaseConvention"}},
                                                                     "function": {"variable": "hydra.formatting.convertCase"}}}}}}},
@@ -696,7 +696,7 @@
                                             "function": {
                                               "application": {
                                                 "argument": {
-                                                  "union": {
+                                                  "inject": {
                                                     "field": {"name": "camel", "term": {"unit": {}}},
                                                     "typeName": "hydra.util.CaseConvention"}},
                                                 "function": {"variable": "hydra.formatting.convertCase"}}}}},

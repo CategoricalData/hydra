@@ -634,7 +634,7 @@ encodeTerm = def "encodeTerm" $
            record L._SetLiteral [
              L._SetLiteral_elements>>: var "sels"]),
 
-     _Term_union>>: lambda "inj" $
+     _Term_inject>>: lambda "inj" $
        "tname" <~ (Names.localNameOf @@ Core.injectionTypeName (var "inj")) $
        "field" <~ Core.injectionField (var "inj") $
        "fname" <~ Core.unName (Core.fieldName (var "field")) $

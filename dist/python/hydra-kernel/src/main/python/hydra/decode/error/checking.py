@@ -262,7 +262,7 @@ def untyped_term_variable_checking_error(cx: hydra.graph.Graph, raw: hydra.core.
 def checking_error(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_error_checking_checking_error_1(cx, v1):
         match v1:
-            case hydra.core.TermUnion(value=inj):
+            case hydra.core.TermInject(value=inj):
                 field = inj.field
                 fname = field.name
                 fterm = field.term

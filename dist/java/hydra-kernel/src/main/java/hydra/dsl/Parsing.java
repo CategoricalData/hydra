@@ -33,11 +33,11 @@ public interface Parsing {
   }
 
   static <A> hydra.phantoms.TTerm<hydra.parsing.ParseResult<A>> parseResultFailure(hydra.phantoms.TTerm<hydra.parsing.ParseError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.parsing.ParseResult"), new hydra.core.Field(new hydra.core.Name("failure"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.parsing.ParseResult"), new hydra.core.Field(new hydra.core.Name("failure"), (x).value))));
   }
 
   static <A> hydra.phantoms.TTerm<hydra.parsing.ParseResult<A>> parseResultSuccess(hydra.phantoms.TTerm<hydra.parsing.ParseSuccess<A>> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.parsing.ParseResult"), new hydra.core.Field(new hydra.core.Name("success"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.parsing.ParseResult"), new hydra.core.Field(new hydra.core.Name("success"), (x).value))));
   }
 
   static <A> hydra.phantoms.TTerm<hydra.parsing.ParseSuccess<A>> parseSuccess(hydra.phantoms.TTerm<A> value, hydra.phantoms.TTerm<String> remainder) {

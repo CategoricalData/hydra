@@ -328,7 +328,7 @@
                           (or (= c :eq) (and (number? c) (zero? c))) "equalTo"
                           (or (= c :gt) (and (number? c) (pos? c))) "greaterThan"
                           :else (throw (IllegalArgumentException. (str "not a comparison: " c))))]
-       (list :right (list :union (->hydra_core_injection "hydra.util.Comparison"
+       (list :right (list :inject (->hydra_core_injection "hydra.util.Comparison"
                                    (->hydra_core_field variant-name (list :unit)))))))))
 
 ;; Function coders

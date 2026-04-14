@@ -204,7 +204,7 @@ eliminateUnitVar v term0 =
                       Core.recordTypeName = (Core.recordTypeName v0),
                       Core.recordFields = (Lists.map (rewriteField recurse) (Core.recordFields v0))})
                     Core.TermSet v0 -> Core.TermSet (Sets.map recurse v0)
-                    Core.TermUnion v0 -> Core.TermUnion (Core.Injection {
+                    Core.TermInject v0 -> Core.TermInject (Core.Injection {
                       Core.injectionTypeName = (Core.injectionTypeName v0),
                       Core.injectionField = (rewriteField recurse (Core.injectionField v0))})
                     Core.TermMaybe v0 -> Core.TermMaybe (Maybes.map recurse v0)
@@ -1074,7 +1074,7 @@ encodeTermInline cx env noCast term =
         Core.TermTypeLambda v0 ->
           let body = Core.typeLambdaBody v0
           in (withTypeLambda env v0 (\env2 -> encodeTermInline cx env2 noCast body))
-        Core.TermUnion v0 ->
+        Core.TermInject v0 ->
           let tname = Core.injectionTypeName v0
               field = Core.injectionField v0
           in (Eithers.bind (Resolution.requireUnionType cx (pythonEnvironmentGetGraph env) tname) (\rt -> Logic.ifElse (Predicates.isEnumRowType rt) (Right (Utils.projectFromExpression (Utils.pyNameToPyExpression (PythonNames.encodeNameQualified env tname)) (PythonNames.encodeEnumValue env (Core.fieldName field)))) (
@@ -1521,7 +1521,7 @@ extendMetaForTerm topLevel meta0 term =
                   _ -> meta
                 Core.TermMap _ -> setMetaUsesFrozenDict meta True
                 Core.TermMaybe v0 -> Maybes.maybe (setMetaUsesNothing meta True) (\_ -> setMetaUsesJust meta True) v0
-                Core.TermUnion _ -> setMetaUsesCast True meta
+                Core.TermInject _ -> setMetaUsesCast True meta
                 _ -> meta
       in (Rewriting.foldOverTerm Coders.TraversalOrderPre step meta0 term)
 

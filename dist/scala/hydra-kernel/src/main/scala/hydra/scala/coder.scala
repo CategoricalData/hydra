@@ -409,10 +409,10 @@ def encodeTerm[T0](cx: T0)(g: hydra.graph.Graph)(term0: hydra.core.Term): Either
     case hydra.core.Term.set(v_Term_set_s) => hydra.lib.eithers.bind[hydra.errors.Error, Seq[hydra.scala.syntax.Data],
        hydra.scala.syntax.Data](hydra.lib.eithers.mapList[hydra.core.Term, hydra.scala.syntax.Data, hydra.errors.Error]((e: hydra.core.Term) => hydra.scala.coder.encodeTerm(cx)(g)(e))(hydra.lib.sets.toList[hydra.core.Term](v_Term_set_s)))((sels: Seq[hydra.scala.syntax.Data]) =>
       Right(hydra.scala.utils.sapply(hydra.scala.utils.sname("scala.collection.immutable.Set"))(sels)))
-    case hydra.core.Term.union(v_Term_union_inj) => {
-      lazy val sn: hydra.core.Name = (v_Term_union_inj.typeName)
-      lazy val fn: hydra.core.Name = (v_Term_union_inj.field.name)
-      lazy val ft: hydra.core.Term = (v_Term_union_inj.field.term)
+    case hydra.core.Term.inject(v_Term_inject_inj) => {
+      lazy val sn: hydra.core.Name = (v_Term_inject_inj.typeName)
+      lazy val fn: hydra.core.Name = (v_Term_inject_inj.field.name)
+      lazy val ft: hydra.core.Term = (v_Term_inject_inj.field.term)
       lazy val lhs: hydra.scala.syntax.Data = hydra.scala.utils.sname(hydra.scala.utils.qualifyUnionFieldName("UNION.")(Some(sn))(fn))
       lazy val unionFtypes: Map[hydra.core.Name, hydra.core.Type] = hydra.lib.eithers.either[hydra.errors.Error,
          Map[hydra.core.Name, hydra.core.Type], Map[hydra.core.Name, hydra.core.Type]]((_x: hydra.errors.Error) => hydra.lib.maps.empty[hydra.core.Name,

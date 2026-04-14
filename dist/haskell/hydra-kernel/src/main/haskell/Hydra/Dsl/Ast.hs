@@ -11,7 +11,7 @@ import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pur
 
 associativityBoth :: Phantoms.TTerm Ast.Associativity
 associativityBoth =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.ast.Associativity"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "both"),
@@ -19,7 +19,7 @@ associativityBoth =
 
 associativityLeft :: Phantoms.TTerm Ast.Associativity
 associativityLeft =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.ast.Associativity"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "left"),
@@ -27,7 +27,7 @@ associativityLeft =
 
 associativityNone :: Phantoms.TTerm Ast.Associativity
 associativityNone =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.ast.Associativity"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "none"),
@@ -35,7 +35,7 @@ associativityNone =
 
 associativityRight :: Phantoms.TTerm Ast.Associativity
 associativityRight =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.ast.Associativity"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "right"),
@@ -319,7 +319,7 @@ bracketsWithOpen original newVal =
 
 exprBrackets :: Phantoms.TTerm Ast.BracketExpr -> Phantoms.TTerm Ast.Expr
 exprBrackets x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.ast.Expr"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "brackets"),
@@ -327,7 +327,7 @@ exprBrackets x =
 
 exprConst :: Phantoms.TTerm Ast.Symbol -> Phantoms.TTerm Ast.Expr
 exprConst x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.ast.Expr"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "const"),
@@ -335,7 +335,7 @@ exprConst x =
 
 exprIndent :: Phantoms.TTerm Ast.IndentedExpression -> Phantoms.TTerm Ast.Expr
 exprIndent x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.ast.Expr"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "indent"),
@@ -343,7 +343,7 @@ exprIndent x =
 
 exprOp :: Phantoms.TTerm Ast.OpExpr -> Phantoms.TTerm Ast.Expr
 exprOp x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.ast.Expr"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "op"),
@@ -351,7 +351,7 @@ exprOp x =
 
 exprSeq :: Phantoms.TTerm Ast.SeqExpr -> Phantoms.TTerm Ast.Expr
 exprSeq x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.ast.Expr"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "seq"),
@@ -359,7 +359,7 @@ exprSeq x =
 
 indentStyleAllLines :: Phantoms.TTerm String -> Phantoms.TTerm Ast.IndentStyle
 indentStyleAllLines x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.ast.IndentStyle"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "allLines"),
@@ -367,7 +367,7 @@ indentStyleAllLines x =
 
 indentStyleSubsequentLines :: Phantoms.TTerm String -> Phantoms.TTerm Ast.IndentStyle
 indentStyleSubsequentLines x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.ast.IndentStyle"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "subsequentLines"),
@@ -857,7 +857,7 @@ unSymbol x =
 
 wsBreak :: Phantoms.TTerm Ast.Ws
 wsBreak =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.ast.Ws"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "break"),
@@ -865,7 +865,7 @@ wsBreak =
 
 wsBreakAndIndent :: Phantoms.TTerm String -> Phantoms.TTerm Ast.Ws
 wsBreakAndIndent x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.ast.Ws"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "breakAndIndent"),
@@ -873,7 +873,7 @@ wsBreakAndIndent x =
 
 wsDoubleBreak :: Phantoms.TTerm Ast.Ws
 wsDoubleBreak =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.ast.Ws"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "doubleBreak"),
@@ -881,7 +881,7 @@ wsDoubleBreak =
 
 wsNone :: Phantoms.TTerm Ast.Ws
 wsNone =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.ast.Ws"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "none"),
@@ -889,7 +889,7 @@ wsNone =
 
 wsSpace :: Phantoms.TTerm Ast.Ws
 wsSpace =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.ast.Ws"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "space"),

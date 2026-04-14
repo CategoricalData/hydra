@@ -275,8 +275,8 @@ public interface Coder {
       }
 
       @Override
-      public hydra.core.Term visit(hydra.core.Term.Union inj) {
-        return new hydra.core.Term.Union(new hydra.core.Injection((inj).value.typeName, (rewriteField).apply(recurse).apply((inj).value.field)));
+      public hydra.core.Term visit(hydra.core.Term.Inject inj) {
+        return new hydra.core.Term.Inject(new hydra.core.Injection((inj).value.typeName, (rewriteField).apply(recurse).apply((inj).value.field)));
       }
 
       @Override
@@ -2275,7 +2275,7 @@ public interface Coder {
       }
 
       @Override
-      public hydra.util.Either<hydra.errors.Error_, hydra.python.syntax.Expression> visit(hydra.core.Term.Union inj) {
+      public hydra.util.Either<hydra.errors.Error_, hydra.python.syntax.Expression> visit(hydra.core.Term.Inject inj) {
         hydra.core.Field field = (inj).value.field;
         hydra.core.Name tname = (inj).value.typeName;
         return hydra.lib.eithers.Bind.apply(
@@ -3614,7 +3614,7 @@ public interface Coder {
       }
 
       @Override
-      public hydra.python.environment.PythonModuleMetadata visit(hydra.core.Term.Union ignored) {
+      public hydra.python.environment.PythonModuleMetadata visit(hydra.core.Term.Inject ignored) {
         return hydra.python.Coder.setMetaUsesCast(
           true,
           meta);

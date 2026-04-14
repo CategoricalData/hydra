@@ -316,7 +316,7 @@ def encode_term(dialect: hydra.lisp.syntax.Dialect, cx: T0, g: T1, term: hydra.c
         case hydra.core.TermSet(value=s):
             return hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda v1: encode_term(dialect, cx, g, v1)), hydra.lib.sets.to_list(s)), (lambda sels: Right(cast(hydra.lisp.syntax.Expression, hydra.lisp.syntax.ExpressionSet(hydra.lisp.syntax.SetLiteral(sels))))))
 
-        case hydra.core.TermUnion(value=inj):
+        case hydra.core.TermInject(value=inj):
             @lru_cache(1)
             def tname() -> str:
                 return hydra.names.local_name_of(inj.type_name)

@@ -110,7 +110,7 @@ unit = Core.termUnit
 
 -- | Create a union injection term
 injection :: Name -> TTerm Field -> TTerm Term
-injection tname fld = Core.termUnion $ Core.injection (Core.nameLift tname) fld
+injection tname fld = Core.termInject $ Core.injection (Core.nameLift tname) fld
 
 -- | Create a record term with a type name and fields
 record :: Name -> [TTerm Field] -> TTerm Term

@@ -902,6 +902,12 @@ typesByName =
               Core.annotatedTypeAnnotation = (M.fromList [
                 (Core.Name "description", (Core.TermLiteral (Core.LiteralString "An either value")))])}))},
           Core.FieldType {
+            Core.fieldTypeName = (Core.Name "inject"),
+            Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+              Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.core.Injection")),
+              Core.annotatedTypeAnnotation = (M.fromList [
+                (Core.Name "description", (Core.TermLiteral (Core.LiteralString "An injection; an instance of a union type")))])}))},
+          Core.FieldType {
             Core.fieldTypeName = (Core.Name "lambda"),
             Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
               Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.core.Lambda")),
@@ -977,12 +983,6 @@ typesByName =
               Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.core.TypeLambda")),
               Core.annotatedTypeAnnotation = (M.fromList [
                 (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A System F type abstraction term")))])}))},
-          Core.FieldType {
-            Core.fieldTypeName = (Core.Name "union"),
-            Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
-              Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.core.Injection")),
-              Core.annotatedTypeAnnotation = (M.fromList [
-                (Core.Name "description", (Core.TermLiteral (Core.LiteralString "An injection; an instance of a union type")))])}))},
           Core.FieldType {
             Core.fieldTypeName = (Core.Name "unit"),
             Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {

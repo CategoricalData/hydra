@@ -139,11 +139,11 @@ public interface Coders {
   }
 
   static hydra.phantoms.TTerm<hydra.coders.CoderDirection> coderDirectionDecode() {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.coders.CoderDirection"), new hydra.core.Field(new hydra.core.Name("decode"), new hydra.core.Term.Unit()))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.coders.CoderDirection"), new hydra.core.Field(new hydra.core.Name("decode"), new hydra.core.Term.Unit()))));
   }
 
   static hydra.phantoms.TTerm<hydra.coders.CoderDirection> coderDirectionEncode() {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.coders.CoderDirection"), new hydra.core.Field(new hydra.core.Name("encode"), new hydra.core.Term.Unit()))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.coders.CoderDirection"), new hydra.core.Field(new hydra.core.Name("encode"), new hydra.core.Term.Unit()))));
   }
 
   static <V1, V2> hydra.phantoms.TTerm<java.util.function.Function<hydra.context.Context, java.util.function.Function<V1, hydra.util.Either<hydra.errors.Error_, V2>>>> coderEncode(hydra.phantoms.TTerm<hydra.coders.Coder<V1, V2>> x) {
@@ -333,11 +333,11 @@ public interface Coders {
   }
 
   static hydra.phantoms.TTerm<hydra.coders.TraversalOrder> traversalOrderPost() {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.coders.TraversalOrder"), new hydra.core.Field(new hydra.core.Name("post"), new hydra.core.Term.Unit()))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.coders.TraversalOrder"), new hydra.core.Field(new hydra.core.Name("post"), new hydra.core.Term.Unit()))));
   }
 
   static hydra.phantoms.TTerm<hydra.coders.TraversalOrder> traversalOrderPre() {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.coders.TraversalOrder"), new hydra.core.Field(new hydra.core.Name("pre"), new hydra.core.Term.Unit()))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.coders.TraversalOrder"), new hydra.core.Field(new hydra.core.Name("pre"), new hydra.core.Term.Unit()))));
   }
 
   static hydra.phantoms.TTerm<String> unLanguageName(hydra.phantoms.TTerm<hydra.coders.LanguageName> x) {

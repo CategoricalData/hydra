@@ -472,7 +472,7 @@ public interface Checking {
       }
 
       @Override
-      public hydra.util.Either<hydra.errors.Error_, hydra.util.Pair<hydra.core.Type, hydra.context.Context>> visit(hydra.core.Term.Union v1) {
+      public hydra.util.Either<hydra.errors.Error_, hydra.util.Pair<hydra.core.Type, hydra.context.Context>> visit(hydra.core.Term.Inject v1) {
         return hydra.Checking.typeOfInjection(
           cx1.get(),
           tx,

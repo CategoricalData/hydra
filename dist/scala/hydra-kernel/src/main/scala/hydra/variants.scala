@@ -23,6 +23,7 @@ enum TermVariant :
    case application extends TermVariant
    case cases extends TermVariant
    case either extends TermVariant
+   case inject extends TermVariant
    case lambda extends TermVariant
    case let extends TermVariant
    case list extends TermVariant
@@ -35,7 +36,6 @@ enum TermVariant :
    case set extends TermVariant
    case typeApplication extends TermVariant
    case typeLambda extends TermVariant
-   case union extends TermVariant
    case unit extends TermVariant
    case unwrap extends TermVariant
    case variable extends TermVariant

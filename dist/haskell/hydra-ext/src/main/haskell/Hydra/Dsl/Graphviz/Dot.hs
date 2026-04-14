@@ -77,7 +77,7 @@ attrStmtWithType original newVal =
 
 attrTypeEdge :: Phantoms.TTerm Dot.AttrType
 attrTypeEdge =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphviz.dot.AttrType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "edge"),
@@ -85,7 +85,7 @@ attrTypeEdge =
 
 attrTypeGraph :: Phantoms.TTerm Dot.AttrType
 attrTypeGraph =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphviz.dot.AttrType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "graph"),
@@ -93,7 +93,7 @@ attrTypeGraph =
 
 attrTypeNode :: Phantoms.TTerm Dot.AttrType
 attrTypeNode =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphviz.dot.AttrType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "node"),
@@ -101,7 +101,7 @@ attrTypeNode =
 
 compassPtC :: Phantoms.TTerm Dot.CompassPt
 compassPtC =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphviz.dot.CompassPt"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "c"),
@@ -109,7 +109,7 @@ compassPtC =
 
 compassPtE :: Phantoms.TTerm Dot.CompassPt
 compassPtE =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphviz.dot.CompassPt"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "e"),
@@ -117,7 +117,7 @@ compassPtE =
 
 compassPtN :: Phantoms.TTerm Dot.CompassPt
 compassPtN =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphviz.dot.CompassPt"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "n"),
@@ -125,7 +125,7 @@ compassPtN =
 
 compassPtNe :: Phantoms.TTerm Dot.CompassPt
 compassPtNe =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphviz.dot.CompassPt"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "ne"),
@@ -133,7 +133,7 @@ compassPtNe =
 
 compassPtNone :: Phantoms.TTerm Dot.CompassPt
 compassPtNone =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphviz.dot.CompassPt"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "none"),
@@ -141,7 +141,7 @@ compassPtNone =
 
 compassPtNw :: Phantoms.TTerm Dot.CompassPt
 compassPtNw =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphviz.dot.CompassPt"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "nw"),
@@ -149,7 +149,7 @@ compassPtNw =
 
 compassPtS :: Phantoms.TTerm Dot.CompassPt
 compassPtS =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphviz.dot.CompassPt"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "s"),
@@ -157,7 +157,7 @@ compassPtS =
 
 compassPtSe :: Phantoms.TTerm Dot.CompassPt
 compassPtSe =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphviz.dot.CompassPt"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "se"),
@@ -165,7 +165,7 @@ compassPtSe =
 
 compassPtSw :: Phantoms.TTerm Dot.CompassPt
 compassPtSw =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphviz.dot.CompassPt"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sw"),
@@ -173,7 +173,7 @@ compassPtSw =
 
 compassPtW :: Phantoms.TTerm Dot.CompassPt
 compassPtW =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphviz.dot.CompassPt"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "w"),
@@ -585,7 +585,7 @@ nodeIdWithPort original newVal =
 
 nodeOrSubgraphNode :: Phantoms.TTerm Dot.NodeId -> Phantoms.TTerm Dot.NodeOrSubgraph
 nodeOrSubgraphNode x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphviz.dot.NodeOrSubgraph"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "node"),
@@ -593,7 +593,7 @@ nodeOrSubgraphNode x =
 
 nodeOrSubgraphSubgraph :: Phantoms.TTerm Dot.Subgraph -> Phantoms.TTerm Dot.NodeOrSubgraph
 nodeOrSubgraphSubgraph x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphviz.dot.NodeOrSubgraph"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "subgraph"),
@@ -721,7 +721,7 @@ portWithPosition original newVal =
 
 stmtAttr :: Phantoms.TTerm Dot.AttrStmt -> Phantoms.TTerm Dot.Stmt
 stmtAttr x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphviz.dot.Stmt"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "attr"),
@@ -729,7 +729,7 @@ stmtAttr x =
 
 stmtEdge :: Phantoms.TTerm Dot.EdgeStmt -> Phantoms.TTerm Dot.Stmt
 stmtEdge x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphviz.dot.Stmt"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "edge"),
@@ -737,7 +737,7 @@ stmtEdge x =
 
 stmtEquals :: Phantoms.TTerm Dot.EqualityPair -> Phantoms.TTerm Dot.Stmt
 stmtEquals x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphviz.dot.Stmt"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "equals"),
@@ -745,7 +745,7 @@ stmtEquals x =
 
 stmtNode :: Phantoms.TTerm Dot.NodeStmt -> Phantoms.TTerm Dot.Stmt
 stmtNode x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphviz.dot.Stmt"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "node"),
@@ -753,7 +753,7 @@ stmtNode x =
 
 stmtSubgraph :: Phantoms.TTerm Dot.Subgraph -> Phantoms.TTerm Dot.Stmt
 stmtSubgraph x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.graphviz.dot.Stmt"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "subgraph"),

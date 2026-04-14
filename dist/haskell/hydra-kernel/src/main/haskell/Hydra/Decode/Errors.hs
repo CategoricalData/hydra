@@ -34,7 +34,7 @@ emptyListError cx t = ExtractCore.decodeUnit cx t
 error :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Errors.Error
 error cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
-      Core.TermUnion v0 ->
+      Core.TermInject v0 ->
         let field = Core.injectionField v0
             fname = Core.fieldName field
             fterm = Core.fieldTerm field
@@ -63,7 +63,7 @@ error cx raw =
 extractionError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Errors.ExtractionError
 extractionError cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
-      Core.TermUnion v0 ->
+      Core.TermInject v0 ->
         let field = Core.injectionField v0
             fname = Core.fieldName field
             fterm = Core.fieldTerm field
@@ -85,7 +85,7 @@ extractionError cx raw =
 inferenceError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Errors.InferenceError
 inferenceError cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
-      Core.TermUnion v0 ->
+      Core.TermInject v0 ->
         let field = Core.injectionField v0
             fname = Core.fieldName field
             fterm = Core.fieldTerm field
@@ -185,7 +185,7 @@ otherResolutionError cx raw =
 resolutionError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Errors.ResolutionError
 resolutionError cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
-      Core.TermUnion v0 ->
+      Core.TermInject v0 ->
         let field = Core.injectionField v0
             fname = Core.fieldName field
             fterm = Core.fieldTerm field

@@ -353,7 +353,7 @@ injection = define "injection" $
   "term" <<~ Lexical.stripAndDereferenceTerm @@ var "graph" @@ var "term0" $
   Phantoms.cases _Term (var "term")
     (Just (unexpected(Phantoms.string "injection") (ShowCore.term @@ var "term"))) [
-    _Term_union>>: "injection" ~>
+    _Term_inject>>: "injection" ~>
       Logic.ifElse (Core.equalName_ (Core.injectionTypeName (var "injection")) (var "expected"))
         (right (Core.injectionField (var "injection")))
         (unexpected

@@ -847,7 +847,7 @@ declarationForUnionType isSer aliases tparams elName fields cx g =
 decodeTypeFromTerm :: Core.Term -> Maybe Core.Type
 decodeTypeFromTerm term =
     case (Strip.deannotateTerm term) of
-      Core.TermUnion v0 -> Logic.ifElse (Equality.equal (Core.injectionTypeName v0) (Core.Name "hydra.core.Type")) (
+      Core.TermInject v0 -> Logic.ifElse (Equality.equal (Core.injectionTypeName v0) (Core.Name "hydra.core.Type")) (
         let fname = Core.unName (Core.fieldName (Core.injectionField v0))
             fterm = Core.fieldTerm (Core.injectionField v0)
         in (Logic.ifElse (Equality.equal fname "variable") (case fterm of
@@ -867,7 +867,7 @@ decodeTypeFromTerm term =
             Core.functionTypeDomain = dom,
             Core.functionTypeCodomain = cod})) (decodeTypeFromTerm (Core.fieldTerm codField)))))
           _ -> Nothing) (Logic.ifElse (Equality.equal fname "literal") (case fterm of
-          Core.TermUnion v1 -> Logic.ifElse (Equality.equal (Core.unName (Core.fieldName (Core.injectionField v1))) "string") (Just (Core.TypeLiteral Core.LiteralTypeString)) Nothing
+          Core.TermInject v1 -> Logic.ifElse (Equality.equal (Core.unName (Core.fieldName (Core.injectionField v1))) "string") (Just (Core.TypeLiteral Core.LiteralTypeString)) Nothing
           _ -> Nothing) Nothing)))))) Nothing
       _ -> Nothing
 
@@ -1516,7 +1516,7 @@ encodeTermInternal env anns tyapps term cx g0 =
                       Core.TypeForall v1 -> Annotations.setTermAnnotation Constants.key_type (Just (EncodeCore.type_ (Core.forallTypeBody v1))) (Core.typeLambdaBody v0)
                       _ -> Core.typeLambdaBody v0)
             in (encodeTerm env2 annotatedBody cx g))))
-        Core.TermUnion v0 ->
+        Core.TermInject v0 ->
           let injTypeName = Core.injectionTypeName v0
               injField = Core.injectionField v0
               injFieldName = Core.fieldName injField

@@ -73,7 +73,7 @@ def is_encoded_term(t: hydra.core.Term) -> bool:
                 t = a.function
                 continue
 
-            case hydra.core.TermUnion(value=i):
+            case hydra.core.TermInject(value=i):
                 return hydra.lib.equality.equal("hydra.core.Term", i.type_name.value)
 
             case _:
@@ -88,7 +88,7 @@ def is_encoded_type(t: hydra.core.Term) -> bool:
                 t = a.function
                 continue
 
-            case hydra.core.TermUnion(value=i):
+            case hydra.core.TermInject(value=i):
                 return hydra.lib.equality.equal("hydra.core.Type", i.type_name.value)
 
             case _:

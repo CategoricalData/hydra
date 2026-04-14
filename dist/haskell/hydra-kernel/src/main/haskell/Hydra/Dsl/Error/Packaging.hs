@@ -388,7 +388,7 @@ duplicateModuleNamespaceErrorWithNamespace original newVal =
 
 invalidModuleErrorConflictingVariantName :: Phantoms.TTerm ErrorPackaging.ConflictingVariantNameError -> Phantoms.TTerm ErrorPackaging.InvalidModuleError
 invalidModuleErrorConflictingVariantName x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.error.packaging.InvalidModuleError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "conflictingVariantName"),
@@ -396,7 +396,7 @@ invalidModuleErrorConflictingVariantName x =
 
 invalidModuleErrorDefinitionNotInModuleNamespace :: Phantoms.TTerm ErrorPackaging.DefinitionNotInModuleNamespaceError -> Phantoms.TTerm ErrorPackaging.InvalidModuleError
 invalidModuleErrorDefinitionNotInModuleNamespace x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.error.packaging.InvalidModuleError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "definitionNotInModuleNamespace"),
@@ -404,7 +404,7 @@ invalidModuleErrorDefinitionNotInModuleNamespace x =
 
 invalidModuleErrorDuplicateDefinitionName :: Phantoms.TTerm ErrorPackaging.DuplicateDefinitionNameError -> Phantoms.TTerm ErrorPackaging.InvalidModuleError
 invalidModuleErrorDuplicateDefinitionName x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.error.packaging.InvalidModuleError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "duplicateDefinitionName"),
@@ -412,7 +412,7 @@ invalidModuleErrorDuplicateDefinitionName x =
 
 invalidPackageErrorConflictingModuleNamespace :: Phantoms.TTerm ErrorPackaging.ConflictingModuleNamespaceError -> Phantoms.TTerm ErrorPackaging.InvalidPackageError
 invalidPackageErrorConflictingModuleNamespace x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.error.packaging.InvalidPackageError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "conflictingModuleNamespace"),
@@ -420,7 +420,7 @@ invalidPackageErrorConflictingModuleNamespace x =
 
 invalidPackageErrorDuplicateModuleNamespace :: Phantoms.TTerm ErrorPackaging.DuplicateModuleNamespaceError -> Phantoms.TTerm ErrorPackaging.InvalidPackageError
 invalidPackageErrorDuplicateModuleNamespace x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.error.packaging.InvalidPackageError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "duplicateModuleNamespace"),
@@ -428,7 +428,7 @@ invalidPackageErrorDuplicateModuleNamespace x =
 
 invalidPackageErrorInvalidModule :: Phantoms.TTerm ErrorPackaging.InvalidModuleError -> Phantoms.TTerm ErrorPackaging.InvalidPackageError
 invalidPackageErrorInvalidModule x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.error.packaging.InvalidPackageError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "invalidModule"),

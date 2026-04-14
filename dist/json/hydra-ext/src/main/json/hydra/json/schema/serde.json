@@ -187,7 +187,7 @@
                             "term": {
                               "lambda": {
                                 "body": {
-                                  "union": {
+                                  "inject": {
                                     "field": {"name": "boolean", "term": {"variable": "b"}},
                                     "typeName": "hydra.json.model.Value"}},
                                 "domain": {"literal": {"boolean": {}}},
@@ -308,7 +308,7 @@
                                           "pair": {
                                             "@first": {"variable": "hydra.json.schema.serde.key_uniqueItems"},
                                             "@second": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {"name": "boolean", "term": {"variable": "b"}},
                                                 "typeName": "hydra.json.model.Value"}}}},
                                         "type": {"literal": {"string": {}}}}},
@@ -339,7 +339,7 @@
             "body": {
               "lambda": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "number",
                       "term": {
@@ -397,7 +397,7 @@
                                         "term": {
                                           "lambda": {
                                             "body": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "array",
                                                   "term": {
@@ -442,7 +442,7 @@
             "body": {
               "lambda": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "string",
                       "term": {
@@ -565,7 +565,7 @@
                                           "pair": {
                                             "@first": {"variable": "hydra.json.schema.serde.key_allOf"},
                                             "@second": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "array",
                                                   "term": {
@@ -598,7 +598,7 @@
                                           "pair": {
                                             "@first": {"variable": "hydra.json.schema.serde.key_anyOf"},
                                             "@second": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "array",
                                                   "term": {
@@ -631,7 +631,7 @@
                                           "pair": {
                                             "@first": {"variable": "hydra.json.schema.serde.key_oneOf"},
                                             "@second": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "array",
                                                   "term": {
@@ -683,7 +683,7 @@
                                           "pair": {
                                             "@first": {"variable": "hydra.json.schema.serde.key_enum"},
                                             "@second": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {"name": "array", "term": {"variable": "values"}},
                                                 "typeName": "hydra.json.model.Value"}}}},
                                         "type": {"literal": {"string": {}}}}},
@@ -783,7 +783,7 @@
                                                                   "pair": {
                                                                     "@first": {"variable": "hydra.json.schema.serde.key_exclusiveMinimum"},
                                                                     "@second": {
-                                                                      "union": {
+                                                                      "inject": {
                                                                         "field": {"name": "boolean", "term": {"literal": {"boolean": true}}},
                                                                         "typeName": "hydra.json.model.Value"}}}},
                                                                 "type": {"literal": {"string": {}}}}},
@@ -870,7 +870,7 @@
                                                                   "pair": {
                                                                     "@first": {"variable": "hydra.json.schema.serde.key_exclusiveMaximum"},
                                                                     "@second": {
-                                                                      "union": {
+                                                                      "inject": {
                                                                         "field": {"name": "boolean", "term": {"literal": {"boolean": true}}},
                                                                         "typeName": "hydra.json.model.Value"}}}},
                                                                 "type": {"literal": {"string": {}}}}},
@@ -1108,7 +1108,7 @@
                                           "pair": {
                                             "@first": {"variable": "hydra.json.schema.serde.key_properties"},
                                             "@second": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "object",
                                                   "term": {
@@ -1187,7 +1187,7 @@
                                           "pair": {
                                             "@first": {"variable": "hydra.json.schema.serde.key_required"},
                                             "@second": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "array",
                                                   "term": {
@@ -1258,7 +1258,7 @@
                                           "pair": {
                                             "@first": {"variable": "hydra.json.schema.serde.key_dependencies"},
                                             "@second": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "object",
                                                   "term": {
@@ -1318,7 +1318,7 @@
                                           "pair": {
                                             "@first": {"variable": "hydra.json.schema.serde.key_patternProperties"},
                                             "@second": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "object",
                                                   "term": {
@@ -1510,7 +1510,7 @@
                                               "pair": {
                                                 "@first": {"variable": "hydra.json.schema.serde.key_title"},
                                                 "@second": {
-                                                  "union": {
+                                                  "inject": {
                                                     "field": {"name": "string", "term": {"variable": "s"}},
                                                     "typeName": "hydra.json.model.Value"}}}},
                                             "type": {"literal": {"string": {}}}}},
@@ -1531,7 +1531,7 @@
                                               "pair": {
                                                 "@first": {"variable": "hydra.json.schema.serde.key_description"},
                                                 "@second": {
-                                                  "union": {
+                                                  "inject": {
                                                     "field": {"name": "string", "term": {"variable": "s"}},
                                                     "typeName": "hydra.json.model.Value"}}}},
                                             "type": {"literal": {"string": {}}}}},
@@ -1581,7 +1581,7 @@
                                           "pair": {
                                             "@first": {"variable": "hydra.json.schema.serde.key_maxLength"},
                                             "@second": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "number",
                                                   "term": {
@@ -1608,7 +1608,7 @@
                                           "pair": {
                                             "@first": {"variable": "hydra.json.schema.serde.key_minLength"},
                                             "@second": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "number",
                                                   "term": {
@@ -1635,7 +1635,7 @@
                                           "pair": {
                                             "@first": {"variable": "hydra.json.schema.serde.key_pattern"},
                                             "@second": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "string",
                                                   "term": {
@@ -1671,7 +1671,7 @@
             "body": {
               "lambda": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "object",
                       "term": {
@@ -1753,7 +1753,7 @@
                             "term": {
                               "lambda": {
                                 "body": {
-                                  "union": {
+                                  "inject": {
                                     "field": {
                                       "name": "array",
                                       "term": {
@@ -1794,7 +1794,7 @@
             "body": {
               "lambda": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "string",
                       "term": {
@@ -1842,7 +1842,7 @@
                             "term": {
                               "lambda": {
                                 "body": {
-                                  "union": {
+                                  "inject": {
                                     "field": {
                                       "name": "array",
                                       "term": {
@@ -1892,7 +1892,7 @@
                             "term": {
                               "lambda": {
                                 "body": {
-                                  "union": {
+                                  "inject": {
                                     "field": {"name": "string", "term": {"literal": {"string": "string"}}},
                                     "typeName": "hydra.json.model.Value"}},
                                 "domain": {"unit": {}},
@@ -1902,7 +1902,7 @@
                             "term": {
                               "lambda": {
                                 "body": {
-                                  "union": {
+                                  "inject": {
                                     "field": {"name": "string", "term": {"literal": {"string": "integer"}}},
                                     "typeName": "hydra.json.model.Value"}},
                                 "domain": {"unit": {}},
@@ -1912,7 +1912,7 @@
                             "term": {
                               "lambda": {
                                 "body": {
-                                  "union": {
+                                  "inject": {
                                     "field": {"name": "string", "term": {"literal": {"string": "number"}}},
                                     "typeName": "hydra.json.model.Value"}},
                                 "domain": {"unit": {}},
@@ -1922,7 +1922,7 @@
                             "term": {
                               "lambda": {
                                 "body": {
-                                  "union": {
+                                  "inject": {
                                     "field": {"name": "string", "term": {"literal": {"string": "boolean"}}},
                                     "typeName": "hydra.json.model.Value"}},
                                 "domain": {"unit": {}},
@@ -1932,7 +1932,7 @@
                             "term": {
                               "lambda": {
                                 "body": {
-                                  "union": {
+                                  "inject": {
                                     "field": {"name": "string", "term": {"literal": {"string": "null"}}},
                                     "typeName": "hydra.json.model.Value"}},
                                 "domain": {"unit": {}},
@@ -1942,7 +1942,7 @@
                             "term": {
                               "lambda": {
                                 "body": {
-                                  "union": {
+                                  "inject": {
                                     "field": {"name": "string", "term": {"literal": {"string": "array"}}},
                                     "typeName": "hydra.json.model.Value"}},
                                 "domain": {"unit": {}},
@@ -1952,7 +1952,7 @@
                             "term": {
                               "lambda": {
                                 "body": {
-                                  "union": {
+                                  "inject": {
                                     "field": {"name": "string", "term": {"literal": {"string": "object"}}},
                                     "typeName": "hydra.json.model.Value"}},
                                 "domain": {"unit": {}},
@@ -2048,7 +2048,7 @@
                                                         "argument": {
                                                           "lambda": {
                                                             "body": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {"name": "string", "term": {"variable": "i"}},
                                                                 "typeName": "hydra.json.model.Value"}},
                                                             "domain": {"literal": {"string": {}}},
@@ -2072,7 +2072,7 @@
                                                 "@second": {
                                                   "application": {
                                                     "argument": {
-                                                      "union": {
+                                                      "inject": {
                                                         "field": {
                                                           "name": "string",
                                                           "term": {"literal": {"string": "http://json-schema.org/2020-12/schema"}}},
@@ -2098,7 +2098,7 @@
                                                         "argument": {
                                                           "lambda": {
                                                             "body": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {
                                                                   "name": "object",
                                                                   "term": {
@@ -2216,7 +2216,7 @@
                               "values": {"variable": "hydra.json.model.Value"}}},
                           "variables": []}}],
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
                           "name": "object",
                           "term": {
@@ -2321,7 +2321,7 @@
             "body": {
               "lambda": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "object",
                       "term": {

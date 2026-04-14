@@ -11,7 +11,7 @@ import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pur
 
 booleanArgumentValue :: Phantoms.TTerm Bool -> Phantoms.TTerm Gremlin.BooleanArgument
 booleanArgumentValue x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.BooleanArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "value"),
@@ -19,7 +19,7 @@ booleanArgumentValue x =
 
 booleanArgumentVariable :: Phantoms.TTerm Gremlin.Identifier -> Phantoms.TTerm Gremlin.BooleanArgument
 booleanArgumentVariable x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.BooleanArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "variable"),
@@ -27,7 +27,7 @@ booleanArgumentVariable x =
 
 byArgsOrder :: Phantoms.TTerm Gremlin.TraversalOrderArgument -> Phantoms.TTerm Gremlin.ByArgs
 byArgsOrder x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.ByArgs"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "order"),
@@ -35,7 +35,7 @@ byArgsOrder x =
 
 byArgsOther :: Phantoms.TTerm Gremlin.ByOtherArgs -> Phantoms.TTerm Gremlin.ByArgs
 byArgsOther x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.ByArgs"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "other"),
@@ -43,7 +43,7 @@ byArgsOther x =
 
 byArgsToken :: Phantoms.TTerm Gremlin.TraversalTokenArgument -> Phantoms.TTerm Gremlin.ByArgs
 byArgsToken x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.ByArgs"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "token"),
@@ -51,7 +51,7 @@ byArgsToken x =
 
 byOtherArgsComparator :: Phantoms.TTerm (Maybe Gremlin.TraversalComparatorArgument) -> Phantoms.TTerm Gremlin.ByOtherArgs
 byOtherArgsComparator x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.ByOtherArgs"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "comparator"),
@@ -59,7 +59,7 @@ byOtherArgsComparator x =
 
 byOtherArgsOther :: Phantoms.TTerm (Maybe Gremlin.TraversalFunctionArgumentOrStringArgumentOrNestedTraversal) -> Phantoms.TTerm Gremlin.ByOtherArgs
 byOtherArgsOther x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.ByOtherArgs"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "other"),
@@ -79,7 +79,7 @@ chainedTraversal first rest =
 
 chainedTraversalElementMethod :: Phantoms.TTerm Gremlin.TraversalMethod -> Phantoms.TTerm Gremlin.ChainedTraversalElement
 chainedTraversalElementMethod x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.ChainedTraversalElement"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "method"),
@@ -87,7 +87,7 @@ chainedTraversalElementMethod x =
 
 chainedTraversalElementSelf :: Phantoms.TTerm Gremlin.TraversalSelfMethod -> Phantoms.TTerm Gremlin.ChainedTraversalElement
 chainedTraversalElementSelf x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.ChainedTraversalElement"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "self"),
@@ -143,7 +143,7 @@ chainedTraversalWithRest original newVal =
 
 chooseArgsFunction :: Phantoms.TTerm Gremlin.TraversalFunctionArgument -> Phantoms.TTerm Gremlin.ChooseArgs
 chooseArgsFunction x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.ChooseArgs"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "function"),
@@ -151,7 +151,7 @@ chooseArgsFunction x =
 
 chooseArgsPredicateTraversal :: Phantoms.TTerm Gremlin.PredicateTraversalArgument -> Phantoms.TTerm Gremlin.ChooseArgs
 chooseArgsPredicateTraversal x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.ChooseArgs"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "predicateTraversal"),
@@ -159,7 +159,7 @@ chooseArgsPredicateTraversal x =
 
 chooseArgsTraversal :: Phantoms.TTerm Gremlin.NestedTraversalArgument -> Phantoms.TTerm Gremlin.ChooseArgs
 chooseArgsTraversal x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.ChooseArgs"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "traversal"),
@@ -167,7 +167,7 @@ chooseArgsTraversal x =
 
 concatArgsString :: Phantoms.TTerm [Gremlin.StringNullableArgument] -> Phantoms.TTerm Gremlin.ConcatArgs
 concatArgsString x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.ConcatArgs"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "string"),
@@ -175,7 +175,7 @@ concatArgsString x =
 
 concatArgsTraversal :: Phantoms.TTerm [Gremlin.NestedTraversal] -> Phantoms.TTerm Gremlin.ConcatArgs
 concatArgsTraversal x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.ConcatArgs"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "traversal"),
@@ -243,7 +243,7 @@ configurationWithValue original newVal =
 
 connectedComponentConstantsComponent :: Phantoms.TTerm Gremlin.ConnectedComponentConstants
 connectedComponentConstantsComponent =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.ConnectedComponentConstants"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "component"),
@@ -251,7 +251,7 @@ connectedComponentConstantsComponent =
 
 connectedComponentConstantsEdges :: Phantoms.TTerm Gremlin.ConnectedComponentConstants
 connectedComponentConstantsEdges =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.ConnectedComponentConstants"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "edges"),
@@ -259,7 +259,7 @@ connectedComponentConstantsEdges =
 
 connectedComponentConstantsPropertyName :: Phantoms.TTerm Gremlin.ConnectedComponentConstants
 connectedComponentConstantsPropertyName =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.ConnectedComponentConstants"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "propertyName"),
@@ -327,7 +327,7 @@ dateAddArgsWithUnit original newVal =
 
 dateArgumentValue :: Phantoms.TTerm Gremlin.DateLiteral -> Phantoms.TTerm Gremlin.DateArgument
 dateArgumentValue x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.DateArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "value"),
@@ -335,7 +335,7 @@ dateArgumentValue x =
 
 dateArgumentVariable :: Phantoms.TTerm Gremlin.Identifier -> Phantoms.TTerm Gremlin.DateArgument
 dateArgumentVariable x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.DateArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "variable"),
@@ -343,7 +343,7 @@ dateArgumentVariable x =
 
 dateDiffArgsDate :: Phantoms.TTerm Gremlin.DateArgument -> Phantoms.TTerm Gremlin.DateDiffArgs
 dateDiffArgsDate x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.DateDiffArgs"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "date"),
@@ -351,7 +351,7 @@ dateDiffArgsDate x =
 
 dateDiffArgsTraversal :: Phantoms.TTerm Gremlin.NestedTraversal -> Phantoms.TTerm Gremlin.DateDiffArgs
 dateDiffArgsTraversal x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.DateDiffArgs"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "traversal"),
@@ -365,7 +365,7 @@ dateLiteral x =
 
 dedupArgsScopeString :: Phantoms.TTerm Gremlin.ScopeStringArgument -> Phantoms.TTerm Gremlin.DedupArgs
 dedupArgsScopeString x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.DedupArgs"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "scopeString"),
@@ -373,7 +373,7 @@ dedupArgsScopeString x =
 
 dedupArgsString :: Phantoms.TTerm [Gremlin.StringNullableArgument] -> Phantoms.TTerm Gremlin.DedupArgs
 dedupArgsString x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.DedupArgs"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "string"),
@@ -441,7 +441,7 @@ directionAndVarargsWithVarargs original newVal =
 
 floatArgumentValue :: Phantoms.TTerm Gremlin.FloatLiteral -> Phantoms.TTerm Gremlin.FloatArgument
 floatArgumentValue x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.FloatArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "value"),
@@ -449,7 +449,7 @@ floatArgumentValue x =
 
 floatArgumentVariable :: Phantoms.TTerm Gremlin.Identifier -> Phantoms.TTerm Gremlin.FloatArgument
 floatArgumentVariable x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.FloatArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "variable"),
@@ -463,7 +463,7 @@ floatLiteral x =
 
 fromArgsString :: Phantoms.TTerm Gremlin.StringArgument -> Phantoms.TTerm Gremlin.FromArgs
 fromArgsString x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.FromArgs"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "string"),
@@ -471,7 +471,7 @@ fromArgsString x =
 
 fromArgsTraversal :: Phantoms.TTerm Gremlin.NestedTraversal -> Phantoms.TTerm Gremlin.FromArgs
 fromArgsTraversal x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.FromArgs"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "traversal"),
@@ -479,7 +479,7 @@ fromArgsTraversal x =
 
 fromArgsVertex :: Phantoms.TTerm Gremlin.StructureVertexArgument -> Phantoms.TTerm Gremlin.FromArgs
 fromArgsVertex x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.FromArgs"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "vertex"),
@@ -667,7 +667,7 @@ genericLiteralArgumentAndTraversalBiFunctionArgumentWithLiteral original newVal 
 
 genericLiteralArgumentAndTraversalPredicateLiteral :: Phantoms.TTerm Gremlin.GenericLiteralArgument -> Phantoms.TTerm Gremlin.GenericLiteralArgumentAndTraversalPredicate
 genericLiteralArgumentAndTraversalPredicateLiteral x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteralArgumentAndTraversalPredicate"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "literal"),
@@ -675,7 +675,7 @@ genericLiteralArgumentAndTraversalPredicateLiteral x =
 
 genericLiteralArgumentAndTraversalPredicatePredicate :: Phantoms.TTerm Gremlin.TraversalPredicate -> Phantoms.TTerm Gremlin.GenericLiteralArgumentAndTraversalPredicate
 genericLiteralArgumentAndTraversalPredicatePredicate x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteralArgumentAndTraversalPredicate"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "predicate"),
@@ -683,7 +683,7 @@ genericLiteralArgumentAndTraversalPredicatePredicate x =
 
 genericLiteralArgumentValue :: Phantoms.TTerm Gremlin.GenericLiteral -> Phantoms.TTerm Gremlin.GenericLiteralArgument
 genericLiteralArgumentValue x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteralArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "value"),
@@ -691,7 +691,7 @@ genericLiteralArgumentValue x =
 
 genericLiteralArgumentVariable :: Phantoms.TTerm Gremlin.Identifier -> Phantoms.TTerm Gremlin.GenericLiteralArgument
 genericLiteralArgumentVariable x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteralArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "variable"),
@@ -699,7 +699,7 @@ genericLiteralArgumentVariable x =
 
 genericLiteralBoolean :: Phantoms.TTerm Bool -> Phantoms.TTerm Gremlin.GenericLiteral
 genericLiteralBoolean x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteral"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "boolean"),
@@ -713,7 +713,7 @@ genericLiteralCollection x =
 
 genericLiteralDate :: Phantoms.TTerm Gremlin.DateLiteral -> Phantoms.TTerm Gremlin.GenericLiteral
 genericLiteralDate x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteral"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "date"),
@@ -721,7 +721,7 @@ genericLiteralDate x =
 
 genericLiteralGenericLiteralCollection :: Phantoms.TTerm Gremlin.GenericLiteralCollection -> Phantoms.TTerm Gremlin.GenericLiteral
 genericLiteralGenericLiteralCollection x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteral"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "genericLiteralCollection"),
@@ -729,7 +729,7 @@ genericLiteralGenericLiteralCollection x =
 
 genericLiteralGenericLiteralMap :: Phantoms.TTerm Gremlin.GenericLiteralMap -> Phantoms.TTerm Gremlin.GenericLiteral
 genericLiteralGenericLiteralMap x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteral"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "genericLiteralMap"),
@@ -737,7 +737,7 @@ genericLiteralGenericLiteralMap x =
 
 genericLiteralGenericLiteralRange :: Phantoms.TTerm Gremlin.GenericLiteralRange -> Phantoms.TTerm Gremlin.GenericLiteral
 genericLiteralGenericLiteralRange x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteral"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "genericLiteralRange"),
@@ -745,7 +745,7 @@ genericLiteralGenericLiteralRange x =
 
 genericLiteralGenericLiteralSet :: Phantoms.TTerm Gremlin.GenericLiteralSet -> Phantoms.TTerm Gremlin.GenericLiteral
 genericLiteralGenericLiteralSet x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteral"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "genericLiteralSet"),
@@ -753,7 +753,7 @@ genericLiteralGenericLiteralSet x =
 
 genericLiteralInf :: Phantoms.TTerm Gremlin.GenericLiteral
 genericLiteralInf =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteral"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "inf"),
@@ -767,7 +767,7 @@ genericLiteralList x =
 
 genericLiteralListArgumentValue :: Phantoms.TTerm Gremlin.GenericLiteralList -> Phantoms.TTerm Gremlin.GenericLiteralListArgument
 genericLiteralListArgumentValue x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteralListArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "value"),
@@ -775,7 +775,7 @@ genericLiteralListArgumentValue x =
 
 genericLiteralListArgumentVariable :: Phantoms.TTerm Gremlin.Identifier -> Phantoms.TTerm Gremlin.GenericLiteralListArgument
 genericLiteralListArgumentVariable x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteralListArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "variable"),
@@ -789,7 +789,7 @@ genericLiteralMap x =
 
 genericLiteralMapArgumentValue :: Phantoms.TTerm Gremlin.GenericLiteralMap -> Phantoms.TTerm Gremlin.GenericLiteralMapArgument
 genericLiteralMapArgumentValue x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteralMapArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "value"),
@@ -797,7 +797,7 @@ genericLiteralMapArgumentValue x =
 
 genericLiteralMapArgumentVariable :: Phantoms.TTerm Gremlin.Identifier -> Phantoms.TTerm Gremlin.GenericLiteralMapArgument
 genericLiteralMapArgumentVariable x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteralMapArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "variable"),
@@ -865,7 +865,7 @@ genericLiteralMapNullableArgumentAndTraversalCardinalityArgumentWithObject origi
 
 genericLiteralMapNullableArgumentOrNestedTraversalMap :: Phantoms.TTerm Gremlin.GenericLiteralMapNullableArgument -> Phantoms.TTerm Gremlin.GenericLiteralMapNullableArgumentOrNestedTraversal
 genericLiteralMapNullableArgumentOrNestedTraversalMap x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteralMapNullableArgumentOrNestedTraversal"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "map"),
@@ -873,7 +873,7 @@ genericLiteralMapNullableArgumentOrNestedTraversalMap x =
 
 genericLiteralMapNullableArgumentOrNestedTraversalTraversal :: Phantoms.TTerm Gremlin.NestedTraversal -> Phantoms.TTerm Gremlin.GenericLiteralMapNullableArgumentOrNestedTraversal
 genericLiteralMapNullableArgumentOrNestedTraversalTraversal x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteralMapNullableArgumentOrNestedTraversal"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "traversal"),
@@ -881,7 +881,7 @@ genericLiteralMapNullableArgumentOrNestedTraversalTraversal x =
 
 genericLiteralMapNullableArgumentValue :: Phantoms.TTerm (Maybe Gremlin.GenericLiteralMap) -> Phantoms.TTerm Gremlin.GenericLiteralMapNullableArgument
 genericLiteralMapNullableArgumentValue x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteralMapNullableArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "value"),
@@ -889,7 +889,7 @@ genericLiteralMapNullableArgumentValue x =
 
 genericLiteralMapNullableArgumentVariable :: Phantoms.TTerm Gremlin.Identifier -> Phantoms.TTerm Gremlin.GenericLiteralMapNullableArgument
 genericLiteralMapNullableArgumentVariable x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteralMapNullableArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "variable"),
@@ -897,7 +897,7 @@ genericLiteralMapNullableArgumentVariable x =
 
 genericLiteralNan :: Phantoms.TTerm Gremlin.GenericLiteral
 genericLiteralNan =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteral"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "nan"),
@@ -905,7 +905,7 @@ genericLiteralNan =
 
 genericLiteralNestedTraversal :: Phantoms.TTerm Gremlin.NestedTraversal -> Phantoms.TTerm Gremlin.GenericLiteral
 genericLiteralNestedTraversal x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteral"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "nestedTraversal"),
@@ -913,7 +913,7 @@ genericLiteralNestedTraversal x =
 
 genericLiteralNull :: Phantoms.TTerm Gremlin.GenericLiteral
 genericLiteralNull =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteral"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "null"),
@@ -921,7 +921,7 @@ genericLiteralNull =
 
 genericLiteralNumeric :: Phantoms.TTerm Gremlin.NumericLiteral -> Phantoms.TTerm Gremlin.GenericLiteral
 genericLiteralNumeric x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteral"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "numeric"),
@@ -929,7 +929,7 @@ genericLiteralNumeric x =
 
 genericLiteralRangeInteger :: Phantoms.TTerm Gremlin.IntegerRange -> Phantoms.TTerm Gremlin.GenericLiteralRange
 genericLiteralRangeInteger x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteralRange"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "integer"),
@@ -937,7 +937,7 @@ genericLiteralRangeInteger x =
 
 genericLiteralRangeString :: Phantoms.TTerm Gremlin.StringRange -> Phantoms.TTerm Gremlin.GenericLiteralRange
 genericLiteralRangeString x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteralRange"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "string"),
@@ -951,7 +951,7 @@ genericLiteralSet x =
 
 genericLiteralString :: Phantoms.TTerm String -> Phantoms.TTerm Gremlin.GenericLiteral
 genericLiteralString x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteral"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "string"),
@@ -959,7 +959,7 @@ genericLiteralString x =
 
 genericLiteralStructureVertex :: Phantoms.TTerm Gremlin.StructureVertex -> Phantoms.TTerm Gremlin.GenericLiteral
 genericLiteralStructureVertex x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteral"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "structureVertex"),
@@ -967,7 +967,7 @@ genericLiteralStructureVertex x =
 
 genericLiteralTerminatedTraversal :: Phantoms.TTerm Gremlin.TerminatedTraversal -> Phantoms.TTerm Gremlin.GenericLiteral
 genericLiteralTerminatedTraversal x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteral"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "terminatedTraversal"),
@@ -975,7 +975,7 @@ genericLiteralTerminatedTraversal x =
 
 genericLiteralTraversalCardinality :: Phantoms.TTerm Gremlin.TraversalCardinality -> Phantoms.TTerm Gremlin.GenericLiteral
 genericLiteralTraversalCardinality x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteral"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "traversalCardinality"),
@@ -983,7 +983,7 @@ genericLiteralTraversalCardinality x =
 
 genericLiteralTraversalDT :: Phantoms.TTerm Gremlin.TraversalDT -> Phantoms.TTerm Gremlin.GenericLiteral
 genericLiteralTraversalDT x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteral"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "traversalDT"),
@@ -991,7 +991,7 @@ genericLiteralTraversalDT x =
 
 genericLiteralTraversalDirection :: Phantoms.TTerm Gremlin.TraversalDirection -> Phantoms.TTerm Gremlin.GenericLiteral
 genericLiteralTraversalDirection x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteral"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "traversalDirection"),
@@ -999,7 +999,7 @@ genericLiteralTraversalDirection x =
 
 genericLiteralTraversalMerge :: Phantoms.TTerm Gremlin.TraversalMerge -> Phantoms.TTerm Gremlin.GenericLiteral
 genericLiteralTraversalMerge x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteral"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "traversalMerge"),
@@ -1007,7 +1007,7 @@ genericLiteralTraversalMerge x =
 
 genericLiteralTraversalPick :: Phantoms.TTerm Gremlin.TraversalPick -> Phantoms.TTerm Gremlin.GenericLiteral
 genericLiteralTraversalPick x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteral"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "traversalPick"),
@@ -1015,7 +1015,7 @@ genericLiteralTraversalPick x =
 
 genericLiteralTraversalToken :: Phantoms.TTerm Gremlin.TraversalToken -> Phantoms.TTerm Gremlin.GenericLiteral
 genericLiteralTraversalToken x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.GenericLiteral"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "traversalToken"),
@@ -1023,7 +1023,7 @@ genericLiteralTraversalToken x =
 
 hasArgsString :: Phantoms.TTerm Gremlin.HasStringArgumentAndOptionalStringLiteralVarargs -> Phantoms.TTerm Gremlin.HasArgs
 hasArgsString x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.HasArgs"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "string"),
@@ -1031,7 +1031,7 @@ hasArgsString x =
 
 hasArgsTraversalToken :: Phantoms.TTerm Gremlin.HasTraversalTokenArgs -> Phantoms.TTerm Gremlin.HasArgs
 hasArgsTraversalToken x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.HasArgs"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "traversalToken"),
@@ -1059,7 +1059,7 @@ hasStringArgumentAndOptionalStringLiteralVarargsRest x =
 
 hasStringArgumentAndOptionalStringLiteralVarargsRestObject :: Phantoms.TTerm Gremlin.GenericLiteralArgument -> Phantoms.TTerm Gremlin.HasStringArgumentAndOptionalStringLiteralVarargsRest
 hasStringArgumentAndOptionalStringLiteralVarargsRestObject x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.HasStringArgumentAndOptionalStringLiteralVarargsRest"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "object"),
@@ -1067,7 +1067,7 @@ hasStringArgumentAndOptionalStringLiteralVarargsRestObject x =
 
 hasStringArgumentAndOptionalStringLiteralVarargsRestPredicate :: Phantoms.TTerm Gremlin.TraversalPredicate -> Phantoms.TTerm Gremlin.HasStringArgumentAndOptionalStringLiteralVarargsRest
 hasStringArgumentAndOptionalStringLiteralVarargsRestPredicate x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.HasStringArgumentAndOptionalStringLiteralVarargsRest"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "predicate"),
@@ -1075,7 +1075,7 @@ hasStringArgumentAndOptionalStringLiteralVarargsRestPredicate x =
 
 hasStringArgumentAndOptionalStringLiteralVarargsRestStringObject :: Phantoms.TTerm Gremlin.StringNullableArgumentAndGenericLiteralArgument -> Phantoms.TTerm Gremlin.HasStringArgumentAndOptionalStringLiteralVarargsRest
 hasStringArgumentAndOptionalStringLiteralVarargsRestStringObject x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.HasStringArgumentAndOptionalStringLiteralVarargsRest"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "stringObject"),
@@ -1083,7 +1083,7 @@ hasStringArgumentAndOptionalStringLiteralVarargsRestStringObject x =
 
 hasStringArgumentAndOptionalStringLiteralVarargsRestStringPredicate :: Phantoms.TTerm Gremlin.StringNullableArgumentAndTraversalPredicate -> Phantoms.TTerm Gremlin.HasStringArgumentAndOptionalStringLiteralVarargsRest
 hasStringArgumentAndOptionalStringLiteralVarargsRestStringPredicate x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.HasStringArgumentAndOptionalStringLiteralVarargsRest"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "stringPredicate"),
@@ -1091,7 +1091,7 @@ hasStringArgumentAndOptionalStringLiteralVarargsRestStringPredicate x =
 
 hasStringArgumentAndOptionalStringLiteralVarargsRestTraversal :: Phantoms.TTerm Gremlin.NestedTraversal -> Phantoms.TTerm Gremlin.HasStringArgumentAndOptionalStringLiteralVarargsRest
 hasStringArgumentAndOptionalStringLiteralVarargsRestTraversal x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.HasStringArgumentAndOptionalStringLiteralVarargsRest"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "traversal"),
@@ -1159,7 +1159,7 @@ hasTraversalTokenArgsRest x =
 
 hasTraversalTokenArgsRestLiteral :: Phantoms.TTerm Gremlin.GenericLiteralArgument -> Phantoms.TTerm Gremlin.HasTraversalTokenArgsRest
 hasTraversalTokenArgsRestLiteral x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.HasTraversalTokenArgsRest"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "literal"),
@@ -1167,7 +1167,7 @@ hasTraversalTokenArgsRestLiteral x =
 
 hasTraversalTokenArgsRestPredicate :: Phantoms.TTerm Gremlin.TraversalPredicate -> Phantoms.TTerm Gremlin.HasTraversalTokenArgsRest
 hasTraversalTokenArgsRestPredicate x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.HasTraversalTokenArgsRest"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "predicate"),
@@ -1175,7 +1175,7 @@ hasTraversalTokenArgsRestPredicate x =
 
 hasTraversalTokenArgsRestTraversal :: Phantoms.TTerm Gremlin.NestedTraversal -> Phantoms.TTerm Gremlin.HasTraversalTokenArgsRest
 hasTraversalTokenArgsRestTraversal x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.HasTraversalTokenArgsRest"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "traversal"),
@@ -1229,7 +1229,7 @@ identifier x =
 
 integerArgumentValue :: Phantoms.TTerm Gremlin.IntegerLiteral -> Phantoms.TTerm Gremlin.IntegerArgument
 integerArgumentValue x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.IntegerArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "value"),
@@ -1237,7 +1237,7 @@ integerArgumentValue x =
 
 integerArgumentVariable :: Phantoms.TTerm Gremlin.Identifier -> Phantoms.TTerm Gremlin.IntegerArgument
 integerArgumentVariable x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.IntegerArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "variable"),
@@ -1311,7 +1311,7 @@ integerRangeWithRight original newVal =
 
 ioOptionsKeysReader :: Phantoms.TTerm Gremlin.IoOptionsKeys
 ioOptionsKeysReader =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.IoOptionsKeys"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "reader"),
@@ -1319,7 +1319,7 @@ ioOptionsKeysReader =
 
 ioOptionsKeysWriter :: Phantoms.TTerm Gremlin.IoOptionsKeys
 ioOptionsKeysWriter =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.IoOptionsKeys"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "writer"),
@@ -1327,7 +1327,7 @@ ioOptionsKeysWriter =
 
 ioOptionsValuesGraphml :: Phantoms.TTerm Gremlin.IoOptionsValues
 ioOptionsValuesGraphml =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.IoOptionsValues"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "graphml"),
@@ -1335,7 +1335,7 @@ ioOptionsValuesGraphml =
 
 ioOptionsValuesGraphson :: Phantoms.TTerm Gremlin.IoOptionsValues
 ioOptionsValuesGraphson =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.IoOptionsValues"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "graphson"),
@@ -1343,7 +1343,7 @@ ioOptionsValuesGraphson =
 
 ioOptionsValuesGryo :: Phantoms.TTerm Gremlin.IoOptionsValues
 ioOptionsValuesGryo =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.IoOptionsValues"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "gryo"),
@@ -1351,7 +1351,7 @@ ioOptionsValuesGryo =
 
 keywordEdges :: Phantoms.TTerm Gremlin.Keyword
 keywordEdges =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.Keyword"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "edges"),
@@ -1359,7 +1359,7 @@ keywordEdges =
 
 keywordKeys :: Phantoms.TTerm Gremlin.Keyword
 keywordKeys =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.Keyword"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "keys"),
@@ -1367,7 +1367,7 @@ keywordKeys =
 
 keywordNew :: Phantoms.TTerm Gremlin.Keyword
 keywordNew =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.Keyword"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "new"),
@@ -1375,7 +1375,7 @@ keywordNew =
 
 keywordOrIdentifierIdentifier :: Phantoms.TTerm Gremlin.Identifier -> Phantoms.TTerm Gremlin.KeywordOrIdentifier
 keywordOrIdentifierIdentifier x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.KeywordOrIdentifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "identifier"),
@@ -1383,7 +1383,7 @@ keywordOrIdentifierIdentifier x =
 
 keywordOrIdentifierKeyword :: Phantoms.TTerm Gremlin.Keyword -> Phantoms.TTerm Gremlin.KeywordOrIdentifier
 keywordOrIdentifierKeyword x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.KeywordOrIdentifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "keyword"),
@@ -1391,7 +1391,7 @@ keywordOrIdentifierKeyword x =
 
 keywordValues :: Phantoms.TTerm Gremlin.Keyword
 keywordValues =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.Keyword"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "values"),
@@ -1399,7 +1399,7 @@ keywordValues =
 
 mapEntryKey :: Phantoms.TTerm Gremlin.MapKey -> Phantoms.TTerm Gremlin.MapEntry
 mapEntryKey x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.MapEntry"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "key"),
@@ -1407,7 +1407,7 @@ mapEntryKey x =
 
 mapEntryValue :: Phantoms.TTerm Gremlin.GenericLiteral -> Phantoms.TTerm Gremlin.MapEntry
 mapEntryValue x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.MapEntry"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "value"),
@@ -1415,7 +1415,7 @@ mapEntryValue x =
 
 mapKeyCollection :: Phantoms.TTerm Gremlin.GenericLiteralCollection -> Phantoms.TTerm Gremlin.MapKey
 mapKeyCollection x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.MapKey"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "collection"),
@@ -1423,7 +1423,7 @@ mapKeyCollection x =
 
 mapKeyIdentifier :: Phantoms.TTerm Gremlin.Identifier -> Phantoms.TTerm Gremlin.MapKey
 mapKeyIdentifier x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.MapKey"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "identifier"),
@@ -1431,7 +1431,7 @@ mapKeyIdentifier x =
 
 mapKeyKeyword :: Phantoms.TTerm Gremlin.Keyword -> Phantoms.TTerm Gremlin.MapKey
 mapKeyKeyword x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.MapKey"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "keyword"),
@@ -1439,7 +1439,7 @@ mapKeyKeyword x =
 
 mapKeyMap :: Phantoms.TTerm Gremlin.GenericLiteralMap -> Phantoms.TTerm Gremlin.MapKey
 mapKeyMap x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.MapKey"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "map"),
@@ -1447,7 +1447,7 @@ mapKeyMap x =
 
 mapKeyNumeric :: Phantoms.TTerm Gremlin.NumericLiteral -> Phantoms.TTerm Gremlin.MapKey
 mapKeyNumeric x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.MapKey"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "numeric"),
@@ -1455,7 +1455,7 @@ mapKeyNumeric x =
 
 mapKeySet :: Phantoms.TTerm Gremlin.GenericLiteralSet -> Phantoms.TTerm Gremlin.MapKey
 mapKeySet x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.MapKey"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "set"),
@@ -1463,7 +1463,7 @@ mapKeySet x =
 
 mapKeyString :: Phantoms.TTerm String -> Phantoms.TTerm Gremlin.MapKey
 mapKeyString x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.MapKey"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "string"),
@@ -1471,7 +1471,7 @@ mapKeyString x =
 
 mapKeyTraversalDirection :: Phantoms.TTerm Gremlin.TraversalDirection -> Phantoms.TTerm Gremlin.MapKey
 mapKeyTraversalDirection x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.MapKey"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "traversalDirection"),
@@ -1479,7 +1479,7 @@ mapKeyTraversalDirection x =
 
 mapKeyTraversalToken :: Phantoms.TTerm Gremlin.TraversalToken -> Phantoms.TTerm Gremlin.MapKey
 mapKeyTraversalToken x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.MapKey"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "traversalToken"),
@@ -1487,7 +1487,7 @@ mapKeyTraversalToken x =
 
 nestedTraversalAnonymous :: Phantoms.TTerm Gremlin.ChainedTraversal -> Phantoms.TTerm Gremlin.NestedTraversal
 nestedTraversalAnonymous x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.NestedTraversal"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "anonymous"),
@@ -1603,7 +1603,7 @@ nestedTraversalArgumentWithTraversal3 original newVal =
 
 nestedTraversalChained :: Phantoms.TTerm Gremlin.ChainedTraversal -> Phantoms.TTerm Gremlin.NestedTraversal
 nestedTraversalChained x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.NestedTraversal"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "chained"),
@@ -1611,7 +1611,7 @@ nestedTraversalChained x =
 
 nestedTraversalRoot :: Phantoms.TTerm Gremlin.RootTraversal -> Phantoms.TTerm Gremlin.NestedTraversal
 nestedTraversalRoot x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.NestedTraversal"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "root"),
@@ -1619,7 +1619,7 @@ nestedTraversalRoot x =
 
 numericLiteralFloat :: Phantoms.TTerm Gremlin.FloatLiteral -> Phantoms.TTerm Gremlin.NumericLiteral
 numericLiteralFloat x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.NumericLiteral"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "float"),
@@ -1627,7 +1627,7 @@ numericLiteralFloat x =
 
 numericLiteralInteger :: Phantoms.TTerm Gremlin.IntegerLiteral -> Phantoms.TTerm Gremlin.NumericLiteral
 numericLiteralInteger x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.NumericLiteral"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "integer"),
@@ -1635,7 +1635,7 @@ numericLiteralInteger x =
 
 optionArgsMergeMap :: Phantoms.TTerm Gremlin.TraversalMergeArgumentAndGenericLiteralMapNullableArgument -> Phantoms.TTerm Gremlin.OptionArgs
 optionArgsMergeMap x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.OptionArgs"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "mergeMap"),
@@ -1643,7 +1643,7 @@ optionArgsMergeMap x =
 
 optionArgsMergeTraversal :: Phantoms.TTerm Gremlin.TraversalMergeArgumentAndNestedTraversal -> Phantoms.TTerm Gremlin.OptionArgs
 optionArgsMergeTraversal x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.OptionArgs"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "mergeTraversal"),
@@ -1651,7 +1651,7 @@ optionArgsMergeTraversal x =
 
 optionArgsObjectTraversal :: Phantoms.TTerm Gremlin.GenericLiteralArgumentAndNestedTraversal -> Phantoms.TTerm Gremlin.OptionArgs
 optionArgsObjectTraversal x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.OptionArgs"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "objectTraversal"),
@@ -1659,7 +1659,7 @@ optionArgsObjectTraversal x =
 
 optionArgsPredicateTraversal :: Phantoms.TTerm Gremlin.TraversalPredicateAndNestedTraversal -> Phantoms.TTerm Gremlin.OptionArgs
 optionArgsPredicateTraversal x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.OptionArgs"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "predicateTraversal"),
@@ -1667,7 +1667,7 @@ optionArgsPredicateTraversal x =
 
 optionArgsTraversal :: Phantoms.TTerm Gremlin.NestedTraversal -> Phantoms.TTerm Gremlin.OptionArgs
 optionArgsTraversal x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.OptionArgs"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "traversal"),
@@ -1855,7 +1855,7 @@ optionalTraversalScopeArgumentAndStringArgumentWithString original newVal =
 
 pageRankConstantsEdges :: Phantoms.TTerm Gremlin.PageRankConstants
 pageRankConstantsEdges =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.PageRankConstants"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "edges"),
@@ -1863,7 +1863,7 @@ pageRankConstantsEdges =
 
 pageRankConstantsPropertyName :: Phantoms.TTerm Gremlin.PageRankConstants
 pageRankConstantsPropertyName =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.PageRankConstants"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "propertyName"),
@@ -1871,7 +1871,7 @@ pageRankConstantsPropertyName =
 
 pageRankConstantsTimes :: Phantoms.TTerm Gremlin.PageRankConstants
 pageRankConstantsTimes =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.PageRankConstants"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "times"),
@@ -1879,7 +1879,7 @@ pageRankConstantsTimes =
 
 peerPressureConstantsEdges :: Phantoms.TTerm Gremlin.PeerPressureConstants
 peerPressureConstantsEdges =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.PeerPressureConstants"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "edges"),
@@ -1887,7 +1887,7 @@ peerPressureConstantsEdges =
 
 peerPressureConstantsPropertyName :: Phantoms.TTerm Gremlin.PeerPressureConstants
 peerPressureConstantsPropertyName =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.PeerPressureConstants"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "propertyName"),
@@ -1895,7 +1895,7 @@ peerPressureConstantsPropertyName =
 
 peerPressureConstantsTimes :: Phantoms.TTerm Gremlin.PeerPressureConstants
 peerPressureConstantsTimes =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.PeerPressureConstants"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "times"),
@@ -1963,7 +1963,7 @@ popStringsArgumentWithString original newVal =
 
 predicateOrTraversalPredicate :: Phantoms.TTerm Gremlin.TraversalPredicate -> Phantoms.TTerm Gremlin.PredicateOrTraversal
 predicateOrTraversalPredicate x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.PredicateOrTraversal"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "predicate"),
@@ -1971,7 +1971,7 @@ predicateOrTraversalPredicate x =
 
 predicateOrTraversalTraversal :: Phantoms.TTerm Gremlin.NestedTraversal -> Phantoms.TTerm Gremlin.PredicateOrTraversal
 predicateOrTraversalTraversal x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.PredicateOrTraversal"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "traversal"),
@@ -2087,7 +2087,7 @@ predicateTraversalArgumentWithTraversal2 original newVal =
 
 propertyArgsCardinalityObject :: Phantoms.TTerm Gremlin.GenericLiteralMapNullableArgumentAndTraversalCardinalityArgument -> Phantoms.TTerm Gremlin.PropertyArgs
 propertyArgsCardinalityObject x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.PropertyArgs"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "cardinalityObject"),
@@ -2095,7 +2095,7 @@ propertyArgsCardinalityObject x =
 
 propertyArgsCardinalityObjects :: Phantoms.TTerm Gremlin.TraversalCardinalityArgumentAndObjects -> Phantoms.TTerm Gremlin.PropertyArgs
 propertyArgsCardinalityObjects x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.PropertyArgs"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "cardinalityObjects"),
@@ -2103,7 +2103,7 @@ propertyArgsCardinalityObjects x =
 
 propertyArgsObject :: Phantoms.TTerm Gremlin.GenericLiteralMapNullableArgument -> Phantoms.TTerm Gremlin.PropertyArgs
 propertyArgsObject x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.PropertyArgs"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "object"),
@@ -2111,7 +2111,7 @@ propertyArgsObject x =
 
 propertyArgsObjects :: Phantoms.TTerm [Gremlin.GenericLiteralArgument] -> Phantoms.TTerm Gremlin.PropertyArgs
 propertyArgsObjects x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.PropertyArgs"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "objects"),
@@ -2119,7 +2119,7 @@ propertyArgsObjects x =
 
 queryEmpty :: Phantoms.TTerm Gremlin.Query
 queryEmpty =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.Query"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "empty"),
@@ -2133,7 +2133,7 @@ queryList x =
 
 queryRootTraversal :: Phantoms.TTerm Gremlin.RootTraversalQuery -> Phantoms.TTerm Gremlin.Query
 queryRootTraversal x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.Query"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "rootTraversal"),
@@ -2141,7 +2141,7 @@ queryRootTraversal x =
 
 queryToString :: Phantoms.TTerm Gremlin.Query
 queryToString =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.Query"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "toString"),
@@ -2149,7 +2149,7 @@ queryToString =
 
 queryTraversalSource :: Phantoms.TTerm Gremlin.TraversalSourceQuery -> Phantoms.TTerm Gremlin.Query
 queryTraversalSource x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.Query"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "traversalSource"),
@@ -2661,7 +2661,7 @@ scopeStringArgumentWithStrings original newVal =
 
 selectArgsColumn :: Phantoms.TTerm Gremlin.TraversalColumnArgument -> Phantoms.TTerm Gremlin.SelectArgs
 selectArgsColumn x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.SelectArgs"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "column"),
@@ -2669,7 +2669,7 @@ selectArgsColumn x =
 
 selectArgsPopStrings :: Phantoms.TTerm Gremlin.PopStringsArgument -> Phantoms.TTerm Gremlin.SelectArgs
 selectArgsPopStrings x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.SelectArgs"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "popStrings"),
@@ -2677,7 +2677,7 @@ selectArgsPopStrings x =
 
 selectArgsPopTraversal :: Phantoms.TTerm Gremlin.TraversalPopArgumentAndNestedTraversal -> Phantoms.TTerm Gremlin.SelectArgs
 selectArgsPopTraversal x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.SelectArgs"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "popTraversal"),
@@ -2685,7 +2685,7 @@ selectArgsPopTraversal x =
 
 selectArgsStrings :: Phantoms.TTerm [Gremlin.StringArgument] -> Phantoms.TTerm Gremlin.SelectArgs
 selectArgsStrings x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.SelectArgs"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "strings"),
@@ -2693,7 +2693,7 @@ selectArgsStrings x =
 
 selectArgsTraversal :: Phantoms.TTerm Gremlin.NestedTraversal -> Phantoms.TTerm Gremlin.SelectArgs
 selectArgsTraversal x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.SelectArgs"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "traversal"),
@@ -2701,7 +2701,7 @@ selectArgsTraversal x =
 
 serviceArgumentsMap :: Phantoms.TTerm (Maybe Gremlin.GenericLiteralMapArgument) -> Phantoms.TTerm Gremlin.ServiceArguments
 serviceArgumentsMap x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.ServiceArguments"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "map"),
@@ -2709,7 +2709,7 @@ serviceArgumentsMap x =
 
 serviceArgumentsTraversal :: Phantoms.TTerm (Maybe Gremlin.NestedTraversal) -> Phantoms.TTerm Gremlin.ServiceArguments
 serviceArgumentsTraversal x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.ServiceArguments"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "traversal"),
@@ -2777,7 +2777,7 @@ serviceCallWithService original newVal =
 
 shortestPathConstantsDistance :: Phantoms.TTerm Gremlin.ShortestPathConstants
 shortestPathConstantsDistance =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.ShortestPathConstants"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "distance"),
@@ -2785,7 +2785,7 @@ shortestPathConstantsDistance =
 
 shortestPathConstantsEdges :: Phantoms.TTerm Gremlin.ShortestPathConstants
 shortestPathConstantsEdges =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.ShortestPathConstants"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "edges"),
@@ -2793,7 +2793,7 @@ shortestPathConstantsEdges =
 
 shortestPathConstantsIncludeEdges :: Phantoms.TTerm Gremlin.ShortestPathConstants
 shortestPathConstantsIncludeEdges =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.ShortestPathConstants"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "includeEdges"),
@@ -2801,7 +2801,7 @@ shortestPathConstantsIncludeEdges =
 
 shortestPathConstantsMaxDistance :: Phantoms.TTerm Gremlin.ShortestPathConstants
 shortestPathConstantsMaxDistance =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.ShortestPathConstants"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "maxDistance"),
@@ -2809,7 +2809,7 @@ shortestPathConstantsMaxDistance =
 
 shortestPathConstantsTarget :: Phantoms.TTerm Gremlin.ShortestPathConstants
 shortestPathConstantsTarget =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.ShortestPathConstants"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "target"),
@@ -3057,7 +3057,7 @@ stringArgumentAndOptionalStringLiteralVarargsWithRest original newVal =
 
 stringArgumentOrNestedTraversalString :: Phantoms.TTerm Gremlin.StringArgument -> Phantoms.TTerm Gremlin.StringArgumentOrNestedTraversal
 stringArgumentOrNestedTraversalString x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.StringArgumentOrNestedTraversal"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "string"),
@@ -3065,7 +3065,7 @@ stringArgumentOrNestedTraversalString x =
 
 stringArgumentOrNestedTraversalTraversal :: Phantoms.TTerm Gremlin.NestedTraversal -> Phantoms.TTerm Gremlin.StringArgumentOrNestedTraversal
 stringArgumentOrNestedTraversalTraversal x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.StringArgumentOrNestedTraversal"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "traversal"),
@@ -3073,7 +3073,7 @@ stringArgumentOrNestedTraversalTraversal x =
 
 stringArgumentValue :: Phantoms.TTerm String -> Phantoms.TTerm Gremlin.StringArgument
 stringArgumentValue x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.StringArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "value"),
@@ -3081,7 +3081,7 @@ stringArgumentValue x =
 
 stringArgumentVariable :: Phantoms.TTerm Gremlin.Identifier -> Phantoms.TTerm Gremlin.StringArgument
 stringArgumentVariable x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.StringArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "variable"),
@@ -3209,7 +3209,7 @@ stringNullableArgumentAndTraversalPredicateWithString original newVal =
 
 stringNullableArgumentValue :: Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Gremlin.StringNullableArgument
 stringNullableArgumentValue x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.StringNullableArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "value"),
@@ -3217,7 +3217,7 @@ stringNullableArgumentValue x =
 
 stringNullableArgumentVariable :: Phantoms.TTerm Gremlin.Identifier -> Phantoms.TTerm Gremlin.StringNullableArgument
 stringNullableArgumentVariable x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.StringNullableArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "variable"),
@@ -3300,7 +3300,7 @@ structureVertex new id label =
 
 structureVertexArgumentValue :: Phantoms.TTerm Gremlin.StructureVertex -> Phantoms.TTerm Gremlin.StructureVertexArgument
 structureVertexArgumentValue x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.StructureVertexArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "value"),
@@ -3308,7 +3308,7 @@ structureVertexArgumentValue x =
 
 structureVertexArgumentVariable :: Phantoms.TTerm Gremlin.Identifier -> Phantoms.TTerm Gremlin.StructureVertexArgument
 structureVertexArgumentVariable x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.StructureVertexArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "variable"),
@@ -3637,7 +3637,7 @@ terminatedTraversalWithTerminal original newVal =
 
 toArgsDirection :: Phantoms.TTerm Gremlin.DirectionAndVarargs -> Phantoms.TTerm Gremlin.ToArgs
 toArgsDirection x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.ToArgs"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "direction"),
@@ -3645,7 +3645,7 @@ toArgsDirection x =
 
 toArgsString :: Phantoms.TTerm Gremlin.StringArgument -> Phantoms.TTerm Gremlin.ToArgs
 toArgsString x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.ToArgs"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "string"),
@@ -3653,7 +3653,7 @@ toArgsString x =
 
 toArgsTraversal :: Phantoms.TTerm Gremlin.NestedTraversal -> Phantoms.TTerm Gremlin.ToArgs
 toArgsTraversal x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.ToArgs"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "traversal"),
@@ -3661,7 +3661,7 @@ toArgsTraversal x =
 
 toArgsVertex :: Phantoms.TTerm Gremlin.StructureVertexArgument -> Phantoms.TTerm Gremlin.ToArgs
 toArgsVertex x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.ToArgs"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "vertex"),
@@ -3669,7 +3669,7 @@ toArgsVertex x =
 
 transactionPartBegin :: Phantoms.TTerm Gremlin.TransactionPart
 transactionPartBegin =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TransactionPart"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "begin"),
@@ -3677,7 +3677,7 @@ transactionPartBegin =
 
 transactionPartCommit :: Phantoms.TTerm Gremlin.TransactionPart
 transactionPartCommit =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TransactionPart"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "commit"),
@@ -3685,7 +3685,7 @@ transactionPartCommit =
 
 transactionPartRollback :: Phantoms.TTerm Gremlin.TransactionPart
 transactionPartRollback =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TransactionPart"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "rollback"),
@@ -3693,7 +3693,7 @@ transactionPartRollback =
 
 traversalBiFunctionArgumentValue :: Phantoms.TTerm Gremlin.TraversalOperator -> Phantoms.TTerm Gremlin.TraversalBiFunctionArgument
 traversalBiFunctionArgumentValue x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalBiFunctionArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "value"),
@@ -3701,7 +3701,7 @@ traversalBiFunctionArgumentValue x =
 
 traversalBiFunctionArgumentVariable :: Phantoms.TTerm Gremlin.Identifier -> Phantoms.TTerm Gremlin.TraversalBiFunctionArgument
 traversalBiFunctionArgumentVariable x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalBiFunctionArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "variable"),
@@ -3769,7 +3769,7 @@ traversalCardinalityArgumentAndObjectsWithObjects original newVal =
 
 traversalCardinalityArgumentValue :: Phantoms.TTerm Gremlin.TraversalCardinality -> Phantoms.TTerm Gremlin.TraversalCardinalityArgument
 traversalCardinalityArgumentValue x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalCardinalityArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "value"),
@@ -3777,7 +3777,7 @@ traversalCardinalityArgumentValue x =
 
 traversalCardinalityArgumentVariable :: Phantoms.TTerm Gremlin.Identifier -> Phantoms.TTerm Gremlin.TraversalCardinalityArgument
 traversalCardinalityArgumentVariable x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalCardinalityArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "variable"),
@@ -3785,7 +3785,7 @@ traversalCardinalityArgumentVariable x =
 
 traversalCardinalityList :: Phantoms.TTerm Gremlin.GenericLiteral -> Phantoms.TTerm Gremlin.TraversalCardinality
 traversalCardinalityList x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalCardinality"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "list"),
@@ -3793,7 +3793,7 @@ traversalCardinalityList x =
 
 traversalCardinalitySet :: Phantoms.TTerm Gremlin.GenericLiteral -> Phantoms.TTerm Gremlin.TraversalCardinality
 traversalCardinalitySet x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalCardinality"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "set"),
@@ -3801,7 +3801,7 @@ traversalCardinalitySet x =
 
 traversalCardinalitySingle :: Phantoms.TTerm Gremlin.GenericLiteral -> Phantoms.TTerm Gremlin.TraversalCardinality
 traversalCardinalitySingle x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalCardinality"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "single"),
@@ -3809,7 +3809,7 @@ traversalCardinalitySingle x =
 
 traversalColumnArgumentValue :: Phantoms.TTerm Gremlin.TraversalColumn -> Phantoms.TTerm Gremlin.TraversalColumnArgument
 traversalColumnArgumentValue x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalColumnArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "value"),
@@ -3817,7 +3817,7 @@ traversalColumnArgumentValue x =
 
 traversalColumnArgumentVariable :: Phantoms.TTerm Gremlin.Identifier -> Phantoms.TTerm Gremlin.TraversalColumnArgument
 traversalColumnArgumentVariable x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalColumnArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "variable"),
@@ -3825,7 +3825,7 @@ traversalColumnArgumentVariable x =
 
 traversalColumnKeys :: Phantoms.TTerm Gremlin.TraversalColumn
 traversalColumnKeys =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalColumn"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "keys"),
@@ -3833,7 +3833,7 @@ traversalColumnKeys =
 
 traversalColumnValues :: Phantoms.TTerm Gremlin.TraversalColumn
 traversalColumnValues =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalColumn"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "values"),
@@ -3841,7 +3841,7 @@ traversalColumnValues =
 
 traversalComparatorArgumentValue :: Phantoms.TTerm Gremlin.TraversalOrder -> Phantoms.TTerm Gremlin.TraversalComparatorArgument
 traversalComparatorArgumentValue x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalComparatorArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "value"),
@@ -3849,7 +3849,7 @@ traversalComparatorArgumentValue x =
 
 traversalComparatorArgumentVariable :: Phantoms.TTerm Gremlin.Identifier -> Phantoms.TTerm Gremlin.TraversalComparatorArgument
 traversalComparatorArgumentVariable x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalComparatorArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "variable"),
@@ -3857,7 +3857,7 @@ traversalComparatorArgumentVariable x =
 
 traversalDTArgumentValue :: Phantoms.TTerm Gremlin.TraversalDT -> Phantoms.TTerm Gremlin.TraversalDTArgument
 traversalDTArgumentValue x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalDTArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "value"),
@@ -3865,7 +3865,7 @@ traversalDTArgumentValue x =
 
 traversalDTArgumentVariable :: Phantoms.TTerm Gremlin.Identifier -> Phantoms.TTerm Gremlin.TraversalDTArgument
 traversalDTArgumentVariable x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalDTArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "variable"),
@@ -3873,7 +3873,7 @@ traversalDTArgumentVariable x =
 
 traversalDTDay :: Phantoms.TTerm Gremlin.TraversalDT
 traversalDTDay =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalDT"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "day"),
@@ -3881,7 +3881,7 @@ traversalDTDay =
 
 traversalDTHour :: Phantoms.TTerm Gremlin.TraversalDT
 traversalDTHour =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalDT"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "hour"),
@@ -3889,7 +3889,7 @@ traversalDTHour =
 
 traversalDTMinute :: Phantoms.TTerm Gremlin.TraversalDT
 traversalDTMinute =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalDT"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "minute"),
@@ -3897,7 +3897,7 @@ traversalDTMinute =
 
 traversalDTSecond :: Phantoms.TTerm Gremlin.TraversalDT
 traversalDTSecond =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalDT"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "second"),
@@ -3905,7 +3905,7 @@ traversalDTSecond =
 
 traversalDirectionArgumentValue :: Phantoms.TTerm Gremlin.TraversalDirection -> Phantoms.TTerm Gremlin.TraversalDirectionArgument
 traversalDirectionArgumentValue x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalDirectionArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "value"),
@@ -3913,7 +3913,7 @@ traversalDirectionArgumentValue x =
 
 traversalDirectionArgumentVariable :: Phantoms.TTerm Gremlin.Identifier -> Phantoms.TTerm Gremlin.TraversalDirectionArgument
 traversalDirectionArgumentVariable x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalDirectionArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "variable"),
@@ -3921,7 +3921,7 @@ traversalDirectionArgumentVariable x =
 
 traversalDirectionBoth :: Phantoms.TTerm Gremlin.TraversalDirection
 traversalDirectionBoth =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalDirection"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "both"),
@@ -3929,7 +3929,7 @@ traversalDirectionBoth =
 
 traversalDirectionIn :: Phantoms.TTerm Gremlin.TraversalDirection
 traversalDirectionIn =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalDirection"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "in"),
@@ -3937,7 +3937,7 @@ traversalDirectionIn =
 
 traversalDirectionOut :: Phantoms.TTerm Gremlin.TraversalDirection
 traversalDirectionOut =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalDirection"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "out"),
@@ -3945,7 +3945,7 @@ traversalDirectionOut =
 
 traversalFunctionArgumentOrStringArgumentOrNestedTraversalFunction :: Phantoms.TTerm Gremlin.TraversalFunctionArgument -> Phantoms.TTerm Gremlin.TraversalFunctionArgumentOrStringArgumentOrNestedTraversal
 traversalFunctionArgumentOrStringArgumentOrNestedTraversalFunction x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalFunctionArgumentOrStringArgumentOrNestedTraversal"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "function"),
@@ -3953,7 +3953,7 @@ traversalFunctionArgumentOrStringArgumentOrNestedTraversalFunction x =
 
 traversalFunctionArgumentOrStringArgumentOrNestedTraversalString :: Phantoms.TTerm Gremlin.StringArgument -> Phantoms.TTerm Gremlin.TraversalFunctionArgumentOrStringArgumentOrNestedTraversal
 traversalFunctionArgumentOrStringArgumentOrNestedTraversalString x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalFunctionArgumentOrStringArgumentOrNestedTraversal"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "string"),
@@ -3961,7 +3961,7 @@ traversalFunctionArgumentOrStringArgumentOrNestedTraversalString x =
 
 traversalFunctionArgumentOrStringArgumentOrNestedTraversalTraversal :: Phantoms.TTerm Gremlin.NestedTraversal -> Phantoms.TTerm Gremlin.TraversalFunctionArgumentOrStringArgumentOrNestedTraversal
 traversalFunctionArgumentOrStringArgumentOrNestedTraversalTraversal x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalFunctionArgumentOrStringArgumentOrNestedTraversal"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "traversal"),
@@ -3969,7 +3969,7 @@ traversalFunctionArgumentOrStringArgumentOrNestedTraversalTraversal x =
 
 traversalFunctionArgumentValue :: Phantoms.TTerm Gremlin.TraversalFunction -> Phantoms.TTerm Gremlin.TraversalFunctionArgument
 traversalFunctionArgumentValue x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalFunctionArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "value"),
@@ -3977,7 +3977,7 @@ traversalFunctionArgumentValue x =
 
 traversalFunctionArgumentVariable :: Phantoms.TTerm Gremlin.Identifier -> Phantoms.TTerm Gremlin.TraversalFunctionArgument
 traversalFunctionArgumentVariable x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalFunctionArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "variable"),
@@ -3985,7 +3985,7 @@ traversalFunctionArgumentVariable x =
 
 traversalFunctionColumn :: Phantoms.TTerm Gremlin.TraversalColumn -> Phantoms.TTerm Gremlin.TraversalFunction
 traversalFunctionColumn x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalFunction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "column"),
@@ -3993,7 +3993,7 @@ traversalFunctionColumn x =
 
 traversalFunctionToken :: Phantoms.TTerm Gremlin.TraversalToken -> Phantoms.TTerm Gremlin.TraversalFunction
 traversalFunctionToken x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalFunction"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "token"),
@@ -4169,7 +4169,7 @@ traversalMergeArgumentAndNestedTraversalWithTraversal original newVal =
 
 traversalMergeArgumentValue :: Phantoms.TTerm Gremlin.TraversalMerge -> Phantoms.TTerm Gremlin.TraversalMergeArgument
 traversalMergeArgumentValue x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMergeArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "value"),
@@ -4177,7 +4177,7 @@ traversalMergeArgumentValue x =
 
 traversalMergeArgumentVariable :: Phantoms.TTerm Gremlin.Identifier -> Phantoms.TTerm Gremlin.TraversalMergeArgument
 traversalMergeArgumentVariable x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMergeArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "variable"),
@@ -4185,7 +4185,7 @@ traversalMergeArgumentVariable x =
 
 traversalMergeInV :: Phantoms.TTerm Gremlin.TraversalMerge
 traversalMergeInV =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMerge"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "inV"),
@@ -4193,7 +4193,7 @@ traversalMergeInV =
 
 traversalMergeOnCreate :: Phantoms.TTerm Gremlin.TraversalMerge
 traversalMergeOnCreate =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMerge"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "onCreate"),
@@ -4201,7 +4201,7 @@ traversalMergeOnCreate =
 
 traversalMergeOnMatch :: Phantoms.TTerm Gremlin.TraversalMerge
 traversalMergeOnMatch =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMerge"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "onMatch"),
@@ -4209,7 +4209,7 @@ traversalMergeOnMatch =
 
 traversalMergeOutV :: Phantoms.TTerm Gremlin.TraversalMerge
 traversalMergeOutV =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMerge"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "outV"),
@@ -4217,7 +4217,7 @@ traversalMergeOutV =
 
 traversalMethodAddE :: Phantoms.TTerm Gremlin.StringArgumentOrNestedTraversal -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodAddE x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "addE"),
@@ -4225,7 +4225,7 @@ traversalMethodAddE x =
 
 traversalMethodAddV :: Phantoms.TTerm (Maybe Gremlin.StringArgumentOrNestedTraversal) -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodAddV x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "addV"),
@@ -4233,7 +4233,7 @@ traversalMethodAddV x =
 
 traversalMethodAggregate :: Phantoms.TTerm Gremlin.OptionalTraversalScopeArgumentAndStringArgument -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodAggregate x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "aggregate"),
@@ -4241,7 +4241,7 @@ traversalMethodAggregate x =
 
 traversalMethodAll :: Phantoms.TTerm Gremlin.TraversalPredicate -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodAll x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "all"),
@@ -4249,7 +4249,7 @@ traversalMethodAll x =
 
 traversalMethodAnd :: Phantoms.TTerm [Gremlin.NestedTraversal] -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodAnd x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "and"),
@@ -4257,7 +4257,7 @@ traversalMethodAnd x =
 
 traversalMethodAny :: Phantoms.TTerm Gremlin.TraversalPredicate -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodAny x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "any"),
@@ -4265,7 +4265,7 @@ traversalMethodAny x =
 
 traversalMethodAs :: Phantoms.TTerm Gremlin.StringArgumentAndOptionalStringLiteralVarargs -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodAs x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "as"),
@@ -4273,7 +4273,7 @@ traversalMethodAs x =
 
 traversalMethodAsDate :: Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodAsDate =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "asDate"),
@@ -4281,7 +4281,7 @@ traversalMethodAsDate =
 
 traversalMethodAsString :: Phantoms.TTerm (Maybe Gremlin.TraversalScopeArgument) -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodAsString x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "asString"),
@@ -4289,7 +4289,7 @@ traversalMethodAsString x =
 
 traversalMethodBarrier :: Phantoms.TTerm (Maybe Gremlin.TraversalSackMethodArgumentOrIntegerArgument) -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodBarrier x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "barrier"),
@@ -4297,7 +4297,7 @@ traversalMethodBarrier x =
 
 traversalMethodBoth :: Phantoms.TTerm [Gremlin.StringNullableArgument] -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodBoth x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "both"),
@@ -4305,7 +4305,7 @@ traversalMethodBoth x =
 
 traversalMethodBothE :: Phantoms.TTerm [Gremlin.StringNullableArgument] -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodBothE x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "bothE"),
@@ -4313,7 +4313,7 @@ traversalMethodBothE x =
 
 traversalMethodBothV :: Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodBothV =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "bothV"),
@@ -4321,7 +4321,7 @@ traversalMethodBothV =
 
 traversalMethodBranch :: Phantoms.TTerm Gremlin.NestedTraversal -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodBranch x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "branch"),
@@ -4329,7 +4329,7 @@ traversalMethodBranch x =
 
 traversalMethodBy :: Phantoms.TTerm Gremlin.ByArgs -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodBy x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "by"),
@@ -4337,7 +4337,7 @@ traversalMethodBy x =
 
 traversalMethodCall :: Phantoms.TTerm Gremlin.ServiceCall -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodCall x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "call"),
@@ -4345,7 +4345,7 @@ traversalMethodCall x =
 
 traversalMethodCap :: Phantoms.TTerm Gremlin.StringArgumentAndOptionalStringLiteralVarargs -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodCap x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "cap"),
@@ -4353,7 +4353,7 @@ traversalMethodCap x =
 
 traversalMethodChoose :: Phantoms.TTerm Gremlin.ChooseArgs -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodChoose x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "choose"),
@@ -4361,7 +4361,7 @@ traversalMethodChoose x =
 
 traversalMethodCoalesce :: Phantoms.TTerm [Gremlin.NestedTraversal] -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodCoalesce x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "coalesce"),
@@ -4369,7 +4369,7 @@ traversalMethodCoalesce x =
 
 traversalMethodCoin :: Phantoms.TTerm Gremlin.FloatArgument -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodCoin x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "coin"),
@@ -4377,7 +4377,7 @@ traversalMethodCoin x =
 
 traversalMethodCombine :: Phantoms.TTerm Gremlin.GenericLiteralArgument -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodCombine x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "combine"),
@@ -4385,7 +4385,7 @@ traversalMethodCombine x =
 
 traversalMethodConcat :: Phantoms.TTerm Gremlin.ConcatArgs -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodConcat x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "concat"),
@@ -4393,7 +4393,7 @@ traversalMethodConcat x =
 
 traversalMethodConjoin :: Phantoms.TTerm Gremlin.StringArgument -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodConjoin x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "conjoin"),
@@ -4401,7 +4401,7 @@ traversalMethodConjoin x =
 
 traversalMethodConnectedComponent :: Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodConnectedComponent =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "connectedComponent"),
@@ -4409,7 +4409,7 @@ traversalMethodConnectedComponent =
 
 traversalMethodConstant :: Phantoms.TTerm Gremlin.GenericLiteralArgument -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodConstant x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "constant"),
@@ -4417,7 +4417,7 @@ traversalMethodConstant x =
 
 traversalMethodCount :: Phantoms.TTerm (Maybe Gremlin.TraversalScopeArgument) -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodCount x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "count"),
@@ -4425,7 +4425,7 @@ traversalMethodCount x =
 
 traversalMethodCyclicPath :: Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodCyclicPath =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "cyclicPath"),
@@ -4433,7 +4433,7 @@ traversalMethodCyclicPath =
 
 traversalMethodDateAdd :: Phantoms.TTerm Gremlin.DateAddArgs -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodDateAdd x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "dateAdd"),
@@ -4441,7 +4441,7 @@ traversalMethodDateAdd x =
 
 traversalMethodDateDiff :: Phantoms.TTerm Gremlin.DateDiffArgs -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodDateDiff x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "dateDiff"),
@@ -4449,7 +4449,7 @@ traversalMethodDateDiff x =
 
 traversalMethodDedup :: Phantoms.TTerm Gremlin.DedupArgs -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodDedup x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "dedup"),
@@ -4457,7 +4457,7 @@ traversalMethodDedup x =
 
 traversalMethodDifference :: Phantoms.TTerm Gremlin.GenericLiteralArgument -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodDifference x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "difference"),
@@ -4465,7 +4465,7 @@ traversalMethodDifference x =
 
 traversalMethodDisjunct :: Phantoms.TTerm Gremlin.GenericLiteralArgument -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodDisjunct x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "disjunct"),
@@ -4473,7 +4473,7 @@ traversalMethodDisjunct x =
 
 traversalMethodDrop :: Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodDrop =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "drop"),
@@ -4481,7 +4481,7 @@ traversalMethodDrop =
 
 traversalMethodE :: Phantoms.TTerm [Gremlin.GenericLiteralArgument] -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodE x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "e"),
@@ -4489,7 +4489,7 @@ traversalMethodE x =
 
 traversalMethodElement :: Phantoms.TTerm [Gremlin.StringNullableArgument] -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodElement x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "element"),
@@ -4497,7 +4497,7 @@ traversalMethodElement x =
 
 traversalMethodElementMap :: Phantoms.TTerm [Gremlin.StringNullableArgument] -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodElementMap x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "elementMap"),
@@ -4505,7 +4505,7 @@ traversalMethodElementMap x =
 
 traversalMethodEmit :: Phantoms.TTerm (Maybe Gremlin.PredicateOrTraversal) -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodEmit x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "emit"),
@@ -4513,7 +4513,7 @@ traversalMethodEmit x =
 
 traversalMethodFail :: Phantoms.TTerm (Maybe Gremlin.StringArgument) -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodFail x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "fail"),
@@ -4521,7 +4521,7 @@ traversalMethodFail x =
 
 traversalMethodFilter :: Phantoms.TTerm Gremlin.PredicateOrTraversal -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodFilter x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "filter"),
@@ -4529,7 +4529,7 @@ traversalMethodFilter x =
 
 traversalMethodFlatMap :: Phantoms.TTerm Gremlin.NestedTraversal -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodFlatMap x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "flatMap"),
@@ -4537,7 +4537,7 @@ traversalMethodFlatMap x =
 
 traversalMethodFold :: Phantoms.TTerm (Maybe Gremlin.GenericLiteralArgumentAndTraversalBiFunctionArgument) -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodFold x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "fold"),
@@ -4545,7 +4545,7 @@ traversalMethodFold x =
 
 traversalMethodFormat :: Phantoms.TTerm Gremlin.StringArgument -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodFormat x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "format"),
@@ -4553,7 +4553,7 @@ traversalMethodFormat x =
 
 traversalMethodFrom :: Phantoms.TTerm Gremlin.FromArgs -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodFrom x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "from"),
@@ -4561,7 +4561,7 @@ traversalMethodFrom x =
 
 traversalMethodGroup :: Phantoms.TTerm (Maybe Gremlin.StringArgument) -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodGroup x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "group"),
@@ -4569,7 +4569,7 @@ traversalMethodGroup x =
 
 traversalMethodGroupCount :: Phantoms.TTerm (Maybe Gremlin.StringArgument) -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodGroupCount x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "groupCount"),
@@ -4577,7 +4577,7 @@ traversalMethodGroupCount x =
 
 traversalMethodHas :: Phantoms.TTerm Gremlin.HasArgs -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodHas x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "has"),
@@ -4585,7 +4585,7 @@ traversalMethodHas x =
 
 traversalMethodHasId :: Phantoms.TTerm Gremlin.GenericLiteralArgumentAndTraversalPredicate -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodHasId x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "hasId"),
@@ -4593,7 +4593,7 @@ traversalMethodHasId x =
 
 traversalMethodHasKey :: Phantoms.TTerm Gremlin.TraversalPredicateOrStringLiteralVarargs -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodHasKey x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "hasKey"),
@@ -4601,7 +4601,7 @@ traversalMethodHasKey x =
 
 traversalMethodHasLabel :: Phantoms.TTerm Gremlin.TraversalPredicateOrStringLiteralVarargs -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodHasLabel x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "hasLabel"),
@@ -4609,7 +4609,7 @@ traversalMethodHasLabel x =
 
 traversalMethodHasNot :: Phantoms.TTerm Gremlin.StringNullableArgument -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodHasNot x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "hasNot"),
@@ -4617,7 +4617,7 @@ traversalMethodHasNot x =
 
 traversalMethodHasValue :: Phantoms.TTerm Gremlin.TraversalPredicateOrGenericLiteralArgument -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodHasValue x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "hasValue"),
@@ -4625,7 +4625,7 @@ traversalMethodHasValue x =
 
 traversalMethodId :: Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodId =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "id"),
@@ -4633,7 +4633,7 @@ traversalMethodId =
 
 traversalMethodIdentity :: Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodIdentity =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "identity"),
@@ -4641,7 +4641,7 @@ traversalMethodIdentity =
 
 traversalMethodIn :: Phantoms.TTerm [Gremlin.StringNullableArgument] -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodIn x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "in"),
@@ -4649,7 +4649,7 @@ traversalMethodIn x =
 
 traversalMethodInE :: Phantoms.TTerm [Gremlin.StringNullableArgument] -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodInE x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "inE"),
@@ -4657,7 +4657,7 @@ traversalMethodInE x =
 
 traversalMethodInV :: Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodInV =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "inV"),
@@ -4665,7 +4665,7 @@ traversalMethodInV =
 
 traversalMethodIndex :: Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodIndex =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "index"),
@@ -4673,7 +4673,7 @@ traversalMethodIndex =
 
 traversalMethodInject :: Phantoms.TTerm [Gremlin.GenericLiteralArgument] -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodInject x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "inject"),
@@ -4681,7 +4681,7 @@ traversalMethodInject x =
 
 traversalMethodIntersect :: Phantoms.TTerm Gremlin.GenericLiteralArgument -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodIntersect x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "intersect"),
@@ -4689,7 +4689,7 @@ traversalMethodIntersect x =
 
 traversalMethodIs :: Phantoms.TTerm Gremlin.TraversalPredicateOrGenericLiteralArgument -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodIs x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "is"),
@@ -4697,7 +4697,7 @@ traversalMethodIs x =
 
 traversalMethodKey :: Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodKey =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "key"),
@@ -4705,7 +4705,7 @@ traversalMethodKey =
 
 traversalMethodLTrim :: Phantoms.TTerm (Maybe Gremlin.TraversalScopeArgument) -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodLTrim x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "lTrim"),
@@ -4713,7 +4713,7 @@ traversalMethodLTrim x =
 
 traversalMethodLabel :: Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodLabel =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "label"),
@@ -4721,7 +4721,7 @@ traversalMethodLabel =
 
 traversalMethodLength :: Phantoms.TTerm (Maybe Gremlin.TraversalScopeArgument) -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodLength x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "length"),
@@ -4729,7 +4729,7 @@ traversalMethodLength x =
 
 traversalMethodLimit :: Phantoms.TTerm Gremlin.OptionalTraversalScopeArgumentAndIntegerArgument -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodLimit x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "limit"),
@@ -4737,7 +4737,7 @@ traversalMethodLimit x =
 
 traversalMethodLocal :: Phantoms.TTerm Gremlin.NestedTraversal -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodLocal x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "local"),
@@ -4745,7 +4745,7 @@ traversalMethodLocal x =
 
 traversalMethodLoops :: Phantoms.TTerm (Maybe Gremlin.StringArgument) -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodLoops x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "loops"),
@@ -4753,7 +4753,7 @@ traversalMethodLoops x =
 
 traversalMethodMap :: Phantoms.TTerm Gremlin.NestedTraversal -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodMap x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "map"),
@@ -4761,7 +4761,7 @@ traversalMethodMap x =
 
 traversalMethodMatch :: Phantoms.TTerm [Gremlin.NestedTraversal] -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodMatch x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "match"),
@@ -4769,7 +4769,7 @@ traversalMethodMatch x =
 
 traversalMethodMath :: Phantoms.TTerm Gremlin.StringArgument -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodMath x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "math"),
@@ -4777,7 +4777,7 @@ traversalMethodMath x =
 
 traversalMethodMax :: Phantoms.TTerm (Maybe Gremlin.TraversalScopeArgument) -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodMax x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "max"),
@@ -4785,7 +4785,7 @@ traversalMethodMax x =
 
 traversalMethodMean :: Phantoms.TTerm (Maybe Gremlin.TraversalScopeArgument) -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodMean x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "mean"),
@@ -4793,7 +4793,7 @@ traversalMethodMean x =
 
 traversalMethodMerge :: Phantoms.TTerm Gremlin.GenericLiteralArgument -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodMerge x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "merge"),
@@ -4801,7 +4801,7 @@ traversalMethodMerge x =
 
 traversalMethodMergeE :: Phantoms.TTerm (Maybe Gremlin.GenericLiteralMapNullableArgumentOrNestedTraversal) -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodMergeE x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "mergeE"),
@@ -4809,7 +4809,7 @@ traversalMethodMergeE x =
 
 traversalMethodMergeV :: Phantoms.TTerm (Maybe Gremlin.GenericLiteralMapNullableArgumentOrNestedTraversal) -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodMergeV x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "mergeV"),
@@ -4817,7 +4817,7 @@ traversalMethodMergeV x =
 
 traversalMethodMin :: Phantoms.TTerm (Maybe Gremlin.TraversalScopeArgument) -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodMin x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "min"),
@@ -4825,7 +4825,7 @@ traversalMethodMin x =
 
 traversalMethodNone :: Phantoms.TTerm Gremlin.TraversalPredicate -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodNone x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "none"),
@@ -4833,7 +4833,7 @@ traversalMethodNone x =
 
 traversalMethodNot :: Phantoms.TTerm Gremlin.NestedTraversal -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodNot x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "not"),
@@ -4841,7 +4841,7 @@ traversalMethodNot x =
 
 traversalMethodOption :: Phantoms.TTerm Gremlin.OptionArgs -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodOption x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "option"),
@@ -4849,7 +4849,7 @@ traversalMethodOption x =
 
 traversalMethodOptional :: Phantoms.TTerm Gremlin.NestedTraversal -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodOptional x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "optional"),
@@ -4857,7 +4857,7 @@ traversalMethodOptional x =
 
 traversalMethodOr :: Phantoms.TTerm [Gremlin.NestedTraversal] -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodOr x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "or"),
@@ -4865,7 +4865,7 @@ traversalMethodOr x =
 
 traversalMethodOrder :: Phantoms.TTerm (Maybe Gremlin.TraversalScopeArgument) -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodOrder x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "order"),
@@ -4873,7 +4873,7 @@ traversalMethodOrder x =
 
 traversalMethodOtherV :: Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodOtherV =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "otherV"),
@@ -4881,7 +4881,7 @@ traversalMethodOtherV =
 
 traversalMethodOut :: Phantoms.TTerm [Gremlin.StringNullableArgument] -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodOut x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "out"),
@@ -4889,7 +4889,7 @@ traversalMethodOut x =
 
 traversalMethodOutE :: Phantoms.TTerm [Gremlin.StringNullableArgument] -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodOutE x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "outE"),
@@ -4897,7 +4897,7 @@ traversalMethodOutE x =
 
 traversalMethodOutV :: Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodOutV =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "outV"),
@@ -4905,7 +4905,7 @@ traversalMethodOutV =
 
 traversalMethodPageRank :: Phantoms.TTerm (Maybe Gremlin.FloatArgument) -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodPageRank x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "pageRank"),
@@ -4913,7 +4913,7 @@ traversalMethodPageRank x =
 
 traversalMethodPath :: Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodPath =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "path"),
@@ -4921,7 +4921,7 @@ traversalMethodPath =
 
 traversalMethodPeerPressure :: Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodPeerPressure =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "peerPressure"),
@@ -4929,7 +4929,7 @@ traversalMethodPeerPressure =
 
 traversalMethodProduct :: Phantoms.TTerm Gremlin.GenericLiteralArgument -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodProduct x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "product"),
@@ -4937,7 +4937,7 @@ traversalMethodProduct x =
 
 traversalMethodProfile :: Phantoms.TTerm (Maybe Gremlin.StringArgument) -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodProfile x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "profile"),
@@ -4945,7 +4945,7 @@ traversalMethodProfile x =
 
 traversalMethodProject :: Phantoms.TTerm Gremlin.StringArgumentAndOptionalStringLiteralVarargs -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodProject x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "project"),
@@ -4953,7 +4953,7 @@ traversalMethodProject x =
 
 traversalMethodProperties :: Phantoms.TTerm [Gremlin.StringNullableArgument] -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodProperties x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "properties"),
@@ -4961,7 +4961,7 @@ traversalMethodProperties x =
 
 traversalMethodProperty :: Phantoms.TTerm Gremlin.PropertyArgs -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodProperty x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "property"),
@@ -4969,7 +4969,7 @@ traversalMethodProperty x =
 
 traversalMethodPropertyMap :: Phantoms.TTerm [Gremlin.StringNullableArgument] -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodPropertyMap x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "propertyMap"),
@@ -4977,7 +4977,7 @@ traversalMethodPropertyMap x =
 
 traversalMethodRTrim :: Phantoms.TTerm (Maybe Gremlin.TraversalScopeArgument) -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodRTrim x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "rTrim"),
@@ -4985,7 +4985,7 @@ traversalMethodRTrim x =
 
 traversalMethodRange :: Phantoms.TTerm Gremlin.RangeArgs -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodRange x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "range"),
@@ -4993,7 +4993,7 @@ traversalMethodRange x =
 
 traversalMethodRead :: Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodRead =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "read"),
@@ -5001,7 +5001,7 @@ traversalMethodRead =
 
 traversalMethodRepeat :: Phantoms.TTerm Gremlin.OptionalStringArgumentAndNestedTraversal -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodRepeat x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "repeat"),
@@ -5009,7 +5009,7 @@ traversalMethodRepeat x =
 
 traversalMethodReplace :: Phantoms.TTerm Gremlin.ReplaceArgs -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodReplace x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "replace"),
@@ -5017,7 +5017,7 @@ traversalMethodReplace x =
 
 traversalMethodReverse :: Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodReverse =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "reverse"),
@@ -5025,7 +5025,7 @@ traversalMethodReverse =
 
 traversalMethodSack :: Phantoms.TTerm (Maybe Gremlin.TraversalBiFunctionArgument) -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodSack x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sack"),
@@ -5033,7 +5033,7 @@ traversalMethodSack x =
 
 traversalMethodSample :: Phantoms.TTerm Gremlin.OptionalTraversalScopeArgumentAndIntegerArgument -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodSample x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sample"),
@@ -5041,7 +5041,7 @@ traversalMethodSample x =
 
 traversalMethodSelect :: Phantoms.TTerm Gremlin.SelectArgs -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodSelect x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "select"),
@@ -5049,7 +5049,7 @@ traversalMethodSelect x =
 
 traversalMethodShortestPath :: Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodShortestPath =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "shortestPath"),
@@ -5057,7 +5057,7 @@ traversalMethodShortestPath =
 
 traversalMethodSideEffect :: Phantoms.TTerm Gremlin.NestedTraversal -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodSideEffect x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sideEffect"),
@@ -5065,7 +5065,7 @@ traversalMethodSideEffect x =
 
 traversalMethodSimplePath :: Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodSimplePath =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "simplePath"),
@@ -5073,7 +5073,7 @@ traversalMethodSimplePath =
 
 traversalMethodSkip :: Phantoms.TTerm Gremlin.OptionalTraversalScopeArgumentAndIntegerArgument -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodSkip x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "skip"),
@@ -5081,7 +5081,7 @@ traversalMethodSkip x =
 
 traversalMethodSplit :: Phantoms.TTerm Gremlin.SplitArgs -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodSplit x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "split"),
@@ -5089,7 +5089,7 @@ traversalMethodSplit x =
 
 traversalMethodStore :: Phantoms.TTerm Gremlin.StringArgument -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodStore x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "store"),
@@ -5097,7 +5097,7 @@ traversalMethodStore x =
 
 traversalMethodSubgraph :: Phantoms.TTerm Gremlin.StringArgument -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodSubgraph x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "subgraph"),
@@ -5105,7 +5105,7 @@ traversalMethodSubgraph x =
 
 traversalMethodSubstring :: Phantoms.TTerm Gremlin.SubstringArgs -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodSubstring x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "substring"),
@@ -5113,7 +5113,7 @@ traversalMethodSubstring x =
 
 traversalMethodSum :: Phantoms.TTerm (Maybe Gremlin.TraversalScopeArgument) -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodSum x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sum"),
@@ -5121,7 +5121,7 @@ traversalMethodSum x =
 
 traversalMethodTail :: Phantoms.TTerm (Maybe Gremlin.TailArgs) -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodTail x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "tail"),
@@ -5129,7 +5129,7 @@ traversalMethodTail x =
 
 traversalMethodTimes :: Phantoms.TTerm Gremlin.IntegerArgument -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodTimes x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "times"),
@@ -5137,7 +5137,7 @@ traversalMethodTimes x =
 
 traversalMethodTo :: Phantoms.TTerm Gremlin.ToArgs -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodTo x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "to"),
@@ -5145,7 +5145,7 @@ traversalMethodTo x =
 
 traversalMethodToE :: Phantoms.TTerm Gremlin.DirectionAndVarargs -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodToE x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "toE"),
@@ -5153,7 +5153,7 @@ traversalMethodToE x =
 
 traversalMethodToLower :: Phantoms.TTerm (Maybe Gremlin.TraversalScopeArgument) -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodToLower x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "toLower"),
@@ -5161,7 +5161,7 @@ traversalMethodToLower x =
 
 traversalMethodToUpper :: Phantoms.TTerm (Maybe Gremlin.TraversalScopeArgument) -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodToUpper x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "toUpper"),
@@ -5169,7 +5169,7 @@ traversalMethodToUpper x =
 
 traversalMethodToV :: Phantoms.TTerm Gremlin.TraversalDirectionArgument -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodToV x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "toV"),
@@ -5177,7 +5177,7 @@ traversalMethodToV x =
 
 traversalMethodTree :: Phantoms.TTerm (Maybe Gremlin.StringArgument) -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodTree x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "tree"),
@@ -5185,7 +5185,7 @@ traversalMethodTree x =
 
 traversalMethodTrim :: Phantoms.TTerm (Maybe Gremlin.TraversalScopeArgument) -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodTrim x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "trim"),
@@ -5193,7 +5193,7 @@ traversalMethodTrim x =
 
 traversalMethodUnfold :: Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodUnfold =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "unfold"),
@@ -5201,7 +5201,7 @@ traversalMethodUnfold =
 
 traversalMethodUnion :: Phantoms.TTerm [Gremlin.NestedTraversal] -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodUnion x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "union"),
@@ -5209,7 +5209,7 @@ traversalMethodUnion x =
 
 traversalMethodUntil :: Phantoms.TTerm Gremlin.PredicateOrTraversal -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodUntil x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "until"),
@@ -5217,7 +5217,7 @@ traversalMethodUntil x =
 
 traversalMethodV :: Phantoms.TTerm [Gremlin.GenericLiteralArgument] -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodV x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "v"),
@@ -5225,7 +5225,7 @@ traversalMethodV x =
 
 traversalMethodValue :: Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodValue =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "value"),
@@ -5233,7 +5233,7 @@ traversalMethodValue =
 
 traversalMethodValueMap :: Phantoms.TTerm Gremlin.ValueMapArgs -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodValueMap x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "valueMap"),
@@ -5241,7 +5241,7 @@ traversalMethodValueMap x =
 
 traversalMethodValues :: Phantoms.TTerm [Gremlin.StringNullableArgument] -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodValues x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "values"),
@@ -5249,7 +5249,7 @@ traversalMethodValues x =
 
 traversalMethodWhere :: Phantoms.TTerm Gremlin.WhereArgs -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodWhere x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "where"),
@@ -5257,7 +5257,7 @@ traversalMethodWhere x =
 
 traversalMethodWith :: Phantoms.TTerm Gremlin.WithArgs -> Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodWith x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "with"),
@@ -5265,7 +5265,7 @@ traversalMethodWith x =
 
 traversalMethodWrite :: Phantoms.TTerm Gremlin.TraversalMethod
 traversalMethodWrite =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "write"),
@@ -5273,7 +5273,7 @@ traversalMethodWrite =
 
 traversalOperatorAddAll :: Phantoms.TTerm Gremlin.TraversalOperator
 traversalOperatorAddAll =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "addAll"),
@@ -5281,7 +5281,7 @@ traversalOperatorAddAll =
 
 traversalOperatorAnd :: Phantoms.TTerm Gremlin.TraversalOperator
 traversalOperatorAnd =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "and"),
@@ -5289,7 +5289,7 @@ traversalOperatorAnd =
 
 traversalOperatorAssign :: Phantoms.TTerm Gremlin.TraversalOperator
 traversalOperatorAssign =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "assign"),
@@ -5297,7 +5297,7 @@ traversalOperatorAssign =
 
 traversalOperatorDiv :: Phantoms.TTerm Gremlin.TraversalOperator
 traversalOperatorDiv =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "div"),
@@ -5305,7 +5305,7 @@ traversalOperatorDiv =
 
 traversalOperatorMax :: Phantoms.TTerm Gremlin.TraversalOperator
 traversalOperatorMax =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "max"),
@@ -5313,7 +5313,7 @@ traversalOperatorMax =
 
 traversalOperatorMin :: Phantoms.TTerm Gremlin.TraversalOperator
 traversalOperatorMin =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "min"),
@@ -5321,7 +5321,7 @@ traversalOperatorMin =
 
 traversalOperatorMinus :: Phantoms.TTerm Gremlin.TraversalOperator
 traversalOperatorMinus =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "minus"),
@@ -5329,7 +5329,7 @@ traversalOperatorMinus =
 
 traversalOperatorMult :: Phantoms.TTerm Gremlin.TraversalOperator
 traversalOperatorMult =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "mult"),
@@ -5337,7 +5337,7 @@ traversalOperatorMult =
 
 traversalOperatorOr :: Phantoms.TTerm Gremlin.TraversalOperator
 traversalOperatorOr =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "or"),
@@ -5345,7 +5345,7 @@ traversalOperatorOr =
 
 traversalOperatorSum :: Phantoms.TTerm Gremlin.TraversalOperator
 traversalOperatorSum =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sum"),
@@ -5353,7 +5353,7 @@ traversalOperatorSum =
 
 traversalOperatorSumLong :: Phantoms.TTerm Gremlin.TraversalOperator
 traversalOperatorSumLong =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sumLong"),
@@ -5361,7 +5361,7 @@ traversalOperatorSumLong =
 
 traversalOrderArgumentValue :: Phantoms.TTerm Gremlin.TraversalOrder -> Phantoms.TTerm Gremlin.TraversalOrderArgument
 traversalOrderArgumentValue x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalOrderArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "value"),
@@ -5369,7 +5369,7 @@ traversalOrderArgumentValue x =
 
 traversalOrderArgumentVariable :: Phantoms.TTerm Gremlin.Identifier -> Phantoms.TTerm Gremlin.TraversalOrderArgument
 traversalOrderArgumentVariable x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalOrderArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "variable"),
@@ -5377,7 +5377,7 @@ traversalOrderArgumentVariable x =
 
 traversalOrderAsc :: Phantoms.TTerm Gremlin.TraversalOrder
 traversalOrderAsc =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalOrder"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "asc"),
@@ -5385,7 +5385,7 @@ traversalOrderAsc =
 
 traversalOrderDecr :: Phantoms.TTerm Gremlin.TraversalOrder
 traversalOrderDecr =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalOrder"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "decr"),
@@ -5393,7 +5393,7 @@ traversalOrderDecr =
 
 traversalOrderDesc :: Phantoms.TTerm Gremlin.TraversalOrder
 traversalOrderDesc =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalOrder"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "desc"),
@@ -5401,7 +5401,7 @@ traversalOrderDesc =
 
 traversalOrderIncr :: Phantoms.TTerm Gremlin.TraversalOrder
 traversalOrderIncr =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalOrder"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "incr"),
@@ -5409,7 +5409,7 @@ traversalOrderIncr =
 
 traversalOrderShuffle :: Phantoms.TTerm Gremlin.TraversalOrder
 traversalOrderShuffle =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalOrder"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "shuffle"),
@@ -5417,7 +5417,7 @@ traversalOrderShuffle =
 
 traversalPickAny :: Phantoms.TTerm Gremlin.TraversalPick
 traversalPickAny =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalPick"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "any"),
@@ -5425,7 +5425,7 @@ traversalPickAny =
 
 traversalPickNone :: Phantoms.TTerm Gremlin.TraversalPick
 traversalPickNone =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalPick"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "none"),
@@ -5433,7 +5433,7 @@ traversalPickNone =
 
 traversalPopAll :: Phantoms.TTerm Gremlin.TraversalPop
 traversalPopAll =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalPop"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "all"),
@@ -5501,7 +5501,7 @@ traversalPopArgumentAndNestedTraversalWithTraversal original newVal =
 
 traversalPopArgumentValue :: Phantoms.TTerm Gremlin.TraversalPop -> Phantoms.TTerm Gremlin.TraversalPopArgument
 traversalPopArgumentValue x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalPopArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "value"),
@@ -5509,7 +5509,7 @@ traversalPopArgumentValue x =
 
 traversalPopArgumentVariable :: Phantoms.TTerm Gremlin.Identifier -> Phantoms.TTerm Gremlin.TraversalPopArgument
 traversalPopArgumentVariable x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalPopArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "variable"),
@@ -5517,7 +5517,7 @@ traversalPopArgumentVariable x =
 
 traversalPopFirst :: Phantoms.TTerm Gremlin.TraversalPop
 traversalPopFirst =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalPop"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "first"),
@@ -5525,7 +5525,7 @@ traversalPopFirst =
 
 traversalPopLast :: Phantoms.TTerm Gremlin.TraversalPop
 traversalPopLast =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalPop"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "last"),
@@ -5533,7 +5533,7 @@ traversalPopLast =
 
 traversalPopMixed :: Phantoms.TTerm Gremlin.TraversalPop
 traversalPopMixed =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalPop"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "mixed"),
@@ -5541,7 +5541,7 @@ traversalPopMixed =
 
 traversalPredicateAnd :: Phantoms.TTerm Gremlin.TwoTraversalPredicates -> Phantoms.TTerm Gremlin.TraversalPredicate
 traversalPredicateAnd x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalPredicate"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "and"),
@@ -5609,7 +5609,7 @@ traversalPredicateAndNestedTraversalWithTraversal original newVal =
 
 traversalPredicateBetween :: Phantoms.TTerm Gremlin.RangeArgument -> Phantoms.TTerm Gremlin.TraversalPredicate
 traversalPredicateBetween x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalPredicate"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "between"),
@@ -5617,7 +5617,7 @@ traversalPredicateBetween x =
 
 traversalPredicateContaining :: Phantoms.TTerm Gremlin.StringArgument -> Phantoms.TTerm Gremlin.TraversalPredicate
 traversalPredicateContaining x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalPredicate"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "containing"),
@@ -5625,7 +5625,7 @@ traversalPredicateContaining x =
 
 traversalPredicateEndingWith :: Phantoms.TTerm Gremlin.StringArgument -> Phantoms.TTerm Gremlin.TraversalPredicate
 traversalPredicateEndingWith x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalPredicate"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "endingWith"),
@@ -5633,7 +5633,7 @@ traversalPredicateEndingWith x =
 
 traversalPredicateEq :: Phantoms.TTerm Gremlin.GenericLiteralArgument -> Phantoms.TTerm Gremlin.TraversalPredicate
 traversalPredicateEq x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalPredicate"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "eq"),
@@ -5641,7 +5641,7 @@ traversalPredicateEq x =
 
 traversalPredicateGt :: Phantoms.TTerm Gremlin.GenericLiteralArgument -> Phantoms.TTerm Gremlin.TraversalPredicate
 traversalPredicateGt x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalPredicate"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "gt"),
@@ -5649,7 +5649,7 @@ traversalPredicateGt x =
 
 traversalPredicateGte :: Phantoms.TTerm Gremlin.GenericLiteralArgument -> Phantoms.TTerm Gremlin.TraversalPredicate
 traversalPredicateGte x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalPredicate"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "gte"),
@@ -5657,7 +5657,7 @@ traversalPredicateGte x =
 
 traversalPredicateInside :: Phantoms.TTerm Gremlin.RangeArgument -> Phantoms.TTerm Gremlin.TraversalPredicate
 traversalPredicateInside x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalPredicate"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "inside"),
@@ -5665,7 +5665,7 @@ traversalPredicateInside x =
 
 traversalPredicateLt :: Phantoms.TTerm Gremlin.GenericLiteralArgument -> Phantoms.TTerm Gremlin.TraversalPredicate
 traversalPredicateLt x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalPredicate"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "lt"),
@@ -5673,7 +5673,7 @@ traversalPredicateLt x =
 
 traversalPredicateLte :: Phantoms.TTerm Gremlin.GenericLiteralArgument -> Phantoms.TTerm Gremlin.TraversalPredicate
 traversalPredicateLte x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalPredicate"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "lte"),
@@ -5681,7 +5681,7 @@ traversalPredicateLte x =
 
 traversalPredicateNegate :: Phantoms.TTerm Gremlin.TraversalPredicate -> Phantoms.TTerm Gremlin.TraversalPredicate
 traversalPredicateNegate x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalPredicate"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "negate"),
@@ -5689,7 +5689,7 @@ traversalPredicateNegate x =
 
 traversalPredicateNeq :: Phantoms.TTerm Gremlin.GenericLiteralArgument -> Phantoms.TTerm Gremlin.TraversalPredicate
 traversalPredicateNeq x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalPredicate"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "neq"),
@@ -5697,7 +5697,7 @@ traversalPredicateNeq x =
 
 traversalPredicateNot :: Phantoms.TTerm Gremlin.TraversalPredicate -> Phantoms.TTerm Gremlin.TraversalPredicate
 traversalPredicateNot x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalPredicate"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "not"),
@@ -5705,7 +5705,7 @@ traversalPredicateNot x =
 
 traversalPredicateNotContaining :: Phantoms.TTerm Gremlin.StringArgument -> Phantoms.TTerm Gremlin.TraversalPredicate
 traversalPredicateNotContaining x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalPredicate"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "notContaining"),
@@ -5713,7 +5713,7 @@ traversalPredicateNotContaining x =
 
 traversalPredicateNotEndingWith :: Phantoms.TTerm Gremlin.StringArgument -> Phantoms.TTerm Gremlin.TraversalPredicate
 traversalPredicateNotEndingWith x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalPredicate"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "notEndingWith"),
@@ -5721,7 +5721,7 @@ traversalPredicateNotEndingWith x =
 
 traversalPredicateNotRegex :: Phantoms.TTerm Gremlin.StringArgument -> Phantoms.TTerm Gremlin.TraversalPredicate
 traversalPredicateNotRegex x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalPredicate"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "notRegex"),
@@ -5729,7 +5729,7 @@ traversalPredicateNotRegex x =
 
 traversalPredicateNotStartingWith :: Phantoms.TTerm Gremlin.StringArgument -> Phantoms.TTerm Gremlin.TraversalPredicate
 traversalPredicateNotStartingWith x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalPredicate"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "notStartingWith"),
@@ -5737,7 +5737,7 @@ traversalPredicateNotStartingWith x =
 
 traversalPredicateOr :: Phantoms.TTerm Gremlin.TwoTraversalPredicates -> Phantoms.TTerm Gremlin.TraversalPredicate
 traversalPredicateOr x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalPredicate"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "or"),
@@ -5745,7 +5745,7 @@ traversalPredicateOr x =
 
 traversalPredicateOrGenericLiteralArgumentLiteral :: Phantoms.TTerm [Gremlin.GenericLiteralArgument] -> Phantoms.TTerm Gremlin.TraversalPredicateOrGenericLiteralArgument
 traversalPredicateOrGenericLiteralArgumentLiteral x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalPredicateOrGenericLiteralArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "literal"),
@@ -5753,7 +5753,7 @@ traversalPredicateOrGenericLiteralArgumentLiteral x =
 
 traversalPredicateOrGenericLiteralArgumentPredicate :: Phantoms.TTerm Gremlin.TraversalPredicate -> Phantoms.TTerm Gremlin.TraversalPredicateOrGenericLiteralArgument
 traversalPredicateOrGenericLiteralArgumentPredicate x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalPredicateOrGenericLiteralArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "predicate"),
@@ -5761,7 +5761,7 @@ traversalPredicateOrGenericLiteralArgumentPredicate x =
 
 traversalPredicateOrStringLiteralVarargsPredicate :: Phantoms.TTerm Gremlin.TraversalPredicate -> Phantoms.TTerm Gremlin.TraversalPredicateOrStringLiteralVarargs
 traversalPredicateOrStringLiteralVarargsPredicate x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalPredicateOrStringLiteralVarargs"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "predicate"),
@@ -5769,7 +5769,7 @@ traversalPredicateOrStringLiteralVarargsPredicate x =
 
 traversalPredicateOrStringLiteralVarargsString :: Phantoms.TTerm [Gremlin.StringNullableArgument] -> Phantoms.TTerm Gremlin.TraversalPredicateOrStringLiteralVarargs
 traversalPredicateOrStringLiteralVarargsString x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalPredicateOrStringLiteralVarargs"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "string"),
@@ -5777,7 +5777,7 @@ traversalPredicateOrStringLiteralVarargsString x =
 
 traversalPredicateOutside :: Phantoms.TTerm Gremlin.RangeArgument -> Phantoms.TTerm Gremlin.TraversalPredicate
 traversalPredicateOutside x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalPredicate"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "outside"),
@@ -5785,7 +5785,7 @@ traversalPredicateOutside x =
 
 traversalPredicateRegex :: Phantoms.TTerm Gremlin.StringArgument -> Phantoms.TTerm Gremlin.TraversalPredicate
 traversalPredicateRegex x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalPredicate"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "regex"),
@@ -5793,7 +5793,7 @@ traversalPredicateRegex x =
 
 traversalPredicateStartingWith :: Phantoms.TTerm Gremlin.StringArgument -> Phantoms.TTerm Gremlin.TraversalPredicate
 traversalPredicateStartingWith x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalPredicate"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "startingWith"),
@@ -5801,7 +5801,7 @@ traversalPredicateStartingWith x =
 
 traversalPredicateWithin :: Phantoms.TTerm (Maybe Gremlin.GenericLiteralArgument) -> Phantoms.TTerm Gremlin.TraversalPredicate
 traversalPredicateWithin x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalPredicate"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "within"),
@@ -5809,7 +5809,7 @@ traversalPredicateWithin x =
 
 traversalPredicateWithout :: Phantoms.TTerm (Maybe Gremlin.GenericLiteralArgument) -> Phantoms.TTerm Gremlin.TraversalPredicate
 traversalPredicateWithout x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalPredicate"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "without"),
@@ -5817,7 +5817,7 @@ traversalPredicateWithout x =
 
 traversalSackMethodArgumentOrIntegerArgumentConsumer :: Phantoms.TTerm Gremlin.TraversalSackMethodArgument -> Phantoms.TTerm Gremlin.TraversalSackMethodArgumentOrIntegerArgument
 traversalSackMethodArgumentOrIntegerArgumentConsumer x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalSackMethodArgumentOrIntegerArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "consumer"),
@@ -5825,7 +5825,7 @@ traversalSackMethodArgumentOrIntegerArgumentConsumer x =
 
 traversalSackMethodArgumentOrIntegerArgumentInt :: Phantoms.TTerm Gremlin.IntegerArgument -> Phantoms.TTerm Gremlin.TraversalSackMethodArgumentOrIntegerArgument
 traversalSackMethodArgumentOrIntegerArgumentInt x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalSackMethodArgumentOrIntegerArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "int"),
@@ -5833,7 +5833,7 @@ traversalSackMethodArgumentOrIntegerArgumentInt x =
 
 traversalSackMethodArgumentValue :: Phantoms.TTerm Gremlin.TraversalSackMethodArgument
 traversalSackMethodArgumentValue =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalSackMethodArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "value"),
@@ -5841,7 +5841,7 @@ traversalSackMethodArgumentValue =
 
 traversalSackMethodArgumentVariable :: Phantoms.TTerm Gremlin.Identifier -> Phantoms.TTerm Gremlin.TraversalSackMethodArgument
 traversalSackMethodArgumentVariable x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalSackMethodArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "variable"),
@@ -5849,7 +5849,7 @@ traversalSackMethodArgumentVariable x =
 
 traversalScopeArgumentValue :: Phantoms.TTerm Gremlin.TraversalScope -> Phantoms.TTerm Gremlin.TraversalScopeArgument
 traversalScopeArgumentValue x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalScopeArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "value"),
@@ -5857,7 +5857,7 @@ traversalScopeArgumentValue x =
 
 traversalScopeArgumentVariable :: Phantoms.TTerm Gremlin.Identifier -> Phantoms.TTerm Gremlin.TraversalScopeArgument
 traversalScopeArgumentVariable x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalScopeArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "variable"),
@@ -5865,7 +5865,7 @@ traversalScopeArgumentVariable x =
 
 traversalScopeGlobal :: Phantoms.TTerm Gremlin.TraversalScope
 traversalScopeGlobal =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalScope"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "global"),
@@ -5873,7 +5873,7 @@ traversalScopeGlobal =
 
 traversalScopeLocal :: Phantoms.TTerm Gremlin.TraversalScope
 traversalScopeLocal =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalScope"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "local"),
@@ -5881,7 +5881,7 @@ traversalScopeLocal =
 
 traversalSelfMethodDiscard :: Phantoms.TTerm Gremlin.TraversalSelfMethod
 traversalSelfMethodDiscard =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalSelfMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "discard"),
@@ -5955,7 +5955,7 @@ traversalSourceQueryWithTransactionPart original newVal =
 
 traversalSourceSelfMethodWith :: Phantoms.TTerm Gremlin.StringArgumentAndOptionalGenericLiteralArgument -> Phantoms.TTerm Gremlin.TraversalSourceSelfMethod
 traversalSourceSelfMethodWith x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalSourceSelfMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "with"),
@@ -5963,7 +5963,7 @@ traversalSourceSelfMethodWith x =
 
 traversalSourceSelfMethodWithBulk :: Phantoms.TTerm Bool -> Phantoms.TTerm Gremlin.TraversalSourceSelfMethod
 traversalSourceSelfMethodWithBulk x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalSourceSelfMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "withBulk"),
@@ -5971,7 +5971,7 @@ traversalSourceSelfMethodWithBulk x =
 
 traversalSourceSelfMethodWithPath :: Phantoms.TTerm Gremlin.TraversalSourceSelfMethod
 traversalSourceSelfMethodWithPath =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalSourceSelfMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "withPath"),
@@ -5979,7 +5979,7 @@ traversalSourceSelfMethodWithPath =
 
 traversalSourceSelfMethodWithSack :: Phantoms.TTerm Gremlin.GenericLiteralArgumentAndOptionalTraversalBiFunctionArgument -> Phantoms.TTerm Gremlin.TraversalSourceSelfMethod
 traversalSourceSelfMethodWithSack x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalSourceSelfMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "withSack"),
@@ -5987,7 +5987,7 @@ traversalSourceSelfMethodWithSack x =
 
 traversalSourceSelfMethodWithSideEffect :: Phantoms.TTerm Gremlin.StringArgumentAndGenericLiteralArgument -> Phantoms.TTerm Gremlin.TraversalSourceSelfMethod
 traversalSourceSelfMethodWithSideEffect x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalSourceSelfMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "withSideEffect"),
@@ -5995,7 +5995,7 @@ traversalSourceSelfMethodWithSideEffect x =
 
 traversalSourceSelfMethodWithStrategies :: Phantoms.TTerm [Gremlin.TraversalStrategy] -> Phantoms.TTerm Gremlin.TraversalSourceSelfMethod
 traversalSourceSelfMethodWithStrategies x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalSourceSelfMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "withStrategies"),
@@ -6003,7 +6003,7 @@ traversalSourceSelfMethodWithStrategies x =
 
 traversalSourceSelfMethodWithoutStrategies :: Phantoms.TTerm [Gremlin.Identifier] -> Phantoms.TTerm Gremlin.TraversalSourceSelfMethod
 traversalSourceSelfMethodWithoutStrategies x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalSourceSelfMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "withoutStrategies"),
@@ -6011,7 +6011,7 @@ traversalSourceSelfMethodWithoutStrategies x =
 
 traversalSourceSpawnMethodAddE :: Phantoms.TTerm Gremlin.StringArgumentOrNestedTraversal -> Phantoms.TTerm Gremlin.TraversalSourceSpawnMethod
 traversalSourceSpawnMethodAddE x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalSourceSpawnMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "addE"),
@@ -6019,7 +6019,7 @@ traversalSourceSpawnMethodAddE x =
 
 traversalSourceSpawnMethodAddV :: Phantoms.TTerm (Maybe Gremlin.StringArgumentOrNestedTraversal) -> Phantoms.TTerm Gremlin.TraversalSourceSpawnMethod
 traversalSourceSpawnMethodAddV x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalSourceSpawnMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "addV"),
@@ -6027,7 +6027,7 @@ traversalSourceSpawnMethodAddV x =
 
 traversalSourceSpawnMethodCall :: Phantoms.TTerm (Maybe Gremlin.ServiceCall) -> Phantoms.TTerm Gremlin.TraversalSourceSpawnMethod
 traversalSourceSpawnMethodCall x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalSourceSpawnMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "call"),
@@ -6035,7 +6035,7 @@ traversalSourceSpawnMethodCall x =
 
 traversalSourceSpawnMethodE :: Phantoms.TTerm [Gremlin.GenericLiteralArgument] -> Phantoms.TTerm Gremlin.TraversalSourceSpawnMethod
 traversalSourceSpawnMethodE x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalSourceSpawnMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "e"),
@@ -6043,7 +6043,7 @@ traversalSourceSpawnMethodE x =
 
 traversalSourceSpawnMethodInject :: Phantoms.TTerm [Gremlin.GenericLiteralArgument] -> Phantoms.TTerm Gremlin.TraversalSourceSpawnMethod
 traversalSourceSpawnMethodInject x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalSourceSpawnMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "inject"),
@@ -6051,7 +6051,7 @@ traversalSourceSpawnMethodInject x =
 
 traversalSourceSpawnMethodIo :: Phantoms.TTerm Gremlin.StringArgument -> Phantoms.TTerm Gremlin.TraversalSourceSpawnMethod
 traversalSourceSpawnMethodIo x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalSourceSpawnMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "io"),
@@ -6059,7 +6059,7 @@ traversalSourceSpawnMethodIo x =
 
 traversalSourceSpawnMethodMergeE :: Phantoms.TTerm Gremlin.GenericLiteralMapNullableArgumentOrNestedTraversal -> Phantoms.TTerm Gremlin.TraversalSourceSpawnMethod
 traversalSourceSpawnMethodMergeE x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalSourceSpawnMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "mergeE"),
@@ -6067,7 +6067,7 @@ traversalSourceSpawnMethodMergeE x =
 
 traversalSourceSpawnMethodMergeV :: Phantoms.TTerm Gremlin.GenericLiteralMapNullableArgumentOrNestedTraversal -> Phantoms.TTerm Gremlin.TraversalSourceSpawnMethod
 traversalSourceSpawnMethodMergeV x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalSourceSpawnMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "mergeV"),
@@ -6075,7 +6075,7 @@ traversalSourceSpawnMethodMergeV x =
 
 traversalSourceSpawnMethodUnion :: Phantoms.TTerm [Gremlin.NestedTraversal] -> Phantoms.TTerm Gremlin.TraversalSourceSpawnMethod
 traversalSourceSpawnMethodUnion x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalSourceSpawnMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "union"),
@@ -6083,7 +6083,7 @@ traversalSourceSpawnMethodUnion x =
 
 traversalSourceSpawnMethodV :: Phantoms.TTerm [Gremlin.GenericLiteralArgument] -> Phantoms.TTerm Gremlin.TraversalSourceSpawnMethod
 traversalSourceSpawnMethodV x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalSourceSpawnMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "v"),
@@ -6199,7 +6199,7 @@ traversalStrategyWithNew original newVal =
 
 traversalTerminalMethodExplain :: Phantoms.TTerm Gremlin.TraversalTerminalMethod
 traversalTerminalMethodExplain =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalTerminalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "explain"),
@@ -6207,7 +6207,7 @@ traversalTerminalMethodExplain =
 
 traversalTerminalMethodHasNext :: Phantoms.TTerm Gremlin.TraversalTerminalMethod
 traversalTerminalMethodHasNext =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalTerminalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "hasNext"),
@@ -6215,7 +6215,7 @@ traversalTerminalMethodHasNext =
 
 traversalTerminalMethodIterate :: Phantoms.TTerm Gremlin.TraversalTerminalMethod
 traversalTerminalMethodIterate =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalTerminalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "iterate"),
@@ -6223,7 +6223,7 @@ traversalTerminalMethodIterate =
 
 traversalTerminalMethodNext :: Phantoms.TTerm (Maybe Gremlin.IntegerLiteral) -> Phantoms.TTerm Gremlin.TraversalTerminalMethod
 traversalTerminalMethodNext x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalTerminalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "next"),
@@ -6231,7 +6231,7 @@ traversalTerminalMethodNext x =
 
 traversalTerminalMethodToBulkSet :: Phantoms.TTerm Gremlin.TraversalTerminalMethod
 traversalTerminalMethodToBulkSet =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalTerminalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "toBulkSet"),
@@ -6239,7 +6239,7 @@ traversalTerminalMethodToBulkSet =
 
 traversalTerminalMethodToList :: Phantoms.TTerm Gremlin.TraversalTerminalMethod
 traversalTerminalMethodToList =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalTerminalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "toList"),
@@ -6247,7 +6247,7 @@ traversalTerminalMethodToList =
 
 traversalTerminalMethodToSet :: Phantoms.TTerm Gremlin.TraversalTerminalMethod
 traversalTerminalMethodToSet =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalTerminalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "toSet"),
@@ -6255,7 +6255,7 @@ traversalTerminalMethodToSet =
 
 traversalTerminalMethodTryNext :: Phantoms.TTerm Gremlin.TraversalTerminalMethod
 traversalTerminalMethodTryNext =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalTerminalMethod"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "tryNext"),
@@ -6263,7 +6263,7 @@ traversalTerminalMethodTryNext =
 
 traversalTokenArgumentValue :: Phantoms.TTerm Gremlin.TraversalToken -> Phantoms.TTerm Gremlin.TraversalTokenArgument
 traversalTokenArgumentValue x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalTokenArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "value"),
@@ -6271,7 +6271,7 @@ traversalTokenArgumentValue x =
 
 traversalTokenArgumentVariable :: Phantoms.TTerm Gremlin.Identifier -> Phantoms.TTerm Gremlin.TraversalTokenArgument
 traversalTokenArgumentVariable x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalTokenArgument"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "variable"),
@@ -6279,7 +6279,7 @@ traversalTokenArgumentVariable x =
 
 traversalTokenId :: Phantoms.TTerm Gremlin.TraversalToken
 traversalTokenId =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalToken"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "id"),
@@ -6287,7 +6287,7 @@ traversalTokenId =
 
 traversalTokenKey :: Phantoms.TTerm Gremlin.TraversalToken
 traversalTokenKey =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalToken"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "key"),
@@ -6295,7 +6295,7 @@ traversalTokenKey =
 
 traversalTokenLabel :: Phantoms.TTerm Gremlin.TraversalToken
 traversalTokenLabel =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalToken"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "label"),
@@ -6303,7 +6303,7 @@ traversalTokenLabel =
 
 traversalTokenValue :: Phantoms.TTerm Gremlin.TraversalToken
 traversalTokenValue =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.TraversalToken"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "value"),
@@ -6431,7 +6431,7 @@ unTraversalSource x =
 
 valueMapArgsBoolean :: Phantoms.TTerm Gremlin.ValueMapBooleanArgs -> Phantoms.TTerm Gremlin.ValueMapArgs
 valueMapArgsBoolean x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.ValueMapArgs"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "boolean"),
@@ -6439,7 +6439,7 @@ valueMapArgsBoolean x =
 
 valueMapArgsString :: Phantoms.TTerm [Gremlin.StringNullableArgument] -> Phantoms.TTerm Gremlin.ValueMapArgs
 valueMapArgsString x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.ValueMapArgs"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "string"),
@@ -6507,7 +6507,7 @@ valueMapBooleanArgsWithValue original newVal =
 
 whereArgsPredicate :: Phantoms.TTerm Gremlin.WhereWithPredicateArgs -> Phantoms.TTerm Gremlin.WhereArgs
 whereArgsPredicate x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.WhereArgs"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "predicate"),
@@ -6515,7 +6515,7 @@ whereArgsPredicate x =
 
 whereArgsString :: Phantoms.TTerm Gremlin.StringArgument -> Phantoms.TTerm Gremlin.WhereArgs
 whereArgsString x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.WhereArgs"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "string"),
@@ -6523,7 +6523,7 @@ whereArgsString x =
 
 whereArgsTraversal :: Phantoms.TTerm Gremlin.NestedTraversal -> Phantoms.TTerm Gremlin.WhereArgs
 whereArgsTraversal x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.WhereArgs"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "traversal"),
@@ -6611,7 +6611,7 @@ withArgsKeys x =
 
 withArgsKeysString :: Phantoms.TTerm Gremlin.StringArgument -> Phantoms.TTerm Gremlin.WithArgsKeys
 withArgsKeysString x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.WithArgsKeys"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "string"),
@@ -6619,7 +6619,7 @@ withArgsKeysString x =
 
 withArgsKeysWithOption :: Phantoms.TTerm Gremlin.WithOptionKeys -> Phantoms.TTerm Gremlin.WithArgsKeys
 withArgsKeysWithOption x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.WithArgsKeys"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "withOption"),
@@ -6635,7 +6635,7 @@ withArgsValues x =
 
 withArgsValuesIo :: Phantoms.TTerm Gremlin.IoOptionsValues -> Phantoms.TTerm Gremlin.WithArgsValues
 withArgsValuesIo x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.WithArgsValues"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "io"),
@@ -6643,7 +6643,7 @@ withArgsValuesIo x =
 
 withArgsValuesObject :: Phantoms.TTerm Gremlin.GenericLiteralArgument -> Phantoms.TTerm Gremlin.WithArgsValues
 withArgsValuesObject x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.WithArgsValues"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "object"),
@@ -6651,7 +6651,7 @@ withArgsValuesObject x =
 
 withArgsValuesWithOptions :: Phantoms.TTerm Gremlin.WithOptionsValues -> Phantoms.TTerm Gremlin.WithArgsValues
 withArgsValuesWithOptions x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.WithArgsValues"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "withOptions"),
@@ -6691,7 +6691,7 @@ withArgsWithValues original newVal =
 
 withOptionKeysConnectedComponent :: Phantoms.TTerm Gremlin.ConnectedComponentConstants -> Phantoms.TTerm Gremlin.WithOptionKeys
 withOptionKeysConnectedComponent x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.WithOptionKeys"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "connectedComponent"),
@@ -6699,7 +6699,7 @@ withOptionKeysConnectedComponent x =
 
 withOptionKeysIo :: Phantoms.TTerm Gremlin.IoOptionsKeys -> Phantoms.TTerm Gremlin.WithOptionKeys
 withOptionKeysIo x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.WithOptionKeys"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "io"),
@@ -6707,7 +6707,7 @@ withOptionKeysIo x =
 
 withOptionKeysPageRank :: Phantoms.TTerm Gremlin.PageRankConstants -> Phantoms.TTerm Gremlin.WithOptionKeys
 withOptionKeysPageRank x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.WithOptionKeys"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "pageRank"),
@@ -6715,7 +6715,7 @@ withOptionKeysPageRank x =
 
 withOptionKeysPeerPressure :: Phantoms.TTerm Gremlin.PeerPressureConstants -> Phantoms.TTerm Gremlin.WithOptionKeys
 withOptionKeysPeerPressure x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.WithOptionKeys"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "peerPressure"),
@@ -6723,7 +6723,7 @@ withOptionKeysPeerPressure x =
 
 withOptionKeysShortestPath :: Phantoms.TTerm Gremlin.ShortestPathConstants -> Phantoms.TTerm Gremlin.WithOptionKeys
 withOptionKeysShortestPath x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.WithOptionKeys"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "shortestPath"),
@@ -6731,7 +6731,7 @@ withOptionKeysShortestPath x =
 
 withOptionKeysWithOptionsIndexer :: Phantoms.TTerm Gremlin.WithOptionKeys
 withOptionKeysWithOptionsIndexer =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.WithOptionKeys"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "withOptionsIndexer"),
@@ -6739,7 +6739,7 @@ withOptionKeysWithOptionsIndexer =
 
 withOptionKeysWithOptionsTokens :: Phantoms.TTerm Gremlin.WithOptionKeys
 withOptionKeysWithOptionsTokens =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.WithOptionKeys"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "withOptionsTokens"),
@@ -6747,7 +6747,7 @@ withOptionKeysWithOptionsTokens =
 
 withOptionsValuesAll :: Phantoms.TTerm Gremlin.WithOptionsValues
 withOptionsValuesAll =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.WithOptionsValues"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "all"),
@@ -6755,7 +6755,7 @@ withOptionsValuesAll =
 
 withOptionsValuesIds :: Phantoms.TTerm Gremlin.WithOptionsValues
 withOptionsValuesIds =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.WithOptionsValues"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "ids"),
@@ -6763,7 +6763,7 @@ withOptionsValuesIds =
 
 withOptionsValuesKeys :: Phantoms.TTerm Gremlin.WithOptionsValues
 withOptionsValuesKeys =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.WithOptionsValues"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "keys"),
@@ -6771,7 +6771,7 @@ withOptionsValuesKeys =
 
 withOptionsValuesLabels :: Phantoms.TTerm Gremlin.WithOptionsValues
 withOptionsValuesLabels =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.WithOptionsValues"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "labels"),
@@ -6779,7 +6779,7 @@ withOptionsValuesLabels =
 
 withOptionsValuesList :: Phantoms.TTerm Gremlin.WithOptionsValues
 withOptionsValuesList =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.WithOptionsValues"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "list"),
@@ -6787,7 +6787,7 @@ withOptionsValuesList =
 
 withOptionsValuesMap :: Phantoms.TTerm Gremlin.WithOptionsValues
 withOptionsValuesMap =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.WithOptionsValues"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "map"),
@@ -6795,7 +6795,7 @@ withOptionsValuesMap =
 
 withOptionsValuesNone :: Phantoms.TTerm Gremlin.WithOptionsValues
 withOptionsValuesNone =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.WithOptionsValues"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "none"),
@@ -6803,7 +6803,7 @@ withOptionsValuesNone =
 
 withOptionsValuesTokens :: Phantoms.TTerm Gremlin.WithOptionsValues
 withOptionsValuesTokens =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.WithOptionsValues"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "tokens"),
@@ -6811,7 +6811,7 @@ withOptionsValuesTokens =
 
 withOptionsValuesValues :: Phantoms.TTerm Gremlin.WithOptionsValues
 withOptionsValuesValues =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.tinkerpop.gremlin.WithOptionsValues"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "values"),

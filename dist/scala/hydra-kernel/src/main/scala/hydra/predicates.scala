@@ -56,13 +56,13 @@ def isComplexVariable(tc: hydra.graph.Graph)(name: hydra.core.Name): Boolean =
 def isEncodedTerm(t: hydra.core.Term): Boolean =
   hydra.strip.deannotateTerm(t) match
   case hydra.core.Term.application(v_Term_application_a) => hydra.predicates.isEncodedTerm(v_Term_application_a.function)
-  case hydra.core.Term.union(v_Term_union_i) => hydra.lib.equality.equal[scala.Predef.String]("hydra.core.Term")(v_Term_union_i.typeName)
+  case hydra.core.Term.inject(v_Term_inject_i) => hydra.lib.equality.equal[scala.Predef.String]("hydra.core.Term")(v_Term_inject_i.typeName)
   case _ => false
 
 def isEncodedType(t: hydra.core.Term): Boolean =
   hydra.strip.deannotateTerm(t) match
   case hydra.core.Term.application(v_Term_application_a) => hydra.predicates.isEncodedType(v_Term_application_a.function)
-  case hydra.core.Term.union(v_Term_union_i) => hydra.lib.equality.equal[scala.Predef.String]("hydra.core.Type")(v_Term_union_i.typeName)
+  case hydra.core.Term.inject(v_Term_inject_i) => hydra.lib.equality.equal[scala.Predef.String]("hydra.core.Type")(v_Term_inject_i.typeName)
   case _ => false
 
 def isEnumRowType(rt: Seq[hydra.core.FieldType]): Boolean =

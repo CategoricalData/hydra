@@ -12,7 +12,7 @@ import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pur
 
 aggregationQueryCount :: Phantoms.TTerm Query.AggregationQuery
 aggregationQueryCount =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.query.AggregationQuery"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "count"),
@@ -86,7 +86,7 @@ associativeExpressionWithOperator original newVal =
 
 binaryBooleanOperatorAnd :: Phantoms.TTerm Query.BinaryBooleanOperator
 binaryBooleanOperatorAnd =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.query.BinaryBooleanOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "and"),
@@ -94,7 +94,7 @@ binaryBooleanOperatorAnd =
 
 binaryBooleanOperatorOr :: Phantoms.TTerm Query.BinaryBooleanOperator
 binaryBooleanOperatorOr =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.query.BinaryBooleanOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "or"),
@@ -102,7 +102,7 @@ binaryBooleanOperatorOr =
 
 binaryBooleanOperatorXor :: Phantoms.TTerm Query.BinaryBooleanOperator
 binaryBooleanOperatorXor =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.query.BinaryBooleanOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "xor"),
@@ -218,7 +218,7 @@ binaryExpressionWithRight original newVal =
 
 binaryOperatorBoolean :: Phantoms.TTerm Query.BinaryBooleanOperator -> Phantoms.TTerm Query.BinaryOperator
 binaryOperatorBoolean x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.query.BinaryOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "boolean"),
@@ -226,7 +226,7 @@ binaryOperatorBoolean x =
 
 binaryOperatorComparison :: Phantoms.TTerm Query.ComparisonOperator -> Phantoms.TTerm Query.BinaryOperator
 binaryOperatorComparison x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.query.BinaryOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "comparison"),
@@ -234,7 +234,7 @@ binaryOperatorComparison x =
 
 binaryOperatorPower :: Phantoms.TTerm Query.BinaryOperator
 binaryOperatorPower =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.query.BinaryOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "power"),
@@ -302,7 +302,7 @@ bindingWithValue original newVal =
 
 comparisonOperatorEq :: Phantoms.TTerm Query.ComparisonOperator
 comparisonOperatorEq =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.query.ComparisonOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "eq"),
@@ -310,7 +310,7 @@ comparisonOperatorEq =
 
 comparisonOperatorGt :: Phantoms.TTerm Query.ComparisonOperator
 comparisonOperatorGt =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.query.ComparisonOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "gt"),
@@ -318,7 +318,7 @@ comparisonOperatorGt =
 
 comparisonOperatorGte :: Phantoms.TTerm Query.ComparisonOperator
 comparisonOperatorGte =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.query.ComparisonOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "gte"),
@@ -326,7 +326,7 @@ comparisonOperatorGte =
 
 comparisonOperatorLt :: Phantoms.TTerm Query.ComparisonOperator
 comparisonOperatorLt =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.query.ComparisonOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "lt"),
@@ -334,7 +334,7 @@ comparisonOperatorLt =
 
 comparisonOperatorLte :: Phantoms.TTerm Query.ComparisonOperator
 comparisonOperatorLte =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.query.ComparisonOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "lte"),
@@ -342,7 +342,7 @@ comparisonOperatorLte =
 
 comparisonOperatorNeq :: Phantoms.TTerm Query.ComparisonOperator
 comparisonOperatorNeq =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.query.ComparisonOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "neq"),
@@ -520,7 +520,7 @@ edgeProjectionPatternWithVertex original newVal =
 
 expressionAssociative :: Phantoms.TTerm Query.AssociativeExpression -> Phantoms.TTerm Query.Expression
 expressionAssociative x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.query.Expression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "associative"),
@@ -528,7 +528,7 @@ expressionAssociative x =
 
 expressionBinary :: Phantoms.TTerm Query.BinaryExpression -> Phantoms.TTerm Query.Expression
 expressionBinary x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.query.Expression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "binary"),
@@ -536,7 +536,7 @@ expressionBinary x =
 
 expressionProperty :: Phantoms.TTerm Query.PropertyProjection -> Phantoms.TTerm Query.Expression
 expressionProperty x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.query.Expression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "property"),
@@ -544,7 +544,7 @@ expressionProperty x =
 
 expressionUnary :: Phantoms.TTerm Query.UnaryExpression -> Phantoms.TTerm Query.Expression
 expressionUnary x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.query.Expression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "unary"),
@@ -552,7 +552,7 @@ expressionUnary x =
 
 expressionVariable :: Phantoms.TTerm Query.Variable -> Phantoms.TTerm Query.Expression
 expressionVariable x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.query.Expression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "variable"),
@@ -560,7 +560,7 @@ expressionVariable x =
 
 expressionVertex :: Phantoms.TTerm Query.VertexPattern -> Phantoms.TTerm Query.Expression
 expressionVertex x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.query.Expression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "vertex"),
@@ -982,7 +982,7 @@ propertyValue x =
 
 propertyValuePatternValue :: Phantoms.TTerm String -> Phantoms.TTerm Query.PropertyValuePattern
 propertyValuePatternValue x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.query.PropertyValuePattern"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "value"),
@@ -990,7 +990,7 @@ propertyValuePatternValue x =
 
 propertyValuePatternVariable :: Phantoms.TTerm Model.PropertyKey -> Phantoms.TTerm Query.PropertyValuePattern
 propertyValuePatternVariable x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.query.PropertyValuePattern"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "variable"),
@@ -998,7 +998,7 @@ propertyValuePatternVariable x =
 
 queryAggregate :: Phantoms.TTerm Query.AggregationQuery -> Phantoms.TTerm Query.Query
 queryAggregate x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.query.Query"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "aggregate"),
@@ -1006,7 +1006,7 @@ queryAggregate x =
 
 queryApplication :: Phantoms.TTerm Query.ApplicationQuery -> Phantoms.TTerm Query.Query
 queryApplication x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.query.Query"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "application"),
@@ -1014,7 +1014,7 @@ queryApplication x =
 
 queryLetQuery :: Phantoms.TTerm Query.LetQuery -> Phantoms.TTerm Query.Query
 queryLetQuery x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.query.Query"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "LetQuery"),
@@ -1022,7 +1022,7 @@ queryLetQuery x =
 
 queryMatch :: Phantoms.TTerm Query.MatchQuery -> Phantoms.TTerm Query.Query
 queryMatch x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.query.Query"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "match"),
@@ -1030,7 +1030,7 @@ queryMatch x =
 
 querySelect :: Phantoms.TTerm Query.SelectQuery -> Phantoms.TTerm Query.Query
 querySelect x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.query.Query"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "select"),
@@ -1038,7 +1038,7 @@ querySelect x =
 
 queryValue :: Phantoms.TTerm String -> Phantoms.TTerm Query.Query
 queryValue x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.query.Query"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "value"),
@@ -1184,7 +1184,7 @@ unaryExpressionWithOperator original newVal =
 
 unaryOperatorNegate :: Phantoms.TTerm Query.UnaryOperator
 unaryOperatorNegate =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.query.UnaryOperator"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "negate"),

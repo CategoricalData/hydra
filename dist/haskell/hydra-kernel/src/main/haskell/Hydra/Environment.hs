@@ -109,7 +109,7 @@ schemaGraphToTypingEnvironment g =
                     let forTerm =
                             \term -> case term of
                               Core.TermRecord v0 -> Logic.ifElse (Equality.equal (Core.recordTypeName v0) (Core.Name "hydra.core.TypeScheme")) (Eithers.map Maybes.pure (decodeTypeScheme (Core.bindingTerm el))) (Right Nothing)
-                              Core.TermUnion v0 -> Logic.ifElse (Equality.equal (Core.injectionTypeName v0) (Core.Name "hydra.core.Type")) (Eithers.map (\decoded -> Just (toTypeScheme [] decoded)) (decodeType (Core.bindingTerm el))) (Right Nothing)
+                              Core.TermInject v0 -> Logic.ifElse (Equality.equal (Core.injectionTypeName v0) (Core.Name "hydra.core.Type")) (Eithers.map (\decoded -> Just (toTypeScheme [] decoded)) (decodeType (Core.bindingTerm el))) (Right Nothing)
                               _ -> Right Nothing
                     in (Eithers.bind (Maybes.maybe (Eithers.map (\typ -> Just (Scoping.fTypeToTypeScheme typ)) (decodeType (Core.bindingTerm el))) (\ts -> Logic.ifElse (Equality.equal ts (Core.TypeScheme {
                       Core.typeSchemeVariables = [],

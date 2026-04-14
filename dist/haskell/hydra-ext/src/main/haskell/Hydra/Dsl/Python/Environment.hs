@@ -4196,7 +4196,7 @@ pythonModuleMetadataWithUsesTypeVar original newVal =
 
 pythonVersionPython310 :: Phantoms.TTerm Environment.PythonVersion
 pythonVersionPython310 =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.python.environment.PythonVersion"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "python310"),
@@ -4204,7 +4204,7 @@ pythonVersionPython310 =
 
 pythonVersionPython312 :: Phantoms.TTerm Environment.PythonVersion
 pythonVersionPython312 =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.python.environment.PythonVersion"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "python312"),

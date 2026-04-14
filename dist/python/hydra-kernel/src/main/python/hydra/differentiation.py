@@ -106,7 +106,7 @@ def differentiate_term(dx: hydra.core.Name, term: hydra.core.Term):
         case hydra.core.TermMaybe():
             return cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralFloat(cast(hydra.core.FloatValue, hydra.core.FloatValueFloat64(0.0))))))
 
-        case hydra.core.TermUnion():
+        case hydra.core.TermInject():
             return cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralFloat(cast(hydra.core.FloatValue, hydra.core.FloatValueFloat64(0.0))))))
 
         case hydra.core.TermWrap():

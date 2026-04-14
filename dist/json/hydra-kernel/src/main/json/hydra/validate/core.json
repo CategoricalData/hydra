@@ -54,7 +54,7 @@
                                     "argument": {
                                       "lambda": {
                                         "body": {
-                                          "union": {
+                                          "inject": {
                                             "field": {
                                               "name": "duplicateBinding",
                                               "term": {
@@ -121,7 +121,7 @@
                                 "argument": {
                                   "lambda": {
                                     "body": {
-                                      "union": {
+                                      "inject": {
                                         "field": {
                                           "name": "duplicateField",
                                           "term": {
@@ -301,7 +301,7 @@
                                                                   "application": {
                                                                     "argument": {
                                                                       "maybe": {
-                                                                        "union": {
+                                                                        "inject": {
                                                                           "field": {
                                                                             "name": "termVariableShadowing",
                                                                             "term": {
@@ -469,7 +469,7 @@
                                                                   "application": {
                                                                     "argument": {
                                                                       "maybe": {
-                                                                        "union": {
+                                                                        "inject": {
                                                                           "field": {
                                                                             "name": "emptyTermAnnotation",
                                                                             "term": {
@@ -505,7 +505,7 @@
                                                                           "lambda": {
                                                                             "body": {
                                                                               "maybe": {
-                                                                                "union": {
+                                                                                "inject": {
                                                                                   "field": {
                                                                                     "name": "nestedTermAnnotation",
                                                                                     "term": {
@@ -596,7 +596,7 @@
                                                                                                                   "lambda": {
                                                                                                                     "body": {
                                                                                                                       "maybe": {
-                                                                                                                        "union": {
+                                                                                                                        "inject": {
                                                                                                                           "field": {
                                                                                                                             "name": "constantCondition",
                                                                                                                             "term": {
@@ -676,7 +676,7 @@
                                                                                                   "application": {
                                                                                                     "argument": {
                                                                                                       "maybe": {
-                                                                                                        "union": {
+                                                                                                        "inject": {
                                                                                                           "field": {
                                                                                                             "name": "selfApplication",
                                                                                                             "term": {
@@ -766,7 +766,7 @@
                                                                                                           "application": {
                                                                                                             "argument": {
                                                                                                               "maybe": {
-                                                                                                                "union": {
+                                                                                                                "inject": {
                                                                                                                   "field": {
                                                                                                                     "name": "unnecessaryIdentityApplication",
                                                                                                                     "term": {
@@ -845,7 +845,7 @@
                                                                                                       "application": {
                                                                                                         "argument": {
                                                                                                           "maybe": {
-                                                                                                            "union": {
+                                                                                                            "inject": {
                                                                                                               "field": {
                                                                                                                 "name": "redundantWrapUnwrap",
                                                                                                                 "term": {
@@ -929,7 +929,7 @@
                                                                   "application": {
                                                                     "argument": {
                                                                       "maybe": {
-                                                                        "union": {
+                                                                        "inject": {
                                                                           "field": {
                                                                             "name": "emptyTypeNameInTerm",
                                                                             "term": {
@@ -1030,7 +1030,7 @@
                                                                   "application": {
                                                                     "argument": {
                                                                       "maybe": {
-                                                                        "union": {
+                                                                        "inject": {
                                                                           "field": {
                                                                             "name": "emptyLetBindings",
                                                                             "term": {
@@ -1075,7 +1075,7 @@
                                                                               "application": {
                                                                                 "argument": {
                                                                                   "maybe": {
-                                                                                    "union": {
+                                                                                    "inject": {
                                                                                       "field": {
                                                                                         "name": "invalidLetBindingName",
                                                                                         "term": {
@@ -1141,7 +1141,7 @@
                                                                                                   "lambda": {
                                                                                                     "body": {
                                                                                                       "maybe": {
-                                                                                                        "union": {
+                                                                                                        "inject": {
                                                                                                           "field": {
                                                                                                             "name": "undefinedTypeVariableInBindingType",
                                                                                                             "term": {
@@ -1218,7 +1218,7 @@
                                             "domain": {"variable": "hydra.core.Let"},
                                             "parameter": "lt"}}},
                                       {
-                                        "name": "union",
+                                        "name": "inject",
                                         "term": {
                                           "lambda": {
                                             "body": {
@@ -1241,7 +1241,7 @@
                                                       "application": {
                                                         "argument": {
                                                           "maybe": {
-                                                            "union": {
+                                                            "inject": {
                                                               "field": {
                                                                 "name": "emptyTypeNameInTerm",
                                                                 "term": {
@@ -1298,7 +1298,7 @@
                                                               "application": {
                                                                 "argument": {
                                                                   "maybe": {
-                                                                    "union": {
+                                                                    "inject": {
                                                                       "field": {
                                                                         "name": "termVariableShadowing",
                                                                         "term": {
@@ -1340,7 +1340,7 @@
                                                           "application": {
                                                             "argument": {
                                                               "maybe": {
-                                                                "union": {
+                                                                "inject": {
                                                                   "field": {
                                                                     "name": "invalidLambdaParameterName",
                                                                     "term": {
@@ -1384,7 +1384,7 @@
                                                                               "lambda": {
                                                                                 "body": {
                                                                                   "maybe": {
-                                                                                    "union": {
+                                                                                    "inject": {
                                                                                       "field": {
                                                                                         "name": "undefinedTypeVariableInLambdaDomain",
                                                                                         "term": {
@@ -1471,7 +1471,7 @@
                                                       "application": {
                                                         "argument": {
                                                           "maybe": {
-                                                            "union": {
+                                                            "inject": {
                                                               "field": {
                                                                 "name": "emptyTypeNameInTerm",
                                                                 "term": {
@@ -1551,7 +1551,7 @@
                                                                       "application": {
                                                                         "argument": {
                                                                           "maybe": {
-                                                                            "union": {
+                                                                            "inject": {
                                                                               "field": {
                                                                                 "name": "emptyTypeNameInTerm",
                                                                                 "term": {
@@ -1588,7 +1588,7 @@
                                                                       "application": {
                                                                         "argument": {
                                                                           "maybe": {
-                                                                            "union": {
+                                                                            "inject": {
                                                                               "field": {
                                                                                 "name": "emptyCaseStatement",
                                                                                 "term": {
@@ -1666,7 +1666,7 @@
                                                           "lambda": {
                                                             "body": {
                                                               "maybe": {
-                                                                "union": {
+                                                                "inject": {
                                                                   "field": {
                                                                     "name": "undefinedTypeVariableInTypeApplication",
                                                                     "term": {
@@ -1736,7 +1736,7 @@
                                                               "application": {
                                                                 "argument": {
                                                                   "maybe": {
-                                                                    "union": {
+                                                                    "inject": {
                                                                       "field": {
                                                                         "name": "typeVariableShadowingInTypeLambda",
                                                                         "term": {
@@ -1779,7 +1779,7 @@
                                                           "application": {
                                                             "argument": {
                                                               "maybe": {
-                                                                "union": {
+                                                                "inject": {
                                                                   "field": {
                                                                     "name": "invalidTypeLambdaParameterName",
                                                                     "term": {
@@ -1819,7 +1819,7 @@
                                               "application": {
                                                 "argument": {
                                                   "maybe": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {
                                                         "name": "undefinedTermVariable",
                                                         "term": {
@@ -1936,7 +1936,7 @@
                                                       "application": {
                                                         "argument": {
                                                           "maybe": {
-                                                            "union": {
+                                                            "inject": {
                                                               "field": {
                                                                 "name": "emptyTypeNameInTerm",
                                                                 "term": {
@@ -2057,7 +2057,7 @@
                                                           "application": {
                                                             "argument": {
                                                               "maybe": {
-                                                                "union": {
+                                                                "inject": {
                                                                   "field": {
                                                                     "name": "emptyTypeAnnotation",
                                                                     "term": {
@@ -2102,7 +2102,7 @@
                                                                   "lambda": {
                                                                     "body": {
                                                                       "maybe": {
-                                                                        "union": {
+                                                                        "inject": {
                                                                           "field": {
                                                                             "name": "nestedTypeAnnotation",
                                                                             "term": {
@@ -2189,7 +2189,7 @@
                                                       "application": {
                                                         "argument": {
                                                           "maybe": {
-                                                            "union": {
+                                                            "inject": {
                                                               "field": {
                                                                 "name": "typeVariableShadowingInForall",
                                                                 "term": {
@@ -2227,7 +2227,7 @@
                                                   "application": {
                                                     "argument": {
                                                       "maybe": {
-                                                        "union": {
+                                                        "inject": {
                                                           "field": {
                                                             "name": "invalidForallParameterName",
                                                             "term": {
@@ -2321,7 +2321,7 @@
                                                               "lambda": {
                                                                 "body": {
                                                                   "maybe": {
-                                                                    "union": {
+                                                                    "inject": {
                                                                       "field": {
                                                                         "name": "nonComparableMapKeyType",
                                                                         "term": {
@@ -2409,7 +2409,7 @@
                                                   "application": {
                                                     "argument": {
                                                       "maybe": {
-                                                        "union": {
+                                                        "inject": {
                                                           "field": {
                                                             "name": "emptyRecordType",
                                                             "term": {
@@ -2445,7 +2445,7 @@
                                                   "lambda": {
                                                     "body": {
                                                       "maybe": {
-                                                        "union": {
+                                                        "inject": {
                                                           "field": {
                                                             "name": "duplicateRecordTypeFieldNames",
                                                             "term": {
@@ -2527,7 +2527,7 @@
                                                           "lambda": {
                                                             "body": {
                                                               "maybe": {
-                                                                "union": {
+                                                                "inject": {
                                                                   "field": {
                                                                     "name": "nonComparableSetElementType",
                                                                     "term": {
@@ -2580,7 +2580,7 @@
                                                   "application": {
                                                     "argument": {
                                                       "maybe": {
-                                                        "union": {
+                                                        "inject": {
                                                           "field": {
                                                             "name": "emptyUnionType",
                                                             "term": {
@@ -2633,7 +2633,7 @@
                                                             "type": {"type": {"variable": "hydra.core.FieldType"}, "variables": []}}],
                                                         "body": {
                                                           "maybe": {
-                                                            "union": {
+                                                            "inject": {
                                                               "field": {
                                                                 "name": "singleVariantUnion",
                                                                 "term": {
@@ -2684,7 +2684,7 @@
                                                   "lambda": {
                                                     "body": {
                                                       "maybe": {
-                                                        "union": {
+                                                        "inject": {
                                                           "field": {
                                                             "name": "duplicateUnionTypeFieldNames",
                                                             "term": {
@@ -2754,7 +2754,7 @@
                                       "application": {
                                         "argument": {
                                           "maybe": {
-                                            "union": {
+                                            "inject": {
                                               "field": {
                                                 "name": "undefinedTypeVariable",
                                                 "term": {
@@ -3090,7 +3090,7 @@
                               "lambda": {
                                 "body": {
                                   "maybe": {
-                                    "union": {
+                                    "inject": {
                                       "field": {
                                         "name": "voidInNonBottomPosition",
                                         "term": {

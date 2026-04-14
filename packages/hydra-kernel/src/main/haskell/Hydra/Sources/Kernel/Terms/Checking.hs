@@ -417,7 +417,7 @@ typeOf = define "typeOf" $
     _Term_set>>: typeOfSet @@ var "cx1" @@ var "tx" @@ var "typeArgs",
     _Term_typeApplication>>: typeOfTypeApplication @@ var "cx1" @@ var "tx" @@ var "typeArgs",
     _Term_typeLambda>>: typeOfTypeLambda @@ var "cx1" @@ var "tx" @@ var "typeArgs",
-    _Term_union>>: typeOfInjection @@ var "cx1" @@ var "tx" @@ var "typeArgs",
+    _Term_inject>>: typeOfInjection @@ var "cx1" @@ var "tx" @@ var "typeArgs",
     _Term_unit>>: constant $ typeOfUnit @@ var "cx1" @@ var "tx" @@ var "typeArgs",
     _Term_unwrap>>: typeOfUnwrap @@ var "cx1" @@ var "tx" @@ var "typeArgs",
     _Term_variable>>: typeOfVariable @@ var "cx1" @@ var "tx" @@ var "typeArgs",

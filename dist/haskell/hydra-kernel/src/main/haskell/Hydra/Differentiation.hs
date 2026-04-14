@@ -230,7 +230,7 @@ differentiateTerm dx term =
       Core.TermMap _ -> Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 0.0))
       Core.TermEither _ -> Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 0.0))
       Core.TermMaybe _ -> Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 0.0))
-      Core.TermUnion _ -> Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 0.0))
+      Core.TermInject _ -> Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 0.0))
       Core.TermWrap _ -> Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 0.0))
 
 -- | Compute the gradient of a term as a record of partial derivatives

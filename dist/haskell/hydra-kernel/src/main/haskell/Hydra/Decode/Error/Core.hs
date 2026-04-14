@@ -169,7 +169,7 @@ invalidLetBindingNameError cx raw =
 invalidTermError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError ErrorCore.InvalidTermError
 invalidTermError cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
-      Core.TermUnion v0 ->
+      Core.TermInject v0 ->
         let field = Core.injectionField v0
             fname = Core.fieldName field
             fterm = Core.fieldTerm field
@@ -206,7 +206,7 @@ invalidTermError cx raw =
 invalidTypeError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError ErrorCore.InvalidTypeError
 invalidTypeError cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
-      Core.TermUnion v0 ->
+      Core.TermInject v0 ->
         let field = Core.injectionField v0
             fname = Core.fieldName field
             fterm = Core.fieldTerm field

@@ -70,7 +70,7 @@ object TestSuiteRunner {
     Term.let(Let(Seq(Binding(name, value, None)), body))
 
   private def inject(typeName: String, fieldName: String, term: Term): Term =
-    Term.union(Injection(typeName, Field(fieldName, term)))
+    Term.inject(Injection(typeName, Field(fieldName, term)))
 
   private def record(typeName: String, fields: Field*): Term =
     Term.record(Record(typeName, fields.toSeq))

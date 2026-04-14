@@ -119,11 +119,11 @@
                                 "body": {
                                   "either": {
                                     "@left": {
-                                      "union": {
+                                      "inject": {
                                         "field": {
                                           "name": "extraction",
                                           "term": {
-                                            "union": {
+                                            "inject": {
                                               "field": {
                                                 "name": "unexpectedShape",
                                                 "term": {
@@ -271,11 +271,11 @@
                                 "body": {
                                   "either": {
                                     "@left": {
-                                      "union": {
+                                      "inject": {
                                         "field": {
                                           "name": "extraction",
                                           "term": {
-                                            "union": {
+                                            "inject": {
                                               "field": {
                                                 "name": "unexpectedShape",
                                                 "term": {
@@ -401,11 +401,11 @@
                                 "body": {
                                   "either": {
                                     "@left": {
-                                      "union": {
+                                      "inject": {
                                         "field": {
                                           "name": "extraction",
                                           "term": {
-                                            "union": {
+                                            "inject": {
                                               "field": {
                                                 "name": "unexpectedShape",
                                                 "term": {
@@ -531,11 +531,11 @@
                                 "body": {
                                   "either": {
                                     "@left": {
-                                      "union": {
+                                      "inject": {
                                         "field": {
                                           "name": "extraction",
                                           "term": {
-                                            "union": {
+                                            "inject": {
                                               "field": {
                                                 "name": "unexpectedShape",
                                                 "term": {
@@ -663,11 +663,11 @@
                                                             "body": {
                                                               "either": {
                                                                 "@left": {
-                                                                  "union": {
+                                                                  "inject": {
                                                                     "field": {
                                                                       "name": "extraction",
                                                                       "term": {
-                                                                        "union": {
+                                                                        "inject": {
                                                                           "field": {
                                                                             "name": "unexpectedShape",
                                                                             "term": {
@@ -786,11 +786,11 @@
                                                             "body": {
                                                               "either": {
                                                                 "@left": {
-                                                                  "union": {
+                                                                  "inject": {
                                                                     "field": {
                                                                       "name": "extraction",
                                                                       "term": {
-                                                                        "union": {
+                                                                        "inject": {
                                                                           "field": {
                                                                             "name": "unexpectedShape",
                                                                             "term": {
@@ -866,11 +866,11 @@
                                                 "body": {
                                                   "either": {
                                                     "@left": {
-                                                      "union": {
+                                                      "inject": {
                                                         "field": {
                                                           "name": "extraction",
                                                           "term": {
-                                                            "union": {
+                                                            "inject": {
                                                               "field": {
                                                                 "name": "unexpectedShape",
                                                                 "term": {
@@ -2403,11 +2403,11 @@
                                                     "body": {
                                                       "either": {
                                                         "@left": {
-                                                          "union": {
+                                                          "inject": {
                                                             "field": {
                                                               "name": "extraction",
                                                               "term": {
-                                                                "union": {
+                                                                "inject": {
                                                                   "field": {
                                                                     "name": "unexpectedShape",
                                                                     "term": {
@@ -2505,11 +2505,11 @@
                                                     "body": {
                                                       "either": {
                                                         "@left": {
-                                                          "union": {
+                                                          "inject": {
                                                             "field": {
                                                               "name": "extraction",
                                                               "term": {
-                                                                "union": {
+                                                                "inject": {
                                                                   "field": {
                                                                     "name": "unexpectedShape",
                                                                     "term": {
@@ -2708,11 +2708,11 @@
                                 "body": {
                                   "either": {
                                     "@left": {
-                                      "union": {
+                                      "inject": {
                                         "field": {
                                           "name": "extraction",
                                           "term": {
-                                            "union": {
+                                            "inject": {
                                               "field": {
                                                 "name": "unexpectedShape",
                                                 "term": {
@@ -2860,11 +2860,11 @@
                                 "body": {
                                   "either": {
                                     "@left": {
-                                      "union": {
+                                      "inject": {
                                         "field": {
                                           "name": "extraction",
                                           "term": {
-                                            "union": {
+                                            "inject": {
                                               "field": {
                                                 "name": "unexpectedShape",
                                                 "term": {
@@ -2932,11 +2932,11 @@
                                 "body": {
                                   "either": {
                                     "@left": {
-                                      "union": {
+                                      "inject": {
                                         "field": {
                                           "name": "extraction",
                                           "term": {
-                                            "union": {
+                                            "inject": {
                                               "field": {
                                                 "name": "unexpectedShape",
                                                 "term": {
@@ -3157,11 +3157,11 @@
                                                             "body": {
                                                               "either": {
                                                                 "@left": {
-                                                                  "union": {
+                                                                  "inject": {
                                                                     "field": {
                                                                       "name": "extraction",
                                                                       "term": {
-                                                                        "union": {
+                                                                        "inject": {
                                                                           "field": {
                                                                             "name": "unexpectedShape",
                                                                             "term": {
@@ -3301,11 +3301,11 @@
                                     "body": {
                                       "either": {
                                         "@left": {
-                                          "union": {
+                                          "inject": {
                                             "field": {
                                               "name": "extraction",
                                               "term": {
-                                                "union": {
+                                                "inject": {
                                                   "field": {
                                                     "name": "unexpectedShape",
                                                     "term": {
@@ -3382,11 +3382,11 @@
                                     "body": {
                                       "either": {
                                         "@left": {
-                                          "union": {
+                                          "inject": {
                                             "field": {
                                               "name": "extraction",
                                               "term": {
-                                                "union": {
+                                                "inject": {
                                                   "field": {
                                                     "name": "unexpectedShape",
                                                     "term": {
@@ -3442,7 +3442,7 @@
                                       "cases": {
                                         "cases": [
                                           {
-                                            "name": "union",
+                                            "name": "inject",
                                             "term": {
                                               "lambda": {
                                                 "body": {
@@ -3454,11 +3454,11 @@
                                                             "body": {
                                                               "either": {
                                                                 "@left": {
-                                                                  "union": {
+                                                                  "inject": {
                                                                     "field": {
                                                                       "name": "extraction",
                                                                       "term": {
-                                                                        "union": {
+                                                                        "inject": {
                                                                           "field": {
                                                                             "name": "unexpectedShape",
                                                                             "term": {
@@ -3541,11 +3541,11 @@
                                                 "body": {
                                                   "either": {
                                                     "@left": {
-                                                      "union": {
+                                                      "inject": {
                                                         "field": {
                                                           "name": "extraction",
                                                           "term": {
-                                                            "union": {
+                                                            "inject": {
                                                               "field": {
                                                                 "name": "unexpectedShape",
                                                                 "term": {
@@ -3724,11 +3724,11 @@
                                 "body": {
                                   "either": {
                                     "@left": {
-                                      "union": {
+                                      "inject": {
                                         "field": {
                                           "name": "extraction",
                                           "term": {
-                                            "union": {
+                                            "inject": {
                                               "field": {
                                                 "name": "unexpectedShape",
                                                 "term": {
@@ -3876,11 +3876,11 @@
                                 "body": {
                                   "either": {
                                     "@left": {
-                                      "union": {
+                                      "inject": {
                                         "field": {
                                           "name": "extraction",
                                           "term": {
-                                            "union": {
+                                            "inject": {
                                               "field": {
                                                 "name": "unexpectedShape",
                                                 "term": {
@@ -4028,11 +4028,11 @@
                                 "body": {
                                   "either": {
                                     "@left": {
-                                      "union": {
+                                      "inject": {
                                         "field": {
                                           "name": "extraction",
                                           "term": {
-                                            "union": {
+                                            "inject": {
                                               "field": {
                                                 "name": "unexpectedShape",
                                                 "term": {
@@ -4180,11 +4180,11 @@
                                 "body": {
                                   "either": {
                                     "@left": {
-                                      "union": {
+                                      "inject": {
                                         "field": {
                                           "name": "extraction",
                                           "term": {
-                                            "union": {
+                                            "inject": {
                                               "field": {
                                                 "name": "unexpectedShape",
                                                 "term": {
@@ -4252,11 +4252,11 @@
                                 "body": {
                                   "either": {
                                     "@left": {
-                                      "union": {
+                                      "inject": {
                                         "field": {
                                           "name": "extraction",
                                           "term": {
-                                            "union": {
+                                            "inject": {
                                               "field": {
                                                 "name": "unexpectedShape",
                                                 "term": {
@@ -4438,11 +4438,11 @@
                                             "body": {
                                               "either": {
                                                 "@left": {
-                                                  "union": {
+                                                  "inject": {
                                                     "field": {
                                                       "name": "extraction",
                                                       "term": {
-                                                        "union": {
+                                                        "inject": {
                                                           "field": {
                                                             "name": "unexpectedShape",
                                                             "term": {
@@ -4579,11 +4579,11 @@
                                                         "body": {
                                                           "either": {
                                                             "@left": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {
                                                                   "name": "extraction",
                                                                   "term": {
-                                                                    "union": {
+                                                                    "inject": {
                                                                       "field": {
                                                                         "name": "multipleBindings",
                                                                         "term": {
@@ -4648,11 +4648,11 @@
                                                         "body": {
                                                           "either": {
                                                             "@left": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {
                                                                   "name": "extraction",
                                                                   "term": {
-                                                                    "union": {
+                                                                    "inject": {
                                                                       "field": {
                                                                         "name": "noSuchBinding",
                                                                         "term": {
@@ -4764,11 +4764,11 @@
                                             "body": {
                                               "either": {
                                                 "@left": {
-                                                  "union": {
+                                                  "inject": {
                                                     "field": {
                                                       "name": "extraction",
                                                       "term": {
-                                                        "union": {
+                                                        "inject": {
                                                           "field": {
                                                             "name": "unexpectedShape",
                                                             "term": {
@@ -4867,11 +4867,11 @@
                                             "body": {
                                               "either": {
                                                 "@left": {
-                                                  "union": {
+                                                  "inject": {
                                                     "field": {
                                                       "name": "extraction",
                                                       "term": {
-                                                        "union": {
+                                                        "inject": {
                                                           "field": {
                                                             "name": "unexpectedShape",
                                                             "term": {
@@ -4970,11 +4970,11 @@
                                             "body": {
                                               "either": {
                                                 "@left": {
-                                                  "union": {
+                                                  "inject": {
                                                     "field": {
                                                       "name": "extraction",
                                                       "term": {
-                                                        "union": {
+                                                        "inject": {
                                                           "field": {
                                                             "name": "unexpectedShape",
                                                             "term": {
@@ -5183,11 +5183,11 @@
                                     "body": {
                                       "either": {
                                         "@left": {
-                                          "union": {
+                                          "inject": {
                                             "field": {
                                               "name": "extraction",
                                               "term": {
-                                                "union": {
+                                                "inject": {
                                                   "field": {
                                                     "name": "unexpectedShape",
                                                     "term": {
@@ -5260,11 +5260,11 @@
                                             "body": {
                                               "either": {
                                                 "@left": {
-                                                  "union": {
+                                                  "inject": {
                                                     "field": {
                                                       "name": "extraction",
                                                       "term": {
-                                                        "union": {
+                                                        "inject": {
                                                           "field": {
                                                             "name": "unexpectedShape",
                                                             "term": {
@@ -5531,11 +5531,11 @@
                                                                 "body": {
                                                                   "either": {
                                                                     "@left": {
-                                                                      "union": {
+                                                                      "inject": {
                                                                         "field": {
                                                                           "name": "extraction",
                                                                           "term": {
-                                                                            "union": {
+                                                                            "inject": {
                                                                               "field": {
                                                                                 "name": "unexpectedShape",
                                                                                 "term": {
@@ -5676,11 +5676,11 @@
                                     "body": {
                                       "either": {
                                         "@left": {
-                                          "union": {
+                                          "inject": {
                                             "field": {
                                               "name": "extraction",
                                               "term": {
-                                                "union": {
+                                                "inject": {
                                                   "field": {
                                                     "name": "unexpectedShape",
                                                     "term": {
@@ -5737,11 +5737,11 @@
                                         "body": {
                                           "either": {
                                             "@left": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "extraction",
                                                   "term": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {
                                                         "name": "unexpectedShape",
                                                         "term": {
@@ -5928,11 +5928,11 @@
                                                     "body": {
                                                       "either": {
                                                         "@left": {
-                                                          "union": {
+                                                          "inject": {
                                                             "field": {
                                                               "name": "extraction",
                                                               "term": {
-                                                                "union": {
+                                                                "inject": {
                                                                   "field": {
                                                                     "name": "unexpectedShape",
                                                                     "term": {
@@ -6053,11 +6053,11 @@
                                     "body": {
                                       "either": {
                                         "@left": {
-                                          "union": {
+                                          "inject": {
                                             "field": {
                                               "name": "extraction",
                                               "term": {
-                                                "union": {
+                                                "inject": {
                                                   "field": {
                                                     "name": "unexpectedShape",
                                                     "term": {
@@ -6214,11 +6214,11 @@
                                                             "body": {
                                                               "either": {
                                                                 "@left": {
-                                                                  "union": {
+                                                                  "inject": {
                                                                     "field": {
                                                                       "name": "extraction",
                                                                       "term": {
-                                                                        "union": {
+                                                                        "inject": {
                                                                           "field": {
                                                                             "name": "unexpectedShape",
                                                                             "term": {
@@ -6338,11 +6338,11 @@
                                             "body": {
                                               "either": {
                                                 "@left": {
-                                                  "union": {
+                                                  "inject": {
                                                     "field": {
                                                       "name": "extraction",
                                                       "term": {
-                                                        "union": {
+                                                        "inject": {
                                                           "field": {
                                                             "name": "unexpectedShape",
                                                             "term": {
@@ -6503,11 +6503,11 @@
                                             "body": {
                                               "either": {
                                                 "@left": {
-                                                  "union": {
+                                                  "inject": {
                                                     "field": {
                                                       "name": "extraction",
                                                       "term": {
-                                                        "union": {
+                                                        "inject": {
                                                           "field": {
                                                             "name": "unexpectedShape",
                                                             "term": {
@@ -6721,11 +6721,11 @@
                                             "body": {
                                               "either": {
                                                 "@left": {
-                                                  "union": {
+                                                  "inject": {
                                                     "field": {
                                                       "name": "extraction",
                                                       "term": {
-                                                        "union": {
+                                                        "inject": {
                                                           "field": {
                                                             "name": "unexpectedShape",
                                                             "term": {
@@ -6922,11 +6922,11 @@
                                     "body": {
                                       "either": {
                                         "@left": {
-                                          "union": {
+                                          "inject": {
                                             "field": {
                                               "name": "extraction",
                                               "term": {
-                                                "union": {
+                                                "inject": {
                                                   "field": {
                                                     "name": "unexpectedShape",
                                                     "term": {
@@ -7052,11 +7052,11 @@
                                 "body": {
                                   "either": {
                                     "@left": {
-                                      "union": {
+                                      "inject": {
                                         "field": {
                                           "name": "extraction",
                                           "term": {
-                                            "union": {
+                                            "inject": {
                                               "field": {
                                                 "name": "unexpectedShape",
                                                 "term": {
@@ -7129,11 +7129,11 @@
                                             "body": {
                                               "either": {
                                                 "@left": {
-                                                  "union": {
+                                                  "inject": {
                                                     "field": {
                                                       "name": "extraction",
                                                       "term": {
-                                                        "union": {
+                                                        "inject": {
                                                           "field": {
                                                             "name": "unexpectedShape",
                                                             "term": {
@@ -7377,11 +7377,11 @@
                                 "body": {
                                   "either": {
                                     "@left": {
-                                      "union": {
+                                      "inject": {
                                         "field": {
                                           "name": "extraction",
                                           "term": {
-                                            "union": {
+                                            "inject": {
                                               "field": {
                                                 "name": "unexpectedShape",
                                                 "term": {
@@ -7529,11 +7529,11 @@
                                 "body": {
                                   "either": {
                                     "@left": {
-                                      "union": {
+                                      "inject": {
                                         "field": {
                                           "name": "extraction",
                                           "term": {
-                                            "union": {
+                                            "inject": {
                                               "field": {
                                                 "name": "unexpectedShape",
                                                 "term": {
@@ -7681,11 +7681,11 @@
                                 "body": {
                                   "either": {
                                     "@left": {
-                                      "union": {
+                                      "inject": {
                                         "field": {
                                           "name": "extraction",
                                           "term": {
-                                            "union": {
+                                            "inject": {
                                               "field": {
                                                 "name": "unexpectedShape",
                                                 "term": {
@@ -7833,11 +7833,11 @@
                                 "body": {
                                   "either": {
                                     "@left": {
-                                      "union": {
+                                      "inject": {
                                         "field": {
                                           "name": "extraction",
                                           "term": {
-                                            "union": {
+                                            "inject": {
                                               "field": {
                                                 "name": "unexpectedShape",
                                                 "term": {
@@ -7918,11 +7918,11 @@
                                             "body": {
                                               "either": {
                                                 "@left": {
-                                                  "union": {
+                                                  "inject": {
                                                     "field": {
                                                       "name": "extraction",
                                                       "term": {
-                                                        "union": {
+                                                        "inject": {
                                                           "field": {
                                                             "name": "unexpectedShape",
                                                             "term": {
@@ -7995,11 +7995,11 @@
                                 "body": {
                                   "either": {
                                     "@left": {
-                                      "union": {
+                                      "inject": {
                                         "field": {
                                           "name": "extraction",
                                           "term": {
-                                            "union": {
+                                            "inject": {
                                               "field": {
                                                 "name": "unexpectedShape",
                                                 "term": {
@@ -8169,11 +8169,11 @@
                                                             "body": {
                                                               "either": {
                                                                 "@left": {
-                                                                  "union": {
+                                                                  "inject": {
                                                                     "field": {
                                                                       "name": "extraction",
                                                                       "term": {
-                                                                        "union": {
+                                                                        "inject": {
                                                                           "field": {
                                                                             "name": "unexpectedShape",
                                                                             "term": {
@@ -8258,11 +8258,11 @@
                                                 "body": {
                                                   "either": {
                                                     "@left": {
-                                                      "union": {
+                                                      "inject": {
                                                         "field": {
                                                           "name": "extraction",
                                                           "term": {
-                                                            "union": {
+                                                            "inject": {
                                                               "field": {
                                                                 "name": "unexpectedShape",
                                                                 "term": {
@@ -8392,11 +8392,11 @@
                                             "body": {
                                               "either": {
                                                 "@left": {
-                                                  "union": {
+                                                  "inject": {
                                                     "field": {
                                                       "name": "extraction",
                                                       "term": {
-                                                        "union": {
+                                                        "inject": {
                                                           "field": {
                                                             "name": "unexpectedShape",
                                                             "term": {

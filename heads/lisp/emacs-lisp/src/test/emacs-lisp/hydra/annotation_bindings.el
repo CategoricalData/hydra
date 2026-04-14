@@ -18,7 +18,7 @@
                :bindings (list (make-hydra_core_binding :name name :term val :type nil))
                :body body)))
 (defun hydra--t-inject (type-name field-name term)
-  (list :union (make-hydra_core_injection
+  (list :inject (make-hydra_core_injection
                  :type_name type-name
                  :field (make-hydra_core_field :name field-name :term term))))
 (defun hydra--t-record (type-name fields)

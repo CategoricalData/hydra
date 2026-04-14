@@ -255,12 +255,12 @@ setTypeClasses m term =
 
       let encodeClass =
               \tc -> case tc of
-                Classes.TypeClassEquality -> Core.TermUnion (Core.Injection {
+                Classes.TypeClassEquality -> Core.TermInject (Core.Injection {
                   Core.injectionTypeName = (Core.Name "hydra.classes.TypeClass"),
                   Core.injectionField = Core.Field {
                     Core.fieldName = (Core.Name "equality"),
                     Core.fieldTerm = Core.TermUnit}})
-                Classes.TypeClassOrdering -> Core.TermUnion (Core.Injection {
+                Classes.TypeClassOrdering -> Core.TermInject (Core.Injection {
                   Core.injectionTypeName = (Core.Name "hydra.classes.TypeClass"),
                   Core.injectionField = Core.Field {
                     Core.fieldName = (Core.Name "ordering"),

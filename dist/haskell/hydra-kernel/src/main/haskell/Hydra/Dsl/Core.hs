@@ -650,7 +650,7 @@ fieldWithTerm original newVal =
 
 floatTypeBigfloat :: Phantoms.TTerm Core.FloatType
 floatTypeBigfloat =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.core.FloatType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "bigfloat"),
@@ -658,7 +658,7 @@ floatTypeBigfloat =
 
 floatTypeFloat32 :: Phantoms.TTerm Core.FloatType
 floatTypeFloat32 =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.core.FloatType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "float32"),
@@ -666,7 +666,7 @@ floatTypeFloat32 =
 
 floatTypeFloat64 :: Phantoms.TTerm Core.FloatType
 floatTypeFloat64 =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.core.FloatType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "float64"),
@@ -674,7 +674,7 @@ floatTypeFloat64 =
 
 floatValueBigfloat :: Phantoms.TTerm Double -> Phantoms.TTerm Core.FloatValue
 floatValueBigfloat x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.core.FloatValue"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "bigfloat"),
@@ -682,7 +682,7 @@ floatValueBigfloat x =
 
 floatValueFloat32 :: Phantoms.TTerm Float -> Phantoms.TTerm Core.FloatValue
 floatValueFloat32 x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.core.FloatValue"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "float32"),
@@ -690,7 +690,7 @@ floatValueFloat32 x =
 
 floatValueFloat64 :: Phantoms.TTerm Double -> Phantoms.TTerm Core.FloatValue
 floatValueFloat64 x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.core.FloatValue"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "float64"),
@@ -878,7 +878,7 @@ injectionWithTypeName original newVal =
 
 integerTypeBigint :: Phantoms.TTerm Core.IntegerType
 integerTypeBigint =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.core.IntegerType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "bigint"),
@@ -886,7 +886,7 @@ integerTypeBigint =
 
 integerTypeInt16 :: Phantoms.TTerm Core.IntegerType
 integerTypeInt16 =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.core.IntegerType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "int16"),
@@ -894,7 +894,7 @@ integerTypeInt16 =
 
 integerTypeInt32 :: Phantoms.TTerm Core.IntegerType
 integerTypeInt32 =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.core.IntegerType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "int32"),
@@ -902,7 +902,7 @@ integerTypeInt32 =
 
 integerTypeInt64 :: Phantoms.TTerm Core.IntegerType
 integerTypeInt64 =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.core.IntegerType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "int64"),
@@ -910,7 +910,7 @@ integerTypeInt64 =
 
 integerTypeInt8 :: Phantoms.TTerm Core.IntegerType
 integerTypeInt8 =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.core.IntegerType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "int8"),
@@ -918,7 +918,7 @@ integerTypeInt8 =
 
 integerTypeUint16 :: Phantoms.TTerm Core.IntegerType
 integerTypeUint16 =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.core.IntegerType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "uint16"),
@@ -926,7 +926,7 @@ integerTypeUint16 =
 
 integerTypeUint32 :: Phantoms.TTerm Core.IntegerType
 integerTypeUint32 =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.core.IntegerType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "uint32"),
@@ -934,7 +934,7 @@ integerTypeUint32 =
 
 integerTypeUint64 :: Phantoms.TTerm Core.IntegerType
 integerTypeUint64 =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.core.IntegerType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "uint64"),
@@ -942,7 +942,7 @@ integerTypeUint64 =
 
 integerTypeUint8 :: Phantoms.TTerm Core.IntegerType
 integerTypeUint8 =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.core.IntegerType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "uint8"),
@@ -950,7 +950,7 @@ integerTypeUint8 =
 
 integerValueBigint :: Phantoms.TTerm Integer -> Phantoms.TTerm Core.IntegerValue
 integerValueBigint x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.core.IntegerValue"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "bigint"),
@@ -958,7 +958,7 @@ integerValueBigint x =
 
 integerValueInt16 :: Phantoms.TTerm I.Int16 -> Phantoms.TTerm Core.IntegerValue
 integerValueInt16 x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.core.IntegerValue"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "int16"),
@@ -966,7 +966,7 @@ integerValueInt16 x =
 
 integerValueInt32 :: Phantoms.TTerm Int -> Phantoms.TTerm Core.IntegerValue
 integerValueInt32 x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.core.IntegerValue"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "int32"),
@@ -974,7 +974,7 @@ integerValueInt32 x =
 
 integerValueInt64 :: Phantoms.TTerm I.Int64 -> Phantoms.TTerm Core.IntegerValue
 integerValueInt64 x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.core.IntegerValue"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "int64"),
@@ -982,7 +982,7 @@ integerValueInt64 x =
 
 integerValueInt8 :: Phantoms.TTerm I.Int8 -> Phantoms.TTerm Core.IntegerValue
 integerValueInt8 x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.core.IntegerValue"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "int8"),
@@ -990,7 +990,7 @@ integerValueInt8 x =
 
 integerValueUint16 :: Phantoms.TTerm Int -> Phantoms.TTerm Core.IntegerValue
 integerValueUint16 x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.core.IntegerValue"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "uint16"),
@@ -998,7 +998,7 @@ integerValueUint16 x =
 
 integerValueUint32 :: Phantoms.TTerm I.Int64 -> Phantoms.TTerm Core.IntegerValue
 integerValueUint32 x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.core.IntegerValue"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "uint32"),
@@ -1006,7 +1006,7 @@ integerValueUint32 x =
 
 integerValueUint64 :: Phantoms.TTerm Integer -> Phantoms.TTerm Core.IntegerValue
 integerValueUint64 x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.core.IntegerValue"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "uint64"),
@@ -1014,7 +1014,7 @@ integerValueUint64 x =
 
 integerValueUint8 :: Phantoms.TTerm I.Int16 -> Phantoms.TTerm Core.IntegerValue
 integerValueUint8 x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.core.IntegerValue"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "uint8"),
@@ -1190,7 +1190,7 @@ letWithBody original newVal =
 
 literalBinary :: Phantoms.TTerm B.ByteString -> Phantoms.TTerm Core.Literal
 literalBinary x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.core.Literal"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "binary"),
@@ -1198,7 +1198,7 @@ literalBinary x =
 
 literalBoolean :: Phantoms.TTerm Bool -> Phantoms.TTerm Core.Literal
 literalBoolean x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.core.Literal"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "boolean"),
@@ -1206,7 +1206,7 @@ literalBoolean x =
 
 literalFloat :: Phantoms.TTerm Core.FloatValue -> Phantoms.TTerm Core.Literal
 literalFloat x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.core.Literal"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "float"),
@@ -1214,7 +1214,7 @@ literalFloat x =
 
 literalInteger :: Phantoms.TTerm Core.IntegerValue -> Phantoms.TTerm Core.Literal
 literalInteger x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.core.Literal"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "integer"),
@@ -1222,7 +1222,7 @@ literalInteger x =
 
 literalString :: Phantoms.TTerm String -> Phantoms.TTerm Core.Literal
 literalString x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.core.Literal"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "string"),
@@ -1230,7 +1230,7 @@ literalString x =
 
 literalTypeBinary :: Phantoms.TTerm Core.LiteralType
 literalTypeBinary =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.core.LiteralType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "binary"),
@@ -1238,7 +1238,7 @@ literalTypeBinary =
 
 literalTypeBoolean :: Phantoms.TTerm Core.LiteralType
 literalTypeBoolean =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.core.LiteralType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "boolean"),
@@ -1246,7 +1246,7 @@ literalTypeBoolean =
 
 literalTypeFloat :: Phantoms.TTerm Core.FloatType -> Phantoms.TTerm Core.LiteralType
 literalTypeFloat x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.core.LiteralType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "float"),
@@ -1254,7 +1254,7 @@ literalTypeFloat x =
 
 literalTypeInteger :: Phantoms.TTerm Core.IntegerType -> Phantoms.TTerm Core.LiteralType
 literalTypeInteger x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.core.LiteralType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "integer"),
@@ -1262,7 +1262,7 @@ literalTypeInteger x =
 
 literalTypeString :: Phantoms.TTerm Core.LiteralType
 literalTypeString =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.core.LiteralType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "string"),
@@ -1516,7 +1516,7 @@ recordWithTypeName original newVal =
 
 termAnnotated :: Phantoms.TTerm Core.AnnotatedTerm -> Phantoms.TTerm Core.Term
 termAnnotated x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.core.Term"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "annotated"),
@@ -1524,7 +1524,7 @@ termAnnotated x =
 
 termApplication :: Phantoms.TTerm Core.Application -> Phantoms.TTerm Core.Term
 termApplication x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.core.Term"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "application"),
@@ -1532,7 +1532,7 @@ termApplication x =
 
 termCases :: Phantoms.TTerm Core.CaseStatement -> Phantoms.TTerm Core.Term
 termCases x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.core.Term"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "cases"),
@@ -1540,15 +1540,23 @@ termCases x =
 
 termEither :: Phantoms.TTerm (Either Core.Term Core.Term) -> Phantoms.TTerm Core.Term
 termEither x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.core.Term"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "either"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
+termInject :: Phantoms.TTerm Core.Injection -> Phantoms.TTerm Core.Term
+termInject x =
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.core.Term"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "inject"),
+        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+
 termLambda :: Phantoms.TTerm Core.Lambda -> Phantoms.TTerm Core.Term
 termLambda x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.core.Term"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "lambda"),
@@ -1556,7 +1564,7 @@ termLambda x =
 
 termLet :: Phantoms.TTerm Core.Let -> Phantoms.TTerm Core.Term
 termLet x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.core.Term"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "let"),
@@ -1564,7 +1572,7 @@ termLet x =
 
 termList :: Phantoms.TTerm [Core.Term] -> Phantoms.TTerm Core.Term
 termList x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.core.Term"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "list"),
@@ -1572,7 +1580,7 @@ termList x =
 
 termLiteral :: Phantoms.TTerm Core.Literal -> Phantoms.TTerm Core.Term
 termLiteral x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.core.Term"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "literal"),
@@ -1580,7 +1588,7 @@ termLiteral x =
 
 termMap :: Phantoms.TTerm (M.Map Core.Term Core.Term) -> Phantoms.TTerm Core.Term
 termMap x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.core.Term"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "map"),
@@ -1588,7 +1596,7 @@ termMap x =
 
 termMaybe :: Phantoms.TTerm (Maybe Core.Term) -> Phantoms.TTerm Core.Term
 termMaybe x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.core.Term"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "maybe"),
@@ -1596,7 +1604,7 @@ termMaybe x =
 
 termPair :: Phantoms.TTerm (Core.Term, Core.Term) -> Phantoms.TTerm Core.Term
 termPair x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.core.Term"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "pair"),
@@ -1604,7 +1612,7 @@ termPair x =
 
 termProject :: Phantoms.TTerm Core.Projection -> Phantoms.TTerm Core.Term
 termProject x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.core.Term"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "project"),
@@ -1612,7 +1620,7 @@ termProject x =
 
 termRecord :: Phantoms.TTerm Core.Record -> Phantoms.TTerm Core.Term
 termRecord x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.core.Term"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "record"),
@@ -1620,7 +1628,7 @@ termRecord x =
 
 termSet :: Phantoms.TTerm (S.Set Core.Term) -> Phantoms.TTerm Core.Term
 termSet x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.core.Term"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "set"),
@@ -1628,7 +1636,7 @@ termSet x =
 
 termTypeApplication :: Phantoms.TTerm Core.TypeApplicationTerm -> Phantoms.TTerm Core.Term
 termTypeApplication x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.core.Term"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "typeApplication"),
@@ -1636,23 +1644,15 @@ termTypeApplication x =
 
 termTypeLambda :: Phantoms.TTerm Core.TypeLambda -> Phantoms.TTerm Core.Term
 termTypeLambda x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.core.Term"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "typeLambda"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-termUnion :: Phantoms.TTerm Core.Injection -> Phantoms.TTerm Core.Term
-termUnion x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.core.Term"),
-      Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "union"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
-
 termUnit :: Phantoms.TTerm Core.Term
 termUnit =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.core.Term"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "unit"),
@@ -1660,7 +1660,7 @@ termUnit =
 
 termUnwrap :: Phantoms.TTerm Core.Name -> Phantoms.TTerm Core.Term
 termUnwrap x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.core.Term"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "unwrap"),
@@ -1668,7 +1668,7 @@ termUnwrap x =
 
 termVariable :: Phantoms.TTerm Core.Name -> Phantoms.TTerm Core.Term
 termVariable x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.core.Term"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "variable"),
@@ -1676,7 +1676,7 @@ termVariable x =
 
 termWrap :: Phantoms.TTerm Core.WrappedTerm -> Phantoms.TTerm Core.Term
 termWrap x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.core.Term"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "wrap"),
@@ -1684,7 +1684,7 @@ termWrap x =
 
 typeAnnotated :: Phantoms.TTerm Core.AnnotatedType -> Phantoms.TTerm Core.Type
 typeAnnotated x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.core.Type"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "annotated"),
@@ -1692,7 +1692,7 @@ typeAnnotated x =
 
 typeApplication :: Phantoms.TTerm Core.ApplicationType -> Phantoms.TTerm Core.Type
 typeApplication x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.core.Type"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "application"),
@@ -1760,7 +1760,7 @@ typeApplicationTermWithType original newVal =
 
 typeEither :: Phantoms.TTerm Core.EitherType -> Phantoms.TTerm Core.Type
 typeEither x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.core.Type"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "either"),
@@ -1768,7 +1768,7 @@ typeEither x =
 
 typeForall :: Phantoms.TTerm Core.ForallType -> Phantoms.TTerm Core.Type
 typeForall x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.core.Type"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "forall"),
@@ -1776,7 +1776,7 @@ typeForall x =
 
 typeFunction :: Phantoms.TTerm Core.FunctionType -> Phantoms.TTerm Core.Type
 typeFunction x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.core.Type"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "function"),
@@ -1844,7 +1844,7 @@ typeLambdaWithParameter original newVal =
 
 typeList :: Phantoms.TTerm Core.Type -> Phantoms.TTerm Core.Type
 typeList x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.core.Type"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "list"),
@@ -1852,7 +1852,7 @@ typeList x =
 
 typeLiteral :: Phantoms.TTerm Core.LiteralType -> Phantoms.TTerm Core.Type
 typeLiteral x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.core.Type"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "literal"),
@@ -1860,7 +1860,7 @@ typeLiteral x =
 
 typeMap :: Phantoms.TTerm Core.MapType -> Phantoms.TTerm Core.Type
 typeMap x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.core.Type"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "map"),
@@ -1868,7 +1868,7 @@ typeMap x =
 
 typeMaybe :: Phantoms.TTerm Core.Type -> Phantoms.TTerm Core.Type
 typeMaybe x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.core.Type"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "maybe"),
@@ -1876,7 +1876,7 @@ typeMaybe x =
 
 typePair :: Phantoms.TTerm Core.PairType -> Phantoms.TTerm Core.Type
 typePair x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.core.Type"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "pair"),
@@ -1884,7 +1884,7 @@ typePair x =
 
 typeRecord :: Phantoms.TTerm [Core.FieldType] -> Phantoms.TTerm Core.Type
 typeRecord x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.core.Type"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "record"),
@@ -2000,7 +2000,7 @@ typeSchemeWithVariables original newVal =
 
 typeSet :: Phantoms.TTerm Core.Type -> Phantoms.TTerm Core.Type
 typeSet x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.core.Type"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "set"),
@@ -2008,7 +2008,7 @@ typeSet x =
 
 typeUnion :: Phantoms.TTerm [Core.FieldType] -> Phantoms.TTerm Core.Type
 typeUnion x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.core.Type"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "union"),
@@ -2016,7 +2016,7 @@ typeUnion x =
 
 typeUnit :: Phantoms.TTerm Core.Type
 typeUnit =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.core.Type"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "unit"),
@@ -2024,7 +2024,7 @@ typeUnit =
 
 typeVariable :: Phantoms.TTerm Core.Name -> Phantoms.TTerm Core.Type
 typeVariable x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.core.Type"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "variable"),
@@ -2058,7 +2058,7 @@ typeVariableMetadataWithClasses original newVal =
 
 typeVoid :: Phantoms.TTerm Core.Type
 typeVoid =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.core.Type"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "void"),
@@ -2066,7 +2066,7 @@ typeVoid =
 
 typeWrap :: Phantoms.TTerm Core.Type -> Phantoms.TTerm Core.Type
 typeWrap x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.core.Type"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "wrap"),

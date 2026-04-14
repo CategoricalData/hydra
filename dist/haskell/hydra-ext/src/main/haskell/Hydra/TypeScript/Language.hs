@@ -47,7 +47,7 @@ typeScriptLanguage =
           Variants.TermVariantMap,
           Variants.TermVariantMaybe,
           Variants.TermVariantRecord,
-          Variants.TermVariantUnion]
+          Variants.TermVariantInject]
     typeVariants =
         Sets.fromList [
           Variants.TypeVariantList,

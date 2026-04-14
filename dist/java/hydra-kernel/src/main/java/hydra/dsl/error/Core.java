@@ -313,147 +313,147 @@ public interface Core {
   }
 
   static hydra.phantoms.TTerm<hydra.error.core.InvalidTermError> invalidTermErrorConstantCondition(hydra.phantoms.TTerm<hydra.error.core.ConstantConditionError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTermError"), new hydra.core.Field(new hydra.core.Name("constantCondition"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTermError"), new hydra.core.Field(new hydra.core.Name("constantCondition"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.error.core.InvalidTermError> invalidTermErrorDuplicateBinding(hydra.phantoms.TTerm<hydra.error.core.DuplicateBindingError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTermError"), new hydra.core.Field(new hydra.core.Name("duplicateBinding"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTermError"), new hydra.core.Field(new hydra.core.Name("duplicateBinding"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.error.core.InvalidTermError> invalidTermErrorDuplicateField(hydra.phantoms.TTerm<hydra.error.core.DuplicateFieldError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTermError"), new hydra.core.Field(new hydra.core.Name("duplicateField"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTermError"), new hydra.core.Field(new hydra.core.Name("duplicateField"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.error.core.InvalidTermError> invalidTermErrorEmptyCaseStatement(hydra.phantoms.TTerm<hydra.error.core.EmptyCaseStatementError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTermError"), new hydra.core.Field(new hydra.core.Name("emptyCaseStatement"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTermError"), new hydra.core.Field(new hydra.core.Name("emptyCaseStatement"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.error.core.InvalidTermError> invalidTermErrorEmptyLetBindings(hydra.phantoms.TTerm<hydra.error.core.EmptyLetBindingsError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTermError"), new hydra.core.Field(new hydra.core.Name("emptyLetBindings"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTermError"), new hydra.core.Field(new hydra.core.Name("emptyLetBindings"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.error.core.InvalidTermError> invalidTermErrorEmptyTermAnnotation(hydra.phantoms.TTerm<hydra.error.core.EmptyTermAnnotationError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTermError"), new hydra.core.Field(new hydra.core.Name("emptyTermAnnotation"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTermError"), new hydra.core.Field(new hydra.core.Name("emptyTermAnnotation"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.error.core.InvalidTermError> invalidTermErrorEmptyTypeNameInTerm(hydra.phantoms.TTerm<hydra.error.core.EmptyTypeNameInTermError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTermError"), new hydra.core.Field(new hydra.core.Name("emptyTypeNameInTerm"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTermError"), new hydra.core.Field(new hydra.core.Name("emptyTypeNameInTerm"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.error.core.InvalidTermError> invalidTermErrorInvalidLambdaParameterName(hydra.phantoms.TTerm<hydra.error.core.InvalidLambdaParameterNameError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTermError"), new hydra.core.Field(new hydra.core.Name("invalidLambdaParameterName"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTermError"), new hydra.core.Field(new hydra.core.Name("invalidLambdaParameterName"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.error.core.InvalidTermError> invalidTermErrorInvalidLetBindingName(hydra.phantoms.TTerm<hydra.error.core.InvalidLetBindingNameError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTermError"), new hydra.core.Field(new hydra.core.Name("invalidLetBindingName"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTermError"), new hydra.core.Field(new hydra.core.Name("invalidLetBindingName"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.error.core.InvalidTermError> invalidTermErrorInvalidTypeLambdaParameterName(hydra.phantoms.TTerm<hydra.error.core.InvalidTypeLambdaParameterNameError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTermError"), new hydra.core.Field(new hydra.core.Name("invalidTypeLambdaParameterName"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTermError"), new hydra.core.Field(new hydra.core.Name("invalidTypeLambdaParameterName"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.error.core.InvalidTermError> invalidTermErrorNestedTermAnnotation(hydra.phantoms.TTerm<hydra.error.core.NestedTermAnnotationError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTermError"), new hydra.core.Field(new hydra.core.Name("nestedTermAnnotation"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTermError"), new hydra.core.Field(new hydra.core.Name("nestedTermAnnotation"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.error.core.InvalidTermError> invalidTermErrorRedundantWrapUnwrap(hydra.phantoms.TTerm<hydra.error.core.RedundantWrapUnwrapError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTermError"), new hydra.core.Field(new hydra.core.Name("redundantWrapUnwrap"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTermError"), new hydra.core.Field(new hydra.core.Name("redundantWrapUnwrap"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.error.core.InvalidTermError> invalidTermErrorSelfApplication(hydra.phantoms.TTerm<hydra.error.core.SelfApplicationError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTermError"), new hydra.core.Field(new hydra.core.Name("selfApplication"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTermError"), new hydra.core.Field(new hydra.core.Name("selfApplication"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.error.core.InvalidTermError> invalidTermErrorTermVariableShadowing(hydra.phantoms.TTerm<hydra.error.core.TermVariableShadowingError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTermError"), new hydra.core.Field(new hydra.core.Name("termVariableShadowing"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTermError"), new hydra.core.Field(new hydra.core.Name("termVariableShadowing"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.error.core.InvalidTermError> invalidTermErrorTypeVariableShadowingInTypeLambda(hydra.phantoms.TTerm<hydra.error.core.TypeVariableShadowingInTypeLambdaError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTermError"), new hydra.core.Field(new hydra.core.Name("typeVariableShadowingInTypeLambda"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTermError"), new hydra.core.Field(new hydra.core.Name("typeVariableShadowingInTypeLambda"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.error.core.InvalidTermError> invalidTermErrorUndefinedTermVariable(hydra.phantoms.TTerm<hydra.error.core.UndefinedTermVariableError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTermError"), new hydra.core.Field(new hydra.core.Name("undefinedTermVariable"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTermError"), new hydra.core.Field(new hydra.core.Name("undefinedTermVariable"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.error.core.InvalidTermError> invalidTermErrorUndefinedTypeVariableInBindingType(hydra.phantoms.TTerm<hydra.error.core.UndefinedTypeVariableInBindingTypeError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTermError"), new hydra.core.Field(new hydra.core.Name("undefinedTypeVariableInBindingType"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTermError"), new hydra.core.Field(new hydra.core.Name("undefinedTypeVariableInBindingType"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.error.core.InvalidTermError> invalidTermErrorUndefinedTypeVariableInLambdaDomain(hydra.phantoms.TTerm<hydra.error.core.UndefinedTypeVariableInLambdaDomainError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTermError"), new hydra.core.Field(new hydra.core.Name("undefinedTypeVariableInLambdaDomain"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTermError"), new hydra.core.Field(new hydra.core.Name("undefinedTypeVariableInLambdaDomain"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.error.core.InvalidTermError> invalidTermErrorUndefinedTypeVariableInTypeApplication(hydra.phantoms.TTerm<hydra.error.core.UndefinedTypeVariableInTypeApplicationError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTermError"), new hydra.core.Field(new hydra.core.Name("undefinedTypeVariableInTypeApplication"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTermError"), new hydra.core.Field(new hydra.core.Name("undefinedTypeVariableInTypeApplication"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.error.core.InvalidTermError> invalidTermErrorUnknownPrimitiveName(hydra.phantoms.TTerm<hydra.error.core.UnknownPrimitiveNameError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTermError"), new hydra.core.Field(new hydra.core.Name("unknownPrimitiveName"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTermError"), new hydra.core.Field(new hydra.core.Name("unknownPrimitiveName"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.error.core.InvalidTermError> invalidTermErrorUnnecessaryIdentityApplication(hydra.phantoms.TTerm<hydra.error.core.UnnecessaryIdentityApplicationError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTermError"), new hydra.core.Field(new hydra.core.Name("unnecessaryIdentityApplication"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTermError"), new hydra.core.Field(new hydra.core.Name("unnecessaryIdentityApplication"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.error.core.InvalidTermError> invalidTermErrorUntypedTermVariable(hydra.phantoms.TTerm<hydra.error.core.UntypedTermVariableError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTermError"), new hydra.core.Field(new hydra.core.Name("untypedTermVariable"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTermError"), new hydra.core.Field(new hydra.core.Name("untypedTermVariable"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.error.core.InvalidTypeError> invalidTypeErrorDuplicateRecordTypeFieldNames(hydra.phantoms.TTerm<hydra.error.core.DuplicateRecordTypeFieldNamesError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTypeError"), new hydra.core.Field(new hydra.core.Name("duplicateRecordTypeFieldNames"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTypeError"), new hydra.core.Field(new hydra.core.Name("duplicateRecordTypeFieldNames"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.error.core.InvalidTypeError> invalidTypeErrorDuplicateUnionTypeFieldNames(hydra.phantoms.TTerm<hydra.error.core.DuplicateUnionTypeFieldNamesError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTypeError"), new hydra.core.Field(new hydra.core.Name("duplicateUnionTypeFieldNames"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTypeError"), new hydra.core.Field(new hydra.core.Name("duplicateUnionTypeFieldNames"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.error.core.InvalidTypeError> invalidTypeErrorEmptyRecordType(hydra.phantoms.TTerm<hydra.error.core.EmptyRecordTypeError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTypeError"), new hydra.core.Field(new hydra.core.Name("emptyRecordType"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTypeError"), new hydra.core.Field(new hydra.core.Name("emptyRecordType"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.error.core.InvalidTypeError> invalidTypeErrorEmptyTypeAnnotation(hydra.phantoms.TTerm<hydra.error.core.EmptyTypeAnnotationError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTypeError"), new hydra.core.Field(new hydra.core.Name("emptyTypeAnnotation"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTypeError"), new hydra.core.Field(new hydra.core.Name("emptyTypeAnnotation"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.error.core.InvalidTypeError> invalidTypeErrorEmptyUnionType(hydra.phantoms.TTerm<hydra.error.core.EmptyUnionTypeError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTypeError"), new hydra.core.Field(new hydra.core.Name("emptyUnionType"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTypeError"), new hydra.core.Field(new hydra.core.Name("emptyUnionType"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.error.core.InvalidTypeError> invalidTypeErrorInvalidForallParameterName(hydra.phantoms.TTerm<hydra.error.core.InvalidForallParameterNameError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTypeError"), new hydra.core.Field(new hydra.core.Name("invalidForallParameterName"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTypeError"), new hydra.core.Field(new hydra.core.Name("invalidForallParameterName"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.error.core.InvalidTypeError> invalidTypeErrorInvalidTypeSchemeVariableName(hydra.phantoms.TTerm<hydra.error.core.InvalidTypeSchemeVariableNameError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTypeError"), new hydra.core.Field(new hydra.core.Name("invalidTypeSchemeVariableName"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTypeError"), new hydra.core.Field(new hydra.core.Name("invalidTypeSchemeVariableName"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.error.core.InvalidTypeError> invalidTypeErrorNestedTypeAnnotation(hydra.phantoms.TTerm<hydra.error.core.NestedTypeAnnotationError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTypeError"), new hydra.core.Field(new hydra.core.Name("nestedTypeAnnotation"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTypeError"), new hydra.core.Field(new hydra.core.Name("nestedTypeAnnotation"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.error.core.InvalidTypeError> invalidTypeErrorNonComparableMapKeyType(hydra.phantoms.TTerm<hydra.error.core.NonComparableMapKeyTypeError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTypeError"), new hydra.core.Field(new hydra.core.Name("nonComparableMapKeyType"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTypeError"), new hydra.core.Field(new hydra.core.Name("nonComparableMapKeyType"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.error.core.InvalidTypeError> invalidTypeErrorNonComparableSetElementType(hydra.phantoms.TTerm<hydra.error.core.NonComparableSetElementTypeError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTypeError"), new hydra.core.Field(new hydra.core.Name("nonComparableSetElementType"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTypeError"), new hydra.core.Field(new hydra.core.Name("nonComparableSetElementType"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.error.core.InvalidTypeError> invalidTypeErrorSingleVariantUnion(hydra.phantoms.TTerm<hydra.error.core.SingleVariantUnionError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTypeError"), new hydra.core.Field(new hydra.core.Name("singleVariantUnion"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTypeError"), new hydra.core.Field(new hydra.core.Name("singleVariantUnion"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.error.core.InvalidTypeError> invalidTypeErrorTypeVariableShadowingInForall(hydra.phantoms.TTerm<hydra.error.core.TypeVariableShadowingInForallError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTypeError"), new hydra.core.Field(new hydra.core.Name("typeVariableShadowingInForall"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTypeError"), new hydra.core.Field(new hydra.core.Name("typeVariableShadowingInForall"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.error.core.InvalidTypeError> invalidTypeErrorUndefinedTypeVariable(hydra.phantoms.TTerm<hydra.error.core.UndefinedTypeVariableError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTypeError"), new hydra.core.Field(new hydra.core.Name("undefinedTypeVariable"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTypeError"), new hydra.core.Field(new hydra.core.Name("undefinedTypeVariable"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.error.core.InvalidTypeError> invalidTypeErrorVoidInNonBottomPosition(hydra.phantoms.TTerm<hydra.error.core.VoidInNonBottomPositionError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTypeError"), new hydra.core.Field(new hydra.core.Name("voidInNonBottomPosition"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.core.InvalidTypeError"), new hydra.core.Field(new hydra.core.Name("voidInNonBottomPosition"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.error.core.InvalidTypeLambdaParameterNameError> invalidTypeLambdaParameterNameError(hydra.phantoms.TTerm<hydra.paths.SubtermPath> location, hydra.phantoms.TTerm<hydra.core.Name> name) {

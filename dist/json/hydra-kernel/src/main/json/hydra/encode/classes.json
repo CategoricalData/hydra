@@ -11,9 +11,9 @@
                 "term": {
                   "lambda": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
-                          "name": "union",
+                          "name": "inject",
                           "term": {
                             "record": {
                               "fields": [
@@ -42,7 +42,7 @@
                                               "function": {
                                                 "lambda": {
                                                   "body": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {"name": "unit", "term": {"unit": {}}},
                                                       "typeName": "hydra.core.Term"}},
                                                   "domain": {"unit": {}},
@@ -57,9 +57,9 @@
                 "term": {
                   "lambda": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
-                          "name": "union",
+                          "name": "inject",
                           "term": {
                             "record": {
                               "fields": [
@@ -88,7 +88,7 @@
                                               "function": {
                                                 "lambda": {
                                                   "body": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {"name": "unit", "term": {"unit": {}}},
                                                       "typeName": "hydra.core.Term"}},
                                                   "domain": {"unit": {}},

@@ -108,7 +108,7 @@ graphqlLanguage = define "graphqlLanguage" $
     Variants.termVariantLiteral,
     Variants.termVariantMaybe,
     Variants.termVariantRecord,
-    Variants.termVariantUnion],
+    Variants.termVariantInject],
   "typeVariants">: Sets.fromList $ list [
     Variants.typeVariantApplication,
     Variants.typeVariantEither,

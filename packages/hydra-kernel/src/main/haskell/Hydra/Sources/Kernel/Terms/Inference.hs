@@ -694,7 +694,7 @@ inferTypeOfInjection = define "inferTypeOfInjection" $
     ("subst" ~> yield
       @@ var "fcx3"
       @@ (buildTypeApplicationTerm @@ var "svars"
-        @@ (Core.termUnion $ Core.injection (var "tname") $ Core.field (var "fname") (var "iterm")))
+        @@ (Core.termInject $ Core.injection (var "tname") $ Core.field (var "fname") (var "iterm")))
       @@ (Resolution.nominalApplication @@ var "tname" @@ Lists.map (unaryFunction Core.typeVariable) (var "svars"))
       @@ (Substitution.composeTypeSubst @@ var "isubst" @@ var "subst")) @@
     list [Typing.typeConstraint (var "ftyp") (var "ityp") (string "schema type of injected field")] $
@@ -951,7 +951,7 @@ inferTypeOfTerm = define "inferTypeOfTerm" $
     _Term_set>>: "s" ~> inferTypeOfSet @@ var "fcx2" @@ var "cx" @@ var "s",
     _Term_typeApplication>>: "tt" ~> inferTypeOfTypeApplication @@ var "fcx2" @@ var "cx" @@ var "tt",
     _Term_typeLambda>>: "ta" ~> inferTypeOfTypeLambda @@ var "fcx2" @@ var "cx" @@ var "ta",
-    _Term_union>>: "i" ~> inferTypeOfInjection @@ var "fcx2" @@ var "cx" @@ var "i",
+    _Term_inject>>: "i" ~> inferTypeOfInjection @@ var "fcx2" @@ var "cx" @@ var "i",
     _Term_unit>>: constant $ right (inferTypeOfUnit @@ var "fcx2"),
     _Term_unwrap>>: "tname" ~> inferTypeOfUnwrap @@ var "fcx2" @@ var "cx" @@ var "tname",
     _Term_variable>>: "name" ~> inferTypeOfVariable @@ var "fcx2" @@ var "cx" @@ var "name",

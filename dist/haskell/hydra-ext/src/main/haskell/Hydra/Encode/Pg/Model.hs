@@ -31,22 +31,22 @@ adjacentEdge v x =
 direction :: Model.Direction -> Core.Term
 direction x =
     case x of
-      Model.DirectionOut -> Core.TermUnion (Core.Injection {
+      Model.DirectionOut -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.pg.model.Direction"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "out"),
           Core.fieldTerm = Core.TermUnit}})
-      Model.DirectionIn -> Core.TermUnion (Core.Injection {
+      Model.DirectionIn -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.pg.model.Direction"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "in"),
           Core.fieldTerm = Core.TermUnit}})
-      Model.DirectionBoth -> Core.TermUnion (Core.Injection {
+      Model.DirectionBoth -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.pg.model.Direction"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "both"),
           Core.fieldTerm = Core.TermUnit}})
-      Model.DirectionUndirected -> Core.TermUnion (Core.Injection {
+      Model.DirectionUndirected -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.pg.model.Direction"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "undirected"),
@@ -103,12 +103,12 @@ edgeType t x =
 element :: (t0 -> Core.Term) -> Model.Element t0 -> Core.Term
 element v x =
     case x of
-      Model.ElementVertex v0 -> Core.TermUnion (Core.Injection {
+      Model.ElementVertex v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.pg.model.Element"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "vertex"),
           Core.fieldTerm = (vertex v v0)}})
-      Model.ElementEdge v0 -> Core.TermUnion (Core.Injection {
+      Model.ElementEdge v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.pg.model.Element"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "edge"),
@@ -117,12 +117,12 @@ element v x =
 elementKind :: Model.ElementKind -> Core.Term
 elementKind x =
     case x of
-      Model.ElementKindVertex -> Core.TermUnion (Core.Injection {
+      Model.ElementKindVertex -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.pg.model.ElementKind"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "vertex"),
           Core.fieldTerm = Core.TermUnit}})
-      Model.ElementKindEdge -> Core.TermUnion (Core.Injection {
+      Model.ElementKindEdge -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.pg.model.ElementKind"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "edge"),
@@ -143,12 +143,12 @@ elementTree v x =
 elementType :: (t0 -> Core.Term) -> Model.ElementType t0 -> Core.Term
 elementType t x =
     case x of
-      Model.ElementTypeVertex v0 -> Core.TermUnion (Core.Injection {
+      Model.ElementTypeVertex v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.pg.model.ElementType"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "vertex"),
           Core.fieldTerm = (vertexType t v0)}})
-      Model.ElementTypeEdge v0 -> Core.TermUnion (Core.Injection {
+      Model.ElementTypeEdge v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.pg.model.ElementType"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "edge"),
@@ -193,12 +193,12 @@ graphSchema t x =
 label :: Model.Label -> Core.Term
 label x =
     case x of
-      Model.LabelVertex v0 -> Core.TermUnion (Core.Injection {
+      Model.LabelVertex v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.pg.model.Label"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "vertex"),
           Core.fieldTerm = (vertexLabel v0)}})
-      Model.LabelEdge v0 -> Core.TermUnion (Core.Injection {
+      Model.LabelEdge v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.pg.model.Label"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "edge"),

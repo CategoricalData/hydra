@@ -974,7 +974,7 @@ public interface Terms {
      * @return the injection term
      */
     static Term inject(Name typeName, Field field) {
-        return new Term.Union(new Injection(typeName, field));
+        return new Term.Inject(new Injection(typeName, field));
     }
 
     /**

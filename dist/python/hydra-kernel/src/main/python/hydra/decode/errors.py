@@ -145,7 +145,7 @@ def unexpected_shape_error(cx: hydra.graph.Graph, raw: hydra.core.Term):
 def extraction_error(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_errors_extraction_error_1(cx, v1):
         match v1:
-            case hydra.core.TermUnion(value=inj):
+            case hydra.core.TermInject(value=inj):
                 field = inj.field
                 fname = field.name
                 fterm = field.term
@@ -228,7 +228,7 @@ def unification_inference_error(cx: hydra.graph.Graph, raw: hydra.core.Term):
 def inference_error(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_errors_inference_error_1(cx, v1):
         match v1:
-            case hydra.core.TermUnion(value=inj):
+            case hydra.core.TermInject(value=inj):
                 field = inj.field
                 fname = field.name
                 fterm = field.term
@@ -305,7 +305,7 @@ def other_resolution_error(cx: hydra.graph.Graph, raw: hydra.core.Term):
 def resolution_error(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_errors_resolution_error_1(cx, v1):
         match v1:
-            case hydra.core.TermUnion(value=inj):
+            case hydra.core.TermInject(value=inj):
                 field = inj.field
                 fname = field.name
                 fterm = field.term
@@ -321,7 +321,7 @@ def resolution_error(cx: hydra.graph.Graph, raw: hydra.core.Term):
 def error(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_errors_error_1(cx, v1):
         match v1:
-            case hydra.core.TermUnion(value=inj):
+            case hydra.core.TermInject(value=inj):
                 field = inj.field
                 fname = field.name
                 fterm = field.term

@@ -201,7 +201,7 @@ fromJson = define "fromJson" $
         "jsonVal" <~ (Maybes.fromMaybe Json.valueNull (var "val")) $
         "decoded" <~ (fromJson @@ var "types" @@ var "tname" @@ var "ftype" @@ var "jsonVal") $
         Eithers.map
-          ("v" ~> Core.termUnion $ Core.injection
+          ("v" ~> Core.termInject $ Core.injection
             (var "tname")
             (Core.field (Core.name $ var "key") (var "v")))
           (var "decoded")) $

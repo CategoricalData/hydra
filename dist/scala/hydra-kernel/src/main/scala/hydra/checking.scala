@@ -203,7 +203,7 @@ def typeOf(cx: hydra.context.Context)(tx: hydra.graph.Graph)(typeArgs: Seq[hydra
     case hydra.core.Term.set(v_Term_set_v1) => hydra.checking.typeOfSet(cx1)(tx)(typeArgs)(v_Term_set_v1)
     case hydra.core.Term.typeApplication(v_Term_typeApplication_v1) => hydra.checking.typeOfTypeApplication(cx1)(tx)(typeArgs)(v_Term_typeApplication_v1)
     case hydra.core.Term.typeLambda(v_Term_typeLambda_v1) => hydra.checking.typeOfTypeLambda(cx1)(tx)(typeArgs)(v_Term_typeLambda_v1)
-    case hydra.core.Term.union(v_Term_union_v1) => hydra.checking.typeOfInjection(cx1)(tx)(typeArgs)(v_Term_union_v1)
+    case hydra.core.Term.inject(v_Term_inject_v1) => hydra.checking.typeOfInjection(cx1)(tx)(typeArgs)(v_Term_inject_v1)
     case hydra.core.Term.unit => hydra.checking.typeOfUnit(cx1)(tx)(typeArgs)
     case hydra.core.Term.unwrap(v_Term_unwrap_v1) => hydra.checking.typeOfUnwrap(cx1)(tx)(typeArgs)(v_Term_unwrap_v1)
     case hydra.core.Term.variable(v_Term_variable_v1) => hydra.checking.typeOfVariable(cx1)(tx)(typeArgs)(v_Term_variable_v1)

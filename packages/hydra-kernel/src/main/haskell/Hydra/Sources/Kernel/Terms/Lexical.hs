@@ -287,7 +287,7 @@ matchUnion = define "matchUnion" $
     _Term_variable>>: "name" ~>
       "el" <<~ requireBinding @@ var "graph" @@ var "name" $
       matchUnion @@ var "graph" @@ var "tname" @@ var "pairs" @@ (Core.bindingTerm (var "el")),
-    _Term_union>>: "injection" ~>
+    _Term_inject>>: "injection" ~>
       "exp" <~ (
         "fname" <~ Core.fieldName (Core.injectionField (var "injection")) $
         "val" <~ Core.fieldTerm (Core.injectionField (var "injection")) $

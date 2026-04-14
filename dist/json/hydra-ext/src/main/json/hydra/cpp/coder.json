@@ -10,7 +10,7 @@
                 "body": {
                   "lambda": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
                           "name": "class",
                           "term": {
@@ -24,7 +24,7 @@
                                         {
                                           "name": "key",
                                           "term": {
-                                            "union": {
+                                            "inject": {
                                               "field": {"name": "class", "term": {"unit": {}}},
                                               "typeName": "hydra.cpp.syntax.ClassKey"}}},
                                         {"name": "name", "term": {"variable": "name"}},
@@ -59,7 +59,7 @@
             "body": {
               "lambda": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "class",
                       "term": {
@@ -73,7 +73,7 @@
                                     {
                                       "name": "key",
                                       "term": {
-                                        "union": {
+                                        "inject": {
                                           "field": {"name": "enumClass", "term": {"unit": {}}},
                                           "typeName": "hydra.cpp.syntax.ClassKey"}}},
                                     {"name": "name", "term": {"variable": "name"}},
@@ -127,11 +127,11 @@
       "term": {
         "name": "hydra.cpp.coder.memberSpecificationPublic",
         "term": {
-          "union": {
+          "inject": {
             "field": {
               "name": "accessLabel",
               "term": {
-                "union": {
+                "inject": {
                   "field": {"name": "public", "term": {"unit": {}}},
                   "typeName": "hydra.cpp.syntax.AccessSpecifier"}}},
             "typeName": "hydra.cpp.syntax.MemberSpecification"}},
@@ -142,11 +142,11 @@
       "term": {
         "name": "hydra.cpp.coder.memberSpecificationProtected",
         "term": {
-          "union": {
+          "inject": {
             "field": {
               "name": "accessLabel",
               "term": {
-                "union": {
+                "inject": {
                   "field": {"name": "protected", "term": {"unit": {}}},
                   "typeName": "hydra.cpp.syntax.AccessSpecifier"}}},
             "typeName": "hydra.cpp.syntax.MemberSpecification"}},
@@ -161,7 +161,7 @@
             "body": {
               "lambda": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "template",
                       "term": {
@@ -178,7 +178,7 @@
                                       "argument": {
                                         "lambda": {
                                           "body": {
-                                            "union": {
+                                            "inject": {
                                               "field": {"name": "type", "term": {"variable": "a"}},
                                               "typeName": "hydra.cpp.syntax.TemplateArgument"}},
                                           "domain": {"variable": "hydra.cpp.syntax.TypeExpression"},
@@ -213,7 +213,7 @@
             "body": {
               "application": {
                 "argument": {
-                  "union": {
+                  "inject": {
                     "field": {"name": "identifier", "term": {"variable": "name"}},
                     "typeName": "hydra.cpp.syntax.PrimaryExpression"}},
                 "function": {"variable": "hydra.cpp.coder.cppPrimaryExpressionToCppExpression"}}},
@@ -233,11 +233,11 @@
             "body": {
               "application": {
                 "argument": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "literal",
                       "term": {
-                        "union": {
+                        "inject": {
                           "field": {
                             "name": "boolean",
                             "term": {
@@ -263,15 +263,15 @@
             "body": {
               "application": {
                 "argument": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "literal",
                       "term": {
-                        "union": {
+                        "inject": {
                           "field": {
                             "name": "integer",
                             "term": {
-                              "union": {
+                              "inject": {
                                 "field": {"name": "decimal", "term": {"variable": "val"}},
                                 "typeName": "hydra.cpp.syntax.IntegerLiteral"}}},
                           "typeName": "hydra.cpp.syntax.Literal"}}},
@@ -295,7 +295,7 @@
                 "body": {
                   "application": {
                     "argument": {
-                      "union": {
+                      "inject": {
                         "field": {
                           "name": "functionCall",
                           "term": {
@@ -304,11 +304,11 @@
                                 {
                                   "name": "function",
                                   "term": {
-                                    "union": {
+                                    "inject": {
                                       "field": {
                                         "name": "primary",
                                         "term": {
-                                          "union": {
+                                          "inject": {
                                             "field": {"name": "identifier", "term": {"variable": "funcName"}},
                                             "typeName": "hydra.cpp.syntax.PrimaryExpression"}}},
                                       "typeName": "hydra.cpp.syntax.PostfixExpression"}}},
@@ -344,7 +344,7 @@
                         "term": {
                           "list": [
                             {
-                              "union": {
+                              "inject": {
                                 "field": {
                                   "name": "pragma",
                                   "term": {
@@ -378,7 +378,7 @@
                 "body": {
                   "application": {
                     "argument": {
-                      "union": {
+                      "inject": {
                         "field": {
                           "name": "compound",
                           "term": {
@@ -392,7 +392,7 @@
                     "function": {
                       "application": {
                         "argument": {
-                          "union": {
+                          "inject": {
                             "field": {"name": "default", "term": {"unit": {}}},
                             "typeName": "hydra.cpp.syntax.FunctionBody"}},
                         "function": {
@@ -430,7 +430,7 @@
                       {
                         "name": "type",
                         "term": {
-                          "union": {
+                          "inject": {
                             "field": {
                               "name": "qualified",
                               "term": {
@@ -439,7 +439,7 @@
                                     {
                                       "name": "baseType",
                                       "term": {
-                                        "union": {
+                                        "inject": {
                                           "field": {
                                             "name": "qualified",
                                             "term": {
@@ -449,7 +449,7 @@
                                                   {
                                                     "name": "qualifier",
                                                     "term": {
-                                                      "union": {
+                                                      "inject": {
                                                         "field": {"name": "const", "term": {"unit": {}}},
                                                         "typeName": "hydra.cpp.syntax.TypeQualifier"}}}],
                                                 "typeName": "hydra.cpp.syntax.QualifiedType"}}},
@@ -457,7 +457,7 @@
                                     {
                                       "name": "qualifier",
                                       "term": {
-                                        "union": {
+                                        "inject": {
                                           "field": {"name": "lvalueRef", "term": {"unit": {}}},
                                           "typeName": "hydra.cpp.syntax.TypeQualifier"}}}],
                                   "typeName": "hydra.cpp.syntax.QualifiedType"}}},
@@ -523,7 +523,7 @@
         "term": {
           "lambda": {
             "body": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "qualified",
                   "term": {
@@ -533,7 +533,7 @@
                         {
                           "name": "qualifier",
                           "term": {
-                            "union": {
+                            "inject": {
                               "field": {"name": "const", "term": {"unit": {}}},
                               "typeName": "hydra.cpp.syntax.TypeQualifier"}}}],
                       "typeName": "hydra.cpp.syntax.QualifiedType"}}},
@@ -552,7 +552,7 @@
         "term": {
           "application": {
             "argument": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "functionCall",
                   "term": {
@@ -561,7 +561,7 @@
                         {
                           "name": "function",
                           "term": {
-                            "union": {
+                            "inject": {
                               "field": {
                                 "name": "memberAccess",
                                 "term": {
@@ -570,7 +570,7 @@
                                       {
                                         "name": "object",
                                         "term": {
-                                          "union": {
+                                          "inject": {
                                             "field": {
                                               "name": "functionCall",
                                               "term": {
@@ -579,11 +579,11 @@
                                                     {
                                                       "name": "function",
                                                       "term": {
-                                                        "union": {
+                                                        "inject": {
                                                           "field": {
                                                             "name": "primary",
                                                             "term": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {"name": "identifier", "term": {"literal": {"string": "typeid"}}},
                                                                 "typeName": "hydra.cpp.syntax.PrimaryExpression"}}},
                                                           "typeName": "hydra.cpp.syntax.PostfixExpression"}}},
@@ -594,17 +594,17 @@
                                                           {
                                                             "application": {
                                                               "argument": {
-                                                                "union": {
+                                                                "inject": {
                                                                   "field": {
                                                                     "name": "parenthesized",
                                                                     "term": {
                                                                       "application": {
                                                                         "argument": {
-                                                                          "union": {
+                                                                          "inject": {
                                                                             "field": {
                                                                               "name": "primary",
                                                                               "term": {
-                                                                                "union": {
+                                                                                "inject": {
                                                                                   "field": {"name": "identifier", "term": {"literal": {"string": "*this"}}},
                                                                                   "typeName": "hydra.cpp.syntax.PrimaryExpression"}}},
                                                                             "typeName": "hydra.cpp.syntax.PostfixExpression"}},
@@ -634,11 +634,11 @@
             "body": {
               "lambda": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "jump",
                       "term": {
-                        "union": {
+                        "inject": {
                           "field": {
                             "name": "throw",
                             "term": {
@@ -671,7 +671,7 @@
             "body": {
               "application": {
                 "argument": {
-                  "union": {
+                  "inject": {
                     "field": {"name": "primary", "term": {"variable": "prim"}},
                     "typeName": "hydra.cpp.syntax.PostfixExpression"}},
                 "function": {"variable": "hydra.cpp.coder.cppPostfixExpressionToCppExpression"}}},
@@ -689,15 +689,15 @@
         "term": {
           "lambda": {
             "body": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "assignment",
                   "term": {
-                    "union": {
+                    "inject": {
                       "field": {
                         "name": "conditional",
                         "term": {
-                          "union": {
+                          "inject": {
                             "field": {
                               "name": "logicalOr",
                               "term": {
@@ -724,7 +724,7 @@
             "body": {
               "application": {
                 "argument": {
-                  "union": {
+                  "inject": {
                     "field": {"name": "postfix", "term": {"variable": "pe"}},
                     "typeName": "hydra.cpp.syntax.UnaryExpression"}},
                 "function": {"variable": "hydra.cpp.coder.cppUnaryExpressionToCppExpression"}}},
@@ -742,43 +742,43 @@
         "term": {
           "lambda": {
             "body": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "logicalAnd",
                   "term": {
-                    "union": {
+                    "inject": {
                       "field": {
                         "name": "inclusiveOr",
                         "term": {
-                          "union": {
+                          "inject": {
                             "field": {
                               "name": "exclusiveOr",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {
                                     "name": "and",
                                     "term": {
-                                      "union": {
+                                      "inject": {
                                         "field": {
                                           "name": "equality",
                                           "term": {
-                                            "union": {
+                                            "inject": {
                                               "field": {
                                                 "name": "relational",
                                                 "term": {
-                                                  "union": {
+                                                  "inject": {
                                                     "field": {
                                                       "name": "shift",
                                                       "term": {
-                                                        "union": {
+                                                        "inject": {
                                                           "field": {
                                                             "name": "additive",
                                                             "term": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {
                                                                   "name": "multiplicative",
                                                                   "term": {
-                                                                    "union": {
+                                                                    "inject": {
                                                                       "field": {"name": "unary", "term": {"variable": "ue"}},
                                                                       "typeName": "hydra.cpp.syntax.MultiplicativeExpression"}}},
                                                                 "typeName": "hydra.cpp.syntax.AdditiveExpression"}}},
@@ -1111,7 +1111,7 @@
             "body": {
               "lambda": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "namespace",
                       "term": {
@@ -1149,11 +1149,11 @@
                 "body": {
                   "application": {
                     "argument": {
-                      "union": {
+                      "inject": {
                         "field": {
                           "name": "basic",
                           "term": {
-                            "union": {
+                            "inject": {
                               "field": {
                                 "name": "named",
                                 "term": {
@@ -1174,11 +1174,11 @@
                                 {
                                   "application": {
                                     "argument": {
-                                      "union": {
+                                      "inject": {
                                         "field": {
                                           "name": "basic",
                                           "term": {
-                                            "union": {
+                                            "inject": {
                                               "field": {
                                                 "name": "named",
                                                 "term": {
@@ -1221,7 +1221,7 @@
         "term": {
           "lambda": {
             "body": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "basic",
                   "term": {
@@ -1235,7 +1235,7 @@
                               "term": {
                                 "lambda": {
                                   "body": {
-                                    "union": {
+                                    "inject": {
                                       "field": {"name": "char", "term": {"unit": {}}},
                                       "typeName": "hydra.cpp.syntax.BasicType"}},
                                   "domain": {"unit": {}},
@@ -1245,7 +1245,7 @@
                               "term": {
                                 "lambda": {
                                   "body": {
-                                    "union": {
+                                    "inject": {
                                       "field": {"name": "bool", "term": {"unit": {}}},
                                       "typeName": "hydra.cpp.syntax.BasicType"}},
                                   "domain": {"unit": {}},
@@ -1265,7 +1265,7 @@
                                               "term": {
                                                 "lambda": {
                                                   "body": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {"name": "float", "term": {"unit": {}}},
                                                       "typeName": "hydra.cpp.syntax.BasicType"}},
                                                   "domain": {"unit": {}},
@@ -1275,13 +1275,13 @@
                                               "term": {
                                                 "lambda": {
                                                   "body": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {"name": "double", "term": {"unit": {}}},
                                                       "typeName": "hydra.cpp.syntax.BasicType"}},
                                                   "domain": {"unit": {}},
                                                   "parameter": "_"}}}],
                                           "default": {
-                                            "union": {
+                                            "inject": {
                                               "field": {"name": "double", "term": {"unit": {}}},
                                               "typeName": "hydra.cpp.syntax.BasicType"}},
                                           "typeName": "hydra.core.FloatType"}}}},
@@ -1302,7 +1302,7 @@
                                               "term": {
                                                 "lambda": {
                                                   "body": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {"name": "int", "term": {"unit": {}}},
                                                       "typeName": "hydra.cpp.syntax.BasicType"}},
                                                   "domain": {"unit": {}},
@@ -1312,7 +1312,7 @@
                                               "term": {
                                                 "lambda": {
                                                   "body": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {"name": "char", "term": {"unit": {}}},
                                                       "typeName": "hydra.cpp.syntax.BasicType"}},
                                                   "domain": {"unit": {}},
@@ -1322,7 +1322,7 @@
                                               "term": {
                                                 "lambda": {
                                                   "body": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {"name": "named", "term": {"literal": {"string": "int16_t"}}},
                                                       "typeName": "hydra.cpp.syntax.BasicType"}},
                                                   "domain": {"unit": {}},
@@ -1332,7 +1332,7 @@
                                               "term": {
                                                 "lambda": {
                                                   "body": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {"name": "int", "term": {"unit": {}}},
                                                       "typeName": "hydra.cpp.syntax.BasicType"}},
                                                   "domain": {"unit": {}},
@@ -1342,13 +1342,13 @@
                                               "term": {
                                                 "lambda": {
                                                   "body": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {"name": "named", "term": {"literal": {"string": "int64_t"}}},
                                                       "typeName": "hydra.cpp.syntax.BasicType"}},
                                                   "domain": {"unit": {}},
                                                   "parameter": "_"}}}],
                                           "default": {
-                                            "union": {
+                                            "inject": {
                                               "field": {"name": "int", "term": {"unit": {}}},
                                               "typeName": "hydra.cpp.syntax.BasicType"}},
                                           "typeName": "hydra.core.IntegerType"}}}},
@@ -1359,7 +1359,7 @@
                               "term": {
                                 "lambda": {
                                   "body": {
-                                    "union": {
+                                    "inject": {
                                       "field": {"name": "string", "term": {"unit": {}}},
                                       "typeName": "hydra.cpp.syntax.BasicType"}},
                                   "domain": {"unit": {}},
@@ -1892,7 +1892,7 @@
                                                         "body": {
                                                           "either": {
                                                             "@left": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {
                                                                   "name": "other",
                                                                   "term": {
@@ -1965,7 +1965,7 @@
                                                         "body": {
                                                           "either": {
                                                             "@left": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {
                                                                   "name": "other",
                                                                   "term": {
@@ -1988,11 +1988,11 @@
                                                         "body": {
                                                           "either": {
                                                             "@right": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {
                                                                   "name": "basic",
                                                                   "term": {
-                                                                    "union": {
+                                                                    "inject": {
                                                                       "field": {
                                                                         "name": "named",
                                                                         "term": {
@@ -2019,7 +2019,7 @@
                                                         "body": {
                                                           "either": {
                                                             "@left": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {
                                                                   "name": "other",
                                                                   "term": {
@@ -2062,7 +2062,7 @@
                                                 "body": {
                                                   "either": {
                                                     "@left": {
-                                                      "union": {
+                                                      "inject": {
                                                         "field": {
                                                           "name": "other",
                                                           "term": {
@@ -2179,7 +2179,7 @@
                                                     "body": {
                                                       "either": {
                                                         "@right": {
-                                                          "union": {
+                                                          "inject": {
                                                             "field": {
                                                               "name": "function",
                                                               "term": {
@@ -2455,7 +2455,7 @@
                                                         "body": {
                                                           "either": {
                                                             "@right": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {
                                                                   "name": "typedef",
                                                                   "term": {
@@ -2705,7 +2705,7 @@
                                                                 "body": {
                                                                   "either": {
                                                                     "@left": {
-                                                                      "union": {
+                                                                      "inject": {
                                                                         "field": {
                                                                           "name": "other",
                                                                           "term": {
@@ -2935,11 +2935,11 @@
                                                                                                   "argument": {
                                                                                                     "lambda": {
                                                                                                       "body": {
-                                                                                                        "union": {
+                                                                                                        "inject": {
                                                                                                           "field": {
                                                                                                             "name": "member",
                                                                                                             "term": {
-                                                                                                              "union": {
+                                                                                                              "inject": {
                                                                                                                 "field": {"name": "variable", "term": {"variable": "field"}},
                                                                                                                 "typeName": "hydra.cpp.syntax.MemberDeclaration"}}},
                                                                                                           "typeName": "hydra.cpp.syntax.MemberSpecification"}},
@@ -2955,11 +2955,11 @@
                                                                                           {
                                                                                             "list": [
                                                                                               {
-                                                                                                "union": {
+                                                                                                "inject": {
                                                                                                   "field": {
                                                                                                     "name": "member",
                                                                                                     "term": {
-                                                                                                      "union": {
+                                                                                                      "inject": {
                                                                                                         "field": {
                                                                                                           "name": "constructor",
                                                                                                           "term": {
@@ -2995,11 +2995,11 @@
                                                                                                                                           "function": {
                                                                                                                                             "application": {
                                                                                                                                               "argument": {
-                                                                                                                                                "union": {
+                                                                                                                                                "inject": {
                                                                                                                                                   "field": {
                                                                                                                                                     "name": "basic",
                                                                                                                                                     "term": {
-                                                                                                                                                      "union": {
+                                                                                                                                                      "inject": {
                                                                                                                                                         "field": {"name": "int", "term": {"unit": {}}},
                                                                                                                                                         "typeName": "hydra.cpp.syntax.BasicType"}}},
                                                                                                                                                   "typeName": "hydra.cpp.syntax.TypeExpression"}},
@@ -3423,11 +3423,11 @@
                                                                               "argument": {
                                                                                 "lambda": {
                                                                                   "body": {
-                                                                                    "union": {
+                                                                                    "inject": {
                                                                                       "field": {
                                                                                         "name": "member",
                                                                                         "term": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {
                                                                                               "name": "variable",
                                                                                               "term": {
@@ -3785,7 +3785,7 @@
             "body": {
               "lambda": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "template",
                       "term": {
@@ -3825,11 +3825,11 @@
                                                                         "function": {"project": {"field": "name", "typeName": "hydra.core.FieldType"}}}},
                                                                     "type": {"type": {"variable": "hydra.core.Name"}, "variables": []}}],
                                                                 "body": {
-                                                                  "union": {
+                                                                  "inject": {
                                                                     "field": {
                                                                       "name": "member",
                                                                       "term": {
-                                                                        "union": {
+                                                                        "inject": {
                                                                           "field": {
                                                                             "name": "function",
                                                                             "term": {
@@ -3840,17 +3840,17 @@
                                                                                     "term": {
                                                                                       "list": [
                                                                                         {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "virtual", "term": {"unit": {}}},
                                                                                             "typeName": "hydra.cpp.syntax.FunctionSpecifierPrefix"}}]}},
                                                                                   {
                                                                                     "name": "returnType",
                                                                                     "term": {
-                                                                                      "union": {
+                                                                                      "inject": {
                                                                                         "field": {
                                                                                           "name": "basic",
                                                                                           "term": {
-                                                                                            "union": {
+                                                                                            "inject": {
                                                                                               "field": {"name": "named", "term": {"literal": {"string": "R"}}},
                                                                                               "typeName": "hydra.cpp.syntax.BasicType"}}},
                                                                                         "typeName": "hydra.cpp.syntax.TypeExpression"}}},
@@ -3865,7 +3865,7 @@
                                                                                               {
                                                                                                 "name": "type",
                                                                                                 "term": {
-                                                                                                  "union": {
+                                                                                                  "inject": {
                                                                                                     "field": {
                                                                                                       "name": "qualified",
                                                                                                       "term": {
@@ -3874,7 +3874,7 @@
                                                                                                             {
                                                                                                               "name": "baseType",
                                                                                                               "term": {
-                                                                                                                "union": {
+                                                                                                                "inject": {
                                                                                                                   "field": {
                                                                                                                     "name": "qualified",
                                                                                                                     "term": {
@@ -3883,11 +3883,11 @@
                                                                                                                           {
                                                                                                                             "name": "baseType",
                                                                                                                             "term": {
-                                                                                                                              "union": {
+                                                                                                                              "inject": {
                                                                                                                                 "field": {
                                                                                                                                   "name": "basic",
                                                                                                                                   "term": {
-                                                                                                                                    "union": {
+                                                                                                                                    "inject": {
                                                                                                                                       "field": {
                                                                                                                                         "name": "named",
                                                                                                                                         "term": {
@@ -3902,7 +3902,7 @@
                                                                                                                           {
                                                                                                                             "name": "qualifier",
                                                                                                                             "term": {
-                                                                                                                              "union": {
+                                                                                                                              "inject": {
                                                                                                                                 "field": {"name": "const", "term": {"unit": {}}},
                                                                                                                                 "typeName": "hydra.cpp.syntax.TypeQualifier"}}}],
                                                                                                                         "typeName": "hydra.cpp.syntax.QualifiedType"}}},
@@ -3910,7 +3910,7 @@
                                                                                                             {
                                                                                                               "name": "qualifier",
                                                                                                               "term": {
-                                                                                                                "union": {
+                                                                                                                "inject": {
                                                                                                                   "field": {"name": "lvalueRef", "term": {"unit": {}}},
                                                                                                                   "typeName": "hydra.cpp.syntax.TypeQualifier"}}}],
                                                                                                           "typeName": "hydra.cpp.syntax.QualifiedType"}}},
@@ -3933,7 +3933,7 @@
                                                                                   {
                                                                                     "name": "body",
                                                                                     "term": {
-                                                                                      "union": {
+                                                                                      "inject": {
                                                                                         "field": {"name": "pure", "term": {"unit": {}}},
                                                                                         "typeName": "hydra.cpp.syntax.FunctionBody"}}}],
                                                                                 "typeName": "hydra.cpp.syntax.FunctionDeclaration"}}},
@@ -3951,11 +3951,11 @@
                                                 {
                                                   "list": [
                                                     {
-                                                      "union": {
+                                                      "inject": {
                                                         "field": {
                                                           "name": "member",
                                                           "term": {
-                                                            "union": {
+                                                            "inject": {
                                                               "field": {
                                                                 "name": "destructor",
                                                                 "term": {
@@ -3966,7 +3966,7 @@
                                                                         "term": {
                                                                           "list": [
                                                                             {
-                                                                              "union": {
+                                                                              "inject": {
                                                                                 "field": {"name": "virtual", "term": {"unit": {}}},
                                                                                 "typeName": "hydra.cpp.syntax.FunctionSpecifierPrefix"}}]}},
                                                                       {
@@ -3984,7 +3984,7 @@
                                                                       {
                                                                         "name": "body",
                                                                         "term": {
-                                                                          "union": {
+                                                                          "inject": {
                                                                             "field": {"name": "default", "term": {"unit": {}}},
                                                                             "typeName": "hydra.cpp.syntax.FunctionBody"}}}],
                                                                     "typeName": "hydra.cpp.syntax.DestructorDeclaration"}}},
@@ -4031,7 +4031,7 @@
             "body": {
               "lambda": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "template",
                       "term": {
@@ -4056,11 +4056,11 @@
                                                 {
                                                   "list": [
                                                     {
-                                                      "union": {
+                                                      "inject": {
                                                         "field": {
                                                           "name": "member",
                                                           "term": {
-                                                            "union": {
+                                                            "inject": {
                                                               "field": {
                                                                 "name": "function",
                                                                 "term": {
@@ -4071,17 +4071,17 @@
                                                                         "term": {
                                                                           "list": [
                                                                             {
-                                                                              "union": {
+                                                                              "inject": {
                                                                                 "field": {"name": "virtual", "term": {"unit": {}}},
                                                                                 "typeName": "hydra.cpp.syntax.FunctionSpecifierPrefix"}}]}},
                                                                       {
                                                                         "name": "returnType",
                                                                         "term": {
-                                                                          "union": {
+                                                                          "inject": {
                                                                             "field": {
                                                                               "name": "basic",
                                                                               "term": {
-                                                                                "union": {
+                                                                                "inject": {
                                                                                   "field": {"name": "named", "term": {"literal": {"string": "R"}}},
                                                                                   "typeName": "hydra.cpp.syntax.BasicType"}}},
                                                                             "typeName": "hydra.cpp.syntax.TypeExpression"}}},
@@ -4093,11 +4093,11 @@
                                                                             {
                                                                               "application": {
                                                                                 "argument": {
-                                                                                  "union": {
+                                                                                  "inject": {
                                                                                     "field": {
                                                                                       "name": "basic",
                                                                                       "term": {
-                                                                                        "union": {
+                                                                                        "inject": {
                                                                                           "field": {
                                                                                             "name": "named",
                                                                                             "term": {
@@ -4115,13 +4115,13 @@
                                                                         "term": {
                                                                           "list": [
                                                                             {
-                                                                              "union": {
+                                                                              "inject": {
                                                                                 "field": {"name": "const", "term": {"unit": {}}},
                                                                                 "typeName": "hydra.cpp.syntax.FunctionSpecifierSuffix"}}]}},
                                                                       {
                                                                         "name": "body",
                                                                         "term": {
-                                                                          "union": {
+                                                                          "inject": {
                                                                             "field": {"name": "pure", "term": {"unit": {}}},
                                                                             "typeName": "hydra.cpp.syntax.FunctionBody"}}}],
                                                                     "typeName": "hydra.cpp.syntax.FunctionDeclaration"}}},
@@ -4145,11 +4145,11 @@
                                                                         "function": {"project": {"field": "name", "typeName": "hydra.core.FieldType"}}}},
                                                                     "type": {"type": {"variable": "hydra.core.Name"}, "variables": []}}],
                                                                 "body": {
-                                                                  "union": {
+                                                                  "inject": {
                                                                     "field": {
                                                                       "name": "member",
                                                                       "term": {
-                                                                        "union": {
+                                                                        "inject": {
                                                                           "field": {
                                                                             "name": "function",
                                                                             "term": {
@@ -4164,11 +4164,11 @@
                                                                                   {
                                                                                     "name": "returnType",
                                                                                     "term": {
-                                                                                      "union": {
+                                                                                      "inject": {
                                                                                         "field": {
                                                                                           "name": "basic",
                                                                                           "term": {
-                                                                                            "union": {
+                                                                                            "inject": {
                                                                                               "field": {"name": "named", "term": {"literal": {"string": "R"}}},
                                                                                               "typeName": "hydra.cpp.syntax.BasicType"}}},
                                                                                         "typeName": "hydra.cpp.syntax.TypeExpression"}}},
@@ -4180,11 +4180,11 @@
                                                                                         {
                                                                                           "application": {
                                                                                             "argument": {
-                                                                                              "union": {
+                                                                                              "inject": {
                                                                                                 "field": {
                                                                                                   "name": "basic",
                                                                                                   "term": {
-                                                                                                    "union": {
+                                                                                                    "inject": {
                                                                                                       "field": {
                                                                                                         "name": "named",
                                                                                                         "term": {
@@ -4205,13 +4205,13 @@
                                                                                     "term": {
                                                                                       "list": [
                                                                                         {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "override", "term": {"unit": {}}},
                                                                                             "typeName": "hydra.cpp.syntax.FunctionSpecifierSuffix"}}]}},
                                                                                   {
                                                                                     "name": "body",
                                                                                     "term": {
-                                                                                      "union": {
+                                                                                      "inject": {
                                                                                         "field": {
                                                                                           "name": "compound",
                                                                                           "term": {
@@ -4219,11 +4219,11 @@
                                                                                               "body": {
                                                                                                 "list": [
                                                                                                   {
-                                                                                                    "union": {
+                                                                                                    "inject": {
                                                                                                       "field": {
                                                                                                         "name": "jump",
                                                                                                         "term": {
-                                                                                                          "union": {
+                                                                                                          "inject": {
                                                                                                             "field": {
                                                                                                               "name": "returnValue",
                                                                                                               "term": {
@@ -4269,7 +4269,7 @@
                                                 {
                                                   "name": "access",
                                                   "term": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {"name": "public", "term": {"unit": {}}},
                                                       "typeName": "hydra.cpp.syntax.AccessSpecifier"}}},
                                                 {
@@ -4325,11 +4325,11 @@
                                 "list": [
                                   {"variable": "hydra.cpp.coder.memberSpecificationProtected"},
                                   {
-                                    "union": {
+                                    "inject": {
                                       "field": {
                                         "name": "member",
                                         "term": {
-                                          "union": {
+                                          "inject": {
                                             "field": {
                                               "name": "constructor",
                                               "term": {
@@ -4356,7 +4356,7 @@
                                                     {
                                                       "name": "body",
                                                       "term": {
-                                                        "union": {
+                                                        "inject": {
                                                           "field": {"name": "default", "term": {"unit": {}}},
                                                           "typeName": "hydra.cpp.syntax.FunctionBody"}}}],
                                                   "typeName": "hydra.cpp.syntax.ConstructorDeclaration"}}},
@@ -4364,11 +4364,11 @@
                                       "typeName": "hydra.cpp.syntax.MemberSpecification"}},
                                   {"variable": "hydra.cpp.coder.memberSpecificationPublic"},
                                   {
-                                    "union": {
+                                    "inject": {
                                       "field": {
                                         "name": "member",
                                         "term": {
-                                          "union": {
+                                          "inject": {
                                             "field": {
                                               "name": "destructor",
                                               "term": {
@@ -4379,7 +4379,7 @@
                                                       "term": {
                                                         "list": [
                                                           {
-                                                            "union": {
+                                                            "inject": {
                                                               "field": {"name": "virtual", "term": {"unit": {}}},
                                                               "typeName": "hydra.cpp.syntax.FunctionSpecifierPrefix"}}]}},
                                                     {
@@ -4397,18 +4397,18 @@
                                                     {
                                                       "name": "body",
                                                       "term": {
-                                                        "union": {
+                                                        "inject": {
                                                           "field": {"name": "default", "term": {"unit": {}}},
                                                           "typeName": "hydra.cpp.syntax.FunctionBody"}}}],
                                                   "typeName": "hydra.cpp.syntax.DestructorDeclaration"}}},
                                             "typeName": "hydra.cpp.syntax.MemberDeclaration"}}},
                                       "typeName": "hydra.cpp.syntax.MemberSpecification"}},
                                   {
-                                    "union": {
+                                    "inject": {
                                       "field": {
                                         "name": "member",
                                         "term": {
-                                          "union": {
+                                          "inject": {
                                             "field": {
                                               "name": "template",
                                               "term": {
@@ -4421,7 +4421,7 @@
                                                     {
                                                       "name": "declaration",
                                                       "term": {
-                                                        "union": {
+                                                        "inject": {
                                                           "field": {
                                                             "name": "function",
                                                             "term": {
@@ -4436,11 +4436,11 @@
                                                                   {
                                                                     "name": "returnType",
                                                                     "term": {
-                                                                      "union": {
+                                                                      "inject": {
                                                                         "field": {
                                                                           "name": "basic",
                                                                           "term": {
-                                                                            "union": {
+                                                                            "inject": {
                                                                               "field": {"name": "named", "term": {"literal": {"string": "R"}}},
                                                                               "typeName": "hydra.cpp.syntax.BasicType"}}},
                                                                         "typeName": "hydra.cpp.syntax.TypeExpression"}}},
@@ -4455,7 +4455,7 @@
                                                                               {
                                                                                 "name": "type",
                                                                                 "term": {
-                                                                                  "union": {
+                                                                                  "inject": {
                                                                                     "field": {
                                                                                       "name": "qualified",
                                                                                       "term": {
@@ -4464,11 +4464,11 @@
                                                                                             {
                                                                                               "name": "baseType",
                                                                                               "term": {
-                                                                                                "union": {
+                                                                                                "inject": {
                                                                                                   "field": {
                                                                                                     "name": "basic",
                                                                                                     "term": {
-                                                                                                      "union": {
+                                                                                                      "inject": {
                                                                                                         "field": {
                                                                                                           "name": "named",
                                                                                                           "term": {
@@ -4486,7 +4486,7 @@
                                                                                             {
                                                                                               "name": "qualifier",
                                                                                               "term": {
-                                                                                                "union": {
+                                                                                                "inject": {
                                                                                                   "field": {"name": "lvalueRef", "term": {"unit": {}}},
                                                                                                   "typeName": "hydra.cpp.syntax.TypeQualifier"}}}],
                                                                                           "typeName": "hydra.cpp.syntax.QualifiedType"}}},
@@ -4505,13 +4505,13 @@
                                                                     "term": {
                                                                       "list": [
                                                                         {
-                                                                          "union": {
+                                                                          "inject": {
                                                                             "field": {"name": "const", "term": {"unit": {}}},
                                                                             "typeName": "hydra.cpp.syntax.FunctionSpecifierSuffix"}}]}},
                                                                   {
                                                                     "name": "body",
                                                                     "term": {
-                                                                      "union": {
+                                                                      "inject": {
                                                                         "field": {"name": "declaration", "term": {"unit": {}}},
                                                                         "typeName": "hydra.cpp.syntax.FunctionBody"}}}],
                                                                 "typeName": "hydra.cpp.syntax.FunctionDeclaration"}}},
@@ -4646,11 +4646,11 @@
                                                                             "body": {
                                                                               "list": [
                                                                                 {
-                                                                                  "union": {
+                                                                                  "inject": {
                                                                                     "field": {
                                                                                       "name": "member",
                                                                                       "term": {
-                                                                                        "union": {
+                                                                                        "inject": {
                                                                                           "field": {
                                                                                             "name": "variable",
                                                                                             "term": {
@@ -4851,11 +4851,11 @@
                                                                                                           {
                                                                                                             "list": [
                                                                                                               {
-                                                                                                                "union": {
+                                                                                                                "inject": {
                                                                                                                   "field": {
                                                                                                                     "name": "member",
                                                                                                                     "term": {
-                                                                                                                      "union": {
+                                                                                                                      "inject": {
                                                                                                                         "field": {
                                                                                                                           "name": "constructor",
                                                                                                                           "term": {
@@ -4899,7 +4899,7 @@
                                                                                                           {
                                                                                                             "name": "access",
                                                                                                             "term": {
-                                                                                                              "union": {
+                                                                                                              "inject": {
                                                                                                                 "field": {"name": "public", "term": {"unit": {}}},
                                                                                                                 "typeName": "hydra.cpp.syntax.AccessSpecifier"}}},
                                                                                                           {
@@ -4992,7 +4992,7 @@
             "body": {
               "lambda": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "template",
                       "term": {
@@ -5005,7 +5005,7 @@
                             {
                               "name": "declaration",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {
                                     "name": "function",
                                     "term": {
@@ -5020,11 +5020,11 @@
                                           {
                                             "name": "returnType",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "basic",
                                                   "term": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {"name": "named", "term": {"literal": {"string": "R"}}},
                                                       "typeName": "hydra.cpp.syntax.BasicType"}}},
                                                 "typeName": "hydra.cpp.syntax.TypeExpression"}}},
@@ -5050,7 +5050,7 @@
                                                       {
                                                         "name": "type",
                                                         "term": {
-                                                          "union": {
+                                                          "inject": {
                                                             "field": {
                                                               "name": "qualified",
                                                               "term": {
@@ -5059,11 +5059,11 @@
                                                                     {
                                                                       "name": "baseType",
                                                                       "term": {
-                                                                        "union": {
+                                                                        "inject": {
                                                                           "field": {
                                                                             "name": "basic",
                                                                             "term": {
-                                                                              "union": {
+                                                                              "inject": {
                                                                                 "field": {
                                                                                   "name": "named",
                                                                                   "term": {
@@ -5081,7 +5081,7 @@
                                                                     {
                                                                       "name": "qualifier",
                                                                       "term": {
-                                                                        "union": {
+                                                                        "inject": {
                                                                           "field": {"name": "lvalueRef", "term": {"unit": {}}},
                                                                           "typeName": "hydra.cpp.syntax.TypeQualifier"}}}],
                                                                   "typeName": "hydra.cpp.syntax.QualifiedType"}}},
@@ -5100,13 +5100,13 @@
                                             "term": {
                                               "list": [
                                                 {
-                                                  "union": {
+                                                  "inject": {
                                                     "field": {"name": "const", "term": {"unit": {}}},
                                                     "typeName": "hydra.cpp.syntax.FunctionSpecifierSuffix"}}]}},
                                           {
                                             "name": "body",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "compound",
                                                   "term": {
@@ -5129,7 +5129,7 @@
                                                                               "function": {"project": {"field": "name", "typeName": "hydra.core.FieldType"}}}},
                                                                           "type": {"type": {"variable": "hydra.core.Name"}, "variables": []}}],
                                                                       "body": {
-                                                                        "union": {
+                                                                        "inject": {
                                                                           "field": {
                                                                             "name": "selection",
                                                                             "term": {
@@ -5138,11 +5138,11 @@
                                                                                   {
                                                                                     "name": "condition",
                                                                                     "term": {
-                                                                                      "union": {
+                                                                                      "inject": {
                                                                                         "field": {
                                                                                           "name": "assignment",
                                                                                           "term": {
-                                                                                            "union": {
+                                                                                            "inject": {
                                                                                               "field": {
                                                                                                 "name": "assignment",
                                                                                                 "term": {
@@ -5153,15 +5153,15 @@
                                                                                                         "term": {
                                                                                                           "application": {
                                                                                                             "argument": {
-                                                                                                              "union": {
+                                                                                                              "inject": {
                                                                                                                 "field": {
                                                                                                                   "name": "postfix",
                                                                                                                   "term": {
-                                                                                                                    "union": {
+                                                                                                                    "inject": {
                                                                                                                       "field": {
                                                                                                                         "name": "primary",
                                                                                                                         "term": {
-                                                                                                                          "union": {
+                                                                                                                          "inject": {
                                                                                                                             "field": {"name": "identifier", "term": {"literal": {"string": "auto ptr"}}},
                                                                                                                             "typeName": "hydra.cpp.syntax.PrimaryExpression"}}},
                                                                                                                       "typeName": "hydra.cpp.syntax.PostfixExpression"}}},
@@ -5171,27 +5171,27 @@
                                                                                                       {
                                                                                                         "name": "op",
                                                                                                         "term": {
-                                                                                                          "union": {
+                                                                                                          "inject": {
                                                                                                             "field": {"name": "assign", "term": {"unit": {}}},
                                                                                                             "typeName": "hydra.cpp.syntax.AssignmentOperator"}}},
                                                                                                       {
                                                                                                         "name": "right",
                                                                                                         "term": {
-                                                                                                          "union": {
+                                                                                                          "inject": {
                                                                                                             "field": {
                                                                                                               "name": "conditional",
                                                                                                               "term": {
-                                                                                                                "union": {
+                                                                                                                "inject": {
                                                                                                                   "field": {
                                                                                                                     "name": "logicalOr",
                                                                                                                     "term": {
                                                                                                                       "application": {
                                                                                                                         "argument": {
-                                                                                                                          "union": {
+                                                                                                                          "inject": {
                                                                                                                             "field": {
                                                                                                                               "name": "postfix",
                                                                                                                               "term": {
-                                                                                                                                "union": {
+                                                                                                                                "inject": {
                                                                                                                                   "field": {
                                                                                                                                     "name": "functionCall",
                                                                                                                                     "term": {
@@ -5200,11 +5200,11 @@
                                                                                                                                           {
                                                                                                                                             "name": "function",
                                                                                                                                             "term": {
-                                                                                                                                              "union": {
+                                                                                                                                              "inject": {
                                                                                                                                                 "field": {
                                                                                                                                                   "name": "primary",
                                                                                                                                                   "term": {
-                                                                                                                                                    "union": {
+                                                                                                                                                    "inject": {
                                                                                                                                                       "field": {
                                                                                                                                                         "name": "identifier",
                                                                                                                                                         "term": {
@@ -5235,7 +5235,7 @@
                                                                                                                                                 {
                                                                                                                                                   "application": {
                                                                                                                                                     "argument": {
-                                                                                                                                                      "union": {
+                                                                                                                                                      "inject": {
                                                                                                                                                         "field": {"name": "identifier", "term": {"literal": {"string": "this"}}},
                                                                                                                                                         "typeName": "hydra.cpp.syntax.PrimaryExpression"}},
                                                                                                                                                     "function": {"variable": "hydra.cpp.coder.cppPrimaryExpressionToCppExpression"}}}]}}],
@@ -5252,7 +5252,7 @@
                                                                                   {
                                                                                     "name": "thenBranch",
                                                                                     "term": {
-                                                                                      "union": {
+                                                                                      "inject": {
                                                                                         "field": {
                                                                                           "name": "compound",
                                                                                           "term": {
@@ -5260,17 +5260,17 @@
                                                                                               "body": {
                                                                                                 "list": [
                                                                                                   {
-                                                                                                    "union": {
+                                                                                                    "inject": {
                                                                                                       "field": {
                                                                                                         "name": "jump",
                                                                                                         "term": {
-                                                                                                          "union": {
+                                                                                                          "inject": {
                                                                                                             "field": {
                                                                                                               "name": "returnValue",
                                                                                                               "term": {
                                                                                                                 "application": {
                                                                                                                   "argument": {
-                                                                                                                    "union": {
+                                                                                                                    "inject": {
                                                                                                                       "field": {
                                                                                                                         "name": "functionCall",
                                                                                                                         "term": {
@@ -5279,7 +5279,7 @@
                                                                                                                               {
                                                                                                                                 "name": "function",
                                                                                                                                 "term": {
-                                                                                                                                  "union": {
+                                                                                                                                  "inject": {
                                                                                                                                     "field": {
                                                                                                                                       "name": "memberAccess",
                                                                                                                                       "term": {
@@ -5288,11 +5288,11 @@
                                                                                                                                             {
                                                                                                                                               "name": "object",
                                                                                                                                               "term": {
-                                                                                                                                                "union": {
+                                                                                                                                                "inject": {
                                                                                                                                                   "field": {
                                                                                                                                                     "name": "primary",
                                                                                                                                                     "term": {
-                                                                                                                                                      "union": {
+                                                                                                                                                      "inject": {
                                                                                                                                                         "field": {"name": "identifier", "term": {"literal": {"string": "visitor"}}},
                                                                                                                                                         "typeName": "hydra.cpp.syntax.PrimaryExpression"}}},
                                                                                                                                                   "typeName": "hydra.cpp.syntax.PostfixExpression"}}},
@@ -5306,7 +5306,7 @@
                                                                                                                                     {
                                                                                                                                       "application": {
                                                                                                                                         "argument": {
-                                                                                                                                          "union": {
+                                                                                                                                          "inject": {
                                                                                                                                             "field": {
                                                                                                                                               "name": "unaryOp",
                                                                                                                                               "term": {
@@ -5315,21 +5315,21 @@
                                                                                                                                                     {
                                                                                                                                                       "name": "operator",
                                                                                                                                                       "term": {
-                                                                                                                                                        "union": {
+                                                                                                                                                        "inject": {
                                                                                                                                                           "field": {"name": "dereference", "term": {"unit": {}}},
                                                                                                                                                           "typeName": "hydra.cpp.syntax.UnaryOperator"}}},
                                                                                                                                                     {
                                                                                                                                                       "name": "operand",
                                                                                                                                                       "term": {
-                                                                                                                                                        "union": {
+                                                                                                                                                        "inject": {
                                                                                                                                                           "field": {
                                                                                                                                                             "name": "postfix",
                                                                                                                                                             "term": {
-                                                                                                                                                              "union": {
+                                                                                                                                                              "inject": {
                                                                                                                                                                 "field": {
                                                                                                                                                                   "name": "primary",
                                                                                                                                                                   "term": {
-                                                                                                                                                                    "union": {
+                                                                                                                                                                    "inject": {
                                                                                                                                                                       "field": {"name": "identifier", "term": {"literal": {"string": "ptr"}}},
                                                                                                                                                                       "typeName": "hydra.cpp.syntax.PrimaryExpression"}}},
                                                                                                                                                                 "typeName": "hydra.cpp.syntax.PostfixExpression"}}},
@@ -5455,7 +5455,7 @@
                 "body": {
                   "lambda": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
                           "name": "function",
                           "term": {
@@ -5466,17 +5466,17 @@
                                   "term": {
                                     "list": [
                                       {
-                                        "union": {
+                                        "inject": {
                                           "field": {"name": "inline", "term": {"unit": {}}},
                                           "typeName": "hydra.cpp.syntax.FunctionSpecifierPrefix"}}]}},
                                 {
                                   "name": "returnType",
                                   "term": {
-                                    "union": {
+                                    "inject": {
                                       "field": {
                                         "name": "basic",
                                         "term": {
-                                          "union": {
+                                          "inject": {
                                             "field": {"name": "bool", "term": {"unit": {}}},
                                             "typeName": "hydra.cpp.syntax.BasicType"}}},
                                       "typeName": "hydra.cpp.syntax.TypeExpression"}}},
@@ -5488,11 +5488,11 @@
                                       {
                                         "application": {
                                           "argument": {
-                                            "union": {
+                                            "inject": {
                                               "field": {
                                                 "name": "basic",
                                                 "term": {
-                                                  "union": {
+                                                  "inject": {
                                                     "field": {
                                                       "name": "named",
                                                       "term": {
@@ -5508,11 +5508,11 @@
                                       {
                                         "application": {
                                           "argument": {
-                                            "union": {
+                                            "inject": {
                                               "field": {
                                                 "name": "basic",
                                                 "term": {
-                                                  "union": {
+                                                  "inject": {
                                                     "field": {
                                                       "name": "named",
                                                       "term": {
@@ -5534,7 +5534,7 @@
                                 {
                                   "name": "body",
                                   "term": {
-                                    "union": {
+                                    "inject": {
                                       "field": {
                                         "name": "compound",
                                         "term": {
@@ -5542,11 +5542,11 @@
                                             "body": {
                                               "list": [
                                                 {
-                                                  "union": {
+                                                  "inject": {
                                                     "field": {
                                                       "name": "jump",
                                                       "term": {
-                                                        "union": {
+                                                        "inject": {
                                                           "field": {
                                                             "name": "returnValue",
                                                             "term": {
@@ -5648,13 +5648,13 @@
                     "function": {
                       "application": {
                         "argument": {
-                          "union": {
+                          "inject": {
                             "field": {"name": "lowerSnake", "term": {"unit": {}}},
                             "typeName": "hydra.util.CaseConvention"}},
                         "function": {
                           "application": {
                             "argument": {
-                              "union": {
+                              "inject": {
                                 "field": {"name": "lowerSnake", "term": {"unit": {}}},
                                 "typeName": "hydra.util.CaseConvention"}},
                             "function": {"variable": "hydra.names.nameToFilePath"}}}}}}}}},

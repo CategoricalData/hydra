@@ -6,7 +6,7 @@
         "term": {
           "lambda": {
             "body": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "record",
                   "term": {
@@ -80,7 +80,7 @@
                 "body": {
                   "lambda": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
                           "name": "wrap",
                           "term": {
@@ -106,7 +106,7 @@
                                       "function": {
                                         "lambda": {
                                           "body": {
-                                            "union": {
+                                            "inject": {
                                               "field": {
                                                 "name": "list",
                                                 "term": {
@@ -117,7 +117,7 @@
                                                         "argument": {
                                                           "lambda": {
                                                             "body": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {
                                                                   "name": "maybe",
                                                                   "term": {
@@ -180,7 +180,7 @@
         "term": {
           "lambda": {
             "body": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "wrap",
                   "term": {
@@ -203,7 +203,7 @@
                               "function": {
                                 "lambda": {
                                   "body": {
-                                    "union": {
+                                    "inject": {
                                       "field": {
                                         "name": "list",
                                         "term": {
@@ -214,11 +214,11 @@
                                                 "argument": {
                                                   "lambda": {
                                                     "body": {
-                                                      "union": {
+                                                      "inject": {
                                                         "field": {
                                                           "name": "literal",
                                                           "term": {
-                                                            "union": {
+                                                            "inject": {
                                                               "field": {"name": "string", "term": {"variable": "x"}},
                                                               "typeName": "hydra.core.Literal"}}},
                                                         "typeName": "hydra.core.Term"}},
@@ -254,7 +254,7 @@
                 "body": {
                   "lambda": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
                           "name": "record",
                           "term": {
@@ -293,7 +293,7 @@
                                                   "function": {
                                                     "lambda": {
                                                       "body": {
-                                                        "union": {
+                                                        "inject": {
                                                           "field": {
                                                             "name": "maybe",
                                                             "term": {
@@ -336,7 +336,7 @@
                                                   "function": {
                                                     "lambda": {
                                                       "body": {
-                                                        "union": {
+                                                        "inject": {
                                                           "field": {
                                                             "name": "list",
                                                             "term": {
@@ -403,7 +403,7 @@
         "term": {
           "lambda": {
             "body": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "record",
                   "term": {
@@ -459,7 +459,7 @@
                                           "function": {
                                             "lambda": {
                                               "body": {
-                                                "union": {
+                                                "inject": {
                                                   "field": {
                                                     "name": "list",
                                                     "term": {

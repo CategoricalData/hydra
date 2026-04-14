@@ -250,7 +250,7 @@
                                   "cases": {
                                     "cases": [
                                       {
-                                        "name": "union",
+                                        "name": "inject",
                                         "term": {
                                           "lambda": {
                                             "body": {
@@ -309,7 +309,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "universal", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.testing.TestCase"}},
                                                                                         "domain": {"variable": "hydra.testing.UniversalTestCase"},

@@ -11,7 +11,7 @@ import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pur
 
 caseConventionCamel :: Phantoms.TTerm Util.CaseConvention
 caseConventionCamel =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.util.CaseConvention"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "camel"),
@@ -19,7 +19,7 @@ caseConventionCamel =
 
 caseConventionLowerSnake :: Phantoms.TTerm Util.CaseConvention
 caseConventionLowerSnake =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.util.CaseConvention"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "lowerSnake"),
@@ -27,7 +27,7 @@ caseConventionLowerSnake =
 
 caseConventionPascal :: Phantoms.TTerm Util.CaseConvention
 caseConventionPascal =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.util.CaseConvention"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "pascal"),
@@ -35,7 +35,7 @@ caseConventionPascal =
 
 caseConventionUpperSnake :: Phantoms.TTerm Util.CaseConvention
 caseConventionUpperSnake =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.util.CaseConvention"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "upperSnake"),
@@ -43,7 +43,7 @@ caseConventionUpperSnake =
 
 comparisonEqualTo :: Phantoms.TTerm Util.Comparison
 comparisonEqualTo =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.util.Comparison"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "equalTo"),
@@ -51,7 +51,7 @@ comparisonEqualTo =
 
 comparisonGreaterThan :: Phantoms.TTerm Util.Comparison
 comparisonGreaterThan =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.util.Comparison"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "greaterThan"),
@@ -59,7 +59,7 @@ comparisonGreaterThan =
 
 comparisonLessThan :: Phantoms.TTerm Util.Comparison
 comparisonLessThan =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.util.Comparison"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "lessThan"),
@@ -67,7 +67,7 @@ comparisonLessThan =
 
 precisionArbitrary :: Phantoms.TTerm Util.Precision
 precisionArbitrary =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.util.Precision"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "arbitrary"),
@@ -75,7 +75,7 @@ precisionArbitrary =
 
 precisionBits :: Phantoms.TTerm Int -> Phantoms.TTerm Util.Precision
 precisionBits x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.util.Precision"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "bits"),

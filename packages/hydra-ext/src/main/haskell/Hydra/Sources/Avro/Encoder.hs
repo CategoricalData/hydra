@@ -329,13 +329,13 @@ enumAdapter = define "enumAdapter" $
       (Coders.coder
         (lambda "cx1" $ lambda "t" $
           cases _Term (var "t") (Just (err @@ var "cx1" @@ string "expected union term for enum")) [
-            _Term_union>>: lambda "inj" $ lets [
+            _Term_inject>>: lambda "inj" $ lets [
               "fname">: project _Injection _Injection_field @@ var "inj"] $
               right (inject JM._Value JM._Value_string (localName @@ (project _Field _Field_name @@ var "fname")))])
         (lambda "_cx" $ lambda "j" $
           cases JM._Value (var "j") Nothing [
             JM._Value_string>>: lambda "s" $
-              right (Core.termUnion (Core.injection (var "typeName") (Core.field (Core.name (var "s")) Core.termUnit)))])),
+              right (Core.termInject (Core.injection (var "typeName") (Core.field (Core.name (var "s")) Core.termUnit)))])),
     "env1">: record AvroEnv._EncodeEnvironment [
       AvroEnv._EncodeEnvironment_typeMap>>: project AvroEnv._EncodeEnvironment AvroEnv._EncodeEnvironment_typeMap @@ var "env0",
       AvroEnv._EncodeEnvironment_emitted>>: Maps.insert (var "typeName") (var "adapter_")
@@ -715,7 +715,7 @@ unionAsRecordAdapter = define "unionAsRecordAdapter" $
         (Coders.coder
           (lambda "cx1" $ lambda "t" $
             cases _Term (var "t") (Just (err @@ var "cx1" @@ string "expected union term")) [
-              _Term_union>>: lambda "inj" $ lets [
+              _Term_inject>>: lambda "inj" $ lets [
                 "activeName">: project _Field _Field_name @@ (project _Injection _Injection_field @@ var "inj"),
                 "activeValue">: project _Field _Field_term @@ (project _Injection _Injection_field @@ var "inj"),
                 "encodePair">: lambda "nameAd" $ lets [
@@ -743,7 +743,7 @@ unionAsRecordAdapter = define "unionAsRecordAdapter" $
                         (var "findActive" @@ var "rest_")
                         (lambda "jv" $
                           cases JM._Value (var "jv") (Just (
-                            Eithers.map (lambda "t" $ Core.termUnion (Core.injection (var "typeName") (Core.field (var "fname") (var "t"))))
+                            Eithers.map (lambda "t" $ Core.termInject (Core.injection (var "typeName") (Core.field (var "fname") (var "t"))))
                               (Coders.coderDecode (Coders.adapterCoder (var "ad")) @@ var "cx1" @@ var "jv"))) [
                             JM._Value_null>>: constant (var "findActive" @@ var "rest_")])
                         (var "mjv"))] $

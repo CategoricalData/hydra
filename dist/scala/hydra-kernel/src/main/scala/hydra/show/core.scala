@@ -226,7 +226,7 @@ def term(t: hydra.core.Term): scala.Predef.String =
         hydra.lib.strings.cat(Seq(hydra.show.core.term(t2), "\u27E8", hydra.show.core.`type`(typ), "\u27E9"))
       }
     }
-    case hydra.core.Term.union(v_Term_union_v1) => hydra.show.core.injection(v_Term_union_v1)
+    case hydra.core.Term.inject(v_Term_inject_v1) => hydra.show.core.injection(v_Term_inject_v1)
     case hydra.core.Term.unit => "unit"
     case hydra.core.Term.unwrap(v_Term_unwrap_tname) => hydra.lib.strings.cat(Seq("unwrap(", v_Term_unwrap_tname, ")"))
     case hydra.core.Term.variable(v_Term_variable_name) => v_Term_variable_name

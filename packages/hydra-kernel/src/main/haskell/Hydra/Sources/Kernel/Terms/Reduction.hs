@@ -461,7 +461,7 @@ etaExpandTerm = define "etaExpandTerm" $
         var "afterRecursion" @@ var "result",
 
       -- Union: recurse into injection field
-      _Term_union>>: "inj" ~> var "afterRecursion" @@ (Core.termUnion $ Core.injection
+      _Term_inject>>: "inj" ~> var "afterRecursion" @@ (Core.termInject $ Core.injection
         (Core.injectionTypeName $ var "inj")
         (var "forField" @@ Core.injectionField (var "inj"))),
 
@@ -889,6 +889,6 @@ termIsValue = define "termIsValue" $
       Maybes.maybe true termIsValue (var "m"),
     _Term_record>>: "r" ~> var "checkFields" @@ Core.recordFields (var "r"),
     _Term_set>>: "s" ~> var "forList" @@ Sets.toList (var "s"),
-    _Term_union>>: "i" ~> var "checkField" @@ Core.injectionField (var "i"),
+    _Term_inject>>: "i" ~> var "checkField" @@ Core.injectionField (var "i"),
     _Term_unit>>: constant true,
     _Term_variable>>: constant false]

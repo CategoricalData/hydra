@@ -311,9 +311,9 @@ def encodeTerm[T0](depth: Int)(namespaces: hydra.packaging.Namespaces[hydra.hask
       lazy val term1: hydra.core.Term = (v_Term_typeApplication_typed.body)
       encode(term1)
     }
-    case hydra.core.Term.union(v_Term_union_injection) => {
-      lazy val sname: hydra.core.Name = (v_Term_union_injection.typeName)
-      lazy val field: hydra.core.Field = (v_Term_union_injection.field)
+    case hydra.core.Term.inject(v_Term_inject_injection) => {
+      lazy val sname: hydra.core.Name = (v_Term_inject_injection.typeName)
+      lazy val field: hydra.core.Field = (v_Term_inject_injection.field)
       lazy val fn: hydra.core.Name = (field.name)
       lazy val ft: hydra.core.Term = (field.term)
       lazy val lhs: hydra.haskell.syntax.Expression = hydra.haskell.syntax.Expression.variable(hydra.haskell.utils.unionFieldReference(hydra.lib.sets.union[hydra.core.Name](hydra.lib.sets.fromList[hydra.core.Name](hydra.lib.maps.keys[hydra.core.Name,
@@ -769,7 +769,7 @@ def typeDecl[T0](namespaces: hydra.packaging.Namespaces[hydra.haskell.syntax.Mod
   def rewrite(recurse: (hydra.core.Term => hydra.core.Term))(term: hydra.core.Term): hydra.core.Term =
     {
     lazy val variantResult: Option[hydra.core.Field] = hydra.strip.deannotateTerm(term) match
-      case hydra.core.Term.union(v_Term_union_inj) => hydra.lib.logic.ifElse[Option[hydra.core.Field]](hydra.lib.equality.equal[hydra.core.Name](v_Term_union_inj.typeName)("hydra.core.Type"))(Some(v_Term_union_inj.field))(None)
+      case hydra.core.Term.inject(v_Term_inject_inj) => hydra.lib.logic.ifElse[Option[hydra.core.Field]](hydra.lib.equality.equal[hydra.core.Name](v_Term_inject_inj.typeName)("hydra.core.Type"))(Some(v_Term_inject_inj.field))(None)
       case _ => None
     def decodeString(term2: hydra.core.Term): Option[scala.Predef.String] =
       hydra.strip.deannotateTerm(term2) match

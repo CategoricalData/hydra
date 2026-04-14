@@ -615,7 +615,7 @@
                                             "body": {
                                               "either": {
                                                 "@left": {
-                                                  "union": {
+                                                  "inject": {
                                                     "field": {
                                                       "name": "other",
                                                       "term": {

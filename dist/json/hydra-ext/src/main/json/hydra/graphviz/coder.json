@@ -411,7 +411,7 @@
                     "body": {
                       "lambda": {
                         "body": {
-                          "union": {
+                          "inject": {
                             "field": {
                               "name": "edge",
                               "term": {
@@ -494,7 +494,7 @@
             "body": {
               "lambda": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "node",
                       "term": {
@@ -1057,7 +1057,7 @@
                                             "domain": {"variable": "hydra.core.TypeApplicationTerm"},
                                             "parameter": "_"}}},
                                       {
-                                        "name": "union",
+                                        "name": "inject",
                                         "term": {
                                           "lambda": {
                                             "body": {
@@ -1220,7 +1220,7 @@
                             "term": {
                               "lambda": {
                                 "body": {
-                                  "union": {
+                                  "inject": {
                                     "field": {
                                       "name": "node",
                                       "term": {
@@ -1783,7 +1783,7 @@
                                                           {
                                                             "name": "nodeStmt",
                                                             "term": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {
                                                                   "name": "node",
                                                                   "term": {
@@ -2118,7 +2118,7 @@
                                                                               {
                                                                                 "name": "varNodeStmt",
                                                                                 "term": {
-                                                                                  "union": {
+                                                                                  "inject": {
                                                                                     "field": {
                                                                                       "name": "node",
                                                                                       "term": {
@@ -2146,7 +2146,7 @@
                                                                               {
                                                                                 "name": "varEdgeStmt",
                                                                                 "term": {
-                                                                                  "union": {
+                                                                                  "inject": {
                                                                                     "field": {
                                                                                       "name": "edge",
                                                                                       "term": {
@@ -2185,7 +2185,7 @@
                                                                                         "body": {
                                                                                           "pair": {
                                                                                             "@first": {
-                                                                                              "union": {
+                                                                                              "inject": {
                                                                                                 "field": {"name": "lambdaBody", "term": {"unit": {}}},
                                                                                                 "typeName": "hydra.paths.SubtermStep"}},
                                                                                             "@second": {"variable": "body"}}},
@@ -2540,7 +2540,7 @@
                                                                                                         "body": {
                                                                                                           "pair": {
                                                                                                             "@first": {
-                                                                                                              "union": {
+                                                                                                              "inject": {
                                                                                                                 "field": {"name": "letBinding", "term": {"variable": "bname"}},
                                                                                                                 "typeName": "hydra.paths.SubtermStep"}},
                                                                                                             "@second": {"variable": "bterm"}}},
@@ -2639,7 +2639,7 @@
                                                                                         "body": {
                                                                                           "pair": {
                                                                                             "@first": {
-                                                                                              "union": {
+                                                                                              "inject": {
                                                                                                 "field": {"name": "letBody", "term": {"unit": {}}},
                                                                                                 "typeName": "hydra.paths.SubtermStep"}},
                                                                                             "@second": {"variable": "env"}}},
@@ -2826,7 +2826,7 @@
                                         "body": {
                                           "pair": {
                                             "@first": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {"name": "annotatedBody", "term": {"unit": {}}},
                                                 "typeName": "hydra.paths.SubtermStep"}},
                                             "@second": {"variable": "term"}}},

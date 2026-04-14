@@ -43,7 +43,7 @@ def name(cx: hydra.graph.Graph, raw: hydra.core.Term):
 def float_type(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_core_float_type_1(cx, v1):
         match v1:
-            case hydra.core.TermUnion(value=inj):
+            case hydra.core.TermInject(value=inj):
                 field = inj.field
                 fname = field.name
                 fterm = field.term
@@ -59,7 +59,7 @@ def float_type(cx: hydra.graph.Graph, raw: hydra.core.Term):
 def integer_type(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_core_integer_type_1(cx, v1):
         match v1:
-            case hydra.core.TermUnion(value=inj):
+            case hydra.core.TermInject(value=inj):
                 field = inj.field
                 fname = field.name
                 fterm = field.term
@@ -75,7 +75,7 @@ def integer_type(cx: hydra.graph.Graph, raw: hydra.core.Term):
 def literal_type(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_core_literal_type_1(cx, v1):
         match v1:
-            case hydra.core.TermUnion(value=inj):
+            case hydra.core.TermInject(value=inj):
                 field = inj.field
                 fname = field.name
                 fterm = field.term
@@ -104,7 +104,7 @@ def type_variable_metadata(cx: hydra.graph.Graph, raw: hydra.core.Term):
 def float_value(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_core_float_value_1(cx, v1):
         match v1:
-            case hydra.core.TermUnion(value=inj):
+            case hydra.core.TermInject(value=inj):
                 field = inj.field
                 fname = field.name
                 fterm = field.term
@@ -183,7 +183,7 @@ def float_value(cx: hydra.graph.Graph, raw: hydra.core.Term):
 def integer_value(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_core_integer_value_1(cx, v1):
         match v1:
-            case hydra.core.TermUnion(value=inj):
+            case hydra.core.TermInject(value=inj):
                 field = inj.field
                 fname = field.name
                 fterm = field.term
@@ -388,7 +388,7 @@ def integer_value(cx: hydra.graph.Graph, raw: hydra.core.Term):
 def literal(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_core_literal_1(cx, v1):
         match v1:
-            case hydra.core.TermUnion(value=inj):
+            case hydra.core.TermInject(value=inj):
                 field = inj.field
                 fname = field.name
                 fterm = field.term
@@ -680,13 +680,13 @@ def record(cx: hydra.graph.Graph, raw: hydra.core.Term):
 def term(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_core_term_1(cx, v1):
         match v1:
-            case hydra.core.TermUnion(value=inj):
+            case hydra.core.TermInject(value=inj):
                 field = inj.field
                 fname = field.name
                 fterm = field.term
                 @lru_cache(1)
                 def variant_map() -> FrozenDict[hydra.core.Name, Callable[[hydra.core.Term], Either[hydra.errors.DecodingError, hydra.core.Term]]]:
-                    return hydra.lib.maps.from_list(((hydra.core.Name("annotated"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.core.Term, hydra.core.TermAnnotated(t))), annotated_term(cx, input)))), (hydra.core.Name("application"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.core.Term, hydra.core.TermApplication(t))), application(cx, input)))), (hydra.core.Name("cases"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.core.Term, hydra.core.TermCases(t))), case_statement(cx, input)))), (hydra.core.Name("either"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.core.Term, hydra.core.TermEither(t))), hydra.extract.core.decode_either((lambda x1, x2: term(x1, x2)), (lambda x1, x2: term(x1, x2)), cx, input)))), (hydra.core.Name("lambda"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.core.Term, hydra.core.TermLambda(t))), lambda_(cx, input)))), (hydra.core.Name("let"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.core.Term, hydra.core.TermLet(t))), let(cx, input)))), (hydra.core.Name("list"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.core.Term, hydra.core.TermList(t))), hydra.extract.core.decode_list((lambda x1, x2: term(x1, x2)), cx, input)))), (hydra.core.Name("literal"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.core.Term, hydra.core.TermLiteral(t))), literal(cx, input)))), (hydra.core.Name("map"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.core.Term, hydra.core.TermMap(t))), hydra.extract.core.decode_map((lambda x1, x2: term(x1, x2)), (lambda x1, x2: term(x1, x2)), cx, input)))), (hydra.core.Name("maybe"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.core.Term, hydra.core.TermMaybe(t))), hydra.extract.core.decode_maybe((lambda x1, x2: term(x1, x2)), cx, input)))), (hydra.core.Name("pair"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.core.Term, hydra.core.TermPair(t))), hydra.extract.core.decode_pair((lambda x1, x2: term(x1, x2)), (lambda x1, x2: term(x1, x2)), cx, input)))), (hydra.core.Name("project"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.core.Term, hydra.core.TermProject(t))), projection(cx, input)))), (hydra.core.Name("record"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.core.Term, hydra.core.TermRecord(t))), record(cx, input)))), (hydra.core.Name("set"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.core.Term, hydra.core.TermSet(t))), hydra.extract.core.decode_set((lambda x1, x2: term(x1, x2)), cx, input)))), (hydra.core.Name("typeApplication"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.core.Term, hydra.core.TermTypeApplication(t))), type_application_term(cx, input)))), (hydra.core.Name("typeLambda"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.core.Term, hydra.core.TermTypeLambda(t))), type_lambda(cx, input)))), (hydra.core.Name("union"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.core.Term, hydra.core.TermUnion(t))), injection(cx, input)))), (hydra.core.Name("unit"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.core.Term, hydra.core.TermUnit())), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("unwrap"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.core.Term, hydra.core.TermUnwrap(t))), name(cx, input)))), (hydra.core.Name("variable"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.core.Term, hydra.core.TermVariable(t))), name(cx, input)))), (hydra.core.Name("wrap"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.core.Term, hydra.core.TermWrap(t))), wrapped_term(cx, input))))))
+                    return hydra.lib.maps.from_list(((hydra.core.Name("annotated"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.core.Term, hydra.core.TermAnnotated(t))), annotated_term(cx, input)))), (hydra.core.Name("application"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.core.Term, hydra.core.TermApplication(t))), application(cx, input)))), (hydra.core.Name("cases"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.core.Term, hydra.core.TermCases(t))), case_statement(cx, input)))), (hydra.core.Name("either"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.core.Term, hydra.core.TermEither(t))), hydra.extract.core.decode_either((lambda x1, x2: term(x1, x2)), (lambda x1, x2: term(x1, x2)), cx, input)))), (hydra.core.Name("inject"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.core.Term, hydra.core.TermInject(t))), injection(cx, input)))), (hydra.core.Name("lambda"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.core.Term, hydra.core.TermLambda(t))), lambda_(cx, input)))), (hydra.core.Name("let"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.core.Term, hydra.core.TermLet(t))), let(cx, input)))), (hydra.core.Name("list"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.core.Term, hydra.core.TermList(t))), hydra.extract.core.decode_list((lambda x1, x2: term(x1, x2)), cx, input)))), (hydra.core.Name("literal"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.core.Term, hydra.core.TermLiteral(t))), literal(cx, input)))), (hydra.core.Name("map"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.core.Term, hydra.core.TermMap(t))), hydra.extract.core.decode_map((lambda x1, x2: term(x1, x2)), (lambda x1, x2: term(x1, x2)), cx, input)))), (hydra.core.Name("maybe"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.core.Term, hydra.core.TermMaybe(t))), hydra.extract.core.decode_maybe((lambda x1, x2: term(x1, x2)), cx, input)))), (hydra.core.Name("pair"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.core.Term, hydra.core.TermPair(t))), hydra.extract.core.decode_pair((lambda x1, x2: term(x1, x2)), (lambda x1, x2: term(x1, x2)), cx, input)))), (hydra.core.Name("project"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.core.Term, hydra.core.TermProject(t))), projection(cx, input)))), (hydra.core.Name("record"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.core.Term, hydra.core.TermRecord(t))), record(cx, input)))), (hydra.core.Name("set"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.core.Term, hydra.core.TermSet(t))), hydra.extract.core.decode_set((lambda x1, x2: term(x1, x2)), cx, input)))), (hydra.core.Name("typeApplication"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.core.Term, hydra.core.TermTypeApplication(t))), type_application_term(cx, input)))), (hydra.core.Name("typeLambda"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.core.Term, hydra.core.TermTypeLambda(t))), type_lambda(cx, input)))), (hydra.core.Name("unit"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.core.Term, hydra.core.TermUnit())), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("unwrap"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.core.Term, hydra.core.TermUnwrap(t))), name(cx, input)))), (hydra.core.Name("variable"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.core.Term, hydra.core.TermVariable(t))), name(cx, input)))), (hydra.core.Name("wrap"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.core.Term, hydra.core.TermWrap(t))), wrapped_term(cx, input))))))
                 return hydra.lib.maybes.maybe((lambda : Left(hydra.errors.DecodingError(hydra.lib.strings.cat(("no such field ", fname.value, " in union"))))), (lambda f: f(fterm)), hydra.lib.maps.lookup(fname, variant_map()))
 
             case _:
@@ -696,7 +696,7 @@ def term(cx: hydra.graph.Graph, raw: hydra.core.Term):
 def type(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_core_type_1(cx, v1):
         match v1:
-            case hydra.core.TermUnion(value=inj):
+            case hydra.core.TermInject(value=inj):
                 field = inj.field
                 fname = field.name
                 fterm = field.term

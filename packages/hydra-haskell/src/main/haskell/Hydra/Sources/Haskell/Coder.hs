@@ -534,7 +534,7 @@ encodeTerm = haskellCoderDefinition "encodeTerm" $
       _Term_typeApplication>>: "typed" ~> lets [
         "term1">: Core.typeApplicationTermBody $ var "typed"] $
         var "encode" @@ var "term1",
-      _Term_union>>: "injection" ~> lets [
+      _Term_inject>>: "injection" ~> lets [
         "sname">: Core.injectionTypeName $ var "injection",
         "field">: Core.injectionField $ var "injection",
         "fn">: Core.fieldName $ var "field",
@@ -1063,7 +1063,7 @@ typeDecl = haskellCoderDefinition "typeDecl" $
     "rewrite">: "recurse" ~> "term" ~> lets [
       "variantResult">: cases _Term (Strip.deannotateTerm @@ var "term")
         (Just nothing) [
-        _Term_union>>: "inj" ~> Logic.ifElse (Equality.equal (Core.injectionTypeName $ var "inj") (Core.nameLift _Type))
+        _Term_inject>>: "inj" ~> Logic.ifElse (Equality.equal (Core.injectionTypeName $ var "inj") (Core.nameLift _Type))
           (just $ Core.injectionField $ var "inj")
           nothing],
       "decodeString">: "term" ~> (cases _Term (Strip.deannotateTerm @@ var "term")

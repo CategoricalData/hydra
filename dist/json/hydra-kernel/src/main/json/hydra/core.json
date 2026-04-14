@@ -1067,6 +1067,15 @@
                             "left": {"variable": "hydra.core.Term"},
                             "right": {"variable": "hydra.core.Term"}}}}}},
                   {
+                    "name": "inject",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "An injection; an instance of a union type"}}}],
+                        "body": {"variable": "hydra.core.Injection"}}}},
+                  {
                     "name": "lambda",
                     "type": {
                       "annotated": {
@@ -1178,15 +1187,6 @@
                             "@key": "description",
                             "@value": {"literal": {"string": "A System F type abstraction term"}}}],
                         "body": {"variable": "hydra.core.TypeLambda"}}}},
-                  {
-                    "name": "union",
-                    "type": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "An injection; an instance of a union type"}}}],
-                        "body": {"variable": "hydra.core.Injection"}}}},
                   {
                     "name": "unit",
                     "type": {

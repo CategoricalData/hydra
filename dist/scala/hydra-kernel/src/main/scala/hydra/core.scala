@@ -89,6 +89,7 @@ enum Term :
    case application(value: hydra.core.Application) extends Term
    case cases(value: hydra.core.CaseStatement) extends Term
    case either(value: Either[hydra.core.Term, hydra.core.Term]) extends Term
+   case inject(value: hydra.core.Injection) extends Term
    case lambda(value: hydra.core.Lambda) extends Term
    case let(value: hydra.core.Let) extends Term
    case list(value: Seq[hydra.core.Term]) extends Term
@@ -101,7 +102,6 @@ enum Term :
    case set(value: scala.collection.immutable.Set[hydra.core.Term]) extends Term
    case typeApplication(value: hydra.core.TypeApplicationTerm) extends Term
    case typeLambda(value: hydra.core.TypeLambda) extends Term
-   case union(value: hydra.core.Injection) extends Term
    case unit extends Term
    case unwrap(value: hydra.core.Name) extends Term
    case variable(value: hydra.core.Name) extends Term

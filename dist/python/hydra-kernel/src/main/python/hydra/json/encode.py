@@ -150,7 +150,7 @@ def to_json_untyped(term: hydra.core.Term) -> Either[str, hydra.json.model.Value
                 return hydra.lib.eithers.map_list((lambda x1: encode_field(x1)), fields)
             return hydra.lib.eithers.map((lambda fs: cast(hydra.json.model.Value, hydra.json.model.ValueObject(hydra.lib.maps.from_list(fs)))), encoded_fields())
 
-        case hydra.core.TermUnion(value=inj):
+        case hydra.core.TermInject(value=inj):
             field = inj.field
             fname = field.name.value
             fterm = field.term
@@ -287,7 +287,7 @@ def to_json(types: FrozenDict[hydra.core.Name, hydra.core.Type], tname: hydra.co
                 return Left("expected record term")
     def _hoist_stripped_term_body_5(rt, v1):
         match v1:
-            case hydra.core.TermUnion(value=inj):
+            case hydra.core.TermInject(value=inj):
                 field = inj.field
                 fname = field.name.value
                 fterm = field.term

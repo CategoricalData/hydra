@@ -48,7 +48,7 @@ def type_definition(cx: hydra.graph.Graph, raw: hydra.core.Term):
 def definition(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_packaging_definition_1(cx, v1):
         match v1:
-            case hydra.core.TermUnion(value=inj):
+            case hydra.core.TermInject(value=inj):
                 field = inj.field
                 fname = field.name
                 fterm = field.term

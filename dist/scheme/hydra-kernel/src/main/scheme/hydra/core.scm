@@ -27,7 +27,7 @@
 (define-record-type hydra_core_map_type (make-hydra_core_map_type keys values) hydra_core_map_type? (keys hydra_core_map_type-keys) (values hydra_core_map_type-values))
 (define-record-type hydra_core_projection (make-hydra_core_projection type_name field) hydra_core_projection? (type_name hydra_core_projection-type_name) (field hydra_core_projection-field))
 (define-record-type hydra_core_record (make-hydra_core_record type_name fields) hydra_core_record? (type_name hydra_core_record-type_name) (fields hydra_core_record-fields))
-(define hydra_core_term-variants (list 'annotated 'application 'cases 'either 'lambda 'let 'list 'literal 'map 'maybe 'pair 'project 'record 'set 'type_application 'type_lambda 'union 'unit 'unwrap 'variable 'wrap))
+(define hydra_core_term-variants (list 'annotated 'application 'cases 'either 'inject 'lambda 'let 'list 'literal 'map 'maybe 'pair 'project 'record 'set 'type_application 'type_lambda 'unit 'unwrap 'variable 'wrap))
 (define hydra_core_type-variants (list 'annotated 'application 'either 'forall 'function 'list 'literal 'map 'maybe 'pair 'record 'set 'union 'unit 'variable 'void 'wrap))
 (define-record-type hydra_core_type_application_term (make-hydra_core_type_application_term body type) hydra_core_type_application_term? (body hydra_core_type_application_term-body) (type hydra_core_type_application_term-type))
 (define-record-type hydra_core_type_lambda (make-hydra_core_type_lambda parameter body) hydra_core_type_lambda? (parameter hydra_core_type_lambda-parameter) (body hydra_core_type_lambda-body))

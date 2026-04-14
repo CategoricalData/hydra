@@ -408,7 +408,7 @@
                                                                         "argument": {
                                                                           "application": {
                                                                             "argument": {
-                                                                              "union": {
+                                                                              "inject": {
                                                                                 "field": {
                                                                                   "name": "variable",
                                                                                   "term": {
@@ -1090,7 +1090,7 @@
                                 "function": {
                                   "application": {
                                     "argument": {
-                                      "union": {
+                                      "inject": {
                                         "field": {"name": "pre", "term": {"unit": {}}},
                                         "typeName": "hydra.coders.TraversalOrder"}},
                                     "function": {
@@ -1236,7 +1236,7 @@
                                                                 "term": {
                                                                   "lambda": {
                                                                     "body": {
-                                                                      "union": {
+                                                                      "inject": {
                                                                         "field": {
                                                                           "name": "variable",
                                                                           "term": {
@@ -1434,7 +1434,7 @@
                                                                                                     "function": {"project": {"field": "domain", "typeName": "hydra.core.Lambda"}}}},
                                                                                                 "type": {"type": {"maybe": {"variable": "hydra.core.Type"}}, "variables": []}}],
                                                                                             "body": {
-                                                                                              "union": {
+                                                                                              "inject": {
                                                                                                 "field": {
                                                                                                   "name": "lambda",
                                                                                                   "term": {
@@ -2272,7 +2272,7 @@
                                                                                                               "type": {"list": {"variable": "hydra.core.Binding"}},
                                                                                                               "variables": []}}],
                                                                                                         "body": {
-                                                                                                          "union": {
+                                                                                                          "inject": {
                                                                                                             "field": {
                                                                                                               "name": "let",
                                                                                                               "term": {
@@ -2324,7 +2324,7 @@
                                                                                     "term": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {
                                                                                               "name": "typeApplication",
                                                                                               "term": {
@@ -2392,7 +2392,7 @@
                                                                                     "term": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {
                                                                                               "name": "typeLambda",
                                                                                               "term": {
@@ -2646,7 +2646,7 @@
                                                         "body": {
                                                           "application": {
                                                             "argument": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {"name": "variable", "term": {"variable": "v"}},
                                                                 "typeName": "hydra.core.Term"}},
                                                             "function": {
@@ -2755,7 +2755,7 @@
                                                         "body": {
                                                           "application": {
                                                             "argument": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {
                                                                   "name": "forall",
                                                                   "term": {
@@ -2912,7 +2912,7 @@
                                                 "term": {
                                                   "lambda": {
                                                     "body": {
-                                                      "union": {
+                                                      "inject": {
                                                         "field": {
                                                           "name": "variable",
                                                           "term": {
@@ -3136,7 +3136,7 @@
                                                                 "term": {
                                                                   "lambda": {
                                                                     "body": {
-                                                                      "union": {
+                                                                      "inject": {
                                                                         "field": {
                                                                           "name": "lambda",
                                                                           "term": {
@@ -3218,7 +3218,7 @@
                                                                                   "domain": {"variable": "hydra.core.Binding"}}},
                                                                               "variables": []}}],
                                                                         "body": {
-                                                                          "union": {
+                                                                          "inject": {
                                                                             "field": {
                                                                               "name": "let",
                                                                               "term": {
@@ -3260,7 +3260,7 @@
                                                                 "term": {
                                                                   "lambda": {
                                                                     "body": {
-                                                                      "union": {
+                                                                      "inject": {
                                                                         "field": {
                                                                           "name": "typeApplication",
                                                                           "term": {
@@ -3295,7 +3295,7 @@
                                                                 "term": {
                                                                   "lambda": {
                                                                     "body": {
-                                                                      "union": {
+                                                                      "inject": {
                                                                         "field": {
                                                                           "name": "typeLambda",
                                                                           "term": {
@@ -3351,7 +3351,7 @@
                                                                 "term": {
                                                                   "lambda": {
                                                                     "body": {
-                                                                      "union": {
+                                                                      "inject": {
                                                                         "field": {
                                                                           "name": "annotated",
                                                                           "term": {
@@ -3461,7 +3461,7 @@
                                                     "term": {
                                                       "lambda": {
                                                         "body": {
-                                                          "union": {
+                                                          "inject": {
                                                             "field": {
                                                               "name": "variable",
                                                               "term": {
@@ -3605,7 +3605,7 @@
                                                 "term": {
                                                   "lambda": {
                                                     "body": {
-                                                      "union": {
+                                                      "inject": {
                                                         "field": {
                                                           "name": "variable",
                                                           "term": {
@@ -3895,7 +3895,7 @@
                                                                     "body": {
                                                                       "application": {
                                                                         "argument": {
-                                                                          "union": {
+                                                                          "inject": {
                                                                             "field": {
                                                                               "name": "lambda",
                                                                               "term": {
@@ -3994,7 +3994,7 @@
                                                                                               "values": {"variable": "hydra.core.Name"}}},
                                                                                           "variables": []}}],
                                                                                     "body": {
-                                                                                      "union": {
+                                                                                      "inject": {
                                                                                         "field": {
                                                                                           "name": "lambda",
                                                                                           "term": {
@@ -4147,7 +4147,7 @@
                                                     "term": {
                                                       "lambda": {
                                                         "body": {
-                                                          "union": {
+                                                          "inject": {
                                                             "field": {
                                                               "name": "variable",
                                                               "term": {

@@ -67,11 +67,11 @@
                                                             "argument": {
                                                               "lambda": {
                                                                 "body": {
-                                                                  "union": {
+                                                                  "inject": {
                                                                     "field": {
                                                                       "name": "resolution",
                                                                       "term": {
-                                                                        "union": {
+                                                                        "inject": {
                                                                           "field": {
                                                                             "name": "unexpectedShape",
                                                                             "term": {
@@ -608,11 +608,11 @@
                                                                                         "argument": {
                                                                                           "lambda": {
                                                                                             "body": {
-                                                                                              "union": {
+                                                                                              "inject": {
                                                                                                 "field": {
                                                                                                   "name": "resolution",
                                                                                                   "term": {
-                                                                                                    "union": {
+                                                                                                    "inject": {
                                                                                                       "field": {
                                                                                                         "name": "unexpectedShape",
                                                                                                         "term": {
@@ -702,11 +702,11 @@
                                                 "body": {
                                                   "either": {
                                                     "@left": {
-                                                      "union": {
+                                                      "inject": {
                                                         "field": {
                                                           "name": "resolution",
                                                           "term": {
-                                                            "union": {
+                                                            "inject": {
                                                               "field": {
                                                                 "name": "unexpectedShape",
                                                                 "term": {
@@ -824,11 +824,11 @@
                                                 "body": {
                                                   "either": {
                                                     "@left": {
-                                                      "union": {
+                                                      "inject": {
                                                         "field": {
                                                           "name": "extraction",
                                                           "term": {
-                                                            "union": {
+                                                            "inject": {
                                                               "field": {
                                                                 "name": "multipleFields",
                                                                 "term": {
@@ -893,11 +893,11 @@
                                                 "body": {
                                                   "either": {
                                                     "@left": {
-                                                      "union": {
+                                                      "inject": {
                                                         "field": {
                                                           "name": "resolution",
                                                           "term": {
-                                                            "union": {
+                                                            "inject": {
                                                               "field": {
                                                                 "name": "noMatchingField",
                                                                 "term": {
@@ -1406,7 +1406,7 @@
                                                                 "argument": {
                                                                   "lambda": {
                                                                     "body": {
-                                                                      "union": {
+                                                                      "inject": {
                                                                         "field": {"name": "variable", "term": {"variable": "x"}},
                                                                         "typeName": "hydra.core.Type"}},
                                                                     "domain": {"variable": "hydra.core.Name"},
@@ -1674,7 +1674,7 @@
                         "function": {
                           "application": {
                             "argument": {
-                              "union": {
+                              "inject": {
                                 "field": {"name": "variable", "term": {"variable": "tname"}},
                                 "typeName": "hydra.core.Type"}},
                             "function": {
@@ -1684,7 +1684,7 @@
                                     "body": {
                                       "lambda": {
                                         "body": {
-                                          "union": {
+                                          "inject": {
                                             "field": {
                                               "name": "application",
                                               "term": {
@@ -1917,11 +1917,11 @@
                                                                         "body": {
                                                                           "either": {
                                                                             "@left": {
-                                                                              "union": {
+                                                                              "inject": {
                                                                                 "field": {
                                                                                   "name": "resolution",
                                                                                   "term": {
-                                                                                    "union": {
+                                                                                    "inject": {
                                                                                       "field": {
                                                                                         "name": "unexpectedShape",
                                                                                         "term": {
@@ -2106,11 +2106,11 @@
                                             "body": {
                                               "either": {
                                                 "@left": {
-                                                  "union": {
+                                                  "inject": {
                                                     "field": {
                                                       "name": "resolution",
                                                       "term": {
-                                                        "union": {
+                                                        "inject": {
                                                           "field": {
                                                             "name": "noSuchBinding",
                                                             "term": {
@@ -2267,11 +2267,11 @@
                                                             "body": {
                                                               "either": {
                                                                 "@left": {
-                                                                  "union": {
+                                                                  "inject": {
                                                                     "field": {
                                                                       "name": "resolution",
                                                                       "term": {
-                                                                        "union": {
+                                                                        "inject": {
                                                                           "field": {
                                                                             "name": "noSuchBinding",
                                                                             "term": {
@@ -2413,11 +2413,11 @@
                                                                 "body": {
                                                                   "either": {
                                                                     "@left": {
-                                                                      "union": {
+                                                                      "inject": {
                                                                         "field": {
                                                                           "name": "resolution",
                                                                           "term": {
-                                                                            "union": {
+                                                                            "inject": {
                                                                               "field": {
                                                                                 "name": "noMatchingField",
                                                                                 "term": {

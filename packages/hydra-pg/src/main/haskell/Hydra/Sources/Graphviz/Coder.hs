@@ -252,7 +252,7 @@ termLabel = define "termLabel" $
         var "simpleLabel" @@ Strings.cat2 (string "\x2227") (Names.compactName @@ var "namespaces" @@ (project _Record _Record_typeName @@ var "rec")),
       _Term_typeLambda>>: constant $ var "simpleLabel" @@ string "tyabs",
       _Term_typeApplication>>: constant $ var "simpleLabel" @@ string "tyapp",
-      _Term_union>>: "inj" ~>
+      _Term_inject>>: "inj" ~>
         var "simpleLabel" @@ Strings.cat2 (string "\x22BB") (Names.compactName @@ var "namespaces" @@ (project _Injection _Injection_typeName @@ var "inj")),
       _Term_variable>>: "name" ~>
         var "simpleLabel" @@ (Names.compactName @@ var "namespaces" @@ var "name"),

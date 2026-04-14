@@ -58,7 +58,7 @@ encodeAdjacencyList pairs =
 -- | Encode CaseConvention as a Term (unit variant)
 encodeCaseConvention :: Util.CaseConvention -> Core.Term
 encodeCaseConvention conv =
-    Core.TermUnion (Core.Injection {
+    Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.util.CaseConvention"),
       Core.injectionField = Core.Field {
         Core.fieldName = case conv of

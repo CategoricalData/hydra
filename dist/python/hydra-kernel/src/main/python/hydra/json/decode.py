@@ -258,7 +258,7 @@ def from_json(types: FrozenDict[hydra.core.Name, hydra.core.Type], tname: hydra.
                 @lru_cache(1)
                 def decoded() -> Either[str, hydra.core.Term]:
                     return from_json(types, tname, ftype, json_val())
-                return hydra.lib.eithers.map((lambda v: cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(tname, hydra.core.Field(hydra.core.Name(key), v))))), decoded())
+                return hydra.lib.eithers.map((lambda v: cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(tname, hydra.core.Field(hydra.core.Name(key), v))))), decoded())
             def try_field(key: str, val: Maybe[hydra.json.model.Value], ft: hydra.core.FieldType) -> Maybe[Either[str, hydra.core.Term]]:
                 return hydra.lib.logic.if_else(hydra.lib.equality.equal(ft.name.value, key), (lambda : Just(decode_variant(key, val, ft.type))), (lambda : Nothing()))
             def find_and_decode(key: str, val: Maybe[hydra.json.model.Value], fts: frozenlist[hydra.core.FieldType]) -> Either[str, hydra.core.Term]:

@@ -54,6 +54,8 @@ class TermVariant(Enum):
 
     EITHER = hydra.core.Name("either")
 
+    INJECT = hydra.core.Name("inject")
+
     LAMBDA = hydra.core.Name("lambda")
 
     LET = hydra.core.Name("let")
@@ -77,8 +79,6 @@ class TermVariant(Enum):
     TYPE_APPLICATION = hydra.core.Name("typeApplication")
 
     TYPE_LAMBDA = hydra.core.Name("typeLambda")
-
-    UNION = hydra.core.Name("union")
 
     UNIT = hydra.core.Name("unit")
 

@@ -193,7 +193,7 @@ dateTime x =
 
 doubleValueFinite :: Phantoms.TTerm Double -> Phantoms.TTerm Syntax.DoubleValue
 doubleValueFinite x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.graphson.syntax.DoubleValue"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "finite"),
@@ -201,7 +201,7 @@ doubleValueFinite x =
 
 doubleValueInfinity :: Phantoms.TTerm Syntax.DoubleValue
 doubleValueInfinity =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.graphson.syntax.DoubleValue"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "infinity"),
@@ -209,7 +209,7 @@ doubleValueInfinity =
 
 doubleValueNegativeInfinity :: Phantoms.TTerm Syntax.DoubleValue
 doubleValueNegativeInfinity =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.graphson.syntax.DoubleValue"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "negativeInfinity"),
@@ -217,7 +217,7 @@ doubleValueNegativeInfinity =
 
 doubleValueNotANumber :: Phantoms.TTerm Syntax.DoubleValue
 doubleValueNotANumber =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.graphson.syntax.DoubleValue"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "notANumber"),
@@ -237,7 +237,7 @@ edgeLabel x =
 
 floatValueFinite :: Phantoms.TTerm Float -> Phantoms.TTerm Syntax.FloatValue
 floatValueFinite x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.graphson.syntax.FloatValue"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "finite"),
@@ -245,7 +245,7 @@ floatValueFinite x =
 
 floatValueInfinity :: Phantoms.TTerm Syntax.FloatValue
 floatValueInfinity =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.graphson.syntax.FloatValue"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "infinity"),
@@ -253,7 +253,7 @@ floatValueInfinity =
 
 floatValueNegativeInfinity :: Phantoms.TTerm Syntax.FloatValue
 floatValueNegativeInfinity =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.graphson.syntax.FloatValue"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "negativeInfinity"),
@@ -261,7 +261,7 @@ floatValueNegativeInfinity =
 
 floatValueNotANumber :: Phantoms.TTerm Syntax.FloatValue
 floatValueNotANumber =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.graphson.syntax.FloatValue"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "notANumber"),
@@ -407,7 +407,7 @@ uuid x =
 
 valueBigDecimal :: Phantoms.TTerm Syntax.BigDecimalValue -> Phantoms.TTerm Syntax.Value
 valueBigDecimal x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.graphson.syntax.Value"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "bigDecimal"),
@@ -415,7 +415,7 @@ valueBigDecimal x =
 
 valueBigInteger :: Phantoms.TTerm Integer -> Phantoms.TTerm Syntax.Value
 valueBigInteger x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.graphson.syntax.Value"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "bigInteger"),
@@ -423,7 +423,7 @@ valueBigInteger x =
 
 valueBinary :: Phantoms.TTerm String -> Phantoms.TTerm Syntax.Value
 valueBinary x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.graphson.syntax.Value"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "binary"),
@@ -431,7 +431,7 @@ valueBinary x =
 
 valueBoolean :: Phantoms.TTerm Bool -> Phantoms.TTerm Syntax.Value
 valueBoolean x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.graphson.syntax.Value"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "boolean"),
@@ -439,7 +439,7 @@ valueBoolean x =
 
 valueByte :: Phantoms.TTerm I.Int16 -> Phantoms.TTerm Syntax.Value
 valueByte x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.graphson.syntax.Value"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "byte"),
@@ -447,7 +447,7 @@ valueByte x =
 
 valueChar :: Phantoms.TTerm I.Int64 -> Phantoms.TTerm Syntax.Value
 valueChar x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.graphson.syntax.Value"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "char"),
@@ -455,7 +455,7 @@ valueChar x =
 
 valueComposite :: Phantoms.TTerm Syntax.CompositeTypedValue -> Phantoms.TTerm Syntax.Value
 valueComposite x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.graphson.syntax.Value"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "composite"),
@@ -463,7 +463,7 @@ valueComposite x =
 
 valueDateTime :: Phantoms.TTerm Syntax.DateTime -> Phantoms.TTerm Syntax.Value
 valueDateTime x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.graphson.syntax.Value"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "dateTime"),
@@ -471,7 +471,7 @@ valueDateTime x =
 
 valueDouble :: Phantoms.TTerm Syntax.DoubleValue -> Phantoms.TTerm Syntax.Value
 valueDouble x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.graphson.syntax.Value"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "double"),
@@ -479,7 +479,7 @@ valueDouble x =
 
 valueDuration :: Phantoms.TTerm Syntax.Duration -> Phantoms.TTerm Syntax.Value
 valueDuration x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.graphson.syntax.Value"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "duration"),
@@ -487,7 +487,7 @@ valueDuration x =
 
 valueFloat :: Phantoms.TTerm Syntax.FloatValue -> Phantoms.TTerm Syntax.Value
 valueFloat x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.graphson.syntax.Value"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "float"),
@@ -495,7 +495,7 @@ valueFloat x =
 
 valueInteger :: Phantoms.TTerm Int -> Phantoms.TTerm Syntax.Value
 valueInteger x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.graphson.syntax.Value"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "integer"),
@@ -503,7 +503,7 @@ valueInteger x =
 
 valueList :: Phantoms.TTerm [Syntax.Value] -> Phantoms.TTerm Syntax.Value
 valueList x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.graphson.syntax.Value"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "list"),
@@ -511,7 +511,7 @@ valueList x =
 
 valueLong :: Phantoms.TTerm I.Int64 -> Phantoms.TTerm Syntax.Value
 valueLong x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.graphson.syntax.Value"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "long"),
@@ -519,7 +519,7 @@ valueLong x =
 
 valueMap :: Phantoms.TTerm Syntax.Map -> Phantoms.TTerm Syntax.Value
 valueMap x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.graphson.syntax.Value"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "map"),
@@ -527,7 +527,7 @@ valueMap x =
 
 valueNull :: Phantoms.TTerm Syntax.Value
 valueNull =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.graphson.syntax.Value"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "null"),
@@ -595,7 +595,7 @@ valuePairWithSecond original newVal =
 
 valuePrimitive :: Phantoms.TTerm Syntax.PrimitiveTypedValue -> Phantoms.TTerm Syntax.Value
 valuePrimitive x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.graphson.syntax.Value"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "primitive"),
@@ -603,7 +603,7 @@ valuePrimitive x =
 
 valueSet :: Phantoms.TTerm [Syntax.Value] -> Phantoms.TTerm Syntax.Value
 valueSet x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.graphson.syntax.Value"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "set"),
@@ -611,7 +611,7 @@ valueSet x =
 
 valueShort :: Phantoms.TTerm I.Int16 -> Phantoms.TTerm Syntax.Value
 valueShort x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.graphson.syntax.Value"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "short"),
@@ -619,7 +619,7 @@ valueShort x =
 
 valueString :: Phantoms.TTerm String -> Phantoms.TTerm Syntax.Value
 valueString x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.graphson.syntax.Value"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "string"),
@@ -627,7 +627,7 @@ valueString x =
 
 valueUuid :: Phantoms.TTerm Syntax.Uuid -> Phantoms.TTerm Syntax.Value
 valueUuid x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pg.graphson.syntax.Value"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "uuid"),

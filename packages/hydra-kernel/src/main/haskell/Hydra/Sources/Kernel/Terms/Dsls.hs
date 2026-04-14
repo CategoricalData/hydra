@@ -111,33 +111,33 @@ nominalResultType = define "nominalResultType" $
     (var "vars")
 
 -- | Inject a Record-typed term into the Term.record variant
--- Produces TermUnion(Injection _Term (Field _Term_record innerRecord))
+-- Produces TermInject(Injection _Term (Field _Term_record innerRecord))
 injectTermRecord :: TTerm Term -> TTerm Term
-injectTermRecord t = Core.termUnion $ Core.injection (Core.nameLift _Term) (Core.field (Core.nameLift _Term_record) t)
+injectTermRecord t = Core.termInject $ Core.injection (Core.nameLift _Term) (Core.field (Core.nameLift _Term_record) t)
 
 -- | Inject a term into the Term.application variant
 injectTermApplication :: TTerm Term -> TTerm Term
-injectTermApplication t = Core.termUnion $ Core.injection (Core.nameLift _Term) (Core.field (Core.nameLift _Term_application) t)
+injectTermApplication t = Core.termInject $ Core.injection (Core.nameLift _Term) (Core.field (Core.nameLift _Term_application) t)
 
 -- | Inject a term into the Term.cases variant
 injectTermCases :: TTerm Term -> TTerm Term
-injectTermCases t = Core.termUnion $ Core.injection (Core.nameLift _Term) (Core.field (Core.nameLift _Term_cases) t)
+injectTermCases t = Core.termInject $ Core.injection (Core.nameLift _Term) (Core.field (Core.nameLift _Term_cases) t)
 
 -- | Inject a term into the Term.project variant
 injectTermProject :: TTerm Term -> TTerm Term
-injectTermProject t = Core.termUnion $ Core.injection (Core.nameLift _Term) (Core.field (Core.nameLift _Term_project) t)
+injectTermProject t = Core.termInject $ Core.injection (Core.nameLift _Term) (Core.field (Core.nameLift _Term_project) t)
 
 -- | Inject a term into the Term.union variant
 injectTermUnion :: TTerm Term -> TTerm Term
-injectTermUnion t = Core.termUnion $ Core.injection (Core.nameLift _Term) (Core.field (Core.nameLift _Term_union) t)
+injectTermUnion t = Core.termInject $ Core.injection (Core.nameLift _Term) (Core.field (Core.nameLift _Term_inject) t)
 
 -- | Inject a term into the Term.unwrap variant
 injectTermUnwrap :: TTerm Term -> TTerm Term
-injectTermUnwrap t = Core.termUnion $ Core.injection (Core.nameLift _Term) (Core.field (Core.nameLift _Term_unwrap) t)
+injectTermUnwrap t = Core.termInject $ Core.injection (Core.nameLift _Term) (Core.field (Core.nameLift _Term_unwrap) t)
 
 -- | Inject a term into the Term.wrap variant
 injectTermWrap :: TTerm Term -> TTerm Term
-injectTermWrap t = Core.termUnion $ Core.injection (Core.nameLift _Term) (Core.field (Core.nameLift _Term_wrap) t)
+injectTermWrap t = Core.termInject $ Core.injection (Core.nameLift _Term) (Core.field (Core.nameLift _Term_wrap) t)
 
 -- | Build a deep Name: TermWrap(_Name, TermLiteral(LiteralString(s)))
 deepName :: TTerm String -> TTerm Term
@@ -400,7 +400,7 @@ generateUnionInjector = define "generateUnionInjector" $
   -- Build simple injection
   -- Build deep injection: deepField for the variant, then deepInjection into the union type
   "dFieldValue" <~ (Logic.ifElse (var "isUnit")
-    (Core.termUnion $ Core.injection (Core.nameLift _Term) (Core.field (Core.nameLift _Term_unit) Core.termUnit))
+    (Core.termInject $ Core.injection (Core.nameLift _Term) (Core.field (Core.nameLift _Term_unit) Core.termUnit))
     (unwrapTTerm (Core.termVariable (Core.name (string "x"))))) $
   "injectionTerm" <~ (wrapTermInTTerm (deepInjection (var "typeName") (deepField (var "fieldName") (var "dFieldValue")))) $
   -- For non-unit variants, wrap in a typed lambda; for unit, it's a constant TTerm

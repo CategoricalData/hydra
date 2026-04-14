@@ -919,7 +919,7 @@
                             "body": {
                               "either": {
                                 "@right": {
-                                  "union": {
+                                  "inject": {
                                     "field": {"name": "string", "term": {"variable": "s"}},
                                     "typeName": "hydra.pg.graphson.syntax.Value"}}}},
                             "type": {"variable": "t0"}}},
@@ -979,7 +979,7 @@
                                                         "body": {
                                                           "either": {
                                                             "@right": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {
                                                                   "name": "binary",
                                                                   "term": {
@@ -1002,7 +1002,7 @@
                                                         "body": {
                                                           "either": {
                                                             "@right": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {"name": "boolean", "term": {"variable": "b"}},
                                                                 "typeName": "hydra.pg.graphson.syntax.Value"}}}},
                                                         "type": {"variable": "hydra.errors.Error"}}},
@@ -1030,7 +1030,7 @@
                                                                         "body": {
                                                                           "either": {
                                                                             "@right": {
-                                                                              "union": {
+                                                                              "inject": {
                                                                                 "field": {
                                                                                   "name": "bigDecimal",
                                                                                   "term": {
@@ -1056,11 +1056,11 @@
                                                                         "body": {
                                                                           "either": {
                                                                             "@right": {
-                                                                              "union": {
+                                                                              "inject": {
                                                                                 "field": {
                                                                                   "name": "float",
                                                                                   "term": {
-                                                                                    "union": {
+                                                                                    "inject": {
                                                                                       "field": {"name": "finite", "term": {"variable": "f"}},
                                                                                       "typeName": "hydra.pg.graphson.syntax.FloatValue"}}},
                                                                                 "typeName": "hydra.pg.graphson.syntax.Value"}}}},
@@ -1079,11 +1079,11 @@
                                                                         "body": {
                                                                           "either": {
                                                                             "@right": {
-                                                                              "union": {
+                                                                              "inject": {
                                                                                 "field": {
                                                                                   "name": "double",
                                                                                   "term": {
-                                                                                    "union": {
+                                                                                    "inject": {
                                                                                       "field": {"name": "finite", "term": {"variable": "f"}},
                                                                                       "typeName": "hydra.pg.graphson.syntax.DoubleValue"}}},
                                                                                 "typeName": "hydra.pg.graphson.syntax.Value"}}}},
@@ -1098,7 +1098,7 @@
                                                                 "body": {
                                                                   "either": {
                                                                     "@left": {
-                                                                      "union": {
+                                                                      "inject": {
                                                                         "field": {
                                                                           "name": "other",
                                                                           "term": {
@@ -1132,7 +1132,7 @@
                                                                         "body": {
                                                                           "either": {
                                                                             "@right": {
-                                                                              "union": {
+                                                                              "inject": {
                                                                                 "field": {"name": "bigInteger", "term": {"variable": "i"}},
                                                                                 "typeName": "hydra.pg.graphson.syntax.Value"}}}},
                                                                         "type": {"variable": "hydra.errors.Error"}}},
@@ -1150,7 +1150,7 @@
                                                                         "body": {
                                                                           "either": {
                                                                             "@right": {
-                                                                              "union": {
+                                                                              "inject": {
                                                                                 "field": {"name": "integer", "term": {"variable": "i"}},
                                                                                 "typeName": "hydra.pg.graphson.syntax.Value"}}}},
                                                                         "type": {"variable": "hydra.errors.Error"}}},
@@ -1168,7 +1168,7 @@
                                                                         "body": {
                                                                           "either": {
                                                                             "@right": {
-                                                                              "union": {
+                                                                              "inject": {
                                                                                 "field": {"name": "long", "term": {"variable": "i"}},
                                                                                 "typeName": "hydra.pg.graphson.syntax.Value"}}}},
                                                                         "type": {"variable": "hydra.errors.Error"}}},
@@ -1182,7 +1182,7 @@
                                                                 "body": {
                                                                   "either": {
                                                                     "@left": {
-                                                                      "union": {
+                                                                      "inject": {
                                                                         "field": {
                                                                           "name": "other",
                                                                           "term": {
@@ -1206,7 +1206,7 @@
                                                         "body": {
                                                           "either": {
                                                             "@right": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {"name": "string", "term": {"variable": "s"}},
                                                                 "typeName": "hydra.pg.graphson.syntax.Value"}}}},
                                                         "type": {"variable": "hydra.errors.Error"}}},
@@ -1220,7 +1220,7 @@
                                                 "body": {
                                                   "either": {
                                                     "@left": {
-                                                      "union": {
+                                                      "inject": {
                                                         "field": {
                                                           "name": "other",
                                                           "term": {
@@ -1245,7 +1245,7 @@
                                         "body": {
                                           "either": {
                                             "@right": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {"name": "null", "term": {"unit": {}}},
                                                 "typeName": "hydra.pg.graphson.syntax.Value"}}}},
                                         "type": {"variable": "hydra.errors.Error"}}},
@@ -1259,7 +1259,7 @@
                                 "body": {
                                   "either": {
                                     "@left": {
-                                      "union": {
+                                      "inject": {
                                         "field": {
                                           "name": "other",
                                           "term": {

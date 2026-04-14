@@ -453,7 +453,7 @@ commandType x =
 
 commandTypeAsynchronous :: Phantoms.TTerm Dtld.CommandType
 commandTypeAsynchronous =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.azure.dtld.CommandType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "asynchronous"),
@@ -461,7 +461,7 @@ commandTypeAsynchronous =
 
 commandTypeSynchronous :: Phantoms.TTerm Dtld.CommandType
 commandTypeSynchronous =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.azure.dtld.CommandType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "synchronous"),
@@ -2172,7 +2172,7 @@ fieldWithSchema original newVal =
 
 integerOrStringInteger :: Phantoms.TTerm Int -> Phantoms.TTerm Dtld.IntegerOrString
 integerOrStringInteger x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.azure.dtld.IntegerOrString"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "integer"),
@@ -2180,7 +2180,7 @@ integerOrStringInteger x =
 
 integerOrStringString :: Phantoms.TTerm String -> Phantoms.TTerm Dtld.IntegerOrString
 integerOrStringString x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.azure.dtld.IntegerOrString"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "string"),
@@ -2878,7 +2878,7 @@ interfaceWithType original newVal =
 
 interface_ContentsCommand :: Phantoms.TTerm Dtld.Command -> Phantoms.TTerm Dtld.Interface_Contents
 interface_ContentsCommand x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.azure.dtld.Interface_Contents"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "command"),
@@ -2886,7 +2886,7 @@ interface_ContentsCommand x =
 
 interface_ContentsComponent :: Phantoms.TTerm Dtld.Component -> Phantoms.TTerm Dtld.Interface_Contents
 interface_ContentsComponent x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.azure.dtld.Interface_Contents"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "component"),
@@ -2894,7 +2894,7 @@ interface_ContentsComponent x =
 
 interface_ContentsProperty :: Phantoms.TTerm Dtld.Property -> Phantoms.TTerm Dtld.Interface_Contents
 interface_ContentsProperty x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.azure.dtld.Interface_Contents"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "property"),
@@ -2902,7 +2902,7 @@ interface_ContentsProperty x =
 
 interface_ContentsRelationship :: Phantoms.TTerm Dtld.Relationship -> Phantoms.TTerm Dtld.Interface_Contents
 interface_ContentsRelationship x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.azure.dtld.Interface_Contents"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "relationship"),
@@ -2910,7 +2910,7 @@ interface_ContentsRelationship x =
 
 interface_ContentsTelemetry :: Phantoms.TTerm Dtld.Telemetry -> Phantoms.TTerm Dtld.Interface_Contents
 interface_ContentsTelemetry x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.azure.dtld.Interface_Contents"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "telemetry"),
@@ -5282,7 +5282,7 @@ relationshipWritable x =
 
 schemaComplex :: Phantoms.TTerm Dtld.Schema_Complex -> Phantoms.TTerm Dtld.Schema
 schemaComplex x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.azure.dtld.Schema"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "complex"),
@@ -5290,7 +5290,7 @@ schemaComplex x =
 
 schemaPrimitive :: Phantoms.TTerm Dtld.Schema_Primitive -> Phantoms.TTerm Dtld.Schema
 schemaPrimitive x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.azure.dtld.Schema"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "primitive"),
@@ -5634,7 +5634,7 @@ schema_ArrayWithType original newVal =
 
 schema_ComplexArray :: Phantoms.TTerm Dtld.Schema_Array -> Phantoms.TTerm Dtld.Schema_Complex
 schema_ComplexArray x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.azure.dtld.Schema_Complex"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "array"),
@@ -5642,7 +5642,7 @@ schema_ComplexArray x =
 
 schema_ComplexEnum :: Phantoms.TTerm Dtld.Schema_Enum -> Phantoms.TTerm Dtld.Schema_Complex
 schema_ComplexEnum x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.azure.dtld.Schema_Complex"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "enum"),
@@ -5650,7 +5650,7 @@ schema_ComplexEnum x =
 
 schema_ComplexMap :: Phantoms.TTerm Dtld.Schema_Map -> Phantoms.TTerm Dtld.Schema_Complex
 schema_ComplexMap x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.azure.dtld.Schema_Complex"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "map"),
@@ -5658,7 +5658,7 @@ schema_ComplexMap x =
 
 schema_ComplexObject :: Phantoms.TTerm Dtld.Schema_Object -> Phantoms.TTerm Dtld.Schema_Complex
 schema_ComplexObject x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.azure.dtld.Schema_Complex"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "object"),
@@ -6352,7 +6352,7 @@ schema_InterfaceWithType original newVal =
 
 schema_Interface_TypeArray :: Phantoms.TTerm Dtld.Schema_Array -> Phantoms.TTerm Dtld.Schema_Interface_Type
 schema_Interface_TypeArray x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.azure.dtld.Schema_Interface_Type"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "array"),
@@ -6360,7 +6360,7 @@ schema_Interface_TypeArray x =
 
 schema_Interface_TypeEnum :: Phantoms.TTerm Dtld.Schema_Enum -> Phantoms.TTerm Dtld.Schema_Interface_Type
 schema_Interface_TypeEnum x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.azure.dtld.Schema_Interface_Type"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "enum"),
@@ -6368,7 +6368,7 @@ schema_Interface_TypeEnum x =
 
 schema_Interface_TypeMap :: Phantoms.TTerm Dtld.Schema_Map -> Phantoms.TTerm Dtld.Schema_Interface_Type
 schema_Interface_TypeMap x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.azure.dtld.Schema_Interface_Type"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "map"),
@@ -6376,7 +6376,7 @@ schema_Interface_TypeMap x =
 
 schema_Interface_TypeObject :: Phantoms.TTerm Dtld.Schema_Object -> Phantoms.TTerm Dtld.Schema_Interface_Type
 schema_Interface_TypeObject x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.azure.dtld.Schema_Interface_Type"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "object"),
@@ -7160,7 +7160,7 @@ schema_ObjectWithType original newVal =
 
 schema_PrimitiveBoolean :: Phantoms.TTerm Dtld.Schema_Primitive
 schema_PrimitiveBoolean =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.azure.dtld.Schema_Primitive"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "boolean"),
@@ -7168,7 +7168,7 @@ schema_PrimitiveBoolean =
 
 schema_PrimitiveDate :: Phantoms.TTerm Dtld.Schema_Primitive
 schema_PrimitiveDate =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.azure.dtld.Schema_Primitive"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "date"),
@@ -7176,7 +7176,7 @@ schema_PrimitiveDate =
 
 schema_PrimitiveDateTime :: Phantoms.TTerm Dtld.Schema_Primitive
 schema_PrimitiveDateTime =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.azure.dtld.Schema_Primitive"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "dateTime"),
@@ -7184,7 +7184,7 @@ schema_PrimitiveDateTime =
 
 schema_PrimitiveDouble :: Phantoms.TTerm Dtld.Schema_Primitive
 schema_PrimitiveDouble =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.azure.dtld.Schema_Primitive"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "double"),
@@ -7192,7 +7192,7 @@ schema_PrimitiveDouble =
 
 schema_PrimitiveDuration :: Phantoms.TTerm Dtld.Schema_Primitive
 schema_PrimitiveDuration =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.azure.dtld.Schema_Primitive"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "duration"),
@@ -7200,7 +7200,7 @@ schema_PrimitiveDuration =
 
 schema_PrimitiveFloat :: Phantoms.TTerm Dtld.Schema_Primitive
 schema_PrimitiveFloat =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.azure.dtld.Schema_Primitive"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "float"),
@@ -7208,7 +7208,7 @@ schema_PrimitiveFloat =
 
 schema_PrimitiveInteger :: Phantoms.TTerm Dtld.Schema_Primitive
 schema_PrimitiveInteger =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.azure.dtld.Schema_Primitive"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "integer"),
@@ -7216,7 +7216,7 @@ schema_PrimitiveInteger =
 
 schema_PrimitiveLong :: Phantoms.TTerm Dtld.Schema_Primitive
 schema_PrimitiveLong =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.azure.dtld.Schema_Primitive"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "long"),
@@ -7224,7 +7224,7 @@ schema_PrimitiveLong =
 
 schema_PrimitiveString :: Phantoms.TTerm Dtld.Schema_Primitive
 schema_PrimitiveString =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.azure.dtld.Schema_Primitive"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "string"),
@@ -7232,7 +7232,7 @@ schema_PrimitiveString =
 
 schema_PrimitiveTime :: Phantoms.TTerm Dtld.Schema_Primitive
 schema_PrimitiveTime =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.azure.dtld.Schema_Primitive"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "time"),

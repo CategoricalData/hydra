@@ -12,7 +12,7 @@ import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pur
 
 invalidEdgeErrorId :: Phantoms.TTerm Pg.InvalidValueError -> Phantoms.TTerm Pg.InvalidEdgeError
 invalidEdgeErrorId x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.error.pg.InvalidEdgeError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "id"),
@@ -20,7 +20,7 @@ invalidEdgeErrorId x =
 
 invalidEdgeErrorInVertexLabel :: Phantoms.TTerm Pg.WrongVertexLabelError -> Phantoms.TTerm Pg.InvalidEdgeError
 invalidEdgeErrorInVertexLabel x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.error.pg.InvalidEdgeError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "inVertexLabel"),
@@ -28,7 +28,7 @@ invalidEdgeErrorInVertexLabel x =
 
 invalidEdgeErrorInVertexNotFound :: Phantoms.TTerm Pg.InvalidEdgeError
 invalidEdgeErrorInVertexNotFound =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.error.pg.InvalidEdgeError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "inVertexNotFound"),
@@ -36,7 +36,7 @@ invalidEdgeErrorInVertexNotFound =
 
 invalidEdgeErrorLabel :: Phantoms.TTerm Pg.NoSuchEdgeLabelError -> Phantoms.TTerm Pg.InvalidEdgeError
 invalidEdgeErrorLabel x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.error.pg.InvalidEdgeError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "label"),
@@ -44,7 +44,7 @@ invalidEdgeErrorLabel x =
 
 invalidEdgeErrorOutVertexLabel :: Phantoms.TTerm Pg.WrongVertexLabelError -> Phantoms.TTerm Pg.InvalidEdgeError
 invalidEdgeErrorOutVertexLabel x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.error.pg.InvalidEdgeError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "outVertexLabel"),
@@ -52,7 +52,7 @@ invalidEdgeErrorOutVertexLabel x =
 
 invalidEdgeErrorOutVertexNotFound :: Phantoms.TTerm Pg.InvalidEdgeError
 invalidEdgeErrorOutVertexNotFound =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.error.pg.InvalidEdgeError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "outVertexNotFound"),
@@ -60,7 +60,7 @@ invalidEdgeErrorOutVertexNotFound =
 
 invalidEdgeErrorProperty :: Phantoms.TTerm Pg.InvalidElementPropertyError -> Phantoms.TTerm Pg.InvalidEdgeError
 invalidEdgeErrorProperty x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.error.pg.InvalidEdgeError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "property"),
@@ -188,7 +188,7 @@ invalidGraphEdgeErrorWithId original newVal =
 
 invalidGraphErrorEdge :: Phantoms.TTerm (Pg.InvalidGraphEdgeError v) -> Phantoms.TTerm (Pg.InvalidGraphError v)
 invalidGraphErrorEdge x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.error.pg.InvalidGraphError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "edge"),
@@ -196,7 +196,7 @@ invalidGraphErrorEdge x =
 
 invalidGraphErrorVertex :: Phantoms.TTerm (Pg.InvalidGraphVertexError v) -> Phantoms.TTerm (Pg.InvalidGraphError v)
 invalidGraphErrorVertex x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.error.pg.InvalidGraphError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "vertex"),
@@ -264,7 +264,7 @@ invalidGraphVertexErrorWithId original newVal =
 
 invalidPropertyErrorInvalidValue :: Phantoms.TTerm Pg.InvalidValueError -> Phantoms.TTerm Pg.InvalidPropertyError
 invalidPropertyErrorInvalidValue x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.error.pg.InvalidPropertyError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "invalidValue"),
@@ -272,7 +272,7 @@ invalidPropertyErrorInvalidValue x =
 
 invalidPropertyErrorMissingRequired :: Phantoms.TTerm Model.PropertyKey -> Phantoms.TTerm Pg.InvalidPropertyError
 invalidPropertyErrorMissingRequired x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.error.pg.InvalidPropertyError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "missingRequired"),
@@ -280,7 +280,7 @@ invalidPropertyErrorMissingRequired x =
 
 invalidPropertyErrorUnexpectedKey :: Phantoms.TTerm Model.PropertyKey -> Phantoms.TTerm Pg.InvalidPropertyError
 invalidPropertyErrorUnexpectedKey x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.error.pg.InvalidPropertyError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "unexpectedKey"),
@@ -348,7 +348,7 @@ invalidValueErrorWithValue original newVal =
 
 invalidVertexErrorId :: Phantoms.TTerm Pg.InvalidValueError -> Phantoms.TTerm Pg.InvalidVertexError
 invalidVertexErrorId x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.error.pg.InvalidVertexError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "id"),
@@ -356,7 +356,7 @@ invalidVertexErrorId x =
 
 invalidVertexErrorLabel :: Phantoms.TTerm Pg.NoSuchVertexLabelError -> Phantoms.TTerm Pg.InvalidVertexError
 invalidVertexErrorLabel x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.error.pg.InvalidVertexError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "label"),
@@ -364,7 +364,7 @@ invalidVertexErrorLabel x =
 
 invalidVertexErrorProperty :: Phantoms.TTerm Pg.InvalidElementPropertyError -> Phantoms.TTerm Pg.InvalidVertexError
 invalidVertexErrorProperty x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.error.pg.InvalidVertexError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "property"),

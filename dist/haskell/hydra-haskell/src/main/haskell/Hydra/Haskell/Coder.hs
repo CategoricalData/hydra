@@ -335,7 +335,7 @@ encodeTerm depth namespaces term cx g =
         Core.TermTypeApplication v0 ->
           let term1 = Core.typeApplicationTermBody v0
           in (encode term1)
-        Core.TermUnion v0 ->
+        Core.TermInject v0 ->
           let sname = Core.injectionTypeName v0
               field = Core.injectionField v0
               fn = Core.fieldName field
@@ -814,7 +814,7 @@ typeDecl namespaces name typ cx g =
                   \recurse -> \term ->
                     let variantResult =
                             case (Strip.deannotateTerm term) of
-                              Core.TermUnion v0 -> Logic.ifElse (Equality.equal (Core.injectionTypeName v0) (Core.Name "hydra.core.Type")) (Just (Core.injectionField v0)) Nothing
+                              Core.TermInject v0 -> Logic.ifElse (Equality.equal (Core.injectionTypeName v0) (Core.Name "hydra.core.Type")) (Just (Core.injectionField v0)) Nothing
                               _ -> Nothing
                         decodeString =
                                 \term2 -> case (Strip.deannotateTerm term2) of

@@ -12,7 +12,7 @@ import qualified Data.Map as M
 
 valueArray :: Phantoms.TTerm [Model.Value] -> Phantoms.TTerm Model.Value
 valueArray x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.json.model.Value"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "array"),
@@ -20,7 +20,7 @@ valueArray x =
 
 valueBoolean :: Phantoms.TTerm Bool -> Phantoms.TTerm Model.Value
 valueBoolean x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.json.model.Value"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "boolean"),
@@ -28,7 +28,7 @@ valueBoolean x =
 
 valueNull :: Phantoms.TTerm Model.Value
 valueNull =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.json.model.Value"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "null"),
@@ -36,7 +36,7 @@ valueNull =
 
 valueNumber :: Phantoms.TTerm Double -> Phantoms.TTerm Model.Value
 valueNumber x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.json.model.Value"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "number"),
@@ -44,7 +44,7 @@ valueNumber x =
 
 valueObject :: Phantoms.TTerm (M.Map String Model.Value) -> Phantoms.TTerm Model.Value
 valueObject x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.json.model.Value"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "object"),
@@ -52,7 +52,7 @@ valueObject x =
 
 valueString :: Phantoms.TTerm String -> Phantoms.TTerm Model.Value
 valueString x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.json.model.Value"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "string"),

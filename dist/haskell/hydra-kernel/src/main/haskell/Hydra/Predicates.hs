@@ -67,7 +67,7 @@ isEncodedTerm :: Core.Term -> Bool
 isEncodedTerm t =
     case (Strip.deannotateTerm t) of
       Core.TermApplication v0 -> isEncodedTerm (Core.applicationFunction v0)
-      Core.TermUnion v0 -> Equality.equal "hydra.core.Term" (Core.unName (Core.injectionTypeName v0))
+      Core.TermInject v0 -> Equality.equal "hydra.core.Term" (Core.unName (Core.injectionTypeName v0))
       _ -> False
 
 -- | Determines whether a given term is an encoded type
@@ -75,7 +75,7 @@ isEncodedType :: Core.Term -> Bool
 isEncodedType t =
     case (Strip.deannotateTerm t) of
       Core.TermApplication v0 -> isEncodedType (Core.applicationFunction v0)
-      Core.TermUnion v0 -> Equality.equal "hydra.core.Type" (Core.unName (Core.injectionTypeName v0))
+      Core.TermInject v0 -> Equality.equal "hydra.core.Type" (Core.unName (Core.injectionTypeName v0))
       _ -> False
 
 -- | Check if a row type represents an enum (all fields are unit-typed)
