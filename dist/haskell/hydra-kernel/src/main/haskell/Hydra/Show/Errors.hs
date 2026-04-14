@@ -12,8 +12,8 @@ import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
-import qualified Hydra.Show.Core as Core_
-import qualified Hydra.Show.Error.Core as Core__
+import qualified Hydra.Show.Core as ShowCore
+import qualified Hydra.Show.Error.Core as ErrorCore
 import qualified Hydra.Show.Typing as Typing
 import qualified Hydra.Show.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
@@ -43,17 +43,17 @@ error e =
     case e of
       Errors.ErrorChecking v0 -> checkingError v0
       Errors.ErrorDecoding v0 -> decodingError v0
-      Errors.ErrorDuplicateBinding v0 -> Core__.duplicateBindingError v0
-      Errors.ErrorDuplicateField v0 -> Core__.duplicateFieldError v0
+      Errors.ErrorDuplicateBinding v0 -> ErrorCore.duplicateBindingError v0
+      Errors.ErrorDuplicateField v0 -> ErrorCore.duplicateFieldError v0
       Errors.ErrorExtraction _ -> "extraction error"
       Errors.ErrorInference _ -> "inference error"
       Errors.ErrorOther v0 -> otherError v0
       Errors.ErrorResolution _ -> "resolution error"
-      Errors.ErrorUndefinedField v0 -> Core__.undefinedFieldError v0
-      Errors.ErrorUndefinedTermVariable v0 -> Core__.undefinedTermVariableError v0
-      Errors.ErrorUntypedTermVariable v0 -> Core__.untypedTermVariableError v0
-      Errors.ErrorUnexpectedTermVariant v0 -> Core__.unexpectedTermVariantError v0
-      Errors.ErrorUnexpectedTypeVariant v0 -> Core__.unexpectedTypeVariantError v0
+      Errors.ErrorUndefinedField v0 -> ErrorCore.undefinedFieldError v0
+      Errors.ErrorUndefinedTermVariable v0 -> ErrorCore.undefinedTermVariableError v0
+      Errors.ErrorUntypedTermVariable v0 -> ErrorCore.untypedTermVariableError v0
+      Errors.ErrorUnexpectedTermVariant v0 -> ErrorCore.unexpectedTermVariantError v0
+      Errors.ErrorUnexpectedTypeVariant v0 -> ErrorCore.unexpectedTypeVariantError v0
       Errors.ErrorUnification v0 -> unificationError v0
 
 -- | Show an incorrect unification error as a string
@@ -71,18 +71,18 @@ notAForallTypeError e =
           args = Checking.notAForallTypeErrorTypeArguments e
       in (Strings.cat [
         "not a forall type: ",
-        (Core_.type_ typ),
+        (ShowCore.type_ typ),
         ". Trying to apply ",
         (Literals.showInt32 (Lists.length args)),
         " type argument(s): ",
-        (Formatting.showList Core_.type_ args)])
+        (Formatting.showList ShowCore.type_ args)])
 
 -- | Show a not-a-function-type error as a string
 notAFunctionTypeError :: Checking.NotAFunctionTypeError -> String
 notAFunctionTypeError e =
 
       let typ = Checking.notAFunctionTypeErrorType e
-      in (Strings.cat2 "not a function type: " (Core_.type_ typ))
+      in (Strings.cat2 "not a function type: " (ShowCore.type_ typ))
 
 -- | Show an other error as a string
 otherError :: Errors.OtherError -> String
@@ -98,13 +98,13 @@ typeArityMismatchError e =
           args = Checking.typeArityMismatchErrorTypeArguments e
       in (Strings.cat [
         "type ",
-        (Core_.type_ typ),
+        (ShowCore.type_ typ),
         " applied to the wrong number of type arguments (expected ",
         (Literals.showInt32 expected),
         ", got ",
         (Literals.showInt32 actual),
         "): ",
-        (Formatting.showList Core_.type_ args)])
+        (Formatting.showList ShowCore.type_ args)])
 
 -- | Show a type mismatch error as a string
 typeMismatchError :: Checking.TypeMismatchError -> String
@@ -114,9 +114,9 @@ typeMismatchError e =
           actual = Checking.typeMismatchErrorActualType e
       in (Strings.cat [
         "type mismatch: expected ",
-        (Core_.type_ expected),
+        (ShowCore.type_ expected),
         " but found ",
-        (Core_.type_ actual)])
+        (ShowCore.type_ actual)])
 
 -- | Show an unbound type variables error as a string
 unboundTypeVariablesError :: Checking.UnboundTypeVariablesError -> String
@@ -128,7 +128,7 @@ unboundTypeVariablesError e =
         "unbound type variables: {",
         (Strings.intercalate ", " (Lists.map Core.unName (Sets.toList vars))),
         "} in type ",
-        (Core_.type_ typ)])
+        (ShowCore.type_ typ)])
 
 -- | Show an unequal types error as a string
 unequalTypesError :: Checking.UnequalTypesError -> String
@@ -138,7 +138,7 @@ unequalTypesError e =
           desc = Checking.unequalTypesErrorDescription e
       in (Strings.cat [
         "unequal types ",
-        (Formatting.showList Core_.type_ types),
+        (Formatting.showList ShowCore.type_ types),
         " in ",
         desc])
 
@@ -151,9 +151,9 @@ unificationError e =
           msg = Errors.unificationErrorMessage e
       in (Strings.cat [
         "unification error: cannot unify ",
-        (Core_.type_ lt),
+        (ShowCore.type_ lt),
         " with ",
-        (Core_.type_ rt),
+        (ShowCore.type_ rt),
         ": ",
         msg])
 
@@ -171,4 +171,4 @@ untypedLetBindingError :: Checking.UntypedLetBindingError -> String
 untypedLetBindingError e =
 
       let b = Checking.untypedLetBindingErrorBinding e
-      in (Strings.cat2 "untyped let binding: " (Core_.binding b))
+      in (Strings.cat2 "untyped let binding: " (ShowCore.binding b))

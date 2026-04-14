@@ -8,9 +8,9 @@ import qualified Hydra.Arity as Arity
 import qualified Hydra.Checking as Checking
 import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
-import qualified Hydra.Encode.Core as Core_
+import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Errors as Errors
-import qualified Hydra.Extract.Core as Core__
+import qualified Hydra.Extract.Core as ExtractCore
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lexical as Lexical
 import qualified Hydra.Lib.Eithers as Eithers
@@ -27,7 +27,7 @@ import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Resolution as Resolution
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Scoping as Scoping
-import qualified Hydra.Show.Errors as Errors_
+import qualified Hydra.Show.Errors as ShowErrors
 import qualified Hydra.Strip as Strip
 import qualified Hydra.Variables as Variables
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
@@ -145,7 +145,7 @@ etaExpandTerm tx0 term0 =
                           fullyApplied =
                                   Maybes.maybe fullyAppliedRaw (\ct -> Core.TermAnnotated (Core.AnnotatedTerm {
                                     Core.annotatedTermBody = fullyAppliedRaw,
-                                    Core.annotatedTermAnnotation = (Maps.singleton (Core.Name "type") (Core_.type_ ct))})) codomainType
+                                    Core.annotatedTermAnnotation = (Maps.singleton (Core.Name "type") (EncodeCore.type_ ct))})) codomainType
                           indexedDomains = Lists.zip indices domains
                       in (Lists.foldl (\body -> \idPair ->
                         let i = Pairs.first idPair
@@ -445,14 +445,14 @@ reduceTerm cx graph eager term =
                   \fun -> \args -> Logic.ifElse (Lists.null args) fun (applyToArguments (Core.TermApplication (Core.Application {
                     Core.applicationFunction = fun,
                     Core.applicationArgument = (Lists.head args)})) (Lists.tail args))
-          mapErrorToString = \e -> Errors.ErrorOther (Errors.OtherError (Errors_.error e))
+          mapErrorToString = \e -> Errors.ErrorOther (Errors.OtherError (ShowErrors.error e))
           applyProjection =
-                  \proj -> \reducedArg -> Eithers.bind (Core__.record (Core.projectionTypeName proj) graph (Strip.deannotateTerm reducedArg)) (\fields ->
+                  \proj -> \reducedArg -> Eithers.bind (ExtractCore.record (Core.projectionTypeName proj) graph (Strip.deannotateTerm reducedArg)) (\fields ->
                     let matchingFields = Lists.filter (\f -> Equality.equal (Core.fieldName f) (Core.projectionField proj)) fields
                     in (Logic.ifElse (Lists.null matchingFields) (Left (Errors.ErrorResolution (Errors.ResolutionErrorNoMatchingField (Errors.NoMatchingFieldError {
                       Errors.noMatchingFieldErrorFieldName = (Core.projectionField proj)})))) (Right (Core.fieldTerm (Lists.head matchingFields)))))
           applyCases =
-                  \cs -> \reducedArg -> Eithers.bind (Core__.injection (Core.caseStatementTypeName cs) graph reducedArg) (\field ->
+                  \cs -> \reducedArg -> Eithers.bind (ExtractCore.injection (Core.caseStatementTypeName cs) graph reducedArg) (\field ->
                     let matchingFields = Lists.filter (\f -> Equality.equal (Core.fieldName f) (Core.fieldName field)) (Core.caseStatementCases cs)
                     in (Logic.ifElse (Lists.null matchingFields) (Maybes.maybe (Left (Errors.ErrorResolution (Errors.ResolutionErrorNoMatchingField (Errors.NoMatchingFieldError {
                       Errors.noMatchingFieldErrorFieldName = (Core.fieldName field)})))) (\x -> Right x) (Core.caseStatementDefault cs)) (Right (Core.TermApplication (Core.Application {
@@ -475,7 +475,7 @@ reduceTerm cx graph eager term =
                                 \name -> \args2 ->
                                   let arg = Lists.head args2
                                       remainingArgs = Lists.tail args2
-                                  in (Eithers.bind (reduceArg eager2 (Strip.deannotateTerm arg)) (\reducedArg -> Eithers.bind (Eithers.bind (Core__.wrap name graph reducedArg) (reduce eager2)) (\reducedResult -> applyIfNullary eager2 reducedResult remainingArgs)))
+                                  in (Eithers.bind (reduceArg eager2 (Strip.deannotateTerm arg)) (\reducedArg -> Eithers.bind (Eithers.bind (ExtractCore.wrap name graph reducedArg) (reduce eager2)) (\reducedResult -> applyIfNullary eager2 reducedResult remainingArgs)))
                         forLambda =
                                 \l -> \args2 ->
                                   let param = Core.lambdaParameter l

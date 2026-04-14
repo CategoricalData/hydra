@@ -18,8 +18,8 @@ import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
-import qualified Hydra.Show.Core as Core_
-import qualified Hydra.Show.Errors as Errors_
+import qualified Hydra.Show.Core as ShowCore
+import qualified Hydra.Show.Errors as ShowErrors
 import qualified Hydra.Strip as Strip
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
@@ -38,7 +38,7 @@ bigfloatValue v =
       Core.FloatValueBigfloat v0 -> Right v0
       _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
         Errors.unexpectedShapeErrorExpected = "bigfloat",
-        Errors.unexpectedShapeErrorActual = (Core_.float v)})))
+        Errors.unexpectedShapeErrorActual = (ShowCore.float v)})))
 
 -- | Extract an arbitrary-precision integer value from a term
 bigint :: Graph.Graph -> Core.Term -> Either Errors.Error Integer
@@ -51,7 +51,7 @@ bigintValue v =
       Core.IntegerValueBigint v0 -> Right v0
       _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
         Errors.unexpectedShapeErrorExpected = "bigint",
-        Errors.unexpectedShapeErrorActual = (Core_.integer v)})))
+        Errors.unexpectedShapeErrorActual = (ShowCore.integer v)})))
 
 -- | Extract a binary data value from a term
 binary :: Graph.Graph -> Core.Term -> Either Errors.Error B.ByteString
@@ -64,7 +64,7 @@ binaryLiteral v =
       Core.LiteralBinary v0 -> Right v0
       _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
         Errors.unexpectedShapeErrorExpected = "binary",
-        Errors.unexpectedShapeErrorActual = (Core_.literal v)})))
+        Errors.unexpectedShapeErrorActual = (ShowCore.literal v)})))
 
 -- | Extract a boolean value from a term
 boolean :: Graph.Graph -> Core.Term -> Either Errors.Error Bool
@@ -77,7 +77,7 @@ booleanLiteral v =
       Core.LiteralBoolean v0 -> Right v0
       _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
         Errors.unexpectedShapeErrorExpected = "boolean",
-        Errors.unexpectedShapeErrorActual = (Core_.literal v)})))
+        Errors.unexpectedShapeErrorActual = (ShowCore.literal v)})))
 
 -- | Extract a specific case handler from a case statement term
 caseField :: Core.Name -> String -> Graph.Graph -> Core.Term -> Either Errors.Error Core.Field
@@ -97,10 +97,10 @@ cases name graph term0 =
     Eithers.bind (Lexical.stripAndDereferenceTerm graph term0) (\term -> case term of
       Core.TermCases v0 -> Logic.ifElse (Equality.equal (Core.unName (Core.caseStatementTypeName v0)) (Core.unName name)) (Right v0) (Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
         Errors.unexpectedShapeErrorExpected = (Strings.cat2 "case statement for type " (Core.unName name)),
-        Errors.unexpectedShapeErrorActual = (Core_.term term)}))))
+        Errors.unexpectedShapeErrorActual = (ShowCore.term term)}))))
       _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
         Errors.unexpectedShapeErrorExpected = "case statement",
-        Errors.unexpectedShapeErrorActual = (Core_.term term)}))))
+        Errors.unexpectedShapeErrorActual = (ShowCore.term term)}))))
 
 -- | Decode an Either value using the provided left and right decoders
 decodeEither :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError t0) -> (Graph.Graph -> Core.Term -> Either Errors.DecodingError t1) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Either t0 t1)
@@ -165,7 +165,7 @@ eitherTerm leftFun rightFun graph term0 =
       Core.TermEither v0 -> Eithers.either (\l -> Eithers.map (\x -> Left x) (leftFun l)) (\r -> Eithers.map (\x -> Right x) (rightFun r)) v0
       _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
         Errors.unexpectedShapeErrorExpected = "either value",
-        Errors.unexpectedShapeErrorActual = (Core_.term term)}))))
+        Errors.unexpectedShapeErrorActual = (ShowCore.term term)}))))
 
 -- | Extract the left and right types from an either type
 eitherType :: Core.Type -> Either Errors.Error Core.EitherType
@@ -176,7 +176,7 @@ eitherType typ =
         Core.TypeEither v0 -> Right v0
         _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
           Errors.unexpectedShapeErrorExpected = "either type",
-          Errors.unexpectedShapeErrorActual = (Core_.type_ typ)})))
+          Errors.unexpectedShapeErrorActual = (ShowCore.type_ typ)})))
 
 -- | Extract a field value from a list of fields
 field :: Core.Name -> (Core.Term -> Either Errors.Error t0) -> Graph.Graph -> [Core.Field] -> Either Errors.Error t0
@@ -200,7 +200,7 @@ float32Value v =
       Core.FloatValueFloat32 v0 -> Right v0
       _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
         Errors.unexpectedShapeErrorExpected = "float32",
-        Errors.unexpectedShapeErrorActual = (Core_.float v)})))
+        Errors.unexpectedShapeErrorActual = (ShowCore.float v)})))
 
 -- | Extract a 64-bit floating-point value from a term
 float64 :: Graph.Graph -> Core.Term -> Either Errors.Error Double
@@ -213,7 +213,7 @@ float64Value v =
       Core.FloatValueFloat64 v0 -> Right v0
       _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
         Errors.unexpectedShapeErrorExpected = "float64",
-        Errors.unexpectedShapeErrorActual = (Core_.float v)})))
+        Errors.unexpectedShapeErrorActual = (ShowCore.float v)})))
 
 -- | Extract a floating-point literal from a Literal value
 floatLiteral :: Core.Literal -> Either Errors.Error Core.FloatValue
@@ -222,7 +222,7 @@ floatLiteral lit =
       Core.LiteralFloat v0 -> Right v0
       _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
         Errors.unexpectedShapeErrorExpected = "floating-point value",
-        Errors.unexpectedShapeErrorActual = (Core_.literal lit)})))
+        Errors.unexpectedShapeErrorActual = (ShowCore.literal lit)})))
 
 -- | Extract a float value from a term
 floatValue :: Graph.Graph -> Core.Term -> Either Errors.Error Core.FloatValue
@@ -237,7 +237,7 @@ functionType typ =
         Core.TypeFunction v0 -> Right v0
         _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
           Errors.unexpectedShapeErrorExpected = "function type",
-          Errors.unexpectedShapeErrorActual = (Core_.type_ typ)})))
+          Errors.unexpectedShapeErrorActual = (ShowCore.type_ typ)})))
 
 -- | Extract a field from a union term
 injection :: Core.Name -> Graph.Graph -> Core.Term -> Either Errors.Error Core.Field
@@ -248,7 +248,7 @@ injection expected graph term0 =
         Errors.unexpectedShapeErrorActual = (Core.unName (Core.injectionTypeName v0))}))))
       _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
         Errors.unexpectedShapeErrorExpected = "injection",
-        Errors.unexpectedShapeErrorActual = (Core_.term term)}))))
+        Errors.unexpectedShapeErrorActual = (ShowCore.term term)}))))
 
 -- | Extract a 16-bit signed integer value from a term
 int16 :: Graph.Graph -> Core.Term -> Either Errors.Error I.Int16
@@ -261,7 +261,7 @@ int16Value v =
       Core.IntegerValueInt16 v0 -> Right v0
       _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
         Errors.unexpectedShapeErrorExpected = "int16",
-        Errors.unexpectedShapeErrorActual = (Core_.integer v)})))
+        Errors.unexpectedShapeErrorActual = (ShowCore.integer v)})))
 
 -- | Extract a 32-bit signed integer value from a term
 int32 :: Graph.Graph -> Core.Term -> Either Errors.Error Int
@@ -274,7 +274,7 @@ int32Value v =
       Core.IntegerValueInt32 v0 -> Right v0
       _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
         Errors.unexpectedShapeErrorExpected = "int32",
-        Errors.unexpectedShapeErrorActual = (Core_.integer v)})))
+        Errors.unexpectedShapeErrorActual = (ShowCore.integer v)})))
 
 -- | Extract a 64-bit signed integer value from a term
 int64 :: Graph.Graph -> Core.Term -> Either Errors.Error I.Int64
@@ -287,7 +287,7 @@ int64Value v =
       Core.IntegerValueInt64 v0 -> Right v0
       _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
         Errors.unexpectedShapeErrorExpected = "int64",
-        Errors.unexpectedShapeErrorActual = (Core_.integer v)})))
+        Errors.unexpectedShapeErrorActual = (ShowCore.integer v)})))
 
 -- | Extract an 8-bit signed integer value from a term
 int8 :: Graph.Graph -> Core.Term -> Either Errors.Error I.Int8
@@ -300,7 +300,7 @@ int8Value v =
       Core.IntegerValueInt8 v0 -> Right v0
       _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
         Errors.unexpectedShapeErrorExpected = "int8",
-        Errors.unexpectedShapeErrorActual = (Core_.integer v)})))
+        Errors.unexpectedShapeErrorActual = (ShowCore.integer v)})))
 
 -- | Extract an integer literal from a Literal value
 integerLiteral :: Core.Literal -> Either Errors.Error Core.IntegerValue
@@ -309,7 +309,7 @@ integerLiteral lit =
       Core.LiteralInteger v0 -> Right v0
       _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
         Errors.unexpectedShapeErrorExpected = "integer value",
-        Errors.unexpectedShapeErrorActual = (Core_.literal lit)})))
+        Errors.unexpectedShapeErrorActual = (ShowCore.literal lit)})))
 
 -- | Extract an integer value from a term
 integerValue :: Graph.Graph -> Core.Term -> Either Errors.Error Core.IntegerValue
@@ -322,7 +322,7 @@ lambda graph term0 =
       Core.TermLambda v0 -> Right v0
       _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
         Errors.unexpectedShapeErrorExpected = "lambda",
-        Errors.unexpectedShapeErrorActual = (Core_.term term)}))))
+        Errors.unexpectedShapeErrorActual = (ShowCore.term term)}))))
 
 -- | Extract the body of a lambda term
 lambdaBody :: Graph.Graph -> Core.Term -> Either Errors.Error Core.Term
@@ -335,7 +335,7 @@ let_ graph term0 =
       Core.TermLet v0 -> Right v0
       _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
         Errors.unexpectedShapeErrorExpected = "let term",
-        Errors.unexpectedShapeErrorActual = (Core_.term term)}))))
+        Errors.unexpectedShapeErrorActual = (ShowCore.term term)}))))
 
 -- | Extract a binding with the given name from a let term
 letBinding :: String -> Graph.Graph -> Core.Term -> Either Errors.Error Core.Term
@@ -356,7 +356,7 @@ list graph term =
       Core.TermList v0 -> Right v0
       _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
         Errors.unexpectedShapeErrorExpected = "list",
-        Errors.unexpectedShapeErrorActual = (Core_.term stripped)}))))
+        Errors.unexpectedShapeErrorActual = (ShowCore.term stripped)}))))
 
 -- | Extract the first element of a list term
 listHead :: Graph.Graph -> Core.Term -> Either Errors.Error Core.Term
@@ -378,7 +378,7 @@ listType typ =
         Core.TypeList v0 -> Right v0
         _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
           Errors.unexpectedShapeErrorExpected = "list type",
-          Errors.unexpectedShapeErrorActual = (Core_.type_ typ)})))
+          Errors.unexpectedShapeErrorActual = (ShowCore.type_ typ)})))
 
 -- | Extract a literal value from a term
 literal :: Graph.Graph -> Core.Term -> Either Errors.Error Core.Literal
@@ -387,7 +387,7 @@ literal graph term0 =
       Core.TermLiteral v0 -> Right v0
       _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
         Errors.unexpectedShapeErrorExpected = "literal",
-        Errors.unexpectedShapeErrorActual = (Core_.term term)}))))
+        Errors.unexpectedShapeErrorActual = (ShowCore.term term)}))))
 
 -- | Extract a map of key-value pairs from a term, mapping functions over each key and value
 map :: Ord t0 => ((Core.Term -> Either Errors.Error t0) -> (Core.Term -> Either Errors.Error t1) -> Graph.Graph -> Core.Term -> Either Errors.Error (M.Map t0 t1))
@@ -402,7 +402,7 @@ map fk fv graph term0 =
         Core.TermMap v0 -> Eithers.map Maps.fromList (Eithers.mapList pair (Maps.toList v0))
         _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
           Errors.unexpectedShapeErrorExpected = "map",
-          Errors.unexpectedShapeErrorActual = (Core_.term term)})))))
+          Errors.unexpectedShapeErrorActual = (ShowCore.term term)})))))
 
 -- | Extract the key and value types from a map type
 mapType :: Core.Type -> Either Errors.Error Core.MapType
@@ -413,7 +413,7 @@ mapType typ =
         Core.TypeMap v0 -> Right v0
         _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
           Errors.unexpectedShapeErrorExpected = "map type",
-          Errors.unexpectedShapeErrorActual = (Core_.type_ typ)})))
+          Errors.unexpectedShapeErrorActual = (ShowCore.type_ typ)})))
 
 -- | Extract an optional value from a term, applying a function to the value if present
 maybeTerm :: (Core.Term -> Either Errors.Error t0) -> Graph.Graph -> Core.Term -> Either Errors.Error (Maybe t0)
@@ -422,7 +422,7 @@ maybeTerm f graph term0 =
       Core.TermMaybe v0 -> Maybes.maybe (Right Nothing) (\t -> Eithers.map Maybes.pure (f t)) v0
       _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
         Errors.unexpectedShapeErrorExpected = "maybe value",
-        Errors.unexpectedShapeErrorActual = (Core_.term term)}))))
+        Errors.unexpectedShapeErrorActual = (ShowCore.term term)}))))
 
 -- | Extract the base type from an optional type
 maybeType :: Core.Type -> Either Errors.Error Core.Type
@@ -433,7 +433,7 @@ maybeType typ =
         Core.TypeMaybe v0 -> Right v0
         _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
           Errors.unexpectedShapeErrorExpected = "maybe type",
-          Errors.unexpectedShapeErrorActual = (Core_.type_ typ)})))
+          Errors.unexpectedShapeErrorActual = (ShowCore.type_ typ)})))
 
 -- | Ensure a function has the expected number of arguments
 nArgs :: Core.Name -> Int -> [t0] -> Either Errors.Error ()
@@ -452,7 +452,7 @@ pair kf vf graph term0 =
       Core.TermPair v0 -> Eithers.bind (kf (Pairs.first v0)) (\kVal -> Eithers.bind (vf (Pairs.second v0)) (\vVal -> Right (kVal, vVal)))
       _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
         Errors.unexpectedShapeErrorExpected = "pair",
-        Errors.unexpectedShapeErrorActual = (Core_.term term)}))))
+        Errors.unexpectedShapeErrorActual = (ShowCore.term term)}))))
 
 -- | Extract a record's fields from a term
 record :: Core.Name -> Graph.Graph -> Core.Term -> Either Errors.Error [Core.Field]
@@ -470,7 +470,7 @@ recordType ename typ =
         Core.TypeRecord v0 -> Right v0
         _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
           Errors.unexpectedShapeErrorExpected = "record type",
-          Errors.unexpectedShapeErrorActual = (Core_.type_ typ)})))
+          Errors.unexpectedShapeErrorActual = (ShowCore.type_ typ)})))
 
 -- | Require a field from a record's field map and decode it
 requireField :: String -> (t0 -> t1 -> Either Errors.DecodingError t2) -> M.Map Core.Name t1 -> t0 -> Either Errors.DecodingError t2
@@ -487,7 +487,7 @@ set graph term =
       Core.TermSet v0 -> Right v0
       _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
         Errors.unexpectedShapeErrorExpected = "set",
-        Errors.unexpectedShapeErrorActual = (Core_.term stripped)}))))
+        Errors.unexpectedShapeErrorActual = (ShowCore.term stripped)}))))
 
 -- | Extract a set of values from a term, mapping a function over each element
 setOf :: Ord t0 => ((Core.Term -> Either Errors.Error t0) -> Graph.Graph -> Core.Term -> Either Errors.Error (S.Set t0))
@@ -502,7 +502,7 @@ setType typ =
         Core.TypeSet v0 -> Right v0
         _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
           Errors.unexpectedShapeErrorExpected = "set type",
-          Errors.unexpectedShapeErrorActual = (Core_.type_ typ)})))
+          Errors.unexpectedShapeErrorActual = (ShowCore.type_ typ)})))
 
 -- | Extract a string value from a term
 string :: Graph.Graph -> Core.Term -> Either Errors.Error String
@@ -515,12 +515,12 @@ stringLiteral v =
       Core.LiteralString v0 -> Right v0
       _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
         Errors.unexpectedShapeErrorExpected = "string",
-        Errors.unexpectedShapeErrorActual = (Core_.literal v)})))
+        Errors.unexpectedShapeErrorActual = (ShowCore.literal v)})))
 
 -- | Strip annotations and dereference variables, returning Either DecodingError Term
 stripWithDecodingError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.Term
 stripWithDecodingError g term =
-    Eithers.bimap (\_e -> Errors.DecodingError (Errors_.error _e)) (\x -> x) (Lexical.stripAndDereferenceTermEither g term)
+    Eithers.bimap (\_e -> Errors.DecodingError (ShowErrors.error _e)) (\x -> x) (Lexical.stripAndDereferenceTermEither g term)
 
 -- | Extract a record from a term
 termRecord :: Graph.Graph -> Core.Term -> Either Errors.Error Core.Record
@@ -529,7 +529,7 @@ termRecord graph term0 =
       Core.TermRecord v0 -> Right v0
       _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
         Errors.unexpectedShapeErrorExpected = "record",
-        Errors.unexpectedShapeErrorActual = (Core_.term term)}))))
+        Errors.unexpectedShapeErrorActual = (ShowCore.term term)}))))
 
 -- | Convert a Record's fields to a Map from Name to Term
 toFieldMap :: Core.Record -> M.Map Core.Name Core.Term
@@ -546,7 +546,7 @@ uint16Value v =
       Core.IntegerValueUint16 v0 -> Right v0
       _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
         Errors.unexpectedShapeErrorExpected = "uint16",
-        Errors.unexpectedShapeErrorActual = (Core_.integer v)})))
+        Errors.unexpectedShapeErrorActual = (ShowCore.integer v)})))
 
 -- | Extract a 32-bit unsigned integer value from a term
 uint32 :: Graph.Graph -> Core.Term -> Either Errors.Error I.Int64
@@ -559,7 +559,7 @@ uint32Value v =
       Core.IntegerValueUint32 v0 -> Right v0
       _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
         Errors.unexpectedShapeErrorExpected = "uint32",
-        Errors.unexpectedShapeErrorActual = (Core_.integer v)})))
+        Errors.unexpectedShapeErrorActual = (ShowCore.integer v)})))
 
 -- | Extract a 64-bit unsigned integer value from a term
 uint64 :: Graph.Graph -> Core.Term -> Either Errors.Error Integer
@@ -572,7 +572,7 @@ uint64Value v =
       Core.IntegerValueUint64 v0 -> Right v0
       _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
         Errors.unexpectedShapeErrorExpected = "uint64",
-        Errors.unexpectedShapeErrorActual = (Core_.integer v)})))
+        Errors.unexpectedShapeErrorActual = (ShowCore.integer v)})))
 
 -- | Extract an 8-bit unsigned integer value from a term
 uint8 :: Graph.Graph -> Core.Term -> Either Errors.Error I.Int16
@@ -585,7 +585,7 @@ uint8Value v =
       Core.IntegerValueUint8 v0 -> Right v0
       _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
         Errors.unexpectedShapeErrorExpected = "uint8",
-        Errors.unexpectedShapeErrorActual = (Core_.integer v)})))
+        Errors.unexpectedShapeErrorActual = (ShowCore.integer v)})))
 
 -- | Extract the field types from a union type
 unionType :: t0 -> Core.Type -> Either Errors.Error [Core.FieldType]
@@ -596,7 +596,7 @@ unionType ename typ =
         Core.TypeUnion v0 -> Right v0
         _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
           Errors.unexpectedShapeErrorExpected = "union type",
-          Errors.unexpectedShapeErrorActual = (Core_.type_ typ)})))
+          Errors.unexpectedShapeErrorActual = (ShowCore.type_ typ)})))
 
 -- | Extract a unit value from a term
 unit :: Core.Term -> Either Errors.Error ()
@@ -605,7 +605,7 @@ unit term =
       Core.TermUnit -> Right ()
       _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
         Errors.unexpectedShapeErrorExpected = "unit",
-        Errors.unexpectedShapeErrorActual = (Core_.term term)})))
+        Errors.unexpectedShapeErrorActual = (ShowCore.term term)})))
 
 -- | Extract a unit variant (a variant with an empty record value) from a union term
 unitVariant :: Core.Name -> Graph.Graph -> Core.Term -> Either Errors.Error Core.Name
@@ -621,7 +621,7 @@ wrap expected graph term0 =
         Errors.unexpectedShapeErrorActual = (Core.unName (Core.wrappedTermTypeName v0))}))))
       _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
         Errors.unexpectedShapeErrorExpected = (Strings.cat2 (Strings.cat2 "wrap(" (Core.unName expected)) ")"),
-        Errors.unexpectedShapeErrorActual = (Core_.term term)}))))
+        Errors.unexpectedShapeErrorActual = (ShowCore.term term)}))))
 
 -- | Extract the wrapped type from a wrapper type
 wrappedType :: t0 -> Core.Type -> Either Errors.Error Core.Type
@@ -632,4 +632,4 @@ wrappedType ename typ =
         Core.TypeWrap v0 -> Right v0
         _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
           Errors.unexpectedShapeErrorExpected = "wrapped type",
-          Errors.unexpectedShapeErrorActual = (Core_.type_ typ)})))
+          Errors.unexpectedShapeErrorActual = (ShowCore.type_ typ)})))
