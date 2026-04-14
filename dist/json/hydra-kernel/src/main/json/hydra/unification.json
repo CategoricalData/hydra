@@ -2092,7 +2092,7 @@
                                     "function": {
                                       "application": {
                                         "argument": {
-                                          "union": {
+                                          "inject": {
                                             "field": {"name": "pre", "term": {"unit": {}}},
                                             "typeName": "hydra.coders.TraversalOrder"}},
                                         "function": {

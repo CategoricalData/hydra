@@ -321,7 +321,7 @@ def term_alternatives(cx: T0, graph: hydra.graph.Graph, term: hydra.core.Term) -
             term2 = ta.body
             return Right((term2,))
 
-        case hydra.core.TermUnion(value=inj):
+        case hydra.core.TermInject(value=inj):
             tname = inj.type_name
             field = inj.field
             fname = field.name
@@ -458,8 +458,8 @@ def push_type_apps_inward(term: hydra.core.Term) -> hydra.core.Term:
             case hydra.core.TermTypeLambda(value=ta):
                 return cast(hydra.core.Term, hydra.core.TermTypeLambda(hydra.core.TypeLambda(ta.parameter, go(ta.body))))
 
-            case hydra.core.TermUnion(value=i):
-                return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(i.type_name, for_field(i.field))))
+            case hydra.core.TermInject(value=i):
+                return cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(i.type_name, for_field(i.field))))
 
             case hydra.core.TermUnit():
                 return cast(hydra.core.Term, hydra.core.TermUnit())

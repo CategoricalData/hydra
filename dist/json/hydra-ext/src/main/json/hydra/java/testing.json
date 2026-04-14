@@ -288,13 +288,13 @@
                             "function": {
                               "application": {
                                 "argument": {
-                                  "union": {
+                                  "inject": {
                                     "field": {"name": "pascal", "term": {"unit": {}}},
                                     "typeName": "hydra.util.CaseConvention"}},
                                 "function": {
                                   "application": {
                                     "argument": {
-                                      "union": {
+                                      "inject": {
                                         "field": {"name": "lowerSnake", "term": {"unit": {}}},
                                         "typeName": "hydra.util.CaseConvention"}},
                                     "function": {"variable": "hydra.formatting.convertCase"}}}}}}},

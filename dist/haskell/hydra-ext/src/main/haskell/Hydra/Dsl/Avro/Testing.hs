@@ -13,7 +13,7 @@ import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pur
 
 avroTestCaseLossiness :: Phantoms.TTerm Testing.LossinessTestCase -> Phantoms.TTerm Testing.AvroTestCase
 avroTestCaseLossiness x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.avro.testing.AvroTestCase"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "lossiness"),
@@ -21,7 +21,7 @@ avroTestCaseLossiness x =
 
 avroTestCaseNameMapping :: Phantoms.TTerm Testing.NameMappingTestCase -> Phantoms.TTerm Testing.AvroTestCase
 avroTestCaseNameMapping x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.avro.testing.AvroTestCase"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "nameMapping"),
@@ -29,7 +29,7 @@ avroTestCaseNameMapping x =
 
 avroTestCaseSchemaSerialization :: Phantoms.TTerm Testing.SchemaSerializationTestCase -> Phantoms.TTerm Testing.AvroTestCase
 avroTestCaseSchemaSerialization x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.avro.testing.AvroTestCase"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "schemaSerialization"),
@@ -37,7 +37,7 @@ avroTestCaseSchemaSerialization x =
 
 avroTestCaseTermLevelForward :: Phantoms.TTerm Testing.TermLevelForwardTestCase -> Phantoms.TTerm Testing.AvroTestCase
 avroTestCaseTermLevelForward x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.avro.testing.AvroTestCase"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "termLevelForward"),
@@ -45,7 +45,7 @@ avroTestCaseTermLevelForward x =
 
 avroTestCaseTermLevelReverse :: Phantoms.TTerm Testing.TermLevelReverseTestCase -> Phantoms.TTerm Testing.AvroTestCase
 avroTestCaseTermLevelReverse x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.avro.testing.AvroTestCase"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "termLevelReverse"),
@@ -53,7 +53,7 @@ avroTestCaseTermLevelReverse x =
 
 avroTestCaseTermLevelRoundTripJson :: Phantoms.TTerm Testing.TermLevelRoundTripJsonTestCase -> Phantoms.TTerm Testing.AvroTestCase
 avroTestCaseTermLevelRoundTripJson x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.avro.testing.AvroTestCase"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "termLevelRoundTripJson"),
@@ -61,7 +61,7 @@ avroTestCaseTermLevelRoundTripJson x =
 
 avroTestCaseTermLevelRoundTripTerm :: Phantoms.TTerm Testing.TermLevelRoundTripTermTestCase -> Phantoms.TTerm Testing.AvroTestCase
 avroTestCaseTermLevelRoundTripTerm x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.avro.testing.AvroTestCase"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "termLevelRoundTripTerm"),
@@ -69,7 +69,7 @@ avroTestCaseTermLevelRoundTripTerm x =
 
 avroTestCaseTypeLevelForward :: Phantoms.TTerm Testing.TypeLevelForwardTestCase -> Phantoms.TTerm Testing.AvroTestCase
 avroTestCaseTypeLevelForward x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.avro.testing.AvroTestCase"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "typeLevelForward"),
@@ -77,7 +77,7 @@ avroTestCaseTypeLevelForward x =
 
 avroTestCaseTypeLevelReverse :: Phantoms.TTerm Testing.TypeLevelReverseTestCase -> Phantoms.TTerm Testing.AvroTestCase
 avroTestCaseTypeLevelReverse x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.avro.testing.AvroTestCase"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "typeLevelReverse"),
@@ -85,7 +85,7 @@ avroTestCaseTypeLevelReverse x =
 
 avroTestCaseTypeLevelRoundTripAvro :: Phantoms.TTerm Testing.TypeLevelRoundTripAvroTestCase -> Phantoms.TTerm Testing.AvroTestCase
 avroTestCaseTypeLevelRoundTripAvro x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.avro.testing.AvroTestCase"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "typeLevelRoundTripAvro"),
@@ -93,7 +93,7 @@ avroTestCaseTypeLevelRoundTripAvro x =
 
 avroTestCaseTypeLevelRoundTripHydra :: Phantoms.TTerm Testing.TypeLevelRoundTripHydraTestCase -> Phantoms.TTerm Testing.AvroTestCase
 avroTestCaseTypeLevelRoundTripHydra x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.avro.testing.AvroTestCase"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "typeLevelRoundTripHydra"),
@@ -101,7 +101,7 @@ avroTestCaseTypeLevelRoundTripHydra x =
 
 avroTestCaseUnion :: Phantoms.TTerm Testing.UnionTestCase -> Phantoms.TTerm Testing.AvroTestCase
 avroTestCaseUnion x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.avro.testing.AvroTestCase"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "union"),

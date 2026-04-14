@@ -261,7 +261,7 @@ def infer_type_of_injection(fcx: hydra.context.Context, cx: hydra.graph.Graph, i
     field = injection.field
     fname = field.name
     term = field.term
-    return hydra.lib.eithers.bind(infer_type_of_term(fcx, cx, term, "injected term"), (lambda result: (fcx2 := result.context, hydra.lib.eithers.bind(hydra.resolution.require_schema_type(fcx2, cx.schema_types, tname), (lambda st_rp: (schema_type := hydra.lib.pairs.first(st_rp), fcx3 := hydra.lib.pairs.second(st_rp), svars := schema_type.variables, stype := schema_type.type, iterm := result.term, ityp := result.type, isubst := result.subst, hydra.lib.eithers.bind(hydra.extract.core.union_type(tname, stype), (lambda sfields: hydra.lib.eithers.bind(hydra.resolution.find_field_type(fcx3, fname, sfields), (lambda ftyp: hydra.lib.eithers.bind(map_constraints(fcx3, cx, (lambda subst: yield_(fcx3, build_type_application_term(svars, cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(tname, hydra.core.Field(fname, iterm))))), hydra.resolution.nominal_application(tname, hydra.lib.lists.map((lambda x: cast(hydra.core.Type, hydra.core.TypeVariable(x))), svars)), hydra.substitution.compose_type_subst(isubst, subst))), (hydra.typing.TypeConstraint(ftyp, ityp, "schema type of injected field"),)), (lambda mc_result: Right(mc_result))))))))[7])))[1]))
+    return hydra.lib.eithers.bind(infer_type_of_term(fcx, cx, term, "injected term"), (lambda result: (fcx2 := result.context, hydra.lib.eithers.bind(hydra.resolution.require_schema_type(fcx2, cx.schema_types, tname), (lambda st_rp: (schema_type := hydra.lib.pairs.first(st_rp), fcx3 := hydra.lib.pairs.second(st_rp), svars := schema_type.variables, stype := schema_type.type, iterm := result.term, ityp := result.type, isubst := result.subst, hydra.lib.eithers.bind(hydra.extract.core.union_type(tname, stype), (lambda sfields: hydra.lib.eithers.bind(hydra.resolution.find_field_type(fcx3, fname, sfields), (lambda ftyp: hydra.lib.eithers.bind(map_constraints(fcx3, cx, (lambda subst: yield_(fcx3, build_type_application_term(svars, cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(tname, hydra.core.Field(fname, iterm))))), hydra.resolution.nominal_application(tname, hydra.lib.lists.map((lambda x: cast(hydra.core.Type, hydra.core.TypeVariable(x))), svars)), hydra.substitution.compose_type_subst(isubst, subst))), (hydra.typing.TypeConstraint(ftyp, ityp, "schema type of injected field"),)), (lambda mc_result: Right(mc_result))))))))[7])))[1]))
 
 def infer_type_of_lambda(fcx: hydra.context.Context, cx: hydra.graph.Graph, lambda_: hydra.core.Lambda) -> Either[hydra.errors.Error, hydra.typing.InferenceResult]:
     r"""Infer the type of a lambda function (Either version)."""
@@ -500,7 +500,7 @@ def infer_type_of_term(fcx: hydra.context.Context, cx: hydra.graph.Graph, term: 
         case hydra.core.TermTypeLambda(value=ta):
             return infer_type_of_type_lambda(fcx2(), cx, ta)
 
-        case hydra.core.TermUnion(value=i):
+        case hydra.core.TermInject(value=i):
             return infer_type_of_injection(fcx2(), cx, i)
 
         case hydra.core.TermUnit():

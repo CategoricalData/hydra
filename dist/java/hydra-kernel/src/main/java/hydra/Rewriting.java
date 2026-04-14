@@ -627,11 +627,11 @@ public interface Rewriting {
       }
 
       @Override
-      public hydra.util.Pair<T1, hydra.core.Term> visit(hydra.core.Term.Union inj) {
+      public hydra.util.Pair<T1, hydra.core.Term> visit(hydra.core.Term.Inject inj) {
         return hydra.Rewriting.rewriteAndFoldTermWithPath_forSingleWithAccessor(
           path,
           recurse,
-          (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (t -> new hydra.core.Term.Union(new hydra.core.Injection((inj).value.typeName, new hydra.core.Field((inj).value.field.name, t)))),
+          (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (t -> new hydra.core.Term.Inject(new hydra.core.Injection((inj).value.typeName, new hydra.core.Field((inj).value.field.name, t)))),
           new hydra.paths.SubtermStep.InjectionTerm(),
           val0,
           (inj).value.field.term);
@@ -1152,10 +1152,10 @@ public interface Rewriting {
       }
 
       @Override
-      public hydra.util.Pair<T1, hydra.core.Term> visit(hydra.core.Term.Union inj) {
+      public hydra.util.Pair<T1, hydra.core.Term> visit(hydra.core.Term.Inject inj) {
         return hydra.Rewriting.rewriteAndFoldTerm_forSingle(
           recurse,
-          (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (t -> new hydra.core.Term.Union(new hydra.core.Injection((inj).value.typeName, new hydra.core.Field((inj).value.field.name, t)))),
+          (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (t -> new hydra.core.Term.Inject(new hydra.core.Injection((inj).value.typeName, new hydra.core.Field((inj).value.field.name, t)))),
           val0,
           (inj).value.field.term);
       }
@@ -1386,8 +1386,8 @@ public interface Rewriting {
         }
 
         @Override
-        public hydra.core.Term visit(hydra.core.Term.Union i) {
-          return new hydra.core.Term.Union(new hydra.core.Injection((i).value.typeName, (forField).apply((i).value.field)));
+        public hydra.core.Term visit(hydra.core.Term.Inject i) {
+          return new hydra.core.Term.Inject(new hydra.core.Injection((i).value.typeName, (forField).apply((i).value.field)));
         }
 
         @Override
@@ -1600,11 +1600,11 @@ public interface Rewriting {
       }
 
       @Override
-      public hydra.util.Either<T1, hydra.core.Term> visit(hydra.core.Term.Union i) {
+      public hydra.util.Either<T1, hydra.core.Term> visit(hydra.core.Term.Inject i) {
         hydra.core.Field field = (i).value.field;
         hydra.core.Name n = (i).value.typeName;
         return hydra.lib.eithers.Map.apply(
-          (java.util.function.Function<hydra.core.Field, hydra.core.Term>) (rfield -> new hydra.core.Term.Union(new hydra.core.Injection(n, rfield))),
+          (java.util.function.Function<hydra.core.Field, hydra.core.Term>) (rfield -> new hydra.core.Term.Inject(new hydra.core.Injection(n, rfield))),
           (forField).apply(field));
       }
 
@@ -1844,11 +1844,11 @@ public interface Rewriting {
       }
 
       @Override
-      public hydra.util.Either<T3, hydra.core.Term> visit(hydra.core.Term.Union i) {
+      public hydra.util.Either<T3, hydra.core.Term> visit(hydra.core.Term.Inject i) {
         hydra.core.Field field = (i).value.field;
         hydra.core.Name n = (i).value.typeName;
         return hydra.lib.eithers.Map.apply(
-          (java.util.function.Function<hydra.core.Field, hydra.core.Term>) (rfield -> new hydra.core.Term.Union(new hydra.core.Injection(n, rfield))),
+          (java.util.function.Function<hydra.core.Field, hydra.core.Term>) (rfield -> new hydra.core.Term.Inject(new hydra.core.Injection(n, rfield))),
           (forField).apply(field));
       }
 
@@ -2010,8 +2010,8 @@ public interface Rewriting {
       }
 
       @Override
-      public hydra.core.Term visit(hydra.core.Term.Union i) {
-        return new hydra.core.Term.Union(new hydra.core.Injection((i).value.typeName, (forField).apply((i).value.field)));
+      public hydra.core.Term visit(hydra.core.Term.Inject i) {
+        return new hydra.core.Term.Inject(new hydra.core.Injection((i).value.typeName, (forField).apply((i).value.field)));
       }
 
       @Override
@@ -2497,7 +2497,7 @@ public interface Rewriting {
       }
 
       @Override
-      public java.util.List<hydra.core.Term> visit(hydra.core.Term.Union ut) {
+      public java.util.List<hydra.core.Term> visit(hydra.core.Term.Inject ut) {
         return java.util.Arrays.asList((ut).value.field.term);
       }
 
@@ -2632,7 +2632,7 @@ public interface Rewriting {
       }
 
       @Override
-      public java.util.List<hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>> visit(hydra.core.Term.Union ut) {
+      public java.util.List<hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>> visit(hydra.core.Term.Inject ut) {
         return java.util.Arrays.asList((hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>) ((hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>) (new hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>(new hydra.paths.SubtermStep.InjectionTerm(), (ut).value.field.term))));
       }
 

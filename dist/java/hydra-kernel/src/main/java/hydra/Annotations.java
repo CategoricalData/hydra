@@ -388,12 +388,12 @@ public interface Annotations {
     java.util.function.Function<hydra.classes.TypeClass, hydra.core.Term> encodeClass = (java.util.function.Function<hydra.classes.TypeClass, hydra.core.Term>) (tc -> (tc).accept(new hydra.classes.TypeClass.PartialVisitor<>() {
       @Override
       public hydra.core.Term visit(hydra.classes.TypeClass.Equality ignored) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.classes.TypeClass"), new hydra.core.Field(new hydra.core.Name("equality"), new hydra.core.Term.Unit())));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.classes.TypeClass"), new hydra.core.Field(new hydra.core.Name("equality"), new hydra.core.Term.Unit())));
       }
 
       @Override
       public hydra.core.Term visit(hydra.classes.TypeClass.Ordering ignored) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.classes.TypeClass"), new hydra.core.Field(new hydra.core.Name("ordering"), new hydra.core.Term.Unit())));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.classes.TypeClass"), new hydra.core.Field(new hydra.core.Name("ordering"), new hydra.core.Term.Unit())));
       }
     }));
     java.util.function.Function<hydra.util.Pair<hydra.core.Name, java.util.Set<hydra.classes.TypeClass>>, hydra.util.Pair<hydra.core.Term, hydra.core.Term>> encodePair = (java.util.function.Function<hydra.util.Pair<hydra.core.Name, java.util.Set<hydra.classes.TypeClass>>, hydra.util.Pair<hydra.core.Term, hydra.core.Term>>) (nameClasses -> {

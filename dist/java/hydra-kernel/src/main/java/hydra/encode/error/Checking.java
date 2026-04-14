@@ -10,67 +10,67 @@ public interface Checking {
     return (v1).accept(new hydra.error.checking.CheckingError.PartialVisitor<>() {
       @Override
       public hydra.core.Term visit(hydra.error.checking.CheckingError.IncorrectUnification y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.checking.CheckingError"), new hydra.core.Field(new hydra.core.Name("incorrectUnification"), hydra.encode.error.Checking.incorrectUnificationError((y).value))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.checking.CheckingError"), new hydra.core.Field(new hydra.core.Name("incorrectUnification"), hydra.encode.error.Checking.incorrectUnificationError((y).value))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.error.checking.CheckingError.NotAForallType y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.checking.CheckingError"), new hydra.core.Field(new hydra.core.Name("notAForallType"), hydra.encode.error.Checking.notAForallTypeError((y).value))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.checking.CheckingError"), new hydra.core.Field(new hydra.core.Name("notAForallType"), hydra.encode.error.Checking.notAForallTypeError((y).value))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.error.checking.CheckingError.NotAFunctionType y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.checking.CheckingError"), new hydra.core.Field(new hydra.core.Name("notAFunctionType"), hydra.encode.error.Checking.notAFunctionTypeError((y).value))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.checking.CheckingError"), new hydra.core.Field(new hydra.core.Name("notAFunctionType"), hydra.encode.error.Checking.notAFunctionTypeError((y).value))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.error.checking.CheckingError.Other y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.checking.CheckingError"), new hydra.core.Field(new hydra.core.Name("other"), hydra.encode.error.Checking.otherCheckingError((y).value))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.checking.CheckingError"), new hydra.core.Field(new hydra.core.Name("other"), hydra.encode.error.Checking.otherCheckingError((y).value))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.error.checking.CheckingError.TypeArityMismatch y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.checking.CheckingError"), new hydra.core.Field(new hydra.core.Name("typeArityMismatch"), hydra.encode.error.Checking.typeArityMismatchError((y).value))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.checking.CheckingError"), new hydra.core.Field(new hydra.core.Name("typeArityMismatch"), hydra.encode.error.Checking.typeArityMismatchError((y).value))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.error.checking.CheckingError.TypeMismatch y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.checking.CheckingError"), new hydra.core.Field(new hydra.core.Name("typeMismatch"), hydra.encode.error.Checking.typeMismatchError((y).value))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.checking.CheckingError"), new hydra.core.Field(new hydra.core.Name("typeMismatch"), hydra.encode.error.Checking.typeMismatchError((y).value))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.error.checking.CheckingError.UnboundTypeVariables y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.checking.CheckingError"), new hydra.core.Field(new hydra.core.Name("unboundTypeVariables"), hydra.encode.error.Checking.unboundTypeVariablesError((y).value))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.checking.CheckingError"), new hydra.core.Field(new hydra.core.Name("unboundTypeVariables"), hydra.encode.error.Checking.unboundTypeVariablesError((y).value))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.error.checking.CheckingError.UndefinedTermVariable y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.checking.CheckingError"), new hydra.core.Field(new hydra.core.Name("undefinedTermVariable"), hydra.encode.error.Checking.undefinedTermVariableCheckingError((y).value))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.checking.CheckingError"), new hydra.core.Field(new hydra.core.Name("undefinedTermVariable"), hydra.encode.error.Checking.undefinedTermVariableCheckingError((y).value))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.error.checking.CheckingError.UnequalTypes y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.checking.CheckingError"), new hydra.core.Field(new hydra.core.Name("unequalTypes"), hydra.encode.error.Checking.unequalTypesError((y).value))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.checking.CheckingError"), new hydra.core.Field(new hydra.core.Name("unequalTypes"), hydra.encode.error.Checking.unequalTypesError((y).value))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.error.checking.CheckingError.UnsupportedTermVariant y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.checking.CheckingError"), new hydra.core.Field(new hydra.core.Name("unsupportedTermVariant"), hydra.encode.error.Checking.unsupportedTermVariantError((y).value))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.checking.CheckingError"), new hydra.core.Field(new hydra.core.Name("unsupportedTermVariant"), hydra.encode.error.Checking.unsupportedTermVariantError((y).value))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.error.checking.CheckingError.UntypedLambda y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.checking.CheckingError"), new hydra.core.Field(new hydra.core.Name("untypedLambda"), hydra.encode.error.Checking.untypedLambdaError((y).value))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.checking.CheckingError"), new hydra.core.Field(new hydra.core.Name("untypedLambda"), hydra.encode.error.Checking.untypedLambdaError((y).value))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.error.checking.CheckingError.UntypedLetBinding y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.checking.CheckingError"), new hydra.core.Field(new hydra.core.Name("untypedLetBinding"), hydra.encode.error.Checking.untypedLetBindingError((y).value))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.checking.CheckingError"), new hydra.core.Field(new hydra.core.Name("untypedLetBinding"), hydra.encode.error.Checking.untypedLetBindingError((y).value))));
       }
 
       @Override
       public hydra.core.Term visit(hydra.error.checking.CheckingError.UntypedTermVariable y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.checking.CheckingError"), new hydra.core.Field(new hydra.core.Name("untypedTermVariable"), hydra.encode.error.Checking.untypedTermVariableCheckingError((y).value))));
+        return new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.checking.CheckingError"), new hydra.core.Field(new hydra.core.Name("untypedTermVariable"), hydra.encode.error.Checking.untypedTermVariableCheckingError((y).value))));
       }
     });
   }

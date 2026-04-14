@@ -98,70 +98,70 @@ def untyped_term_variable_error(x: hydra.error.core.UntypedTermVariableError) ->
 def invalid_term_error(v1: hydra.error.core.InvalidTermError) -> hydra.core.Term:
     match v1:
         case hydra.error.core.InvalidTermErrorConstantCondition(value=y):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.error.core.InvalidTermError"), hydra.core.Field(hydra.core.Name("constantCondition"), constant_condition_error(y)))))
+            return cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.error.core.InvalidTermError"), hydra.core.Field(hydra.core.Name("constantCondition"), constant_condition_error(y)))))
 
         case hydra.error.core.InvalidTermErrorDuplicateBinding(value=y2):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.error.core.InvalidTermError"), hydra.core.Field(hydra.core.Name("duplicateBinding"), duplicate_binding_error(y2)))))
+            return cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.error.core.InvalidTermError"), hydra.core.Field(hydra.core.Name("duplicateBinding"), duplicate_binding_error(y2)))))
 
         case hydra.error.core.InvalidTermErrorDuplicateField(value=y3):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.error.core.InvalidTermError"), hydra.core.Field(hydra.core.Name("duplicateField"), duplicate_field_error(y3)))))
+            return cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.error.core.InvalidTermError"), hydra.core.Field(hydra.core.Name("duplicateField"), duplicate_field_error(y3)))))
 
         case hydra.error.core.InvalidTermErrorEmptyCaseStatement(value=y4):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.error.core.InvalidTermError"), hydra.core.Field(hydra.core.Name("emptyCaseStatement"), empty_case_statement_error(y4)))))
+            return cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.error.core.InvalidTermError"), hydra.core.Field(hydra.core.Name("emptyCaseStatement"), empty_case_statement_error(y4)))))
 
         case hydra.error.core.InvalidTermErrorEmptyLetBindings(value=y5):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.error.core.InvalidTermError"), hydra.core.Field(hydra.core.Name("emptyLetBindings"), empty_let_bindings_error(y5)))))
+            return cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.error.core.InvalidTermError"), hydra.core.Field(hydra.core.Name("emptyLetBindings"), empty_let_bindings_error(y5)))))
 
         case hydra.error.core.InvalidTermErrorEmptyTermAnnotation(value=y6):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.error.core.InvalidTermError"), hydra.core.Field(hydra.core.Name("emptyTermAnnotation"), empty_term_annotation_error(y6)))))
+            return cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.error.core.InvalidTermError"), hydra.core.Field(hydra.core.Name("emptyTermAnnotation"), empty_term_annotation_error(y6)))))
 
         case hydra.error.core.InvalidTermErrorEmptyTypeNameInTerm(value=y7):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.error.core.InvalidTermError"), hydra.core.Field(hydra.core.Name("emptyTypeNameInTerm"), empty_type_name_in_term_error(y7)))))
+            return cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.error.core.InvalidTermError"), hydra.core.Field(hydra.core.Name("emptyTypeNameInTerm"), empty_type_name_in_term_error(y7)))))
 
         case hydra.error.core.InvalidTermErrorInvalidLambdaParameterName(value=y8):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.error.core.InvalidTermError"), hydra.core.Field(hydra.core.Name("invalidLambdaParameterName"), invalid_lambda_parameter_name_error(y8)))))
+            return cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.error.core.InvalidTermError"), hydra.core.Field(hydra.core.Name("invalidLambdaParameterName"), invalid_lambda_parameter_name_error(y8)))))
 
         case hydra.error.core.InvalidTermErrorInvalidLetBindingName(value=y9):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.error.core.InvalidTermError"), hydra.core.Field(hydra.core.Name("invalidLetBindingName"), invalid_let_binding_name_error(y9)))))
+            return cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.error.core.InvalidTermError"), hydra.core.Field(hydra.core.Name("invalidLetBindingName"), invalid_let_binding_name_error(y9)))))
 
         case hydra.error.core.InvalidTermErrorInvalidTypeLambdaParameterName(value=y10):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.error.core.InvalidTermError"), hydra.core.Field(hydra.core.Name("invalidTypeLambdaParameterName"), invalid_type_lambda_parameter_name_error(y10)))))
+            return cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.error.core.InvalidTermError"), hydra.core.Field(hydra.core.Name("invalidTypeLambdaParameterName"), invalid_type_lambda_parameter_name_error(y10)))))
 
         case hydra.error.core.InvalidTermErrorNestedTermAnnotation(value=y11):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.error.core.InvalidTermError"), hydra.core.Field(hydra.core.Name("nestedTermAnnotation"), nested_term_annotation_error(y11)))))
+            return cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.error.core.InvalidTermError"), hydra.core.Field(hydra.core.Name("nestedTermAnnotation"), nested_term_annotation_error(y11)))))
 
         case hydra.error.core.InvalidTermErrorRedundantWrapUnwrap(value=y12):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.error.core.InvalidTermError"), hydra.core.Field(hydra.core.Name("redundantWrapUnwrap"), redundant_wrap_unwrap_error(y12)))))
+            return cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.error.core.InvalidTermError"), hydra.core.Field(hydra.core.Name("redundantWrapUnwrap"), redundant_wrap_unwrap_error(y12)))))
 
         case hydra.error.core.InvalidTermErrorSelfApplication(value=y13):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.error.core.InvalidTermError"), hydra.core.Field(hydra.core.Name("selfApplication"), self_application_error(y13)))))
+            return cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.error.core.InvalidTermError"), hydra.core.Field(hydra.core.Name("selfApplication"), self_application_error(y13)))))
 
         case hydra.error.core.InvalidTermErrorTermVariableShadowing(value=y14):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.error.core.InvalidTermError"), hydra.core.Field(hydra.core.Name("termVariableShadowing"), term_variable_shadowing_error(y14)))))
+            return cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.error.core.InvalidTermError"), hydra.core.Field(hydra.core.Name("termVariableShadowing"), term_variable_shadowing_error(y14)))))
 
         case hydra.error.core.InvalidTermErrorTypeVariableShadowingInTypeLambda(value=y15):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.error.core.InvalidTermError"), hydra.core.Field(hydra.core.Name("typeVariableShadowingInTypeLambda"), type_variable_shadowing_in_type_lambda_error(y15)))))
+            return cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.error.core.InvalidTermError"), hydra.core.Field(hydra.core.Name("typeVariableShadowingInTypeLambda"), type_variable_shadowing_in_type_lambda_error(y15)))))
 
         case hydra.error.core.InvalidTermErrorUndefinedTermVariable(value=y16):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.error.core.InvalidTermError"), hydra.core.Field(hydra.core.Name("undefinedTermVariable"), undefined_term_variable_error(y16)))))
+            return cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.error.core.InvalidTermError"), hydra.core.Field(hydra.core.Name("undefinedTermVariable"), undefined_term_variable_error(y16)))))
 
         case hydra.error.core.InvalidTermErrorUndefinedTypeVariableInBindingType(value=y17):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.error.core.InvalidTermError"), hydra.core.Field(hydra.core.Name("undefinedTypeVariableInBindingType"), undefined_type_variable_in_binding_type_error(y17)))))
+            return cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.error.core.InvalidTermError"), hydra.core.Field(hydra.core.Name("undefinedTypeVariableInBindingType"), undefined_type_variable_in_binding_type_error(y17)))))
 
         case hydra.error.core.InvalidTermErrorUndefinedTypeVariableInLambdaDomain(value=y18):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.error.core.InvalidTermError"), hydra.core.Field(hydra.core.Name("undefinedTypeVariableInLambdaDomain"), undefined_type_variable_in_lambda_domain_error(y18)))))
+            return cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.error.core.InvalidTermError"), hydra.core.Field(hydra.core.Name("undefinedTypeVariableInLambdaDomain"), undefined_type_variable_in_lambda_domain_error(y18)))))
 
         case hydra.error.core.InvalidTermErrorUndefinedTypeVariableInTypeApplication(value=y19):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.error.core.InvalidTermError"), hydra.core.Field(hydra.core.Name("undefinedTypeVariableInTypeApplication"), undefined_type_variable_in_type_application_error(y19)))))
+            return cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.error.core.InvalidTermError"), hydra.core.Field(hydra.core.Name("undefinedTypeVariableInTypeApplication"), undefined_type_variable_in_type_application_error(y19)))))
 
         case hydra.error.core.InvalidTermErrorUnknownPrimitiveName(value=y20):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.error.core.InvalidTermError"), hydra.core.Field(hydra.core.Name("unknownPrimitiveName"), unknown_primitive_name_error(y20)))))
+            return cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.error.core.InvalidTermError"), hydra.core.Field(hydra.core.Name("unknownPrimitiveName"), unknown_primitive_name_error(y20)))))
 
         case hydra.error.core.InvalidTermErrorUnnecessaryIdentityApplication(value=y21):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.error.core.InvalidTermError"), hydra.core.Field(hydra.core.Name("unnecessaryIdentityApplication"), unnecessary_identity_application_error(y21)))))
+            return cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.error.core.InvalidTermError"), hydra.core.Field(hydra.core.Name("unnecessaryIdentityApplication"), unnecessary_identity_application_error(y21)))))
 
         case hydra.error.core.InvalidTermErrorUntypedTermVariable(value=y22):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.error.core.InvalidTermError"), hydra.core.Field(hydra.core.Name("untypedTermVariable"), untyped_term_variable_error(y22)))))
+            return cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.error.core.InvalidTermError"), hydra.core.Field(hydra.core.Name("untypedTermVariable"), untyped_term_variable_error(y22)))))
 
         case _:
             raise AssertionError("Unreachable: all variants handled")
@@ -193,46 +193,46 @@ def void_in_non_bottom_position_error(x: hydra.error.core.VoidInNonBottomPositio
 def invalid_type_error(v1: hydra.error.core.InvalidTypeError) -> hydra.core.Term:
     match v1:
         case hydra.error.core.InvalidTypeErrorDuplicateRecordTypeFieldNames(value=y):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.error.core.InvalidTypeError"), hydra.core.Field(hydra.core.Name("duplicateRecordTypeFieldNames"), duplicate_record_type_field_names_error(y)))))
+            return cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.error.core.InvalidTypeError"), hydra.core.Field(hydra.core.Name("duplicateRecordTypeFieldNames"), duplicate_record_type_field_names_error(y)))))
 
         case hydra.error.core.InvalidTypeErrorDuplicateUnionTypeFieldNames(value=y2):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.error.core.InvalidTypeError"), hydra.core.Field(hydra.core.Name("duplicateUnionTypeFieldNames"), duplicate_union_type_field_names_error(y2)))))
+            return cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.error.core.InvalidTypeError"), hydra.core.Field(hydra.core.Name("duplicateUnionTypeFieldNames"), duplicate_union_type_field_names_error(y2)))))
 
         case hydra.error.core.InvalidTypeErrorEmptyRecordType(value=y3):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.error.core.InvalidTypeError"), hydra.core.Field(hydra.core.Name("emptyRecordType"), empty_record_type_error(y3)))))
+            return cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.error.core.InvalidTypeError"), hydra.core.Field(hydra.core.Name("emptyRecordType"), empty_record_type_error(y3)))))
 
         case hydra.error.core.InvalidTypeErrorEmptyTypeAnnotation(value=y4):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.error.core.InvalidTypeError"), hydra.core.Field(hydra.core.Name("emptyTypeAnnotation"), empty_type_annotation_error(y4)))))
+            return cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.error.core.InvalidTypeError"), hydra.core.Field(hydra.core.Name("emptyTypeAnnotation"), empty_type_annotation_error(y4)))))
 
         case hydra.error.core.InvalidTypeErrorEmptyUnionType(value=y5):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.error.core.InvalidTypeError"), hydra.core.Field(hydra.core.Name("emptyUnionType"), empty_union_type_error(y5)))))
+            return cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.error.core.InvalidTypeError"), hydra.core.Field(hydra.core.Name("emptyUnionType"), empty_union_type_error(y5)))))
 
         case hydra.error.core.InvalidTypeErrorInvalidForallParameterName(value=y6):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.error.core.InvalidTypeError"), hydra.core.Field(hydra.core.Name("invalidForallParameterName"), invalid_forall_parameter_name_error(y6)))))
+            return cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.error.core.InvalidTypeError"), hydra.core.Field(hydra.core.Name("invalidForallParameterName"), invalid_forall_parameter_name_error(y6)))))
 
         case hydra.error.core.InvalidTypeErrorInvalidTypeSchemeVariableName(value=y7):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.error.core.InvalidTypeError"), hydra.core.Field(hydra.core.Name("invalidTypeSchemeVariableName"), invalid_type_scheme_variable_name_error(y7)))))
+            return cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.error.core.InvalidTypeError"), hydra.core.Field(hydra.core.Name("invalidTypeSchemeVariableName"), invalid_type_scheme_variable_name_error(y7)))))
 
         case hydra.error.core.InvalidTypeErrorNestedTypeAnnotation(value=y8):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.error.core.InvalidTypeError"), hydra.core.Field(hydra.core.Name("nestedTypeAnnotation"), nested_type_annotation_error(y8)))))
+            return cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.error.core.InvalidTypeError"), hydra.core.Field(hydra.core.Name("nestedTypeAnnotation"), nested_type_annotation_error(y8)))))
 
         case hydra.error.core.InvalidTypeErrorNonComparableMapKeyType(value=y9):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.error.core.InvalidTypeError"), hydra.core.Field(hydra.core.Name("nonComparableMapKeyType"), non_comparable_map_key_type_error(y9)))))
+            return cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.error.core.InvalidTypeError"), hydra.core.Field(hydra.core.Name("nonComparableMapKeyType"), non_comparable_map_key_type_error(y9)))))
 
         case hydra.error.core.InvalidTypeErrorNonComparableSetElementType(value=y10):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.error.core.InvalidTypeError"), hydra.core.Field(hydra.core.Name("nonComparableSetElementType"), non_comparable_set_element_type_error(y10)))))
+            return cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.error.core.InvalidTypeError"), hydra.core.Field(hydra.core.Name("nonComparableSetElementType"), non_comparable_set_element_type_error(y10)))))
 
         case hydra.error.core.InvalidTypeErrorSingleVariantUnion(value=y11):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.error.core.InvalidTypeError"), hydra.core.Field(hydra.core.Name("singleVariantUnion"), single_variant_union_error(y11)))))
+            return cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.error.core.InvalidTypeError"), hydra.core.Field(hydra.core.Name("singleVariantUnion"), single_variant_union_error(y11)))))
 
         case hydra.error.core.InvalidTypeErrorTypeVariableShadowingInForall(value=y12):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.error.core.InvalidTypeError"), hydra.core.Field(hydra.core.Name("typeVariableShadowingInForall"), type_variable_shadowing_in_forall_error(y12)))))
+            return cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.error.core.InvalidTypeError"), hydra.core.Field(hydra.core.Name("typeVariableShadowingInForall"), type_variable_shadowing_in_forall_error(y12)))))
 
         case hydra.error.core.InvalidTypeErrorUndefinedTypeVariable(value=y13):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.error.core.InvalidTypeError"), hydra.core.Field(hydra.core.Name("undefinedTypeVariable"), undefined_type_variable_error(y13)))))
+            return cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.error.core.InvalidTypeError"), hydra.core.Field(hydra.core.Name("undefinedTypeVariable"), undefined_type_variable_error(y13)))))
 
         case hydra.error.core.InvalidTypeErrorVoidInNonBottomPosition(value=y14):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.error.core.InvalidTypeError"), hydra.core.Field(hydra.core.Name("voidInNonBottomPosition"), void_in_non_bottom_position_error(y14)))))
+            return cast(hydra.core.Term, hydra.core.TermInject(hydra.core.Injection(hydra.core.Name("hydra.error.core.InvalidTypeError"), hydra.core.Field(hydra.core.Name("voidInNonBottomPosition"), void_in_non_bottom_position_error(y14)))))
 
         case _:
             raise AssertionError("Unreachable: all variants handled")

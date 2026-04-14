@@ -110,7 +110,7 @@ def termVariant(v1: hydra.core.Term): hydra.variants.TermVariant =
   case hydra.core.Term.set(v_Term_set__) => hydra.variants.TermVariant.set
   case hydra.core.Term.typeApplication(v_Term_typeApplication__) => hydra.variants.TermVariant.typeApplication
   case hydra.core.Term.typeLambda(v_Term_typeLambda__) => hydra.variants.TermVariant.typeLambda
-  case hydra.core.Term.union(v_Term_union__) => hydra.variants.TermVariant.union
+  case hydra.core.Term.inject(v_Term_inject__) => hydra.variants.TermVariant.inject
   case hydra.core.Term.unit => hydra.variants.TermVariant.unit
   case hydra.core.Term.unwrap(v_Term_unwrap__) => hydra.variants.TermVariant.unwrap
   case hydra.core.Term.variable(v_Term_variable__) => hydra.variants.TermVariant.variable
@@ -121,7 +121,7 @@ lazy val termVariants: Seq[hydra.variants.TermVariant] = Seq(hydra.variants.Term
    hydra.variants.TermVariant.let, hydra.variants.TermVariant.list, hydra.variants.TermVariant.literal,
    hydra.variants.TermVariant.map, hydra.variants.TermVariant.maybe, hydra.variants.TermVariant.pair,
    hydra.variants.TermVariant.project, hydra.variants.TermVariant.record, hydra.variants.TermVariant.set,
-   hydra.variants.TermVariant.typeLambda, hydra.variants.TermVariant.typeApplication, hydra.variants.TermVariant.union,
+   hydra.variants.TermVariant.typeLambda, hydra.variants.TermVariant.typeApplication, hydra.variants.TermVariant.inject,
    hydra.variants.TermVariant.unit, hydra.variants.TermVariant.unwrap, hydra.variants.TermVariant.variable,
    hydra.variants.TermVariant.wrap)
 

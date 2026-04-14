@@ -11,7 +11,7 @@ import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pur
 
 eliminationVariantRecord :: Phantoms.TTerm Variants.EliminationVariant
 eliminationVariantRecord =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.variants.EliminationVariant"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "record"),
@@ -19,7 +19,7 @@ eliminationVariantRecord =
 
 eliminationVariantUnion :: Phantoms.TTerm Variants.EliminationVariant
 eliminationVariantUnion =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.variants.EliminationVariant"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "union"),
@@ -27,7 +27,7 @@ eliminationVariantUnion =
 
 eliminationVariantWrap :: Phantoms.TTerm Variants.EliminationVariant
 eliminationVariantWrap =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.variants.EliminationVariant"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "wrap"),
@@ -35,7 +35,7 @@ eliminationVariantWrap =
 
 functionVariantElimination :: Phantoms.TTerm Variants.FunctionVariant
 functionVariantElimination =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.variants.FunctionVariant"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "elimination"),
@@ -43,7 +43,7 @@ functionVariantElimination =
 
 functionVariantLambda :: Phantoms.TTerm Variants.FunctionVariant
 functionVariantLambda =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.variants.FunctionVariant"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "lambda"),
@@ -51,7 +51,7 @@ functionVariantLambda =
 
 literalVariantBinary :: Phantoms.TTerm Variants.LiteralVariant
 literalVariantBinary =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.variants.LiteralVariant"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "binary"),
@@ -59,7 +59,7 @@ literalVariantBinary =
 
 literalVariantBoolean :: Phantoms.TTerm Variants.LiteralVariant
 literalVariantBoolean =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.variants.LiteralVariant"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "boolean"),
@@ -67,7 +67,7 @@ literalVariantBoolean =
 
 literalVariantFloat :: Phantoms.TTerm Variants.LiteralVariant
 literalVariantFloat =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.variants.LiteralVariant"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "float"),
@@ -75,7 +75,7 @@ literalVariantFloat =
 
 literalVariantInteger :: Phantoms.TTerm Variants.LiteralVariant
 literalVariantInteger =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.variants.LiteralVariant"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "integer"),
@@ -83,7 +83,7 @@ literalVariantInteger =
 
 literalVariantString :: Phantoms.TTerm Variants.LiteralVariant
 literalVariantString =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.variants.LiteralVariant"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "string"),
@@ -91,7 +91,7 @@ literalVariantString =
 
 termVariantAnnotated :: Phantoms.TTerm Variants.TermVariant
 termVariantAnnotated =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.variants.TermVariant"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "annotated"),
@@ -99,7 +99,7 @@ termVariantAnnotated =
 
 termVariantApplication :: Phantoms.TTerm Variants.TermVariant
 termVariantApplication =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.variants.TermVariant"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "application"),
@@ -107,7 +107,7 @@ termVariantApplication =
 
 termVariantCases :: Phantoms.TTerm Variants.TermVariant
 termVariantCases =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.variants.TermVariant"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "cases"),
@@ -115,15 +115,23 @@ termVariantCases =
 
 termVariantEither :: Phantoms.TTerm Variants.TermVariant
 termVariantEither =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.variants.TermVariant"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "either"),
         Core.fieldTerm = Core.TermUnit}}))
 
+termVariantInject :: Phantoms.TTerm Variants.TermVariant
+termVariantInject =
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.variants.TermVariant"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "inject"),
+        Core.fieldTerm = Core.TermUnit}}))
+
 termVariantLambda :: Phantoms.TTerm Variants.TermVariant
 termVariantLambda =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.variants.TermVariant"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "lambda"),
@@ -131,7 +139,7 @@ termVariantLambda =
 
 termVariantLet :: Phantoms.TTerm Variants.TermVariant
 termVariantLet =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.variants.TermVariant"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "let"),
@@ -139,7 +147,7 @@ termVariantLet =
 
 termVariantList :: Phantoms.TTerm Variants.TermVariant
 termVariantList =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.variants.TermVariant"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "list"),
@@ -147,7 +155,7 @@ termVariantList =
 
 termVariantLiteral :: Phantoms.TTerm Variants.TermVariant
 termVariantLiteral =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.variants.TermVariant"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "literal"),
@@ -155,7 +163,7 @@ termVariantLiteral =
 
 termVariantMap :: Phantoms.TTerm Variants.TermVariant
 termVariantMap =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.variants.TermVariant"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "map"),
@@ -163,7 +171,7 @@ termVariantMap =
 
 termVariantMaybe :: Phantoms.TTerm Variants.TermVariant
 termVariantMaybe =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.variants.TermVariant"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "maybe"),
@@ -171,7 +179,7 @@ termVariantMaybe =
 
 termVariantPair :: Phantoms.TTerm Variants.TermVariant
 termVariantPair =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.variants.TermVariant"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "pair"),
@@ -179,7 +187,7 @@ termVariantPair =
 
 termVariantProject :: Phantoms.TTerm Variants.TermVariant
 termVariantProject =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.variants.TermVariant"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "project"),
@@ -187,7 +195,7 @@ termVariantProject =
 
 termVariantRecord :: Phantoms.TTerm Variants.TermVariant
 termVariantRecord =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.variants.TermVariant"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "record"),
@@ -195,7 +203,7 @@ termVariantRecord =
 
 termVariantSet :: Phantoms.TTerm Variants.TermVariant
 termVariantSet =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.variants.TermVariant"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "set"),
@@ -203,7 +211,7 @@ termVariantSet =
 
 termVariantTypeApplication :: Phantoms.TTerm Variants.TermVariant
 termVariantTypeApplication =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.variants.TermVariant"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "typeApplication"),
@@ -211,23 +219,15 @@ termVariantTypeApplication =
 
 termVariantTypeLambda :: Phantoms.TTerm Variants.TermVariant
 termVariantTypeLambda =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.variants.TermVariant"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "typeLambda"),
         Core.fieldTerm = Core.TermUnit}}))
 
-termVariantUnion :: Phantoms.TTerm Variants.TermVariant
-termVariantUnion =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.variants.TermVariant"),
-      Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "union"),
-        Core.fieldTerm = Core.TermUnit}}))
-
 termVariantUnit :: Phantoms.TTerm Variants.TermVariant
 termVariantUnit =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.variants.TermVariant"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "unit"),
@@ -235,7 +235,7 @@ termVariantUnit =
 
 termVariantUnwrap :: Phantoms.TTerm Variants.TermVariant
 termVariantUnwrap =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.variants.TermVariant"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "unwrap"),
@@ -243,7 +243,7 @@ termVariantUnwrap =
 
 termVariantVariable :: Phantoms.TTerm Variants.TermVariant
 termVariantVariable =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.variants.TermVariant"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "variable"),
@@ -251,7 +251,7 @@ termVariantVariable =
 
 termVariantWrap :: Phantoms.TTerm Variants.TermVariant
 termVariantWrap =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.variants.TermVariant"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "wrap"),
@@ -259,7 +259,7 @@ termVariantWrap =
 
 typeVariantAnnotated :: Phantoms.TTerm Variants.TypeVariant
 typeVariantAnnotated =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.variants.TypeVariant"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "annotated"),
@@ -267,7 +267,7 @@ typeVariantAnnotated =
 
 typeVariantApplication :: Phantoms.TTerm Variants.TypeVariant
 typeVariantApplication =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.variants.TypeVariant"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "application"),
@@ -275,7 +275,7 @@ typeVariantApplication =
 
 typeVariantEither :: Phantoms.TTerm Variants.TypeVariant
 typeVariantEither =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.variants.TypeVariant"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "either"),
@@ -283,7 +283,7 @@ typeVariantEither =
 
 typeVariantForall :: Phantoms.TTerm Variants.TypeVariant
 typeVariantForall =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.variants.TypeVariant"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "forall"),
@@ -291,7 +291,7 @@ typeVariantForall =
 
 typeVariantFunction :: Phantoms.TTerm Variants.TypeVariant
 typeVariantFunction =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.variants.TypeVariant"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "function"),
@@ -299,7 +299,7 @@ typeVariantFunction =
 
 typeVariantList :: Phantoms.TTerm Variants.TypeVariant
 typeVariantList =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.variants.TypeVariant"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "list"),
@@ -307,7 +307,7 @@ typeVariantList =
 
 typeVariantLiteral :: Phantoms.TTerm Variants.TypeVariant
 typeVariantLiteral =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.variants.TypeVariant"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "literal"),
@@ -315,7 +315,7 @@ typeVariantLiteral =
 
 typeVariantMap :: Phantoms.TTerm Variants.TypeVariant
 typeVariantMap =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.variants.TypeVariant"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "map"),
@@ -323,7 +323,7 @@ typeVariantMap =
 
 typeVariantMaybe :: Phantoms.TTerm Variants.TypeVariant
 typeVariantMaybe =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.variants.TypeVariant"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "maybe"),
@@ -331,7 +331,7 @@ typeVariantMaybe =
 
 typeVariantPair :: Phantoms.TTerm Variants.TypeVariant
 typeVariantPair =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.variants.TypeVariant"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "pair"),
@@ -339,7 +339,7 @@ typeVariantPair =
 
 typeVariantRecord :: Phantoms.TTerm Variants.TypeVariant
 typeVariantRecord =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.variants.TypeVariant"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "record"),
@@ -347,7 +347,7 @@ typeVariantRecord =
 
 typeVariantSet :: Phantoms.TTerm Variants.TypeVariant
 typeVariantSet =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.variants.TypeVariant"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "set"),
@@ -355,7 +355,7 @@ typeVariantSet =
 
 typeVariantUnion :: Phantoms.TTerm Variants.TypeVariant
 typeVariantUnion =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.variants.TypeVariant"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "union"),
@@ -363,7 +363,7 @@ typeVariantUnion =
 
 typeVariantUnit :: Phantoms.TTerm Variants.TypeVariant
 typeVariantUnit =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.variants.TypeVariant"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "unit"),
@@ -371,7 +371,7 @@ typeVariantUnit =
 
 typeVariantVariable :: Phantoms.TTerm Variants.TypeVariant
 typeVariantVariable =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.variants.TypeVariant"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "variable"),
@@ -379,7 +379,7 @@ typeVariantVariable =
 
 typeVariantVoid :: Phantoms.TTerm Variants.TypeVariant
 typeVariantVoid =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.variants.TypeVariant"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "void"),
@@ -387,7 +387,7 @@ typeVariantVoid =
 
 typeVariantWrap :: Phantoms.TTerm Variants.TypeVariant
 typeVariantWrap =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.variants.TypeVariant"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "wrap"),

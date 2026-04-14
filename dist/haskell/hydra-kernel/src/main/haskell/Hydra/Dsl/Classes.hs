@@ -11,7 +11,7 @@ import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pur
 
 typeClassEquality :: Phantoms.TTerm Classes.TypeClass
 typeClassEquality =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.classes.TypeClass"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "equality"),
@@ -19,7 +19,7 @@ typeClassEquality =
 
 typeClassOrdering :: Phantoms.TTerm Classes.TypeClass
 typeClassOrdering =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.classes.TypeClass"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "ordering"),

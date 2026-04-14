@@ -176,112 +176,112 @@ invalidLetBindingNameError x =
 invalidTermError :: Core__.InvalidTermError -> Core.Term
 invalidTermError x =
     case x of
-      Core__.InvalidTermErrorConstantCondition v0 -> Core.TermUnion (Core.Injection {
+      Core__.InvalidTermErrorConstantCondition v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.error.core.InvalidTermError"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "constantCondition"),
           Core.fieldTerm = (constantConditionError v0)}})
-      Core__.InvalidTermErrorDuplicateBinding v0 -> Core.TermUnion (Core.Injection {
+      Core__.InvalidTermErrorDuplicateBinding v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.error.core.InvalidTermError"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "duplicateBinding"),
           Core.fieldTerm = (duplicateBindingError v0)}})
-      Core__.InvalidTermErrorDuplicateField v0 -> Core.TermUnion (Core.Injection {
+      Core__.InvalidTermErrorDuplicateField v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.error.core.InvalidTermError"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "duplicateField"),
           Core.fieldTerm = (duplicateFieldError v0)}})
-      Core__.InvalidTermErrorEmptyCaseStatement v0 -> Core.TermUnion (Core.Injection {
+      Core__.InvalidTermErrorEmptyCaseStatement v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.error.core.InvalidTermError"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "emptyCaseStatement"),
           Core.fieldTerm = (emptyCaseStatementError v0)}})
-      Core__.InvalidTermErrorEmptyLetBindings v0 -> Core.TermUnion (Core.Injection {
+      Core__.InvalidTermErrorEmptyLetBindings v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.error.core.InvalidTermError"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "emptyLetBindings"),
           Core.fieldTerm = (emptyLetBindingsError v0)}})
-      Core__.InvalidTermErrorEmptyTermAnnotation v0 -> Core.TermUnion (Core.Injection {
+      Core__.InvalidTermErrorEmptyTermAnnotation v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.error.core.InvalidTermError"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "emptyTermAnnotation"),
           Core.fieldTerm = (emptyTermAnnotationError v0)}})
-      Core__.InvalidTermErrorEmptyTypeNameInTerm v0 -> Core.TermUnion (Core.Injection {
+      Core__.InvalidTermErrorEmptyTypeNameInTerm v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.error.core.InvalidTermError"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "emptyTypeNameInTerm"),
           Core.fieldTerm = (emptyTypeNameInTermError v0)}})
-      Core__.InvalidTermErrorInvalidLambdaParameterName v0 -> Core.TermUnion (Core.Injection {
+      Core__.InvalidTermErrorInvalidLambdaParameterName v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.error.core.InvalidTermError"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "invalidLambdaParameterName"),
           Core.fieldTerm = (invalidLambdaParameterNameError v0)}})
-      Core__.InvalidTermErrorInvalidLetBindingName v0 -> Core.TermUnion (Core.Injection {
+      Core__.InvalidTermErrorInvalidLetBindingName v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.error.core.InvalidTermError"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "invalidLetBindingName"),
           Core.fieldTerm = (invalidLetBindingNameError v0)}})
-      Core__.InvalidTermErrorInvalidTypeLambdaParameterName v0 -> Core.TermUnion (Core.Injection {
+      Core__.InvalidTermErrorInvalidTypeLambdaParameterName v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.error.core.InvalidTermError"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "invalidTypeLambdaParameterName"),
           Core.fieldTerm = (invalidTypeLambdaParameterNameError v0)}})
-      Core__.InvalidTermErrorNestedTermAnnotation v0 -> Core.TermUnion (Core.Injection {
+      Core__.InvalidTermErrorNestedTermAnnotation v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.error.core.InvalidTermError"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "nestedTermAnnotation"),
           Core.fieldTerm = (nestedTermAnnotationError v0)}})
-      Core__.InvalidTermErrorRedundantWrapUnwrap v0 -> Core.TermUnion (Core.Injection {
+      Core__.InvalidTermErrorRedundantWrapUnwrap v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.error.core.InvalidTermError"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "redundantWrapUnwrap"),
           Core.fieldTerm = (redundantWrapUnwrapError v0)}})
-      Core__.InvalidTermErrorSelfApplication v0 -> Core.TermUnion (Core.Injection {
+      Core__.InvalidTermErrorSelfApplication v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.error.core.InvalidTermError"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "selfApplication"),
           Core.fieldTerm = (selfApplicationError v0)}})
-      Core__.InvalidTermErrorTermVariableShadowing v0 -> Core.TermUnion (Core.Injection {
+      Core__.InvalidTermErrorTermVariableShadowing v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.error.core.InvalidTermError"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "termVariableShadowing"),
           Core.fieldTerm = (termVariableShadowingError v0)}})
-      Core__.InvalidTermErrorTypeVariableShadowingInTypeLambda v0 -> Core.TermUnion (Core.Injection {
+      Core__.InvalidTermErrorTypeVariableShadowingInTypeLambda v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.error.core.InvalidTermError"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "typeVariableShadowingInTypeLambda"),
           Core.fieldTerm = (typeVariableShadowingInTypeLambdaError v0)}})
-      Core__.InvalidTermErrorUndefinedTermVariable v0 -> Core.TermUnion (Core.Injection {
+      Core__.InvalidTermErrorUndefinedTermVariable v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.error.core.InvalidTermError"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "undefinedTermVariable"),
           Core.fieldTerm = (undefinedTermVariableError v0)}})
-      Core__.InvalidTermErrorUndefinedTypeVariableInBindingType v0 -> Core.TermUnion (Core.Injection {
+      Core__.InvalidTermErrorUndefinedTypeVariableInBindingType v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.error.core.InvalidTermError"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "undefinedTypeVariableInBindingType"),
           Core.fieldTerm = (undefinedTypeVariableInBindingTypeError v0)}})
-      Core__.InvalidTermErrorUndefinedTypeVariableInLambdaDomain v0 -> Core.TermUnion (Core.Injection {
+      Core__.InvalidTermErrorUndefinedTypeVariableInLambdaDomain v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.error.core.InvalidTermError"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "undefinedTypeVariableInLambdaDomain"),
           Core.fieldTerm = (undefinedTypeVariableInLambdaDomainError v0)}})
-      Core__.InvalidTermErrorUndefinedTypeVariableInTypeApplication v0 -> Core.TermUnion (Core.Injection {
+      Core__.InvalidTermErrorUndefinedTypeVariableInTypeApplication v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.error.core.InvalidTermError"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "undefinedTypeVariableInTypeApplication"),
           Core.fieldTerm = (undefinedTypeVariableInTypeApplicationError v0)}})
-      Core__.InvalidTermErrorUnknownPrimitiveName v0 -> Core.TermUnion (Core.Injection {
+      Core__.InvalidTermErrorUnknownPrimitiveName v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.error.core.InvalidTermError"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "unknownPrimitiveName"),
           Core.fieldTerm = (unknownPrimitiveNameError v0)}})
-      Core__.InvalidTermErrorUnnecessaryIdentityApplication v0 -> Core.TermUnion (Core.Injection {
+      Core__.InvalidTermErrorUnnecessaryIdentityApplication v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.error.core.InvalidTermError"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "unnecessaryIdentityApplication"),
           Core.fieldTerm = (unnecessaryIdentityApplicationError v0)}})
-      Core__.InvalidTermErrorUntypedTermVariable v0 -> Core.TermUnion (Core.Injection {
+      Core__.InvalidTermErrorUntypedTermVariable v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.error.core.InvalidTermError"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "untypedTermVariable"),
@@ -290,72 +290,72 @@ invalidTermError x =
 invalidTypeError :: Core__.InvalidTypeError -> Core.Term
 invalidTypeError x =
     case x of
-      Core__.InvalidTypeErrorDuplicateRecordTypeFieldNames v0 -> Core.TermUnion (Core.Injection {
+      Core__.InvalidTypeErrorDuplicateRecordTypeFieldNames v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.error.core.InvalidTypeError"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "duplicateRecordTypeFieldNames"),
           Core.fieldTerm = (duplicateRecordTypeFieldNamesError v0)}})
-      Core__.InvalidTypeErrorDuplicateUnionTypeFieldNames v0 -> Core.TermUnion (Core.Injection {
+      Core__.InvalidTypeErrorDuplicateUnionTypeFieldNames v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.error.core.InvalidTypeError"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "duplicateUnionTypeFieldNames"),
           Core.fieldTerm = (duplicateUnionTypeFieldNamesError v0)}})
-      Core__.InvalidTypeErrorEmptyRecordType v0 -> Core.TermUnion (Core.Injection {
+      Core__.InvalidTypeErrorEmptyRecordType v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.error.core.InvalidTypeError"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "emptyRecordType"),
           Core.fieldTerm = (emptyRecordTypeError v0)}})
-      Core__.InvalidTypeErrorEmptyTypeAnnotation v0 -> Core.TermUnion (Core.Injection {
+      Core__.InvalidTypeErrorEmptyTypeAnnotation v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.error.core.InvalidTypeError"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "emptyTypeAnnotation"),
           Core.fieldTerm = (emptyTypeAnnotationError v0)}})
-      Core__.InvalidTypeErrorEmptyUnionType v0 -> Core.TermUnion (Core.Injection {
+      Core__.InvalidTypeErrorEmptyUnionType v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.error.core.InvalidTypeError"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "emptyUnionType"),
           Core.fieldTerm = (emptyUnionTypeError v0)}})
-      Core__.InvalidTypeErrorInvalidForallParameterName v0 -> Core.TermUnion (Core.Injection {
+      Core__.InvalidTypeErrorInvalidForallParameterName v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.error.core.InvalidTypeError"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "invalidForallParameterName"),
           Core.fieldTerm = (invalidForallParameterNameError v0)}})
-      Core__.InvalidTypeErrorInvalidTypeSchemeVariableName v0 -> Core.TermUnion (Core.Injection {
+      Core__.InvalidTypeErrorInvalidTypeSchemeVariableName v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.error.core.InvalidTypeError"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "invalidTypeSchemeVariableName"),
           Core.fieldTerm = (invalidTypeSchemeVariableNameError v0)}})
-      Core__.InvalidTypeErrorNestedTypeAnnotation v0 -> Core.TermUnion (Core.Injection {
+      Core__.InvalidTypeErrorNestedTypeAnnotation v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.error.core.InvalidTypeError"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "nestedTypeAnnotation"),
           Core.fieldTerm = (nestedTypeAnnotationError v0)}})
-      Core__.InvalidTypeErrorNonComparableMapKeyType v0 -> Core.TermUnion (Core.Injection {
+      Core__.InvalidTypeErrorNonComparableMapKeyType v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.error.core.InvalidTypeError"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "nonComparableMapKeyType"),
           Core.fieldTerm = (nonComparableMapKeyTypeError v0)}})
-      Core__.InvalidTypeErrorNonComparableSetElementType v0 -> Core.TermUnion (Core.Injection {
+      Core__.InvalidTypeErrorNonComparableSetElementType v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.error.core.InvalidTypeError"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "nonComparableSetElementType"),
           Core.fieldTerm = (nonComparableSetElementTypeError v0)}})
-      Core__.InvalidTypeErrorSingleVariantUnion v0 -> Core.TermUnion (Core.Injection {
+      Core__.InvalidTypeErrorSingleVariantUnion v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.error.core.InvalidTypeError"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "singleVariantUnion"),
           Core.fieldTerm = (singleVariantUnionError v0)}})
-      Core__.InvalidTypeErrorTypeVariableShadowingInForall v0 -> Core.TermUnion (Core.Injection {
+      Core__.InvalidTypeErrorTypeVariableShadowingInForall v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.error.core.InvalidTypeError"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "typeVariableShadowingInForall"),
           Core.fieldTerm = (typeVariableShadowingInForallError v0)}})
-      Core__.InvalidTypeErrorUndefinedTypeVariable v0 -> Core.TermUnion (Core.Injection {
+      Core__.InvalidTypeErrorUndefinedTypeVariable v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.error.core.InvalidTypeError"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "undefinedTypeVariable"),
           Core.fieldTerm = (undefinedTypeVariableError v0)}})
-      Core__.InvalidTypeErrorVoidInNonBottomPosition v0 -> Core.TermUnion (Core.Injection {
+      Core__.InvalidTypeErrorVoidInNonBottomPosition v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.error.core.InvalidTypeError"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "voidInNonBottomPosition"),

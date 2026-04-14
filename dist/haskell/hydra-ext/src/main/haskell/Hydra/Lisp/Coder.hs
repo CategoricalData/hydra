@@ -281,7 +281,7 @@ encodeTerm dialect cx g term =
           in (Right (lispApp (lispVar constructorName) sfields))))
       Core.TermSet v0 -> Eithers.bind (Eithers.mapList (encodeTerm dialect cx g) (Sets.toList v0)) (\sels -> Right (Syntax.ExpressionSet (Syntax.SetLiteral {
         Syntax.setLiteralElements = sels})))
-      Core.TermUnion v0 ->
+      Core.TermInject v0 ->
         let tname = Names.localNameOf (Core.injectionTypeName v0)
             field = Core.injectionField v0
             fname = Core.unName (Core.fieldName field)

@@ -61,7 +61,7 @@ def subterm_node(cx: hydra.graph.Graph, raw: hydra.core.Term):
 def subterm_step(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_paths_subterm_step_1(cx, v1):
         match v1:
-            case hydra.core.TermUnion(value=inj):
+            case hydra.core.TermInject(value=inj):
                 field = inj.field
                 fname = field.name
                 fterm = field.term
@@ -259,7 +259,7 @@ def subtype_node(cx: hydra.graph.Graph, raw: hydra.core.Term):
 def subtype_step(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_paths_subtype_step_1(cx, v1):
         match v1:
-            case hydra.core.TermUnion(value=inj):
+            case hydra.core.TermInject(value=inj):
                 field = inj.field
                 fname = field.name
                 fterm = field.term

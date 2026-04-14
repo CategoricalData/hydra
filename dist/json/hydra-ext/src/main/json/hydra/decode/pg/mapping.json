@@ -2662,7 +2662,7 @@
                                   "cases": {
                                     "cases": [
                                       {
-                                        "name": "union",
+                                        "name": "inject",
                                         "term": {
                                           "lambda": {
                                             "body": {
@@ -2721,7 +2721,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "vertex", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.pg.mapping.ElementSpec"}},
                                                                                         "domain": {"variable": "hydra.pg.mapping.VertexSpec"},
@@ -2772,7 +2772,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "edge", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.pg.mapping.ElementSpec"}},
                                                                                         "domain": {"variable": "hydra.pg.mapping.EdgeSpec"},
@@ -3181,7 +3181,7 @@
                                   "cases": {
                                     "cases": [
                                       {
-                                        "name": "union",
+                                        "name": "inject",
                                         "term": {
                                           "lambda": {
                                             "body": {
@@ -3254,7 +3254,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "value", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.pg.mapping.ValueSpec"}},
                                                                                         "domain": {"unit": {}},
@@ -3408,7 +3408,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "pattern", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.pg.mapping.ValueSpec"}},
                                                                                         "domain": {"literal": {"string": {}}},

@@ -73,7 +73,7 @@ csharpLanguage =
           Variants.TermVariantMaybe,
           Variants.TermVariantRecord,
           Variants.TermVariantSet,
-          Variants.TermVariantUnion,
+          Variants.TermVariantInject,
           Variants.TermVariantVariable,
           Variants.TermVariantWrap]
     typeVariants =

@@ -191,7 +191,7 @@ matchUnion graph tname pairs term =
           mapping = Maps.fromList pairs
       in case stripped of
         Core.TermVariable v0 -> Eithers.bind (requireBinding graph v0) (\el -> matchUnion graph tname pairs (Core.bindingTerm el))
-        Core.TermUnion v0 ->
+        Core.TermInject v0 ->
           let exp =
 
                     let fname = Core.fieldName (Core.injectionField v0)

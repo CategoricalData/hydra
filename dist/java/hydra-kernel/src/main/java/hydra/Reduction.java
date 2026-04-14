@@ -589,8 +589,8 @@ public interface Reduction {
         }
 
         @Override
-        public hydra.core.Term visit(hydra.core.Term.Union inj) {
-          return (afterRecursion).apply(new hydra.core.Term.Union(new hydra.core.Injection((inj).value.typeName, (forField).apply((inj).value.field))));
+        public hydra.core.Term visit(hydra.core.Term.Inject inj) {
+          return (afterRecursion).apply(new hydra.core.Term.Inject(new hydra.core.Injection((inj).value.typeName, (forField).apply((inj).value.field))));
         }
 
         @Override
@@ -1399,7 +1399,7 @@ public interface Reduction {
       }
 
       @Override
-      public Boolean visit(hydra.core.Term.Union i) {
+      public Boolean visit(hydra.core.Term.Inject i) {
         return (checkField).apply((i).value.field);
       }
 

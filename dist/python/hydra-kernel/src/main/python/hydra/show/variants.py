@@ -60,8 +60,8 @@ def term_variant(v1: hydra.variants.TermVariant) -> str:
         case hydra.variants.TermVariant.TYPE_APPLICATION:
             return "typeApplication"
 
-        case hydra.variants.TermVariant.UNION:
-            return "union"
+        case hydra.variants.TermVariant.INJECT:
+            return "inject"
 
         case hydra.variants.TermVariant.UNIT:
             return "unit"

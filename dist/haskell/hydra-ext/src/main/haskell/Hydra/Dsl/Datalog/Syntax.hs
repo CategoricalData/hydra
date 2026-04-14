@@ -23,7 +23,7 @@ atom relation termList =
 
 atomListMultiple :: Phantoms.TTerm Syntax.AtomList_Multiple -> Phantoms.TTerm Syntax.AtomList
 atomListMultiple x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.datalog.syntax.AtomList"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "multiple"),
@@ -31,7 +31,7 @@ atomListMultiple x =
 
 atomListSingle :: Phantoms.TTerm Syntax.Atom -> Phantoms.TTerm Syntax.AtomList
 atomListSingle x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.datalog.syntax.AtomList"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "single"),
@@ -153,7 +153,7 @@ constant x =
 
 constantListMultiple :: Phantoms.TTerm Syntax.ConstantList_Multiple -> Phantoms.TTerm Syntax.ConstantList
 constantListMultiple x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.datalog.syntax.ConstantList"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "multiple"),
@@ -161,7 +161,7 @@ constantListMultiple x =
 
 constantListSingle :: Phantoms.TTerm Syntax.Constant -> Phantoms.TTerm Syntax.ConstantList
 constantListSingle x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.datalog.syntax.ConstantList"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "single"),
@@ -295,7 +295,7 @@ program x =
 
 program_ElmtFact :: Phantoms.TTerm Syntax.Fact -> Phantoms.TTerm Syntax.Program_Elmt
 program_ElmtFact x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.datalog.syntax.Program_Elmt"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "Fact"),
@@ -303,7 +303,7 @@ program_ElmtFact x =
 
 program_ElmtRule :: Phantoms.TTerm Syntax.Rule -> Phantoms.TTerm Syntax.Program_Elmt
 program_ElmtRule x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.datalog.syntax.Program_Elmt"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "Rule"),
@@ -377,7 +377,7 @@ ruleWithAtomList original newVal =
 
 termConstant :: Phantoms.TTerm Syntax.Constant -> Phantoms.TTerm Syntax.Term
 termConstant x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.datalog.syntax.Term"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "Constant"),
@@ -385,7 +385,7 @@ termConstant x =
 
 termListMultiple :: Phantoms.TTerm Syntax.TermList_Multiple -> Phantoms.TTerm Syntax.TermList
 termListMultiple x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.datalog.syntax.TermList"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "multiple"),
@@ -393,7 +393,7 @@ termListMultiple x =
 
 termListSingle :: Phantoms.TTerm Syntax.Term -> Phantoms.TTerm Syntax.TermList
 termListSingle x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.datalog.syntax.TermList"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "single"),
@@ -461,7 +461,7 @@ termList_MultipleWithTermList original newVal =
 
 termVariable :: Phantoms.TTerm Syntax.Variable -> Phantoms.TTerm Syntax.Term
 termVariable x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.datalog.syntax.Term"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "Variable"),

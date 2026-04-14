@@ -27,7 +27,7 @@
                                   "cases": {
                                     "cases": [
                                       {
-                                        "name": "union",
+                                        "name": "inject",
                                         "term": {
                                           "lambda": {
                                             "body": {
@@ -100,7 +100,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "encode", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.coders.CoderDirection"}},
                                                                                         "domain": {"unit": {}},
@@ -163,7 +163,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "decode", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.coders.CoderDirection"}},
                                                                                         "domain": {"unit": {}},
@@ -596,7 +596,7 @@
                                   "cases": {
                                     "cases": [
                                       {
-                                        "name": "union",
+                                        "name": "inject",
                                         "term": {
                                           "lambda": {
                                             "body": {
@@ -669,7 +669,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "pre", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.coders.TraversalOrder"}},
                                                                                         "domain": {"unit": {}},
@@ -732,7 +732,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "post", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.coders.TraversalOrder"}},
                                                                                         "domain": {"unit": {}},

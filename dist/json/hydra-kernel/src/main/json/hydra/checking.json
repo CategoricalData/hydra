@@ -203,11 +203,11 @@
                                                             "body": {
                                                               "either": {
                                                                 "@left": {
-                                                                  "union": {
+                                                                  "inject": {
                                                                     "field": {
                                                                       "name": "extraction",
                                                                       "term": {
-                                                                        "union": {
+                                                                        "inject": {
                                                                           "field": {
                                                                             "name": "unexpectedShape",
                                                                             "term": {
@@ -528,11 +528,11 @@
                                                                                                 "body": {
                                                                                                   "either": {
                                                                                                     "@left": {
-                                                                                                      "union": {
+                                                                                                      "inject": {
                                                                                                         "field": {
                                                                                                           "name": "checking",
                                                                                                           "term": {
-                                                                                                            "union": {
+                                                                                                            "inject": {
                                                                                                               "field": {
                                                                                                                 "name": "unboundTypeVariables",
                                                                                                                 "term": {
@@ -899,7 +899,7 @@
                                                                                                 "argument": {
                                                                                                   "application": {
                                                                                                     "argument": {
-                                                                                                      "union": {
+                                                                                                      "inject": {
                                                                                                         "field": {
                                                                                                           "name": "variable",
                                                                                                           "term": {
@@ -1085,11 +1085,11 @@
                                                                     "body": {
                                                                       "either": {
                                                                         "@left": {
-                                                                          "union": {
+                                                                          "inject": {
                                                                             "field": {
                                                                               "name": "checking",
                                                                               "term": {
-                                                                                "union": {
+                                                                                "inject": {
                                                                                   "field": {
                                                                                     "name": "typeArityMismatch",
                                                                                     "term": {
@@ -1098,7 +1098,7 @@
                                                                                           {
                                                                                             "name": "type",
                                                                                             "term": {
-                                                                                              "union": {
+                                                                                              "inject": {
                                                                                                 "field": {"name": "variable", "term": {"variable": "tname"}},
                                                                                                 "typeName": "hydra.core.Type"}}},
                                                                                           {"name": "expectedArity", "term": {"variable": "varslen"}},
@@ -1249,11 +1249,11 @@
                                             "body": {
                                               "either": {
                                                 "@left": {
-                                                  "union": {
+                                                  "inject": {
                                                     "field": {
                                                       "name": "checking",
                                                       "term": {
-                                                        "union": {
+                                                        "inject": {
                                                           "field": {
                                                             "name": "unequalTypes",
                                                             "term": {
@@ -1378,11 +1378,11 @@
                                                             "body": {
                                                               "either": {
                                                                 "@left": {
-                                                                  "union": {
+                                                                  "inject": {
                                                                     "field": {
                                                                       "name": "checking",
                                                                       "term": {
-                                                                        "union": {
+                                                                        "inject": {
                                                                           "field": {
                                                                             "name": "typeMismatch",
                                                                             "term": {
@@ -1837,11 +1837,11 @@
                                                                     "body": {
                                                                       "either": {
                                                                         "@left": {
-                                                                          "union": {
+                                                                          "inject": {
                                                                             "field": {
                                                                               "name": "checking",
                                                                               "term": {
-                                                                                "union": {
+                                                                                "inject": {
                                                                                   "field": {
                                                                                     "name": "incorrectUnification",
                                                                                     "term": {
@@ -2144,7 +2144,7 @@
                                         "function": {
                                           "application": {
                                             "argument": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {"name": "pre", "term": {"unit": {}}},
                                                 "typeName": "hydra.coders.TraversalOrder"}},
                                             "function": {
@@ -2581,7 +2581,7 @@
                                                         "argument": {"variable": "cx1"},
                                                         "function": {"variable": "hydra.checking.typeOfTypeLambda"}}}}}}}},
                                           {
-                                            "name": "union",
+                                            "name": "inject",
                                             "term": {
                                               "application": {
                                                 "argument": {"variable": "typeArgs"},
@@ -2654,11 +2654,11 @@
                                                 "body": {
                                                   "either": {
                                                     "@left": {
-                                                      "union": {
+                                                      "inject": {
                                                         "field": {
                                                           "name": "checking",
                                                           "term": {
-                                                            "union": {
+                                                            "inject": {
                                                               "field": {
                                                                 "name": "unsupportedTermVariant",
                                                                 "term": {
@@ -2882,11 +2882,11 @@
                                                                                             "body": {
                                                                                               "either": {
                                                                                                 "@left": {
-                                                                                                  "union": {
+                                                                                                  "inject": {
                                                                                                     "field": {
                                                                                                       "name": "checking",
                                                                                                       "term": {
-                                                                                                        "union": {
+                                                                                                        "inject": {
                                                                                                           "field": {
                                                                                                             "name": "typeMismatch",
                                                                                                             "term": {
@@ -3011,7 +3011,7 @@
                                                                                                         "body": {
                                                                                                           "pair": {
                                                                                                             "@first": {
-                                                                                                              "union": {
+                                                                                                              "inject": {
                                                                                                                 "field": {"name": "variable", "term": {"variable": "freshN"}},
                                                                                                                 "typeName": "hydra.core.Type"}},
                                                                                                             "@second": {"variable": "cx1"}}},
@@ -3031,11 +3031,11 @@
                                                                         "body": {
                                                                           "either": {
                                                                             "@left": {
-                                                                              "union": {
+                                                                              "inject": {
                                                                                 "field": {
                                                                                   "name": "checking",
                                                                                   "term": {
-                                                                                    "union": {
+                                                                                    "inject": {
                                                                                       "field": {
                                                                                         "name": "notAFunctionType",
                                                                                         "term": {
@@ -4034,7 +4034,7 @@
                                                                                                                                 "body": {
                                                                                                                                   "pair": {
                                                                                                                                     "@first": {
-                                                                                                                                      "union": {
+                                                                                                                                      "inject": {
                                                                                                                                         "field": {
                                                                                                                                           "name": "function",
                                                                                                                                           "term": {
@@ -4272,11 +4272,11 @@
                                             "body": {
                                               "either": {
                                                 "@left": {
-                                                  "union": {
+                                                  "inject": {
                                                     "field": {
                                                       "name": "checking",
                                                       "term": {
-                                                        "union": {
+                                                        "inject": {
                                                           "field": {
                                                             "name": "typeArityMismatch",
                                                             "term": {
@@ -4285,7 +4285,7 @@
                                                                   {
                                                                     "name": "type",
                                                                     "term": {
-                                                                      "union": {
+                                                                      "inject": {
                                                                         "field": {
                                                                           "name": "either",
                                                                           "term": {
@@ -4294,13 +4294,13 @@
                                                                                 {
                                                                                   "name": "left",
                                                                                   "term": {
-                                                                                    "union": {
+                                                                                    "inject": {
                                                                                       "field": {"name": "unit", "term": {"unit": {}}},
                                                                                       "typeName": "hydra.core.Type"}}},
                                                                                 {
                                                                                   "name": "right",
                                                                                   "term": {
-                                                                                    "union": {
+                                                                                    "inject": {
                                                                                       "field": {"name": "unit", "term": {"unit": {}}},
                                                                                       "typeName": "hydra.core.Type"}}}],
                                                                               "typeName": "hydra.core.EitherType"}}},
@@ -4376,7 +4376,7 @@
                                                                                         "body": {
                                                                                           "pair": {
                                                                                             "@first": {
-                                                                                              "union": {
+                                                                                              "inject": {
                                                                                                 "field": {
                                                                                                   "name": "either",
                                                                                                   "term": {
@@ -4497,7 +4497,7 @@
                                                                                             "body": {
                                                                                               "pair": {
                                                                                                 "@first": {
-                                                                                                  "union": {
+                                                                                                  "inject": {
                                                                                                     "field": {
                                                                                                       "name": "either",
                                                                                                       "term": {
@@ -5148,7 +5148,7 @@
                                                                                                     "body": {
                                                                                                       "pair": {
                                                                                                         "@first": {
-                                                                                                          "union": {
+                                                                                                          "inject": {
                                                                                                             "field": {
                                                                                                               "name": "function",
                                                                                                               "term": {
@@ -5263,11 +5263,11 @@
                                                                     "body": {
                                                                       "either": {
                                                                         "@left": {
-                                                                          "union": {
+                                                                          "inject": {
                                                                             "field": {
                                                                               "name": "checking",
                                                                               "term": {
-                                                                                "union": {
+                                                                                "inject": {
                                                                                   "field": {
                                                                                     "name": "untypedLambda",
                                                                                     "term": {
@@ -5437,11 +5437,11 @@
                                                                         "body": {
                                                                           "either": {
                                                                             "@left": {
-                                                                              "union": {
+                                                                              "inject": {
                                                                                 "field": {
                                                                                   "name": "checking",
                                                                                   "term": {
-                                                                                    "union": {
+                                                                                    "inject": {
                                                                                       "field": {
                                                                                         "name": "untypedLetBinding",
                                                                                         "term": {
@@ -6268,7 +6268,7 @@
                                                                                 "body": {
                                                                                   "pair": {
                                                                                     "@first": {
-                                                                                      "union": {
+                                                                                      "inject": {
                                                                                         "field": {"name": "list", "term": {"variable": "unifiedType"}},
                                                                                         "typeName": "hydra.core.Type"}},
                                                                                     "@second": {"variable": "cx2"}}},
@@ -6347,11 +6347,11 @@
                                                 "body": {
                                                   "either": {
                                                     "@left": {
-                                                      "union": {
+                                                      "inject": {
                                                         "field": {
                                                           "name": "checking",
                                                           "term": {
-                                                            "union": {
+                                                            "inject": {
                                                               "field": {
                                                                 "name": "typeArityMismatch",
                                                                 "term": {
@@ -6360,11 +6360,11 @@
                                                                       {
                                                                         "name": "type",
                                                                         "term": {
-                                                                          "union": {
+                                                                          "inject": {
                                                                             "field": {
                                                                               "name": "list",
                                                                               "term": {
-                                                                                "union": {
+                                                                                "inject": {
                                                                                   "field": {"name": "unit", "term": {"unit": {}}},
                                                                                   "typeName": "hydra.core.Type"}}},
                                                                             "typeName": "hydra.core.Type"}}},
@@ -6404,7 +6404,7 @@
                                                                 "body": {
                                                                   "pair": {
                                                                     "@first": {
-                                                                      "union": {
+                                                                      "inject": {
                                                                         "field": {
                                                                           "name": "list",
                                                                           "term": {
@@ -6526,7 +6526,7 @@
                                       {
                                         "name": "t",
                                         "term": {
-                                          "union": {
+                                          "inject": {
                                             "field": {
                                               "name": "literal",
                                               "term": {
@@ -7281,7 +7281,7 @@
                                                                                                     "argument": {
                                                                                                       "application": {
                                                                                                         "argument": {
-                                                                                                          "union": {
+                                                                                                          "inject": {
                                                                                                             "field": {
                                                                                                               "name": "map",
                                                                                                               "term": {
@@ -7442,11 +7442,11 @@
                                                 "body": {
                                                   "either": {
                                                     "@left": {
-                                                      "union": {
+                                                      "inject": {
                                                         "field": {
                                                           "name": "checking",
                                                           "term": {
-                                                            "union": {
+                                                            "inject": {
                                                               "field": {
                                                                 "name": "typeArityMismatch",
                                                                 "term": {
@@ -7455,7 +7455,7 @@
                                                                       {
                                                                         "name": "type",
                                                                         "term": {
-                                                                          "union": {
+                                                                          "inject": {
                                                                             "field": {
                                                                               "name": "map",
                                                                               "term": {
@@ -7464,13 +7464,13 @@
                                                                                     {
                                                                                       "name": "keys",
                                                                                       "term": {
-                                                                                        "union": {
+                                                                                        "inject": {
                                                                                           "field": {"name": "unit", "term": {"unit": {}}},
                                                                                           "typeName": "hydra.core.Type"}}},
                                                                                     {
                                                                                       "name": "values",
                                                                                       "term": {
-                                                                                        "union": {
+                                                                                        "inject": {
                                                                                           "field": {"name": "unit", "term": {"unit": {}}},
                                                                                           "typeName": "hydra.core.Type"}}}],
                                                                                   "typeName": "hydra.core.MapType"}}},
@@ -7511,7 +7511,7 @@
                                                                 "body": {
                                                                   "pair": {
                                                                     "@first": {
-                                                                      "union": {
+                                                                      "inject": {
                                                                         "field": {
                                                                           "name": "map",
                                                                           "term": {
@@ -7682,11 +7682,11 @@
                                                     "body": {
                                                       "either": {
                                                         "@left": {
-                                                          "union": {
+                                                          "inject": {
                                                             "field": {
                                                               "name": "checking",
                                                               "term": {
-                                                                "union": {
+                                                                "inject": {
                                                                   "field": {
                                                                     "name": "typeArityMismatch",
                                                                     "term": {
@@ -7695,11 +7695,11 @@
                                                                           {
                                                                             "name": "type",
                                                                             "term": {
-                                                                              "union": {
+                                                                              "inject": {
                                                                                 "field": {
                                                                                   "name": "maybe",
                                                                                   "term": {
-                                                                                    "union": {
+                                                                                    "inject": {
                                                                                       "field": {"name": "unit", "term": {"unit": {}}},
                                                                                       "typeName": "hydra.core.Type"}}},
                                                                                 "typeName": "hydra.core.Type"}}},
@@ -7731,7 +7731,7 @@
                                                                     "body": {
                                                                       "pair": {
                                                                         "@first": {
-                                                                          "union": {
+                                                                          "inject": {
                                                                             "field": {
                                                                               "name": "maybe",
                                                                               "term": {
@@ -7830,7 +7830,7 @@
                                                                   {
                                                                     "name": "t",
                                                                     "term": {
-                                                                      "union": {
+                                                                      "inject": {
                                                                         "field": {"name": "maybe", "term": {"variable": "termType"}},
                                                                         "typeName": "hydra.core.Type"}},
                                                                     "type": {"type": {"variable": "hydra.core.Type"}, "variables": []}}],
@@ -8032,11 +8032,11 @@
                                             "body": {
                                               "either": {
                                                 "@left": {
-                                                  "union": {
+                                                  "inject": {
                                                     "field": {
                                                       "name": "checking",
                                                       "term": {
-                                                        "union": {
+                                                        "inject": {
                                                           "field": {
                                                             "name": "typeArityMismatch",
                                                             "term": {
@@ -8045,7 +8045,7 @@
                                                                   {
                                                                     "name": "type",
                                                                     "term": {
-                                                                      "union": {
+                                                                      "inject": {
                                                                         "field": {
                                                                           "name": "pair",
                                                                           "term": {
@@ -8054,13 +8054,13 @@
                                                                                 {
                                                                                   "name": "first",
                                                                                   "term": {
-                                                                                    "union": {
+                                                                                    "inject": {
                                                                                       "field": {"name": "unit", "term": {"unit": {}}},
                                                                                       "typeName": "hydra.core.Type"}}},
                                                                                 {
                                                                                   "name": "second",
                                                                                   "term": {
-                                                                                    "union": {
+                                                                                    "inject": {
                                                                                       "field": {"name": "unit", "term": {"unit": {}}},
                                                                                       "typeName": "hydra.core.Type"}}}],
                                                                               "typeName": "hydra.core.PairType"}}},
@@ -8197,7 +8197,7 @@
                                                                                                     "body": {
                                                                                                       "pair": {
                                                                                                         "@first": {
-                                                                                                          "union": {
+                                                                                                          "inject": {
                                                                                                             "field": {
                                                                                                               "name": "pair",
                                                                                                               "term": {
@@ -8542,7 +8542,7 @@
                                                     "body": {
                                                       "either": {
                                                         "@left": {
-                                                          "union": {
+                                                          "inject": {
                                                             "field": {
                                                               "name": "undefinedTermVariable",
                                                               "term": {
@@ -8769,7 +8769,7 @@
                                                                                                         "body": {
                                                                                                           "pair": {
                                                                                                             "@first": {
-                                                                                                              "union": {
+                                                                                                              "inject": {
                                                                                                                 "field": {
                                                                                                                   "name": "function",
                                                                                                                   "term": {
@@ -9625,7 +9625,7 @@
                                                                                 "body": {
                                                                                   "pair": {
                                                                                     "@first": {
-                                                                                      "union": {
+                                                                                      "inject": {
                                                                                         "field": {"name": "set", "term": {"variable": "unifiedType"}},
                                                                                         "typeName": "hydra.core.Type"}},
                                                                                     "@second": {"variable": "cx2"}}},
@@ -9704,11 +9704,11 @@
                                                 "body": {
                                                   "either": {
                                                     "@left": {
-                                                      "union": {
+                                                      "inject": {
                                                         "field": {
                                                           "name": "checking",
                                                           "term": {
-                                                            "union": {
+                                                            "inject": {
                                                               "field": {
                                                                 "name": "typeArityMismatch",
                                                                 "term": {
@@ -9717,11 +9717,11 @@
                                                                       {
                                                                         "name": "type",
                                                                         "term": {
-                                                                          "union": {
+                                                                          "inject": {
                                                                             "field": {
                                                                               "name": "set",
                                                                               "term": {
-                                                                                "union": {
+                                                                                "inject": {
                                                                                   "field": {"name": "unit", "term": {"unit": {}}},
                                                                                   "typeName": "hydra.core.Type"}}},
                                                                             "typeName": "hydra.core.Type"}}},
@@ -9761,7 +9761,7 @@
                                                                 "body": {
                                                                   "pair": {
                                                                     "@first": {
-                                                                      "union": {
+                                                                      "inject": {
                                                                         "field": {
                                                                           "name": "set",
                                                                           "term": {
@@ -10131,7 +10131,7 @@
                                                                     "argument": {
                                                                       "application": {
                                                                         "argument": {
-                                                                          "union": {
+                                                                          "inject": {
                                                                             "field": {
                                                                               "name": "forall",
                                                                               "term": {
@@ -10282,7 +10282,7 @@
                                     "argument": {
                                       "application": {
                                         "argument": {
-                                          "union": {
+                                          "inject": {
                                             "field": {"name": "unit", "term": {"unit": {}}},
                                             "typeName": "hydra.core.Type"}},
                                         "function": {
@@ -10473,7 +10473,7 @@
                                                                                         "body": {
                                                                                           "pair": {
                                                                                             "@first": {
-                                                                                              "union": {
+                                                                                              "inject": {
                                                                                                 "field": {
                                                                                                   "name": "function",
                                                                                                   "term": {
@@ -10854,7 +10854,7 @@
                                                                     "body": {
                                                                       "either": {
                                                                         "@left": {
-                                                                          "union": {
+                                                                          "inject": {
                                                                             "field": {
                                                                               "name": "untypedTermVariable",
                                                                               "term": {

@@ -56,7 +56,7 @@ def term_dependency_names(binds: bool, with_prims: bool, with_noms: bool, term0:
             case hydra.core.TermRecord(value=record):
                 return nominal(record.type_name)
 
-            case hydra.core.TermUnion(value=injection):
+            case hydra.core.TermInject(value=injection):
                 return nominal(injection.type_name)
 
             case hydra.core.TermVariable(value=name2):

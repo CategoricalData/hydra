@@ -256,7 +256,7 @@ etaExpandTerm tx0 term0 =
                                       Core.typeLambdaParameter = (Core.typeLambdaParameter v0),
                                       Core.typeLambdaBody = (rewriteWithArgs [] tx1 (Core.typeLambdaBody v0))})
                         in (afterRecursion result)
-                      Core.TermUnion v0 -> afterRecursion (Core.TermUnion (Core.Injection {
+                      Core.TermInject v0 -> afterRecursion (Core.TermInject (Core.Injection {
                         Core.injectionTypeName = (Core.injectionTypeName v0),
                         Core.injectionField = (forField (Core.injectionField v0))}))
                       Core.TermUnit -> Core.TermUnit
@@ -550,7 +550,7 @@ termIsValue term =
         Core.TermMaybe v0 -> Maybes.maybe True termIsValue v0
         Core.TermRecord v0 -> checkFields (Core.recordFields v0)
         Core.TermSet v0 -> forList (Sets.toList v0)
-        Core.TermUnion v0 -> checkField (Core.injectionField v0)
+        Core.TermInject v0 -> checkField (Core.injectionField v0)
         Core.TermUnit -> True
         Core.TermVariable _ -> False
         _ -> False

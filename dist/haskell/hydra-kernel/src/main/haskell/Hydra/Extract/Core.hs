@@ -243,7 +243,7 @@ functionType typ =
 injection :: Core.Name -> Graph.Graph -> Core.Term -> Either Errors.Error Core.Field
 injection expected graph term0 =
     Eithers.bind (Lexical.stripAndDereferenceTerm graph term0) (\term -> case term of
-      Core.TermUnion v0 -> Logic.ifElse (Equality.equal (Core.unName (Core.injectionTypeName v0)) (Core.unName expected)) (Right (Core.injectionField v0)) (Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
+      Core.TermInject v0 -> Logic.ifElse (Equality.equal (Core.unName (Core.injectionTypeName v0)) (Core.unName expected)) (Right (Core.injectionField v0)) (Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
         Errors.unexpectedShapeErrorExpected = (Strings.cat2 "injection of type " (Core.unName expected)),
         Errors.unexpectedShapeErrorActual = (Core.unName (Core.injectionTypeName v0))}))))
       _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {

@@ -8,7 +8,7 @@
             "body": {
               "lambda": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "record",
                       "term": {
@@ -33,15 +33,15 @@
                                         {
                                           "name": "term",
                                           "term": {
-                                            "union": {
+                                            "inject": {
                                               "field": {
                                                 "name": "literal",
                                                 "term": {
-                                                  "union": {
+                                                  "inject": {
                                                     "field": {
                                                       "name": "float",
                                                       "term": {
-                                                        "union": {
+                                                        "inject": {
                                                           "field": {"name": "float32", "term": {"variable": "lat"}},
                                                           "typeName": "hydra.core.FloatValue"}}},
                                                     "typeName": "hydra.core.Literal"}}},
@@ -59,15 +59,15 @@
                                         {
                                           "name": "term",
                                           "term": {
-                                            "union": {
+                                            "inject": {
                                               "field": {
                                                 "name": "literal",
                                                 "term": {
-                                                  "union": {
+                                                  "inject": {
                                                     "field": {
                                                       "name": "float",
                                                       "term": {
-                                                        "union": {
+                                                        "inject": {
                                                           "field": {"name": "float32", "term": {"variable": "lon"}},
                                                           "typeName": "hydra.core.FloatValue"}}},
                                                     "typeName": "hydra.core.Literal"}}},
@@ -92,7 +92,7 @@
       "term": {
         "name": "hydra.test.testTerms.testDataArthur",
         "term": {
-          "union": {
+          "inject": {
             "field": {
               "name": "record",
               "term": {
@@ -117,11 +117,11 @@
                                 {
                                   "name": "term",
                                   "term": {
-                                    "union": {
+                                    "inject": {
                                       "field": {
                                         "name": "literal",
                                         "term": {
-                                          "union": {
+                                          "inject": {
                                             "field": {"name": "string", "term": {"literal": {"string": "Arthur"}}},
                                             "typeName": "hydra.core.Literal"}}},
                                       "typeName": "hydra.core.Term"}}}],
@@ -138,11 +138,11 @@
                                 {
                                   "name": "term",
                                   "term": {
-                                    "union": {
+                                    "inject": {
                                       "field": {
                                         "name": "literal",
                                         "term": {
-                                          "union": {
+                                          "inject": {
                                             "field": {"name": "string", "term": {"literal": {"string": "Dent"}}},
                                             "typeName": "hydra.core.Literal"}}},
                                       "typeName": "hydra.core.Term"}}}],
@@ -159,15 +159,15 @@
                                 {
                                   "name": "term",
                                   "term": {
-                                    "union": {
+                                    "inject": {
                                       "field": {
                                         "name": "literal",
                                         "term": {
-                                          "union": {
+                                          "inject": {
                                             "field": {
                                               "name": "integer",
                                               "term": {
-                                                "union": {
+                                                "inject": {
                                                   "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 42}}}},
                                                   "typeName": "hydra.core.IntegerValue"}}},
                                             "typeName": "hydra.core.Literal"}}},
@@ -204,7 +204,7 @@
                         {
                           "name": "type",
                           "term": {
-                            "union": {
+                            "inject": {
                               "field": {
                                 "name": "variable",
                                 "term": {"variable": "hydra.test.testTypes.testTypePersonName"}},
@@ -236,7 +236,7 @@
               {
                 "name": "term",
                 "term": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "project",
                       "term": {
@@ -266,7 +266,7 @@
                         {
                           "name": "type",
                           "term": {
-                            "union": {
+                            "inject": {
                               "field": {
                                 "name": "function",
                                 "term": {
@@ -275,7 +275,7 @@
                                       {
                                         "name": "domain",
                                         "term": {
-                                          "union": {
+                                          "inject": {
                                             "field": {
                                               "name": "variable",
                                               "term": {"variable": "hydra.test.testTypes.testTypePersonName"}},
@@ -283,11 +283,11 @@
                                       {
                                         "name": "codomain",
                                         "term": {
-                                          "union": {
+                                          "inject": {
                                             "field": {
                                               "name": "literal",
                                               "term": {
-                                                "union": {
+                                                "inject": {
                                                   "field": {"name": "string", "term": {"unit": {}}},
                                                   "typeName": "hydra.core.LiteralType"}}},
                                             "typeName": "hydra.core.Type"}}}],

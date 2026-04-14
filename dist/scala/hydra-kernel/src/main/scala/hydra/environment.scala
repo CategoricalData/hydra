@@ -81,8 +81,8 @@ def schemaGraphToTypingEnvironment(g: hydra.graph.Graph): Either[hydra.errors.Er
       case hydra.core.Term.record(v_Term_record_r) => hydra.lib.logic.ifElse[Either[hydra.errors.Error,
          Option[hydra.core.TypeScheme]]](hydra.lib.equality.equal[hydra.core.Name](v_Term_record_r.typeName)("hydra.core.TypeScheme"))(hydra.lib.eithers.map[hydra.core.TypeScheme,
          Option[hydra.core.TypeScheme], hydra.errors.Error](hydra.lib.maybes.pure[hydra.core.TypeScheme])(decodeTypeScheme(el.term)))(Right(None))
-      case hydra.core.Term.union(v_Term_union_i) => hydra.lib.logic.ifElse[Either[hydra.errors.Error,
-         Option[hydra.core.TypeScheme]]](hydra.lib.equality.equal[hydra.core.Name](v_Term_union_i.typeName)("hydra.core.Type"))(hydra.lib.eithers.map[hydra.core.Type,
+      case hydra.core.Term.inject(v_Term_inject_i) => hydra.lib.logic.ifElse[Either[hydra.errors.Error,
+         Option[hydra.core.TypeScheme]]](hydra.lib.equality.equal[hydra.core.Name](v_Term_inject_i.typeName)("hydra.core.Type"))(hydra.lib.eithers.map[hydra.core.Type,
          Option[hydra.core.TypeScheme], hydra.errors.Error]((decoded: hydra.core.Type) => Some(toTypeScheme(Seq())(decoded)))(decodeType(el.term)))(Right(None))
       case _ => Right(None)
     hydra.lib.eithers.bind[hydra.errors.Error, Option[hydra.core.TypeScheme], Option[Tuple2[hydra.core.Name,

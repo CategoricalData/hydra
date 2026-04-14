@@ -7,11 +7,11 @@ package hydra.dsl;
  */
 public interface Packaging {
   static hydra.phantoms.TTerm<hydra.packaging.Definition> definitionTerm(hydra.phantoms.TTerm<hydra.packaging.TermDefinition> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.packaging.Definition"), new hydra.core.Field(new hydra.core.Name("term"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.packaging.Definition"), new hydra.core.Field(new hydra.core.Name("term"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.packaging.Definition> definitionType(hydra.phantoms.TTerm<hydra.packaging.TypeDefinition> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.packaging.Definition"), new hydra.core.Field(new hydra.core.Name("type"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.packaging.Definition"), new hydra.core.Field(new hydra.core.Name("type"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.packaging.FileExtension> fileExtension(hydra.phantoms.TTerm<String> x) {

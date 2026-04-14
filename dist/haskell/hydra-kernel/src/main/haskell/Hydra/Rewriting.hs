@@ -156,7 +156,7 @@ rewriteAndFoldTerm f term0 =
                   Core.TermTypeLambda v0 -> forSingle recurse (\t -> Core.TermTypeLambda (Core.TypeLambda {
                     Core.typeLambdaParameter = (Core.typeLambdaParameter v0),
                     Core.typeLambdaBody = t})) val0 (Core.typeLambdaBody v0)
-                  Core.TermUnion v0 -> forSingle recurse (\t -> Core.TermUnion (Core.Injection {
+                  Core.TermInject v0 -> forSingle recurse (\t -> Core.TermInject (Core.Injection {
                     Core.injectionTypeName = (Core.injectionTypeName v0),
                     Core.injectionField = Core.Field {
                       Core.fieldName = (Core.fieldName (Core.injectionField v0)),
@@ -356,7 +356,7 @@ rewriteAndFoldTermWithPath f term0 =
                   Core.TermTypeLambda v0 -> forSingleWithAccessor recurse (\t -> Core.TermTypeLambda (Core.TypeLambda {
                     Core.typeLambdaParameter = (Core.typeLambdaParameter v0),
                     Core.typeLambdaBody = t})) Paths.SubtermStepTypeLambdaBody val0 (Core.typeLambdaBody v0)
-                  Core.TermUnion v0 -> forSingleWithAccessor recurse (\t -> Core.TermUnion (Core.Injection {
+                  Core.TermInject v0 -> forSingleWithAccessor recurse (\t -> Core.TermInject (Core.Injection {
                     Core.injectionTypeName = (Core.injectionTypeName v0),
                     Core.injectionField = Core.Field {
                       Core.fieldName = (Core.fieldName (Core.injectionField v0)),
@@ -425,7 +425,7 @@ rewriteTerm f term0 =
                   Core.TermTypeLambda v0 -> Core.TermTypeLambda (Core.TypeLambda {
                     Core.typeLambdaParameter = (Core.typeLambdaParameter v0),
                     Core.typeLambdaBody = (recurse (Core.typeLambdaBody v0))})
-                  Core.TermUnion v0 -> Core.TermUnion (Core.Injection {
+                  Core.TermInject v0 -> Core.TermInject (Core.Injection {
                     Core.injectionTypeName = (Core.injectionTypeName v0),
                     Core.injectionField = (forField (Core.injectionField v0))})
                   Core.TermUnit -> Core.TermUnit
@@ -506,10 +506,10 @@ rewriteTermM f term0 =
                     in (Eithers.bind (recurse body) (\rbody -> Right (Core.TermTypeLambda (Core.TypeLambda {
                       Core.typeLambdaParameter = v,
                       Core.typeLambdaBody = rbody}))))
-                  Core.TermUnion v0 ->
+                  Core.TermInject v0 ->
                     let n = Core.injectionTypeName v0
                         field = Core.injectionField v0
-                    in (Eithers.map (\rfield -> Core.TermUnion (Core.Injection {
+                    in (Eithers.map (\rfield -> Core.TermInject (Core.Injection {
                       Core.injectionTypeName = n,
                       Core.injectionField = rfield})) (forField field))
                   Core.TermUnit -> Right Core.TermUnit
@@ -582,7 +582,7 @@ rewriteTermWithContext f cx0 term0 =
                   Core.TermTypeLambda v0 -> Core.TermTypeLambda (Core.TypeLambda {
                     Core.typeLambdaParameter = (Core.typeLambdaParameter v0),
                     Core.typeLambdaBody = (recurse (Core.typeLambdaBody v0))})
-                  Core.TermUnion v0 -> Core.TermUnion (Core.Injection {
+                  Core.TermInject v0 -> Core.TermInject (Core.Injection {
                     Core.injectionTypeName = (Core.injectionTypeName v0),
                     Core.injectionField = (forField (Core.injectionField v0))})
                   Core.TermUnit -> Core.TermUnit
@@ -664,10 +664,10 @@ rewriteTermWithContextM f cx0 term0 =
                     in (Eithers.bind (recurse body) (\rbody -> Right (Core.TermTypeLambda (Core.TypeLambda {
                       Core.typeLambdaParameter = v,
                       Core.typeLambdaBody = rbody}))))
-                  Core.TermUnion v0 ->
+                  Core.TermInject v0 ->
                     let n = Core.injectionTypeName v0
                         field = Core.injectionField v0
-                    in (Eithers.map (\rfield -> Core.TermUnion (Core.Injection {
+                    in (Eithers.map (\rfield -> Core.TermInject (Core.Injection {
                       Core.injectionTypeName = n,
                       Core.injectionField = rfield})) (forField field))
                   Core.TermUnit -> Right Core.TermUnit
@@ -834,7 +834,7 @@ subterms x =
         Core.typeApplicationTermBody v0]
       Core.TermTypeLambda v0 -> [
         Core.typeLambdaBody v0]
-      Core.TermUnion v0 -> [
+      Core.TermInject v0 -> [
         Core.fieldTerm (Core.injectionField v0)]
       Core.TermUnit -> []
       Core.TermUnwrap _ -> []
@@ -872,7 +872,7 @@ subtermsWithSteps x =
         (Paths.SubtermStepTypeApplicationTerm, (Core.typeApplicationTermBody v0))]
       Core.TermTypeLambda v0 -> [
         (Paths.SubtermStepTypeLambdaBody, (Core.typeLambdaBody v0))]
-      Core.TermUnion v0 -> [
+      Core.TermInject v0 -> [
         (Paths.SubtermStepInjectionTerm, (Core.fieldTerm (Core.injectionField v0)))]
       Core.TermUnit -> []
       Core.TermUnwrap _ -> []

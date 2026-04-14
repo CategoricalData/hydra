@@ -400,7 +400,7 @@ def untyped_term_variable_error(cx: hydra.graph.Graph, raw: hydra.core.Term):
 def invalid_term_error(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_error_core_invalid_term_error_1(cx, v1):
         match v1:
-            case hydra.core.TermUnion(value=inj):
+            case hydra.core.TermInject(value=inj):
                 field = inj.field
                 fname = field.name
                 fterm = field.term
@@ -520,7 +520,7 @@ def void_in_non_bottom_position_error(cx: hydra.graph.Graph, raw: hydra.core.Ter
 def invalid_type_error(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_error_core_invalid_type_error_1(cx, v1):
         match v1:
-            case hydra.core.TermUnion(value=inj):
+            case hydra.core.TermInject(value=inj):
                 field = inj.field
                 fname = field.name
                 fterm = field.term

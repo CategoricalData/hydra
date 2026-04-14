@@ -110,7 +110,7 @@ evalStep cx step term =
       Core.TermMaybe v0 -> Maybes.maybe (Right []) (\t -> evalStep cx step t) v0
       Core.TermRecord v0 -> Maybes.maybe (Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 (Strings.cat2 "No such field " step) " in record")))) (\t -> Right [
         t]) (Maps.lookup (Core.Name step) (Resolution.fieldMap (Core.recordFields v0)))
-      Core.TermUnion v0 -> Logic.ifElse (Equality.equal (Core.unName (Core.fieldName (Core.injectionField v0))) step) (evalStep cx step (Core.fieldTerm (Core.injectionField v0))) (Right [])
+      Core.TermInject v0 -> Logic.ifElse (Equality.equal (Core.unName (Core.fieldName (Core.injectionField v0))) step) (evalStep cx step (Core.fieldTerm (Core.injectionField v0))) (Right [])
       Core.TermWrap v0 -> evalStep cx step (Core.wrappedTermBody v0)
       _ -> Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "Can't traverse through term for step " step))))
 

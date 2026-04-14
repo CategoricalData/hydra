@@ -48,7 +48,7 @@
                                                         "body": {
                                                           "typeApplication": {
                                                             "body": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {"name": "success", "term": {"variable": "s"}},
                                                                 "typeName": "hydra.parsing.ParseResult"}},
                                                             "type": {"variable": "t0"}}},
@@ -66,7 +66,7 @@
                                                             "argument": {
                                                               "typeApplication": {
                                                                 "body": {
-                                                                  "union": {
+                                                                  "inject": {
                                                                     "field": {"name": "failure", "term": {"variable": "e"}},
                                                                     "typeName": "hydra.parsing.ParseResult"}},
                                                                 "type": {"variable": "t0"}}},
@@ -257,7 +257,7 @@
                                                                                 "body": {
                                                                                   "typeApplication": {
                                                                                     "body": {
-                                                                                      "union": {
+                                                                                      "inject": {
                                                                                         "field": {
                                                                                           "name": "success",
                                                                                           "term": {
@@ -312,7 +312,7 @@
                                                                                 "body": {
                                                                                   "typeApplication": {
                                                                                     "body": {
-                                                                                      "union": {
+                                                                                      "inject": {
                                                                                         "field": {"name": "failure", "term": {"variable": "e"}},
                                                                                         "typeName": "hydra.parsing.ParseResult"}},
                                                                                     "type": {"variable": "t1"}}},
@@ -333,7 +333,7 @@
                                                             "body": {
                                                               "typeApplication": {
                                                                 "body": {
-                                                                  "union": {
+                                                                  "inject": {
                                                                     "field": {"name": "failure", "term": {"variable": "e"}},
                                                                     "typeName": "hydra.parsing.ParseResult"}},
                                                                 "type": {"variable": "t1"}}},
@@ -595,7 +595,7 @@
                                                             "body": {
                                                               "typeApplication": {
                                                                 "body": {
-                                                                  "union": {
+                                                                  "inject": {
                                                                     "field": {"name": "failure", "term": {"variable": "e"}},
                                                                     "typeName": "hydra.parsing.ParseResult"}},
                                                                 "type": {"variable": "t1"}}},
@@ -780,7 +780,7 @@
                             "argument": {
                               "typeApplication": {
                                 "body": {
-                                  "union": {
+                                  "inject": {
                                     "field": {
                                       "name": "failure",
                                       "term": {
@@ -798,7 +798,7 @@
                                 "argument": {
                                   "typeApplication": {
                                     "body": {
-                                      "union": {
+                                      "inject": {
                                         "field": {
                                           "name": "success",
                                           "term": {
@@ -864,7 +864,7 @@
                                 "body": {
                                   "typeApplication": {
                                     "body": {
-                                      "union": {
+                                      "inject": {
                                         "field": {
                                           "name": "failure",
                                           "term": {
@@ -1054,7 +1054,7 @@
                                                             "body": {
                                                               "typeApplication": {
                                                                 "body": {
-                                                                  "union": {
+                                                                  "inject": {
                                                                     "field": {
                                                                       "name": "success",
                                                                       "term": {
@@ -1101,7 +1101,7 @@
                                                             "body": {
                                                               "typeApplication": {
                                                                 "body": {
-                                                                  "union": {
+                                                                  "inject": {
                                                                     "field": {"name": "failure", "term": {"variable": "e"}},
                                                                     "typeName": "hydra.parsing.ParseResult"}},
                                                                 "type": {"variable": "t1"}}},
@@ -1240,7 +1240,7 @@
                                 "body": {
                                   "typeApplication": {
                                     "body": {
-                                      "union": {
+                                      "inject": {
                                         "field": {
                                           "name": "success",
                                           "term": {
@@ -1387,7 +1387,7 @@
                                                     "argument": {
                                                       "typeApplication": {
                                                         "body": {
-                                                          "union": {
+                                                          "inject": {
                                                             "field": {
                                                               "name": "failure",
                                                               "term": {
@@ -1405,7 +1405,7 @@
                                                         "argument": {
                                                           "typeApplication": {
                                                             "body": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {
                                                                   "name": "success",
                                                                   "term": {
@@ -1437,7 +1437,7 @@
                                             "argument": {
                                               "typeApplication": {
                                                 "body": {
-                                                  "union": {
+                                                  "inject": {
                                                     "field": {
                                                       "name": "failure",
                                                       "term": {
@@ -1851,7 +1851,7 @@
                                                 "argument": {
                                                   "typeApplication": {
                                                     "body": {
-                                                      "union": {
+                                                      "inject": {
                                                         "field": {
                                                           "name": "failure",
                                                           "term": {
@@ -1875,7 +1875,7 @@
                                                     "argument": {
                                                       "typeApplication": {
                                                         "body": {
-                                                          "union": {
+                                                          "inject": {
                                                             "field": {
                                                               "name": "success",
                                                               "term": {

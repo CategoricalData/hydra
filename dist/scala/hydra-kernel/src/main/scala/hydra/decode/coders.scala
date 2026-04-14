@@ -10,8 +10,8 @@ def coderDirection(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.er
   hydra.lib.eithers.either[hydra.errors.DecodingError, hydra.core.Term, Either[hydra.errors.DecodingError,
      hydra.coders.CoderDirection]]((err: hydra.errors.DecodingError) => Left(err))((stripped: hydra.core.Term) =>
   stripped match
-  case hydra.core.Term.union(v_Term_union_inj) => {
-    lazy val field: hydra.core.Field = (v_Term_union_inj.field)
+  case hydra.core.Term.inject(v_Term_inject_inj) => {
+    lazy val field: hydra.core.Field = (v_Term_inject_inj.field)
     lazy val fname: hydra.core.Name = (field.name)
     lazy val fterm: hydra.core.Term = (field.term)
     lazy val variantMap: Map[hydra.core.Name, (hydra.core.Term => Either[hydra.errors.DecodingError, hydra.coders.CoderDirection])] = hydra.lib.maps.fromList[hydra.core.Name,
@@ -45,8 +45,8 @@ def traversalOrder(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.er
   hydra.lib.eithers.either[hydra.errors.DecodingError, hydra.core.Term, Either[hydra.errors.DecodingError,
      hydra.coders.TraversalOrder]]((err: hydra.errors.DecodingError) => Left(err))((stripped: hydra.core.Term) =>
   stripped match
-  case hydra.core.Term.union(v_Term_union_inj) => {
-    lazy val field: hydra.core.Field = (v_Term_union_inj.field)
+  case hydra.core.Term.inject(v_Term_inject_inj) => {
+    lazy val field: hydra.core.Field = (v_Term_inject_inj.field)
     lazy val fname: hydra.core.Name = (field.name)
     lazy val fterm: hydra.core.Term = (field.term)
     lazy val variantMap: Map[hydra.core.Name, (hydra.core.Term => Either[hydra.errors.DecodingError, hydra.coders.TraversalOrder])] = hydra.lib.maps.fromList[hydra.core.Name,

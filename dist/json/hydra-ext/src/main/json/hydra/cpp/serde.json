@@ -1151,7 +1151,7 @@
                             "argument": {
                               "application": {
                                 "argument": {
-                                  "union": {
+                                  "inject": {
                                     "field": {"name": "enumClass", "term": {"unit": {}}},
                                     "typeName": "hydra.cpp.syntax.ClassKey"}},
                                 "function": {
@@ -1166,7 +1166,7 @@
                                 "argument": {
                                   "application": {
                                     "argument": {
-                                      "union": {
+                                      "inject": {
                                         "field": {"name": "enum", "term": {"unit": {}}},
                                         "typeName": "hydra.cpp.syntax.ClassKey"}},
                                     "function": {

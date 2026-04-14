@@ -11,12 +11,12 @@ import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pur
 coderDirection :: Coders.CoderDirection -> Core.Term
 coderDirection x =
     case x of
-      Coders.CoderDirectionEncode -> Core.TermUnion (Core.Injection {
+      Coders.CoderDirectionEncode -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.coders.CoderDirection"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "encode"),
           Core.fieldTerm = Core.TermUnit}})
-      Coders.CoderDirectionDecode -> Core.TermUnion (Core.Injection {
+      Coders.CoderDirectionDecode -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.coders.CoderDirection"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "decode"),
@@ -31,12 +31,12 @@ languageName x =
 traversalOrder :: Coders.TraversalOrder -> Core.Term
 traversalOrder x =
     case x of
-      Coders.TraversalOrderPre -> Core.TermUnion (Core.Injection {
+      Coders.TraversalOrderPre -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.coders.TraversalOrder"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "pre"),
           Core.fieldTerm = Core.TermUnit}})
-      Coders.TraversalOrderPost -> Core.TermUnion (Core.Injection {
+      Coders.TraversalOrderPost -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.coders.TraversalOrder"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "post"),

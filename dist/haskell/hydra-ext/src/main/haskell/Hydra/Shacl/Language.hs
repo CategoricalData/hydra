@@ -50,7 +50,7 @@ shaclLanguage =
           Variants.TermVariantMaybe,
           Variants.TermVariantRecord,
           Variants.TermVariantSet,
-          Variants.TermVariantUnion]
+          Variants.TermVariantInject]
     typeVariants =
         Sets.fromList [
           Variants.TypeVariantAnnotated,

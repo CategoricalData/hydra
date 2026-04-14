@@ -25,7 +25,7 @@
                                     "body": {
                                       "either": {
                                         "@left": {
-                                          "union": {
+                                          "inject": {
                                             "field": {
                                               "name": "other",
                                               "term": {
@@ -190,7 +190,7 @@
                                                                                             {
                                                                                               "name": "schemaTerm",
                                                                                               "term": {
-                                                                                                "union": {
+                                                                                                "inject": {
                                                                                                   "field": {
                                                                                                     "name": "variable",
                                                                                                     "term": {
@@ -207,7 +207,7 @@
                                                                                                   "term": {
                                                                                                     "application": {
                                                                                                       "argument": {
-                                                                                                        "union": {
+                                                                                                        "inject": {
                                                                                                           "field": {
                                                                                                             "name": "annotated",
                                                                                                             "term": {
@@ -264,7 +264,7 @@
                                                                                                               {
                                                                                                                 "name": "type",
                                                                                                                 "term": {
-                                                                                                                  "union": {
+                                                                                                                  "inject": {
                                                                                                                     "field": {
                                                                                                                       "name": "variable",
                                                                                                                       "term": {
@@ -352,7 +352,7 @@
                                                                       {
                                                                         "name": "target",
                                                                         "term": {
-                                                                          "union": {
+                                                                          "inject": {
                                                                             "field": {
                                                                               "name": "node",
                                                                               "term": {
@@ -405,7 +405,7 @@
                                                             "argument": {
                                                               "lambda": {
                                                                 "body": {
-                                                                  "union": {
+                                                                  "inject": {
                                                                     "field": {
                                                                       "name": "other",
                                                                       "term": {
@@ -597,7 +597,7 @@
                       {
                         "name": "severity",
                         "term": {
-                          "union": {
+                          "inject": {
                             "field": {"name": "info", "term": {"unit": {}}},
                             "typeName": "hydra.shacl.model.Severity"}}},
                       {
@@ -1085,7 +1085,7 @@
                                                                                 "argument": {
                                                                                   "lambda": {
                                                                                     "body": {
-                                                                                      "union": {
+                                                                                      "inject": {
                                                                                         "field": {"name": "minCount", "term": {"variable": "__n"}},
                                                                                         "typeName": "hydra.shacl.model.PropertyShapeConstraint"}},
                                                                                     "domain": {"literal": {"integer": {"bigint": {}}}},
@@ -1110,7 +1110,7 @@
                                                                                 "argument": {
                                                                                   "lambda": {
                                                                                     "body": {
-                                                                                      "union": {
+                                                                                      "inject": {
                                                                                         "field": {"name": "maxCount", "term": {"variable": "__n"}},
                                                                                         "typeName": "hydra.shacl.model.PropertyShapeConstraint"}},
                                                                                     "domain": {"literal": {"integer": {"bigint": {}}}},
@@ -1291,7 +1291,7 @@
                                 "argument": {
                                   "list": [
                                     {
-                                      "union": {
+                                      "inject": {
                                         "field": {
                                           "name": "datatype",
                                           "term": {
@@ -1588,7 +1588,7 @@
                                                                               {
                                                                                 "name": "subject",
                                                                                 "term": {
-                                                                                  "union": {
+                                                                                  "inject": {
                                                                                     "field": {
                                                                                       "name": "literal",
                                                                                       "term": {
@@ -2450,7 +2450,7 @@
                                             "domain": {"set": {"variable": "hydra.core.Term"}},
                                             "parameter": "terms"}}},
                                       {
-                                        "name": "union",
+                                        "name": "inject",
                                         "term": {
                                           "lambda": {
                                             "body": {
@@ -3004,7 +3004,7 @@
                                                                       {
                                                                         "name": "subject",
                                                                         "term": {
-                                                                          "union": {
+                                                                          "inject": {
                                                                             "field": {
                                                                               "name": "iri",
                                                                               "term": {
@@ -3568,7 +3568,7 @@
                                                                 "argument": {
                                                                   "list": [
                                                                     {
-                                                                      "union": {
+                                                                      "inject": {
                                                                         "field": {
                                                                           "name": "property",
                                                                           "term": {
@@ -3583,7 +3583,7 @@
                                                                                           "body": {
                                                                                             "typeApplication": {
                                                                                               "body": {
-                                                                                                "union": {
+                                                                                                "inject": {
                                                                                                   "field": {"name": "definition", "term": {"variable": "__p"}},
                                                                                                   "typeName": "hydra.shacl.model.Reference"}},
                                                                                               "type": {"variable": "hydra.shacl.model.PropertyShape"}}},
@@ -3702,7 +3702,7 @@
                                                                 "argument": {
                                                                   "list": [
                                                                     {
-                                                                      "union": {
+                                                                      "inject": {
                                                                         "field": {
                                                                           "name": "xone",
                                                                           "term": {
@@ -3717,7 +3717,7 @@
                                                                                           "body": {
                                                                                             "typeApplication": {
                                                                                               "body": {
-                                                                                                "union": {
+                                                                                                "inject": {
                                                                                                   "field": {
                                                                                                     "name": "anonymous",
                                                                                                     "term": {
@@ -3725,7 +3725,7 @@
                                                                                                         "argument": {
                                                                                                           "list": [
                                                                                                             {
-                                                                                                              "union": {
+                                                                                                              "inject": {
                                                                                                                 "field": {
                                                                                                                   "name": "property",
                                                                                                                   "term": {
@@ -3735,7 +3735,7 @@
                                                                                                                           {
                                                                                                                             "typeApplication": {
                                                                                                                               "body": {
-                                                                                                                                "union": {
+                                                                                                                                "inject": {
                                                                                                                                   "field": {"name": "definition", "term": {"variable": "__p"}},
                                                                                                                                   "typeName": "hydra.shacl.model.Reference"}},
                                                                                                                               "type": {"variable": "hydra.shacl.model.PropertyShape"}}}]},
@@ -3824,7 +3824,7 @@
                                                                 "argument": {
                                                                   "list": [
                                                                     {
-                                                                      "union": {
+                                                                      "inject": {
                                                                         "field": {
                                                                           "name": "node",
                                                                           "term": {
@@ -3834,7 +3834,7 @@
                                                                                   {
                                                                                     "typeApplication": {
                                                                                       "body": {
-                                                                                        "union": {
+                                                                                        "inject": {
                                                                                           "field": {
                                                                                             "name": "named",
                                                                                             "term": {
@@ -3909,7 +3909,7 @@
             "body": {
               "lambda": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "node",
                       "term": {
@@ -4053,7 +4053,7 @@
                                         "term": {
                                           "lambda": {
                                             "body": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {"name": "iri", "term": {"variable": "iri"}},
                                                 "typeName": "hydra.rdf.syntax.Resource"}},
                                             "domain": {"variable": "hydra.rdf.syntax.Iri"},
@@ -4063,7 +4063,7 @@
                                         "term": {
                                           "lambda": {
                                             "body": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {"name": "bnode", "term": {"variable": "bnode"}},
                                                 "typeName": "hydra.rdf.syntax.Resource"}},
                                             "domain": {"variable": "hydra.rdf.syntax.BlankNode"},
@@ -4085,7 +4085,7 @@
                                   {
                                     "name": "object",
                                     "term": {
-                                      "union": {
+                                      "inject": {
                                         "field": {
                                           "name": "iri",
                                           "term": {

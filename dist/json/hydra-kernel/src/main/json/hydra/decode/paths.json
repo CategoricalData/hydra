@@ -1050,7 +1050,7 @@
                                   "cases": {
                                     "cases": [
                                       {
-                                        "name": "union",
+                                        "name": "inject",
                                         "term": {
                                           "lambda": {
                                             "body": {
@@ -1123,7 +1123,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "annotatedBody", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.paths.SubtermStep"}},
                                                                                         "domain": {"unit": {}},
@@ -1186,7 +1186,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "applicationFunction", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.paths.SubtermStep"}},
                                                                                         "domain": {"unit": {}},
@@ -1249,7 +1249,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "applicationArgument", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.paths.SubtermStep"}},
                                                                                         "domain": {"unit": {}},
@@ -1312,7 +1312,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "lambdaBody", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.paths.SubtermStep"}},
                                                                                         "domain": {"unit": {}},
@@ -1375,7 +1375,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "unionCasesDefault", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.paths.SubtermStep"}},
                                                                                         "domain": {"unit": {}},
@@ -1424,7 +1424,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "unionCasesBranch", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.paths.SubtermStep"}},
                                                                                         "domain": {"variable": "hydra.core.Name"},
@@ -1489,7 +1489,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "letBody", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.paths.SubtermStep"}},
                                                                                         "domain": {"unit": {}},
@@ -1538,7 +1538,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "letBinding", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.paths.SubtermStep"}},
                                                                                         "domain": {"variable": "hydra.core.Name"},
@@ -1712,7 +1712,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "listElement", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.paths.SubtermStep"}},
                                                                                         "domain": {"literal": {"integer": {"int32": {}}}},
@@ -1886,7 +1886,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "mapKey", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.paths.SubtermStep"}},
                                                                                         "domain": {"literal": {"integer": {"int32": {}}}},
@@ -2060,7 +2060,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "mapValue", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.paths.SubtermStep"}},
                                                                                         "domain": {"literal": {"integer": {"int32": {}}}},
@@ -2125,7 +2125,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "maybeTerm", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.paths.SubtermStep"}},
                                                                                         "domain": {"unit": {}},
@@ -2297,7 +2297,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "productTerm", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.paths.SubtermStep"}},
                                                                                         "domain": {"literal": {"integer": {"int32": {}}}},
@@ -2348,7 +2348,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "recordField", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.paths.SubtermStep"}},
                                                                                         "domain": {"variable": "hydra.core.Name"},
@@ -2522,7 +2522,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "setElement", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.paths.SubtermStep"}},
                                                                                         "domain": {"literal": {"integer": {"int32": {}}}},
@@ -2587,7 +2587,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "sumTerm", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.paths.SubtermStep"}},
                                                                                         "domain": {"unit": {}},
@@ -2650,7 +2650,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "typeLambdaBody", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.paths.SubtermStep"}},
                                                                                         "domain": {"unit": {}},
@@ -2713,7 +2713,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "typeApplicationTerm", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.paths.SubtermStep"}},
                                                                                         "domain": {"unit": {}},
@@ -2776,7 +2776,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "injectionTerm", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.paths.SubtermStep"}},
                                                                                         "domain": {"unit": {}},
@@ -2839,7 +2839,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "wrappedTerm", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.paths.SubtermStep"}},
                                                                                         "domain": {"unit": {}},
@@ -4071,7 +4071,7 @@
                                   "cases": {
                                     "cases": [
                                       {
-                                        "name": "union",
+                                        "name": "inject",
                                         "term": {
                                           "lambda": {
                                             "body": {
@@ -4144,7 +4144,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "annotatedBody", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.paths.SubtypeStep"}},
                                                                                         "domain": {"unit": {}},
@@ -4207,7 +4207,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "applicationFunction", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.paths.SubtypeStep"}},
                                                                                         "domain": {"unit": {}},
@@ -4270,7 +4270,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "applicationArgument", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.paths.SubtypeStep"}},
                                                                                         "domain": {"unit": {}},
@@ -4333,7 +4333,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "eitherLeft", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.paths.SubtypeStep"}},
                                                                                         "domain": {"unit": {}},
@@ -4396,7 +4396,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "eitherRight", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.paths.SubtypeStep"}},
                                                                                         "domain": {"unit": {}},
@@ -4459,7 +4459,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "forallBody", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.paths.SubtypeStep"}},
                                                                                         "domain": {"unit": {}},
@@ -4522,7 +4522,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "functionDomain", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.paths.SubtypeStep"}},
                                                                                         "domain": {"unit": {}},
@@ -4585,7 +4585,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "functionCodomain", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.paths.SubtypeStep"}},
                                                                                         "domain": {"unit": {}},
@@ -4648,7 +4648,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "listElement", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.paths.SubtypeStep"}},
                                                                                         "domain": {"unit": {}},
@@ -4711,7 +4711,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "mapKeys", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.paths.SubtypeStep"}},
                                                                                         "domain": {"unit": {}},
@@ -4774,7 +4774,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "mapValues", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.paths.SubtypeStep"}},
                                                                                         "domain": {"unit": {}},
@@ -4837,7 +4837,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "maybeElement", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.paths.SubtypeStep"}},
                                                                                         "domain": {"unit": {}},
@@ -4900,7 +4900,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "pairFirst", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.paths.SubtypeStep"}},
                                                                                         "domain": {"unit": {}},
@@ -4963,7 +4963,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "pairSecond", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.paths.SubtypeStep"}},
                                                                                         "domain": {"unit": {}},
@@ -5012,7 +5012,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "recordField", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.paths.SubtypeStep"}},
                                                                                         "domain": {"variable": "hydra.core.Name"},
@@ -5077,7 +5077,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "setElement", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.paths.SubtypeStep"}},
                                                                                         "domain": {"unit": {}},
@@ -5126,7 +5126,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "unionField", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.paths.SubtypeStep"}},
                                                                                         "domain": {"variable": "hydra.core.Name"},
@@ -5191,7 +5191,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "wrappedType", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.paths.SubtypeStep"}},
                                                                                         "domain": {"unit": {}},

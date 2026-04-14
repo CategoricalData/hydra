@@ -27,7 +27,7 @@
                                   "cases": {
                                     "cases": [
                                       {
-                                        "name": "union",
+                                        "name": "inject",
                                         "term": {
                                           "lambda": {
                                             "body": {
@@ -92,7 +92,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "array", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.json.model.Value"}},
                                                                                         "domain": {"list": {"variable": "hydra.json.model.Value"}},
@@ -248,7 +248,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "boolean", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.json.model.Value"}},
                                                                                         "domain": {"literal": {"boolean": {}}},
@@ -313,7 +313,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "null", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.json.model.Value"}},
                                                                                         "domain": {"unit": {}},
@@ -485,7 +485,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "number", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.json.model.Value"}},
                                                                                         "domain": {"literal": {"float": {"bigfloat": {}}}},
@@ -653,7 +653,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "object", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.json.model.Value"}},
                                                                                         "domain": {
@@ -815,7 +815,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "string", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.json.model.Value"}},
                                                                                         "domain": {"literal": {"string": {}}},

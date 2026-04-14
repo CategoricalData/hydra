@@ -71,7 +71,7 @@ alternationWithRight original newVal =
 
 boolOpAnd :: Phantoms.TTerm Syntax.BoolOp
 boolOpAnd =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.syntax.BoolOp"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "and"),
@@ -79,7 +79,7 @@ boolOpAnd =
 
 boolOpOr :: Phantoms.TTerm Syntax.BoolOp
 boolOpOr =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.syntax.BoolOp"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "or"),
@@ -87,7 +87,7 @@ boolOpOr =
 
 compareSymEqual :: Phantoms.TTerm Syntax.CompareSym
 compareSymEqual =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.syntax.CompareSym"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "equal"),
@@ -95,7 +95,7 @@ compareSymEqual =
 
 compareSymGreaterThan :: Phantoms.TTerm Syntax.CompareSym
 compareSymGreaterThan =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.syntax.CompareSym"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "greaterThan"),
@@ -103,7 +103,7 @@ compareSymGreaterThan =
 
 compareSymGreaterThanOrEqual :: Phantoms.TTerm Syntax.CompareSym
 compareSymGreaterThanOrEqual =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.syntax.CompareSym"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "greaterThanOrEqual"),
@@ -111,7 +111,7 @@ compareSymGreaterThanOrEqual =
 
 compareSymLessThan :: Phantoms.TTerm Syntax.CompareSym
 compareSymLessThan =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.syntax.CompareSym"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "lessThan"),
@@ -119,7 +119,7 @@ compareSymLessThan =
 
 compareSymLessThanOrEqual :: Phantoms.TTerm Syntax.CompareSym
 compareSymLessThanOrEqual =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.syntax.CompareSym"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "lessThanOrEqual"),
@@ -127,7 +127,7 @@ compareSymLessThanOrEqual =
 
 compareSymNotEqual :: Phantoms.TTerm Syntax.CompareSym
 compareSymNotEqual =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.syntax.CompareSym"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "notEqual"),
@@ -135,7 +135,7 @@ compareSymNotEqual =
 
 complexConditionCompound :: Phantoms.TTerm Syntax.CompoundComplexCondition -> Phantoms.TTerm Syntax.ComplexCondition
 complexConditionCompound x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.syntax.ComplexCondition"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "compound"),
@@ -143,7 +143,7 @@ complexConditionCompound x =
 
 complexConditionSimple :: Phantoms.TTerm Syntax.Condition -> Phantoms.TTerm Syntax.ComplexCondition
 complexConditionSimple x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.syntax.ComplexCondition"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "simple"),
@@ -535,7 +535,7 @@ conditionWithValue original newVal =
 
 edgeDirectionIncoming :: Phantoms.TTerm Syntax.EdgeDirection
 edgeDirectionIncoming =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.syntax.EdgeDirection"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "incoming"),
@@ -543,7 +543,7 @@ edgeDirectionIncoming =
 
 edgeDirectionOutgoing :: Phantoms.TTerm Syntax.EdgeDirection
 edgeDirectionOutgoing =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.syntax.EdgeDirection"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "outgoing"),
@@ -551,7 +551,7 @@ edgeDirectionOutgoing =
 
 edgeDirectionUndirected :: Phantoms.TTerm Syntax.EdgeDirection
 edgeDirectionUndirected =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.syntax.EdgeDirection"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "undirected"),
@@ -619,7 +619,7 @@ edgePatternWithRpq original newVal =
 
 functionComplex :: Phantoms.TTerm Syntax.ComplexFunction -> Phantoms.TTerm Syntax.Function
 functionComplex x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.syntax.Function"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "complex"),
@@ -627,7 +627,7 @@ functionComplex x =
 
 functionNested :: Phantoms.TTerm Syntax.NestedFunction -> Phantoms.TTerm Syntax.Function
 functionNested x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.syntax.Function"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "nested"),
@@ -635,7 +635,7 @@ functionNested x =
 
 functionSimple :: Phantoms.TTerm Syntax.SimpleFunction -> Phantoms.TTerm Syntax.Function
 functionSimple x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.syntax.Function"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "simple"),
@@ -649,7 +649,7 @@ groupBy x =
 
 groupByOptionLength :: Phantoms.TTerm Syntax.GroupByOption
 groupByOptionLength =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.syntax.GroupByOption"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "length"),
@@ -657,7 +657,7 @@ groupByOptionLength =
 
 groupByOptionSource :: Phantoms.TTerm Syntax.GroupByOption
 groupByOptionSource =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.syntax.GroupByOption"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "source"),
@@ -665,7 +665,7 @@ groupByOptionSource =
 
 groupByOptionSourceLength :: Phantoms.TTerm Syntax.GroupByOption
 groupByOptionSourceLength =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.syntax.GroupByOption"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sourceLength"),
@@ -673,7 +673,7 @@ groupByOptionSourceLength =
 
 groupByOptionSourceTarget :: Phantoms.TTerm Syntax.GroupByOption
 groupByOptionSourceTarget =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.syntax.GroupByOption"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sourceTarget"),
@@ -681,7 +681,7 @@ groupByOptionSourceTarget =
 
 groupByOptionSourceTargetLength :: Phantoms.TTerm Syntax.GroupByOption
 groupByOptionSourceTargetLength =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.syntax.GroupByOption"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sourceTargetLength"),
@@ -689,7 +689,7 @@ groupByOptionSourceTargetLength =
 
 groupByOptionTarget :: Phantoms.TTerm Syntax.GroupByOption
 groupByOptionTarget =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.syntax.GroupByOption"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "target"),
@@ -697,7 +697,7 @@ groupByOptionTarget =
 
 groupByOptionTargetLength :: Phantoms.TTerm Syntax.GroupByOption
 groupByOptionTargetLength =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.syntax.GroupByOption"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "targetLength"),
@@ -705,7 +705,7 @@ groupByOptionTargetLength =
 
 groupProjAll :: Phantoms.TTerm Syntax.GroupProj
 groupProjAll =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.syntax.GroupProj"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "all"),
@@ -713,7 +713,7 @@ groupProjAll =
 
 groupProjLimited :: Phantoms.TTerm Syntax.Number -> Phantoms.TTerm Syntax.GroupProj
 groupProjLimited x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.syntax.GroupProj"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "limited"),
@@ -813,7 +813,7 @@ orderBy x =
 
 orderByOptionGroup :: Phantoms.TTerm Syntax.OrderByOption
 orderByOptionGroup =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.syntax.OrderByOption"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "group"),
@@ -821,7 +821,7 @@ orderByOptionGroup =
 
 orderByOptionGroupPath :: Phantoms.TTerm Syntax.OrderByOption
 orderByOptionGroupPath =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.syntax.OrderByOption"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "groupPath"),
@@ -829,7 +829,7 @@ orderByOptionGroupPath =
 
 orderByOptionPartition :: Phantoms.TTerm Syntax.OrderByOption
 orderByOptionPartition =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.syntax.OrderByOption"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "partition"),
@@ -837,7 +837,7 @@ orderByOptionPartition =
 
 orderByOptionPartitionGroup :: Phantoms.TTerm Syntax.OrderByOption
 orderByOptionPartitionGroup =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.syntax.OrderByOption"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "partitionGroup"),
@@ -845,7 +845,7 @@ orderByOptionPartitionGroup =
 
 orderByOptionPartitionGroupPath :: Phantoms.TTerm Syntax.OrderByOption
 orderByOptionPartitionGroupPath =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.syntax.OrderByOption"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "partitionGroupPath"),
@@ -853,7 +853,7 @@ orderByOptionPartitionGroupPath =
 
 orderByOptionPartitionPath :: Phantoms.TTerm Syntax.OrderByOption
 orderByOptionPartitionPath =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.syntax.OrderByOption"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "partitionPath"),
@@ -861,7 +861,7 @@ orderByOptionPartitionPath =
 
 orderByOptionPath :: Phantoms.TTerm Syntax.OrderByOption
 orderByOptionPath =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.syntax.OrderByOption"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "path"),
@@ -869,7 +869,7 @@ orderByOptionPath =
 
 partProjAll :: Phantoms.TTerm Syntax.PartProj
 partProjAll =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.syntax.PartProj"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "all"),
@@ -877,7 +877,7 @@ partProjAll =
 
 partProjLimited :: Phantoms.TTerm Syntax.Number -> Phantoms.TTerm Syntax.PartProj
 partProjLimited x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.syntax.PartProj"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "limited"),
@@ -1131,7 +1131,7 @@ pathPatternWithStartNode original newVal =
 
 pathProjAll :: Phantoms.TTerm Syntax.PathProj
 pathProjAll =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.syntax.PathProj"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "all"),
@@ -1139,7 +1139,7 @@ pathProjAll =
 
 pathProjLimited :: Phantoms.TTerm Syntax.Number -> Phantoms.TTerm Syntax.PathProj
 pathProjLimited x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.syntax.PathProj"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "limited"),
@@ -1561,7 +1561,7 @@ projectionWithPathProj original newVal =
 
 restrictorExtAcyclic :: Phantoms.TTerm Syntax.RestrictorExt
 restrictorExtAcyclic =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.syntax.RestrictorExt"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "acyclic"),
@@ -1569,7 +1569,7 @@ restrictorExtAcyclic =
 
 restrictorExtShortest :: Phantoms.TTerm Syntax.RestrictorExt
 restrictorExtShortest =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.syntax.RestrictorExt"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "shortest"),
@@ -1577,7 +1577,7 @@ restrictorExtShortest =
 
 restrictorExtSimple :: Phantoms.TTerm Syntax.RestrictorExt
 restrictorExtSimple =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.syntax.RestrictorExt"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "simple"),
@@ -1585,7 +1585,7 @@ restrictorExtSimple =
 
 restrictorExtTrail :: Phantoms.TTerm Syntax.RestrictorExt
 restrictorExtTrail =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.syntax.RestrictorExt"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "trail"),
@@ -1593,7 +1593,7 @@ restrictorExtTrail =
 
 restrictorExtWalk :: Phantoms.TTerm Syntax.RestrictorExt
 restrictorExtWalk =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.syntax.RestrictorExt"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "walk"),
@@ -1601,7 +1601,7 @@ restrictorExtWalk =
 
 rpqAlternation :: Phantoms.TTerm Syntax.Alternation -> Phantoms.TTerm Syntax.Rpq
 rpqAlternation x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.syntax.Rpq"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "alternation"),
@@ -1609,7 +1609,7 @@ rpqAlternation x =
 
 rpqConcatenation :: Phantoms.TTerm Syntax.Concatenation -> Phantoms.TTerm Syntax.Rpq
 rpqConcatenation x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.syntax.Rpq"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "concatenation"),
@@ -1617,7 +1617,7 @@ rpqConcatenation x =
 
 rpqLabel :: Phantoms.TTerm Syntax.Label -> Phantoms.TTerm Syntax.Rpq
 rpqLabel x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.syntax.Rpq"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "label"),
@@ -1625,7 +1625,7 @@ rpqLabel x =
 
 rpqNegated :: Phantoms.TTerm Syntax.Label -> Phantoms.TTerm Syntax.Rpq
 rpqNegated x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.syntax.Rpq"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "negated"),
@@ -1633,7 +1633,7 @@ rpqNegated x =
 
 rpqOptional :: Phantoms.TTerm Syntax.Rpq -> Phantoms.TTerm Syntax.Rpq
 rpqOptional x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.syntax.Rpq"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "optional"),
@@ -1641,7 +1641,7 @@ rpqOptional x =
 
 rpqParenthesis :: Phantoms.TTerm Syntax.Rpq -> Phantoms.TTerm Syntax.Rpq
 rpqParenthesis x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.syntax.Rpq"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "parenthesis"),
@@ -1649,7 +1649,7 @@ rpqParenthesis x =
 
 rpqPlus :: Phantoms.TTerm Syntax.Plus -> Phantoms.TTerm Syntax.Rpq
 rpqPlus x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.syntax.Rpq"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "plus"),
@@ -1663,7 +1663,7 @@ rpqRestrictor x =
 
 rpqReverse :: Phantoms.TTerm Syntax.Label -> Phantoms.TTerm Syntax.Rpq
 rpqReverse x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.syntax.Rpq"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "reverse"),
@@ -1671,7 +1671,7 @@ rpqReverse x =
 
 rpqStar :: Phantoms.TTerm Syntax.Star -> Phantoms.TTerm Syntax.Rpq
 rpqStar x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "com.gdblab.pathAlgebra.syntax.Rpq"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "star"),

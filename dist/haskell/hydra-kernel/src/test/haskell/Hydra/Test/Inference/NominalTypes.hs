@@ -530,7 +530,7 @@ testGroupForVariants =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#1",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> Core_.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermUnion (Core.Injection {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> Core_.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermInject (Core.Injection {
                   Core.injectionTypeName = TestTypes.testTypeTimestampName,
                   Core.injectionField = Core.Field {
                     Core.fieldName = (Core.Name "unixTimeMillis"),
@@ -545,7 +545,7 @@ testGroupForVariants =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#2",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> Core_.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermUnion (Core.Injection {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> Core_.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermInject (Core.Injection {
                   Core.injectionTypeName = TestTypes.testTypeUnionMonomorphicName,
                   Core.injectionField = Core.Field {
                     Core.fieldName = (Core.Name "string"),
@@ -565,7 +565,7 @@ testGroupForVariants =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#1",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> Core_.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermUnion (Core.Injection {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> Core_.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermInject (Core.Injection {
                   Core.injectionTypeName = TestTypes.testTypeUnionPolymorphicRecursiveName,
                   Core.injectionField = Core.Field {
                     Core.fieldName = (Core.Name "bool"),
@@ -583,7 +583,7 @@ testGroupForVariants =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#2",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> Core_.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermUnion (Core.Injection {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> Core_.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermInject (Core.Injection {
                   Core.injectionTypeName = TestTypes.testTypeUnionPolymorphicRecursiveName,
                   Core.injectionField = Core.Field {
                     Core.fieldName = (Core.Name "value"),
@@ -604,13 +604,13 @@ testGroupForVariants =
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "other"),
-                      Core.bindingTerm = (Core.TermUnion (Core.Injection {
+                      Core.bindingTerm = (Core.TermInject (Core.Injection {
                         Core.injectionTypeName = TestTypes.testTypeUnionPolymorphicRecursiveName,
                         Core.injectionField = Core.Field {
                           Core.fieldName = (Core.Name "value"),
                           Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}})),
                       Core.bindingType = Nothing}],
-                  Core.letBody = (Core.TermUnion (Core.Injection {
+                  Core.letBody = (Core.TermInject (Core.Injection {
                     Core.injectionTypeName = TestTypes.testTypeUnionPolymorphicRecursiveName,
                     Core.injectionField = Core.Field {
                       Core.fieldName = (Core.Name "other"),

@@ -34,11 +34,11 @@
                                                         "body": {
                                                           "either": {
                                                             "@left": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {
                                                                   "name": "extraction",
                                                                   "term": {
-                                                                    "union": {
+                                                                    "inject": {
                                                                       "field": {
                                                                         "name": "unexpectedShape",
                                                                         "term": {
@@ -65,7 +65,7 @@
                                                             "body": {
                                                               "either": {
                                                                 "@right": {
-                                                                  "union": {
+                                                                  "inject": {
                                                                     "field": {"name": "greaterThan", "term": {"unit": {}}},
                                                                     "typeName": "hydra.util.Comparison"}}}},
                                                             "type": {"variable": "hydra.errors.Error"}}},
@@ -101,7 +101,7 @@
                                                         "body": {
                                                           "either": {
                                                             "@right": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {"name": "lessThan", "term": {"unit": {}}},
                                                                 "typeName": "hydra.util.Comparison"}}}},
                                                         "type": {"variable": "hydra.errors.Error"}}},
@@ -137,7 +137,7 @@
                                                     "body": {
                                                       "either": {
                                                         "@right": {
-                                                          "union": {
+                                                          "inject": {
                                                             "field": {"name": "equalTo", "term": {"unit": {}}},
                                                             "typeName": "hydra.util.Comparison"}}}},
                                                     "type": {"variable": "hydra.errors.Error"}}},

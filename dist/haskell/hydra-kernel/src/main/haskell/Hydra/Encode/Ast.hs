@@ -13,22 +13,22 @@ import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pur
 associativity :: Ast.Associativity -> Core.Term
 associativity x =
     case x of
-      Ast.AssociativityNone -> Core.TermUnion (Core.Injection {
+      Ast.AssociativityNone -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.ast.Associativity"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "none"),
           Core.fieldTerm = Core.TermUnit}})
-      Ast.AssociativityLeft -> Core.TermUnion (Core.Injection {
+      Ast.AssociativityLeft -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.ast.Associativity"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "left"),
           Core.fieldTerm = Core.TermUnit}})
-      Ast.AssociativityRight -> Core.TermUnion (Core.Injection {
+      Ast.AssociativityRight -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.ast.Associativity"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "right"),
           Core.fieldTerm = Core.TermUnit}})
-      Ast.AssociativityBoth -> Core.TermUnion (Core.Injection {
+      Ast.AssociativityBoth -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.ast.Associativity"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "both"),
@@ -79,27 +79,27 @@ brackets x =
 expr :: Ast.Expr -> Core.Term
 expr x =
     case x of
-      Ast.ExprConst v0 -> Core.TermUnion (Core.Injection {
+      Ast.ExprConst v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.ast.Expr"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "const"),
           Core.fieldTerm = (symbol v0)}})
-      Ast.ExprIndent v0 -> Core.TermUnion (Core.Injection {
+      Ast.ExprIndent v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.ast.Expr"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "indent"),
           Core.fieldTerm = (indentedExpression v0)}})
-      Ast.ExprOp v0 -> Core.TermUnion (Core.Injection {
+      Ast.ExprOp v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.ast.Expr"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "op"),
           Core.fieldTerm = (opExpr v0)}})
-      Ast.ExprBrackets v0 -> Core.TermUnion (Core.Injection {
+      Ast.ExprBrackets v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.ast.Expr"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "brackets"),
           Core.fieldTerm = (bracketExpr v0)}})
-      Ast.ExprSeq v0 -> Core.TermUnion (Core.Injection {
+      Ast.ExprSeq v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.ast.Expr"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "seq"),
@@ -108,12 +108,12 @@ expr x =
 indentStyle :: Ast.IndentStyle -> Core.Term
 indentStyle x =
     case x of
-      Ast.IndentStyleAllLines v0 -> Core.TermUnion (Core.Injection {
+      Ast.IndentStyleAllLines v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.ast.IndentStyle"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "allLines"),
           Core.fieldTerm = (Core.TermLiteral (Core.LiteralString v0))}})
-      Ast.IndentStyleSubsequentLines v0 -> Core.TermUnion (Core.Injection {
+      Ast.IndentStyleSubsequentLines v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.ast.IndentStyle"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "subsequentLines"),
@@ -203,27 +203,27 @@ symbol x =
 ws :: Ast.Ws -> Core.Term
 ws x =
     case x of
-      Ast.WsNone -> Core.TermUnion (Core.Injection {
+      Ast.WsNone -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.ast.Ws"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "none"),
           Core.fieldTerm = Core.TermUnit}})
-      Ast.WsSpace -> Core.TermUnion (Core.Injection {
+      Ast.WsSpace -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.ast.Ws"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "space"),
           Core.fieldTerm = Core.TermUnit}})
-      Ast.WsBreak -> Core.TermUnion (Core.Injection {
+      Ast.WsBreak -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.ast.Ws"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "break"),
           Core.fieldTerm = Core.TermUnit}})
-      Ast.WsBreakAndIndent v0 -> Core.TermUnion (Core.Injection {
+      Ast.WsBreakAndIndent v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.ast.Ws"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "breakAndIndent"),
           Core.fieldTerm = (Core.TermLiteral (Core.LiteralString v0))}})
-      Ast.WsDoubleBreak -> Core.TermUnion (Core.Injection {
+      Ast.WsDoubleBreak -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.ast.Ws"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "doubleBreak"),

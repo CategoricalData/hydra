@@ -61,102 +61,102 @@ subtermPath x =
 subtermStep :: Paths.SubtermStep -> Core.Term
 subtermStep x =
     case x of
-      Paths.SubtermStepAnnotatedBody -> Core.TermUnion (Core.Injection {
+      Paths.SubtermStepAnnotatedBody -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.paths.SubtermStep"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "annotatedBody"),
           Core.fieldTerm = Core.TermUnit}})
-      Paths.SubtermStepApplicationFunction -> Core.TermUnion (Core.Injection {
+      Paths.SubtermStepApplicationFunction -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.paths.SubtermStep"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "applicationFunction"),
           Core.fieldTerm = Core.TermUnit}})
-      Paths.SubtermStepApplicationArgument -> Core.TermUnion (Core.Injection {
+      Paths.SubtermStepApplicationArgument -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.paths.SubtermStep"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "applicationArgument"),
           Core.fieldTerm = Core.TermUnit}})
-      Paths.SubtermStepLambdaBody -> Core.TermUnion (Core.Injection {
+      Paths.SubtermStepLambdaBody -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.paths.SubtermStep"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "lambdaBody"),
           Core.fieldTerm = Core.TermUnit}})
-      Paths.SubtermStepUnionCasesDefault -> Core.TermUnion (Core.Injection {
+      Paths.SubtermStepUnionCasesDefault -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.paths.SubtermStep"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "unionCasesDefault"),
           Core.fieldTerm = Core.TermUnit}})
-      Paths.SubtermStepUnionCasesBranch v0 -> Core.TermUnion (Core.Injection {
+      Paths.SubtermStepUnionCasesBranch v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.paths.SubtermStep"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "unionCasesBranch"),
           Core.fieldTerm = (Core_.name v0)}})
-      Paths.SubtermStepLetBody -> Core.TermUnion (Core.Injection {
+      Paths.SubtermStepLetBody -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.paths.SubtermStep"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "letBody"),
           Core.fieldTerm = Core.TermUnit}})
-      Paths.SubtermStepLetBinding v0 -> Core.TermUnion (Core.Injection {
+      Paths.SubtermStepLetBinding v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.paths.SubtermStep"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "letBinding"),
           Core.fieldTerm = (Core_.name v0)}})
-      Paths.SubtermStepListElement v0 -> Core.TermUnion (Core.Injection {
+      Paths.SubtermStepListElement v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.paths.SubtermStep"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "listElement"),
           Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 v0)))}})
-      Paths.SubtermStepMapKey v0 -> Core.TermUnion (Core.Injection {
+      Paths.SubtermStepMapKey v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.paths.SubtermStep"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "mapKey"),
           Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 v0)))}})
-      Paths.SubtermStepMapValue v0 -> Core.TermUnion (Core.Injection {
+      Paths.SubtermStepMapValue v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.paths.SubtermStep"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "mapValue"),
           Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 v0)))}})
-      Paths.SubtermStepMaybeTerm -> Core.TermUnion (Core.Injection {
+      Paths.SubtermStepMaybeTerm -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.paths.SubtermStep"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "maybeTerm"),
           Core.fieldTerm = Core.TermUnit}})
-      Paths.SubtermStepProductTerm v0 -> Core.TermUnion (Core.Injection {
+      Paths.SubtermStepProductTerm v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.paths.SubtermStep"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "productTerm"),
           Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 v0)))}})
-      Paths.SubtermStepRecordField v0 -> Core.TermUnion (Core.Injection {
+      Paths.SubtermStepRecordField v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.paths.SubtermStep"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "recordField"),
           Core.fieldTerm = (Core_.name v0)}})
-      Paths.SubtermStepSetElement v0 -> Core.TermUnion (Core.Injection {
+      Paths.SubtermStepSetElement v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.paths.SubtermStep"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "setElement"),
           Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 v0)))}})
-      Paths.SubtermStepSumTerm -> Core.TermUnion (Core.Injection {
+      Paths.SubtermStepSumTerm -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.paths.SubtermStep"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "sumTerm"),
           Core.fieldTerm = Core.TermUnit}})
-      Paths.SubtermStepTypeLambdaBody -> Core.TermUnion (Core.Injection {
+      Paths.SubtermStepTypeLambdaBody -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.paths.SubtermStep"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "typeLambdaBody"),
           Core.fieldTerm = Core.TermUnit}})
-      Paths.SubtermStepTypeApplicationTerm -> Core.TermUnion (Core.Injection {
+      Paths.SubtermStepTypeApplicationTerm -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.paths.SubtermStep"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "typeApplicationTerm"),
           Core.fieldTerm = Core.TermUnit}})
-      Paths.SubtermStepInjectionTerm -> Core.TermUnion (Core.Injection {
+      Paths.SubtermStepInjectionTerm -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.paths.SubtermStep"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "injectionTerm"),
           Core.fieldTerm = Core.TermUnit}})
-      Paths.SubtermStepWrappedTerm -> Core.TermUnion (Core.Injection {
+      Paths.SubtermStepWrappedTerm -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.paths.SubtermStep"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "wrappedTerm"),
@@ -213,92 +213,92 @@ subtypePath x =
 subtypeStep :: Paths.SubtypeStep -> Core.Term
 subtypeStep x =
     case x of
-      Paths.SubtypeStepAnnotatedBody -> Core.TermUnion (Core.Injection {
+      Paths.SubtypeStepAnnotatedBody -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.paths.SubtypeStep"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "annotatedBody"),
           Core.fieldTerm = Core.TermUnit}})
-      Paths.SubtypeStepApplicationFunction -> Core.TermUnion (Core.Injection {
+      Paths.SubtypeStepApplicationFunction -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.paths.SubtypeStep"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "applicationFunction"),
           Core.fieldTerm = Core.TermUnit}})
-      Paths.SubtypeStepApplicationArgument -> Core.TermUnion (Core.Injection {
+      Paths.SubtypeStepApplicationArgument -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.paths.SubtypeStep"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "applicationArgument"),
           Core.fieldTerm = Core.TermUnit}})
-      Paths.SubtypeStepEitherLeft -> Core.TermUnion (Core.Injection {
+      Paths.SubtypeStepEitherLeft -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.paths.SubtypeStep"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "eitherLeft"),
           Core.fieldTerm = Core.TermUnit}})
-      Paths.SubtypeStepEitherRight -> Core.TermUnion (Core.Injection {
+      Paths.SubtypeStepEitherRight -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.paths.SubtypeStep"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "eitherRight"),
           Core.fieldTerm = Core.TermUnit}})
-      Paths.SubtypeStepForallBody -> Core.TermUnion (Core.Injection {
+      Paths.SubtypeStepForallBody -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.paths.SubtypeStep"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "forallBody"),
           Core.fieldTerm = Core.TermUnit}})
-      Paths.SubtypeStepFunctionDomain -> Core.TermUnion (Core.Injection {
+      Paths.SubtypeStepFunctionDomain -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.paths.SubtypeStep"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "functionDomain"),
           Core.fieldTerm = Core.TermUnit}})
-      Paths.SubtypeStepFunctionCodomain -> Core.TermUnion (Core.Injection {
+      Paths.SubtypeStepFunctionCodomain -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.paths.SubtypeStep"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "functionCodomain"),
           Core.fieldTerm = Core.TermUnit}})
-      Paths.SubtypeStepListElement -> Core.TermUnion (Core.Injection {
+      Paths.SubtypeStepListElement -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.paths.SubtypeStep"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "listElement"),
           Core.fieldTerm = Core.TermUnit}})
-      Paths.SubtypeStepMapKeys -> Core.TermUnion (Core.Injection {
+      Paths.SubtypeStepMapKeys -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.paths.SubtypeStep"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "mapKeys"),
           Core.fieldTerm = Core.TermUnit}})
-      Paths.SubtypeStepMapValues -> Core.TermUnion (Core.Injection {
+      Paths.SubtypeStepMapValues -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.paths.SubtypeStep"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "mapValues"),
           Core.fieldTerm = Core.TermUnit}})
-      Paths.SubtypeStepMaybeElement -> Core.TermUnion (Core.Injection {
+      Paths.SubtypeStepMaybeElement -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.paths.SubtypeStep"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "maybeElement"),
           Core.fieldTerm = Core.TermUnit}})
-      Paths.SubtypeStepPairFirst -> Core.TermUnion (Core.Injection {
+      Paths.SubtypeStepPairFirst -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.paths.SubtypeStep"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "pairFirst"),
           Core.fieldTerm = Core.TermUnit}})
-      Paths.SubtypeStepPairSecond -> Core.TermUnion (Core.Injection {
+      Paths.SubtypeStepPairSecond -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.paths.SubtypeStep"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "pairSecond"),
           Core.fieldTerm = Core.TermUnit}})
-      Paths.SubtypeStepRecordField v0 -> Core.TermUnion (Core.Injection {
+      Paths.SubtypeStepRecordField v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.paths.SubtypeStep"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "recordField"),
           Core.fieldTerm = (Core_.name v0)}})
-      Paths.SubtypeStepSetElement -> Core.TermUnion (Core.Injection {
+      Paths.SubtypeStepSetElement -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.paths.SubtypeStep"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "setElement"),
           Core.fieldTerm = Core.TermUnit}})
-      Paths.SubtypeStepUnionField v0 -> Core.TermUnion (Core.Injection {
+      Paths.SubtypeStepUnionField v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.paths.SubtypeStep"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "unionField"),
           Core.fieldTerm = (Core_.name v0)}})
-      Paths.SubtypeStepWrappedType -> Core.TermUnion (Core.Injection {
+      Paths.SubtypeStepWrappedType -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.paths.SubtypeStep"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "wrappedType"),

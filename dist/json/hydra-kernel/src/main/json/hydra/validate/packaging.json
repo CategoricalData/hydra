@@ -167,7 +167,7 @@
                                                                                             "@first": {"variable": "seen"},
                                                                                             "@second": {
                                                                                               "maybe": {
-                                                                                                "union": {
+                                                                                                "inject": {
                                                                                                   "field": {
                                                                                                     "name": "conflictingModuleNamespace",
                                                                                                     "term": {
@@ -539,7 +539,7 @@
                                                                                                                                                   "application": {
                                                                                                                                                     "argument": {
                                                                                                                                                       "maybe": {
-                                                                                                                                                        "union": {
+                                                                                                                                                        "inject": {
                                                                                                                                                           "field": {
                                                                                                                                                             "name": "conflictingVariantName",
                                                                                                                                                             "term": {
@@ -759,7 +759,7 @@
                                                                       "application": {
                                                                         "argument": {
                                                                           "maybe": {
-                                                                            "union": {
+                                                                            "inject": {
                                                                               "field": {
                                                                                 "name": "definitionNotInModuleNamespace",
                                                                                 "term": {
@@ -970,7 +970,7 @@
                                                                                         "@first": {"variable": "seen"},
                                                                                         "@second": {
                                                                                           "maybe": {
-                                                                                            "union": {
+                                                                                            "inject": {
                                                                                               "field": {
                                                                                                 "name": "duplicateDefinitionName",
                                                                                                 "term": {
@@ -1194,7 +1194,7 @@
                                                                                     "@first": {"variable": "seen"},
                                                                                     "@second": {
                                                                                       "maybe": {
-                                                                                        "union": {
+                                                                                        "inject": {
                                                                                           "field": {
                                                                                             "name": "duplicateModuleNamespace",
                                                                                             "term": {
@@ -1508,7 +1508,7 @@
                                                                             "argument": {
                                                                               "lambda": {
                                                                                 "body": {
-                                                                                  "union": {
+                                                                                  "inject": {
                                                                                     "field": {"name": "invalidModule", "term": {"variable": "err"}},
                                                                                     "typeName": "hydra.error.packaging.InvalidPackageError"}},
                                                                                 "domain": {"variable": "hydra.error.packaging.InvalidModuleError"},

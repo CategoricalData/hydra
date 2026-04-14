@@ -745,7 +745,7 @@ public interface Coder {
       }
 
       @Override
-      public hydra.util.Either<T2, hydra.lisp.syntax.Expression> visit(hydra.core.Term.Union inj) {
+      public hydra.util.Either<T2, hydra.lisp.syntax.Expression> visit(hydra.core.Term.Inject inj) {
         hydra.core.Field field = (inj).value.field;
         hydra.core.Term fterm = (field).term;
         hydra.core.Term dterm = hydra.Strip.deannotateTerm(fterm);

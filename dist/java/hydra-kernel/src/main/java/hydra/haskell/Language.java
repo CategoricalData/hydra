@@ -46,7 +46,7 @@ public interface Language {
       new hydra.variants.TermVariant.Set(),
       new hydra.variants.TermVariant.TypeApplication(),
       new hydra.variants.TermVariant.TypeLambda(),
-      new hydra.variants.TermVariant.Union(),
+      new hydra.variants.TermVariant.Inject(),
       new hydra.variants.TermVariant.Unit(),
       new hydra.variants.TermVariant.Unwrap(),
       new hydra.variants.TermVariant.Variable(),

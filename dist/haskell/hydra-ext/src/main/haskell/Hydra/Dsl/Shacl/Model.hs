@@ -73,7 +73,7 @@ closedWithIsClosed original newVal =
 
 commonConstraintAnd :: Phantoms.TTerm (S.Set (Model.Reference Model.Shape)) -> Phantoms.TTerm Model.CommonConstraint
 commonConstraintAnd x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shacl.model.CommonConstraint"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "and"),
@@ -81,7 +81,7 @@ commonConstraintAnd x =
 
 commonConstraintClass :: Phantoms.TTerm (S.Set Syntax.RdfsClass) -> Phantoms.TTerm Model.CommonConstraint
 commonConstraintClass x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shacl.model.CommonConstraint"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "class"),
@@ -89,7 +89,7 @@ commonConstraintClass x =
 
 commonConstraintClosed :: Phantoms.TTerm Model.Closed -> Phantoms.TTerm Model.CommonConstraint
 commonConstraintClosed x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shacl.model.CommonConstraint"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "closed"),
@@ -97,7 +97,7 @@ commonConstraintClosed x =
 
 commonConstraintDatatype :: Phantoms.TTerm Syntax.Iri -> Phantoms.TTerm Model.CommonConstraint
 commonConstraintDatatype x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shacl.model.CommonConstraint"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "datatype"),
@@ -105,7 +105,7 @@ commonConstraintDatatype x =
 
 commonConstraintDisjoint :: Phantoms.TTerm (S.Set Syntax.Property) -> Phantoms.TTerm Model.CommonConstraint
 commonConstraintDisjoint x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shacl.model.CommonConstraint"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "disjoint"),
@@ -113,7 +113,7 @@ commonConstraintDisjoint x =
 
 commonConstraintEquals :: Phantoms.TTerm (S.Set Syntax.Property) -> Phantoms.TTerm Model.CommonConstraint
 commonConstraintEquals x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shacl.model.CommonConstraint"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "equals"),
@@ -121,7 +121,7 @@ commonConstraintEquals x =
 
 commonConstraintHasValue :: Phantoms.TTerm (S.Set Syntax.Node) -> Phantoms.TTerm Model.CommonConstraint
 commonConstraintHasValue x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shacl.model.CommonConstraint"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "hasValue"),
@@ -129,7 +129,7 @@ commonConstraintHasValue x =
 
 commonConstraintIn :: Phantoms.TTerm [Syntax.Node] -> Phantoms.TTerm Model.CommonConstraint
 commonConstraintIn x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shacl.model.CommonConstraint"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "in"),
@@ -137,7 +137,7 @@ commonConstraintIn x =
 
 commonConstraintLanguageIn :: Phantoms.TTerm (S.Set Syntax.LanguageTag) -> Phantoms.TTerm Model.CommonConstraint
 commonConstraintLanguageIn x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shacl.model.CommonConstraint"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "languageIn"),
@@ -145,7 +145,7 @@ commonConstraintLanguageIn x =
 
 commonConstraintMaxExclusive :: Phantoms.TTerm Syntax.Literal -> Phantoms.TTerm Model.CommonConstraint
 commonConstraintMaxExclusive x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shacl.model.CommonConstraint"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "maxExclusive"),
@@ -153,7 +153,7 @@ commonConstraintMaxExclusive x =
 
 commonConstraintMaxInclusive :: Phantoms.TTerm Syntax.Literal -> Phantoms.TTerm Model.CommonConstraint
 commonConstraintMaxInclusive x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shacl.model.CommonConstraint"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "maxInclusive"),
@@ -161,7 +161,7 @@ commonConstraintMaxInclusive x =
 
 commonConstraintMaxLength :: Phantoms.TTerm Integer -> Phantoms.TTerm Model.CommonConstraint
 commonConstraintMaxLength x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shacl.model.CommonConstraint"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "maxLength"),
@@ -169,7 +169,7 @@ commonConstraintMaxLength x =
 
 commonConstraintMinExclusive :: Phantoms.TTerm Syntax.Literal -> Phantoms.TTerm Model.CommonConstraint
 commonConstraintMinExclusive x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shacl.model.CommonConstraint"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "minExclusive"),
@@ -177,7 +177,7 @@ commonConstraintMinExclusive x =
 
 commonConstraintMinInclusive :: Phantoms.TTerm Syntax.Literal -> Phantoms.TTerm Model.CommonConstraint
 commonConstraintMinInclusive x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shacl.model.CommonConstraint"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "minInclusive"),
@@ -185,7 +185,7 @@ commonConstraintMinInclusive x =
 
 commonConstraintMinLength :: Phantoms.TTerm Integer -> Phantoms.TTerm Model.CommonConstraint
 commonConstraintMinLength x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shacl.model.CommonConstraint"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "minLength"),
@@ -193,7 +193,7 @@ commonConstraintMinLength x =
 
 commonConstraintNode :: Phantoms.TTerm (S.Set (Model.Reference Model.NodeShape)) -> Phantoms.TTerm Model.CommonConstraint
 commonConstraintNode x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shacl.model.CommonConstraint"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "node"),
@@ -201,7 +201,7 @@ commonConstraintNode x =
 
 commonConstraintNodeKind :: Phantoms.TTerm Model.NodeKind -> Phantoms.TTerm Model.CommonConstraint
 commonConstraintNodeKind x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shacl.model.CommonConstraint"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "nodeKind"),
@@ -209,7 +209,7 @@ commonConstraintNodeKind x =
 
 commonConstraintNot :: Phantoms.TTerm (S.Set (Model.Reference Model.Shape)) -> Phantoms.TTerm Model.CommonConstraint
 commonConstraintNot x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shacl.model.CommonConstraint"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "not"),
@@ -217,7 +217,7 @@ commonConstraintNot x =
 
 commonConstraintOr :: Phantoms.TTerm (S.Set (Model.Reference Model.Shape)) -> Phantoms.TTerm Model.CommonConstraint
 commonConstraintOr x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shacl.model.CommonConstraint"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "or"),
@@ -225,7 +225,7 @@ commonConstraintOr x =
 
 commonConstraintPattern :: Phantoms.TTerm Model.Pattern -> Phantoms.TTerm Model.CommonConstraint
 commonConstraintPattern x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shacl.model.CommonConstraint"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "pattern"),
@@ -233,7 +233,7 @@ commonConstraintPattern x =
 
 commonConstraintProperty :: Phantoms.TTerm (S.Set (Model.Reference Model.PropertyShape)) -> Phantoms.TTerm Model.CommonConstraint
 commonConstraintProperty x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shacl.model.CommonConstraint"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "property"),
@@ -241,7 +241,7 @@ commonConstraintProperty x =
 
 commonConstraintXone :: Phantoms.TTerm (S.Set (Model.Reference Model.Shape)) -> Phantoms.TTerm Model.CommonConstraint
 commonConstraintXone x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shacl.model.CommonConstraint"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "xone"),
@@ -867,7 +867,7 @@ definitionWithTarget original newVal =
 
 nodeKindBlankNode :: Phantoms.TTerm Model.NodeKind
 nodeKindBlankNode =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shacl.model.NodeKind"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "blankNode"),
@@ -875,7 +875,7 @@ nodeKindBlankNode =
 
 nodeKindBlankNodeOrIri :: Phantoms.TTerm Model.NodeKind
 nodeKindBlankNodeOrIri =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shacl.model.NodeKind"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "blankNodeOrIri"),
@@ -883,7 +883,7 @@ nodeKindBlankNodeOrIri =
 
 nodeKindBlankNodeOrLiteral :: Phantoms.TTerm Model.NodeKind
 nodeKindBlankNodeOrLiteral =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shacl.model.NodeKind"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "blankNodeOrLiteral"),
@@ -891,7 +891,7 @@ nodeKindBlankNodeOrLiteral =
 
 nodeKindIri :: Phantoms.TTerm Model.NodeKind
 nodeKindIri =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shacl.model.NodeKind"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "iri"),
@@ -899,7 +899,7 @@ nodeKindIri =
 
 nodeKindIriOrLiteral :: Phantoms.TTerm Model.NodeKind
 nodeKindIriOrLiteral =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shacl.model.NodeKind"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "iriOrLiteral"),
@@ -907,7 +907,7 @@ nodeKindIriOrLiteral =
 
 nodeKindLiteral :: Phantoms.TTerm Model.NodeKind
 nodeKindLiteral =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shacl.model.NodeKind"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "literal"),
@@ -1036,7 +1036,7 @@ propertyShapeCommon x =
 
 propertyShapeConstraintLessThan :: Phantoms.TTerm (S.Set Syntax.Property) -> Phantoms.TTerm Model.PropertyShapeConstraint
 propertyShapeConstraintLessThan x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shacl.model.PropertyShapeConstraint"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "lessThan"),
@@ -1044,7 +1044,7 @@ propertyShapeConstraintLessThan x =
 
 propertyShapeConstraintLessThanOrEquals :: Phantoms.TTerm (S.Set Syntax.Property) -> Phantoms.TTerm Model.PropertyShapeConstraint
 propertyShapeConstraintLessThanOrEquals x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shacl.model.PropertyShapeConstraint"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "lessThanOrEquals"),
@@ -1052,7 +1052,7 @@ propertyShapeConstraintLessThanOrEquals x =
 
 propertyShapeConstraintMaxCount :: Phantoms.TTerm Integer -> Phantoms.TTerm Model.PropertyShapeConstraint
 propertyShapeConstraintMaxCount x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shacl.model.PropertyShapeConstraint"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "maxCount"),
@@ -1060,7 +1060,7 @@ propertyShapeConstraintMaxCount x =
 
 propertyShapeConstraintMinCount :: Phantoms.TTerm Integer -> Phantoms.TTerm Model.PropertyShapeConstraint
 propertyShapeConstraintMinCount x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shacl.model.PropertyShapeConstraint"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "minCount"),
@@ -1068,7 +1068,7 @@ propertyShapeConstraintMinCount x =
 
 propertyShapeConstraintQualifiedValueShape :: Phantoms.TTerm Model.QualifiedValueShape -> Phantoms.TTerm Model.PropertyShapeConstraint
 propertyShapeConstraintQualifiedValueShape x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shacl.model.PropertyShapeConstraint"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "qualifiedValueShape"),
@@ -1076,7 +1076,7 @@ propertyShapeConstraintQualifiedValueShape x =
 
 propertyShapeConstraintUniqueLang :: Phantoms.TTerm Bool -> Phantoms.TTerm Model.PropertyShapeConstraint
 propertyShapeConstraintUniqueLang x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shacl.model.PropertyShapeConstraint"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "uniqueLang"),
@@ -1659,7 +1659,7 @@ qualifiedValueShapeWithQualifiedValueShapesDisjoint original newVal =
 
 referenceAnonymous :: Phantoms.TTerm a -> Phantoms.TTerm (Model.Reference a)
 referenceAnonymous x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shacl.model.Reference"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "anonymous"),
@@ -1667,7 +1667,7 @@ referenceAnonymous x =
 
 referenceDefinition :: Phantoms.TTerm (Model.Definition a) -> Phantoms.TTerm (Model.Reference a)
 referenceDefinition x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shacl.model.Reference"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "definition"),
@@ -1675,7 +1675,7 @@ referenceDefinition x =
 
 referenceNamed :: Phantoms.TTerm Syntax.Iri -> Phantoms.TTerm (Model.Reference a)
 referenceNamed x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shacl.model.Reference"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "named"),
@@ -1683,7 +1683,7 @@ referenceNamed x =
 
 severityInfo :: Phantoms.TTerm Model.Severity
 severityInfo =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shacl.model.Severity"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "info"),
@@ -1691,7 +1691,7 @@ severityInfo =
 
 severityViolation :: Phantoms.TTerm Model.Severity
 severityViolation =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shacl.model.Severity"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "violation"),
@@ -1699,7 +1699,7 @@ severityViolation =
 
 severityWarning :: Phantoms.TTerm Model.Severity
 severityWarning =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shacl.model.Severity"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "warning"),
@@ -1707,7 +1707,7 @@ severityWarning =
 
 shapeNode :: Phantoms.TTerm Model.NodeShape -> Phantoms.TTerm Model.Shape
 shapeNode x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shacl.model.Shape"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "node"),
@@ -1715,7 +1715,7 @@ shapeNode x =
 
 shapeProperty :: Phantoms.TTerm Model.PropertyShape -> Phantoms.TTerm Model.Shape
 shapeProperty x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.shacl.model.Shape"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "property"),

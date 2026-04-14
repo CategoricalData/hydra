@@ -7,7 +7,7 @@
           "annotated": {
             "annotation": [{"@key": "firstClassType", "@value": {"literal": {"boolean": true}}}],
             "body": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "forall",
                   "term": {
@@ -20,7 +20,7 @@
                         {
                           "name": "body",
                           "term": {
-                            "union": {
+                            "inject": {
                               "field": {
                                 "name": "record",
                                 "term": {
@@ -37,7 +37,7 @@
                                           {
                                             "name": "type",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "variable",
                                                   "term": {
@@ -56,11 +56,11 @@
                                           {
                                             "name": "type",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "maybe",
                                                   "term": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {
                                                         "name": "application",
                                                         "term": {
@@ -69,7 +69,7 @@
                                                               {
                                                                 "name": "function",
                                                                 "term": {
-                                                                  "union": {
+                                                                  "inject": {
                                                                     "field": {
                                                                       "name": "variable",
                                                                       "term": {"variable": "hydra.test.testTypes.testTypeBuddyListBName"}},
@@ -77,7 +77,7 @@
                                                               {
                                                                 "name": "argument",
                                                                 "term": {
-                                                                  "union": {
+                                                                  "inject": {
                                                                     "field": {
                                                                       "name": "variable",
                                                                       "term": {
@@ -106,7 +106,7 @@
           "annotated": {
             "annotation": [{"@key": "firstClassType", "@value": {"literal": {"boolean": true}}}],
             "body": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "forall",
                   "term": {
@@ -119,7 +119,7 @@
                         {
                           "name": "body",
                           "term": {
-                            "union": {
+                            "inject": {
                               "field": {
                                 "name": "record",
                                 "term": {
@@ -136,7 +136,7 @@
                                           {
                                             "name": "type",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "variable",
                                                   "term": {
@@ -155,11 +155,11 @@
                                           {
                                             "name": "type",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "maybe",
                                                   "term": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {
                                                         "name": "application",
                                                         "term": {
@@ -168,7 +168,7 @@
                                                               {
                                                                 "name": "function",
                                                                 "term": {
-                                                                  "union": {
+                                                                  "inject": {
                                                                     "field": {
                                                                       "name": "variable",
                                                                       "term": {"variable": "hydra.test.testTypes.testTypeBuddyListAName"}},
@@ -176,7 +176,7 @@
                                                               {
                                                                 "name": "argument",
                                                                 "term": {
-                                                                  "union": {
+                                                                  "inject": {
                                                                     "field": {
                                                                       "name": "variable",
                                                                       "term": {
@@ -205,7 +205,7 @@
           "annotated": {
             "annotation": [{"@key": "firstClassType", "@value": {"literal": {"boolean": true}}}],
             "body": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "union",
                   "term": {
@@ -222,7 +222,7 @@
                             {
                               "name": "type",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {"name": "unit", "term": {"unit": {}}},
                                   "typeName": "hydra.core.Type"}}}],
                           "typeName": "hydra.core.FieldType"}},
@@ -238,7 +238,7 @@
                             {
                               "name": "type",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {"name": "unit", "term": {"unit": {}}},
                                   "typeName": "hydra.core.Type"}}}],
                           "typeName": "hydra.core.FieldType"}},
@@ -254,7 +254,7 @@
                             {
                               "name": "type",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {"name": "unit", "term": {"unit": {}}},
                                   "typeName": "hydra.core.Type"}}}],
                           "typeName": "hydra.core.FieldType"}}]}},
@@ -275,7 +275,7 @@
           "annotated": {
             "annotation": [{"@key": "firstClassType", "@value": {"literal": {"boolean": true}}}],
             "body": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "forall",
                   "term": {
@@ -288,7 +288,7 @@
                         {
                           "name": "body",
                           "term": {
-                            "union": {
+                            "inject": {
                               "field": {
                                 "name": "forall",
                                 "term": {
@@ -301,7 +301,7 @@
                                       {
                                         "name": "body",
                                         "term": {
-                                          "union": {
+                                          "inject": {
                                             "field": {
                                               "name": "union",
                                               "term": {
@@ -318,7 +318,7 @@
                                                         {
                                                           "name": "type",
                                                           "term": {
-                                                            "union": {
+                                                            "inject": {
                                                               "field": {
                                                                 "name": "variable",
                                                                 "term": {
@@ -337,7 +337,7 @@
                                                         {
                                                           "name": "type",
                                                           "term": {
-                                                            "union": {
+                                                            "inject": {
                                                               "field": {
                                                                 "name": "variable",
                                                                 "term": {
@@ -365,7 +365,7 @@
           "annotated": {
             "annotation": [{"@key": "firstClassType", "@value": {"literal": {"boolean": true}}}],
             "body": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "union",
                   "term": {
@@ -382,11 +382,11 @@
                             {
                               "name": "type",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {
                                     "name": "literal",
                                     "term": {
-                                      "union": {
+                                      "inject": {
                                         "field": {"name": "boolean", "term": {"unit": {}}},
                                         "typeName": "hydra.core.LiteralType"}}},
                                   "typeName": "hydra.core.Type"}}}],
@@ -403,11 +403,11 @@
                             {
                               "name": "type",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {
                                     "name": "literal",
                                     "term": {
-                                      "union": {
+                                      "inject": {
                                         "field": {"name": "string", "term": {"unit": {}}},
                                         "typeName": "hydra.core.LiteralType"}}},
                                   "typeName": "hydra.core.Type"}}}],
@@ -429,7 +429,7 @@
           "annotated": {
             "annotation": [{"@key": "firstClassType", "@value": {"literal": {"boolean": true}}}],
             "body": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "union",
                   "term": {
@@ -446,7 +446,7 @@
                             {
                               "name": "type",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {
                                     "name": "variable",
                                     "term": {"variable": "hydra.test.testTypes.testTypeHydraLiteralTypeName"}},
@@ -464,7 +464,7 @@
                             {
                               "name": "type",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {
                                     "name": "variable",
                                     "term": {"variable": "hydra.test.testTypes.testTypeHydraTypeName"}},
@@ -487,7 +487,7 @@
           "annotated": {
             "annotation": [{"@key": "firstClassType", "@value": {"literal": {"boolean": true}}}],
             "body": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "record",
                   "term": {
@@ -504,15 +504,15 @@
                             {
                               "name": "type",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {
                                     "name": "literal",
                                     "term": {
-                                      "union": {
+                                      "inject": {
                                         "field": {
                                           "name": "integer",
                                           "term": {
-                                            "union": {
+                                            "inject": {
                                               "field": {"name": "int32", "term": {"unit": {}}},
                                               "typeName": "hydra.core.IntegerType"}}},
                                         "typeName": "hydra.core.LiteralType"}}},
@@ -530,11 +530,11 @@
                             {
                               "name": "type",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {
                                     "name": "maybe",
                                     "term": {
-                                      "union": {
+                                      "inject": {
                                         "field": {
                                           "name": "variable",
                                           "term": {"variable": "hydra.test.testTypes.testTypeIntListName"}},
@@ -558,7 +558,7 @@
           "annotated": {
             "annotation": [{"@key": "firstClassType", "@value": {"literal": {"boolean": true}}}],
             "body": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "record",
                   "term": {
@@ -575,15 +575,15 @@
                             {
                               "name": "type",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {
                                     "name": "literal",
                                     "term": {
-                                      "union": {
+                                      "inject": {
                                         "field": {
                                           "name": "float",
                                           "term": {
-                                            "union": {
+                                            "inject": {
                                               "field": {"name": "float32", "term": {"unit": {}}},
                                               "typeName": "hydra.core.FloatType"}}},
                                         "typeName": "hydra.core.LiteralType"}}},
@@ -601,15 +601,15 @@
                             {
                               "name": "type",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {
                                     "name": "literal",
                                     "term": {
-                                      "union": {
+                                      "inject": {
                                         "field": {
                                           "name": "float",
                                           "term": {
-                                            "union": {
+                                            "inject": {
                                               "field": {"name": "float32", "term": {"unit": {}}},
                                               "typeName": "hydra.core.FloatType"}}},
                                         "typeName": "hydra.core.LiteralType"}}},
@@ -632,7 +632,7 @@
           "annotated": {
             "annotation": [{"@key": "firstClassType", "@value": {"literal": {"boolean": true}}}],
             "body": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "forall",
                   "term": {
@@ -645,7 +645,7 @@
                         {
                           "name": "body",
                           "term": {
-                            "union": {
+                            "inject": {
                               "field": {
                                 "name": "record",
                                 "term": {
@@ -662,7 +662,7 @@
                                           {
                                             "name": "type",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "variable",
                                                   "term": {
@@ -681,7 +681,7 @@
                                           {
                                             "name": "type",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "variable",
                                                   "term": {
@@ -707,7 +707,7 @@
           "annotated": {
             "annotation": [{"@key": "firstClassType", "@value": {"literal": {"boolean": true}}}],
             "body": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "forall",
                   "term": {
@@ -720,7 +720,7 @@
                         {
                           "name": "body",
                           "term": {
-                            "union": {
+                            "inject": {
                               "field": {
                                 "name": "record",
                                 "term": {
@@ -737,7 +737,7 @@
                                           {
                                             "name": "type",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "variable",
                                                   "term": {
@@ -756,11 +756,11 @@
                                           {
                                             "name": "type",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "maybe",
                                                   "term": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {
                                                         "name": "application",
                                                         "term": {
@@ -769,7 +769,7 @@
                                                               {
                                                                 "name": "function",
                                                                 "term": {
-                                                                  "union": {
+                                                                  "inject": {
                                                                     "field": {
                                                                       "name": "variable",
                                                                       "term": {"variable": "hydra.test.testTypes.testTypeListName"}},
@@ -777,7 +777,7 @@
                                                               {
                                                                 "name": "argument",
                                                                 "term": {
-                                                                  "union": {
+                                                                  "inject": {
                                                                     "field": {
                                                                       "name": "variable",
                                                                       "term": {
@@ -806,7 +806,7 @@
           "annotated": {
             "annotation": [{"@key": "firstClassType", "@value": {"literal": {"boolean": true}}}],
             "body": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "union",
                   "term": {
@@ -823,15 +823,15 @@
                             {
                               "name": "type",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {
                                     "name": "literal",
                                     "term": {
-                                      "union": {
+                                      "inject": {
                                         "field": {
                                           "name": "integer",
                                           "term": {
-                                            "union": {
+                                            "inject": {
                                               "field": {"name": "int32", "term": {"unit": {}}},
                                               "typeName": "hydra.core.IntegerType"}}},
                                         "typeName": "hydra.core.LiteralType"}}},
@@ -849,15 +849,15 @@
                             {
                               "name": "type",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {
                                     "name": "literal",
                                     "term": {
-                                      "union": {
+                                      "inject": {
                                         "field": {
                                           "name": "float",
                                           "term": {
-                                            "union": {
+                                            "inject": {
                                               "field": {"name": "float32", "term": {"unit": {}}},
                                               "typeName": "hydra.core.FloatType"}}},
                                         "typeName": "hydra.core.LiteralType"}}},
@@ -880,7 +880,7 @@
           "annotated": {
             "annotation": [{"@key": "firstClassType", "@value": {"literal": {"boolean": true}}}],
             "body": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "record",
                   "term": {
@@ -897,11 +897,11 @@
                             {
                               "name": "type",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {
                                     "name": "literal",
                                     "term": {
-                                      "union": {
+                                      "inject": {
                                         "field": {"name": "string", "term": {"unit": {}}},
                                         "typeName": "hydra.core.LiteralType"}}},
                                   "typeName": "hydra.core.Type"}}}],
@@ -918,11 +918,11 @@
                             {
                               "name": "type",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {
                                     "name": "literal",
                                     "term": {
-                                      "union": {
+                                      "inject": {
                                         "field": {"name": "string", "term": {"unit": {}}},
                                         "typeName": "hydra.core.LiteralType"}}},
                                   "typeName": "hydra.core.Type"}}}],
@@ -939,15 +939,15 @@
                             {
                               "name": "type",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {
                                     "name": "literal",
                                     "term": {
-                                      "union": {
+                                      "inject": {
                                         "field": {
                                           "name": "integer",
                                           "term": {
-                                            "union": {
+                                            "inject": {
                                               "field": {"name": "int32", "term": {"unit": {}}},
                                               "typeName": "hydra.core.IntegerType"}}},
                                         "typeName": "hydra.core.LiteralType"}}},
@@ -970,7 +970,7 @@
           "annotated": {
             "annotation": [{"@key": "firstClassType", "@value": {"literal": {"boolean": true}}}],
             "body": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "forall",
                   "term": {
@@ -983,7 +983,7 @@
                         {
                           "name": "body",
                           "term": {
-                            "union": {
+                            "inject": {
                               "field": {
                                 "name": "union",
                                 "term": {
@@ -1000,7 +1000,7 @@
                                           {
                                             "name": "type",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "variable",
                                                   "term": {"variable": "hydra.test.testTypes.testTypePersonName"}},
@@ -1018,7 +1018,7 @@
                                           {
                                             "name": "type",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "variable",
                                                   "term": {
@@ -1044,7 +1044,7 @@
           "annotated": {
             "annotation": [{"@key": "firstClassType", "@value": {"literal": {"boolean": true}}}],
             "body": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "forall",
                   "term": {
@@ -1057,15 +1057,15 @@
                         {
                           "name": "body",
                           "term": {
-                            "union": {
+                            "inject": {
                               "field": {
                                 "name": "wrap",
                                 "term": {
-                                  "union": {
+                                  "inject": {
                                     "field": {
                                       "name": "list",
                                       "term": {
-                                        "union": {
+                                        "inject": {
                                           "field": {
                                             "name": "variable",
                                             "term": {
@@ -1091,7 +1091,7 @@
           "annotated": {
             "annotation": [{"@key": "firstClassType", "@value": {"literal": {"boolean": true}}}],
             "body": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "union",
                   "term": {
@@ -1108,15 +1108,15 @@
                             {
                               "name": "type",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {
                                     "name": "literal",
                                     "term": {
-                                      "union": {
+                                      "inject": {
                                         "field": {
                                           "name": "integer",
                                           "term": {
-                                            "union": {
+                                            "inject": {
                                               "field": {"name": "int32", "term": {"unit": {}}},
                                               "typeName": "hydra.core.IntegerType"}}},
                                         "typeName": "hydra.core.LiteralType"}}},
@@ -1134,15 +1134,15 @@
                             {
                               "name": "type",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {
                                     "name": "literal",
                                     "term": {
-                                      "union": {
+                                      "inject": {
                                         "field": {
                                           "name": "float",
                                           "term": {
-                                            "union": {
+                                            "inject": {
                                               "field": {"name": "float32", "term": {"unit": {}}},
                                               "typeName": "hydra.core.FloatType"}}},
                                         "typeName": "hydra.core.LiteralType"}}},
@@ -1165,15 +1165,15 @@
           "annotated": {
             "annotation": [{"@key": "firstClassType", "@value": {"literal": {"boolean": true}}}],
             "body": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "wrap",
                   "term": {
-                    "union": {
+                    "inject": {
                       "field": {
                         "name": "literal",
                         "term": {
-                          "union": {
+                          "inject": {
                             "field": {"name": "string", "term": {"unit": {}}},
                             "typeName": "hydra.core.LiteralType"}}},
                       "typeName": "hydra.core.Type"}}},
@@ -1194,7 +1194,7 @@
           "annotated": {
             "annotation": [{"@key": "firstClassType", "@value": {"literal": {"boolean": true}}}],
             "body": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "forall",
                   "term": {
@@ -1207,7 +1207,7 @@
                         {
                           "name": "body",
                           "term": {
-                            "union": {
+                            "inject": {
                               "field": {
                                 "name": "forall",
                                 "term": {
@@ -1220,11 +1220,11 @@
                                       {
                                         "name": "body",
                                         "term": {
-                                          "union": {
+                                          "inject": {
                                             "field": {
                                               "name": "wrap",
                                               "term": {
-                                                "union": {
+                                                "inject": {
                                                   "field": {
                                                     "name": "application",
                                                     "term": {
@@ -1233,7 +1233,7 @@
                                                           {
                                                             "name": "function",
                                                             "term": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {
                                                                   "name": "application",
                                                                   "term": {
@@ -1242,7 +1242,7 @@
                                                                         {
                                                                           "name": "function",
                                                                           "term": {
-                                                                            "union": {
+                                                                            "inject": {
                                                                               "field": {
                                                                                 "name": "application",
                                                                                 "term": {
@@ -1251,7 +1251,7 @@
                                                                                       {
                                                                                         "name": "function",
                                                                                         "term": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {
                                                                                               "name": "variable",
                                                                                               "term": {"variable": "hydra.test.testTypes.testTypeTripleName"}},
@@ -1259,7 +1259,7 @@
                                                                                       {
                                                                                         "name": "argument",
                                                                                         "term": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {
                                                                                               "name": "variable",
                                                                                               "term": {
@@ -1270,7 +1270,7 @@
                                                                         {
                                                                           "name": "argument",
                                                                           "term": {
-                                                                            "union": {
+                                                                            "inject": {
                                                                               "field": {
                                                                                 "name": "variable",
                                                                                 "term": {
@@ -1281,7 +1281,7 @@
                                                           {
                                                             "name": "argument",
                                                             "term": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {
                                                                   "name": "variable",
                                                                   "term": {
@@ -1310,7 +1310,7 @@
           "annotated": {
             "annotation": [{"@key": "firstClassType", "@value": {"literal": {"boolean": true}}}],
             "body": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "union",
                   "term": {
@@ -1327,15 +1327,15 @@
                             {
                               "name": "type",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {
                                     "name": "literal",
                                     "term": {
-                                      "union": {
+                                      "inject": {
                                         "field": {
                                           "name": "integer",
                                           "term": {
-                                            "union": {
+                                            "inject": {
                                               "field": {"name": "uint64", "term": {"unit": {}}},
                                               "typeName": "hydra.core.IntegerType"}}},
                                         "typeName": "hydra.core.LiteralType"}}},
@@ -1353,11 +1353,11 @@
                             {
                               "name": "type",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {
                                     "name": "literal",
                                     "term": {
-                                      "union": {
+                                      "inject": {
                                         "field": {"name": "string", "term": {"unit": {}}},
                                         "typeName": "hydra.core.LiteralType"}}},
                                   "typeName": "hydra.core.Type"}}}],
@@ -1379,7 +1379,7 @@
           "annotated": {
             "annotation": [{"@key": "firstClassType", "@value": {"literal": {"boolean": true}}}],
             "body": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "forall",
                   "term": {
@@ -1392,7 +1392,7 @@
                         {
                           "name": "body",
                           "term": {
-                            "union": {
+                            "inject": {
                               "field": {
                                 "name": "forall",
                                 "term": {
@@ -1405,7 +1405,7 @@
                                       {
                                         "name": "body",
                                         "term": {
-                                          "union": {
+                                          "inject": {
                                             "field": {
                                               "name": "forall",
                                               "term": {
@@ -1418,7 +1418,7 @@
                                                     {
                                                       "name": "body",
                                                       "term": {
-                                                        "union": {
+                                                        "inject": {
                                                           "field": {
                                                             "name": "record",
                                                             "term": {
@@ -1435,7 +1435,7 @@
                                                                       {
                                                                         "name": "type",
                                                                         "term": {
-                                                                          "union": {
+                                                                          "inject": {
                                                                             "field": {
                                                                               "name": "variable",
                                                                               "term": {
@@ -1454,7 +1454,7 @@
                                                                       {
                                                                         "name": "type",
                                                                         "term": {
-                                                                          "union": {
+                                                                          "inject": {
                                                                             "field": {
                                                                               "name": "variable",
                                                                               "term": {
@@ -1473,7 +1473,7 @@
                                                                       {
                                                                         "name": "type",
                                                                         "term": {
-                                                                          "union": {
+                                                                          "inject": {
                                                                             "field": {
                                                                               "name": "variable",
                                                                               "term": {
@@ -1503,7 +1503,7 @@
           "annotated": {
             "annotation": [{"@key": "firstClassType", "@value": {"literal": {"boolean": true}}}],
             "body": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "union",
                   "term": {
@@ -1520,11 +1520,11 @@
                             {
                               "name": "type",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {
                                     "name": "literal",
                                     "term": {
-                                      "union": {
+                                      "inject": {
                                         "field": {"name": "boolean", "term": {"unit": {}}},
                                         "typeName": "hydra.core.LiteralType"}}},
                                   "typeName": "hydra.core.Type"}}}],
@@ -1541,11 +1541,11 @@
                             {
                               "name": "type",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {
                                     "name": "literal",
                                     "term": {
-                                      "union": {
+                                      "inject": {
                                         "field": {"name": "string", "term": {"unit": {}}},
                                         "typeName": "hydra.core.LiteralType"}}},
                                   "typeName": "hydra.core.Type"}}}],
@@ -1562,7 +1562,7 @@
                             {
                               "name": "type",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {"name": "unit", "term": {"unit": {}}},
                                   "typeName": "hydra.core.Type"}}}],
                           "typeName": "hydra.core.FieldType"}}]}},
@@ -1583,7 +1583,7 @@
           "annotated": {
             "annotation": [{"@key": "firstClassType", "@value": {"literal": {"boolean": true}}}],
             "body": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "forall",
                   "term": {
@@ -1596,7 +1596,7 @@
                         {
                           "name": "body",
                           "term": {
-                            "union": {
+                            "inject": {
                               "field": {
                                 "name": "union",
                                 "term": {
@@ -1613,11 +1613,11 @@
                                           {
                                             "name": "type",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "literal",
                                                   "term": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {"name": "boolean", "term": {"unit": {}}},
                                                       "typeName": "hydra.core.LiteralType"}}},
                                                 "typeName": "hydra.core.Type"}}}],
@@ -1634,7 +1634,7 @@
                                           {
                                             "name": "type",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "variable",
                                                   "term": {
@@ -1653,7 +1653,7 @@
                                           {
                                             "name": "type",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {
                                                   "name": "application",
                                                   "term": {
@@ -1662,7 +1662,7 @@
                                                         {
                                                           "name": "function",
                                                           "term": {
-                                                            "union": {
+                                                            "inject": {
                                                               "field": {
                                                                 "name": "variable",
                                                                 "term": {
@@ -1671,7 +1671,7 @@
                                                         {
                                                           "name": "argument",
                                                           "term": {
-                                                            "union": {
+                                                            "inject": {
                                                               "field": {
                                                                 "name": "variable",
                                                                 "term": {
@@ -1699,7 +1699,7 @@
           "annotated": {
             "annotation": [{"@key": "firstClassType", "@value": {"literal": {"boolean": true}}}],
             "body": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "record",
                   "term": {
@@ -1721,7 +1721,7 @@
           "annotated": {
             "annotation": [{"@key": "firstClassType", "@value": {"literal": {"boolean": true}}}],
             "body": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "function",
                   "term": {
@@ -1730,18 +1730,18 @@
                         {
                           "name": "domain",
                           "term": {
-                            "union": {
+                            "inject": {
                               "field": {
                                 "name": "literal",
                                 "term": {
-                                  "union": {
+                                  "inject": {
                                     "field": {"name": "string", "term": {"unit": {}}},
                                     "typeName": "hydra.core.LiteralType"}}},
                               "typeName": "hydra.core.Type"}}},
                         {
                           "name": "codomain",
                           "term": {
-                            "union": {
+                            "inject": {
                               "field": {
                                 "name": "function",
                                 "term": {
@@ -1750,22 +1750,22 @@
                                       {
                                         "name": "domain",
                                         "term": {
-                                          "union": {
+                                          "inject": {
                                             "field": {
                                               "name": "literal",
                                               "term": {
-                                                "union": {
+                                                "inject": {
                                                   "field": {"name": "string", "term": {"unit": {}}},
                                                   "typeName": "hydra.core.LiteralType"}}},
                                             "typeName": "hydra.core.Type"}}},
                                       {
                                         "name": "codomain",
                                         "term": {
-                                          "union": {
+                                          "inject": {
                                             "field": {
                                               "name": "literal",
                                               "term": {
-                                                "union": {
+                                                "inject": {
                                                   "field": {"name": "string", "term": {"unit": {}}},
                                                   "typeName": "hydra.core.LiteralType"}}},
                                             "typeName": "hydra.core.Type"}}}],
@@ -1781,7 +1781,7 @@
           "annotated": {
             "annotation": [{"@key": "firstClassType", "@value": {"literal": {"boolean": true}}}],
             "body": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "function",
                   "term": {
@@ -1790,22 +1790,22 @@
                         {
                           "name": "domain",
                           "term": {
-                            "union": {
+                            "inject": {
                               "field": {
                                 "name": "literal",
                                 "term": {
-                                  "union": {
+                                  "inject": {
                                     "field": {"name": "string", "term": {"unit": {}}},
                                     "typeName": "hydra.core.LiteralType"}}},
                               "typeName": "hydra.core.Type"}}},
                         {
                           "name": "codomain",
                           "term": {
-                            "union": {
+                            "inject": {
                               "field": {
                                 "name": "literal",
                                 "term": {
-                                  "union": {
+                                  "inject": {
                                     "field": {"name": "string", "term": {"unit": {}}},
                                     "typeName": "hydra.core.LiteralType"}}},
                               "typeName": "hydra.core.Type"}}}],
@@ -1827,7 +1827,7 @@
           "annotated": {
             "annotation": [{"@key": "firstClassType", "@value": {"literal": {"boolean": true}}}],
             "body": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "union",
                   "term": {
@@ -1844,11 +1844,11 @@
                             {
                               "name": "type",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {
                                     "name": "literal",
                                     "term": {
-                                      "union": {
+                                      "inject": {
                                         "field": {"name": "string", "term": {"unit": {}}},
                                         "typeName": "hydra.core.LiteralType"}}},
                                   "typeName": "hydra.core.Type"}}}],
@@ -1865,15 +1865,15 @@
                             {
                               "name": "type",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {
                                     "name": "literal",
                                     "term": {
-                                      "union": {
+                                      "inject": {
                                         "field": {
                                           "name": "integer",
                                           "term": {
-                                            "union": {
+                                            "inject": {
                                               "field": {"name": "int8", "term": {"unit": {}}},
                                               "typeName": "hydra.core.IntegerType"}}},
                                         "typeName": "hydra.core.LiteralType"}}},
@@ -1888,7 +1888,7 @@
           "annotated": {
             "annotation": [{"@key": "firstClassType", "@value": {"literal": {"boolean": true}}}],
             "body": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "function",
                   "term": {
@@ -1897,7 +1897,7 @@
                         {
                           "name": "domain",
                           "term": {
-                            "union": {
+                            "inject": {
                               "field": {
                                 "name": "variable",
                                 "term": {"variable": "hydra.test.testTypes.testTypePersonName"}},
@@ -1905,11 +1905,11 @@
                         {
                           "name": "codomain",
                           "term": {
-                            "union": {
+                            "inject": {
                               "field": {
                                 "name": "literal",
                                 "term": {
-                                  "union": {
+                                  "inject": {
                                     "field": {"name": "string", "term": {"unit": {}}},
                                     "typeName": "hydra.core.LiteralType"}}},
                               "typeName": "hydra.core.Type"}}}],
@@ -1923,19 +1923,19 @@
           "annotated": {
             "annotation": [{"@key": "firstClassType", "@value": {"literal": {"boolean": true}}}],
             "body": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "list",
                   "term": {
-                    "union": {
+                    "inject": {
                       "field": {
                         "name": "literal",
                         "term": {
-                          "union": {
+                          "inject": {
                             "field": {
                               "name": "integer",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {"name": "int8", "term": {"unit": {}}},
                                   "typeName": "hydra.core.IntegerType"}}},
                             "typeName": "hydra.core.LiteralType"}}},
@@ -1949,19 +1949,19 @@
           "annotated": {
             "annotation": [{"@key": "firstClassType", "@value": {"literal": {"boolean": true}}}],
             "body": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "list",
                   "term": {
-                    "union": {
+                    "inject": {
                       "field": {
                         "name": "literal",
                         "term": {
-                          "union": {
+                          "inject": {
                             "field": {
                               "name": "integer",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {"name": "int16", "term": {"unit": {}}},
                                   "typeName": "hydra.core.IntegerType"}}},
                             "typeName": "hydra.core.LiteralType"}}},
@@ -1975,19 +1975,19 @@
           "annotated": {
             "annotation": [{"@key": "firstClassType", "@value": {"literal": {"boolean": true}}}],
             "body": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "list",
                   "term": {
-                    "union": {
+                    "inject": {
                       "field": {
                         "name": "list",
                         "term": {
-                          "union": {
+                          "inject": {
                             "field": {
                               "name": "literal",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {"name": "string", "term": {"unit": {}}},
                                   "typeName": "hydra.core.LiteralType"}}},
                             "typeName": "hydra.core.Type"}}},
@@ -2001,19 +2001,19 @@
           "annotated": {
             "annotation": [{"@key": "firstClassType", "@value": {"literal": {"boolean": true}}}],
             "body": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "list",
                   "term": {
-                    "union": {
+                    "inject": {
                       "field": {
                         "name": "set",
                         "term": {
-                          "union": {
+                          "inject": {
                             "field": {
                               "name": "literal",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {"name": "string", "term": {"unit": {}}},
                                   "typeName": "hydra.core.LiteralType"}}},
                             "typeName": "hydra.core.Type"}}},
@@ -2027,15 +2027,15 @@
           "annotated": {
             "annotation": [{"@key": "firstClassType", "@value": {"literal": {"boolean": true}}}],
             "body": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "list",
                   "term": {
-                    "union": {
+                    "inject": {
                       "field": {
                         "name": "literal",
                         "term": {
-                          "union": {
+                          "inject": {
                             "field": {"name": "string", "term": {"unit": {}}},
                             "typeName": "hydra.core.LiteralType"}}},
                       "typeName": "hydra.core.Type"}}},
@@ -2048,7 +2048,7 @@
           "annotated": {
             "annotation": [{"@key": "firstClassType", "@value": {"literal": {"boolean": true}}}],
             "body": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "map",
                   "term": {
@@ -2057,26 +2057,26 @@
                         {
                           "name": "keys",
                           "term": {
-                            "union": {
+                            "inject": {
                               "field": {
                                 "name": "literal",
                                 "term": {
-                                  "union": {
+                                  "inject": {
                                     "field": {"name": "string", "term": {"unit": {}}},
                                     "typeName": "hydra.core.LiteralType"}}},
                               "typeName": "hydra.core.Type"}}},
                         {
                           "name": "values",
                           "term": {
-                            "union": {
+                            "inject": {
                               "field": {
                                 "name": "literal",
                                 "term": {
-                                  "union": {
+                                  "inject": {
                                     "field": {
                                       "name": "integer",
                                       "term": {
-                                        "union": {
+                                        "inject": {
                                           "field": {"name": "int32", "term": {"unit": {}}},
                                           "typeName": "hydra.core.IntegerType"}}},
                                     "typeName": "hydra.core.LiteralType"}}},
@@ -2091,19 +2091,19 @@
           "annotated": {
             "annotation": [{"@key": "firstClassType", "@value": {"literal": {"boolean": true}}}],
             "body": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "maybe",
                   "term": {
-                    "union": {
+                    "inject": {
                       "field": {
                         "name": "literal",
                         "term": {
-                          "union": {
+                          "inject": {
                             "field": {
                               "name": "integer",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {"name": "int8", "term": {"unit": {}}},
                                   "typeName": "hydra.core.IntegerType"}}},
                             "typeName": "hydra.core.LiteralType"}}},
@@ -2117,19 +2117,19 @@
           "annotated": {
             "annotation": [{"@key": "firstClassType", "@value": {"literal": {"boolean": true}}}],
             "body": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "maybe",
                   "term": {
-                    "union": {
+                    "inject": {
                       "field": {
                         "name": "literal",
                         "term": {
-                          "union": {
+                          "inject": {
                             "field": {
                               "name": "integer",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {"name": "int16", "term": {"unit": {}}},
                                   "typeName": "hydra.core.IntegerType"}}},
                             "typeName": "hydra.core.LiteralType"}}},
@@ -2143,15 +2143,15 @@
           "annotated": {
             "annotation": [{"@key": "firstClassType", "@value": {"literal": {"boolean": true}}}],
             "body": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "maybe",
                   "term": {
-                    "union": {
+                    "inject": {
                       "field": {
                         "name": "literal",
                         "term": {
-                          "union": {
+                          "inject": {
                             "field": {"name": "string", "term": {"unit": {}}},
                             "typeName": "hydra.core.LiteralType"}}},
                       "typeName": "hydra.core.Type"}}},
@@ -2164,15 +2164,15 @@
           "annotated": {
             "annotation": [{"@key": "firstClassType", "@value": {"literal": {"boolean": true}}}],
             "body": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "set",
                   "term": {
-                    "union": {
+                    "inject": {
                       "field": {
                         "name": "literal",
                         "term": {
-                          "union": {
+                          "inject": {
                             "field": {"name": "string", "term": {"unit": {}}},
                             "typeName": "hydra.core.LiteralType"}}},
                       "typeName": "hydra.core.Type"}}},
@@ -2193,7 +2193,7 @@
           "annotated": {
             "annotation": [{"@key": "firstClassType", "@value": {"literal": {"boolean": true}}}],
             "body": {
-              "union": {
+              "inject": {
                 "field": {
                   "name": "union",
                   "term": {
@@ -2210,11 +2210,11 @@
                             {
                               "name": "type",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {
                                     "name": "literal",
                                     "term": {
-                                      "union": {
+                                      "inject": {
                                         "field": {"name": "string", "term": {"unit": {}}},
                                         "typeName": "hydra.core.LiteralType"}}},
                                   "typeName": "hydra.core.Type"}}}],
@@ -2231,15 +2231,15 @@
                             {
                               "name": "type",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {
                                     "name": "literal",
                                     "term": {
-                                      "union": {
+                                      "inject": {
                                         "field": {
                                           "name": "integer",
                                           "term": {
-                                            "union": {
+                                            "inject": {
                                               "field": {"name": "int32", "term": {"unit": {}}},
                                               "typeName": "hydra.core.IntegerType"}}},
                                         "typeName": "hydra.core.LiteralType"}}},

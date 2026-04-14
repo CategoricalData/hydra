@@ -151,8 +151,8 @@ def eliminateUnitVar(v: hydra.core.Name)(term0: hydra.core.Term): hydra.core.Ter
     case hydra.core.Term.record(v_Term_record_rec) => hydra.core.Term.record(hydra.core.Record(v_Term_record_rec.typeName,
        hydra.lib.lists.map[hydra.core.Field, hydra.core.Field]((v1: hydra.core.Field) => rewriteField(recurse)(v1))(v_Term_record_rec.fields)))
     case hydra.core.Term.set(v_Term_set_s) => hydra.core.Term.set(hydra.lib.sets.map[hydra.core.Term, hydra.core.Term](recurse)(v_Term_set_s))
-    case hydra.core.Term.union(v_Term_union_inj) => hydra.core.Term.union(hydra.core.Injection(v_Term_union_inj.typeName,
-       rewriteField(recurse)(v_Term_union_inj.field)))
+    case hydra.core.Term.inject(v_Term_inject_inj) => hydra.core.Term.inject(hydra.core.Injection(v_Term_inject_inj.typeName,
+       rewriteField(recurse)(v_Term_inject_inj.field)))
     case hydra.core.Term.maybe(v_Term_maybe_mt) => hydra.core.Term.maybe(hydra.lib.maybes.map[hydra.core.Term, hydra.core.Term](recurse)(v_Term_maybe_mt))
     case hydra.core.Term.pair(v_Term_pair_p) => hydra.core.Term.pair(Tuple2(recurse(hydra.lib.pairs.first[hydra.core.Term,
        hydra.core.Term](v_Term_pair_p)), recurse(hydra.lib.pairs.second[hydra.core.Term, hydra.core.Term](v_Term_pair_p))))
@@ -1212,10 +1212,10 @@ def encodeTermInline(cx: hydra.context.Context)(env: hydra.python.environment.Py
       lazy val body: hydra.core.Term = (v_Term_typeLambda_tl.body)
       hydra.python.coder.withTypeLambda(env)(v_Term_typeLambda_tl)((env2: hydra.python.environment.PythonEnvironment) => hydra.python.coder.encodeTermInline(cx)(env2)(noCast)(body))
     }
-    case hydra.core.Term.union(v_Term_union_inj) => {
-      lazy val tname: hydra.core.Name = (v_Term_union_inj.typeName)
+    case hydra.core.Term.inject(v_Term_inject_inj) => {
+      lazy val tname: hydra.core.Name = (v_Term_inject_inj.typeName)
       {
-        lazy val field: hydra.core.Field = (v_Term_union_inj.field)
+        lazy val field: hydra.core.Field = (v_Term_inject_inj.field)
         hydra.lib.eithers.bind[hydra.errors.Error, Seq[hydra.core.FieldType], hydra.python.syntax.Expression](hydra.resolution.requireUnionType(cx)(hydra.python.coder.pythonEnvironmentGetGraph(env))(tname))((rt: Seq[hydra.core.FieldType]) =>
           hydra.lib.logic.ifElse[Either[hydra.errors.Error, hydra.python.syntax.Expression]](hydra.predicates.isEnumRowType(rt))(Right(hydra.python.utils.projectFromExpression(hydra.python.utils.pyNameToPyExpression(hydra.python.names.encodeNameQualified(env)(tname)))(hydra.python.names.encodeEnumValue(env)(field.name))))({
           lazy val fname: hydra.core.Name = (field.name)
@@ -1788,7 +1788,7 @@ def extendMetaForTerm(topLevel: Boolean)(meta0: hydra.python.environment.PythonM
     case hydra.core.Term.map(v_Term_map__) => hydra.python.coder.setMetaUsesFrozenDict(meta)(true)
     case hydra.core.Term.maybe(v_Term_maybe_m) => hydra.lib.maybes.maybe[hydra.python.environment.PythonModuleMetadata,
        hydra.core.Term](hydra.python.coder.setMetaUsesNothing(meta)(true))((_x: hydra.core.Term) => hydra.python.coder.setMetaUsesJust(meta)(true))(v_Term_maybe_m)
-    case hydra.core.Term.union(v_Term_union__) => hydra.python.coder.setMetaUsesCast(true)(meta)
+    case hydra.core.Term.inject(v_Term_inject__) => hydra.python.coder.setMetaUsesCast(true)(meta)
     case _ => meta
   hydra.rewriting.foldOverTerm(hydra.coders.TraversalOrder.pre)(step)(meta0)(term)
 }

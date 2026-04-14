@@ -466,7 +466,7 @@ public interface Decode {
             ftype,
             jsonVal.get());
           return hydra.lib.eithers.Map.apply(
-            (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (v -> new hydra.core.Term.Union(new hydra.core.Injection(tname, new hydra.core.Field(new hydra.core.Name(key), v)))),
+            (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (v -> new hydra.core.Term.Inject(new hydra.core.Injection(tname, new hydra.core.Field(new hydra.core.Name(key), v)))),
             decoded);
         })));
         java.util.function.Function<String, java.util.function.Function<hydra.util.Maybe<hydra.json.model.Value>, java.util.function.Function<hydra.core.FieldType, hydra.util.Maybe<hydra.util.Either<String, hydra.core.Term>>>>> tryField = (java.util.function.Function<String, java.util.function.Function<hydra.util.Maybe<hydra.json.model.Value>, java.util.function.Function<hydra.core.FieldType, hydra.util.Maybe<hydra.util.Either<String, hydra.core.Term>>>>>) (key -> (java.util.function.Function<hydra.util.Maybe<hydra.json.model.Value>, java.util.function.Function<hydra.core.FieldType, hydra.util.Maybe<hydra.util.Either<String, hydra.core.Term>>>>) (val -> (java.util.function.Function<hydra.core.FieldType, hydra.util.Maybe<hydra.util.Either<String, hydra.core.Term>>>) (ft -> hydra.lib.logic.IfElse.lazy(

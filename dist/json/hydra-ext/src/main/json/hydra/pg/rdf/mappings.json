@@ -70,7 +70,7 @@
                                                               {
                                                                 "name": "edgeShape",
                                                                 "term": {
-                                                                  "union": {
+                                                                  "inject": {
                                                                     "field": {
                                                                       "name": "property",
                                                                       "term": {
@@ -78,7 +78,7 @@
                                                                           "argument": {
                                                                             "typeApplication": {
                                                                               "body": {
-                                                                                "union": {
+                                                                                "inject": {
                                                                                   "field": {
                                                                                     "name": "anonymous",
                                                                                     "term": {
@@ -94,7 +94,7 @@
                                                                                                     "term": {
                                                                                                       "application": {
                                                                                                         "argument": {
-                                                                                                          "union": {
+                                                                                                          "inject": {
                                                                                                             "field": {
                                                                                                               "name": "class",
                                                                                                               "term": {
@@ -120,7 +120,7 @@
                                                                                                   {
                                                                                                     "name": "severity",
                                                                                                     "term": {
-                                                                                                      "union": {
+                                                                                                      "inject": {
                                                                                                         "field": {"name": "violation", "term": {"unit": {}}},
                                                                                                         "typeName": "hydra.shacl.model.Severity"}}},
                                                                                                   {
@@ -324,7 +324,7 @@
                               {
                                 "name": "subj",
                                 "term": {
-                                  "union": {
+                                  "inject": {
                                     "field": {
                                       "name": "iri",
                                       "term": {
@@ -345,7 +345,7 @@
                               {
                                 "name": "obj",
                                 "term": {
-                                  "union": {
+                                  "inject": {
                                     "field": {
                                       "name": "iri",
                                       "term": {
@@ -620,7 +620,7 @@
                               {
                                 "name": "subj",
                                 "term": {
-                                  "union": {
+                                  "inject": {
                                     "field": {
                                       "name": "iri",
                                       "term": {
@@ -641,7 +641,7 @@
                               {
                                 "name": "rtype",
                                 "term": {
-                                  "union": {
+                                  "inject": {
                                     "field": {
                                       "name": "iri",
                                       "term": {
@@ -740,7 +740,7 @@
                                                   {
                                                     "name": "obj",
                                                     "term": {
-                                                      "union": {
+                                                      "inject": {
                                                         "field": {
                                                           "name": "literal",
                                                           "term": {
@@ -1053,7 +1053,7 @@
                                                                                               {
                                                                                                 "name": "severity",
                                                                                                 "term": {
-                                                                                                  "union": {
+                                                                                                  "inject": {
                                                                                                     "field": {"name": "violation", "term": {"unit": {}}},
                                                                                                     "typeName": "hydra.shacl.model.Severity"}}},
                                                                                               {
@@ -1197,7 +1197,7 @@
                                                               {
                                                                 "name": "updatedShape",
                                                                 "term": {
-                                                                  "union": {
+                                                                  "inject": {
                                                                     "field": {
                                                                       "name": "node",
                                                                       "term": {
@@ -1390,7 +1390,7 @@
                                     "term": {
                                       "application": {
                                         "argument": {
-                                          "union": {
+                                          "inject": {
                                             "field": {"name": "datatype", "term": {"variable": "dtIri"}},
                                             "typeName": "hydra.shacl.model.CommonConstraint"}},
                                         "function": {
@@ -1413,7 +1413,7 @@
                                             "argument": {
                                               "application": {
                                                 "argument": {
-                                                  "union": {
+                                                  "inject": {
                                                     "field": {
                                                       "name": "minCount",
                                                       "term": {"literal": {"integer": {"bigint": "1"}}}},
@@ -1451,7 +1451,7 @@
                                               {
                                                 "name": "severity",
                                                 "term": {
-                                                  "union": {
+                                                  "inject": {
                                                     "field": {"name": "violation", "term": {"unit": {}}},
                                                     "typeName": "hydra.shacl.model.Severity"}}},
                                               {
@@ -1605,7 +1605,7 @@
                                                 "argument": {
                                                   "lambda": {
                                                     "body": {
-                                                      "union": {
+                                                      "inject": {
                                                         "field": {
                                                           "name": "property",
                                                           "term": {
@@ -1613,7 +1613,7 @@
                                                               "argument": {
                                                                 "typeApplication": {
                                                                   "body": {
-                                                                    "union": {
+                                                                    "inject": {
                                                                       "field": {
                                                                         "name": "anonymous",
                                                                         "term": {
@@ -1681,7 +1681,7 @@
                                               {
                                                 "name": "severity",
                                                 "term": {
-                                                  "union": {
+                                                  "inject": {
                                                     "field": {"name": "violation", "term": {"unit": {}}},
                                                     "typeName": "hydra.shacl.model.Severity"}}},
                                               {
@@ -1725,7 +1725,7 @@
                                               {
                                                 "name": "target",
                                                 "term": {
-                                                  "union": {
+                                                  "inject": {
                                                     "field": {
                                                       "name": "node",
                                                       "term": {

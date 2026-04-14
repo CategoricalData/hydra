@@ -68,7 +68,7 @@ public interface Model {
         }
 
         @Override
-        public hydra.util.Either<hydra.errors.DecodingError, hydra.pg.model.Direction> visit(hydra.core.Term.Union inj) {
+        public hydra.util.Either<hydra.errors.DecodingError, hydra.pg.model.Direction> visit(hydra.core.Term.Inject inj) {
           hydra.core.Field field = (inj).value.field;
           hydra.core.Name fname = (field).name;
           hydra.core.Term fterm = (field).term;
@@ -285,7 +285,7 @@ public interface Model {
         }
 
         @Override
-        public hydra.util.Either<hydra.errors.DecodingError, hydra.pg.model.Element<T0>> visit(hydra.core.Term.Union inj) {
+        public hydra.util.Either<hydra.errors.DecodingError, hydra.pg.model.Element<T0>> visit(hydra.core.Term.Inject inj) {
           hydra.core.Field field = (inj).value.field;
           hydra.core.Name fname = (field).name;
           hydra.core.Term fterm = (field).term;
@@ -317,7 +317,7 @@ public interface Model {
         }
 
         @Override
-        public hydra.util.Either<hydra.errors.DecodingError, hydra.pg.model.ElementKind> visit(hydra.core.Term.Union inj) {
+        public hydra.util.Either<hydra.errors.DecodingError, hydra.pg.model.ElementKind> visit(hydra.core.Term.Inject inj) {
           hydra.core.Field field = (inj).value.field;
           hydra.core.Name fname = (field).name;
           hydra.core.Term fterm = (field).term;
@@ -399,7 +399,7 @@ public interface Model {
         }
 
         @Override
-        public hydra.util.Either<hydra.errors.DecodingError, hydra.pg.model.ElementType<T0>> visit(hydra.core.Term.Union inj) {
+        public hydra.util.Either<hydra.errors.DecodingError, hydra.pg.model.ElementType<T0>> visit(hydra.core.Term.Inject inj) {
           hydra.core.Field field = (inj).value.field;
           hydra.core.Name fname = (field).name;
           hydra.core.Term fterm = (field).term;
@@ -600,7 +600,7 @@ public interface Model {
         }
 
         @Override
-        public hydra.util.Either<hydra.errors.DecodingError, hydra.pg.model.Label> visit(hydra.core.Term.Union inj) {
+        public hydra.util.Either<hydra.errors.DecodingError, hydra.pg.model.Label> visit(hydra.core.Term.Inject inj) {
           hydra.core.Field field = (inj).value.field;
           hydra.core.Name fname = (field).name;
           hydra.core.Term fterm = (field).term;

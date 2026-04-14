@@ -140,7 +140,7 @@ def schema_graph_to_typing_environment(g: hydra.graph.Graph) -> Either[hydra.err
                 case hydra.core.TermRecord(value=r):
                     return hydra.lib.logic.if_else(hydra.lib.equality.equal(r.type_name, hydra.core.Name("hydra.core.TypeScheme")), (lambda : hydra.lib.eithers.map((lambda x1: hydra.lib.maybes.pure(x1)), decode_type_scheme(el.term))), (lambda : Right(Nothing())))
 
-                case hydra.core.TermUnion(value=i):
+                case hydra.core.TermInject(value=i):
                     return hydra.lib.logic.if_else(hydra.lib.equality.equal(i.type_name, hydra.core.Name("hydra.core.Type")), (lambda : hydra.lib.eithers.map((lambda decoded: Just(to_type_scheme((), decoded))), decode_type(el.term))), (lambda : Right(Nothing())))
 
                 case _:

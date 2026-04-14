@@ -186,12 +186,12 @@ enumAdapter cx typ mName annotations fieldTypes env0 =
                     Coders.adapterTarget = avroSchema,
                     Coders.adapterCoder = Coders.Coder {
                       Coders.coderEncode = (\cx1 -> \t -> case t of
-                        Core.TermUnion v0 ->
+                        Core.TermInject v0 ->
                           let fname = Core.injectionField v0
                           in (Right (Model.ValueString (localName (Core.fieldName fname))))
                         _ -> err cx1 "expected union term for enum"),
                       Coders.coderDecode = (\_cx -> \j -> case j of
-                        Model.ValueString v0 -> Right (Core.TermUnion (Core.Injection {
+                        Model.ValueString v0 -> Right (Core.TermInject (Core.Injection {
                           Core.injectionTypeName = typeName,
                           Core.injectionField = Core.Field {
                             Core.fieldName = (Core.Name v0),
@@ -530,7 +530,7 @@ unionAsRecordAdapter cx typ mName annotations fieldTypes env0 =
                     Coders.adapterTarget = avroSchema,
                     Coders.adapterCoder = Coders.Coder {
                       Coders.coderEncode = (\cx1 -> \t -> case t of
-                        Core.TermUnion v0 ->
+                        Core.TermInject v0 ->
                           let activeName = Core.fieldName (Core.injectionField v0)
                               activeValue = Core.fieldTerm (Core.injectionField v0)
                               encodePair =
@@ -551,7 +551,7 @@ unionAsRecordAdapter cx typ mName annotations fieldTypes env0 =
                                         mjv = Maps.lookup (localName fname) v0
                                     in (Maybes.maybe (findActive rest_) (\jv -> case jv of
                                       Model.ValueNull -> findActive rest_
-                                      _ -> Eithers.map (\t -> Core.TermUnion (Core.Injection {
+                                      _ -> Eithers.map (\t -> Core.TermInject (Core.Injection {
                                         Core.injectionTypeName = typeName,
                                         Core.injectionField = Core.Field {
                                           Core.fieldName = fname,

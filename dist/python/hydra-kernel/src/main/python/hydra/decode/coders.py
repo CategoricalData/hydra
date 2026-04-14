@@ -19,7 +19,7 @@ import hydra.lib.strings
 def coder_direction(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_coders_coder_direction_1(cx, v1):
         match v1:
-            case hydra.core.TermUnion(value=inj):
+            case hydra.core.TermInject(value=inj):
                 field = inj.field
                 fname = field.name
                 fterm = field.term
@@ -59,7 +59,7 @@ def language_name(cx: hydra.graph.Graph, raw: hydra.core.Term):
 def traversal_order(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_coders_traversal_order_1(cx, v1):
         match v1:
-            case hydra.core.TermUnion(value=inj):
+            case hydra.core.TermInject(value=inj):
                 field = inj.field
                 fname = field.name
                 fterm = field.term

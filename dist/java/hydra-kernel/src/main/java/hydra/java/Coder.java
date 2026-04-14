@@ -2226,7 +2226,7 @@ public interface Coder {
       }
 
       @Override
-      public hydra.util.Maybe<hydra.core.Type> visit(hydra.core.Term.Union inj) {
+      public hydra.util.Maybe<hydra.core.Type> visit(hydra.core.Term.Inject inj) {
         return hydra.lib.logic.IfElse.lazy(
           hydra.lib.equality.Equal.apply(
             (inj).value.typeName,
@@ -2364,7 +2364,7 @@ public interface Coder {
                           }
 
                           @Override
-                          public hydra.util.Maybe<hydra.core.Type> visit(hydra.core.Term.Union litInj) {
+                          public hydra.util.Maybe<hydra.core.Type> visit(hydra.core.Term.Inject litInj) {
                             return hydra.lib.logic.IfElse.lazy(
                               hydra.lib.equality.Equal.apply(
                                 (litInj).value.field.name.value,
@@ -4838,7 +4838,7 @@ public interface Coder {
       }
 
       @Override
-      public hydra.util.Either<hydra.errors.Error_, hydra.java.syntax.Expression> visit(hydra.core.Term.Union inj) {
+      public hydra.util.Either<hydra.errors.Error_, hydra.java.syntax.Expression> visit(hydra.core.Term.Inject inj) {
         hydra.core.Field injField = (inj).value.field;
         hydra.core.Name injFieldName = (injField).name;
         hydra.core.Name injTypeName = (inj).value.typeName;

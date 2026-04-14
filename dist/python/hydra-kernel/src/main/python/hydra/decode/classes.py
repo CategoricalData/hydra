@@ -19,7 +19,7 @@ import hydra.lib.strings
 def type_class(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_classes_type_class_1(cx, v1):
         match v1:
-            case hydra.core.TermUnion(value=inj):
+            case hydra.core.TermInject(value=inj):
                 field = inj.field
                 fname = field.name
                 fterm = field.term

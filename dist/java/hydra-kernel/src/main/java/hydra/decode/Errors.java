@@ -68,7 +68,7 @@ public interface Errors {
         }
 
         @Override
-        public hydra.util.Either<hydra.errors.DecodingError, hydra.errors.Error_> visit(hydra.core.Term.Union inj) {
+        public hydra.util.Either<hydra.errors.DecodingError, hydra.errors.Error_> visit(hydra.core.Term.Inject inj) {
           hydra.core.Field field = (inj).value.field;
           hydra.core.Name fname = (field).name;
           hydra.core.Term fterm = (field).term;
@@ -169,7 +169,7 @@ public interface Errors {
         }
 
         @Override
-        public hydra.util.Either<hydra.errors.DecodingError, hydra.errors.ExtractionError> visit(hydra.core.Term.Union inj) {
+        public hydra.util.Either<hydra.errors.DecodingError, hydra.errors.ExtractionError> visit(hydra.core.Term.Inject inj) {
           hydra.core.Field field = (inj).value.field;
           hydra.core.Name fname = (field).name;
           hydra.core.Term fterm = (field).term;
@@ -235,7 +235,7 @@ public interface Errors {
         }
 
         @Override
-        public hydra.util.Either<hydra.errors.DecodingError, hydra.errors.InferenceError> visit(hydra.core.Term.Union inj) {
+        public hydra.util.Either<hydra.errors.DecodingError, hydra.errors.InferenceError> visit(hydra.core.Term.Inject inj) {
           hydra.core.Field field = (inj).value.field;
           hydra.core.Name fname = (field).name;
           hydra.core.Term fterm = (field).term;
@@ -578,7 +578,7 @@ public interface Errors {
         }
 
         @Override
-        public hydra.util.Either<hydra.errors.DecodingError, hydra.errors.ResolutionError> visit(hydra.core.Term.Union inj) {
+        public hydra.util.Either<hydra.errors.DecodingError, hydra.errors.ResolutionError> visit(hydra.core.Term.Inject inj) {
           hydra.core.Field field = (inj).value.field;
           hydra.core.Name fname = (field).name;
           hydra.core.Term fterm = (field).term;

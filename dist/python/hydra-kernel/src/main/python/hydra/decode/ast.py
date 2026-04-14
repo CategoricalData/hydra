@@ -19,7 +19,7 @@ import hydra.lib.strings
 def associativity(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_ast_associativity_1(cx, v1):
         match v1:
-            case hydra.core.TermUnion(value=inj):
+            case hydra.core.TermInject(value=inj):
                 field = inj.field
                 fname = field.name
                 fterm = field.term
@@ -127,7 +127,7 @@ def brackets(cx: hydra.graph.Graph, raw: hydra.core.Term):
 def indent_style(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_ast_indent_style_1(cx, v1):
         match v1:
-            case hydra.core.TermUnion(value=inj):
+            case hydra.core.TermInject(value=inj):
                 field = inj.field
                 fname = field.name
                 fterm = field.term
@@ -171,7 +171,7 @@ def indent_style(cx: hydra.graph.Graph, raw: hydra.core.Term):
 def ws(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_ast_ws_1(cx, v1):
         match v1:
-            case hydra.core.TermUnion(value=inj):
+            case hydra.core.TermInject(value=inj):
                 field = inj.field
                 fname = field.name
                 fterm = field.term
@@ -271,7 +271,7 @@ def bracket_expr(cx: hydra.graph.Graph, raw: hydra.core.Term):
 def expr(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_ast_expr_1(cx, v1):
         match v1:
-            case hydra.core.TermUnion(value=inj):
+            case hydra.core.TermInject(value=inj):
                 field = inj.field
                 fname = field.name
                 fterm = field.term

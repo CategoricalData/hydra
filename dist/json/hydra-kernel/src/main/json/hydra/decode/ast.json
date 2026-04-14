@@ -27,7 +27,7 @@
                                   "cases": {
                                     "cases": [
                                       {
-                                        "name": "union",
+                                        "name": "inject",
                                         "term": {
                                           "lambda": {
                                             "body": {
@@ -100,7 +100,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "none", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.ast.Associativity"}},
                                                                                         "domain": {"unit": {}},
@@ -163,7 +163,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "left", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.ast.Associativity"}},
                                                                                         "domain": {"unit": {}},
@@ -226,7 +226,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "right", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.ast.Associativity"}},
                                                                                         "domain": {"unit": {}},
@@ -289,7 +289,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "both", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.ast.Associativity"}},
                                                                                         "domain": {"unit": {}},
@@ -1499,7 +1499,7 @@
                                   "cases": {
                                     "cases": [
                                       {
-                                        "name": "union",
+                                        "name": "inject",
                                         "term": {
                                           "lambda": {
                                             "body": {
@@ -1558,7 +1558,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "const", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.ast.Expr"}},
                                                                                         "domain": {"variable": "hydra.ast.Symbol"},
@@ -1609,7 +1609,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "indent", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.ast.Expr"}},
                                                                                         "domain": {"variable": "hydra.ast.IndentedExpression"},
@@ -1658,7 +1658,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "op", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.ast.Expr"}},
                                                                                         "domain": {"variable": "hydra.ast.OpExpr"},
@@ -1709,7 +1709,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "brackets", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.ast.Expr"}},
                                                                                         "domain": {"variable": "hydra.ast.BracketExpr"},
@@ -1760,7 +1760,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "seq", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.ast.Expr"}},
                                                                                         "domain": {"variable": "hydra.ast.SeqExpr"},
@@ -2169,7 +2169,7 @@
                                   "cases": {
                                     "cases": [
                                       {
-                                        "name": "union",
+                                        "name": "inject",
                                         "term": {
                                           "lambda": {
                                             "body": {
@@ -2333,7 +2333,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "allLines", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.ast.IndentStyle"}},
                                                                                         "domain": {"literal": {"string": {}}},
@@ -2489,7 +2489,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "subsequentLines", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.ast.IndentStyle"}},
                                                                                         "domain": {"literal": {"string": {}}},
@@ -4086,7 +4086,7 @@
                                   "cases": {
                                     "cases": [
                                       {
-                                        "name": "union",
+                                        "name": "inject",
                                         "term": {
                                           "lambda": {
                                             "body": {
@@ -4159,7 +4159,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "none", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.ast.Ws"}},
                                                                                         "domain": {"unit": {}},
@@ -4222,7 +4222,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "space", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.ast.Ws"}},
                                                                                         "domain": {"unit": {}},
@@ -4285,7 +4285,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "break", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.ast.Ws"}},
                                                                                         "domain": {"unit": {}},
@@ -4439,7 +4439,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "breakAndIndent", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.ast.Ws"}},
                                                                                         "domain": {"literal": {"string": {}}},
@@ -4504,7 +4504,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "doubleBreak", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.ast.Ws"}},
                                                                                         "domain": {"unit": {}},

@@ -471,7 +471,7 @@ inferTypeOfInjection fcx cx injection =
               iterm = Typing_.inferenceResultTerm result
               ityp = Typing_.inferenceResultType result
               isubst = Typing_.inferenceResultSubst result
-          in (Eithers.bind (Core_.unionType tname stype) (\sfields -> Eithers.bind (Resolution.findFieldType fcx3 fname sfields) (\ftyp -> Eithers.bind (mapConstraints fcx3 cx (\subst -> yield fcx3 (buildTypeApplicationTerm svars (Core.TermUnion (Core.Injection {
+          in (Eithers.bind (Core_.unionType tname stype) (\sfields -> Eithers.bind (Resolution.findFieldType fcx3 fname sfields) (\ftyp -> Eithers.bind (mapConstraints fcx3 cx (\subst -> yield fcx3 (buildTypeApplicationTerm svars (Core.TermInject (Core.Injection {
             Core.injectionTypeName = tname,
             Core.injectionField = Core.Field {
               Core.fieldName = fname,
@@ -874,7 +874,7 @@ inferTypeOfTerm fcx cx term desc =
         Core.TermSet v0 -> inferTypeOfSet fcx2 cx v0
         Core.TermTypeApplication v0 -> inferTypeOfTypeApplication fcx2 cx v0
         Core.TermTypeLambda v0 -> inferTypeOfTypeLambda fcx2 cx v0
-        Core.TermUnion v0 -> inferTypeOfInjection fcx2 cx v0
+        Core.TermInject v0 -> inferTypeOfInjection fcx2 cx v0
         Core.TermUnit -> Right (inferTypeOfUnit fcx2)
         Core.TermUnwrap v0 -> inferTypeOfUnwrap fcx2 cx v0
         Core.TermVariable v0 -> inferTypeOfVariable fcx2 cx v0

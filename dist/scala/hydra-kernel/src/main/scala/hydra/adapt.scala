@@ -578,7 +578,7 @@ def pushTypeAppsInward(term: hydra.core.Term): hydra.core.Term =
       }
       case hydra.core.Term.typeLambda(v_Term_typeLambda_ta) => hydra.core.Term.typeLambda(hydra.core.TypeLambda(v_Term_typeLambda_ta.parameter,
          go(v_Term_typeLambda_ta.body)))
-      case hydra.core.Term.union(v_Term_union_i) => hydra.core.Term.union(hydra.core.Injection(v_Term_union_i.typeName, forField(v_Term_union_i.field)))
+      case hydra.core.Term.inject(v_Term_inject_i) => hydra.core.Term.inject(hydra.core.Injection(v_Term_inject_i.typeName, forField(v_Term_inject_i.field)))
       case hydra.core.Term.unit => hydra.core.Term.unit
       case hydra.core.Term.unwrap(v_Term_unwrap_n) => hydra.core.Term.unwrap(v_Term_unwrap_n)
       case hydra.core.Term.variable(v_Term_variable_v) => hydra.core.Term.variable(v_Term_variable_v)
@@ -637,10 +637,10 @@ def termAlternatives[T0](cx: T0)(graph: hydra.graph.Graph)(term: hydra.core.Term
     lazy val term2: hydra.core.Term = (v_Term_typeApplication_ta.body)
     Right(Seq(term2))
   }
-  case hydra.core.Term.union(v_Term_union_inj) => {
-    lazy val tname: hydra.core.Name = (v_Term_union_inj.typeName)
+  case hydra.core.Term.inject(v_Term_inject_inj) => {
+    lazy val tname: hydra.core.Name = (v_Term_inject_inj.typeName)
     {
-      lazy val field: hydra.core.Field = (v_Term_union_inj.field)
+      lazy val field: hydra.core.Field = (v_Term_inject_inj.field)
       {
         lazy val fname: hydra.core.Name = (field.name)
         {

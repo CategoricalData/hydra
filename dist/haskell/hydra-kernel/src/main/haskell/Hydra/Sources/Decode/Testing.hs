@@ -153,7 +153,7 @@ module_ =
                           Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected union"))}))))),
                         Core.caseStatementCases = [
                           Core.Field {
-                            Core.fieldName = (Core.Name "union"),
+                            Core.fieldName = (Core.Name "inject"),
                             Core.fieldTerm = (Core.TermLambda (Core.Lambda {
                               Core.lambdaParameter = (Core.Name "inj"),
                               Core.lambdaDomain = Nothing,
@@ -199,7 +199,7 @@ module_ =
                                               Core.applicationArgument = (Core.TermLambda (Core.Lambda {
                                                 Core.lambdaParameter = (Core.Name "t"),
                                                 Core.lambdaDomain = Nothing,
-                                                Core.lambdaBody = (Core.TermUnion (Core.Injection {
+                                                Core.lambdaBody = (Core.TermInject (Core.Injection {
                                                   Core.injectionTypeName = (Core.Name "hydra.testing.TestCase"),
                                                   Core.injectionField = Core.Field {
                                                     Core.fieldName = (Core.Name "universal"),

@@ -205,7 +205,7 @@
                     "body": {
                       "lambda": {
                         "body": {
-                          "union": {
+                          "inject": {
                             "field": {
                               "name": "application",
                               "term": {
@@ -214,7 +214,7 @@
                                     {
                                       "name": "function",
                                       "term": {
-                                        "union": {
+                                        "inject": {
                                           "field": {
                                             "name": "application",
                                             "term": {
@@ -223,7 +223,7 @@
                                                   {
                                                     "name": "function",
                                                     "term": {
-                                                      "union": {
+                                                      "inject": {
                                                         "field": {
                                                           "name": "application",
                                                           "term": {
@@ -232,7 +232,7 @@
                                                                 {
                                                                   "name": "function",
                                                                   "term": {
-                                                                    "union": {
+                                                                    "inject": {
                                                                       "field": {
                                                                         "name": "variable",
                                                                         "term": {
@@ -259,11 +259,11 @@
                                     {
                                       "name": "argument",
                                       "term": {
-                                        "union": {
+                                        "inject": {
                                           "field": {
                                             "name": "literal",
                                             "term": {
-                                              "union": {
+                                              "inject": {
                                                 "field": {"name": "string", "term": {"variable": "input_"}},
                                                 "typeName": "hydra.core.Literal"}}},
                                           "typeName": "hydra.core.Term"}}}],
@@ -300,9 +300,9 @@
             "body": {
               "lambda": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
-                      "name": "union",
+                      "name": "inject",
                       "term": {
                         "record": {
                           "fields": [
@@ -369,7 +369,7 @@
                                     {
                                       "name": "term",
                                       "term": {
-                                        "union": {
+                                        "inject": {
                                           "field": {"name": "unit", "term": {"unit": {}}},
                                           "typeName": "hydra.core.Term"}}}],
                                   "typeName": "hydra.core.Field"}}}],
@@ -553,7 +553,7 @@
             "body": {
               "lambda": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "application",
                       "term": {
@@ -562,7 +562,7 @@
                             {
                               "name": "function",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {
                                     "name": "variable",
                                     "term": {
@@ -608,7 +608,7 @@
             "body": {
               "lambda": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "application",
                       "term": {
@@ -617,7 +617,7 @@
                             {
                               "name": "function",
                               "term": {
-                                "union": {
+                                "inject": {
                                   "field": {
                                     "name": "variable",
                                     "term": {
@@ -661,7 +661,7 @@
             "body": {
               "lambda": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "list",
                       "term": {
@@ -672,7 +672,7 @@
                               "argument": {
                                 "lambda": {
                                   "body": {
-                                    "union": {
+                                    "inject": {
                                       "field": {
                                         "name": "pair",
                                         "term": {
@@ -695,7 +695,7 @@
                                                                 "type": {"list": {"literal": {"integer": {"int32": {}}}}}}}}},
                                                         "function": {"variable": "hydra.test.transform.encodeInt"}}},
                                                     "@second": {
-                                                      "union": {
+                                                      "inject": {
                                                         "field": {
                                                           "name": "list",
                                                           "term": {
@@ -775,15 +775,15 @@
             "body": {
               "lambda": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "literal",
                       "term": {
-                        "union": {
+                        "inject": {
                           "field": {
                             "name": "integer",
                             "term": {
-                              "union": {
+                              "inject": {
                                 "field": {"name": "int32", "term": {"variable": "n"}},
                                 "typeName": "hydra.core.IntegerValue"}}},
                           "typeName": "hydra.core.Literal"}}},
@@ -808,7 +808,7 @@
             "body": {
               "lambda": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "either",
                       "term": {
@@ -874,7 +874,7 @@
             "body": {
               "lambda": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "list",
                       "term": {
@@ -918,7 +918,7 @@
             "body": {
               "lambda": {
                 "body": {
-                  "union": {
+                  "inject": {
                     "field": {
                       "name": "list",
                       "term": {

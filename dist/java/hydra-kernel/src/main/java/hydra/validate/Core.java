@@ -262,7 +262,7 @@ public interface Core {
       }
 
       @Override
-      public hydra.util.Maybe<hydra.error.core.InvalidTermError> visit(hydra.core.Term.Union inj) {
+      public hydra.util.Maybe<hydra.error.core.InvalidTermError> visit(hydra.core.Term.Inject inj) {
         hydra.core.Name tname = (inj).value.typeName;
         return hydra.lib.logic.IfElse.lazy(
           hydra.lib.equality.Equal.apply(

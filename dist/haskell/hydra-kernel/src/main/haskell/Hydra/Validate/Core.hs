@@ -130,7 +130,7 @@ checkTerm typed path cx term =
           (Logic.ifElse typed (firstError (Lists.map (\b -> Maybes.cases (Core.bindingType b) Nothing (\ts -> checkUndefinedTypeVariablesInTypeScheme path cx ts (\uvName -> Just (Core_.InvalidTermErrorUndefinedTypeVariableInBindingType (Core_.UndefinedTypeVariableInBindingTypeError {
             Core_.undefinedTypeVariableInBindingTypeErrorLocation = path,
             Core_.undefinedTypeVariableInBindingTypeErrorName = uvName}))))) bindings)) Nothing)])
-      Core.TermUnion v0 ->
+      Core.TermInject v0 ->
         let tname = Core.injectionTypeName v0
         in (Logic.ifElse (Equality.equal (Core.unName tname) "") (Just (Core_.InvalidTermErrorEmptyTypeNameInTerm (Core_.EmptyTypeNameInTermError {
           Core_.emptyTypeNameInTermErrorLocation = path}))) Nothing)

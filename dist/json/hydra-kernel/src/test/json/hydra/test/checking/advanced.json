@@ -86,7 +86,7 @@
                           {
                             "name": "case",
                             "term": {
-                              "union": {
+                              "inject": {
                                 "field": {
                                   "name": "universal",
                                   "term": {
@@ -99,7 +99,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {
                                                         "name": "annotated",
                                                         "term": {
@@ -108,15 +108,15 @@
                                                               {
                                                                 "name": "body",
                                                                 "term": {
-                                                                  "union": {
+                                                                  "inject": {
                                                                     "field": {
                                                                       "name": "literal",
                                                                       "term": {
-                                                                        "union": {
+                                                                        "inject": {
                                                                           "field": {
                                                                             "name": "integer",
                                                                             "term": {
-                                                                              "union": {
+                                                                              "inject": {
                                                                                 "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 42}}}},
                                                                                 "typeName": "hydra.core.IntegerValue"}}},
                                                                           "typeName": "hydra.core.Literal"}}},
@@ -205,15 +205,15 @@
                                           "term": {
                                             "application": {
                                               "argument": {
-                                                "union": {
+                                                "inject": {
                                                   "field": {
                                                     "name": "literal",
                                                     "term": {
-                                                      "union": {
+                                                      "inject": {
                                                         "field": {
                                                           "name": "integer",
                                                           "term": {
-                                                            "union": {
+                                                            "inject": {
                                                               "field": {"name": "int32", "term": {"unit": {}}},
                                                               "typeName": "hydra.core.IntegerType"}}},
                                                         "typeName": "hydra.core.LiteralType"}}},
@@ -237,7 +237,7 @@
                           {
                             "name": "case",
                             "term": {
-                              "union": {
+                              "inject": {
                                 "field": {
                                   "name": "universal",
                                   "term": {
@@ -250,7 +250,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {
                                                         "name": "annotated",
                                                         "term": {
@@ -259,26 +259,26 @@
                                                               {
                                                                 "name": "body",
                                                                 "term": {
-                                                                  "union": {
+                                                                  "inject": {
                                                                     "field": {
                                                                       "name": "list",
                                                                       "term": {
                                                                         "list": [
                                                                           {
-                                                                            "union": {
+                                                                            "inject": {
                                                                               "field": {
                                                                                 "name": "literal",
                                                                                 "term": {
-                                                                                  "union": {
+                                                                                  "inject": {
                                                                                     "field": {"name": "string", "term": {"literal": {"string": "a"}}},
                                                                                     "typeName": "hydra.core.Literal"}}},
                                                                               "typeName": "hydra.core.Term"}},
                                                                           {
-                                                                            "union": {
+                                                                            "inject": {
                                                                               "field": {
                                                                                 "name": "literal",
                                                                                 "term": {
-                                                                                  "union": {
+                                                                                  "inject": {
                                                                                     "field": {"name": "string", "term": {"literal": {"string": "b"}}},
                                                                                     "typeName": "hydra.core.Literal"}}},
                                                                               "typeName": "hydra.core.Term"}}]}},
@@ -367,15 +367,15 @@
                                           "term": {
                                             "application": {
                                               "argument": {
-                                                "union": {
+                                                "inject": {
                                                   "field": {
                                                     "name": "list",
                                                     "term": {
-                                                      "union": {
+                                                      "inject": {
                                                         "field": {
                                                           "name": "literal",
                                                           "term": {
-                                                            "union": {
+                                                            "inject": {
                                                               "field": {"name": "string", "term": {"unit": {}}},
                                                               "typeName": "hydra.core.LiteralType"}}},
                                                         "typeName": "hydra.core.Type"}}},
@@ -399,7 +399,7 @@
                           {
                             "name": "case",
                             "term": {
-                              "union": {
+                              "inject": {
                                 "field": {
                                   "name": "universal",
                                   "term": {
@@ -412,7 +412,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {
                                                         "name": "annotated",
                                                         "term": {
@@ -421,7 +421,7 @@
                                                               {
                                                                 "name": "body",
                                                                 "term": {
-                                                                  "union": {
+                                                                  "inject": {
                                                                     "field": {
                                                                       "name": "record",
                                                                       "term": {
@@ -446,11 +446,11 @@
                                                                                         {
                                                                                           "name": "term",
                                                                                           "term": {
-                                                                                            "union": {
+                                                                                            "inject": {
                                                                                               "field": {
                                                                                                 "name": "literal",
                                                                                                 "term": {
-                                                                                                  "union": {
+                                                                                                  "inject": {
                                                                                                     "field": {"name": "string", "term": {"literal": {"string": "John"}}},
                                                                                                     "typeName": "hydra.core.Literal"}}},
                                                                                               "typeName": "hydra.core.Term"}}}],
@@ -467,11 +467,11 @@
                                                                                         {
                                                                                           "name": "term",
                                                                                           "term": {
-                                                                                            "union": {
+                                                                                            "inject": {
                                                                                               "field": {
                                                                                                 "name": "literal",
                                                                                                 "term": {
-                                                                                                  "union": {
+                                                                                                  "inject": {
                                                                                                     "field": {"name": "string", "term": {"literal": {"string": "Doe"}}},
                                                                                                     "typeName": "hydra.core.Literal"}}},
                                                                                               "typeName": "hydra.core.Term"}}}],
@@ -488,15 +488,15 @@
                                                                                         {
                                                                                           "name": "term",
                                                                                           "term": {
-                                                                                            "union": {
+                                                                                            "inject": {
                                                                                               "field": {
                                                                                                 "name": "literal",
                                                                                                 "term": {
-                                                                                                  "union": {
+                                                                                                  "inject": {
                                                                                                     "field": {
                                                                                                       "name": "integer",
                                                                                                       "term": {
-                                                                                                        "union": {
+                                                                                                        "inject": {
                                                                                                           "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 25}}}},
                                                                                                           "typeName": "hydra.core.IntegerValue"}}},
                                                                                                     "typeName": "hydra.core.Literal"}}},
@@ -588,7 +588,7 @@
                                           "term": {
                                             "application": {
                                               "argument": {
-                                                "union": {
+                                                "inject": {
                                                   "field": {
                                                     "name": "variable",
                                                     "term": {"variable": "hydra.test.testTypes.testTypePersonName"}},
@@ -612,7 +612,7 @@
                           {
                             "name": "case",
                             "term": {
-                              "union": {
+                              "inject": {
                                 "field": {
                                   "name": "universal",
                                   "term": {
@@ -625,7 +625,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {
                                                         "name": "annotated",
                                                         "term": {
@@ -634,7 +634,7 @@
                                                               {
                                                                 "name": "body",
                                                                 "term": {
-                                                                  "union": {
+                                                                  "inject": {
                                                                     "field": {
                                                                       "name": "lambda",
                                                                       "term": {
@@ -651,7 +651,7 @@
                                                                             {
                                                                               "name": "body",
                                                                               "term": {
-                                                                                "union": {
+                                                                                "inject": {
                                                                                   "field": {
                                                                                     "name": "variable",
                                                                                     "term": {
@@ -743,7 +743,7 @@
                                           "term": {
                                             "application": {
                                               "argument": {
-                                                "union": {
+                                                "inject": {
                                                   "field": {
                                                     "name": "forall",
                                                     "term": {
@@ -756,7 +756,7 @@
                                                           {
                                                             "name": "body",
                                                             "term": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {
                                                                   "name": "function",
                                                                   "term": {
@@ -765,7 +765,7 @@
                                                                         {
                                                                           "name": "domain",
                                                                           "term": {
-                                                                            "union": {
+                                                                            "inject": {
                                                                               "field": {
                                                                                 "name": "variable",
                                                                                 "term": {
@@ -774,7 +774,7 @@
                                                                         {
                                                                           "name": "codomain",
                                                                           "term": {
-                                                                            "union": {
+                                                                            "inject": {
                                                                               "field": {
                                                                                 "name": "variable",
                                                                                 "term": {
@@ -830,7 +830,7 @@
                           {
                             "name": "case",
                             "term": {
-                              "union": {
+                              "inject": {
                                 "field": {
                                   "name": "universal",
                                   "term": {
@@ -843,7 +843,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {
                                                         "name": "annotated",
                                                         "term": {
@@ -852,7 +852,7 @@
                                                               {
                                                                 "name": "body",
                                                                 "term": {
-                                                                  "union": {
+                                                                  "inject": {
                                                                     "field": {
                                                                       "name": "annotated",
                                                                       "term": {
@@ -861,15 +861,15 @@
                                                                             {
                                                                               "name": "body",
                                                                               "term": {
-                                                                                "union": {
+                                                                                "inject": {
                                                                                   "field": {
                                                                                     "name": "literal",
                                                                                     "term": {
-                                                                                      "union": {
+                                                                                      "inject": {
                                                                                         "field": {
                                                                                           "name": "integer",
                                                                                           "term": {
-                                                                                            "union": {
+                                                                                            "inject": {
                                                                                               "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 100}}}},
                                                                                               "typeName": "hydra.core.IntegerValue"}}},
                                                                                         "typeName": "hydra.core.Literal"}}},
@@ -967,15 +967,15 @@
                                           "term": {
                                             "application": {
                                               "argument": {
-                                                "union": {
+                                                "inject": {
                                                   "field": {
                                                     "name": "literal",
                                                     "term": {
-                                                      "union": {
+                                                      "inject": {
                                                         "field": {
                                                           "name": "integer",
                                                           "term": {
-                                                            "union": {
+                                                            "inject": {
                                                               "field": {"name": "int32", "term": {"unit": {}}},
                                                               "typeName": "hydra.core.IntegerType"}}},
                                                         "typeName": "hydra.core.LiteralType"}}},
@@ -1001,7 +1001,7 @@
                           {
                             "name": "case",
                             "term": {
-                              "union": {
+                              "inject": {
                                 "field": {
                                   "name": "universal",
                                   "term": {
@@ -1014,7 +1014,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {
                                                         "name": "pair",
                                                         "term": {
@@ -1024,7 +1024,7 @@
                                                                 "body": {
                                                                   "pair": {
                                                                     "@first": {
-                                                                      "union": {
+                                                                      "inject": {
                                                                         "field": {
                                                                           "name": "annotated",
                                                                           "term": {
@@ -1033,15 +1033,15 @@
                                                                                 {
                                                                                   "name": "body",
                                                                                   "term": {
-                                                                                    "union": {
+                                                                                    "inject": {
                                                                                       "field": {
                                                                                         "name": "literal",
                                                                                         "term": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {
                                                                                               "name": "integer",
                                                                                               "term": {
-                                                                                                "union": {
+                                                                                                "inject": {
                                                                                                   "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 1}}}},
                                                                                                   "typeName": "hydra.core.IntegerValue"}}},
                                                                                             "typeName": "hydra.core.Literal"}}},
@@ -1056,7 +1056,7 @@
                                                                               "typeName": "hydra.core.AnnotatedTerm"}}},
                                                                         "typeName": "hydra.core.Term"}},
                                                                     "@second": {
-                                                                      "union": {
+                                                                      "inject": {
                                                                         "field": {
                                                                           "name": "annotated",
                                                                           "term": {
@@ -1065,11 +1065,11 @@
                                                                                 {
                                                                                   "name": "body",
                                                                                   "term": {
-                                                                                    "union": {
+                                                                                    "inject": {
                                                                                       "field": {
                                                                                         "name": "literal",
                                                                                         "term": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "string", "term": {"literal": {"string": "hello"}}},
                                                                                             "typeName": "hydra.core.Literal"}}},
                                                                                       "typeName": "hydra.core.Term"}}},
@@ -1160,7 +1160,7 @@
                                           "term": {
                                             "application": {
                                               "argument": {
-                                                "union": {
+                                                "inject": {
                                                   "field": {
                                                     "name": "pair",
                                                     "term": {
@@ -1169,15 +1169,15 @@
                                                           {
                                                             "name": "first",
                                                             "term": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {
                                                                   "name": "literal",
                                                                   "term": {
-                                                                    "union": {
+                                                                    "inject": {
                                                                       "field": {
                                                                         "name": "integer",
                                                                         "term": {
-                                                                          "union": {
+                                                                          "inject": {
                                                                             "field": {"name": "int32", "term": {"unit": {}}},
                                                                             "typeName": "hydra.core.IntegerType"}}},
                                                                       "typeName": "hydra.core.LiteralType"}}},
@@ -1185,11 +1185,11 @@
                                                           {
                                                             "name": "second",
                                                             "term": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {
                                                                   "name": "literal",
                                                                   "term": {
-                                                                    "union": {
+                                                                    "inject": {
                                                                       "field": {"name": "string", "term": {"unit": {}}},
                                                                       "typeName": "hydra.core.LiteralType"}}},
                                                                 "typeName": "hydra.core.Type"}}}],
@@ -1216,7 +1216,7 @@
                           {
                             "name": "case",
                             "term": {
-                              "union": {
+                              "inject": {
                                 "field": {
                                   "name": "universal",
                                   "term": {
@@ -1229,7 +1229,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {
                                                         "name": "application",
                                                         "term": {
@@ -1238,7 +1238,7 @@
                                                               {
                                                                 "name": "function",
                                                                 "term": {
-                                                                  "union": {
+                                                                  "inject": {
                                                                     "field": {
                                                                       "name": "annotated",
                                                                       "term": {
@@ -1247,7 +1247,7 @@
                                                                             {
                                                                               "name": "body",
                                                                               "term": {
-                                                                                "union": {
+                                                                                "inject": {
                                                                                   "field": {
                                                                                     "name": "lambda",
                                                                                     "term": {
@@ -1264,7 +1264,7 @@
                                                                                           {
                                                                                             "name": "body",
                                                                                             "term": {
-                                                                                              "union": {
+                                                                                              "inject": {
                                                                                                 "field": {
                                                                                                   "name": "variable",
                                                                                                   "term": {
@@ -1284,7 +1284,7 @@
                                                               {
                                                                 "name": "argument",
                                                                 "term": {
-                                                                  "union": {
+                                                                  "inject": {
                                                                     "field": {
                                                                       "name": "annotated",
                                                                       "term": {
@@ -1293,15 +1293,15 @@
                                                                             {
                                                                               "name": "body",
                                                                               "term": {
-                                                                                "union": {
+                                                                                "inject": {
                                                                                   "field": {
                                                                                     "name": "literal",
                                                                                     "term": {
-                                                                                      "union": {
+                                                                                      "inject": {
                                                                                         "field": {
                                                                                           "name": "integer",
                                                                                           "term": {
-                                                                                            "union": {
+                                                                                            "inject": {
                                                                                               "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 42}}}},
                                                                                               "typeName": "hydra.core.IntegerValue"}}},
                                                                                         "typeName": "hydra.core.Literal"}}},
@@ -1392,15 +1392,15 @@
                                           "term": {
                                             "application": {
                                               "argument": {
-                                                "union": {
+                                                "inject": {
                                                   "field": {
                                                     "name": "literal",
                                                     "term": {
-                                                      "union": {
+                                                      "inject": {
                                                         "field": {
                                                           "name": "integer",
                                                           "term": {
-                                                            "union": {
+                                                            "inject": {
                                                               "field": {"name": "int32", "term": {"unit": {}}},
                                                               "typeName": "hydra.core.IntegerType"}}},
                                                         "typeName": "hydra.core.LiteralType"}}},
@@ -1451,7 +1451,7 @@
                           {
                             "name": "case",
                             "term": {
-                              "union": {
+                              "inject": {
                                 "field": {
                                   "name": "universal",
                                   "term": {
@@ -1464,7 +1464,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {
                                                         "name": "let",
                                                         "term": {
@@ -1484,7 +1484,7 @@
                                                                           {
                                                                             "name": "term",
                                                                             "term": {
-                                                                              "union": {
+                                                                              "inject": {
                                                                                 "field": {
                                                                                   "name": "annotated",
                                                                                   "term": {
@@ -1493,15 +1493,15 @@
                                                                                         {
                                                                                           "name": "body",
                                                                                           "term": {
-                                                                                            "union": {
+                                                                                            "inject": {
                                                                                               "field": {
                                                                                                 "name": "literal",
                                                                                                 "term": {
-                                                                                                  "union": {
+                                                                                                  "inject": {
                                                                                                     "field": {
                                                                                                       "name": "integer",
                                                                                                       "term": {
-                                                                                                        "union": {
+                                                                                                        "inject": {
                                                                                                           "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 5}}}},
                                                                                                           "typeName": "hydra.core.IntegerValue"}}},
                                                                                                     "typeName": "hydra.core.Literal"}}},
@@ -1532,7 +1532,7 @@
                                                                           {
                                                                             "name": "term",
                                                                             "term": {
-                                                                              "union": {
+                                                                              "inject": {
                                                                                 "field": {
                                                                                   "name": "annotated",
                                                                                   "term": {
@@ -1541,11 +1541,11 @@
                                                                                         {
                                                                                           "name": "body",
                                                                                           "term": {
-                                                                                            "union": {
+                                                                                            "inject": {
                                                                                               "field": {
                                                                                                 "name": "literal",
                                                                                                 "term": {
-                                                                                                  "union": {
+                                                                                                  "inject": {
                                                                                                     "field": {"name": "string", "term": {"literal": {"string": "world"}}},
                                                                                                     "typeName": "hydra.core.Literal"}}},
                                                                                               "typeName": "hydra.core.Term"}}},
@@ -1568,7 +1568,7 @@
                                                               {
                                                                 "name": "body",
                                                                 "term": {
-                                                                  "union": {
+                                                                  "inject": {
                                                                     "field": {
                                                                       "name": "annotated",
                                                                       "term": {
@@ -1577,7 +1577,7 @@
                                                                             {
                                                                               "name": "body",
                                                                               "term": {
-                                                                                "union": {
+                                                                                "inject": {
                                                                                   "field": {
                                                                                     "name": "pair",
                                                                                     "term": {
@@ -1587,14 +1587,14 @@
                                                                                             "body": {
                                                                                               "pair": {
                                                                                                 "@first": {
-                                                                                                  "union": {
+                                                                                                  "inject": {
                                                                                                     "field": {
                                                                                                       "name": "variable",
                                                                                                       "term": {
                                                                                                         "wrap": {"body": {"literal": {"string": "x"}}, "typeName": "hydra.core.Name"}}},
                                                                                                     "typeName": "hydra.core.Term"}},
                                                                                                 "@second": {
-                                                                                                  "union": {
+                                                                                                  "inject": {
                                                                                                     "field": {
                                                                                                       "name": "variable",
                                                                                                       "term": {
@@ -1689,7 +1689,7 @@
                                           "term": {
                                             "application": {
                                               "argument": {
-                                                "union": {
+                                                "inject": {
                                                   "field": {
                                                     "name": "pair",
                                                     "term": {
@@ -1698,15 +1698,15 @@
                                                           {
                                                             "name": "first",
                                                             "term": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {
                                                                   "name": "literal",
                                                                   "term": {
-                                                                    "union": {
+                                                                    "inject": {
                                                                       "field": {
                                                                         "name": "integer",
                                                                         "term": {
-                                                                          "union": {
+                                                                          "inject": {
                                                                             "field": {"name": "int32", "term": {"unit": {}}},
                                                                             "typeName": "hydra.core.IntegerType"}}},
                                                                       "typeName": "hydra.core.LiteralType"}}},
@@ -1714,11 +1714,11 @@
                                                           {
                                                             "name": "second",
                                                             "term": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {
                                                                   "name": "literal",
                                                                   "term": {
-                                                                    "union": {
+                                                                    "inject": {
                                                                       "field": {"name": "string", "term": {"unit": {}}},
                                                                       "typeName": "hydra.core.LiteralType"}}},
                                                                 "typeName": "hydra.core.Type"}}}],
@@ -1745,7 +1745,7 @@
                           {
                             "name": "case",
                             "term": {
-                              "union": {
+                              "inject": {
                                 "field": {
                                   "name": "universal",
                                   "term": {
@@ -1758,7 +1758,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {
                                                         "name": "record",
                                                         "term": {
@@ -1783,7 +1783,7 @@
                                                                           {
                                                                             "name": "term",
                                                                             "term": {
-                                                                              "union": {
+                                                                              "inject": {
                                                                                 "field": {
                                                                                   "name": "annotated",
                                                                                   "term": {
@@ -1792,11 +1792,11 @@
                                                                                         {
                                                                                           "name": "body",
                                                                                           "term": {
-                                                                                            "union": {
+                                                                                            "inject": {
                                                                                               "field": {
                                                                                                 "name": "literal",
                                                                                                 "term": {
-                                                                                                  "union": {
+                                                                                                  "inject": {
                                                                                                     "field": {"name": "string", "term": {"literal": {"string": "Alice"}}},
                                                                                                     "typeName": "hydra.core.Literal"}}},
                                                                                               "typeName": "hydra.core.Term"}}},
@@ -1822,7 +1822,7 @@
                                                                           {
                                                                             "name": "term",
                                                                             "term": {
-                                                                              "union": {
+                                                                              "inject": {
                                                                                 "field": {
                                                                                   "name": "annotated",
                                                                                   "term": {
@@ -1831,11 +1831,11 @@
                                                                                         {
                                                                                           "name": "body",
                                                                                           "term": {
-                                                                                            "union": {
+                                                                                            "inject": {
                                                                                               "field": {
                                                                                                 "name": "literal",
                                                                                                 "term": {
-                                                                                                  "union": {
+                                                                                                  "inject": {
                                                                                                     "field": {"name": "string", "term": {"literal": {"string": "Smith"}}},
                                                                                                     "typeName": "hydra.core.Literal"}}},
                                                                                               "typeName": "hydra.core.Term"}}},
@@ -1861,7 +1861,7 @@
                                                                           {
                                                                             "name": "term",
                                                                             "term": {
-                                                                              "union": {
+                                                                              "inject": {
                                                                                 "field": {
                                                                                   "name": "annotated",
                                                                                   "term": {
@@ -1870,15 +1870,15 @@
                                                                                         {
                                                                                           "name": "body",
                                                                                           "term": {
-                                                                                            "union": {
+                                                                                            "inject": {
                                                                                               "field": {
                                                                                                 "name": "literal",
                                                                                                 "term": {
-                                                                                                  "union": {
+                                                                                                  "inject": {
                                                                                                     "field": {
                                                                                                       "name": "integer",
                                                                                                       "term": {
-                                                                                                        "union": {
+                                                                                                        "inject": {
                                                                                                           "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 30}}}},
                                                                                                           "typeName": "hydra.core.IntegerValue"}}},
                                                                                                     "typeName": "hydra.core.Literal"}}},
@@ -1970,7 +1970,7 @@
                                           "term": {
                                             "application": {
                                               "argument": {
-                                                "union": {
+                                                "inject": {
                                                   "field": {
                                                     "name": "variable",
                                                     "term": {"variable": "hydra.test.testTypes.testTypePersonName"}},
@@ -1996,7 +1996,7 @@
                           {
                             "name": "case",
                             "term": {
-                              "union": {
+                              "inject": {
                                 "field": {
                                   "name": "universal",
                                   "term": {
@@ -2009,7 +2009,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {
                                                         "name": "let",
                                                         "term": {
@@ -2031,7 +2031,7 @@
                                                                           {
                                                                             "name": "term",
                                                                             "term": {
-                                                                              "union": {
+                                                                              "inject": {
                                                                                 "field": {
                                                                                   "name": "annotated",
                                                                                   "term": {
@@ -2040,7 +2040,7 @@
                                                                                         {
                                                                                           "name": "body",
                                                                                           "term": {
-                                                                                            "union": {
+                                                                                            "inject": {
                                                                                               "field": {
                                                                                                 "name": "variable",
                                                                                                 "term": {
@@ -2067,7 +2067,7 @@
                                                               {
                                                                 "name": "body",
                                                                 "term": {
-                                                                  "union": {
+                                                                  "inject": {
                                                                     "field": {
                                                                       "name": "application",
                                                                       "term": {
@@ -2076,7 +2076,7 @@
                                                                             {
                                                                               "name": "function",
                                                                               "term": {
-                                                                                "union": {
+                                                                                "inject": {
                                                                                   "field": {
                                                                                     "name": "application",
                                                                                     "term": {
@@ -2085,7 +2085,7 @@
                                                                                           {
                                                                                             "name": "function",
                                                                                             "term": {
-                                                                                              "union": {
+                                                                                              "inject": {
                                                                                                 "field": {
                                                                                                   "name": "variable",
                                                                                                   "term": {
@@ -2096,7 +2096,7 @@
                                                                                           {
                                                                                             "name": "argument",
                                                                                             "term": {
-                                                                                              "union": {
+                                                                                              "inject": {
                                                                                                 "field": {
                                                                                                   "name": "annotated",
                                                                                                   "term": {
@@ -2105,15 +2105,15 @@
                                                                                                         {
                                                                                                           "name": "body",
                                                                                                           "term": {
-                                                                                                            "union": {
+                                                                                                            "inject": {
                                                                                                               "field": {
                                                                                                                 "name": "literal",
                                                                                                                 "term": {
-                                                                                                                  "union": {
+                                                                                                                  "inject": {
                                                                                                                     "field": {
                                                                                                                       "name": "integer",
                                                                                                                       "term": {
-                                                                                                                        "union": {
+                                                                                                                        "inject": {
                                                                                                                           "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 10}}}},
                                                                                                                           "typeName": "hydra.core.IntegerValue"}}},
                                                                                                                     "typeName": "hydra.core.Literal"}}},
@@ -2132,7 +2132,7 @@
                                                                             {
                                                                               "name": "argument",
                                                                               "term": {
-                                                                                "union": {
+                                                                                "inject": {
                                                                                   "field": {
                                                                                     "name": "annotated",
                                                                                     "term": {
@@ -2141,15 +2141,15 @@
                                                                                           {
                                                                                             "name": "body",
                                                                                             "term": {
-                                                                                              "union": {
+                                                                                              "inject": {
                                                                                                 "field": {
                                                                                                   "name": "literal",
                                                                                                   "term": {
-                                                                                                    "union": {
+                                                                                                    "inject": {
                                                                                                       "field": {
                                                                                                         "name": "integer",
                                                                                                         "term": {
-                                                                                                          "union": {
+                                                                                                          "inject": {
                                                                                                             "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 20}}}},
                                                                                                             "typeName": "hydra.core.IntegerValue"}}},
                                                                                                       "typeName": "hydra.core.Literal"}}},
@@ -2242,15 +2242,15 @@
                                           "term": {
                                             "application": {
                                               "argument": {
-                                                "union": {
+                                                "inject": {
                                                   "field": {
                                                     "name": "literal",
                                                     "term": {
-                                                      "union": {
+                                                      "inject": {
                                                         "field": {
                                                           "name": "integer",
                                                           "term": {
-                                                            "union": {
+                                                            "inject": {
                                                               "field": {"name": "int32", "term": {"unit": {}}},
                                                               "typeName": "hydra.core.IntegerType"}}},
                                                         "typeName": "hydra.core.LiteralType"}}},

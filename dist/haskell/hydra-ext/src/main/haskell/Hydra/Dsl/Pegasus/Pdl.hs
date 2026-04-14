@@ -215,7 +215,7 @@ namedSchemaType x =
 
 namedSchemaTypeEnum :: Phantoms.TTerm Pdl.EnumSchema -> Phantoms.TTerm Pdl.NamedSchemaType
 namedSchemaTypeEnum x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pegasus.pdl.NamedSchemaType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "enum"),
@@ -223,7 +223,7 @@ namedSchemaTypeEnum x =
 
 namedSchemaTypeRecord :: Phantoms.TTerm Pdl.RecordSchema -> Phantoms.TTerm Pdl.NamedSchemaType
 namedSchemaTypeRecord x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pegasus.pdl.NamedSchemaType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "record"),
@@ -231,7 +231,7 @@ namedSchemaTypeRecord x =
 
 namedSchemaTypeTyperef :: Phantoms.TTerm Pdl.Schema -> Phantoms.TTerm Pdl.NamedSchemaType
 namedSchemaTypeTyperef x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pegasus.pdl.NamedSchemaType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "typeref"),
@@ -320,7 +320,7 @@ package x =
 
 primitiveTypeBoolean :: Phantoms.TTerm Pdl.PrimitiveType
 primitiveTypeBoolean =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pegasus.pdl.PrimitiveType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "boolean"),
@@ -328,7 +328,7 @@ primitiveTypeBoolean =
 
 primitiveTypeBytes :: Phantoms.TTerm Pdl.PrimitiveType
 primitiveTypeBytes =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pegasus.pdl.PrimitiveType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "bytes"),
@@ -336,7 +336,7 @@ primitiveTypeBytes =
 
 primitiveTypeDouble :: Phantoms.TTerm Pdl.PrimitiveType
 primitiveTypeDouble =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pegasus.pdl.PrimitiveType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "double"),
@@ -344,7 +344,7 @@ primitiveTypeDouble =
 
 primitiveTypeFloat :: Phantoms.TTerm Pdl.PrimitiveType
 primitiveTypeFloat =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pegasus.pdl.PrimitiveType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "float"),
@@ -352,7 +352,7 @@ primitiveTypeFloat =
 
 primitiveTypeInt :: Phantoms.TTerm Pdl.PrimitiveType
 primitiveTypeInt =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pegasus.pdl.PrimitiveType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "int"),
@@ -360,7 +360,7 @@ primitiveTypeInt =
 
 primitiveTypeLong :: Phantoms.TTerm Pdl.PrimitiveType
 primitiveTypeLong =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pegasus.pdl.PrimitiveType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "long"),
@@ -368,7 +368,7 @@ primitiveTypeLong =
 
 primitiveTypeString :: Phantoms.TTerm Pdl.PrimitiveType
 primitiveTypeString =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pegasus.pdl.PrimitiveType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "string"),
@@ -808,7 +808,7 @@ recordSchemaWithIncludes original newVal =
 
 schemaArray :: Phantoms.TTerm Pdl.Schema -> Phantoms.TTerm Pdl.Schema
 schemaArray x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pegasus.pdl.Schema"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "array"),
@@ -986,7 +986,7 @@ schemaFileWithSchemas original newVal =
 
 schemaFixed :: Phantoms.TTerm Int -> Phantoms.TTerm Pdl.Schema
 schemaFixed x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pegasus.pdl.Schema"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "fixed"),
@@ -994,7 +994,7 @@ schemaFixed x =
 
 schemaInline :: Phantoms.TTerm Pdl.NamedSchema -> Phantoms.TTerm Pdl.Schema
 schemaInline x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pegasus.pdl.Schema"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "inline"),
@@ -1002,7 +1002,7 @@ schemaInline x =
 
 schemaMap :: Phantoms.TTerm Pdl.Schema -> Phantoms.TTerm Pdl.Schema
 schemaMap x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pegasus.pdl.Schema"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "map"),
@@ -1010,7 +1010,7 @@ schemaMap x =
 
 schemaNamed :: Phantoms.TTerm Pdl.QualifiedName -> Phantoms.TTerm Pdl.Schema
 schemaNamed x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pegasus.pdl.Schema"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "named"),
@@ -1018,7 +1018,7 @@ schemaNamed x =
 
 schemaNull :: Phantoms.TTerm Pdl.Schema
 schemaNull =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pegasus.pdl.Schema"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "null"),
@@ -1026,7 +1026,7 @@ schemaNull =
 
 schemaPrimitive :: Phantoms.TTerm Pdl.PrimitiveType -> Phantoms.TTerm Pdl.Schema
 schemaPrimitive x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pegasus.pdl.Schema"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "primitive"),
@@ -1034,7 +1034,7 @@ schemaPrimitive x =
 
 schemaUnion :: Phantoms.TTerm Pdl.UnionSchema -> Phantoms.TTerm Pdl.Schema
 schemaUnion x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.pegasus.pdl.Schema"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "union"),

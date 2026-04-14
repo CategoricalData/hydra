@@ -47,7 +47,7 @@ encodeEitherType et =
     Core.TermLambda (Core.Lambda {
       Core.lambdaParameter = (Core.Name "e"),
       Core.lambdaDomain = Nothing,
-      Core.lambdaBody = (Core.TermUnion (Core.Injection {
+      Core.lambdaBody = (Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.Term"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "either"),
@@ -65,10 +65,10 @@ encodeFieldValue typeName fieldName fieldType =
     Core.TermLambda (Core.Lambda {
       Core.lambdaParameter = (Core.Name "y"),
       Core.lambdaDomain = Nothing,
-      Core.lambdaBody = (Core.TermUnion (Core.Injection {
+      Core.lambdaBody = (Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.Term"),
         Core.injectionField = Core.Field {
-          Core.fieldName = (Core.Name "union"),
+          Core.fieldName = (Core.Name "inject"),
           Core.fieldTerm = (encodeInjection typeName fieldName (Core.TermApplication (Core.Application {
             Core.applicationFunction = (encodeType fieldType),
             Core.applicationArgument = (Core.TermVariable (Core.Name "y"))})))}}))})
@@ -76,7 +76,7 @@ encodeFieldValue typeName fieldName fieldType =
 -- | Encode a float value based on its float type
 encodeFloatValue :: Core.FloatType -> Core.Term -> Core.Term
 encodeFloatValue floatType valTerm =
-    Core.TermUnion (Core.Injection {
+    Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.core.FloatValue"),
       Core.injectionField = Core.Field {
         Core.fieldName = case floatType of
@@ -117,7 +117,7 @@ encodeInjection typeName fieldName fieldTerm =
 -- | Encode an integer value based on its integer type
 encodeIntegerValue :: Core.IntegerType -> Core.Term -> Core.Term
 encodeIntegerValue intType valTerm =
-    Core.TermUnion (Core.Injection {
+    Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.core.IntegerValue"),
       Core.injectionField = Core.Field {
         Core.fieldName = case intType of
@@ -138,7 +138,7 @@ encodeListType elemType =
     Core.TermLambda (Core.Lambda {
       Core.lambdaParameter = (Core.Name "xs"),
       Core.lambdaDomain = Nothing,
-      Core.lambdaBody = (Core.TermUnion (Core.Injection {
+      Core.lambdaBody = (Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.Term"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "list"),
@@ -155,11 +155,11 @@ encodeLiteralType x =
       Core.LiteralTypeBinary -> Core.TermLambda (Core.Lambda {
         Core.lambdaParameter = (Core.Name "x"),
         Core.lambdaDomain = Nothing,
-        Core.lambdaBody = (Core.TermUnion (Core.Injection {
+        Core.lambdaBody = (Core.TermInject (Core.Injection {
           Core.injectionTypeName = (Core.Name "hydra.core.Term"),
           Core.injectionField = Core.Field {
             Core.fieldName = (Core.Name "literal"),
-            Core.fieldTerm = (Core.TermUnion (Core.Injection {
+            Core.fieldTerm = (Core.TermInject (Core.Injection {
               Core.injectionTypeName = (Core.Name "hydra.core.Literal"),
               Core.injectionField = Core.Field {
                 Core.fieldName = (Core.Name "binary"),
@@ -167,11 +167,11 @@ encodeLiteralType x =
       Core.LiteralTypeBoolean -> Core.TermLambda (Core.Lambda {
         Core.lambdaParameter = (Core.Name "x"),
         Core.lambdaDomain = Nothing,
-        Core.lambdaBody = (Core.TermUnion (Core.Injection {
+        Core.lambdaBody = (Core.TermInject (Core.Injection {
           Core.injectionTypeName = (Core.Name "hydra.core.Term"),
           Core.injectionField = Core.Field {
             Core.fieldName = (Core.Name "literal"),
-            Core.fieldTerm = (Core.TermUnion (Core.Injection {
+            Core.fieldTerm = (Core.TermInject (Core.Injection {
               Core.injectionTypeName = (Core.Name "hydra.core.Literal"),
               Core.injectionField = Core.Field {
                 Core.fieldName = (Core.Name "boolean"),
@@ -179,11 +179,11 @@ encodeLiteralType x =
       Core.LiteralTypeString -> Core.TermLambda (Core.Lambda {
         Core.lambdaParameter = (Core.Name "x"),
         Core.lambdaDomain = Nothing,
-        Core.lambdaBody = (Core.TermUnion (Core.Injection {
+        Core.lambdaBody = (Core.TermInject (Core.Injection {
           Core.injectionTypeName = (Core.Name "hydra.core.Term"),
           Core.injectionField = Core.Field {
             Core.fieldName = (Core.Name "literal"),
-            Core.fieldTerm = (Core.TermUnion (Core.Injection {
+            Core.fieldTerm = (Core.TermInject (Core.Injection {
               Core.injectionTypeName = (Core.Name "hydra.core.Literal"),
               Core.injectionField = Core.Field {
                 Core.fieldName = (Core.Name "string"),
@@ -191,11 +191,11 @@ encodeLiteralType x =
       Core.LiteralTypeInteger v0 -> Core.TermLambda (Core.Lambda {
         Core.lambdaParameter = (Core.Name "x"),
         Core.lambdaDomain = Nothing,
-        Core.lambdaBody = (Core.TermUnion (Core.Injection {
+        Core.lambdaBody = (Core.TermInject (Core.Injection {
           Core.injectionTypeName = (Core.Name "hydra.core.Term"),
           Core.injectionField = Core.Field {
             Core.fieldName = (Core.Name "literal"),
-            Core.fieldTerm = (Core.TermUnion (Core.Injection {
+            Core.fieldTerm = (Core.TermInject (Core.Injection {
               Core.injectionTypeName = (Core.Name "hydra.core.Literal"),
               Core.injectionField = Core.Field {
                 Core.fieldName = (Core.Name "integer"),
@@ -203,11 +203,11 @@ encodeLiteralType x =
       Core.LiteralTypeFloat v0 -> Core.TermLambda (Core.Lambda {
         Core.lambdaParameter = (Core.Name "x"),
         Core.lambdaDomain = Nothing,
-        Core.lambdaBody = (Core.TermUnion (Core.Injection {
+        Core.lambdaBody = (Core.TermInject (Core.Injection {
           Core.injectionTypeName = (Core.Name "hydra.core.Term"),
           Core.injectionField = Core.Field {
             Core.fieldName = (Core.Name "literal"),
-            Core.fieldTerm = (Core.TermUnion (Core.Injection {
+            Core.fieldTerm = (Core.TermInject (Core.Injection {
               Core.injectionTypeName = (Core.Name "hydra.core.Literal"),
               Core.injectionField = Core.Field {
                 Core.fieldName = (Core.Name "float"),
@@ -223,7 +223,7 @@ encodeMapType mt =
     Core.TermLambda (Core.Lambda {
       Core.lambdaParameter = (Core.Name "m"),
       Core.lambdaDomain = Nothing,
-      Core.lambdaBody = (Core.TermUnion (Core.Injection {
+      Core.lambdaBody = (Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.Term"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "map"),
@@ -286,7 +286,7 @@ encodeOptionalType elemType =
     Core.TermLambda (Core.Lambda {
       Core.lambdaParameter = (Core.Name "opt"),
       Core.lambdaDomain = Nothing,
-      Core.lambdaBody = (Core.TermUnion (Core.Injection {
+      Core.lambdaBody = (Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.Term"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "maybe"),
@@ -302,7 +302,7 @@ encodePairType pt =
     Core.TermLambda (Core.Lambda {
       Core.lambdaParameter = (Core.Name "p"),
       Core.lambdaDomain = Nothing,
-      Core.lambdaBody = (Core.TermUnion (Core.Injection {
+      Core.lambdaBody = (Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.Term"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "pair"),
@@ -324,7 +324,7 @@ encodeRecordTypeNamed ename rt =
     Core.TermLambda (Core.Lambda {
       Core.lambdaParameter = (Core.Name "x"),
       Core.lambdaDomain = Nothing,
-      Core.lambdaBody = (Core.TermUnion (Core.Injection {
+      Core.lambdaBody = (Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.Term"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "record"),
@@ -358,7 +358,7 @@ encodeSetType elemType =
     Core.TermLambda (Core.Lambda {
       Core.lambdaParameter = (Core.Name "s"),
       Core.lambdaDomain = Nothing,
-      Core.lambdaBody = (Core.TermUnion (Core.Injection {
+      Core.lambdaBody = (Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.Term"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "set"),
@@ -394,7 +394,7 @@ encodeType x =
       Core.TypeUnit -> Core.TermLambda (Core.Lambda {
         Core.lambdaParameter = (Core.Name "_"),
         Core.lambdaDomain = Nothing,
-        Core.lambdaBody = (Core.TermUnion (Core.Injection {
+        Core.lambdaBody = (Core.TermInject (Core.Injection {
           Core.injectionTypeName = (Core.Name "hydra.core.Term"),
           Core.injectionField = Core.Field {
             Core.fieldName = (Core.Name "unit"),
@@ -402,7 +402,7 @@ encodeType x =
       Core.TypeVoid -> Core.TermLambda (Core.Lambda {
         Core.lambdaParameter = (Core.Name "_"),
         Core.lambdaDomain = Nothing,
-        Core.lambdaBody = (Core.TermUnion (Core.Injection {
+        Core.lambdaBody = (Core.TermInject (Core.Injection {
           Core.injectionTypeName = (Core.Name "hydra.core.Term"),
           Core.injectionField = Core.Field {
             Core.fieldName = (Core.Name "unit"),
@@ -442,7 +442,7 @@ encodeTypeNamed ename typ =
       Core.TypeUnit -> Core.TermLambda (Core.Lambda {
         Core.lambdaParameter = (Core.Name "_"),
         Core.lambdaDomain = Nothing,
-        Core.lambdaBody = (Core.TermUnion (Core.Injection {
+        Core.lambdaBody = (Core.TermInject (Core.Injection {
           Core.injectionTypeName = (Core.Name "hydra.core.Term"),
           Core.injectionField = Core.Field {
             Core.fieldName = (Core.Name "unit"),
@@ -450,7 +450,7 @@ encodeTypeNamed ename typ =
       Core.TypeVoid -> Core.TermLambda (Core.Lambda {
         Core.lambdaParameter = (Core.Name "_"),
         Core.lambdaDomain = Nothing,
-        Core.lambdaBody = (Core.TermUnion (Core.Injection {
+        Core.lambdaBody = (Core.TermInject (Core.Injection {
           Core.injectionTypeName = (Core.Name "hydra.core.Term"),
           Core.injectionField = Core.Field {
             Core.fieldName = (Core.Name "unit"),
@@ -485,7 +485,7 @@ encodeWrappedTypeNamed ename wt =
     Core.TermLambda (Core.Lambda {
       Core.lambdaParameter = (Core.Name "x"),
       Core.lambdaDomain = Nothing,
-      Core.lambdaBody = (Core.TermUnion (Core.Injection {
+      Core.lambdaBody = (Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.Term"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "wrap"),

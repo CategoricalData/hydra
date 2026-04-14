@@ -109,7 +109,7 @@ fieldType cx raw =
 floatType :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.FloatType
 floatType cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
-      Core.TermUnion v0 ->
+      Core.TermInject v0 ->
         let field = Core.injectionField v0
             fname = Core.fieldName field
             fterm = Core.fieldTerm field
@@ -127,7 +127,7 @@ floatType cx raw =
 floatValue :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.FloatValue
 floatValue cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
-      Core.TermUnion v0 ->
+      Core.TermInject v0 ->
         let field = Core.injectionField v0
             fname = Core.fieldName field
             fterm = Core.fieldTerm field
@@ -193,7 +193,7 @@ injection cx raw =
 integerType :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.IntegerType
 integerType cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
-      Core.TermUnion v0 ->
+      Core.TermInject v0 ->
         let field = Core.injectionField v0
             fname = Core.fieldName field
             fterm = Core.fieldTerm field
@@ -217,7 +217,7 @@ integerType cx raw =
 integerValue :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.IntegerValue
 integerValue cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
-      Core.TermUnion v0 ->
+      Core.TermInject v0 ->
         let field = Core.injectionField v0
             fname = Core.fieldName field
             fterm = Core.fieldTerm field
@@ -316,7 +316,7 @@ let_ cx raw =
 literal :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.Literal
 literal cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
-      Core.TermUnion v0 ->
+      Core.TermInject v0 ->
         let field = Core.injectionField v0
             fname = Core.fieldName field
             fterm = Core.fieldTerm field
@@ -348,7 +348,7 @@ literal cx raw =
 literalType :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.LiteralType
 literalType cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
-      Core.TermUnion v0 ->
+      Core.TermInject v0 ->
         let field = Core.injectionField v0
             fname = Core.fieldName field
             fterm = Core.fieldTerm field
@@ -418,7 +418,7 @@ record cx raw =
 term :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.Term
 term cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
-      Core.TermUnion v0 ->
+      Core.TermInject v0 ->
         let field = Core.injectionField v0
             fname = Core.fieldName field
             fterm = Core.fieldTerm field
@@ -428,6 +428,7 @@ term cx raw =
                       (Core.Name "application", (\input -> Eithers.map (\t -> Core.TermApplication t) (application cx input))),
                       (Core.Name "cases", (\input -> Eithers.map (\t -> Core.TermCases t) (caseStatement cx input))),
                       (Core.Name "either", (\input -> Eithers.map (\t -> Core.TermEither t) (Core_.decodeEither term term cx input))),
+                      (Core.Name "inject", (\input -> Eithers.map (\t -> Core.TermInject t) (injection cx input))),
                       (Core.Name "lambda", (\input -> Eithers.map (\t -> Core.TermLambda t) (lambda cx input))),
                       (Core.Name "let", (\input -> Eithers.map (\t -> Core.TermLet t) (let_ cx input))),
                       (Core.Name "list", (\input -> Eithers.map (\t -> Core.TermList t) (Core_.decodeList term cx input))),
@@ -440,7 +441,6 @@ term cx raw =
                       (Core.Name "set", (\input -> Eithers.map (\t -> Core.TermSet t) (Core_.decodeSet term cx input))),
                       (Core.Name "typeApplication", (\input -> Eithers.map (\t -> Core.TermTypeApplication t) (typeApplicationTerm cx input))),
                       (Core.Name "typeLambda", (\input -> Eithers.map (\t -> Core.TermTypeLambda t) (typeLambda cx input))),
-                      (Core.Name "union", (\input -> Eithers.map (\t -> Core.TermUnion t) (injection cx input))),
                       (Core.Name "unit", (\input -> Eithers.map (\t -> Core.TermUnit) (Core_.decodeUnit cx input))),
                       (Core.Name "unwrap", (\input -> Eithers.map (\t -> Core.TermUnwrap t) (name cx input))),
                       (Core.Name "variable", (\input -> Eithers.map (\t -> Core.TermVariable t) (name cx input))),
@@ -454,7 +454,7 @@ term cx raw =
 type_ :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.Type
 type_ cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
-      Core.TermUnion v0 ->
+      Core.TermInject v0 ->
         let field = Core.injectionField v0
             fname = Core.fieldName field
             fterm = Core.fieldTerm field

@@ -209,7 +209,7 @@ def check_term(typed: bool, path: hydra.paths.SubtermPath, cx: hydra.graph.Graph
                 return hydra.lib.lists.map((lambda v1: v1.name), bindings)
             return first_error((hydra.lib.logic.if_else(hydra.lib.lists.null(bindings), (lambda : Just(cast(hydra.error.core.InvalidTermError, hydra.error.core.InvalidTermErrorEmptyLetBindings(hydra.error.core.EmptyLetBindingsError(path))))), (lambda : Nothing())), check_duplicate_bindings(path, bindings), Nothing(), first_error(hydra.lib.lists.map((lambda bname: hydra.lib.logic.if_else(is_valid_name(bname), (lambda : Nothing()), (lambda : Just(cast(hydra.error.core.InvalidTermError, hydra.error.core.InvalidTermErrorInvalidLetBindingName(hydra.error.core.InvalidLetBindingNameError(path, bname))))))), names())), hydra.lib.logic.if_else(typed, (lambda : first_error(hydra.lib.lists.map((lambda b: hydra.lib.maybes.cases(b.type, (lambda : Nothing()), (lambda ts: check_undefined_type_variables_in_type_scheme(path, cx, ts, (lambda uv_name: Just(cast(hydra.error.core.InvalidTermError, hydra.error.core.InvalidTermErrorUndefinedTypeVariableInBindingType(hydra.error.core.UndefinedTypeVariableInBindingTypeError(path, uv_name))))))))), bindings))), (lambda : Nothing()))))
 
-        case hydra.core.TermUnion(value=inj):
+        case hydra.core.TermInject(value=inj):
             tname = inj.type_name
             return hydra.lib.logic.if_else(hydra.lib.equality.equal(tname.value, ""), (lambda : Just(cast(hydra.error.core.InvalidTermError, hydra.error.core.InvalidTermErrorEmptyTypeNameInTerm(hydra.error.core.EmptyTypeNameInTermError(path))))), (lambda : Nothing()))
 

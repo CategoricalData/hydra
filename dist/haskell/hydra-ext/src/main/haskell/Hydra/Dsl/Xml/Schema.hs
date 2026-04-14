@@ -54,7 +54,7 @@ constrainingFacet x =
 
 datatypeAnySimpleType :: Phantoms.TTerm Schema.Datatype
 datatypeAnySimpleType =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.xml.schema.Datatype"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "anySimpleType"),
@@ -62,7 +62,7 @@ datatypeAnySimpleType =
 
 datatypeAnyType :: Phantoms.TTerm Schema.Datatype
 datatypeAnyType =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.xml.schema.Datatype"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "anyType"),
@@ -70,7 +70,7 @@ datatypeAnyType =
 
 datatypeAnyURI :: Phantoms.TTerm Schema.Datatype
 datatypeAnyURI =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.xml.schema.Datatype"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "anyURI"),
@@ -78,7 +78,7 @@ datatypeAnyURI =
 
 datatypeBase64Binary :: Phantoms.TTerm Schema.Datatype
 datatypeBase64Binary =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.xml.schema.Datatype"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "base64Binary"),
@@ -86,7 +86,7 @@ datatypeBase64Binary =
 
 datatypeBoolean :: Phantoms.TTerm Schema.Datatype
 datatypeBoolean =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.xml.schema.Datatype"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "boolean"),
@@ -94,7 +94,7 @@ datatypeBoolean =
 
 datatypeByte :: Phantoms.TTerm Schema.Datatype
 datatypeByte =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.xml.schema.Datatype"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "byte"),
@@ -102,7 +102,7 @@ datatypeByte =
 
 datatypeDate :: Phantoms.TTerm Schema.Datatype
 datatypeDate =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.xml.schema.Datatype"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "date"),
@@ -110,7 +110,7 @@ datatypeDate =
 
 datatypeDateTime :: Phantoms.TTerm Schema.Datatype
 datatypeDateTime =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.xml.schema.Datatype"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "dateTime"),
@@ -118,7 +118,7 @@ datatypeDateTime =
 
 datatypeDecimal :: Phantoms.TTerm Schema.Datatype
 datatypeDecimal =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.xml.schema.Datatype"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "decimal"),
@@ -126,7 +126,7 @@ datatypeDecimal =
 
 datatypeDouble :: Phantoms.TTerm Schema.Datatype
 datatypeDouble =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.xml.schema.Datatype"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "double"),
@@ -134,7 +134,7 @@ datatypeDouble =
 
 datatypeDuration :: Phantoms.TTerm Schema.Datatype
 datatypeDuration =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.xml.schema.Datatype"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "duration"),
@@ -142,7 +142,7 @@ datatypeDuration =
 
 datatypeENTITIES :: Phantoms.TTerm Schema.Datatype
 datatypeENTITIES =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.xml.schema.Datatype"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "ENTITIES"),
@@ -150,7 +150,7 @@ datatypeENTITIES =
 
 datatypeENTITY :: Phantoms.TTerm Schema.Datatype
 datatypeENTITY =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.xml.schema.Datatype"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "ENTITY"),
@@ -158,7 +158,7 @@ datatypeENTITY =
 
 datatypeFloat :: Phantoms.TTerm Schema.Datatype
 datatypeFloat =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.xml.schema.Datatype"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "float"),
@@ -166,7 +166,7 @@ datatypeFloat =
 
 datatypeGDay :: Phantoms.TTerm Schema.Datatype
 datatypeGDay =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.xml.schema.Datatype"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "gDay"),
@@ -174,7 +174,7 @@ datatypeGDay =
 
 datatypeGMonth :: Phantoms.TTerm Schema.Datatype
 datatypeGMonth =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.xml.schema.Datatype"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "gMonth"),
@@ -182,7 +182,7 @@ datatypeGMonth =
 
 datatypeGMonthDay :: Phantoms.TTerm Schema.Datatype
 datatypeGMonthDay =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.xml.schema.Datatype"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "gMonthDay"),
@@ -190,7 +190,7 @@ datatypeGMonthDay =
 
 datatypeGYear :: Phantoms.TTerm Schema.Datatype
 datatypeGYear =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.xml.schema.Datatype"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "gYear"),
@@ -198,7 +198,7 @@ datatypeGYear =
 
 datatypeGYearMonth :: Phantoms.TTerm Schema.Datatype
 datatypeGYearMonth =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.xml.schema.Datatype"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "gYearMonth"),
@@ -206,7 +206,7 @@ datatypeGYearMonth =
 
 datatypeHexBinary :: Phantoms.TTerm Schema.Datatype
 datatypeHexBinary =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.xml.schema.Datatype"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "hexBinary"),
@@ -214,7 +214,7 @@ datatypeHexBinary =
 
 datatypeID :: Phantoms.TTerm Schema.Datatype
 datatypeID =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.xml.schema.Datatype"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "ID"),
@@ -222,7 +222,7 @@ datatypeID =
 
 datatypeIDREF :: Phantoms.TTerm Schema.Datatype
 datatypeIDREF =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.xml.schema.Datatype"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "IDREF"),
@@ -230,7 +230,7 @@ datatypeIDREF =
 
 datatypeIDREFS :: Phantoms.TTerm Schema.Datatype
 datatypeIDREFS =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.xml.schema.Datatype"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "IDREFS"),
@@ -238,7 +238,7 @@ datatypeIDREFS =
 
 datatypeInt :: Phantoms.TTerm Schema.Datatype
 datatypeInt =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.xml.schema.Datatype"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "int"),
@@ -246,7 +246,7 @@ datatypeInt =
 
 datatypeInteger :: Phantoms.TTerm Schema.Datatype
 datatypeInteger =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.xml.schema.Datatype"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "integer"),
@@ -254,7 +254,7 @@ datatypeInteger =
 
 datatypeLanguage :: Phantoms.TTerm Schema.Datatype
 datatypeLanguage =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.xml.schema.Datatype"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "language"),
@@ -262,7 +262,7 @@ datatypeLanguage =
 
 datatypeLong :: Phantoms.TTerm Schema.Datatype
 datatypeLong =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.xml.schema.Datatype"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "long"),
@@ -270,7 +270,7 @@ datatypeLong =
 
 datatypeNMTOKEN :: Phantoms.TTerm Schema.Datatype
 datatypeNMTOKEN =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.xml.schema.Datatype"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "NMTOKEN"),
@@ -278,7 +278,7 @@ datatypeNMTOKEN =
 
 datatypeNOTATION :: Phantoms.TTerm Schema.Datatype
 datatypeNOTATION =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.xml.schema.Datatype"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "NOTATION"),
@@ -286,7 +286,7 @@ datatypeNOTATION =
 
 datatypeName :: Phantoms.TTerm Schema.Datatype
 datatypeName =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.xml.schema.Datatype"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "name"),
@@ -294,7 +294,7 @@ datatypeName =
 
 datatypeNegativeInteger :: Phantoms.TTerm Schema.Datatype
 datatypeNegativeInteger =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.xml.schema.Datatype"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "negativeInteger"),
@@ -302,7 +302,7 @@ datatypeNegativeInteger =
 
 datatypeNonNegativeInteger :: Phantoms.TTerm Schema.Datatype
 datatypeNonNegativeInteger =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.xml.schema.Datatype"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "nonNegativeInteger"),
@@ -310,7 +310,7 @@ datatypeNonNegativeInteger =
 
 datatypeNonPositiveInteger :: Phantoms.TTerm Schema.Datatype
 datatypeNonPositiveInteger =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.xml.schema.Datatype"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "nonPositiveInteger"),
@@ -318,7 +318,7 @@ datatypeNonPositiveInteger =
 
 datatypeNormalizedString :: Phantoms.TTerm Schema.Datatype
 datatypeNormalizedString =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.xml.schema.Datatype"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "normalizedString"),
@@ -326,7 +326,7 @@ datatypeNormalizedString =
 
 datatypePositiveInteger :: Phantoms.TTerm Schema.Datatype
 datatypePositiveInteger =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.xml.schema.Datatype"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "positiveInteger"),
@@ -334,7 +334,7 @@ datatypePositiveInteger =
 
 datatypeQName :: Phantoms.TTerm Schema.Datatype
 datatypeQName =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.xml.schema.Datatype"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "qName"),
@@ -342,7 +342,7 @@ datatypeQName =
 
 datatypeShort :: Phantoms.TTerm Schema.Datatype
 datatypeShort =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.xml.schema.Datatype"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "short"),
@@ -350,7 +350,7 @@ datatypeShort =
 
 datatypeString :: Phantoms.TTerm Schema.Datatype
 datatypeString =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.xml.schema.Datatype"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "string"),
@@ -358,7 +358,7 @@ datatypeString =
 
 datatypeTime :: Phantoms.TTerm Schema.Datatype
 datatypeTime =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.xml.schema.Datatype"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "time"),
@@ -366,7 +366,7 @@ datatypeTime =
 
 datatypeToken :: Phantoms.TTerm Schema.Datatype
 datatypeToken =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.xml.schema.Datatype"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "token"),
@@ -374,7 +374,7 @@ datatypeToken =
 
 datatypeUnsignedByte :: Phantoms.TTerm Schema.Datatype
 datatypeUnsignedByte =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.xml.schema.Datatype"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "unsignedByte"),
@@ -382,7 +382,7 @@ datatypeUnsignedByte =
 
 datatypeUnsignedInt :: Phantoms.TTerm Schema.Datatype
 datatypeUnsignedInt =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.xml.schema.Datatype"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "unsignedInt"),
@@ -390,7 +390,7 @@ datatypeUnsignedInt =
 
 datatypeUnsignedLong :: Phantoms.TTerm Schema.Datatype
 datatypeUnsignedLong =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.xml.schema.Datatype"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "unsignedLong"),
@@ -398,7 +398,7 @@ datatypeUnsignedLong =
 
 datatypeUnsignedShort :: Phantoms.TTerm Schema.Datatype
 datatypeUnsignedShort =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.xml.schema.Datatype"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "unsignedShort"),

@@ -115,7 +115,7 @@ edgeSpec cx raw =
 elementSpec :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Mapping.ElementSpec
 elementSpec cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
-      Core.TermUnion v0 ->
+      Core.TermInject v0 ->
         let field = Core.injectionField v0
             fname = Core.fieldName field
             fterm = Core.fieldTerm field
@@ -142,7 +142,7 @@ propertySpec cx raw =
 valueSpec :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Mapping.ValueSpec
 valueSpec cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
-      Core.TermUnion v0 ->
+      Core.TermInject v0 ->
         let field = Core.injectionField v0
             fname = Core.fieldName field
             fterm = Core.fieldTerm field

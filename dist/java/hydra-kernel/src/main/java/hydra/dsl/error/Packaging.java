@@ -153,26 +153,26 @@ public interface Packaging {
   }
 
   static hydra.phantoms.TTerm<hydra.error.packaging.InvalidModuleError> invalidModuleErrorConflictingVariantName(hydra.phantoms.TTerm<hydra.error.packaging.ConflictingVariantNameError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.packaging.InvalidModuleError"), new hydra.core.Field(new hydra.core.Name("conflictingVariantName"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.packaging.InvalidModuleError"), new hydra.core.Field(new hydra.core.Name("conflictingVariantName"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.error.packaging.InvalidModuleError> invalidModuleErrorDefinitionNotInModuleNamespace(hydra.phantoms.TTerm<hydra.error.packaging.DefinitionNotInModuleNamespaceError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.packaging.InvalidModuleError"), new hydra.core.Field(new hydra.core.Name("definitionNotInModuleNamespace"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.packaging.InvalidModuleError"), new hydra.core.Field(new hydra.core.Name("definitionNotInModuleNamespace"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.error.packaging.InvalidModuleError> invalidModuleErrorDuplicateDefinitionName(hydra.phantoms.TTerm<hydra.error.packaging.DuplicateDefinitionNameError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.packaging.InvalidModuleError"), new hydra.core.Field(new hydra.core.Name("duplicateDefinitionName"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.packaging.InvalidModuleError"), new hydra.core.Field(new hydra.core.Name("duplicateDefinitionName"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.error.packaging.InvalidPackageError> invalidPackageErrorConflictingModuleNamespace(hydra.phantoms.TTerm<hydra.error.packaging.ConflictingModuleNamespaceError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.packaging.InvalidPackageError"), new hydra.core.Field(new hydra.core.Name("conflictingModuleNamespace"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.packaging.InvalidPackageError"), new hydra.core.Field(new hydra.core.Name("conflictingModuleNamespace"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.error.packaging.InvalidPackageError> invalidPackageErrorDuplicateModuleNamespace(hydra.phantoms.TTerm<hydra.error.packaging.DuplicateModuleNamespaceError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.packaging.InvalidPackageError"), new hydra.core.Field(new hydra.core.Name("duplicateModuleNamespace"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.packaging.InvalidPackageError"), new hydra.core.Field(new hydra.core.Name("duplicateModuleNamespace"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.error.packaging.InvalidPackageError> invalidPackageErrorInvalidModule(hydra.phantoms.TTerm<hydra.error.packaging.InvalidModuleError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.error.packaging.InvalidPackageError"), new hydra.core.Field(new hydra.core.Name("invalidModule"), (x).value))));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Inject(new hydra.core.Injection(new hydra.core.Name("hydra.error.packaging.InvalidPackageError"), new hydra.core.Field(new hydra.core.Name("invalidModule"), (x).value))));
   }
 }

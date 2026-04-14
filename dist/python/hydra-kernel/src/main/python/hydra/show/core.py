@@ -447,7 +447,7 @@ def term(t: hydra.core.Term) -> str:
             typ = tt.type
             return hydra.lib.strings.cat((term(t2), "⟨", type(typ), "⟩"))
 
-        case hydra.core.TermUnion(value=v14):
+        case hydra.core.TermInject(value=v14):
             return injection(v14)
 
         case hydra.core.TermUnit():

@@ -15,7 +15,7 @@ import qualified Data.Set as S
 
 checkingErrorIncorrectUnification :: Phantoms.TTerm Checking.IncorrectUnificationError -> Phantoms.TTerm Checking.CheckingError
 checkingErrorIncorrectUnification x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.error.checking.CheckingError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "incorrectUnification"),
@@ -23,7 +23,7 @@ checkingErrorIncorrectUnification x =
 
 checkingErrorNotAForallType :: Phantoms.TTerm Checking.NotAForallTypeError -> Phantoms.TTerm Checking.CheckingError
 checkingErrorNotAForallType x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.error.checking.CheckingError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "notAForallType"),
@@ -31,7 +31,7 @@ checkingErrorNotAForallType x =
 
 checkingErrorNotAFunctionType :: Phantoms.TTerm Checking.NotAFunctionTypeError -> Phantoms.TTerm Checking.CheckingError
 checkingErrorNotAFunctionType x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.error.checking.CheckingError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "notAFunctionType"),
@@ -39,7 +39,7 @@ checkingErrorNotAFunctionType x =
 
 checkingErrorOther :: Phantoms.TTerm Checking.OtherCheckingError -> Phantoms.TTerm Checking.CheckingError
 checkingErrorOther x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.error.checking.CheckingError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "other"),
@@ -47,7 +47,7 @@ checkingErrorOther x =
 
 checkingErrorTypeArityMismatch :: Phantoms.TTerm Checking.TypeArityMismatchError -> Phantoms.TTerm Checking.CheckingError
 checkingErrorTypeArityMismatch x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.error.checking.CheckingError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "typeArityMismatch"),
@@ -55,7 +55,7 @@ checkingErrorTypeArityMismatch x =
 
 checkingErrorTypeMismatch :: Phantoms.TTerm Checking.TypeMismatchError -> Phantoms.TTerm Checking.CheckingError
 checkingErrorTypeMismatch x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.error.checking.CheckingError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "typeMismatch"),
@@ -63,7 +63,7 @@ checkingErrorTypeMismatch x =
 
 checkingErrorUnboundTypeVariables :: Phantoms.TTerm Checking.UnboundTypeVariablesError -> Phantoms.TTerm Checking.CheckingError
 checkingErrorUnboundTypeVariables x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.error.checking.CheckingError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "unboundTypeVariables"),
@@ -71,7 +71,7 @@ checkingErrorUnboundTypeVariables x =
 
 checkingErrorUndefinedTermVariable :: Phantoms.TTerm Checking.UndefinedTermVariableCheckingError -> Phantoms.TTerm Checking.CheckingError
 checkingErrorUndefinedTermVariable x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.error.checking.CheckingError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "undefinedTermVariable"),
@@ -79,7 +79,7 @@ checkingErrorUndefinedTermVariable x =
 
 checkingErrorUnequalTypes :: Phantoms.TTerm Checking.UnequalTypesError -> Phantoms.TTerm Checking.CheckingError
 checkingErrorUnequalTypes x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.error.checking.CheckingError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "unequalTypes"),
@@ -87,7 +87,7 @@ checkingErrorUnequalTypes x =
 
 checkingErrorUnsupportedTermVariant :: Phantoms.TTerm Checking.UnsupportedTermVariantError -> Phantoms.TTerm Checking.CheckingError
 checkingErrorUnsupportedTermVariant x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.error.checking.CheckingError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "unsupportedTermVariant"),
@@ -95,7 +95,7 @@ checkingErrorUnsupportedTermVariant x =
 
 checkingErrorUntypedLambda :: Phantoms.TTerm Checking.UntypedLambdaError -> Phantoms.TTerm Checking.CheckingError
 checkingErrorUntypedLambda x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.error.checking.CheckingError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "untypedLambda"),
@@ -103,7 +103,7 @@ checkingErrorUntypedLambda x =
 
 checkingErrorUntypedLetBinding :: Phantoms.TTerm Checking.UntypedLetBindingError -> Phantoms.TTerm Checking.CheckingError
 checkingErrorUntypedLetBinding x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.error.checking.CheckingError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "untypedLetBinding"),
@@ -111,7 +111,7 @@ checkingErrorUntypedLetBinding x =
 
 checkingErrorUntypedTermVariable :: Phantoms.TTerm Checking.UntypedTermVariableCheckingError -> Phantoms.TTerm Checking.CheckingError
 checkingErrorUntypedTermVariable x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.error.checking.CheckingError"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "untypedTermVariable"),

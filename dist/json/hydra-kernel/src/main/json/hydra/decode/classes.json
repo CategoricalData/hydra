@@ -27,7 +27,7 @@
                                   "cases": {
                                     "cases": [
                                       {
-                                        "name": "union",
+                                        "name": "inject",
                                         "term": {
                                           "lambda": {
                                             "body": {
@@ -100,7 +100,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "equality", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.classes.TypeClass"}},
                                                                                         "domain": {"unit": {}},
@@ -163,7 +163,7 @@
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {"name": "ordering", "term": {"variable": "t"}},
                                                                                             "typeName": "hydra.classes.TypeClass"}},
                                                                                         "domain": {"unit": {}},

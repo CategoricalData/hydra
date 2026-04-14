@@ -126,7 +126,7 @@ toJson types tname typ term =
             in (Eithers.map (\pairs -> Model.ValueObject (Maps.fromList (Maybes.cat pairs))) encodedPairs)
           _ -> Left "expected record term"
         Core.TypeUnion v0 -> case strippedTerm of
-          Core.TermUnion v1 ->
+          Core.TermInject v1 ->
             let field = Core.injectionField v1
                 fname = Core.unName (Core.fieldName field)
                 fterm = Core.fieldTerm field
@@ -221,7 +221,7 @@ toJsonUntyped term =
               fields = Core.recordFields v0
               encodedFields = Eithers.mapList encodeField fields
           in (Eithers.map (\fs -> Model.ValueObject (Maps.fromList fs)) encodedFields)
-        Core.TermUnion v0 ->
+        Core.TermInject v0 ->
           let field = Core.injectionField v0
               fname = Core.unName (Core.fieldName field)
               fterm = Core.fieldTerm field

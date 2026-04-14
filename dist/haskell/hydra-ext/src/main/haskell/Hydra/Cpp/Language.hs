@@ -72,7 +72,7 @@ cppLanguage =
           Variants.TermVariantPair,
           Variants.TermVariantRecord,
           Variants.TermVariantSet,
-          Variants.TermVariantUnion,
+          Variants.TermVariantInject,
           Variants.TermVariantVariable,
           Variants.TermVariantWrap]
     typeVariants =

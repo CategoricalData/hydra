@@ -300,10 +300,10 @@ def encodeTerm[T0, T1, T2](dialect: hydra.lisp.syntax.Dialect)(cx: T0)(g: T1)(te
      hydra.lisp.syntax.Expression](hydra.lib.eithers.mapList[hydra.core.Term, hydra.lisp.syntax.Expression,
      T2]((v1: hydra.core.Term) => hydra.lisp.coder.encodeTerm(dialect)(cx)(g)(v1))(hydra.lib.sets.toList[hydra.core.Term](v_Term_set_s)))((sels: Seq[hydra.lisp.syntax.Expression]) =>
     Right(hydra.lisp.syntax.Expression.set(hydra.lisp.syntax.SetLiteral(sels))))
-  case hydra.core.Term.union(v_Term_union_inj) => {
-    lazy val tname: scala.Predef.String = hydra.names.localNameOf(v_Term_union_inj.typeName)
+  case hydra.core.Term.inject(v_Term_inject_inj) => {
+    lazy val tname: scala.Predef.String = hydra.names.localNameOf(v_Term_inject_inj.typeName)
     {
-      lazy val field: hydra.core.Field = (v_Term_union_inj.field)
+      lazy val field: hydra.core.Field = (v_Term_inject_inj.field)
       {
         lazy val fname: scala.Predef.String = (field.name)
         {

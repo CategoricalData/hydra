@@ -56,11 +56,11 @@
                                     "body": {
                                       "either": {
                                         "@left": {
-                                          "union": {
+                                          "inject": {
                                             "field": {
                                               "name": "extraction",
                                               "term": {
-                                                "union": {
+                                                "inject": {
                                                   "field": {
                                                     "name": "unexpectedShape",
                                                     "term": {
@@ -143,7 +143,7 @@
                 "body": {
                   "lambda": {
                     "body": {
-                      "union": {
+                      "inject": {
                         "field": {
                           "name": "let",
                           "term": {
@@ -603,7 +603,7 @@
                                                         "argument": {
                                                           "lambda": {
                                                             "body": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {"name": "type", "term": {"variable": "td"}},
                                                                 "typeName": "hydra.packaging.Definition"}},
                                                             "domain": {"variable": "hydra.packaging.TypeDefinition"},
@@ -623,7 +623,7 @@
                                                         "argument": {
                                                           "lambda": {
                                                             "body": {
-                                                              "union": {
+                                                              "inject": {
                                                                 "field": {"name": "type", "term": {"variable": "td"}},
                                                                 "typeName": "hydra.packaging.Definition"}},
                                                             "domain": {"variable": "hydra.packaging.TypeDefinition"},
@@ -664,7 +664,7 @@
                                                     "argument": {
                                                       "lambda": {
                                                         "body": {
-                                                          "union": {
+                                                          "inject": {
                                                             "field": {"name": "term", "term": {"variable": "td"}},
                                                             "typeName": "hydra.packaging.Definition"}},
                                                         "domain": {"variable": "hydra.packaging.TermDefinition"},
@@ -902,7 +902,7 @@
                                             "argument": {
                                               "lambda": {
                                                 "body": {
-                                                  "union": {
+                                                  "inject": {
                                                     "field": {"name": "decoding", "term": {"variable": "_e"}},
                                                     "typeName": "hydra.errors.Error"}},
                                                 "domain": {"variable": "hydra.errors.DecodingError"},
@@ -959,7 +959,7 @@
                                                 "argument": {
                                                   "lambda": {
                                                     "body": {
-                                                      "union": {
+                                                      "inject": {
                                                         "field": {"name": "decoding", "term": {"variable": "_e"}},
                                                         "typeName": "hydra.errors.Error"}},
                                                     "domain": {"variable": "hydra.errors.DecodingError"},
@@ -1081,7 +1081,7 @@
                                                                     "domain": {"variable": "hydra.core.Record"},
                                                                     "parameter": "r"}}},
                                                               {
-                                                                "name": "union",
+                                                                "name": "inject",
                                                                 "term": {
                                                                   "lambda": {
                                                                     "body": {
@@ -1311,7 +1311,7 @@
                                                                                           {
                                                                                             "name": "type",
                                                                                             "term": {
-                                                                                              "union": {
+                                                                                              "inject": {
                                                                                                 "field": {
                                                                                                   "name": "variable",
                                                                                                   "term": {
@@ -1384,7 +1384,7 @@
                                                                                       {
                                                                                         "name": "type",
                                                                                         "term": {
-                                                                                          "union": {
+                                                                                          "inject": {
                                                                                             "field": {
                                                                                               "name": "variable",
                                                                                               "term": {

@@ -264,7 +264,7 @@ def type_of(cx: hydra.context.Context, tx: hydra.graph.Graph, type_args: frozenl
         case hydra.core.TermTypeLambda(value=v116):
             return type_of_type_lambda(cx1(), tx, type_args, v116)
 
-        case hydra.core.TermUnion(value=v117):
+        case hydra.core.TermInject(value=v117):
             return type_of_injection(cx1(), tx, type_args, v117)
 
         case hydra.core.TermUnit():

@@ -27,7 +27,7 @@ termVariant x =
       Variants.TermVariantSet -> "set"
       Variants.TermVariantTypeLambda -> "typeLambda"
       Variants.TermVariantTypeApplication -> "typeApplication"
-      Variants.TermVariantUnion -> "union"
+      Variants.TermVariantInject -> "inject"
       Variants.TermVariantUnit -> "unit"
       Variants.TermVariantUnwrap -> "unwrap"
       Variants.TermVariantVariable -> "variable"

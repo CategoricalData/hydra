@@ -215,7 +215,7 @@ def fromJson(types: Map[hydra.core.Name, hydra.core.Type])(tname: hydra.core.Nam
         lazy val jsonVal: hydra.json.model.Value = hydra.lib.maybes.fromMaybe[hydra.json.model.Value](hydra.json.model.Value.`null`)(`val`)
         lazy val decoded: Either[scala.Predef.String, hydra.core.Term] = hydra.json.decode.fromJson(types)(tname)(ftype)(jsonVal)
         hydra.lib.eithers.map[hydra.core.Term, hydra.core.Term, scala.Predef.String]((v: hydra.core.Term) =>
-          hydra.core.Term.union(hydra.core.Injection(tname, hydra.core.Field(key, v))))(decoded)
+          hydra.core.Term.inject(hydra.core.Injection(tname, hydra.core.Field(key, v))))(decoded)
       }
       {
         def tryField(key: scala.Predef.String)(`val`: Option[hydra.json.model.Value])(ft: hydra.core.FieldType): Option[Either[scala.Predef.String,

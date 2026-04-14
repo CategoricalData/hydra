@@ -83,7 +83,7 @@
                                               "application": {
                                                 "argument": {
                                                   "maybe": {
-                                                    "union": {
+                                                    "inject": {
                                                       "field": {
                                                         "name": "label",
                                                         "term": {
@@ -150,7 +150,7 @@
                                                 "argument": {
                                                   "lambda": {
                                                     "body": {
-                                                      "union": {
+                                                      "inject": {
                                                         "field": {"name": "id", "term": {"variable": "err"}},
                                                         "typeName": "hydra.error.pg.InvalidEdgeError"}},
                                                     "domain": {"variable": "hydra.error.pg.InvalidValueError"},
@@ -204,7 +204,7 @@
                                                 "argument": {
                                                   "lambda": {
                                                     "body": {
-                                                      "union": {
+                                                      "inject": {
                                                         "field": {"name": "property", "term": {"variable": "err"}},
                                                         "typeName": "hydra.error.pg.InvalidEdgeError"}},
                                                     "domain": {"variable": "hydra.error.pg.InvalidElementPropertyError"},
@@ -248,7 +248,7 @@
                                                                   "application": {
                                                                     "argument": {
                                                                       "maybe": {
-                                                                        "union": {
+                                                                        "inject": {
                                                                           "field": {
                                                                             "name": "outVertexLabel",
                                                                             "term": {
@@ -306,7 +306,7 @@
                                                               "application": {
                                                                 "argument": {
                                                                   "maybe": {
-                                                                    "union": {
+                                                                    "inject": {
                                                                       "field": {"name": "outVertexNotFound", "term": {"unit": {}}},
                                                                       "typeName": "hydra.error.pg.InvalidEdgeError"}}},
                                                                 "function": {
@@ -369,7 +369,7 @@
                                                                   "application": {
                                                                     "argument": {
                                                                       "maybe": {
-                                                                        "union": {
+                                                                        "inject": {
                                                                           "field": {
                                                                             "name": "inVertexLabel",
                                                                             "term": {
@@ -427,7 +427,7 @@
                                                               "application": {
                                                                 "argument": {
                                                                   "maybe": {
-                                                                    "union": {
+                                                                    "inject": {
                                                                       "field": {"name": "inVertexNotFound", "term": {"unit": {}}},
                                                                       "typeName": "hydra.error.pg.InvalidEdgeError"}}},
                                                                 "function": {
@@ -616,7 +616,7 @@
                                                                         "body": {
                                                                           "typeApplication": {
                                                                             "body": {
-                                                                              "union": {
+                                                                              "inject": {
                                                                                 "field": {
                                                                                   "name": "vertex",
                                                                                   "term": {
@@ -661,7 +661,7 @@
                                                               "maybe": {
                                                                 "typeApplication": {
                                                                   "body": {
-                                                                    "union": {
+                                                                    "inject": {
                                                                       "field": {
                                                                         "name": "vertex",
                                                                         "term": {
@@ -681,7 +681,7 @@
                                                                                   {
                                                                                     "name": "error",
                                                                                     "term": {
-                                                                                      "union": {
+                                                                                      "inject": {
                                                                                         "field": {
                                                                                           "name": "label",
                                                                                           "term": {
@@ -860,7 +860,7 @@
                                                                         "body": {
                                                                           "typeApplication": {
                                                                             "body": {
-                                                                              "union": {
+                                                                              "inject": {
                                                                                 "field": {
                                                                                   "name": "edge",
                                                                                   "term": {
@@ -905,7 +905,7 @@
                                                               "maybe": {
                                                                 "typeApplication": {
                                                                   "body": {
-                                                                    "union": {
+                                                                    "inject": {
                                                                       "field": {
                                                                         "name": "edge",
                                                                         "term": {
@@ -925,7 +925,7 @@
                                                                                   {
                                                                                     "name": "error",
                                                                                     "term": {
-                                                                                      "union": {
+                                                                                      "inject": {
                                                                                         "field": {
                                                                                           "name": "label",
                                                                                           "term": {
@@ -1254,7 +1254,7 @@
                                                                         {
                                                                           "name": "error",
                                                                           "term": {
-                                                                            "union": {
+                                                                            "inject": {
                                                                               "field": {
                                                                                 "name": "missingRequired",
                                                                                 "term": {
@@ -1446,7 +1446,7 @@
                                                                                   {
                                                                                     "name": "error",
                                                                                     "term": {
-                                                                                      "union": {
+                                                                                      "inject": {
                                                                                         "field": {"name": "invalidValue", "term": {"variable": "err"}},
                                                                                         "typeName": "hydra.error.pg.InvalidPropertyError"}}}],
                                                                                 "typeName": "hydra.error.pg.InvalidElementPropertyError"}},
@@ -1471,7 +1471,7 @@
                                                                         {
                                                                           "name": "error",
                                                                           "term": {
-                                                                            "union": {
+                                                                            "inject": {
                                                                               "field": {"name": "unexpectedKey", "term": {"variable": "key"}},
                                                                               "typeName": "hydra.error.pg.InvalidPropertyError"}}}],
                                                                       "typeName": "hydra.error.pg.InvalidElementPropertyError"}}},
@@ -1629,7 +1629,7 @@
                                           "application": {
                                             "argument": {
                                               "maybe": {
-                                                "union": {
+                                                "inject": {
                                                   "field": {
                                                     "name": "label",
                                                     "term": {
@@ -1696,7 +1696,7 @@
                                             "argument": {
                                               "lambda": {
                                                 "body": {
-                                                  "union": {
+                                                  "inject": {
                                                     "field": {"name": "id", "term": {"variable": "err"}},
                                                     "typeName": "hydra.error.pg.InvalidVertexError"}},
                                                 "domain": {"variable": "hydra.error.pg.InvalidValueError"},
@@ -1750,7 +1750,7 @@
                                             "argument": {
                                               "lambda": {
                                                 "body": {
-                                                  "union": {
+                                                  "inject": {
                                                     "field": {"name": "property", "term": {"variable": "err"}},
                                                     "typeName": "hydra.error.pg.InvalidVertexError"}},
                                                 "domain": {"variable": "hydra.error.pg.InvalidElementPropertyError"},

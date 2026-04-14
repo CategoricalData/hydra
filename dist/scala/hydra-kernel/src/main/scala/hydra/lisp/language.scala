@@ -23,7 +23,7 @@ lazy val lispLanguage: hydra.coders.Language = {
      hydra.variants.TermVariant.typeApplication, hydra.variants.TermVariant.typeLambda, hydra.variants.TermVariant.let,
      hydra.variants.TermVariant.list, hydra.variants.TermVariant.literal, hydra.variants.TermVariant.map,
      hydra.variants.TermVariant.maybe, hydra.variants.TermVariant.pair, hydra.variants.TermVariant.record,
-     hydra.variants.TermVariant.set, hydra.variants.TermVariant.union, hydra.variants.TermVariant.unit,
+     hydra.variants.TermVariant.set, hydra.variants.TermVariant.inject, hydra.variants.TermVariant.unit,
      hydra.variants.TermVariant.variable, hydra.variants.TermVariant.wrap))
   lazy val typeVariants: scala.collection.immutable.Set[hydra.variants.TypeVariant] = hydra.lib.sets.fromList[hydra.variants.TypeVariant](Seq(hydra.variants.TypeVariant.annotated,
      hydra.variants.TypeVariant.application, hydra.variants.TypeVariant.either, hydra.variants.TypeVariant.function,
