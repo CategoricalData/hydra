@@ -513,12 +513,12 @@ public interface Inference {
                         fcx5.get(),
                         hydra.Inference.buildTypeApplicationTerm(
                           svars,
-                          new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Union(new hydra.core.CaseStatement(tname, hydra.lib.maybes.Map.apply(
+                          new hydra.core.Term.Cases(new hydra.core.CaseStatement(tname, hydra.lib.maybes.Map.apply(
                             projected -> projected.term,
                             dfltResult), hydra.lib.lists.ZipWith.apply(
                             (java.util.function.Function<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.core.Field>>) (n -> (java.util.function.Function<hydra.core.Term, hydra.core.Field>) (t -> new hydra.core.Field(n, t))),
                             fnames.get(),
-                            iterms.get())))))),
+                            iterms.get())))),
                         new hydra.core.Type.Function(new hydra.core.FunctionType(hydra.Resolution.nominalApplication(
                           tname,
                           hydra.lib.lists.Map.apply(
@@ -668,54 +668,6 @@ public interface Inference {
       e);
   }
 
-  static hydra.util.Either<hydra.errors.Error_, hydra.typing.InferenceResult> inferTypeOfElimination(hydra.context.Context fcx, hydra.graph.Graph cx, hydra.core.Elimination elm) {
-    return (elm).accept(new hydra.core.Elimination.PartialVisitor<>() {
-      @Override
-      public hydra.util.Either<hydra.errors.Error_, hydra.typing.InferenceResult> visit(hydra.core.Elimination.Record p) {
-        return hydra.Inference.inferTypeOfProjection(
-          fcx,
-          cx,
-          (p).value);
-      }
-
-      @Override
-      public hydra.util.Either<hydra.errors.Error_, hydra.typing.InferenceResult> visit(hydra.core.Elimination.Union c) {
-        return hydra.Inference.inferTypeOfCaseStatement(
-          fcx,
-          cx,
-          (c).value);
-      }
-
-      @Override
-      public hydra.util.Either<hydra.errors.Error_, hydra.typing.InferenceResult> visit(hydra.core.Elimination.Wrap tname) {
-        return hydra.Inference.inferTypeOfUnwrap(
-          fcx,
-          cx,
-          (tname).value);
-      }
-    });
-  }
-
-  static hydra.util.Either<hydra.errors.Error_, hydra.typing.InferenceResult> inferTypeOfFunction(hydra.context.Context fcx, hydra.graph.Graph cx, hydra.core.Function f) {
-    return (f).accept(new hydra.core.Function.PartialVisitor<>() {
-      @Override
-      public hydra.util.Either<hydra.errors.Error_, hydra.typing.InferenceResult> visit(hydra.core.Function.Elimination elm) {
-        return hydra.Inference.inferTypeOfElimination(
-          fcx,
-          cx,
-          (elm).value);
-      }
-
-      @Override
-      public hydra.util.Either<hydra.errors.Error_, hydra.typing.InferenceResult> visit(hydra.core.Function.Lambda l) {
-        return hydra.Inference.inferTypeOfLambda(
-          fcx,
-          cx,
-          (l).value);
-      }
-    });
-  }
-
   static hydra.util.Either<hydra.errors.Error_, hydra.typing.InferenceResult> inferTypeOfInjection(hydra.context.Context fcx, hydra.graph.Graph cx, hydra.core.Injection injection) {
     hydra.core.Field field = (injection).field;
     hydra.core.Name fname = (field).name;
@@ -804,7 +756,7 @@ public interface Inference {
         hydra.core.Type rdom = hydra.Substitution.substInType(
           isubst,
           dom);
-        hydra.core.Term rterm = new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(var, hydra.util.Maybe.just(rdom), iterm)));
+        hydra.core.Term rterm = new hydra.core.Term.Lambda(new hydra.core.Lambda(var, hydra.util.Maybe.just(rdom), iterm));
         hydra.core.Type rtype = new hydra.core.Type.Function(new hydra.core.FunctionType(rdom, icod));
         hydra.util.Lazy<java.util.Set<hydra.core.Name>> vars = new hydra.util.Lazy<>(() -> hydra.lib.sets.Unions.apply(java.util.Arrays.asList(
           hydra.Variables.freeVariablesInType(rdom),
@@ -1290,7 +1242,7 @@ public interface Inference {
               fcx2.get(),
               hydra.Inference.buildTypeApplicationTerm(
                 svars,
-                new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(tname, fname))))),
+                new hydra.core.Term.Project(new hydra.core.Projection(tname, fname))),
               new hydra.core.Type.Function(new hydra.core.FunctionType(hydra.Resolution.nominalApplication(
                 tname,
                 hydra.lib.lists.Map.apply(
@@ -1398,6 +1350,14 @@ public interface Inference {
       }
 
       @Override
+      public hydra.util.Either<hydra.errors.Error_, hydra.typing.InferenceResult> visit(hydra.core.Term.Cases c) {
+        return hydra.Inference.inferTypeOfCaseStatement(
+          fcx2.get(),
+          cx,
+          (c).value);
+      }
+
+      @Override
       public hydra.util.Either<hydra.errors.Error_, hydra.typing.InferenceResult> visit(hydra.core.Term.Either e) {
         return hydra.Inference.inferTypeOfEither(
           fcx2.get(),
@@ -1406,11 +1366,11 @@ public interface Inference {
       }
 
       @Override
-      public hydra.util.Either<hydra.errors.Error_, hydra.typing.InferenceResult> visit(hydra.core.Term.Function f) {
-        return hydra.Inference.inferTypeOfFunction(
+      public hydra.util.Either<hydra.errors.Error_, hydra.typing.InferenceResult> visit(hydra.core.Term.Lambda l) {
+        return hydra.Inference.inferTypeOfLambda(
           fcx2.get(),
           cx,
-          (f).value);
+          (l).value);
       }
 
       @Override
@@ -1461,6 +1421,14 @@ public interface Inference {
       }
 
       @Override
+      public hydra.util.Either<hydra.errors.Error_, hydra.typing.InferenceResult> visit(hydra.core.Term.Project p) {
+        return hydra.Inference.inferTypeOfProjection(
+          fcx2.get(),
+          cx,
+          (p).value);
+      }
+
+      @Override
       public hydra.util.Either<hydra.errors.Error_, hydra.typing.InferenceResult> visit(hydra.core.Term.Record r) {
         return hydra.Inference.inferTypeOfRecord(
           fcx2.get(),
@@ -1503,6 +1471,14 @@ public interface Inference {
       @Override
       public hydra.util.Either<hydra.errors.Error_, hydra.typing.InferenceResult> visit(hydra.core.Term.Unit ignored) {
         return hydra.util.Either.<hydra.errors.Error_, hydra.typing.InferenceResult>right(hydra.Inference.inferTypeOfUnit(fcx2.get()));
+      }
+
+      @Override
+      public hydra.util.Either<hydra.errors.Error_, hydra.typing.InferenceResult> visit(hydra.core.Term.Unwrap tname) {
+        return hydra.Inference.inferTypeOfUnwrap(
+          fcx2.get(),
+          cx,
+          (tname).value);
       }
 
       @Override
@@ -1562,7 +1538,7 @@ public interface Inference {
             fcx2.get(),
             hydra.Inference.buildTypeApplicationTerm(
               svars,
-              new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Wrap(tname)))),
+              new hydra.core.Term.Unwrap(tname)),
             new hydra.core.Type.Function(new hydra.core.FunctionType(hydra.Resolution.nominalApplication(
               tname,
               hydra.lib.lists.Map.apply(

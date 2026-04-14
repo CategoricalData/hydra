@@ -155,14 +155,12 @@ contractTerm = define "contractTerm" $
         "rhs" <~ Core.applicationArgument (var "app") $
         cases _Term (Strip.deannotateTerm @@ var "lhs")
           (Just $ var "rec") [
-          _Term_function>>: "f" ~> cases _Function (var "f")
-            (Just $ var "rec") [
-            _Function_lambda>>: "l" ~>
-              "v" <~ Core.lambdaParameter (var "l") $
-              "body" <~ Core.lambdaBody (var "l") $
-              Logic.ifElse (Variables.isFreeVariableInTerm @@ var "v" @@ var "body")
-                (var "body")
-                (Variables.replaceFreeTermVariable @@ var "v" @@ var "rhs" @@ var "body")]]]) $
+          _Term_lambda>>: "l" ~>
+            "v" <~ Core.lambdaParameter (var "l") $
+            "body" <~ Core.lambdaBody (var "l") $
+            Logic.ifElse (Variables.isFreeVariableInTerm @@ var "v" @@ var "body")
+              (var "body")
+              (Variables.replaceFreeTermVariable @@ var "v" @@ var "rhs" @@ var "body")]]) $
   Rewriting.rewriteTerm @@ var "rewrite" @@ var "term"
 
 -- For demo purposes. This should be generalized to enable additional side effects of interest.
@@ -196,9 +194,10 @@ etaExpandTerm = define "etaExpandTerm" $
         var "termArityWithContext" @@ var "tx" @@ Core.annotatedTermBody (var "at"),
       _Term_application>>: "app" ~>
         Math.sub (var "termArityWithContext" @@ var "tx" @@ Core.applicationFunction (var "app")) (int32 1),
-      _Term_function>>: "f" ~> cases _Function (var "f") Nothing [
-        _Function_elimination>>: constant $ int32 1,
-        _Function_lambda>>: constant $ int32 0],
+      _Term_cases>>: constant $ int32 1,
+      _Term_lambda>>: constant $ int32 0,
+      _Term_project>>: constant $ int32 1,
+      _Term_unwrap>>: constant $ int32 1,
       _Term_let>>: "l" ~>
         var "termArityWithContext"
           @@ (Scoping.extendGraphForLet @@ constant (constant nothing) @@ var "tx" @@ var "l")
@@ -300,7 +299,7 @@ etaExpandTerm = define "etaExpandTerm" $
            "i" <~ Pairs.first (var "idPair") $
            "dom" <~ Pairs.second (var "idPair") $
            "vn" <~ Core.name (Strings.cat2 (string "v") (Literals.showInt32 $ var "i")) $
-           Core.termFunction $ Core.functionLambda $ Core.lambda (var "vn") (var "dom") (var "body"))
+           Core.termLambda $ Core.lambda (var "vn") (var "dom") (var "body"))
          (var "fullyApplied") (Lists.reverse (var "indexedDomains")))
       (var "applied")) $
 
@@ -318,7 +317,10 @@ etaExpandTerm = define "etaExpandTerm" $
         (Just nothing) [
         _Term_annotated>>: "at2" ~>
           var "termHeadType" @@ var "tx2" @@ Core.annotatedTermBody (var "at2"),
-        _Term_function>>: constant nothing,
+        _Term_lambda>>: constant nothing,
+        _Term_cases>>: constant nothing,
+        _Term_project>>: constant nothing,
+        _Term_unwrap>>: constant nothing,
         _Term_let>>: "l2" ~>
           var "termHeadType"
             @@ (Scoping.extendGraphForLet @@ constant (constant nothing) @@ var "tx2" @@ var "l2")
@@ -356,15 +358,6 @@ etaExpandTerm = define "etaExpandTerm" $
       "branchHType" <~ var "termHeadType" @@ var "tx" @@ var "branchBody" $
       Core.fieldWithTerm (var "f") (var "expand" @@ true @@ list ([] :: [TTerm Term]) @@ var "arty" @@ var "branchHType" @@ var "branchBody")) $
 
-    -- Helper for eliminations
-    "forElimination" <~ ("elm" ~> cases _Elimination (var "elm") Nothing [
-      _Elimination_record>>: "p" ~> Core.eliminationRecord (var "p"),
-      _Elimination_union>>: "cs" ~> Core.eliminationUnion $ Core.caseStatement
-        (Core.caseStatementTypeName $ var "cs")
-        (Maybes.map ("t1" ~> var "recurse" @@ var "tx" @@ var "t1") (Core.caseStatementDefault $ var "cs"))
-        (Lists.map (var "forCaseBranch") (Core.caseStatementCases $ var "cs")),
-      _Elimination_wrap>>: "nm" ~> Core.eliminationWrap $ var "nm"]) $
-
     -- Helper for maps
     "forMap" <~ ("mp" ~>
       "forPair" <~ ("pr" ~> pair (var "recurse" @@ var "tx" @@ Pairs.first (var "pr"))
@@ -388,33 +381,31 @@ etaExpandTerm = define "etaExpandTerm" $
         ("r" ~> right $ var "recurse" @@ var "tx" @@ var "r")
         (var "e")),
 
-      -- Function: special handling
-      _Term_function>>: "fn" ~> cases _Function (var "fn")
-        Nothing [
-        _Function_elimination>>: "elm" ~>
-          -- Recurse into the elimination, then expand
-          -- Only pad union eliminations (case statements); record/wrap eliminations are handled by the language coder
-          "padElim" <~ cases _Elimination (var "elm") Nothing [
-            _Elimination_record>>: "_" ~> false,
-            _Elimination_union>>: "_" ~> true,
-            _Elimination_wrap>>: "_" ~> false] $
-          "elimTerm" <~ (Core.termFunction $ Core.functionElimination $ var "forElimination" @@ var "elm") $
-          -- For union eliminations, compute the head type as FunctionType(TypeVariable(typeName), TypeUnit)
-          -- This provides the domain type needed for eta-expanded lambda parameters
-          "elimHeadType" <~ cases _Elimination (var "elm") (Just nothing) [
-            _Elimination_union>>: "cs2" ~>
-              just $ Core.typeFunction $ Core.functionType
-                (Core.typeVariable $ Core.caseStatementTypeName $ var "cs2")
-                Core.typeUnit] $
-          var "expand" @@ var "padElim" @@ var "args" @@ (int32 1) @@ var "elimHeadType" @@ var "elimTerm",
-        _Function_lambda>>: "lm" ~>
-          "tx1" <~ Scoping.extendGraphForLambda @@ var "tx" @@ var "lm" $
-          "body" <~ var "rewriteWithArgs" @@ list ([] :: [TTerm Term]) @@ var "tx1" @@ Core.lambdaBody (var "lm") $
-          "result" <~ Core.termFunction (Core.functionLambda $
-            Core.lambda (Core.lambdaParameter $ var "lm") (Core.lambdaDomain $ var "lm") (var "body")) $
-          "arty" <~ var "termArityWithContext" @@ var "tx" @@ var "result" $
-          -- Lambda type is not in the context; pass Nothing (lambdas have arity 0 so expand is a no-op anyway)
-          var "expand" @@ false @@ var "args" @@ var "arty" @@ nothing @@ var "result"],
+      -- Cases (union elimination): pad with lambdas; only union eliminations are padded
+      _Term_cases>>: "cs" ~>
+        "newCs" <~ Core.caseStatement
+          (Core.caseStatementTypeName $ var "cs")
+          (Maybes.map ("t1" ~> var "recurse" @@ var "tx" @@ var "t1") (Core.caseStatementDefault $ var "cs"))
+          (Lists.map (var "forCaseBranch") (Core.caseStatementCases $ var "cs")) $
+        "elimTerm" <~ Core.termCases (var "newCs") $
+        "elimHeadType" <~ just (Core.typeFunction $ Core.functionType
+          (Core.typeVariable $ Core.caseStatementTypeName $ var "cs")
+          Core.typeUnit) $
+        var "expand" @@ true @@ var "args" @@ (int32 1) @@ var "elimHeadType" @@ var "elimTerm",
+      -- Project: pass through; expansion handled by language coder
+      _Term_project>>: "p" ~>
+        var "expand" @@ false @@ var "args" @@ (int32 1) @@ nothing @@ (Core.termProject $ var "p"),
+      -- Unwrap: pass through; expansion handled by language coder
+      _Term_unwrap>>: "nm" ~>
+        var "expand" @@ false @@ var "args" @@ (int32 1) @@ nothing @@ (Core.termUnwrap $ var "nm"),
+      -- Lambda: extend context for body
+      _Term_lambda>>: "lm" ~>
+        "tx1" <~ Scoping.extendGraphForLambda @@ var "tx" @@ var "lm" $
+        "body" <~ var "rewriteWithArgs" @@ list ([] :: [TTerm Term]) @@ var "tx1" @@ Core.lambdaBody (var "lm") $
+        "result" <~ Core.termLambda (Core.lambda (Core.lambdaParameter $ var "lm") (Core.lambdaDomain $ var "lm") (var "body")) $
+        "arty" <~ var "termArityWithContext" @@ var "tx" @@ var "result" $
+        -- Lambda type is not in the context; pass Nothing (lambdas have arity 0 so expand is a no-op anyway)
+        var "expand" @@ false @@ var "args" @@ var "arty" @@ nothing @@ var "result",
 
       -- Let: extend context for bindings and body
       _Term_let>>: "lt" ~>
@@ -505,10 +496,10 @@ etaExpansionArity = define "etaExpansionArity" $
     _Term_application>>: "app" ~> Math.sub
       (etaExpansionArity @@ var "graph" @@ Core.applicationFunction (var "app"))
       (int32 1),
-    _Term_function>>: "f" ~> cases _Function (var "f")
-      Nothing [
-      _Function_elimination>>: constant $ int32 1,
-      _Function_lambda>>: constant $ int32 0],
+    _Term_cases>>: constant $ int32 1,
+    _Term_lambda>>: constant $ int32 0,
+    _Term_project>>: constant $ int32 1,
+    _Term_unwrap>>: constant $ int32 1,
     _Term_typeLambda>>: "ta" ~> etaExpansionArity @@ var "graph" @@ Core.typeLambdaBody (var "ta"),
     _Term_typeApplication>>: "tt" ~> etaExpansionArity @@ var "graph" @@ Core.typeApplicationTermBody (var "tt"),
     _Term_variable>>: "name" ~>
@@ -554,19 +545,18 @@ etaExpandTypedTerm = define "etaExpandTypedTerm" $
     "arityOf" <~ ("tx" ~> "term" ~>
       "dflt" <~ (Eithers.map ("_tc" ~> Arity.typeArity @@ Pairs.first (var "_tc"))
           (Checking.typeOf @@ var "cx" @@ var "tx" @@ list ([] :: [TTerm Type]) @@ var "term")) $
-      "forFunction" <~ ("tx" ~> "f" ~> cases _Function (var "f")
-        Nothing [
-        _Function_elimination>>: constant $ right $ int32 1,
-        _Function_lambda>>: "l" ~>
-          "txl" <~ Scoping.extendGraphForLambda @@ var "tx" @@ var "l" $
-          var "arityOf" @@ var "txl" @@ Core.lambdaBody (var "l")]) $
       cases _Term (var "term")
         (Just $ var "dflt") [
         _Term_annotated>>: "at" ~> var "arityOf" @@ var "tx" @@ Core.annotatedTermBody (var "at"),
         -- Note: No _Term_application case - the dflt fallback using typeOf is correct.
         -- We can't use arityOf(f) - 1 because that doesn't account for higher-order functions
         -- like identity where (id x) has the same arity as x.
-        _Term_function>>: "f" ~> var "forFunction" @@ var "tx" @@ var "f",
+        _Term_cases>>: constant $ right $ int32 1,
+        _Term_project>>: constant $ right $ int32 1,
+        _Term_unwrap>>: constant $ right $ int32 1,
+        _Term_lambda>>: "l" ~>
+          "txl" <~ Scoping.extendGraphForLambda @@ var "tx" @@ var "l" $
+          var "arityOf" @@ var "txl" @@ Core.lambdaBody (var "l"),
         _Term_let>>: "l" ~>
           "txl" <~ Scoping.extendGraphForLet @@ constant (constant nothing) @@ var "tx" @@ var "l" $
           var "arityOf" @@ var "txl" @@ Core.letBody (var "l"),
@@ -587,7 +577,7 @@ etaExpandTypedTerm = define "etaExpandTypedTerm" $
     "pad" <~ ("vars" ~> "body" ~>
       Logic.ifElse (Lists.null $ var "vars")
         (var "body")
-        (Core.termFunction $ Core.functionLambda $ Core.lambda (Lists.head $ var "vars") nothing $ var "pad"
+        (Core.termLambda $ Core.lambda (Lists.head $ var "vars") nothing $ var "pad"
           @@ Lists.tail (var "vars")
           @@ (Core.termApplication $ Core.application (var "body") $ Core.termVariable $ Lists.head $ var "vars"))) $
     "padn" <~ ("n" ~> "body" ~> var "pad" @@ (var "extraVariables" @@ var "n") @@ var "body") $
@@ -615,18 +605,21 @@ etaExpandTypedTerm = define "etaExpandTypedTerm" $
     "forCaseStatement" <~ ("cs" ~>
       "tname" <~ Core.caseStatementTypeName (var "cs") $
       "dflt" <~ Core.caseStatementDefault (var "cs") $
-      "cases" <~ Core.caseStatementCases (var "cs") $
+      "csCases" <~ Core.caseStatementCases (var "cs") $
       "rdflt" <<~ Eithers.mapMaybe (var "rewrite" @@ false @@ false @@ list ([] :: [TTerm Type]) @@ var "recurse" @@ var "tx") (var "dflt") $
-      "rcases" <<~ Eithers.mapList (var "forCase") (var "cases") $
-      right $ Core.termFunction $ Core.functionElimination $ Core.eliminationUnion $
+      "rcases" <<~ Eithers.mapList (var "forCase") (var "csCases") $
+      right $ Core.termCases $
         Core.caseStatement (var "tname") (var "rdflt") (var "rcases")) $
 
-    "forElimination" <~ ("elm" ~>
-      "checkBase" <~ ("elm" ~> cases _Elimination (var "elm")
-        (Just $ var "recurse" @@ var "tx" @@ var "term") [
-        _Elimination_union>>: "cs" ~> var "forCaseStatement" @@ var "cs"]) $
-      "base" <<~ Eithers.map (var "unwind") (var "checkBase" @@ var "elm") $
+    "forCases" <~ ("cs" ~>
+      "base" <<~ Eithers.map (var "unwind") (var "forCaseStatement" @@ var "cs") $
       right $ Logic.ifElse (Logic.or (var "topLevel") (var "forced"))
+        (var "padn" @@ int32 1 @@ var "base")
+        (var "base")) $
+
+    "forNullaryElim" <~ ("elimTerm" ~>
+      "base" <~ var "unwind" @@ var "elimTerm" $
+      Logic.ifElse (Logic.or (var "topLevel") (var "forced"))
         (var "padn" @@ int32 1 @@ var "base")
         (var "base")) $
 
@@ -642,12 +635,12 @@ etaExpandTypedTerm = define "etaExpandTypedTerm" $
         right $ Logic.ifElse (Equality.gt (var "lhsarity") (int32 1))
           (var "padn" @@ (Math.sub (var "lhsarity") (int32 1)) @@ var "a2")
           (var "a2"),
-      _Term_function>>: "f" ~> cases _Function (var "f")
-        (Just $ var "recurseOrForce" @@ var "term") [
-        _Function_elimination>>: "elm" ~> var "forElimination" @@ var "elm",
-        _Function_lambda>>: "l" ~>
-          "txl" <~ Scoping.extendGraphForLambda @@ var "tx" @@ var "l" $
-           Eithers.map (var "unwind") (var "recurse" @@ var "txl" @@ var "term")],
+      _Term_cases>>: "cs" ~> var "forCases" @@ var "cs",
+      _Term_project>>: "p" ~> right $ var "forNullaryElim" @@ Core.termProject (var "p"),
+      _Term_unwrap>>: "n" ~> right $ var "forNullaryElim" @@ Core.termUnwrap (var "n"),
+      _Term_lambda>>: "l" ~>
+        "txl" <~ Scoping.extendGraphForLambda @@ var "tx" @@ var "l" $
+         Eithers.map (var "unwind") (var "recurse" @@ var "txl" @@ var "term"),
       _Term_let>>: "l" ~>
         "txlt" <~ Scoping.extendGraphForLet @@ constant (constant nothing) @@ var "tx" @@ var "l" $
         var "recurse" @@ var "txlt" @@ var "term",
@@ -694,10 +687,7 @@ etaReduceTerm = define "etaReduceTerm" $
       Core.termAnnotated $ Core.annotatedTerm
         (etaReduceTerm @@ (Core.annotatedTermBody $ var "at"))
         (Core.annotatedTermAnnotation $ var "at"),
-    _Term_function>>: "f" ~>
-      cases _Function (var "f")
-        (Just $ var "noChange") [
-        _Function_lambda>>: "l" ~> var "reduceLambda" @@ var "l"]]
+    _Term_lambda>>: "l" ~> var "reduceLambda" @@ var "l"]
 
 reduceTerm :: TTermDefinition (Context -> Graph -> Bool -> Term -> Prelude.Either Error Term)
 reduceTerm = define "reduceTerm" $
@@ -705,12 +695,9 @@ reduceTerm = define "reduceTerm" $
   "cx" ~> "graph" ~> "eager" ~> "term" ~>
   "reduce" <~ ("eager" ~> reduceTerm @@ var "cx" @@ var "graph" @@ var "eager") $
   "doRecurse" <~ ("eager" ~> "term" ~>
-    "isNonLambda" <~ ("f" ~> cases _Function (var "f")
-      (Just true) [
-      _Function_lambda>>: constant false]) $
     "isNonLambdaTerm" <~ cases _Term (var "term")
       (Just true) [
-      _Term_function>>: "f" ~> var "isNonLambda" @@ var "f",
+      _Term_lambda>>: constant false,
       -- Don't recurse into let; handle in applyIfNullary
       _Term_let>>: constant false] $
     Logic.and (var "eager") (var "isNonLambdaTerm")) $
@@ -726,38 +713,47 @@ reduceTerm = define "reduceTerm" $
         (Lists.tail $ var "args"))) $
   "mapErrorToString" <~ ("e" ~>
     Error.errorOther $ Error.otherError (ShowError.error_ @@ var "e")) $
-  "applyElimination" <~ ("elm" ~> "reducedArg" ~>
-    cases _Elimination (var "elm") Nothing [
-      _Elimination_record>>: "proj" ~>
-        "fields" <<~ ExtractCore.record @@ (Core.projectionTypeName $ var "proj") @@ var "graph" @@ (Strip.deannotateTerm @@ var "reducedArg") $
-        "matchingFields" <~ Lists.filter
-          ("f" ~> Equality.equal (Core.fieldName $ var "f") (Core.projectionField $ var "proj"))
-          (var "fields") $
-        Logic.ifElse
-          (Lists.null $ var "matchingFields")
-          (Ctx.failInContext (Error.errorResolution $ Error.resolutionErrorNoMatchingField $ Error.noMatchingFieldError (Core.projectionField $ var "proj")) (var "cx"))
-          (right $ Core.fieldTerm $ Lists.head $ var "matchingFields"),
-      _Elimination_union>>: "cs" ~>
-        "field" <<~ ExtractCore.injection @@ (Core.caseStatementTypeName $ var "cs") @@ var "graph" @@ var "reducedArg" $
-        "matchingFields" <~ Lists.filter
-          ("f" ~> Equality.equal (Core.fieldName $ var "f") (Core.fieldName $ var "field"))
-          (Core.caseStatementCases $ var "cs") $
-        Logic.ifElse (Lists.null $ var "matchingFields")
-          (Maybes.maybe
-            (Ctx.failInContext (Error.errorResolution $ Error.resolutionErrorNoMatchingField $ Error.noMatchingFieldError (Core.fieldName $ var "field")) (var "cx"))
-            (unaryFunction right)
-            (Core.caseStatementDefault $ var "cs"))
-          (right $ Core.termApplication $ Core.application
-            (Core.fieldTerm $ Lists.head $ var "matchingFields")
-            (Core.fieldTerm $ var "field")),
-      _Elimination_wrap>>: "name" ~> ExtractCore.wrap @@ var "name" @@ var "graph" @@ var "reducedArg"]) $
+  "applyProjection" <~ ("proj" ~> "reducedArg" ~>
+    "fields" <<~ ExtractCore.record @@ (Core.projectionTypeName $ var "proj") @@ var "graph" @@ (Strip.deannotateTerm @@ var "reducedArg") $
+    "matchingFields" <~ Lists.filter
+      ("f" ~> Equality.equal (Core.fieldName $ var "f") (Core.projectionField $ var "proj"))
+      (var "fields") $
+    Logic.ifElse
+      (Lists.null $ var "matchingFields")
+      (Ctx.failInContext (Error.errorResolution $ Error.resolutionErrorNoMatchingField $ Error.noMatchingFieldError (Core.projectionField $ var "proj")) (var "cx"))
+      (right $ Core.fieldTerm $ Lists.head $ var "matchingFields")) $
+  "applyCases" <~ ("cs" ~> "reducedArg" ~>
+    "field" <<~ ExtractCore.injection @@ (Core.caseStatementTypeName $ var "cs") @@ var "graph" @@ var "reducedArg" $
+    "matchingFields" <~ Lists.filter
+      ("f" ~> Equality.equal (Core.fieldName $ var "f") (Core.fieldName $ var "field"))
+      (Core.caseStatementCases $ var "cs") $
+    Logic.ifElse (Lists.null $ var "matchingFields")
+      (Maybes.maybe
+        (Ctx.failInContext (Error.errorResolution $ Error.resolutionErrorNoMatchingField $ Error.noMatchingFieldError (Core.fieldName $ var "field")) (var "cx"))
+        (unaryFunction right)
+        (Core.caseStatementDefault $ var "cs"))
+      (right $ Core.termApplication $ Core.application
+        (Core.fieldTerm $ Lists.head $ var "matchingFields")
+        (Core.fieldTerm $ var "field"))) $
   "applyIfNullary" <~ ("eager" ~> "original" ~> "args" ~>
     "stripped" <~ Strip.deannotateTerm @@ var "original" $
-    "forElimination" <~ ("elm" ~> "args" ~>
+    "forProjection" <~ ("proj" ~> "args" ~>
       "arg" <~ Lists.head (var "args") $
       "remainingArgs" <~ Lists.tail (var "args") $
       "reducedArg" <<~ var "reduceArg" @@ var "eager" @@ (Strip.deannotateTerm @@ var "arg") $
-      "reducedResult" <<~ Eithers.bind (var "applyElimination" @@ var "elm" @@ var "reducedArg") (var "reduce" @@ var "eager") $
+      "reducedResult" <<~ Eithers.bind (var "applyProjection" @@ var "proj" @@ var "reducedArg") (var "reduce" @@ var "eager") $
+      var "applyIfNullary" @@ var "eager" @@ var "reducedResult" @@ var "remainingArgs") $
+    "forCases" <~ ("cs" ~> "args" ~>
+      "arg" <~ Lists.head (var "args") $
+      "remainingArgs" <~ Lists.tail (var "args") $
+      "reducedArg" <<~ var "reduceArg" @@ var "eager" @@ (Strip.deannotateTerm @@ var "arg") $
+      "reducedResult" <<~ Eithers.bind (var "applyCases" @@ var "cs" @@ var "reducedArg") (var "reduce" @@ var "eager") $
+      var "applyIfNullary" @@ var "eager" @@ var "reducedResult" @@ var "remainingArgs") $
+    "forUnwrap" <~ ("name" ~> "args" ~>
+      "arg" <~ Lists.head (var "args") $
+      "remainingArgs" <~ Lists.tail (var "args") $
+      "reducedArg" <<~ var "reduceArg" @@ var "eager" @@ (Strip.deannotateTerm @@ var "arg") $
+      "reducedResult" <<~ Eithers.bind (ExtractCore.wrap @@ var "name" @@ var "graph" @@ var "reducedArg") (var "reduce" @@ var "eager") $
       var "applyIfNullary" @@ var "eager" @@ var "reducedResult" @@ var "remainingArgs") $
     "forLambda" <~ ("l" ~> "args" ~>
       "param" <~ Core.lambdaParameter (var "l") $
@@ -782,15 +778,22 @@ reduceTerm = define "reduceTerm" $
       _Term_application>>: "app" ~> var "applyIfNullary" @@ var "eager" @@
         (Core.applicationFunction $ var "app") @@
         (Lists.cons (Core.applicationArgument $ var "app") (var "args")),
-      _Term_function>>: match _Function Nothing [
-          _Function_elimination>>: "elm" ~>
-            Logic.ifElse (Lists.null $ var "args")
-              (right $ var "original")
-              (var "forElimination" @@ var "elm" @@ var "args"),
-          _Function_lambda>>: "l" ~>
-            Logic.ifElse (Lists.null $ var "args")
-              (right $ var "original")
-              (var "forLambda" @@ var "l" @@ var "args")],
+      _Term_cases>>: "cs" ~>
+        Logic.ifElse (Lists.null $ var "args")
+          (right $ var "original")
+          (var "forCases" @@ var "cs" @@ var "args"),
+      _Term_project>>: "p" ~>
+        Logic.ifElse (Lists.null $ var "args")
+          (right $ var "original")
+          (var "forProjection" @@ var "p" @@ var "args"),
+      _Term_unwrap>>: "n" ~>
+        Logic.ifElse (Lists.null $ var "args")
+          (right $ var "original")
+          (var "forUnwrap" @@ var "n" @@ var "args"),
+      _Term_lambda>>: "l" ~>
+        Logic.ifElse (Lists.null $ var "args")
+          (right $ var "original")
+          (var "forLambda" @@ var "l" @@ var "args"),
       _Term_variable>>: "v" ~>
         -- Look up the variable in the graph; if found, reduce its definition
         "mBinding" <~ Lexical.lookupBinding @@ var "graph" @@ var "v" $
@@ -860,25 +863,21 @@ termIsValue = define "termIsValue" $
   "forList" <~ ("els" ~> Lists.foldl ("b" ~> "t" ~> Logic.and (var "b") (termIsValue @@ var "t")) true (var "els")) $
   "checkField" <~ ("f" ~> termIsValue @@ Core.fieldTerm (var "f")) $
   "checkFields" <~ ("fields" ~> Lists.foldl ("b" ~> "f" ~> Logic.and (var "b") (var "checkField" @@ var "f")) true (var "fields")) $
-  "functionIsValue" <~ ("f" ~> cases _Function (var "f") Nothing [
-    _Function_elimination>>: "e" ~>
-      cases _Elimination (var "e") Nothing [
-        _Elimination_wrap>>: constant true,
-        _Elimination_record>>: constant true,
-        _Elimination_union>>: "cs" ~>
-          Logic.and (var "checkFields" @@ Core.caseStatementCases (var "cs"))
-            (Maybes.maybe true termIsValue (Core.caseStatementDefault $ var "cs"))],
-    _Function_lambda>>: "l" ~> termIsValue @@ Core.lambdaBody (var "l")]) $
   cases _Term (Strip.deannotateTerm @@ var "term")
     (Just false) [
     _Term_application>>: constant false,
+    _Term_cases>>: "cs" ~>
+      Logic.and (var "checkFields" @@ Core.caseStatementCases (var "cs"))
+        (Maybes.maybe true termIsValue (Core.caseStatementDefault $ var "cs")),
     _Term_either>>: "e" ~>
       Eithers.either_
         ("l" ~> termIsValue @@ var "l")
         ("r" ~> termIsValue @@ var "r")
         (var "e"),
+    _Term_lambda>>: "l" ~> termIsValue @@ Core.lambdaBody (var "l"),
     _Term_literal>>: constant true,
-    _Term_function>>: "f" ~> var "functionIsValue" @@ var "f",
+    _Term_project>>: constant true,
+    _Term_unwrap>>: constant true,
     _Term_list>>: "els" ~> var "forList" @@ var "els",
     _Term_map>>: "m" ~>
       Lists.foldl ("b" ~> "kv" ~>

@@ -2,7 +2,7 @@
 
 ;; Term-building helpers for annotation bindings
 (define (t-lam param body)
-  (list 'function (list 'lambda (make-hydra_core_lambda param '() body))))
+  (list 'lambda (make-hydra_core_lambda param '() body)))
 (define (t-var name)
   (list 'variable name))
 (define (t-app fun arg)
@@ -21,11 +21,9 @@
 (define (t-field name term)
   (make-hydra_core_field name term))
 (define (t-project type-name field-name)
-  (list 'function (list 'elimination
-    (list 'record (make-hydra_core_projection type-name field-name)))))
+  (list 'project (make-hydra_core_projection type-name field-name)))
 (define (t-match type-name default . case-fields)
-  (list 'function (list 'elimination
-    (list 'union (make-hydra_core_case_statement type-name default case-fields)))))
+  (list 'cases (make-hydra_core_case_statement type-name default case-fields)))
 (define (t-right v) (list 'either (list 'right v)))
 (define (t-left v) (list 'either (list 'left v)))
 (define (t-just v) (list 'maybe (t-inject "hydra.core.Term" "literal"

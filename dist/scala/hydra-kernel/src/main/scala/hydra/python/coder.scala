@@ -78,38 +78,36 @@ def deduplicateCaseVariables(`cases_`: Seq[hydra.core.Field]): Seq[hydra.core.Fi
     lazy val fname: hydra.core.Name = (field.name)
     lazy val fterm: hydra.core.Term = (field.term)
     hydra.strip.deannotateAndDetypeTerm(fterm) match
-      case hydra.core.Term.function(v_Term_function_f) => v_Term_function_f match
-        case hydra.core.Function.lambda(v_Function_lambda_lam) => {
-          lazy val v: hydra.core.Name = (v_Function_lambda_lam.parameter)
+      case hydra.core.Term.lambda(v_Term_lambda_lam) => {
+        lazy val v: hydra.core.Name = (v_Term_lambda_lam.parameter)
+        {
+          lazy val mdom: Option[hydra.core.Type] = (v_Term_lambda_lam.domain)
           {
-            lazy val mdom: Option[hydra.core.Type] = (v_Function_lambda_lam.domain)
-            {
-              lazy val body: hydra.core.Term = (v_Function_lambda_lam.body)
-              hydra.lib.maybes.maybe[Tuple2[Map[hydra.core.Name, Int], Seq[hydra.core.Field]], Int](Tuple2(hydra.lib.maps.insert[hydra.core.Name,
-                 Int](v)(1)(countByName), hydra.lib.lists.cons[hydra.core.Field](field)(done)))((count: Int) =>
+            lazy val body: hydra.core.Term = (v_Term_lambda_lam.body)
+            hydra.lib.maybes.maybe[Tuple2[Map[hydra.core.Name, Int], Seq[hydra.core.Field]], Int](Tuple2(hydra.lib.maps.insert[hydra.core.Name,
+               Int](v)(1)(countByName), hydra.lib.lists.cons[hydra.core.Field](field)(done)))((count: Int) =>
+              {
+              lazy val count2: Int = hydra.lib.math.add(count)(1)
+              {
+                lazy val v2: hydra.core.Name = hydra.lib.strings.cat2(v)(hydra.lib.literals.showInt32(count2))
                 {
-                lazy val count2: Int = hydra.lib.math.add(count)(1)
-                {
-                  lazy val v2: hydra.core.Name = hydra.lib.strings.cat2(v)(hydra.lib.literals.showInt32(count2))
+                  lazy val newBody: hydra.core.Term = hydra.reduction.alphaConvert(v)(v2)(body)
                   {
-                    lazy val newBody: hydra.core.Term = hydra.reduction.alphaConvert(v)(v2)(body)
+                    lazy val newLam: hydra.core.Lambda = hydra.core.Lambda(v2, mdom, newBody)
                     {
-                      lazy val newLam: hydra.core.Lambda = hydra.core.Lambda(v2, mdom, newBody)
+                      lazy val newTerm: hydra.core.Term = hydra.core.Term.lambda(newLam)
                       {
-                        lazy val newTerm: hydra.core.Term = hydra.core.Term.function(hydra.core.Function.lambda(newLam))
-                        {
-                          lazy val newField: hydra.core.Field = hydra.core.Field(fname, newTerm)
-                          Tuple2(hydra.lib.maps.insert[hydra.core.Name, Int](v)(count2)(countByName), hydra.lib.lists.cons[hydra.core.Field](newField)(done))
-                        }
+                        lazy val newField: hydra.core.Field = hydra.core.Field(fname, newTerm)
+                        Tuple2(hydra.lib.maps.insert[hydra.core.Name, Int](v)(count2)(countByName), hydra.lib.lists.cons[hydra.core.Field](newField)(done))
                       }
                     }
                   }
                 }
-              })(hydra.lib.maps.lookup[hydra.core.Name, Int](v)(countByName))
-            }
+              }
+            })(hydra.lib.maps.lookup[hydra.core.Name, Int](v)(countByName))
           }
         }
-        case _ => Tuple2(countByName, hydra.lib.lists.cons[hydra.core.Field](field)(done))
+      }
       case _ => Tuple2(countByName, hydra.lib.lists.cons[hydra.core.Field](field)(done))
   }
   lazy val result: Tuple2[Map[hydra.core.Name, Int], Seq[hydra.core.Field]] = hydra.lib.lists.foldl[Tuple2[Map[hydra.core.Name,
@@ -136,15 +134,11 @@ def eliminateUnitVar(v: hydra.core.Name)(term0: hydra.core.Term): hydra.core.Ter
        (v_Term_annotated_at.annotation)))
     case hydra.core.Term.application(v_Term_application_app) => hydra.core.Term.application(hydra.core.Application(recurse(v_Term_application_app.function),
        recurse(v_Term_application_app.argument)))
-    case hydra.core.Term.function(v_Term_function_f) => v_Term_function_f match
-      case hydra.core.Function.lambda(v_Function_lambda_lam) => hydra.lib.logic.ifElse[hydra.core.Term](hydra.lib.equality.equal[hydra.core.Name](v_Function_lambda_lam.parameter)(v))(term)(hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda(v_Function_lambda_lam.parameter,
-         (v_Function_lambda_lam.domain), recurse(v_Function_lambda_lam.body)))))
-      case hydra.core.Function.elimination(v_Function_elimination_e) => v_Function_elimination_e match
-        case hydra.core.Elimination.union(v_Elimination_union_cs) => hydra.core.Term.function(hydra.core.Function.elimination(hydra.core.Elimination.union(hydra.core.CaseStatement(v_Elimination_union_cs.typeName,
-           hydra.lib.maybes.map[hydra.core.Term, hydra.core.Term](recurse)(v_Elimination_union_cs.default),
-           hydra.lib.lists.map[hydra.core.Field, hydra.core.Field]((v1: hydra.core.Field) => rewriteField(recurse)(v1))(v_Elimination_union_cs.cases)))))
-        case _ => term
-      case _ => term
+    case hydra.core.Term.lambda(v_Term_lambda_lam) => hydra.lib.logic.ifElse[hydra.core.Term](hydra.lib.equality.equal[hydra.core.Name](v_Term_lambda_lam.parameter)(v))(term)(hydra.core.Term.lambda(hydra.core.Lambda(v_Term_lambda_lam.parameter,
+       (v_Term_lambda_lam.domain), recurse(v_Term_lambda_lam.body))))
+    case hydra.core.Term.cases(v_Term_cases_cs) => hydra.core.Term.cases(hydra.core.CaseStatement(v_Term_cases_cs.typeName,
+       hydra.lib.maybes.map[hydra.core.Term, hydra.core.Term](recurse)(v_Term_cases_cs.default), hydra.lib.lists.map[hydra.core.Field,
+       hydra.core.Field]((v1: hydra.core.Field) => rewriteField(recurse)(v1))(v_Term_cases_cs.cases)))
     case hydra.core.Term.let(v_Term_let_lt) => hydra.core.Term.let(hydra.core.Let(hydra.lib.lists.map[hydra.core.Binding,
        hydra.core.Binding]((v1: hydra.core.Binding) => rewriteBinding(recurse)(v1))(v_Term_let_lt.bindings),
        recurse(v_Term_let_lt.body)))
@@ -227,32 +221,28 @@ def encodeApplicationInner(cx: hydra.context.Context)(env: hydra.python.environm
      hydra.python.syntax.Expression, Tuple2[hydra.python.syntax.Expression, Seq[hydra.python.syntax.Expression]]](hydra.python.coder.encodeTermInline(cx)(env)(false)(fun))((pfun: hydra.python.syntax.Expression) =>
     Right(Tuple2(hydra.python.utils.functionCall(hydra.python.utils.pyExpressionToPyPrimary(pfun))(hargs), rargs)))
   hydra.strip.deannotateAndDetypeTerm(fun) match
-    case hydra.core.Term.function(v_Term_function_f) => v_Term_function_f match
-      case hydra.core.Function.elimination(v_Function_elimination_elm) => v_Function_elimination_elm match
-        case hydra.core.Elimination.record(v_Elimination_record_proj) => {
-          lazy val fname: hydra.core.Name = (v_Elimination_record_proj.field)
-          {
-            lazy val fieldExpr: hydra.python.syntax.Expression = hydra.python.utils.projectFromExpression(firstArg)(hydra.python.names.encodeFieldName(env)(fname))
-            Right(Tuple2(withRest(fieldExpr), rargs))
-          }
-        }
-        case hydra.core.Elimination.union(v_Elimination_union_cs) => hydra.lib.eithers.bind[hydra.errors.Error,
-           hydra.python.syntax.Expression, Tuple2[hydra.python.syntax.Expression, Seq[hydra.python.syntax.Expression]]](hydra.python.coder.encodeUnionEliminationInline(cx)(env)(v_Elimination_union_cs)(firstArg))((inlineExpr: hydra.python.syntax.Expression) => Right(Tuple2(withRest(inlineExpr),
-           rargs)))
-        case hydra.core.Elimination.wrap(v_Elimination_wrap__) => {
-          lazy val valueExpr: hydra.python.syntax.Expression = hydra.python.utils.projectFromExpression(firstArg)("value")
-          {
-            lazy val allArgs: Seq[hydra.python.syntax.Expression] = hydra.lib.lists.concat2[hydra.python.syntax.Expression](restArgs)(rargs)
-            hydra.lib.logic.ifElse[Either[hydra.errors.Error, Tuple2[hydra.python.syntax.Expression, Seq[hydra.python.syntax.Expression]]]](hydra.lib.lists.`null`[hydra.python.syntax.Expression](allArgs))(Right(Tuple2(valueExpr,
-               Seq())))(Right(Tuple2(hydra.python.utils.functionCall(hydra.python.utils.pyExpressionToPyPrimary(valueExpr))(allArgs),
-               Seq())))
-          }
-        }
-        case _ => defaultCase
-      case hydra.core.Function.lambda(v_Function_lambda__) => hydra.lib.eithers.bind[hydra.errors.Error,
-         hydra.python.syntax.Expression, Tuple2[hydra.python.syntax.Expression, Seq[hydra.python.syntax.Expression]]](hydra.python.coder.encodeTermInline(cx)(env)(false)(fun))((pfun: hydra.python.syntax.Expression) =>
-        Right(Tuple2(hydra.python.utils.functionCall(hydra.python.utils.pyExpressionToPyPrimary(pfun))(hargs), rargs)))
-      case _ => defaultCase
+    case hydra.core.Term.project(v_Term_project_proj) => {
+      lazy val fname: hydra.core.Name = (v_Term_project_proj.field)
+      {
+        lazy val fieldExpr: hydra.python.syntax.Expression = hydra.python.utils.projectFromExpression(firstArg)(hydra.python.names.encodeFieldName(env)(fname))
+        Right(Tuple2(withRest(fieldExpr), rargs))
+      }
+    }
+    case hydra.core.Term.cases(v_Term_cases_cs) => hydra.lib.eithers.bind[hydra.errors.Error, hydra.python.syntax.Expression,
+       Tuple2[hydra.python.syntax.Expression, Seq[hydra.python.syntax.Expression]]](hydra.python.coder.encodeUnionEliminationInline(cx)(env)(v_Term_cases_cs)(firstArg))((inlineExpr: hydra.python.syntax.Expression) => Right(Tuple2(withRest(inlineExpr),
+       rargs)))
+    case hydra.core.Term.unwrap(v_Term_unwrap__) => {
+      lazy val valueExpr: hydra.python.syntax.Expression = hydra.python.utils.projectFromExpression(firstArg)("value")
+      {
+        lazy val allArgs: Seq[hydra.python.syntax.Expression] = hydra.lib.lists.concat2[hydra.python.syntax.Expression](restArgs)(rargs)
+        hydra.lib.logic.ifElse[Either[hydra.errors.Error, Tuple2[hydra.python.syntax.Expression, Seq[hydra.python.syntax.Expression]]]](hydra.lib.lists.`null`[hydra.python.syntax.Expression](allArgs))(Right(Tuple2(valueExpr,
+           Seq())))(Right(Tuple2(hydra.python.utils.functionCall(hydra.python.utils.pyExpressionToPyPrimary(valueExpr))(allArgs),
+           Seq())))
+      }
+    }
+    case hydra.core.Term.lambda(v_Term_lambda__) => hydra.lib.eithers.bind[hydra.errors.Error, hydra.python.syntax.Expression,
+       Tuple2[hydra.python.syntax.Expression, Seq[hydra.python.syntax.Expression]]](hydra.python.coder.encodeTermInline(cx)(env)(false)(fun))((pfun: hydra.python.syntax.Expression) =>
+      Right(Tuple2(hydra.python.utils.functionCall(hydra.python.utils.pyExpressionToPyPrimary(pfun))(hargs), rargs)))
     case hydra.core.Term.variable(v_Term_variable_name) => {
       lazy val g: hydra.graph.Graph = hydra.python.coder.pythonEnvironmentGetGraph(env)
       {
@@ -587,12 +577,7 @@ def encodeCaseBlock[T0, T1](cx: T0)(env: hydra.python.environment.PythonEnvironm
   lazy val fterm: hydra.core.Term = (field.term)
   lazy val stripped: hydra.core.Term = hydra.strip.deannotateAndDetypeTerm(fterm)
   lazy val effectiveLambda: hydra.core.Lambda = stripped match
-    case hydra.core.Term.function(v_Term_function_f) => v_Term_function_f match
-      case hydra.core.Function.lambda(v_Function_lambda_lam) => v_Function_lambda_lam
-      case _ => {
-        lazy val syntheticVar2: hydra.core.Name = "_matchValue"
-        hydra.core.Lambda(syntheticVar2, None, hydra.core.Term.application(hydra.core.Application(stripped, hydra.core.Term.variable(syntheticVar2))))
-      }
+    case hydra.core.Term.lambda(v_Term_lambda_lam) => v_Term_lambda_lam
     case _ => {
       lazy val syntheticVar: hydra.core.Name = "_matchValue"
       hydra.core.Lambda(syntheticVar, None, hydra.core.Term.application(hydra.core.Application(stripped, hydra.core.Term.variable(syntheticVar))))
@@ -763,74 +748,6 @@ def encodeForallType[T0](env: hydra.python.environment.PythonEnvironment)(lt: hy
        hydra.python.syntax.Sum(None, hydra.python.syntax.Term(None, hydra.python.syntax.Factor.simple(hydra.python.syntax.Power(hydra.python.syntax.AwaitPrimary(false,
        hydra.python.syntax.Primary.simple(hydra.python.syntax.Atom.name(n))), None)))))))), Seq()))))))(params))))
 }
-
-def encodeFunction(cx: hydra.context.Context)(env: hydra.python.environment.PythonEnvironment)(f: hydra.core.Function): Either[hydra.errors.Error,
-   hydra.python.syntax.Expression] =
-  f match
-  case hydra.core.Function.lambda(v_Function_lambda_lam) => hydra.lib.eithers.bind[hydra.errors.Error,
-     hydra.typing.FunctionStructure[hydra.python.environment.PythonEnvironment], hydra.python.syntax.Expression](hydra.python.coder.analyzePythonFunction(cx)(env)(hydra.core.Term.function(hydra.core.Function.lambda(v_Function_lambda_lam))))((fs: hydra.typing.FunctionStructure[hydra.python.environment.PythonEnvironment]) =>
-    {
-    lazy val params: Seq[hydra.core.Name] = (fs.params)
-    {
-      lazy val bindings: Seq[hydra.core.Binding] = (fs.bindings)
-      {
-        lazy val innerBody: hydra.core.Term = (fs.body)
-        {
-          lazy val innerEnv0: hydra.python.environment.PythonEnvironment = (fs.environment)
-          {
-            lazy val bindingNames: Seq[hydra.core.Name] = hydra.lib.lists.map[hydra.core.Binding, hydra.core.Name]((b: hydra.core.Binding) => (b.name))(bindings)
-            {
-              lazy val innerEnv: hydra.python.environment.PythonEnvironment = hydra.python.environment.PythonEnvironment(innerEnv0.namespaces,
-                 (innerEnv0.boundTypeVariables), (innerEnv0.graph), (innerEnv0.nullaryBindings), (innerEnv0.version),
-                 (innerEnv0.skipCasts), hydra.lib.sets.union[hydra.core.Name](hydra.lib.sets.fromList[hydra.core.Name](bindingNames))(innerEnv0.inlineVariables))
-              hydra.lib.eithers.bind[hydra.errors.Error, hydra.python.syntax.Expression, hydra.python.syntax.Expression](hydra.python.coder.encodeTermInline(cx)(innerEnv)(false)(innerBody))((pbody: hydra.python.syntax.Expression) =>
-                {
-                lazy val pparams: Seq[hydra.python.syntax.Name] = hydra.lib.lists.map[hydra.core.Name, hydra.python.syntax.Name]((v1: hydra.core.Name) =>
-                  hydra.python.names.encodeName(false)(hydra.util.CaseConvention.lowerSnake)(innerEnv)(v1))(params)
-                hydra.lib.logic.ifElse[Either[hydra.errors.Error, hydra.python.syntax.Expression]](hydra.lib.lists.`null`[hydra.core.Binding](bindings))(Right(hydra.python.coder.makeUncurriedLambda(pparams)(pbody)))(hydra.lib.eithers.bind[hydra.errors.Error,
-                   Seq[hydra.python.syntax.NamedExpression], hydra.python.syntax.Expression](hydra.lib.eithers.mapList[hydra.core.Binding,
-                   hydra.python.syntax.NamedExpression, hydra.errors.Error]((v1: hydra.core.Binding) =>
-                  hydra.python.coder.encodeBindingAsAssignment(cx)(false)(innerEnv)(v1))(bindings))((pbindingExprs: Seq[hydra.python.syntax.NamedExpression]) =>
-                  {
-                  lazy val pbindingStarExprs: Seq[hydra.python.syntax.StarNamedExpression] = hydra.lib.lists.map[hydra.python.syntax.NamedExpression,
-                     hydra.python.syntax.StarNamedExpression]((ne: hydra.python.syntax.NamedExpression) => hydra.python.syntax.StarNamedExpression.simple(ne))(pbindingExprs)
-                  {
-                    lazy val pbodyStarExpr: hydra.python.syntax.StarNamedExpression = hydra.python.utils.pyExpressionToPyStarNamedExpression(pbody)
-                    {
-                      lazy val tupleElements: Seq[hydra.python.syntax.StarNamedExpression] = hydra.lib.lists.concat2[hydra.python.syntax.StarNamedExpression](pbindingStarExprs)(Seq(pbodyStarExpr))
-                      {
-                        lazy val tupleExpr: hydra.python.syntax.Expression = hydra.python.utils.pyAtomToPyExpression(hydra.python.syntax.Atom.tuple(tupleElements))
-                        {
-                          lazy val indexValue: hydra.python.syntax.Expression = hydra.python.utils.pyAtomToPyExpression(hydra.python.syntax.Atom.number(hydra.python.syntax.Number.integer(hydra.lib.literals.int32ToBigint(hydra.lib.lists.length[hydra.core.Binding](bindings)))))
-                          {
-                            lazy val indexedExpr: hydra.python.syntax.Primary = hydra.python.utils.primaryWithExpressionSlices(hydra.python.utils.pyExpressionToPyPrimary(tupleExpr))(Seq(indexValue))
-                            Right(hydra.python.coder.makeUncurriedLambda(pparams)(hydra.python.utils.pyPrimaryToPyExpression(indexedExpr)))
-                          }
-                        }
-                      }
-                    }
-                  }
-                }))
-              })
-            }
-          }
-        }
-      }
-    }
-  })
-  case hydra.core.Function.elimination(v_Function_elimination_e) => v_Function_elimination_e match
-    case hydra.core.Elimination.record(v_Elimination_record_proj) => {
-      lazy val fname: hydra.core.Name = (v_Elimination_record_proj.field)
-      Right(hydra.python.coder.makeCurriedLambda(Seq("v1"))(hydra.python.utils.projectFromExpression(hydra.python.syntax.Expression.simple(Seq(Seq(hydra.python.syntax.Inversion.simple(hydra.python.syntax.Comparison(hydra.python.syntax.BitwiseOr(None,
-         hydra.python.syntax.BitwiseXor(None, hydra.python.syntax.BitwiseAnd(None, hydra.python.syntax.ShiftExpression(None,
-         hydra.python.syntax.Sum(None, hydra.python.syntax.Term(None, hydra.python.syntax.Factor.simple(hydra.python.syntax.Power(hydra.python.syntax.AwaitPrimary(false,
-         hydra.python.syntax.Primary.simple(hydra.python.syntax.Atom.name("v1"))), None)))))))), Seq()))))))(hydra.python.names.encodeFieldName(env)(fname))))
-    }
-    case hydra.core.Elimination.wrap(v_Elimination_wrap__) => Right(hydra.python.coder.makeCurriedLambda(Seq("v1"))(hydra.python.utils.projectFromExpression(hydra.python.syntax.Expression.simple(Seq(Seq(hydra.python.syntax.Inversion.simple(hydra.python.syntax.Comparison(hydra.python.syntax.BitwiseOr(None,
-       hydra.python.syntax.BitwiseXor(None, hydra.python.syntax.BitwiseAnd(None, hydra.python.syntax.ShiftExpression(None,
-       hydra.python.syntax.Sum(None, hydra.python.syntax.Term(None, hydra.python.syntax.Factor.simple(hydra.python.syntax.Power(hydra.python.syntax.AwaitPrimary(false,
-       hydra.python.syntax.Primary.simple(hydra.python.syntax.Atom.name("v1"))), None)))))))), Seq()))))))("value")))
-    case hydra.core.Elimination.union(v_Elimination_union__) => Right(hydra.python.coder.unsupportedExpression("case expressions as values are not yet supported"))
 
 def encodeFunctionDefinition(cx: hydra.context.Context)(env: hydra.python.environment.PythonEnvironment)(name: hydra.core.Name)(tparams: Seq[hydra.core.Name])(args: Seq[hydra.core.Name])(body: hydra.core.Term)(doms: Seq[hydra.core.Type])(mcod: Option[hydra.core.Type])(comment: Option[scala.Predef.String])(prefixes: Seq[hydra.python.syntax.Statement]): Either[hydra.errors.Error,
    hydra.python.syntax.Statement] =
@@ -1146,7 +1063,69 @@ def encodeTermInline(cx: hydra.context.Context)(env: hydra.python.environment.Py
       withCast(hydra.python.utils.functionCall(hydra.python.utils.pyNameToPyPrimary("Left"))(Seq(pyexp)))))((t1: hydra.core.Term) =>
       hydra.lib.eithers.bind[hydra.errors.Error, hydra.python.syntax.Expression, hydra.python.syntax.Expression](encode(t1))((pyexp: hydra.python.syntax.Expression) =>
       withCast(hydra.python.utils.functionCall(hydra.python.utils.pyNameToPyPrimary("Right"))(Seq(pyexp)))))(v_Term_either_et)
-    case hydra.core.Term.function(v_Term_function_f) => hydra.python.coder.encodeFunction(cx)(env)(v_Term_function_f)
+    case hydra.core.Term.lambda(v_Term_lambda_lam) => hydra.lib.eithers.bind[hydra.errors.Error, hydra.typing.FunctionStructure[hydra.python.environment.PythonEnvironment],
+       hydra.python.syntax.Expression](hydra.python.coder.analyzePythonFunction(cx)(env)(hydra.core.Term.lambda(v_Term_lambda_lam)))((fs: hydra.typing.FunctionStructure[hydra.python.environment.PythonEnvironment]) =>
+      {
+      lazy val params: Seq[hydra.core.Name] = (fs.params)
+      {
+        lazy val bindings: Seq[hydra.core.Binding] = (fs.bindings)
+        {
+          lazy val innerBody: hydra.core.Term = (fs.body)
+          {
+            lazy val innerEnv0: hydra.python.environment.PythonEnvironment = (fs.environment)
+            {
+              lazy val bindingNames: Seq[hydra.core.Name] = hydra.lib.lists.map[hydra.core.Binding, hydra.core.Name]((b: hydra.core.Binding) => (b.name))(bindings)
+              {
+                lazy val innerEnv: hydra.python.environment.PythonEnvironment = hydra.python.environment.PythonEnvironment(innerEnv0.namespaces,
+                   (innerEnv0.boundTypeVariables), (innerEnv0.graph), (innerEnv0.nullaryBindings), (innerEnv0.version),
+                   (innerEnv0.skipCasts), hydra.lib.sets.union[hydra.core.Name](hydra.lib.sets.fromList[hydra.core.Name](bindingNames))(innerEnv0.inlineVariables))
+                hydra.lib.eithers.bind[hydra.errors.Error, hydra.python.syntax.Expression, hydra.python.syntax.Expression](hydra.python.coder.encodeTermInline(cx)(innerEnv)(false)(innerBody))((pbody: hydra.python.syntax.Expression) =>
+                  {
+                  lazy val pparams: Seq[hydra.python.syntax.Name] = hydra.lib.lists.map[hydra.core.Name, hydra.python.syntax.Name]((v1: hydra.core.Name) =>
+                    hydra.python.names.encodeName(false)(hydra.util.CaseConvention.lowerSnake)(innerEnv)(v1))(params)
+                  hydra.lib.logic.ifElse[Either[hydra.errors.Error, hydra.python.syntax.Expression]](hydra.lib.lists.`null`[hydra.core.Binding](bindings))(Right(hydra.python.coder.makeUncurriedLambda(pparams)(pbody)))(hydra.lib.eithers.bind[hydra.errors.Error,
+                     Seq[hydra.python.syntax.NamedExpression], hydra.python.syntax.Expression](hydra.lib.eithers.mapList[hydra.core.Binding,
+                     hydra.python.syntax.NamedExpression, hydra.errors.Error]((v1: hydra.core.Binding) =>
+                    hydra.python.coder.encodeBindingAsAssignment(cx)(false)(innerEnv)(v1))(bindings))((pbindingExprs: Seq[hydra.python.syntax.NamedExpression]) =>
+                    {
+                    lazy val pbindingStarExprs: Seq[hydra.python.syntax.StarNamedExpression] = hydra.lib.lists.map[hydra.python.syntax.NamedExpression,
+                       hydra.python.syntax.StarNamedExpression]((ne: hydra.python.syntax.NamedExpression) => hydra.python.syntax.StarNamedExpression.simple(ne))(pbindingExprs)
+                    {
+                      lazy val pbodyStarExpr: hydra.python.syntax.StarNamedExpression = hydra.python.utils.pyExpressionToPyStarNamedExpression(pbody)
+                      {
+                        lazy val tupleElements: Seq[hydra.python.syntax.StarNamedExpression] = hydra.lib.lists.concat2[hydra.python.syntax.StarNamedExpression](pbindingStarExprs)(Seq(pbodyStarExpr))
+                        {
+                          lazy val tupleExpr: hydra.python.syntax.Expression = hydra.python.utils.pyAtomToPyExpression(hydra.python.syntax.Atom.tuple(tupleElements))
+                          {
+                            lazy val indexValue: hydra.python.syntax.Expression = hydra.python.utils.pyAtomToPyExpression(hydra.python.syntax.Atom.number(hydra.python.syntax.Number.integer(hydra.lib.literals.int32ToBigint(hydra.lib.lists.length[hydra.core.Binding](bindings)))))
+                            {
+                              lazy val indexedExpr: hydra.python.syntax.Primary = hydra.python.utils.primaryWithExpressionSlices(hydra.python.utils.pyExpressionToPyPrimary(tupleExpr))(Seq(indexValue))
+                              Right(hydra.python.coder.makeUncurriedLambda(pparams)(hydra.python.utils.pyPrimaryToPyExpression(indexedExpr)))
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }))
+                })
+              }
+            }
+          }
+        }
+      }
+    })
+    case hydra.core.Term.project(v_Term_project_proj) => {
+      lazy val fname: hydra.core.Name = (v_Term_project_proj.field)
+      Right(hydra.python.coder.makeCurriedLambda(Seq("v1"))(hydra.python.utils.projectFromExpression(hydra.python.syntax.Expression.simple(Seq(Seq(hydra.python.syntax.Inversion.simple(hydra.python.syntax.Comparison(hydra.python.syntax.BitwiseOr(None,
+         hydra.python.syntax.BitwiseXor(None, hydra.python.syntax.BitwiseAnd(None, hydra.python.syntax.ShiftExpression(None,
+         hydra.python.syntax.Sum(None, hydra.python.syntax.Term(None, hydra.python.syntax.Factor.simple(hydra.python.syntax.Power(hydra.python.syntax.AwaitPrimary(false,
+         hydra.python.syntax.Primary.simple(hydra.python.syntax.Atom.name("v1"))), None)))))))), Seq()))))))(hydra.python.names.encodeFieldName(env)(fname))))
+    }
+    case hydra.core.Term.unwrap(v_Term_unwrap__) => Right(hydra.python.coder.makeCurriedLambda(Seq("v1"))(hydra.python.utils.projectFromExpression(hydra.python.syntax.Expression.simple(Seq(Seq(hydra.python.syntax.Inversion.simple(hydra.python.syntax.Comparison(hydra.python.syntax.BitwiseOr(None,
+       hydra.python.syntax.BitwiseXor(None, hydra.python.syntax.BitwiseAnd(None, hydra.python.syntax.ShiftExpression(None,
+       hydra.python.syntax.Sum(None, hydra.python.syntax.Term(None, hydra.python.syntax.Factor.simple(hydra.python.syntax.Power(hydra.python.syntax.AwaitPrimary(false,
+       hydra.python.syntax.Primary.simple(hydra.python.syntax.Atom.name("v1"))), None)))))))), Seq()))))))("value")))
+    case hydra.core.Term.cases(v_Term_cases__) => Right(hydra.python.coder.unsupportedExpression("case expressions as values are not yet supported"))
     case hydra.core.Term.let(v_Term_let_lt) => {
       lazy val bindings: Seq[hydra.core.Binding] = (v_Term_let_lt.bindings)
       {
@@ -1296,40 +1275,36 @@ def encodeTermMultiline(cx: hydra.context.Context)(env: hydra.python.environment
   hydra.lib.logic.ifElse[Either[hydra.errors.Error, Seq[hydra.python.syntax.Statement]]](hydra.lib.equality.equal[Int](hydra.lib.lists.length[hydra.core.Term](args))(1))({
     lazy val arg: hydra.core.Term = hydra.lib.lists.head[hydra.core.Term](args)
     hydra.strip.deannotateAndDetypeTerm(body) match
-      case hydra.core.Term.function(v_Term_function_f) => v_Term_function_f match
-        case hydra.core.Function.elimination(v_Function_elimination_e) => v_Function_elimination_e match
-          case hydra.core.Elimination.union(v_Elimination_union_cs) => {
-            lazy val tname: hydra.core.Name = (v_Elimination_union_cs.typeName)
-            {
-              lazy val dflt: Option[hydra.core.Term] = (v_Elimination_union_cs.default)
+      case hydra.core.Term.cases(v_Term_cases_cs) => {
+        lazy val tname: hydra.core.Name = (v_Term_cases_cs.typeName)
+        {
+          lazy val dflt: Option[hydra.core.Term] = (v_Term_cases_cs.default)
+          {
+            lazy val `cases_`: Seq[hydra.core.Field] = (v_Term_cases_cs.cases)
+            hydra.lib.eithers.bind[hydra.errors.Error, Seq[hydra.core.FieldType], Seq[hydra.python.syntax.Statement]](hydra.resolution.requireUnionType(cx)(hydra.python.coder.pythonEnvironmentGetGraph(env))(tname))((rt: Seq[hydra.core.FieldType]) =>
               {
-                lazy val `cases_`: Seq[hydra.core.Field] = (v_Elimination_union_cs.cases)
-                hydra.lib.eithers.bind[hydra.errors.Error, Seq[hydra.core.FieldType], Seq[hydra.python.syntax.Statement]](hydra.resolution.requireUnionType(cx)(hydra.python.coder.pythonEnvironmentGetGraph(env))(tname))((rt: Seq[hydra.core.FieldType]) =>
+              lazy val isEnum: Boolean = hydra.predicates.isEnumRowType(rt)
+              {
+                lazy val isFull: Boolean = hydra.python.coder.isCasesFull(rt)(`cases_`)
+                hydra.lib.eithers.bind[hydra.errors.Error, hydra.python.syntax.Expression, Seq[hydra.python.syntax.Statement]](hydra.python.coder.encodeTermInline(cx)(env)(false)(arg))((pyArg: hydra.python.syntax.Expression) =>
+                  hydra.lib.eithers.bind[hydra.errors.Error, Seq[hydra.python.syntax.CaseBlock], Seq[hydra.python.syntax.Statement]](hydra.lib.eithers.mapList[hydra.core.Field,
+                     hydra.python.syntax.CaseBlock, hydra.errors.Error]((v1: hydra.core.Field) =>
+                  hydra.python.coder.encodeCaseBlock(cx)(env)(tname)(rt)(isEnum)((e: hydra.python.environment.PythonEnvironment) =>
+                  (t: hydra.core.Term) => hydra.python.coder.encodeTermMultiline(cx)(e)(t))(v1))(hydra.python.coder.deduplicateCaseVariables(`cases_`)))((pyCases: Seq[hydra.python.syntax.CaseBlock]) =>
+                  hydra.lib.eithers.bind[hydra.errors.Error, Seq[hydra.python.syntax.CaseBlock], Seq[hydra.python.syntax.Statement]](hydra.python.coder.encodeDefaultCaseBlock((t: hydra.core.Term) => hydra.python.coder.encodeTermInline(cx)(env)(false)(t))(isFull)(dflt)(tname))((pyDflt: Seq[hydra.python.syntax.CaseBlock]) =>
                   {
-                  lazy val isEnum: Boolean = hydra.predicates.isEnumRowType(rt)
+                  lazy val subj: hydra.python.syntax.SubjectExpression = hydra.python.syntax.SubjectExpression.simple(hydra.python.syntax.NamedExpression.simple(pyArg))
                   {
-                    lazy val isFull: Boolean = hydra.python.coder.isCasesFull(rt)(`cases_`)
-                    hydra.lib.eithers.bind[hydra.errors.Error, hydra.python.syntax.Expression, Seq[hydra.python.syntax.Statement]](hydra.python.coder.encodeTermInline(cx)(env)(false)(arg))((pyArg: hydra.python.syntax.Expression) =>
-                      hydra.lib.eithers.bind[hydra.errors.Error, Seq[hydra.python.syntax.CaseBlock], Seq[hydra.python.syntax.Statement]](hydra.lib.eithers.mapList[hydra.core.Field,
-                         hydra.python.syntax.CaseBlock, hydra.errors.Error]((v1: hydra.core.Field) =>
-                      hydra.python.coder.encodeCaseBlock(cx)(env)(tname)(rt)(isEnum)((e2: hydra.python.environment.PythonEnvironment) =>
-                      (t: hydra.core.Term) => hydra.python.coder.encodeTermMultiline(cx)(e2)(t))(v1))(hydra.python.coder.deduplicateCaseVariables(`cases_`)))((pyCases: Seq[hydra.python.syntax.CaseBlock]) =>
-                      hydra.lib.eithers.bind[hydra.errors.Error, Seq[hydra.python.syntax.CaseBlock], Seq[hydra.python.syntax.Statement]](hydra.python.coder.encodeDefaultCaseBlock((t: hydra.core.Term) => hydra.python.coder.encodeTermInline(cx)(env)(false)(t))(isFull)(dflt)(tname))((pyDflt: Seq[hydra.python.syntax.CaseBlock]) =>
-                      {
-                      lazy val subj: hydra.python.syntax.SubjectExpression = hydra.python.syntax.SubjectExpression.simple(hydra.python.syntax.NamedExpression.simple(pyArg))
-                      {
-                        lazy val matchStmt: hydra.python.syntax.Statement = hydra.python.syntax.Statement.compound(hydra.python.syntax.CompoundStatement.`match`(hydra.python.syntax.MatchStatement(subj,
-                           hydra.lib.lists.concat2[hydra.python.syntax.CaseBlock](pyCases)(pyDflt))))
-                        Right(Seq(matchStmt))
-                      }
-                    })))
+                    lazy val matchStmt: hydra.python.syntax.Statement = hydra.python.syntax.Statement.compound(hydra.python.syntax.CompoundStatement.`match`(hydra.python.syntax.MatchStatement(subj,
+                       hydra.lib.lists.concat2[hydra.python.syntax.CaseBlock](pyCases)(pyDflt))))
+                    Right(Seq(matchStmt))
                   }
-                })
+                })))
               }
-            }
+            })
           }
-          case _ => dfltLogic
-        case _ => dfltLogic
+        }
+      }
       case _ => dfltLogic
   })(dfltLogic)
 }
@@ -1372,43 +1347,39 @@ def encodeTermMultilineTCO(cx: hydra.context.Context)(env: hydra.python.environm
         hydra.lib.logic.ifElse[Either[hydra.errors.Error, Seq[hydra.python.syntax.Statement]]](hydra.lib.equality.equal[Int](hydra.lib.lists.length[hydra.core.Term](args2))(1))({
           lazy val arg: hydra.core.Term = hydra.lib.lists.head[hydra.core.Term](args2)
           hydra.strip.deannotateAndDetypeTerm(body2) match
-            case hydra.core.Term.function(v_Term_function_f) => v_Term_function_f match
-              case hydra.core.Function.elimination(v_Function_elimination_e) => v_Function_elimination_e match
-                case hydra.core.Elimination.union(v_Elimination_union_cs) => {
-                  lazy val tname: hydra.core.Name = (v_Elimination_union_cs.typeName)
-                  {
-                    lazy val dflt: Option[hydra.core.Term] = (v_Elimination_union_cs.default)
+            case hydra.core.Term.cases(v_Term_cases_cs) => {
+              lazy val tname: hydra.core.Name = (v_Term_cases_cs.typeName)
+              {
+                lazy val dflt: Option[hydra.core.Term] = (v_Term_cases_cs.default)
+                {
+                  lazy val `cases_`: Seq[hydra.core.Field] = (v_Term_cases_cs.cases)
+                  hydra.lib.eithers.bind[hydra.errors.Error, Seq[hydra.core.FieldType], Seq[hydra.python.syntax.Statement]](hydra.resolution.requireUnionType(cx)(hydra.python.coder.pythonEnvironmentGetGraph(env))(tname))((rt: Seq[hydra.core.FieldType]) =>
                     {
-                      lazy val `cases_`: Seq[hydra.core.Field] = (v_Elimination_union_cs.cases)
-                      hydra.lib.eithers.bind[hydra.errors.Error, Seq[hydra.core.FieldType], Seq[hydra.python.syntax.Statement]](hydra.resolution.requireUnionType(cx)(hydra.python.coder.pythonEnvironmentGetGraph(env))(tname))((rt: Seq[hydra.core.FieldType]) =>
+                    lazy val isEnum: Boolean = hydra.predicates.isEnumRowType(rt)
+                    {
+                      lazy val isFull: Boolean = hydra.python.coder.isCasesFull(rt)(`cases_`)
+                      hydra.lib.eithers.bind[hydra.errors.Error, hydra.python.syntax.Expression, Seq[hydra.python.syntax.Statement]](hydra.python.coder.encodeTermInline(cx)(env)(false)(arg))((pyArg: hydra.python.syntax.Expression) =>
+                        hydra.lib.eithers.bind[hydra.errors.Error, Seq[hydra.python.syntax.CaseBlock],
+                           Seq[hydra.python.syntax.Statement]](hydra.lib.eithers.mapList[hydra.core.Field,
+                           hydra.python.syntax.CaseBlock, hydra.errors.Error]((v1: hydra.core.Field) =>
+                        hydra.python.coder.encodeCaseBlock(cx)(env)(tname)(rt)(isEnum)((e2: hydra.python.environment.PythonEnvironment) =>
+                        (t2: hydra.core.Term) =>
+                        hydra.python.coder.encodeTermMultilineTCO(cx)(e2)(funcName)(paramNames)(t2))(v1))(hydra.python.coder.deduplicateCaseVariables(`cases_`)))((pyCases: Seq[hydra.python.syntax.CaseBlock]) =>
+                        hydra.lib.eithers.bind[hydra.errors.Error, Seq[hydra.python.syntax.CaseBlock],
+                           Seq[hydra.python.syntax.Statement]](hydra.python.coder.encodeDefaultCaseBlock((t2: hydra.core.Term) => hydra.python.coder.encodeTermInline(cx)(env)(false)(t2))(isFull)(dflt)(tname))((pyDflt: Seq[hydra.python.syntax.CaseBlock]) =>
                         {
-                        lazy val isEnum: Boolean = hydra.predicates.isEnumRowType(rt)
+                        lazy val subj: hydra.python.syntax.SubjectExpression = hydra.python.syntax.SubjectExpression.simple(hydra.python.syntax.NamedExpression.simple(pyArg))
                         {
-                          lazy val isFull: Boolean = hydra.python.coder.isCasesFull(rt)(`cases_`)
-                          hydra.lib.eithers.bind[hydra.errors.Error, hydra.python.syntax.Expression, Seq[hydra.python.syntax.Statement]](hydra.python.coder.encodeTermInline(cx)(env)(false)(arg))((pyArg: hydra.python.syntax.Expression) =>
-                            hydra.lib.eithers.bind[hydra.errors.Error, Seq[hydra.python.syntax.CaseBlock],
-                               Seq[hydra.python.syntax.Statement]](hydra.lib.eithers.mapList[hydra.core.Field,
-                               hydra.python.syntax.CaseBlock, hydra.errors.Error]((v1: hydra.core.Field) =>
-                            hydra.python.coder.encodeCaseBlock(cx)(env)(tname)(rt)(isEnum)((e2: hydra.python.environment.PythonEnvironment) =>
-                            (t2: hydra.core.Term) =>
-                            hydra.python.coder.encodeTermMultilineTCO(cx)(e2)(funcName)(paramNames)(t2))(v1))(hydra.python.coder.deduplicateCaseVariables(`cases_`)))((pyCases: Seq[hydra.python.syntax.CaseBlock]) =>
-                            hydra.lib.eithers.bind[hydra.errors.Error, Seq[hydra.python.syntax.CaseBlock],
-                               Seq[hydra.python.syntax.Statement]](hydra.python.coder.encodeDefaultCaseBlock((t2: hydra.core.Term) => hydra.python.coder.encodeTermInline(cx)(env)(false)(t2))(isFull)(dflt)(tname))((pyDflt: Seq[hydra.python.syntax.CaseBlock]) =>
-                            {
-                            lazy val subj: hydra.python.syntax.SubjectExpression = hydra.python.syntax.SubjectExpression.simple(hydra.python.syntax.NamedExpression.simple(pyArg))
-                            {
-                              lazy val matchStmt: hydra.python.syntax.Statement = hydra.python.syntax.Statement.compound(hydra.python.syntax.CompoundStatement.`match`(hydra.python.syntax.MatchStatement(subj,
-                                 hydra.lib.lists.concat2[hydra.python.syntax.CaseBlock](pyCases)(pyDflt))))
-                              Right(Seq(matchStmt))
-                            }
-                          })))
+                          lazy val matchStmt: hydra.python.syntax.Statement = hydra.python.syntax.Statement.compound(hydra.python.syntax.CompoundStatement.`match`(hydra.python.syntax.MatchStatement(subj,
+                             hydra.lib.lists.concat2[hydra.python.syntax.CaseBlock](pyCases)(pyDflt))))
+                          Right(Seq(matchStmt))
                         }
-                      })
+                      })))
                     }
-                  }
+                  })
                 }
-                case _ => hydra.lib.eithers.bind[hydra.errors.Error, hydra.python.syntax.Expression, Seq[hydra.python.syntax.Statement]](hydra.python.coder.encodeTermInline(cx)(env)(false)(term))((expr: hydra.python.syntax.Expression) => Right(Seq(hydra.python.utils.returnSingle(expr))))
-              case _ => hydra.lib.eithers.bind[hydra.errors.Error, hydra.python.syntax.Expression, Seq[hydra.python.syntax.Statement]](hydra.python.coder.encodeTermInline(cx)(env)(false)(term))((expr: hydra.python.syntax.Expression) => Right(Seq(hydra.python.utils.returnSingle(expr))))
+              }
+            }
             case _ => hydra.lib.eithers.bind[hydra.errors.Error, hydra.python.syntax.Expression, Seq[hydra.python.syntax.Statement]](hydra.python.coder.encodeTermInline(cx)(env)(false)(term))((expr: hydra.python.syntax.Expression) => Right(Seq(hydra.python.utils.returnSingle(expr))))
         })(hydra.lib.eithers.bind[hydra.errors.Error, hydra.python.syntax.Expression, Seq[hydra.python.syntax.Statement]](hydra.python.coder.encodeTermInline(cx)(env)(false)(term))((expr: hydra.python.syntax.Expression) => Right(Seq(hydra.python.utils.returnSingle(expr)))))
       }
@@ -1762,15 +1733,13 @@ def extendEnvWithLambdaParams(env: hydra.python.environment.PythonEnvironment)(t
   {
   def go(e: hydra.python.environment.PythonEnvironment)(t: hydra.core.Term): hydra.python.environment.PythonEnvironment =
     hydra.strip.deannotateAndDetypeTerm(t) match
-    case hydra.core.Term.function(v_Term_function_f) => v_Term_function_f match
-      case hydra.core.Function.lambda(v_Function_lambda_lam) => {
-        lazy val newTc: hydra.graph.Graph = hydra.scoping.extendGraphForLambda(hydra.python.coder.pythonEnvironmentGetGraph(e))(v_Function_lambda_lam)
-        {
-          lazy val newEnv: hydra.python.environment.PythonEnvironment = hydra.python.coder.pythonEnvironmentSetGraph(newTc)(e)
-          go(newEnv)(v_Function_lambda_lam.body)
-        }
+    case hydra.core.Term.lambda(v_Term_lambda_lam) => {
+      lazy val newTc: hydra.graph.Graph = hydra.scoping.extendGraphForLambda(hydra.python.coder.pythonEnvironmentGetGraph(e))(v_Term_lambda_lam)
+      {
+        lazy val newEnv: hydra.python.environment.PythonEnvironment = hydra.python.coder.pythonEnvironmentSetGraph(newTc)(e)
+        go(newEnv)(v_Term_lambda_lam.body)
       }
-      case _ => e
+    }
     case _ => e
   go(env)(term)
 }
@@ -1796,11 +1765,9 @@ def extendMetaForTerm(topLevel: Boolean)(meta0: hydra.python.environment.PythonM
       lazy val metaWithCast: hydra.python.environment.PythonModuleMetadata = hydra.python.coder.setMetaUsesCast(true)(meta)
       hydra.lib.eithers.either[hydra.core.Term, hydra.core.Term, hydra.python.environment.PythonModuleMetadata]((_x: hydra.core.Term) => hydra.python.coder.setMetaUsesLeft(metaWithCast)(true))((_x: hydra.core.Term) => hydra.python.coder.setMetaUsesRight(metaWithCast)(true))(v_Term_either_e)
     }
-    case hydra.core.Term.function(v_Term_function_f) => v_Term_function_f match
-      case hydra.core.Function.lambda(v_Function_lambda_lam) => hydra.lib.maybes.maybe[hydra.python.environment.PythonModuleMetadata,
-         hydra.core.Type](meta)((dom: hydra.core.Type) =>
-        hydra.lib.logic.ifElse[hydra.python.environment.PythonModuleMetadata](topLevel)(hydra.python.coder.extendMetaForType(true)(false)(dom)(meta))(meta))(v_Function_lambda_lam.domain)
-      case _ => meta
+    case hydra.core.Term.lambda(v_Term_lambda_lam) => hydra.lib.maybes.maybe[hydra.python.environment.PythonModuleMetadata,
+       hydra.core.Type](meta)((dom: hydra.core.Type) =>
+      hydra.lib.logic.ifElse[hydra.python.environment.PythonModuleMetadata](topLevel)(hydra.python.coder.extendMetaForType(true)(false)(dom)(meta))(meta))(v_Term_lambda_lam.domain)
     case hydra.core.Term.let(v_Term_let_lt) => {
       lazy val bindings: Seq[hydra.core.Binding] = (v_Term_let_lt.bindings)
       hydra.lib.lists.foldl[hydra.python.environment.PythonModuleMetadata, hydra.core.Binding]({
@@ -1894,11 +1861,7 @@ def extendMetaForTypes(types: Seq[hydra.core.Type])(meta: hydra.python.environme
 
 def extractCaseElimination(term: hydra.core.Term): Option[hydra.core.CaseStatement] =
   hydra.strip.deannotateAndDetypeTerm(term) match
-  case hydra.core.Term.function(v_Term_function_f) => v_Term_function_f match
-    case hydra.core.Function.elimination(v_Function_elimination_e) => v_Function_elimination_e match
-      case hydra.core.Elimination.union(v_Elimination_union_cs) => Some(v_Elimination_union_cs)
-      case _ => None
-    case _ => None
+  case hydra.core.Term.cases(v_Term_cases_cs) => Some(v_Term_cases_cs)
   case _ => None
 
 def findTypeParams(env: hydra.python.environment.PythonEnvironment)(typ: hydra.core.Type): Seq[hydra.core.Name] =
@@ -1910,19 +1873,11 @@ def findTypeParams(env: hydra.python.environment.PythonEnvironment)(typ: hydra.c
   hydra.lib.lists.filter[hydra.core.Name](isBound)(hydra.lib.sets.toList[hydra.core.Name](hydra.variables.freeVariablesInType(typ)))
 }
 
-def functionArityWithPrimitives(graph: hydra.graph.Graph)(f: hydra.core.Function): Int =
-  f match
-  case hydra.core.Function.elimination(v_Function_elimination__) => 1
-  case hydra.core.Function.lambda(v_Function_lambda_lam) => hydra.lib.math.add(1)(hydra.python.coder.termArityWithPrimitives(graph)(v_Function_lambda_lam.body))
-  case _ => 0
-
 def gatherLambdas(term: hydra.core.Term): Tuple2[Seq[hydra.core.Name], hydra.core.Term] =
   {
   def go(params: Seq[hydra.core.Name])(t: hydra.core.Term): Tuple2[Seq[hydra.core.Name], hydra.core.Term] =
     hydra.strip.deannotateAndDetypeTerm(t) match
-    case hydra.core.Term.function(v_Term_function_f) => v_Term_function_f match
-      case hydra.core.Function.lambda(v_Function_lambda_l) => go(hydra.lib.lists.concat2[hydra.core.Name](params)(Seq(v_Function_lambda_l.parameter)))(v_Function_lambda_l.body)
-      case _ => Tuple2(params, t)
+    case hydra.core.Term.lambda(v_Term_lambda_l) => go(hydra.lib.lists.concat2[hydra.core.Name](params)(Seq(v_Term_lambda_l.parameter)))(v_Term_lambda_l.body)
     case _ => Tuple2(params, t)
   go(Seq())(term)
 }
@@ -1991,12 +1946,7 @@ def isCaseStatementApplication(term: hydra.core.Term): Option[Tuple2[hydra.core.
      hydra.core.Term]]]]](hydra.lib.logic.not(hydra.lib.equality.equal[Int](hydra.lib.lists.length[hydra.core.Term](args))(1)))(None)({
     lazy val arg: hydra.core.Term = hydra.lib.lists.head[hydra.core.Term](args)
     hydra.strip.deannotateAndDetypeTerm(body) match
-      case hydra.core.Term.function(v_Term_function_f) => v_Term_function_f match
-        case hydra.core.Function.elimination(v_Function_elimination_e) => v_Function_elimination_e match
-          case hydra.core.Elimination.union(v_Elimination_union_cs) => Some(Tuple2(v_Elimination_union_cs.typeName,
-             Tuple2(v_Elimination_union_cs.default, Tuple2(v_Elimination_union_cs.cases, arg))))
-          case _ => None
-        case _ => None
+      case hydra.core.Term.cases(v_Term_cases_cs) => Some(Tuple2(v_Term_cases_cs.typeName, Tuple2(v_Term_cases_cs.default, Tuple2(v_Term_cases_cs.cases, arg))))
       case _ => None
   })
 }
@@ -2275,7 +2225,10 @@ lazy val targetPythonVersion: hydra.python.environment.PythonVersion = hydra.pyt
 def termArityWithPrimitives(graph: hydra.graph.Graph)(term: hydra.core.Term): Int =
   hydra.strip.deannotateAndDetypeTerm(term) match
   case hydra.core.Term.application(v_Term_application_app) => hydra.lib.math.max(0)(hydra.lib.math.sub(hydra.python.coder.termArityWithPrimitives(graph)(v_Term_application_app.function))(1))
-  case hydra.core.Term.function(v_Term_function_f) => hydra.python.coder.functionArityWithPrimitives(graph)(v_Term_function_f)
+  case hydra.core.Term.lambda(v_Term_lambda_lam) => hydra.lib.math.add(1)(hydra.python.coder.termArityWithPrimitives(graph)(v_Term_lambda_lam.body))
+  case hydra.core.Term.project(v_Term_project__) => 1
+  case hydra.core.Term.unwrap(v_Term_unwrap__) => 1
+  case hydra.core.Term.cases(v_Term_cases__) => 1
   case hydra.core.Term.variable(v_Term_variable_name) => hydra.lib.maybes.maybe[Int, hydra.core.Binding](0)((el: hydra.core.Binding) =>
     hydra.lib.maybes.maybe[Int, hydra.core.TypeScheme](hydra.arity.termArity(el.term))((ts: hydra.core.TypeScheme) => hydra.arity.typeSchemeArity(ts))(el.`type`))(hydra.lexical.lookupBinding(graph)(v_Term_variable_name))
   case _ => 0

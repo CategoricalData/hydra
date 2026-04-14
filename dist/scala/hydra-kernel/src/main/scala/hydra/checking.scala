@@ -64,11 +64,8 @@ def checkForUnboundTypeVariables[T0](cx: T0)(tx: hydra.graph.Graph)(term0: hydra
       hydra.lib.eithers.bind[hydra.errors.Error, Option[Unit], Unit](hydra.lib.eithers.mapMaybe[hydra.core.Type,
          Unit, hydra.errors.Error](check)(m))((_x: Option[Unit]) => Right(()))
     term match
-      case hydra.core.Term.function(v_Term_function_f) => v_Term_function_f match
-        case hydra.core.Function.elimination(v_Function_elimination_e) => dflt
-        case hydra.core.Function.lambda(v_Function_lambda_l) => hydra.lib.eithers.bind[hydra.errors.Error,
-           Unit, Unit](checkOptional(v_Function_lambda_l.domain))((_x: Unit) => recurse(v_Function_lambda_l.body))
-        case _ => dflt
+      case hydra.core.Term.lambda(v_Term_lambda_l) => hydra.lib.eithers.bind[hydra.errors.Error, Unit,
+         Unit](checkOptional(v_Term_lambda_l.domain))((_x: Unit) => recurse(v_Term_lambda_l.body))
       case hydra.core.Term.let(v_Term_let_l) => {
         def forBinding(b: hydra.core.Binding): Either[hydra.errors.Error, Unit] =
           {
@@ -192,25 +189,23 @@ def typeOf(cx: hydra.context.Context)(tx: hydra.graph.Graph)(typeArgs: Seq[hydra
   term match
     case hydra.core.Term.annotated(v_Term_annotated_v1) => hydra.checking.typeOfAnnotatedTerm(cx1)(tx)(typeArgs)(v_Term_annotated_v1)
     case hydra.core.Term.application(v_Term_application_v1) => hydra.checking.typeOfApplication(cx1)(tx)(typeArgs)(v_Term_application_v1)
+    case hydra.core.Term.cases(v_Term_cases_v1) => hydra.checking.typeOfCaseStatement(cx1)(tx)(typeArgs)(v_Term_cases_v1)
     case hydra.core.Term.either(v_Term_either_v1) => hydra.checking.typeOfEither(cx1)(tx)(typeArgs)(v_Term_either_v1)
-    case hydra.core.Term.function(v_Term_function_f) => v_Term_function_f match
-      case hydra.core.Function.elimination(v_Function_elimination_elm) => v_Function_elimination_elm match
-        case hydra.core.Elimination.record(v_Elimination_record_v1) => hydra.checking.typeOfProjection(cx1)(tx)(typeArgs)(v_Elimination_record_v1)
-        case hydra.core.Elimination.union(v_Elimination_union_v1) => hydra.checking.typeOfCaseStatement(cx1)(tx)(typeArgs)(v_Elimination_union_v1)
-        case hydra.core.Elimination.wrap(v_Elimination_wrap_v1) => hydra.checking.typeOfUnwrap(cx1)(tx)(typeArgs)(v_Elimination_wrap_v1)
-      case hydra.core.Function.lambda(v_Function_lambda_v1) => hydra.checking.typeOfLambda(cx1)(tx)(typeArgs)(v_Function_lambda_v1)
+    case hydra.core.Term.lambda(v_Term_lambda_v1) => hydra.checking.typeOfLambda(cx1)(tx)(typeArgs)(v_Term_lambda_v1)
     case hydra.core.Term.let(v_Term_let_v1) => hydra.checking.typeOfLet(cx1)(tx)(typeArgs)(v_Term_let_v1)
     case hydra.core.Term.list(v_Term_list_v1) => hydra.checking.typeOfList(cx1)(tx)(typeArgs)(v_Term_list_v1)
     case hydra.core.Term.literal(v_Term_literal_v1) => hydra.checking.typeOfLiteral(cx1)(tx)(typeArgs)(v_Term_literal_v1)
     case hydra.core.Term.map(v_Term_map_v1) => hydra.checking.typeOfMap(cx1)(tx)(typeArgs)(v_Term_map_v1)
     case hydra.core.Term.maybe(v_Term_maybe_v1) => hydra.checking.typeOfMaybe(cx1)(tx)(typeArgs)(v_Term_maybe_v1)
     case hydra.core.Term.pair(v_Term_pair_v1) => hydra.checking.typeOfPair(cx1)(tx)(typeArgs)(v_Term_pair_v1)
+    case hydra.core.Term.project(v_Term_project_v1) => hydra.checking.typeOfProjection(cx1)(tx)(typeArgs)(v_Term_project_v1)
     case hydra.core.Term.record(v_Term_record_v1) => hydra.checking.typeOfRecord(cx1)(tx)(typeArgs)(v_Term_record_v1)
     case hydra.core.Term.set(v_Term_set_v1) => hydra.checking.typeOfSet(cx1)(tx)(typeArgs)(v_Term_set_v1)
     case hydra.core.Term.typeApplication(v_Term_typeApplication_v1) => hydra.checking.typeOfTypeApplication(cx1)(tx)(typeArgs)(v_Term_typeApplication_v1)
     case hydra.core.Term.typeLambda(v_Term_typeLambda_v1) => hydra.checking.typeOfTypeLambda(cx1)(tx)(typeArgs)(v_Term_typeLambda_v1)
     case hydra.core.Term.union(v_Term_union_v1) => hydra.checking.typeOfInjection(cx1)(tx)(typeArgs)(v_Term_union_v1)
     case hydra.core.Term.unit => hydra.checking.typeOfUnit(cx1)(tx)(typeArgs)
+    case hydra.core.Term.unwrap(v_Term_unwrap_v1) => hydra.checking.typeOfUnwrap(cx1)(tx)(typeArgs)(v_Term_unwrap_v1)
     case hydra.core.Term.variable(v_Term_variable_v1) => hydra.checking.typeOfVariable(cx1)(tx)(typeArgs)(v_Term_variable_v1)
     case hydra.core.Term.wrap(v_Term_wrap_v1) => hydra.checking.typeOfWrappedTerm(cx1)(tx)(typeArgs)(v_Term_wrap_v1)
     case _ => Left(hydra.errors.Error.checking(hydra.error.checking.CheckingError.unsupportedTermVariant(hydra.error.checking.UnsupportedTermVariantError(hydra.reflect.termVariant(term)))))

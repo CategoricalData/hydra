@@ -32,13 +32,11 @@ module_ = Module ns (map toTypeDef definitions) [] [ns] $ -- Note: hydra.core un
       caseStatement,
       eitherType,
       pairType,
-      elimination,
       field,
       fieldType,
       floatType,
       floatValue,
       forallType,
-      function,
       functionType,
       injection,
       integerType,
@@ -153,20 +151,6 @@ pairType = define "PairType" $
       doc "The second component of the pair"
       type_]
 
-elimination :: Binding
-elimination = define "Elimination" $
-  doc "A corresponding elimination for an introduction term" $
-  T.union [
-    "record">:
-      doc "Eliminates a record by projecting a given field"
-      projection,
-    "union">:
-      doc "Eliminates a union term by matching over the fields of the union. This is a case statement."
-      caseStatement,
-    "wrap">:
-      doc "Unwrap a wrapped term"
-      name]
-
 field :: Binding
 field = define "Field" $
   doc "A name/term pair" $
@@ -224,17 +208,6 @@ forallType = define "ForallType" $
     "body">:
       doc "The body of the lambda"
       type_]
-
-function :: Binding
-function = define "Function" $
-  doc "A function" $
-  T.union [
-    "elimination">:
-      doc "An elimination for any of a few term variants"
-      elimination,
-    "lambda">:
-      doc "A function abstraction (lambda)"
-      lambda]
 
 functionType :: Binding
 functionType = define "FunctionType" $
@@ -420,12 +393,15 @@ term = define "Term" $
     "application">:
       doc "A function application"
       application,
+    "cases">:
+      doc "A union elimination; a case statement"
+      caseStatement,
     "either">:
       doc "An either value" $
       T.either_ term term,
-    "function">:
-      doc "A function term"
-      function,
+    "lambda">:
+      doc "A function abstraction (lambda)"
+      lambda,
     "let">:
       doc "A 'let' term, which binds variables to terms"
       let_,
@@ -444,6 +420,9 @@ term = define "Term" $
     "pair">:
       doc "A pair (2-tuple)" $
       T.pair term term,
+    "project">:
+      doc "A record elimination; a projection"
+      projection,
     "record">:
       doc "A record term"
       record,
@@ -462,6 +441,9 @@ term = define "Term" $
     "unit">:
       doc "A unit value; a term with no value" $
       T.unit,
+    "unwrap">:
+      doc "An unwrap elimination; the inverse of a wrap"
+      name,
     "variable">:
       doc "A variable reference"
       name,

@@ -74,8 +74,9 @@ module_ = Module ns definitions
       toDefinition encodeLiteral,
       toDefinition encodeType,
       toDefinition encodeTerm,
-      toDefinition encodeFunction,
-      toDefinition encodeElimination,
+      toDefinition encodeProjectionElim,
+      toDefinition encodeUnionElim,
+      toDefinition encodeUnwrapElim,
       toDefinition encodeStructField,
       toDefinition encodeEnumVariant,
       toDefinition encodeTypeDefinition,
@@ -444,8 +445,16 @@ encodeTerm = def "encodeTerm" $
            "sr" <<~ (encodeTerm @@ var "cx" @@ var "g" @@ var "r") $
              right (rustCall @@ (rustExprPath @@ string "Right") @@ list [var "sr"]))
          (var "e"),
-     _Term_function>>: lambda "fun" $
-       encodeFunction @@ var "cx" @@ var "g" @@ var "fun",
+     _Term_lambda>>: lambda "lam" $
+       "param" <~ (Formatting.convertCaseCamelToLowerSnake @@ Core.unName (Core.lambdaParameter (var "lam"))) $
+       "body" <<~ (encodeTerm @@ var "cx" @@ var "g" @@ Core.lambdaBody (var "lam")) $
+         right (rustClosure @@ list [var "param"] @@ var "body"),
+     _Term_project>>: lambda "proj" $
+       encodeProjectionElim @@ var "cx" @@ var "g" @@ var "proj" @@ nothing,
+     _Term_cases>>: lambda "cs" $
+       encodeUnionElim @@ var "cx" @@ var "g" @@ var "cs" @@ nothing,
+     _Term_unwrap>>: lambda "name" $
+       encodeUnwrapElim @@ var "cx" @@ var "g" @@ var "name" @@ nothing,
      _Term_let>>: lambda "lt" $
        "bindings" <~ Core.letBindings (var "lt") $
        "body" <~ Core.letBody (var "lt") $
@@ -534,32 +543,14 @@ encodeTerm = def "encodeTerm" $
          right (rustCall @@ (rustExprPath @@ var "tname") @@ list [var "inner"])]
 
 -- =============================================================================
--- Function encoding
--- =============================================================================
-
--- | Encode a Hydra function as a Rust expression
-encodeFunction :: TTermDefinition (Context -> Graph -> Function -> Either Error R.Expression)
-encodeFunction = def "encodeFunction" $
-  "cx" ~> "g" ~> lambda "fun" $
-    cases _Function (var "fun") Nothing [
-      _Function_lambda>>: lambda "lam" $
-        "param" <~ (Formatting.convertCaseCamelToLowerSnake @@ Core.unName (Core.lambdaParameter (var "lam"))) $
-        "body" <<~ (encodeTerm @@ var "cx" @@ var "g" @@ Core.lambdaBody (var "lam")) $
-          right (rustClosure @@ list [var "param"] @@ var "body"),
-      _Function_elimination>>: lambda "elim" $
-        encodeElimination @@ var "cx" @@ var "g" @@ var "elim" @@ nothing]
-
--- =============================================================================
 -- Elimination encoding
 -- =============================================================================
 
--- | Encode a Hydra elimination as a Rust expression.
--- Takes an optional argument for applied eliminations.
-encodeElimination :: TTermDefinition (Context -> Graph -> Elimination -> Maybe Term -> Either Error R.Expression)
-encodeElimination = def "encodeElimination" $
-  "cx" ~> "g" ~> lambda "elim" $ lambda "marg" $
-    cases _Elimination (var "elim") Nothing [
-      _Elimination_record>>: lambda "proj" $
+-- | Encode a Hydra record projection as a Rust expression.
+-- Takes an optional argument for applied projections.
+encodeProjectionElim :: TTermDefinition (Context -> Graph -> Projection -> Maybe Term -> Either Error R.Expression)
+encodeProjectionElim = def "encodeProjectionElim" $
+  "cx" ~> "g" ~> lambda "proj" $ lambda "marg" $
         "fname" <~ (Formatting.convertCaseCamelToLowerSnake @@ Core.unName (Core.projectionField (var "proj"))) $
         Maybes.cases (var "marg")
           -- Unapplied projection: |v| v.field
@@ -573,8 +564,13 @@ encodeElimination = def "encodeElimination" $
               right (inject R._Expression R._Expression_fieldAccess $
                 record R._FieldAccessExpr [
                   R._FieldAccessExpr_object>>: var "sarg",
-                  R._FieldAccessExpr_field>>: var "fname"])),
-      _Elimination_union>>: lambda "cs" $
+                  R._FieldAccessExpr_field>>: var "fname"]))
+
+-- | Encode a Hydra case statement (union elimination) as a Rust expression.
+-- Takes an optional argument for applied case statements.
+encodeUnionElim :: TTermDefinition (Context -> Graph -> CaseStatement -> Maybe Term -> Either Error R.Expression)
+encodeUnionElim = def "encodeUnionElim" $
+  "cx" ~> "g" ~> lambda "cs" $ lambda "marg" $
         "tname" <~ (Formatting.capitalize @@ (Names.localNameOf @@ Core.caseStatementTypeName (var "cs"))) $
         "caseFields" <~ Core.caseStatementCases (var "cs") $
         "defCase" <~ Core.caseStatementDefault (var "cs") $
@@ -625,8 +621,13 @@ encodeElimination = def "encodeElimination" $
               right (inject R._Expression R._Expression_match $
                 record R._MatchExpr [
                   R._MatchExpr_scrutinee>>: var "sarg",
-                  R._MatchExpr_arms>>: var "allArms"])),
-      _Elimination_wrap>>: lambda "name" $
+                  R._MatchExpr_arms>>: var "allArms"]))
+
+-- | Encode a Hydra wrap elimination (unwrap) as a Rust expression.
+-- Takes an optional argument for applied unwraps.
+encodeUnwrapElim :: TTermDefinition (Context -> Graph -> Name -> Maybe Term -> Either Error R.Expression)
+encodeUnwrapElim = def "encodeUnwrapElim" $
+  "cx" ~> "g" ~> lambda "name" $ lambda "marg" $
         Maybes.cases (var "marg")
           -- Unapplied: |v| v.0
           (right (rustClosure @@ list [string "v"] @@
@@ -639,7 +640,7 @@ encodeElimination = def "encodeElimination" $
               right (inject R._Expression R._Expression_tupleIndex $
                 record R._TupleIndexExpr [
                   R._TupleIndexExpr_tuple>>: var "sarg",
-                  R._TupleIndexExpr_index>>: int32 0]))]
+                  R._TupleIndexExpr_index>>: int32 0]))
 
 -- =============================================================================
 -- Struct field encoding

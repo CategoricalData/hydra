@@ -20,11 +20,13 @@ lazy val javaLanguage: hydra.coders.Language = {
      hydra.core.IntegerType.int8, hydra.core.IntegerType.int16, hydra.core.IntegerType.int32, hydra.core.IntegerType.int64,
      hydra.core.IntegerType.uint16))
   lazy val termVariants: scala.collection.immutable.Set[hydra.variants.TermVariant] = hydra.lib.sets.fromList[hydra.variants.TermVariant](Seq(hydra.variants.TermVariant.application,
-     hydra.variants.TermVariant.either, hydra.variants.TermVariant.function, hydra.variants.TermVariant.let,
-     hydra.variants.TermVariant.list, hydra.variants.TermVariant.literal, hydra.variants.TermVariant.map,
-     hydra.variants.TermVariant.maybe, hydra.variants.TermVariant.pair, hydra.variants.TermVariant.record,
-     hydra.variants.TermVariant.set, hydra.variants.TermVariant.union, hydra.variants.TermVariant.unit,
-     hydra.variants.TermVariant.variable, hydra.variants.TermVariant.wrap))
+     hydra.variants.TermVariant.either, hydra.variants.TermVariant.cases, hydra.variants.TermVariant.lambda,
+     hydra.variants.TermVariant.project, hydra.variants.TermVariant.unwrap, hydra.variants.TermVariant.typeApplication,
+     hydra.variants.TermVariant.typeLambda, hydra.variants.TermVariant.let, hydra.variants.TermVariant.list,
+     hydra.variants.TermVariant.literal, hydra.variants.TermVariant.map, hydra.variants.TermVariant.maybe,
+     hydra.variants.TermVariant.pair, hydra.variants.TermVariant.record, hydra.variants.TermVariant.set,
+     hydra.variants.TermVariant.union, hydra.variants.TermVariant.unit, hydra.variants.TermVariant.variable,
+     hydra.variants.TermVariant.wrap))
   lazy val typeVariants: scala.collection.immutable.Set[hydra.variants.TypeVariant] = hydra.lib.sets.fromList[hydra.variants.TypeVariant](Seq(hydra.variants.TypeVariant.annotated,
      hydra.variants.TypeVariant.application, hydra.variants.TypeVariant.either, hydra.variants.TypeVariant.function,
      hydra.variants.TypeVariant.forall, hydra.variants.TypeVariant.list, hydra.variants.TypeVariant.literal,

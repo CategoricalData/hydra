@@ -151,25 +151,14 @@ def encodeCaseExpression[T0](depth: Int)(namespaces: hydra.packaging.Namespaces[
   })
 }
 
-def encodeFunction[T0](depth: Int)(namespaces: hydra.packaging.Namespaces[hydra.haskell.syntax.ModuleName])(fun: hydra.core.Function)(cx: T0)(g: hydra.graph.Graph): Either[hydra.errors.Error,
+def encodeLambdaTerm[T0](depth: Int)(namespaces: hydra.packaging.Namespaces[hydra.haskell.syntax.ModuleName])(lam: hydra.core.Lambda)(cx: T0)(g: hydra.graph.Graph): Either[hydra.errors.Error,
    hydra.haskell.syntax.Expression] =
-  fun match
-  case hydra.core.Function.elimination(v_Function_elimination_e) => v_Function_elimination_e match
-    case hydra.core.Elimination.wrap(v_Elimination_wrap_name) => Right(hydra.haskell.syntax.Expression.variable(hydra.haskell.utils.elementReference(namespaces)(hydra.names.qname(hydra.lib.maybes.fromJust[hydra.packaging.Namespace](hydra.names.namespaceOf(v_Elimination_wrap_name)))(hydra.haskell.utils.newtypeAccessorName(v_Elimination_wrap_name)))))
-    case hydra.core.Elimination.record(v_Elimination_record_proj) => {
-      lazy val dn: hydra.core.Name = (v_Elimination_record_proj.typeName)
-      lazy val fname: hydra.core.Name = (v_Elimination_record_proj.field)
-      Right(hydra.haskell.syntax.Expression.variable(hydra.haskell.utils.recordFieldReference(namespaces)(dn)(fname)))
-    }
-    case hydra.core.Elimination.union(v_Elimination_union_stmt) => hydra.lib.eithers.map[hydra.haskell.syntax.Expression,
-       hydra.haskell.syntax.Expression, hydra.errors.Error]((v1: hydra.haskell.syntax.Expression) =>
-      hydra.haskell.utils.hslambda(hydra.haskell.utils.rawName("x"))(v1))(hydra.haskell.coder.encodeCaseExpression(depth)(namespaces)(v_Elimination_union_stmt)(hydra.haskell.utils.hsvar("x"))(cx)(g))
-  case hydra.core.Function.lambda(v_Function_lambda_lam) => {
-    lazy val v: hydra.core.Name = (v_Function_lambda_lam.parameter)
-    lazy val body: hydra.core.Term = (v_Function_lambda_lam.body)
-    hydra.lib.eithers.bind[hydra.errors.Error, hydra.haskell.syntax.Expression, hydra.haskell.syntax.Expression](hydra.haskell.coder.encodeTerm(depth)(namespaces)(body)(cx)(g))((hbody: hydra.haskell.syntax.Expression) =>
-      Right(hydra.haskell.utils.hslambda(hydra.haskell.utils.elementReference(namespaces)(v))(hbody)))
-  }
+  {
+  lazy val v: hydra.core.Name = (lam.parameter)
+  lazy val body: hydra.core.Term = (lam.body)
+  hydra.lib.eithers.bind[hydra.errors.Error, hydra.haskell.syntax.Expression, hydra.haskell.syntax.Expression](hydra.haskell.coder.encodeTerm(depth)(namespaces)(body)(cx)(g))((hbody: hydra.haskell.syntax.Expression) =>
+    Right(hydra.haskell.utils.hslambda(hydra.haskell.utils.elementReference(namespaces)(v))(hbody)))
+}
 
 def encodeLiteral[T0](l: hydra.core.Literal)(cx: T0): Either[hydra.errors.Error, hydra.haskell.syntax.Expression] =
   l match
@@ -192,6 +181,19 @@ def encodeLiteral[T0](l: hydra.core.Literal)(cx: T0): Either[hydra.errors.Error,
   case hydra.core.Literal.string(v_Literal_string_s) => Right(hydra.haskell.utils.hslit(hydra.haskell.syntax.Literal.string(v_Literal_string_s)))
   case _ => Left(hydra.errors.Error.extraction(hydra.errors.ExtractionError.unexpectedShape(hydra.errors.UnexpectedShapeError("supported literal",
      hydra.show.core.literal(l)))))
+
+def encodeProjection[T0](namespaces: hydra.packaging.Namespaces[hydra.haskell.syntax.ModuleName])(proj: hydra.core.Projection): Either[T0,
+   hydra.haskell.syntax.Expression] =
+  {
+  lazy val dn: hydra.core.Name = (proj.typeName)
+  lazy val fname: hydra.core.Name = (proj.field)
+  Right(hydra.haskell.syntax.Expression.variable(hydra.haskell.utils.recordFieldReference(namespaces)(dn)(fname)))
+}
+
+def encodeStandaloneCases[T0](depth: Int)(namespaces: hydra.packaging.Namespaces[hydra.haskell.syntax.ModuleName])(stmt: hydra.core.CaseStatement)(cx: T0)(g: hydra.graph.Graph): Either[hydra.errors.Error,
+   hydra.haskell.syntax.Expression] =
+  hydra.lib.eithers.map[hydra.haskell.syntax.Expression, hydra.haskell.syntax.Expression, hydra.errors.Error]((v1: hydra.haskell.syntax.Expression) =>
+  hydra.haskell.utils.hslambda(hydra.haskell.utils.rawName("x"))(v1))(hydra.haskell.coder.encodeCaseExpression(depth)(namespaces)(stmt)(hydra.haskell.utils.hsvar("x"))(cx)(g))
 
 def encodeTerm[T0](depth: Int)(namespaces: hydra.packaging.Namespaces[hydra.haskell.syntax.ModuleName])(term: hydra.core.Term)(cx: T0)(g: hydra.graph.Graph): Either[hydra.errors.Error,
    hydra.haskell.syntax.Expression] =
@@ -224,25 +226,22 @@ def encodeTerm[T0](depth: Int)(namespaces: hydra.packaging.Namespaces[hydra.hask
       lazy val arg: hydra.core.Term = (v_Term_application_app.argument)
       lazy val deannotatedFun: hydra.core.Term = hydra.strip.deannotateTerm(fun)
       deannotatedFun match
-        case hydra.core.Term.function(v_Term_function_f) => v_Term_function_f match
-          case hydra.core.Function.elimination(v_Function_elimination_e) => v_Function_elimination_e match
-            case hydra.core.Elimination.union(v_Elimination_union_stmt) => hydra.lib.eithers.bind[hydra.errors.Error,
-               hydra.haskell.syntax.Expression, hydra.haskell.syntax.Expression](encode(arg))((harg: hydra.haskell.syntax.Expression) =>
-              hydra.haskell.coder.encodeCaseExpression(depth)(namespaces)(v_Elimination_union_stmt)(harg)(cx)(g))
-            case _ => hydra.lib.eithers.bind[hydra.errors.Error, hydra.haskell.syntax.Expression, hydra.haskell.syntax.Expression](encode(fun))((hfun: hydra.haskell.syntax.Expression) =>
-              hydra.lib.eithers.bind[hydra.errors.Error, hydra.haskell.syntax.Expression, hydra.haskell.syntax.Expression](encode(arg))((harg: hydra.haskell.syntax.Expression) => Right(hydra.haskell.utils.hsapp(hfun)(harg))))
-          case _ => hydra.lib.eithers.bind[hydra.errors.Error, hydra.haskell.syntax.Expression, hydra.haskell.syntax.Expression](encode(fun))((hfun: hydra.haskell.syntax.Expression) =>
-            hydra.lib.eithers.bind[hydra.errors.Error, hydra.haskell.syntax.Expression, hydra.haskell.syntax.Expression](encode(arg))((harg: hydra.haskell.syntax.Expression) => Right(hydra.haskell.utils.hsapp(hfun)(harg))))
+        case hydra.core.Term.cases(v_Term_cases_stmt) => hydra.lib.eithers.bind[hydra.errors.Error, hydra.haskell.syntax.Expression,
+           hydra.haskell.syntax.Expression](encode(arg))((harg: hydra.haskell.syntax.Expression) =>
+          hydra.haskell.coder.encodeCaseExpression(depth)(namespaces)(v_Term_cases_stmt)(harg)(cx)(g))
         case _ => hydra.lib.eithers.bind[hydra.errors.Error, hydra.haskell.syntax.Expression, hydra.haskell.syntax.Expression](encode(fun))((hfun: hydra.haskell.syntax.Expression) =>
           hydra.lib.eithers.bind[hydra.errors.Error, hydra.haskell.syntax.Expression, hydra.haskell.syntax.Expression](encode(arg))((harg: hydra.haskell.syntax.Expression) => Right(hydra.haskell.utils.hsapp(hfun)(harg))))
     }
+    case hydra.core.Term.cases(v_Term_cases_stmt) => hydra.haskell.coder.encodeStandaloneCases(depth)(namespaces)(v_Term_cases_stmt)(cx)(g)
     case hydra.core.Term.either(v_Term_either_e) => hydra.lib.eithers.either[hydra.core.Term, hydra.core.Term,
        Either[hydra.errors.Error, hydra.haskell.syntax.Expression]]((l: hydra.core.Term) =>
       hydra.lib.eithers.bind[hydra.errors.Error, hydra.haskell.syntax.Expression, hydra.haskell.syntax.Expression](encode(l))((hl: hydra.haskell.syntax.Expression) =>
       Right(hydra.haskell.utils.hsapp(hydra.haskell.utils.hsvar("Left"))(hl))))((r: hydra.core.Term) =>
       hydra.lib.eithers.bind[hydra.errors.Error, hydra.haskell.syntax.Expression, hydra.haskell.syntax.Expression](encode(r))((hr: hydra.haskell.syntax.Expression) =>
       Right(hydra.haskell.utils.hsapp(hydra.haskell.utils.hsvar("Right"))(hr))))(v_Term_either_e)
-    case hydra.core.Term.function(v_Term_function_f) => hydra.haskell.coder.encodeFunction(depth)(namespaces)(v_Term_function_f)(cx)(g)
+    case hydra.core.Term.lambda(v_Term_lambda_lam) => hydra.haskell.coder.encodeLambdaTerm(depth)(namespaces)(v_Term_lambda_lam)(cx)(g)
+    case hydra.core.Term.project(v_Term_project_proj) => hydra.haskell.coder.encodeProjection(namespaces)(v_Term_project_proj)
+    case hydra.core.Term.unwrap(v_Term_unwrap_name) => hydra.haskell.coder.encodeUnwrap(namespaces)(v_Term_unwrap_name)
     case hydra.core.Term.let(v_Term_let_letTerm) => {
       def collectBindings(lt: hydra.core.Let): Tuple2[Seq[hydra.core.Binding], hydra.core.Term] =
         {
@@ -457,6 +456,10 @@ def encodeTypeWithClassAssertions[T0, T1](namespaces: hydra.packaging.Namespaces
     Right(hydra.haskell.syntax.Type.ctx(hydra.haskell.syntax.ContextType(hassert, htyp)))
   }))
 }
+
+def encodeUnwrap[T0](namespaces: hydra.packaging.Namespaces[hydra.haskell.syntax.ModuleName])(name: hydra.core.Name): Either[T0,
+   hydra.haskell.syntax.Expression] =
+  Right(hydra.haskell.syntax.Expression.variable(hydra.haskell.utils.elementReference(namespaces)(hydra.names.qname(hydra.lib.maybes.fromJust[hydra.packaging.Namespace](hydra.names.namespaceOf(name)))(hydra.haskell.utils.newtypeAccessorName(name)))))
 
 def extendMetaForTerm(meta: hydra.haskell.environment.HaskellModuleMetadata)(term: hydra.core.Term): hydra.haskell.environment.HaskellModuleMetadata =
   term match

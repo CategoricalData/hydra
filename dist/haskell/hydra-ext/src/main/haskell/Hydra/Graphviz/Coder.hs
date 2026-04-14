@@ -100,24 +100,20 @@ termLabel compact namespaces term =
       in case term of
         Core.TermAnnotated _ -> simpleLabel "@{}"
         Core.TermApplication _ -> simpleLabel (Logic.ifElse compact "$" "apply")
-        Core.TermFunction v0 -> case v0 of
-          Core.FunctionLambda _ -> simpleLabel (Logic.ifElse compact "\955" "lambda")
-          Core.FunctionElimination v1 -> case v1 of
-            Core.EliminationRecord v2 -> simpleLabel (Strings.cat [
-              "{",
-              (Names.compactName namespaces (Core.projectionTypeName v2)),
-              "}.",
-              (Core.unName (Core.projectionField v2))])
-            Core.EliminationUnion v2 -> simpleLabel (Strings.cat [
-              "cases_{",
-              (Names.compactName namespaces (Core.caseStatementTypeName v2)),
-              "}"])
-            Core.EliminationWrap v2 -> simpleLabel (Strings.cat [
-              "unwrap_{",
-              (Names.compactName namespaces v2),
-              "}"])
-            _ -> simpleLabel "?"
-          _ -> simpleLabel "?"
+        Core.TermLambda _ -> simpleLabel (Logic.ifElse compact "\955" "lambda")
+        Core.TermProject v0 -> simpleLabel (Strings.cat [
+          "{",
+          (Names.compactName namespaces (Core.projectionTypeName v0)),
+          "}.",
+          (Core.unName (Core.projectionField v0))])
+        Core.TermCases v0 -> simpleLabel (Strings.cat [
+          "cases_{",
+          (Names.compactName namespaces (Core.caseStatementTypeName v0)),
+          "}"])
+        Core.TermUnwrap v0 -> simpleLabel (Strings.cat [
+          "unwrap_{",
+          (Names.compactName namespaces v0),
+          "}"])
         Core.TermLet _ -> simpleLabel "let"
         Core.TermList _ -> simpleLabel (Logic.ifElse compact "[]" "list")
         Core.TermLiteral v0 -> simpleLabel (case v0 of
@@ -210,31 +206,29 @@ termToDotStmts namespaces term =
                               parentStmt]
                     dflt = Lists.foldl (encode Nothing False ids (Just selfId)) (selfStmts, selfVisited) (Rewriting.subtermsWithSteps currentTerm)
                 in case currentTerm of
-                  Core.TermFunction v0 -> case v0 of
-                    Core.FunctionLambda v1 ->
-                      let v = Core.lambdaParameter v1
-                          body = Core.lambdaBody v1
-                          vstr = Core.unName v
-                          varLabel = Names.uniqueLabel selfVisited vstr
-                          varId = Dot.Id varLabel
-                          visited1 = Sets.insert varLabel selfVisited
-                          ids1 = Maps.insert v varId ids
-                          varNodeStmt =
-                                  Dot.StmtNode (Dot.NodeStmt {
-                                    Dot.nodeStmtId = (toNodeId varId),
-                                    Dot.nodeStmtAttributes = (Just (labelAttrs nodeStyleVariable vstr))})
-                          varEdgeStmt =
-                                  Dot.StmtEdge (Dot.EdgeStmt {
-                                    Dot.edgeStmtLeft = (toNodeOrSubgraph selfId),
-                                    Dot.edgeStmtRight = [
-                                      toNodeOrSubgraph varId],
-                                    Dot.edgeStmtAttributes = (Just (edgeAttrs "var"))})
-                      in (encode Nothing False ids1 (Just selfId) (Lists.concat [
-                        selfStmts,
-                        [
-                          varNodeStmt,
-                          varEdgeStmt]], visited1) (Paths.SubtermStepLambdaBody, body))
-                    _ -> dflt
+                  Core.TermLambda v0 ->
+                    let v = Core.lambdaParameter v0
+                        body = Core.lambdaBody v0
+                        vstr = Core.unName v
+                        varLabel = Names.uniqueLabel selfVisited vstr
+                        varId = Dot.Id varLabel
+                        visited1 = Sets.insert varLabel selfVisited
+                        ids1 = Maps.insert v varId ids
+                        varNodeStmt =
+                                Dot.StmtNode (Dot.NodeStmt {
+                                  Dot.nodeStmtId = (toNodeId varId),
+                                  Dot.nodeStmtAttributes = (Just (labelAttrs nodeStyleVariable vstr))})
+                        varEdgeStmt =
+                                Dot.StmtEdge (Dot.EdgeStmt {
+                                  Dot.edgeStmtLeft = (toNodeOrSubgraph selfId),
+                                  Dot.edgeStmtRight = [
+                                    toNodeOrSubgraph varId],
+                                  Dot.edgeStmtAttributes = (Just (edgeAttrs "var"))})
+                    in (encode Nothing False ids1 (Just selfId) (Lists.concat [
+                      selfStmts,
+                      [
+                        varNodeStmt,
+                        varEdgeStmt]], visited1) (Paths.SubtermStepLambdaBody, body))
                   Core.TermLet v0 ->
                     let bindings = Core.letBindings v0
                         env = Core.letBody v0

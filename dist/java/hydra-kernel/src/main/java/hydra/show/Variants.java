@@ -19,13 +19,18 @@ public interface Variants {
       }
 
       @Override
+      public String visit(hydra.variants.TermVariant.Cases ignored) {
+        return "cases";
+      }
+
+      @Override
       public String visit(hydra.variants.TermVariant.Either ignored) {
         return "either";
       }
 
       @Override
-      public String visit(hydra.variants.TermVariant.Function ignored) {
-        return "function";
+      public String visit(hydra.variants.TermVariant.Lambda ignored) {
+        return "lambda";
       }
 
       @Override
@@ -59,6 +64,11 @@ public interface Variants {
       }
 
       @Override
+      public String visit(hydra.variants.TermVariant.Project ignored) {
+        return "project";
+      }
+
+      @Override
       public String visit(hydra.variants.TermVariant.Record ignored) {
         return "record";
       }
@@ -86,6 +96,11 @@ public interface Variants {
       @Override
       public String visit(hydra.variants.TermVariant.Unit ignored) {
         return "unit";
+      }
+
+      @Override
+      public String visit(hydra.variants.TermVariant.Unwrap ignored) {
+        return "unwrap";
       }
 
       @Override

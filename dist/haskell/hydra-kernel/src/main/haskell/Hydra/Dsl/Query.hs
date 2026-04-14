@@ -75,25 +75,25 @@ edge type_ out in_ =
 edgeIn :: Phantoms.TTerm Query.Edge -> Phantoms.TTerm (Maybe Core.Name)
 edgeIn x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.query.Edge"),
-        Core.projectionField = (Core.Name "in")})))),
+        Core.projectionField = (Core.Name "in")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 edgeOut :: Phantoms.TTerm Query.Edge -> Phantoms.TTerm (Maybe Core.Name)
 edgeOut x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.query.Edge"),
-        Core.projectionField = (Core.Name "out")})))),
+        Core.projectionField = (Core.Name "out")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 edgeType :: Phantoms.TTerm Query.Edge -> Phantoms.TTerm Core.Name
 edgeType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.query.Edge"),
-        Core.projectionField = (Core.Name "type")})))),
+        Core.projectionField = (Core.Name "type")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 edgeWithIn :: Phantoms.TTerm Query.Edge -> Phantoms.TTerm (Maybe Core.Name) -> Phantoms.TTerm Query.Edge
@@ -104,16 +104,16 @@ edgeWithIn original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.query.Edge"),
-              Core.projectionField = (Core.Name "type")})))),
+              Core.projectionField = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "out"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.query.Edge"),
-              Core.projectionField = (Core.Name "out")})))),
+              Core.projectionField = (Core.Name "out")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "in"),
@@ -127,9 +127,9 @@ edgeWithOut original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.query.Edge"),
-              Core.projectionField = (Core.Name "type")})))),
+              Core.projectionField = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "out"),
@@ -137,9 +137,9 @@ edgeWithOut original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "in"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.query.Edge"),
-              Core.projectionField = (Core.Name "in")})))),
+              Core.projectionField = (Core.Name "in")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 edgeWithType :: Phantoms.TTerm Query.Edge -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Query.Edge
@@ -153,16 +153,16 @@ edgeWithType original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "out"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.query.Edge"),
-              Core.projectionField = (Core.Name "out")})))),
+              Core.projectionField = (Core.Name "out")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "in"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.query.Edge"),
-              Core.projectionField = (Core.Name "in")})))),
+              Core.projectionField = (Core.Name "in")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 graphPattern :: Phantoms.TTerm Core.Name -> Phantoms.TTerm [Query.Pattern] -> Phantoms.TTerm Query.GraphPattern
@@ -180,17 +180,17 @@ graphPattern graph patterns =
 graphPatternGraph :: Phantoms.TTerm Query.GraphPattern -> Phantoms.TTerm Core.Name
 graphPatternGraph x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.query.GraphPattern"),
-        Core.projectionField = (Core.Name "graph")})))),
+        Core.projectionField = (Core.Name "graph")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 graphPatternPatterns :: Phantoms.TTerm Query.GraphPattern -> Phantoms.TTerm [Query.Pattern]
 graphPatternPatterns x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.query.GraphPattern"),
-        Core.projectionField = (Core.Name "patterns")})))),
+        Core.projectionField = (Core.Name "patterns")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 graphPatternWithGraph :: Phantoms.TTerm Query.GraphPattern -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Query.GraphPattern
@@ -204,9 +204,9 @@ graphPatternWithGraph original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "patterns"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.query.GraphPattern"),
-              Core.projectionField = (Core.Name "patterns")})))),
+              Core.projectionField = (Core.Name "patterns")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 graphPatternWithPatterns :: Phantoms.TTerm Query.GraphPattern -> Phantoms.TTerm [Query.Pattern] -> Phantoms.TTerm Query.GraphPattern
@@ -217,9 +217,9 @@ graphPatternWithPatterns original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "graph"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.query.GraphPattern"),
-              Core.projectionField = (Core.Name "graph")})))),
+              Core.projectionField = (Core.Name "graph")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "patterns"),
@@ -264,17 +264,17 @@ pathEquation left right =
 pathEquationLeft :: Phantoms.TTerm Query.PathEquation -> Phantoms.TTerm Query.Path
 pathEquationLeft x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.query.PathEquation"),
-        Core.projectionField = (Core.Name "left")})))),
+        Core.projectionField = (Core.Name "left")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 pathEquationRight :: Phantoms.TTerm Query.PathEquation -> Phantoms.TTerm Query.Path
 pathEquationRight x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.query.PathEquation"),
-        Core.projectionField = (Core.Name "right")})))),
+        Core.projectionField = (Core.Name "right")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 pathEquationWithLeft :: Phantoms.TTerm Query.PathEquation -> Phantoms.TTerm Query.Path -> Phantoms.TTerm Query.PathEquation
@@ -288,9 +288,9 @@ pathEquationWithLeft original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "right"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.query.PathEquation"),
-              Core.projectionField = (Core.Name "right")})))),
+              Core.projectionField = (Core.Name "right")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 pathEquationWithRight :: Phantoms.TTerm Query.PathEquation -> Phantoms.TTerm Query.Path -> Phantoms.TTerm Query.PathEquation
@@ -301,9 +301,9 @@ pathEquationWithRight original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "left"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.query.PathEquation"),
-              Core.projectionField = (Core.Name "left")})))),
+              Core.projectionField = (Core.Name "left")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "right"),
@@ -372,17 +372,17 @@ patternImplication antecedent consequent =
 patternImplicationAntecedent :: Phantoms.TTerm Query.PatternImplication -> Phantoms.TTerm Query.Pattern
 patternImplicationAntecedent x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.query.PatternImplication"),
-        Core.projectionField = (Core.Name "antecedent")})))),
+        Core.projectionField = (Core.Name "antecedent")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 patternImplicationConsequent :: Phantoms.TTerm Query.PatternImplication -> Phantoms.TTerm Query.Pattern
 patternImplicationConsequent x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.query.PatternImplication"),
-        Core.projectionField = (Core.Name "consequent")})))),
+        Core.projectionField = (Core.Name "consequent")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 patternImplicationWithAntecedent :: Phantoms.TTerm Query.PatternImplication -> Phantoms.TTerm Query.Pattern -> Phantoms.TTerm Query.PatternImplication
@@ -396,9 +396,9 @@ patternImplicationWithAntecedent original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "consequent"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.query.PatternImplication"),
-              Core.projectionField = (Core.Name "consequent")})))),
+              Core.projectionField = (Core.Name "consequent")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 patternImplicationWithConsequent :: Phantoms.TTerm Query.PatternImplication -> Phantoms.TTerm Query.Pattern -> Phantoms.TTerm Query.PatternImplication
@@ -409,9 +409,9 @@ patternImplicationWithConsequent original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "antecedent"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.query.PatternImplication"),
-              Core.projectionField = (Core.Name "antecedent")})))),
+              Core.projectionField = (Core.Name "antecedent")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "consequent"),
@@ -448,17 +448,17 @@ query variables patterns =
 queryPatterns :: Phantoms.TTerm Query.Query -> Phantoms.TTerm [Query.Pattern]
 queryPatterns x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.query.Query"),
-        Core.projectionField = (Core.Name "patterns")})))),
+        Core.projectionField = (Core.Name "patterns")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 queryVariables :: Phantoms.TTerm Query.Query -> Phantoms.TTerm [Query.Variable]
 queryVariables x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.query.Query"),
-        Core.projectionField = (Core.Name "variables")})))),
+        Core.projectionField = (Core.Name "variables")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 queryWithPatterns :: Phantoms.TTerm Query.Query -> Phantoms.TTerm [Query.Pattern] -> Phantoms.TTerm Query.Query
@@ -469,9 +469,9 @@ queryWithPatterns original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "variables"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.query.Query"),
-              Core.projectionField = (Core.Name "variables")})))),
+              Core.projectionField = (Core.Name "variables")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "patterns"),
@@ -488,9 +488,9 @@ queryWithVariables original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "patterns"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.query.Query"),
-              Core.projectionField = (Core.Name "patterns")})))),
+              Core.projectionField = (Core.Name "patterns")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 range :: Phantoms.TTerm Int -> Phantoms.TTerm Int -> Phantoms.TTerm Query.Range
@@ -508,17 +508,17 @@ range min max =
 rangeMax :: Phantoms.TTerm Query.Range -> Phantoms.TTerm Int
 rangeMax x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.query.Range"),
-        Core.projectionField = (Core.Name "max")})))),
+        Core.projectionField = (Core.Name "max")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 rangeMin :: Phantoms.TTerm Query.Range -> Phantoms.TTerm Int
 rangeMin x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.query.Range"),
-        Core.projectionField = (Core.Name "min")})))),
+        Core.projectionField = (Core.Name "min")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 rangeWithMax :: Phantoms.TTerm Query.Range -> Phantoms.TTerm Int -> Phantoms.TTerm Query.Range
@@ -529,9 +529,9 @@ rangeWithMax original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "min"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.query.Range"),
-              Core.projectionField = (Core.Name "min")})))),
+              Core.projectionField = (Core.Name "min")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "max"),
@@ -548,9 +548,9 @@ rangeWithMin original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "max"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.query.Range"),
-              Core.projectionField = (Core.Name "max")})))),
+              Core.projectionField = (Core.Name "max")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 regexQuantifierAtLeast :: Phantoms.TTerm Int -> Phantoms.TTerm Query.RegexQuantifier
@@ -624,17 +624,17 @@ regexSequence path quantifier =
 regexSequencePath :: Phantoms.TTerm Query.RegexSequence -> Phantoms.TTerm Query.Path
 regexSequencePath x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.query.RegexSequence"),
-        Core.projectionField = (Core.Name "path")})))),
+        Core.projectionField = (Core.Name "path")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 regexSequenceQuantifier :: Phantoms.TTerm Query.RegexSequence -> Phantoms.TTerm Query.RegexQuantifier
 regexSequenceQuantifier x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.query.RegexSequence"),
-        Core.projectionField = (Core.Name "quantifier")})))),
+        Core.projectionField = (Core.Name "quantifier")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 regexSequenceWithPath :: Phantoms.TTerm Query.RegexSequence -> Phantoms.TTerm Query.Path -> Phantoms.TTerm Query.RegexSequence
@@ -648,9 +648,9 @@ regexSequenceWithPath original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "quantifier"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.query.RegexSequence"),
-              Core.projectionField = (Core.Name "quantifier")})))),
+              Core.projectionField = (Core.Name "quantifier")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 regexSequenceWithQuantifier :: Phantoms.TTerm Query.RegexSequence -> Phantoms.TTerm Query.RegexQuantifier -> Phantoms.TTerm Query.RegexSequence
@@ -661,9 +661,9 @@ regexSequenceWithQuantifier original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "path"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.query.RegexSequence"),
-              Core.projectionField = (Core.Name "path")})))),
+              Core.projectionField = (Core.Name "path")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "quantifier"),
@@ -711,25 +711,25 @@ triplePattern subject predicate object =
 triplePatternObject :: Phantoms.TTerm Query.TriplePattern -> Phantoms.TTerm Query.Node
 triplePatternObject x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.query.TriplePattern"),
-        Core.projectionField = (Core.Name "object")})))),
+        Core.projectionField = (Core.Name "object")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 triplePatternPredicate :: Phantoms.TTerm Query.TriplePattern -> Phantoms.TTerm Query.Path
 triplePatternPredicate x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.query.TriplePattern"),
-        Core.projectionField = (Core.Name "predicate")})))),
+        Core.projectionField = (Core.Name "predicate")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 triplePatternSubject :: Phantoms.TTerm Query.TriplePattern -> Phantoms.TTerm Query.Node
 triplePatternSubject x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.query.TriplePattern"),
-        Core.projectionField = (Core.Name "subject")})))),
+        Core.projectionField = (Core.Name "subject")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 triplePatternWithObject :: Phantoms.TTerm Query.TriplePattern -> Phantoms.TTerm Query.Node -> Phantoms.TTerm Query.TriplePattern
@@ -740,16 +740,16 @@ triplePatternWithObject original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "subject"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.query.TriplePattern"),
-              Core.projectionField = (Core.Name "subject")})))),
+              Core.projectionField = (Core.Name "subject")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "predicate"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.query.TriplePattern"),
-              Core.projectionField = (Core.Name "predicate")})))),
+              Core.projectionField = (Core.Name "predicate")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "object"),
@@ -763,9 +763,9 @@ triplePatternWithPredicate original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "subject"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.query.TriplePattern"),
-              Core.projectionField = (Core.Name "subject")})))),
+              Core.projectionField = (Core.Name "subject")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "predicate"),
@@ -773,9 +773,9 @@ triplePatternWithPredicate original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "object"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.query.TriplePattern"),
-              Core.projectionField = (Core.Name "object")})))),
+              Core.projectionField = (Core.Name "object")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 triplePatternWithSubject :: Phantoms.TTerm Query.TriplePattern -> Phantoms.TTerm Query.Node -> Phantoms.TTerm Query.TriplePattern
@@ -789,22 +789,22 @@ triplePatternWithSubject original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "predicate"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.query.TriplePattern"),
-              Core.projectionField = (Core.Name "predicate")})))),
+              Core.projectionField = (Core.Name "predicate")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "object"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.query.TriplePattern"),
-              Core.projectionField = (Core.Name "object")})))),
+              Core.projectionField = (Core.Name "object")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 unVariable :: Phantoms.TTerm Query.Variable -> Phantoms.TTerm String
 unVariable x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.query.Variable")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.query.Variable")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 variable :: Phantoms.TTerm String -> Phantoms.TTerm Query.Variable

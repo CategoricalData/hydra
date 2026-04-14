@@ -11,19 +11,6 @@ import Hydra.Dsl.Meta.Phantoms
 import Hydra.Dsl.Variants
 
 
--- | Convert a Haskell EliminationVariant to a TTerm
-eliminationVariant :: EliminationVariant -> TTerm EliminationVariant
-eliminationVariant v = injectUnit _EliminationVariant $ case v of
-  EliminationVariantRecord -> _EliminationVariant_record
-  EliminationVariantUnion -> _EliminationVariant_union
-  EliminationVariantWrap -> _EliminationVariant_wrap
-
--- | Convert a Haskell FunctionVariant to a TTerm
-functionVariant :: FunctionVariant -> TTerm FunctionVariant
-functionVariant v = injectUnit _FunctionVariant $ case v of
-  FunctionVariantElimination -> _FunctionVariant_elimination
-  FunctionVariantLambda -> _FunctionVariant_lambda
-
 -- | Convert a Haskell LiteralVariant to a TTerm
 literalVariant :: LiteralVariant -> TTerm LiteralVariant
 literalVariant v = injectUnit _LiteralVariant $ case v of
@@ -38,20 +25,23 @@ termVariant :: TermVariant -> TTerm TermVariant
 termVariant v = injectUnit _TermVariant $ case v of
   TermVariantAnnotated -> _TermVariant_annotated
   TermVariantApplication -> _TermVariant_application
+  TermVariantCases -> _TermVariant_cases
   TermVariantEither -> _TermVariant_either
-  TermVariantFunction -> _TermVariant_function
+  TermVariantLambda -> _TermVariant_lambda
   TermVariantLet -> _TermVariant_let
   TermVariantList -> _TermVariant_list
   TermVariantLiteral -> _TermVariant_literal
   TermVariantMap -> _TermVariant_map
   TermVariantMaybe -> _TermVariant_maybe
   TermVariantPair -> _TermVariant_pair
+  TermVariantProject -> _TermVariant_project
   TermVariantRecord -> _TermVariant_record
   TermVariantSet -> _TermVariant_set
   TermVariantTypeLambda -> _TermVariant_typeLambda
   TermVariantTypeApplication -> _TermVariant_typeApplication
   TermVariantUnion -> _TermVariant_union
   TermVariantUnit -> _TermVariant_unit
+  TermVariantUnwrap -> _TermVariant_unwrap
   TermVariantVariable -> _TermVariant_variable
   TermVariantWrap -> _TermVariant_wrap
 

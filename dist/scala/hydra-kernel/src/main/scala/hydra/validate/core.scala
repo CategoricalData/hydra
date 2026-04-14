@@ -71,28 +71,22 @@ def checkTerm(typed: Boolean)(path: hydra.paths.SubtermPath)(cx: hydra.graph.Gra
              v_Term_variable_funName))))(None)
           case _ => None
         case _ => None, fun match
-        case hydra.core.Term.function(v_Term_function_f) => v_Term_function_f match
-          case hydra.core.Function.lambda(v_Function_lambda_lam) => {
-            lazy val param: hydra.core.Name = (v_Function_lambda_lam.parameter)
-            {
-              lazy val body: hydra.core.Term = (v_Function_lambda_lam.body)
-              body match
-                case hydra.core.Term.variable(v_Term_variable_bodyVar) => hydra.lib.logic.ifElse[Option[hydra.error.core.InvalidTermError]](hydra.lib.equality.equal[hydra.core.Name](param)(v_Term_variable_bodyVar))(Some(hydra.error.core.InvalidTermError.unnecessaryIdentityApplication(hydra.error.core.UnnecessaryIdentityApplicationError(path))))(None)
-                case _ => None
-            }
-          }
-          case _ => None
-        case _ => None, fun match
-        case hydra.core.Term.function(v_Term_function_f) => v_Term_function_f match
-          case hydra.core.Function.elimination(v_Function_elimination_elim) => v_Function_elimination_elim match
-            case hydra.core.Elimination.wrap(v_Elimination_wrap_unwrapName) => arg match
-              case hydra.core.Term.wrap(v_Term_wrap_wt) => {
-                lazy val wrapName: hydra.core.Name = (v_Term_wrap_wt.typeName)
-                hydra.lib.logic.ifElse[Option[hydra.error.core.InvalidTermError]](hydra.lib.equality.equal[hydra.core.Name](v_Elimination_wrap_unwrapName)(wrapName))(Some(hydra.error.core.InvalidTermError.redundantWrapUnwrap(hydra.error.core.RedundantWrapUnwrapError(path,
-                   v_Elimination_wrap_unwrapName))))(None)
-              }
+        case hydra.core.Term.lambda(v_Term_lambda_lam) => {
+          lazy val param: hydra.core.Name = (v_Term_lambda_lam.parameter)
+          {
+            lazy val body: hydra.core.Term = (v_Term_lambda_lam.body)
+            body match
+              case hydra.core.Term.variable(v_Term_variable_bodyVar) => hydra.lib.logic.ifElse[Option[hydra.error.core.InvalidTermError]](hydra.lib.equality.equal[hydra.core.Name](param)(v_Term_variable_bodyVar))(Some(hydra.error.core.InvalidTermError.unnecessaryIdentityApplication(hydra.error.core.UnnecessaryIdentityApplicationError(path))))(None)
               case _ => None
-            case _ => None
+          }
+        }
+        case _ => None, fun match
+        case hydra.core.Term.unwrap(v_Term_unwrap_unwrapName) => arg match
+          case hydra.core.Term.wrap(v_Term_wrap_wt) => {
+            lazy val wrapName: hydra.core.Name = (v_Term_wrap_wt.typeName)
+            hydra.lib.logic.ifElse[Option[hydra.error.core.InvalidTermError]](hydra.lib.equality.equal[hydra.core.Name](v_Term_unwrap_unwrapName)(wrapName))(Some(hydra.error.core.InvalidTermError.redundantWrapUnwrap(hydra.error.core.RedundantWrapUnwrapError(path,
+               v_Term_unwrap_unwrapName))))(None)
+          }
           case _ => None
         case _ => None))
     }
@@ -125,38 +119,34 @@ def checkTerm(typed: Boolean)(path: hydra.paths.SubtermPath)(cx: hydra.graph.Gra
     lazy val tname: hydra.core.Name = (v_Term_union_inj.typeName)
     hydra.lib.logic.ifElse[Option[hydra.error.core.InvalidTermError]](hydra.lib.equality.equal[scala.Predef.String](tname)(""))(Some(hydra.error.core.InvalidTermError.emptyTypeNameInTerm(hydra.error.core.EmptyTypeNameInTermError(path))))(None)
   }
-  case hydra.core.Term.function(v_Term_function_fun) => v_Term_function_fun match
-    case hydra.core.Function.lambda(v_Function_lambda_lam) => {
-      lazy val paramName: hydra.core.Name = (v_Function_lambda_lam.parameter)
-      hydra.validate.core.firstError(Seq(hydra.lib.logic.ifElse[Option[hydra.error.core.InvalidTermError]](hydra.lib.maybes.isJust[hydra.core.Term](hydra.lib.maps.lookup[hydra.core.Name,
-         hydra.core.Term](paramName)(cx.boundTerms)))(Some(hydra.error.core.InvalidTermError.termVariableShadowing(hydra.error.core.TermVariableShadowingError(path,
-         paramName))))(None), hydra.lib.logic.ifElse[Option[hydra.error.core.InvalidTermError]](hydra.validate.core.isValidName(paramName))(None)(Some(hydra.error.core.InvalidTermError.invalidLambdaParameterName(hydra.error.core.InvalidLambdaParameterNameError(path,
-         paramName)))), hydra.lib.logic.ifElse[Option[hydra.error.core.InvalidTermError]](typed)(hydra.lib.maybes.cases[hydra.core.Type,
-         Option[hydra.error.core.InvalidTermError]](v_Function_lambda_lam.domain)(None)((dom: hydra.core.Type) =>
-        hydra.validate.core.checkUndefinedTypeVariablesInType(path)(cx)(dom)((uvName: hydra.core.Name) =>
-        Some(hydra.error.core.InvalidTermError.undefinedTypeVariableInLambdaDomain(hydra.error.core.UndefinedTypeVariableInLambdaDomainError(path,
-           uvName))))))(None)))
+  case hydra.core.Term.lambda(v_Term_lambda_lam) => {
+    lazy val paramName: hydra.core.Name = (v_Term_lambda_lam.parameter)
+    hydra.validate.core.firstError(Seq(hydra.lib.logic.ifElse[Option[hydra.error.core.InvalidTermError]](hydra.lib.maybes.isJust[hydra.core.Term](hydra.lib.maps.lookup[hydra.core.Name,
+       hydra.core.Term](paramName)(cx.boundTerms)))(Some(hydra.error.core.InvalidTermError.termVariableShadowing(hydra.error.core.TermVariableShadowingError(path,
+       paramName))))(None), hydra.lib.logic.ifElse[Option[hydra.error.core.InvalidTermError]](hydra.validate.core.isValidName(paramName))(None)(Some(hydra.error.core.InvalidTermError.invalidLambdaParameterName(hydra.error.core.InvalidLambdaParameterNameError(path,
+       paramName)))), hydra.lib.logic.ifElse[Option[hydra.error.core.InvalidTermError]](typed)(hydra.lib.maybes.cases[hydra.core.Type,
+       Option[hydra.error.core.InvalidTermError]](v_Term_lambda_lam.domain)(None)((dom: hydra.core.Type) =>
+      hydra.validate.core.checkUndefinedTypeVariablesInType(path)(cx)(dom)((uvName: hydra.core.Name) =>
+      Some(hydra.error.core.InvalidTermError.undefinedTypeVariableInLambdaDomain(hydra.error.core.UndefinedTypeVariableInLambdaDomainError(path,
+         uvName))))))(None)))
+  }
+  case hydra.core.Term.project(v_Term_project_proj) => {
+    lazy val tname: hydra.core.Name = (v_Term_project_proj.typeName)
+    hydra.lib.logic.ifElse[Option[hydra.error.core.InvalidTermError]](hydra.lib.equality.equal[scala.Predef.String](tname)(""))(Some(hydra.error.core.InvalidTermError.emptyTypeNameInTerm(hydra.error.core.EmptyTypeNameInTermError(path))))(None)
+  }
+  case hydra.core.Term.cases(v_Term_cases_cs) => {
+    lazy val tname: hydra.core.Name = (v_Term_cases_cs.typeName)
+    {
+      lazy val csDefault: Option[hydra.core.Term] = (v_Term_cases_cs.default)
+      {
+        lazy val csCases: Seq[hydra.core.Field] = (v_Term_cases_cs.cases)
+        hydra.validate.core.firstError(Seq(hydra.lib.logic.ifElse[Option[hydra.error.core.InvalidTermError]](hydra.lib.equality.equal[scala.Predef.String](tname)(""))(Some(hydra.error.core.InvalidTermError.emptyTypeNameInTerm(hydra.error.core.EmptyTypeNameInTermError(path))))(None),
+           hydra.lib.logic.ifElse[Option[hydra.error.core.InvalidTermError]](hydra.lib.logic.and(hydra.lib.lists.`null`[hydra.core.Field](csCases))(hydra.lib.maybes.isNothing[hydra.core.Term](csDefault)))(Some(hydra.error.core.InvalidTermError.emptyCaseStatement(hydra.error.core.EmptyCaseStatementError(path,
+           tname))))(None), hydra.validate.core.checkDuplicateFields(path)(hydra.lib.lists.map[hydra.core.Field,
+           hydra.core.Name]((x: hydra.core.Field) => (x.name))(csCases))))
+      }
     }
-    case hydra.core.Function.elimination(v_Function_elimination_elim) => v_Function_elimination_elim match
-      case hydra.core.Elimination.record(v_Elimination_record_proj) => {
-        lazy val tname: hydra.core.Name = (v_Elimination_record_proj.typeName)
-        hydra.lib.logic.ifElse[Option[hydra.error.core.InvalidTermError]](hydra.lib.equality.equal[scala.Predef.String](tname)(""))(Some(hydra.error.core.InvalidTermError.emptyTypeNameInTerm(hydra.error.core.EmptyTypeNameInTermError(path))))(None)
-      }
-      case hydra.core.Elimination.union(v_Elimination_union_cs) => {
-        lazy val tname: hydra.core.Name = (v_Elimination_union_cs.typeName)
-        {
-          lazy val csDefault: Option[hydra.core.Term] = (v_Elimination_union_cs.default)
-          {
-            lazy val csCases: Seq[hydra.core.Field] = (v_Elimination_union_cs.cases)
-            hydra.validate.core.firstError(Seq(hydra.lib.logic.ifElse[Option[hydra.error.core.InvalidTermError]](hydra.lib.equality.equal[scala.Predef.String](tname)(""))(Some(hydra.error.core.InvalidTermError.emptyTypeNameInTerm(hydra.error.core.EmptyTypeNameInTermError(path))))(None),
-               hydra.lib.logic.ifElse[Option[hydra.error.core.InvalidTermError]](hydra.lib.logic.and(hydra.lib.lists.`null`[hydra.core.Field](csCases))(hydra.lib.maybes.isNothing[hydra.core.Term](csDefault)))(Some(hydra.error.core.InvalidTermError.emptyCaseStatement(hydra.error.core.EmptyCaseStatementError(path,
-               tname))))(None), hydra.validate.core.checkDuplicateFields(path)(hydra.lib.lists.map[hydra.core.Field,
-               hydra.core.Name]((x: hydra.core.Field) => (x.name))(csCases))))
-          }
-        }
-      }
-      case _ => None
-    case _ => None
+  }
   case hydra.core.Term.typeApplication(v_Term_typeApplication_ta) => hydra.lib.logic.ifElse[Option[hydra.error.core.InvalidTermError]](typed)(hydra.validate.core.checkUndefinedTypeVariablesInType(path)(cx)(v_Term_typeApplication_ta.`type`)((uvName: hydra.core.Name) =>
     Some(hydra.error.core.InvalidTermError.undefinedTypeVariableInTypeApplication(hydra.error.core.UndefinedTypeVariableInTypeApplicationError(path,
        uvName)))))(None)

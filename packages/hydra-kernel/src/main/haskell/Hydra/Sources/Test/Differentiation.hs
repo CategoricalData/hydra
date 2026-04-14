@@ -70,8 +70,7 @@ f64 :: Double -> TTerm Term
 f64 d = Core.termLiteral $ Core.literalFloat $ Core.floatValueFloat64 (float64 d)
 
 mkLambda :: String -> TTerm Term -> TTerm Term
-mkLambda param body = Core.termFunction $ Core.functionLambda $
-  Core.lambda (mkName param) nothing body
+mkLambda param body = Core.termLambda $ Core.lambda (mkName param) nothing body
 
 -- Deep-level primitive application (for structural test expectations)
 prim1 :: Name -> TTerm Term -> TTerm Term

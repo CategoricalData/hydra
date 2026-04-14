@@ -243,20 +243,6 @@ public interface Bootstrap {
           new hydra.core.Name("description"),
           new hydra.core.Term.Literal(new hydra.core.Literal.String_("A type which provides a choice between a 'left' type and a 'right' type")))))))),
       java.util.Map.entry(
-        new hydra.core.Name("hydra.core.Elimination"),
-        new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Union(java.util.Arrays.asList(
-          new hydra.core.FieldType(new hydra.core.Name("record"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Projection")), new java.util.TreeMap(java.util.Map.ofEntries(java.util.Map.entry(
-            new hydra.core.Name("description"),
-            new hydra.core.Term.Literal(new hydra.core.Literal.String_("Eliminates a record by projecting a given field")))))))),
-          new hydra.core.FieldType(new hydra.core.Name("union"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.CaseStatement")), new java.util.TreeMap(java.util.Map.ofEntries(java.util.Map.entry(
-            new hydra.core.Name("description"),
-            new hydra.core.Term.Literal(new hydra.core.Literal.String_("Eliminates a union term by matching over the fields of the union. This is a case statement.")))))))),
-          new hydra.core.FieldType(new hydra.core.Name("wrap"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Name")), new java.util.TreeMap(java.util.Map.ofEntries(java.util.Map.entry(
-            new hydra.core.Name("description"),
-            new hydra.core.Term.Literal(new hydra.core.Literal.String_("Unwrap a wrapped term")))))))))), new java.util.TreeMap(java.util.Map.ofEntries(java.util.Map.entry(
-          new hydra.core.Name("description"),
-          new hydra.core.Term.Literal(new hydra.core.Literal.String_("A corresponding elimination for an introduction term")))))))),
-      java.util.Map.entry(
         new hydra.core.Name("hydra.core.Field"),
         new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Record(java.util.Arrays.asList(
           new hydra.core.FieldType(new hydra.core.Name("name"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Name")), new java.util.TreeMap(java.util.Map.ofEntries(java.util.Map.entry(
@@ -317,17 +303,6 @@ public interface Bootstrap {
             new hydra.core.Term.Literal(new hydra.core.Literal.String_("The body of the lambda")))))))))), new java.util.TreeMap(java.util.Map.ofEntries(java.util.Map.entry(
           new hydra.core.Name("description"),
           new hydra.core.Term.Literal(new hydra.core.Literal.String_("A universally quantified type; the System F equivalent of a type scheme, and the type-level equivalent of a lambda term.")))))))),
-      java.util.Map.entry(
-        new hydra.core.Name("hydra.core.Function"),
-        new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Union(java.util.Arrays.asList(
-          new hydra.core.FieldType(new hydra.core.Name("elimination"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Elimination")), new java.util.TreeMap(java.util.Map.ofEntries(java.util.Map.entry(
-            new hydra.core.Name("description"),
-            new hydra.core.Term.Literal(new hydra.core.Literal.String_("An elimination for any of a few term variants")))))))),
-          new hydra.core.FieldType(new hydra.core.Name("lambda"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Lambda")), new java.util.TreeMap(java.util.Map.ofEntries(java.util.Map.entry(
-            new hydra.core.Name("description"),
-            new hydra.core.Term.Literal(new hydra.core.Literal.String_("A function abstraction (lambda)")))))))))), new java.util.TreeMap(java.util.Map.ofEntries(java.util.Map.entry(
-          new hydra.core.Name("description"),
-          new hydra.core.Term.Literal(new hydra.core.Literal.String_("A function")))))))),
       java.util.Map.entry(
         new hydra.core.Name("hydra.core.FunctionType"),
         new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Record(java.util.Arrays.asList(
@@ -537,12 +512,15 @@ public interface Bootstrap {
           new hydra.core.FieldType(new hydra.core.Name("application"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Application")), new java.util.TreeMap(java.util.Map.ofEntries(java.util.Map.entry(
             new hydra.core.Name("description"),
             new hydra.core.Term.Literal(new hydra.core.Literal.String_("A function application")))))))),
+          new hydra.core.FieldType(new hydra.core.Name("cases"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.CaseStatement")), new java.util.TreeMap(java.util.Map.ofEntries(java.util.Map.entry(
+            new hydra.core.Name("description"),
+            new hydra.core.Term.Literal(new hydra.core.Literal.String_("A union elimination; a case statement")))))))),
           new hydra.core.FieldType(new hydra.core.Name("either"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Either(new hydra.core.EitherType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Term")), new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Term")))), new java.util.TreeMap(java.util.Map.ofEntries(java.util.Map.entry(
             new hydra.core.Name("description"),
             new hydra.core.Term.Literal(new hydra.core.Literal.String_("An either value")))))))),
-          new hydra.core.FieldType(new hydra.core.Name("function"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Function")), new java.util.TreeMap(java.util.Map.ofEntries(java.util.Map.entry(
+          new hydra.core.FieldType(new hydra.core.Name("lambda"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Lambda")), new java.util.TreeMap(java.util.Map.ofEntries(java.util.Map.entry(
             new hydra.core.Name("description"),
-            new hydra.core.Term.Literal(new hydra.core.Literal.String_("A function term")))))))),
+            new hydra.core.Term.Literal(new hydra.core.Literal.String_("A function abstraction (lambda)")))))))),
           new hydra.core.FieldType(new hydra.core.Name("let"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Let")), new java.util.TreeMap(java.util.Map.ofEntries(java.util.Map.entry(
             new hydra.core.Name("description"),
             new hydra.core.Term.Literal(new hydra.core.Literal.String_("A 'let' term, which binds variables to terms")))))))),
@@ -561,6 +539,9 @@ public interface Bootstrap {
           new hydra.core.FieldType(new hydra.core.Name("pair"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Pair(new hydra.core.PairType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Term")), new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Term")))), new java.util.TreeMap(java.util.Map.ofEntries(java.util.Map.entry(
             new hydra.core.Name("description"),
             new hydra.core.Term.Literal(new hydra.core.Literal.String_("A pair (2-tuple)")))))))),
+          new hydra.core.FieldType(new hydra.core.Name("project"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Projection")), new java.util.TreeMap(java.util.Map.ofEntries(java.util.Map.entry(
+            new hydra.core.Name("description"),
+            new hydra.core.Term.Literal(new hydra.core.Literal.String_("A record elimination; a projection")))))))),
           new hydra.core.FieldType(new hydra.core.Name("record"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Record")), new java.util.TreeMap(java.util.Map.ofEntries(java.util.Map.entry(
             new hydra.core.Name("description"),
             new hydra.core.Term.Literal(new hydra.core.Literal.String_("A record term")))))))),
@@ -579,6 +560,9 @@ public interface Bootstrap {
           new hydra.core.FieldType(new hydra.core.Name("unit"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Unit(), new java.util.TreeMap(java.util.Map.ofEntries(java.util.Map.entry(
             new hydra.core.Name("description"),
             new hydra.core.Term.Literal(new hydra.core.Literal.String_("A unit value; a term with no value")))))))),
+          new hydra.core.FieldType(new hydra.core.Name("unwrap"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Name")), new java.util.TreeMap(java.util.Map.ofEntries(java.util.Map.entry(
+            new hydra.core.Name("description"),
+            new hydra.core.Term.Literal(new hydra.core.Literal.String_("An unwrap elimination; the inverse of a wrap")))))))),
           new hydra.core.FieldType(new hydra.core.Name("variable"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Name")), new java.util.TreeMap(java.util.Map.ofEntries(java.util.Map.entry(
             new hydra.core.Name("description"),
             new hydra.core.Term.Literal(new hydra.core.Literal.String_("A variable reference")))))))),

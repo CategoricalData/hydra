@@ -400,30 +400,10 @@ public interface Transform {
         }
 
         @Override
-        public java.util.Set<String> visit(hydra.core.Term.Function f) {
-          return (f).value.accept(new hydra.core.Function.PartialVisitor<>() {
-            @Override
-            public java.util.Set<String> otherwise(hydra.core.Function instance) {
-              return names;
-            }
-
-            @Override
-            public java.util.Set<String> visit(hydra.core.Function.Elimination e) {
-              return (e).value.accept(new hydra.core.Elimination.PartialVisitor<>() {
-                @Override
-                public java.util.Set<String> otherwise(hydra.core.Elimination instance) {
-                  return names;
-                }
-
-                @Override
-                public java.util.Set<String> visit(hydra.core.Elimination.Record proj) {
-                  return hydra.lib.sets.Insert.apply(
-                    (proj).value.typeName.value,
-                    names);
-                }
-              });
-            }
-          });
+        public java.util.Set<String> visit(hydra.core.Term.Project proj) {
+          return hydra.lib.sets.Insert.apply(
+            (proj).value.typeName.value,
+            names);
         }
       }))),
       (java.util.Set<String>) (hydra.lib.sets.Empty.<String>apply()),

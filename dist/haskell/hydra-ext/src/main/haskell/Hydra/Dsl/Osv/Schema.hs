@@ -24,17 +24,17 @@ credited name contact =
 creditedContact :: Phantoms.TTerm Schema.Credited -> Phantoms.TTerm (Maybe [Schema.Url])
 creditedContact x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.osv.schema.Credited"),
-        Core.projectionField = (Core.Name "contact")})))),
+        Core.projectionField = (Core.Name "contact")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 creditedName :: Phantoms.TTerm Schema.Credited -> Phantoms.TTerm String
 creditedName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.osv.schema.Credited"),
-        Core.projectionField = (Core.Name "name")})))),
+        Core.projectionField = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 creditedWithContact :: Phantoms.TTerm Schema.Credited -> Phantoms.TTerm (Maybe [Schema.Url]) -> Phantoms.TTerm Schema.Credited
@@ -45,9 +45,9 @@ creditedWithContact original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Credited"),
-              Core.projectionField = (Core.Name "name")})))),
+              Core.projectionField = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "contact"),
@@ -64,9 +64,9 @@ creditedWithName original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "contact"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Credited"),
-              Core.projectionField = (Core.Name "contact")})))),
+              Core.projectionField = (Core.Name "contact")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 ecosystem :: Phantoms.TTerm String -> Phantoms.TTerm Schema.Ecosystem
@@ -123,97 +123,97 @@ entry schemaVersion id modified published withdrawn aliases related summary deta
 entryAffected :: Phantoms.TTerm Schema.Entry -> Phantoms.TTerm (Maybe [Schema.PackageVersions])
 entryAffected x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-        Core.projectionField = (Core.Name "affected")})))),
+        Core.projectionField = (Core.Name "affected")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 entryAliases :: Phantoms.TTerm Schema.Entry -> Phantoms.TTerm (Maybe [Schema.Id])
 entryAliases x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-        Core.projectionField = (Core.Name "aliases")})))),
+        Core.projectionField = (Core.Name "aliases")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 entryCredits :: Phantoms.TTerm Schema.Entry -> Phantoms.TTerm (Maybe [Schema.Credited])
 entryCredits x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-        Core.projectionField = (Core.Name "credits")})))),
+        Core.projectionField = (Core.Name "credits")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 entryDetails :: Phantoms.TTerm Schema.Entry -> Phantoms.TTerm (Maybe Schema.Markdown)
 entryDetails x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-        Core.projectionField = (Core.Name "details")})))),
+        Core.projectionField = (Core.Name "details")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 entryId :: Phantoms.TTerm Schema.Entry -> Phantoms.TTerm Schema.Id
 entryId x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-        Core.projectionField = (Core.Name "id")})))),
+        Core.projectionField = (Core.Name "id")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 entryModified :: Phantoms.TTerm Schema.Entry -> Phantoms.TTerm Schema.Timestamp
 entryModified x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-        Core.projectionField = (Core.Name "modified")})))),
+        Core.projectionField = (Core.Name "modified")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 entryPublished :: Phantoms.TTerm Schema.Entry -> Phantoms.TTerm (Maybe Schema.Timestamp)
 entryPublished x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-        Core.projectionField = (Core.Name "published")})))),
+        Core.projectionField = (Core.Name "published")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 entryReferences :: Phantoms.TTerm Schema.Entry -> Phantoms.TTerm (Maybe [Schema.Reference])
 entryReferences x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-        Core.projectionField = (Core.Name "references")})))),
+        Core.projectionField = (Core.Name "references")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 entryRelated :: Phantoms.TTerm Schema.Entry -> Phantoms.TTerm (Maybe [Schema.Id])
 entryRelated x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-        Core.projectionField = (Core.Name "related")})))),
+        Core.projectionField = (Core.Name "related")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 entrySchemaVersion :: Phantoms.TTerm Schema.Entry -> Phantoms.TTerm (Maybe Schema.OsvVersion)
 entrySchemaVersion x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-        Core.projectionField = (Core.Name "schemaVersion")})))),
+        Core.projectionField = (Core.Name "schemaVersion")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 entrySeverity :: Phantoms.TTerm Schema.Entry -> Phantoms.TTerm (Maybe [Schema.Severity])
 entrySeverity x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-        Core.projectionField = (Core.Name "severity")})))),
+        Core.projectionField = (Core.Name "severity")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 entrySummary :: Phantoms.TTerm Schema.Entry -> Phantoms.TTerm (Maybe String)
 entrySummary x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-        Core.projectionField = (Core.Name "summary")})))),
+        Core.projectionField = (Core.Name "summary")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 entryWithAffected :: Phantoms.TTerm Schema.Entry -> Phantoms.TTerm (Maybe [Schema.PackageVersions]) -> Phantoms.TTerm Schema.Entry
@@ -224,72 +224,72 @@ entryWithAffected original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "schemaVersion"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "schemaVersion")})))),
+              Core.projectionField = (Core.Name "schemaVersion")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "id"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "id")})))),
+              Core.projectionField = (Core.Name "id")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "modified"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "modified")})))),
+              Core.projectionField = (Core.Name "modified")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "published"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "published")})))),
+              Core.projectionField = (Core.Name "published")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "withdrawn"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "withdrawn")})))),
+              Core.projectionField = (Core.Name "withdrawn")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "aliases"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "aliases")})))),
+              Core.projectionField = (Core.Name "aliases")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "related"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "related")})))),
+              Core.projectionField = (Core.Name "related")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "summary"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "summary")})))),
+              Core.projectionField = (Core.Name "summary")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "details"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "details")})))),
+              Core.projectionField = (Core.Name "details")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "severity"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "severity")})))),
+              Core.projectionField = (Core.Name "severity")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "affected"),
@@ -297,16 +297,16 @@ entryWithAffected original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "references"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "references")})))),
+              Core.projectionField = (Core.Name "references")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "credits"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "credits")})))),
+              Core.projectionField = (Core.Name "credits")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 entryWithAliases :: Phantoms.TTerm Schema.Entry -> Phantoms.TTerm (Maybe [Schema.Id]) -> Phantoms.TTerm Schema.Entry
@@ -317,37 +317,37 @@ entryWithAliases original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "schemaVersion"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "schemaVersion")})))),
+              Core.projectionField = (Core.Name "schemaVersion")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "id"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "id")})))),
+              Core.projectionField = (Core.Name "id")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "modified"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "modified")})))),
+              Core.projectionField = (Core.Name "modified")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "published"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "published")})))),
+              Core.projectionField = (Core.Name "published")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "withdrawn"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "withdrawn")})))),
+              Core.projectionField = (Core.Name "withdrawn")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "aliases"),
@@ -355,51 +355,51 @@ entryWithAliases original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "related"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "related")})))),
+              Core.projectionField = (Core.Name "related")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "summary"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "summary")})))),
+              Core.projectionField = (Core.Name "summary")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "details"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "details")})))),
+              Core.projectionField = (Core.Name "details")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "severity"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "severity")})))),
+              Core.projectionField = (Core.Name "severity")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "affected"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "affected")})))),
+              Core.projectionField = (Core.Name "affected")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "references"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "references")})))),
+              Core.projectionField = (Core.Name "references")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "credits"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "credits")})))),
+              Core.projectionField = (Core.Name "credits")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 entryWithCredits :: Phantoms.TTerm Schema.Entry -> Phantoms.TTerm (Maybe [Schema.Credited]) -> Phantoms.TTerm Schema.Entry
@@ -410,86 +410,86 @@ entryWithCredits original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "schemaVersion"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "schemaVersion")})))),
+              Core.projectionField = (Core.Name "schemaVersion")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "id"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "id")})))),
+              Core.projectionField = (Core.Name "id")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "modified"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "modified")})))),
+              Core.projectionField = (Core.Name "modified")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "published"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "published")})))),
+              Core.projectionField = (Core.Name "published")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "withdrawn"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "withdrawn")})))),
+              Core.projectionField = (Core.Name "withdrawn")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "aliases"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "aliases")})))),
+              Core.projectionField = (Core.Name "aliases")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "related"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "related")})))),
+              Core.projectionField = (Core.Name "related")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "summary"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "summary")})))),
+              Core.projectionField = (Core.Name "summary")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "details"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "details")})))),
+              Core.projectionField = (Core.Name "details")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "severity"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "severity")})))),
+              Core.projectionField = (Core.Name "severity")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "affected"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "affected")})))),
+              Core.projectionField = (Core.Name "affected")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "references"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "references")})))),
+              Core.projectionField = (Core.Name "references")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "credits"),
@@ -503,58 +503,58 @@ entryWithDetails original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "schemaVersion"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "schemaVersion")})))),
+              Core.projectionField = (Core.Name "schemaVersion")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "id"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "id")})))),
+              Core.projectionField = (Core.Name "id")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "modified"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "modified")})))),
+              Core.projectionField = (Core.Name "modified")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "published"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "published")})))),
+              Core.projectionField = (Core.Name "published")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "withdrawn"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "withdrawn")})))),
+              Core.projectionField = (Core.Name "withdrawn")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "aliases"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "aliases")})))),
+              Core.projectionField = (Core.Name "aliases")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "related"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "related")})))),
+              Core.projectionField = (Core.Name "related")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "summary"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "summary")})))),
+              Core.projectionField = (Core.Name "summary")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "details"),
@@ -562,30 +562,30 @@ entryWithDetails original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "severity"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "severity")})))),
+              Core.projectionField = (Core.Name "severity")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "affected"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "affected")})))),
+              Core.projectionField = (Core.Name "affected")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "references"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "references")})))),
+              Core.projectionField = (Core.Name "references")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "credits"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "credits")})))),
+              Core.projectionField = (Core.Name "credits")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 entryWithId :: Phantoms.TTerm Schema.Entry -> Phantoms.TTerm Schema.Id -> Phantoms.TTerm Schema.Entry
@@ -596,9 +596,9 @@ entryWithId original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "schemaVersion"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "schemaVersion")})))),
+              Core.projectionField = (Core.Name "schemaVersion")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "id"),
@@ -606,79 +606,79 @@ entryWithId original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "modified"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "modified")})))),
+              Core.projectionField = (Core.Name "modified")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "published"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "published")})))),
+              Core.projectionField = (Core.Name "published")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "withdrawn"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "withdrawn")})))),
+              Core.projectionField = (Core.Name "withdrawn")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "aliases"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "aliases")})))),
+              Core.projectionField = (Core.Name "aliases")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "related"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "related")})))),
+              Core.projectionField = (Core.Name "related")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "summary"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "summary")})))),
+              Core.projectionField = (Core.Name "summary")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "details"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "details")})))),
+              Core.projectionField = (Core.Name "details")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "severity"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "severity")})))),
+              Core.projectionField = (Core.Name "severity")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "affected"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "affected")})))),
+              Core.projectionField = (Core.Name "affected")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "references"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "references")})))),
+              Core.projectionField = (Core.Name "references")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "credits"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "credits")})))),
+              Core.projectionField = (Core.Name "credits")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 entryWithModified :: Phantoms.TTerm Schema.Entry -> Phantoms.TTerm Schema.Timestamp -> Phantoms.TTerm Schema.Entry
@@ -689,16 +689,16 @@ entryWithModified original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "schemaVersion"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "schemaVersion")})))),
+              Core.projectionField = (Core.Name "schemaVersion")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "id"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "id")})))),
+              Core.projectionField = (Core.Name "id")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "modified"),
@@ -706,72 +706,72 @@ entryWithModified original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "published"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "published")})))),
+              Core.projectionField = (Core.Name "published")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "withdrawn"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "withdrawn")})))),
+              Core.projectionField = (Core.Name "withdrawn")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "aliases"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "aliases")})))),
+              Core.projectionField = (Core.Name "aliases")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "related"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "related")})))),
+              Core.projectionField = (Core.Name "related")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "summary"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "summary")})))),
+              Core.projectionField = (Core.Name "summary")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "details"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "details")})))),
+              Core.projectionField = (Core.Name "details")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "severity"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "severity")})))),
+              Core.projectionField = (Core.Name "severity")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "affected"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "affected")})))),
+              Core.projectionField = (Core.Name "affected")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "references"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "references")})))),
+              Core.projectionField = (Core.Name "references")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "credits"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "credits")})))),
+              Core.projectionField = (Core.Name "credits")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 entryWithPublished :: Phantoms.TTerm Schema.Entry -> Phantoms.TTerm (Maybe Schema.Timestamp) -> Phantoms.TTerm Schema.Entry
@@ -782,23 +782,23 @@ entryWithPublished original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "schemaVersion"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "schemaVersion")})))),
+              Core.projectionField = (Core.Name "schemaVersion")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "id"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "id")})))),
+              Core.projectionField = (Core.Name "id")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "modified"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "modified")})))),
+              Core.projectionField = (Core.Name "modified")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "published"),
@@ -806,65 +806,65 @@ entryWithPublished original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "withdrawn"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "withdrawn")})))),
+              Core.projectionField = (Core.Name "withdrawn")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "aliases"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "aliases")})))),
+              Core.projectionField = (Core.Name "aliases")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "related"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "related")})))),
+              Core.projectionField = (Core.Name "related")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "summary"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "summary")})))),
+              Core.projectionField = (Core.Name "summary")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "details"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "details")})))),
+              Core.projectionField = (Core.Name "details")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "severity"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "severity")})))),
+              Core.projectionField = (Core.Name "severity")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "affected"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "affected")})))),
+              Core.projectionField = (Core.Name "affected")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "references"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "references")})))),
+              Core.projectionField = (Core.Name "references")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "credits"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "credits")})))),
+              Core.projectionField = (Core.Name "credits")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 entryWithReferences :: Phantoms.TTerm Schema.Entry -> Phantoms.TTerm (Maybe [Schema.Reference]) -> Phantoms.TTerm Schema.Entry
@@ -875,79 +875,79 @@ entryWithReferences original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "schemaVersion"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "schemaVersion")})))),
+              Core.projectionField = (Core.Name "schemaVersion")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "id"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "id")})))),
+              Core.projectionField = (Core.Name "id")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "modified"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "modified")})))),
+              Core.projectionField = (Core.Name "modified")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "published"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "published")})))),
+              Core.projectionField = (Core.Name "published")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "withdrawn"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "withdrawn")})))),
+              Core.projectionField = (Core.Name "withdrawn")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "aliases"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "aliases")})))),
+              Core.projectionField = (Core.Name "aliases")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "related"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "related")})))),
+              Core.projectionField = (Core.Name "related")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "summary"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "summary")})))),
+              Core.projectionField = (Core.Name "summary")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "details"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "details")})))),
+              Core.projectionField = (Core.Name "details")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "severity"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "severity")})))),
+              Core.projectionField = (Core.Name "severity")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "affected"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "affected")})))),
+              Core.projectionField = (Core.Name "affected")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "references"),
@@ -955,9 +955,9 @@ entryWithReferences original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "credits"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "credits")})))),
+              Core.projectionField = (Core.Name "credits")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 entryWithRelated :: Phantoms.TTerm Schema.Entry -> Phantoms.TTerm (Maybe [Schema.Id]) -> Phantoms.TTerm Schema.Entry
@@ -968,44 +968,44 @@ entryWithRelated original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "schemaVersion"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "schemaVersion")})))),
+              Core.projectionField = (Core.Name "schemaVersion")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "id"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "id")})))),
+              Core.projectionField = (Core.Name "id")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "modified"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "modified")})))),
+              Core.projectionField = (Core.Name "modified")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "published"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "published")})))),
+              Core.projectionField = (Core.Name "published")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "withdrawn"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "withdrawn")})))),
+              Core.projectionField = (Core.Name "withdrawn")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "aliases"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "aliases")})))),
+              Core.projectionField = (Core.Name "aliases")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "related"),
@@ -1013,44 +1013,44 @@ entryWithRelated original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "summary"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "summary")})))),
+              Core.projectionField = (Core.Name "summary")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "details"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "details")})))),
+              Core.projectionField = (Core.Name "details")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "severity"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "severity")})))),
+              Core.projectionField = (Core.Name "severity")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "affected"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "affected")})))),
+              Core.projectionField = (Core.Name "affected")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "references"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "references")})))),
+              Core.projectionField = (Core.Name "references")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "credits"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "credits")})))),
+              Core.projectionField = (Core.Name "credits")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 entryWithSchemaVersion :: Phantoms.TTerm Schema.Entry -> Phantoms.TTerm (Maybe Schema.OsvVersion) -> Phantoms.TTerm Schema.Entry
@@ -1064,86 +1064,86 @@ entryWithSchemaVersion original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "id"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "id")})))),
+              Core.projectionField = (Core.Name "id")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "modified"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "modified")})))),
+              Core.projectionField = (Core.Name "modified")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "published"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "published")})))),
+              Core.projectionField = (Core.Name "published")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "withdrawn"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "withdrawn")})))),
+              Core.projectionField = (Core.Name "withdrawn")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "aliases"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "aliases")})))),
+              Core.projectionField = (Core.Name "aliases")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "related"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "related")})))),
+              Core.projectionField = (Core.Name "related")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "summary"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "summary")})))),
+              Core.projectionField = (Core.Name "summary")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "details"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "details")})))),
+              Core.projectionField = (Core.Name "details")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "severity"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "severity")})))),
+              Core.projectionField = (Core.Name "severity")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "affected"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "affected")})))),
+              Core.projectionField = (Core.Name "affected")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "references"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "references")})))),
+              Core.projectionField = (Core.Name "references")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "credits"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "credits")})))),
+              Core.projectionField = (Core.Name "credits")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 entryWithSeverity :: Phantoms.TTerm Schema.Entry -> Phantoms.TTerm (Maybe [Schema.Severity]) -> Phantoms.TTerm Schema.Entry
@@ -1154,65 +1154,65 @@ entryWithSeverity original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "schemaVersion"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "schemaVersion")})))),
+              Core.projectionField = (Core.Name "schemaVersion")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "id"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "id")})))),
+              Core.projectionField = (Core.Name "id")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "modified"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "modified")})))),
+              Core.projectionField = (Core.Name "modified")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "published"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "published")})))),
+              Core.projectionField = (Core.Name "published")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "withdrawn"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "withdrawn")})))),
+              Core.projectionField = (Core.Name "withdrawn")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "aliases"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "aliases")})))),
+              Core.projectionField = (Core.Name "aliases")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "related"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "related")})))),
+              Core.projectionField = (Core.Name "related")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "summary"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "summary")})))),
+              Core.projectionField = (Core.Name "summary")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "details"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "details")})))),
+              Core.projectionField = (Core.Name "details")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "severity"),
@@ -1220,23 +1220,23 @@ entryWithSeverity original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "affected"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "affected")})))),
+              Core.projectionField = (Core.Name "affected")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "references"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "references")})))),
+              Core.projectionField = (Core.Name "references")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "credits"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "credits")})))),
+              Core.projectionField = (Core.Name "credits")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 entryWithSummary :: Phantoms.TTerm Schema.Entry -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Schema.Entry
@@ -1247,51 +1247,51 @@ entryWithSummary original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "schemaVersion"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "schemaVersion")})))),
+              Core.projectionField = (Core.Name "schemaVersion")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "id"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "id")})))),
+              Core.projectionField = (Core.Name "id")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "modified"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "modified")})))),
+              Core.projectionField = (Core.Name "modified")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "published"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "published")})))),
+              Core.projectionField = (Core.Name "published")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "withdrawn"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "withdrawn")})))),
+              Core.projectionField = (Core.Name "withdrawn")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "aliases"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "aliases")})))),
+              Core.projectionField = (Core.Name "aliases")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "related"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "related")})))),
+              Core.projectionField = (Core.Name "related")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "summary"),
@@ -1299,37 +1299,37 @@ entryWithSummary original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "details"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "details")})))),
+              Core.projectionField = (Core.Name "details")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "severity"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "severity")})))),
+              Core.projectionField = (Core.Name "severity")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "affected"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "affected")})))),
+              Core.projectionField = (Core.Name "affected")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "references"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "references")})))),
+              Core.projectionField = (Core.Name "references")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "credits"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "credits")})))),
+              Core.projectionField = (Core.Name "credits")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 entryWithWithdrawn :: Phantoms.TTerm Schema.Entry -> Phantoms.TTerm (Maybe Schema.Timestamp) -> Phantoms.TTerm Schema.Entry
@@ -1340,30 +1340,30 @@ entryWithWithdrawn original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "schemaVersion"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "schemaVersion")})))),
+              Core.projectionField = (Core.Name "schemaVersion")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "id"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "id")})))),
+              Core.projectionField = (Core.Name "id")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "modified"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "modified")})))),
+              Core.projectionField = (Core.Name "modified")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "published"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "published")})))),
+              Core.projectionField = (Core.Name "published")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "withdrawn"),
@@ -1371,66 +1371,66 @@ entryWithWithdrawn original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "aliases"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "aliases")})))),
+              Core.projectionField = (Core.Name "aliases")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "related"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "related")})))),
+              Core.projectionField = (Core.Name "related")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "summary"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "summary")})))),
+              Core.projectionField = (Core.Name "summary")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "details"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "details")})))),
+              Core.projectionField = (Core.Name "details")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "severity"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "severity")})))),
+              Core.projectionField = (Core.Name "severity")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "affected"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "affected")})))),
+              Core.projectionField = (Core.Name "affected")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "references"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "references")})))),
+              Core.projectionField = (Core.Name "references")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "credits"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-              Core.projectionField = (Core.Name "credits")})))),
+              Core.projectionField = (Core.Name "credits")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 entryWithdrawn :: Phantoms.TTerm Schema.Entry -> Phantoms.TTerm (Maybe Schema.Timestamp)
 entryWithdrawn x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.osv.schema.Entry"),
-        Core.projectionField = (Core.Name "withdrawn")})))),
+        Core.projectionField = (Core.Name "withdrawn")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 eventFixed :: Phantoms.TTerm Schema.Version -> Phantoms.TTerm Schema.Event
@@ -1501,25 +1501,25 @@ package ecosystem name purl =
 packageEcosystem :: Phantoms.TTerm Schema.Package -> Phantoms.TTerm Schema.Ecosystem
 packageEcosystem x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.osv.schema.Package"),
-        Core.projectionField = (Core.Name "ecosystem")})))),
+        Core.projectionField = (Core.Name "ecosystem")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 packageName :: Phantoms.TTerm Schema.Package -> Phantoms.TTerm String
 packageName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.osv.schema.Package"),
-        Core.projectionField = (Core.Name "name")})))),
+        Core.projectionField = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 packagePurl :: Phantoms.TTerm Schema.Package -> Phantoms.TTerm (Maybe Schema.Url)
 packagePurl x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.osv.schema.Package"),
-        Core.projectionField = (Core.Name "purl")})))),
+        Core.projectionField = (Core.Name "purl")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 packageVersions :: Phantoms.TTerm Schema.Package -> Phantoms.TTerm (Maybe [Schema.VersionRange]) -> Phantoms.TTerm (Maybe [Schema.Version]) -> Phantoms.TTerm Schema.PackageVersions
@@ -1540,25 +1540,25 @@ packageVersions package ranges versions =
 packageVersionsPackage :: Phantoms.TTerm Schema.PackageVersions -> Phantoms.TTerm Schema.Package
 packageVersionsPackage x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.osv.schema.PackageVersions"),
-        Core.projectionField = (Core.Name "package")})))),
+        Core.projectionField = (Core.Name "package")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 packageVersionsRanges :: Phantoms.TTerm Schema.PackageVersions -> Phantoms.TTerm (Maybe [Schema.VersionRange])
 packageVersionsRanges x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.osv.schema.PackageVersions"),
-        Core.projectionField = (Core.Name "ranges")})))),
+        Core.projectionField = (Core.Name "ranges")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 packageVersionsVersions :: Phantoms.TTerm Schema.PackageVersions -> Phantoms.TTerm (Maybe [Schema.Version])
 packageVersionsVersions x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.osv.schema.PackageVersions"),
-        Core.projectionField = (Core.Name "versions")})))),
+        Core.projectionField = (Core.Name "versions")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 packageVersionsWithPackage :: Phantoms.TTerm Schema.PackageVersions -> Phantoms.TTerm Schema.Package -> Phantoms.TTerm Schema.PackageVersions
@@ -1572,16 +1572,16 @@ packageVersionsWithPackage original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "ranges"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.PackageVersions"),
-              Core.projectionField = (Core.Name "ranges")})))),
+              Core.projectionField = (Core.Name "ranges")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "versions"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.PackageVersions"),
-              Core.projectionField = (Core.Name "versions")})))),
+              Core.projectionField = (Core.Name "versions")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 packageVersionsWithRanges :: Phantoms.TTerm Schema.PackageVersions -> Phantoms.TTerm (Maybe [Schema.VersionRange]) -> Phantoms.TTerm Schema.PackageVersions
@@ -1592,9 +1592,9 @@ packageVersionsWithRanges original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "package"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.PackageVersions"),
-              Core.projectionField = (Core.Name "package")})))),
+              Core.projectionField = (Core.Name "package")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "ranges"),
@@ -1602,9 +1602,9 @@ packageVersionsWithRanges original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "versions"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.PackageVersions"),
-              Core.projectionField = (Core.Name "versions")})))),
+              Core.projectionField = (Core.Name "versions")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 packageVersionsWithVersions :: Phantoms.TTerm Schema.PackageVersions -> Phantoms.TTerm (Maybe [Schema.Version]) -> Phantoms.TTerm Schema.PackageVersions
@@ -1615,16 +1615,16 @@ packageVersionsWithVersions original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "package"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.PackageVersions"),
-              Core.projectionField = (Core.Name "package")})))),
+              Core.projectionField = (Core.Name "package")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "ranges"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.PackageVersions"),
-              Core.projectionField = (Core.Name "ranges")})))),
+              Core.projectionField = (Core.Name "ranges")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "versions"),
@@ -1641,16 +1641,16 @@ packageWithEcosystem original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Package"),
-              Core.projectionField = (Core.Name "name")})))),
+              Core.projectionField = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "purl"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Package"),
-              Core.projectionField = (Core.Name "purl")})))),
+              Core.projectionField = (Core.Name "purl")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 packageWithName :: Phantoms.TTerm Schema.Package -> Phantoms.TTerm String -> Phantoms.TTerm Schema.Package
@@ -1661,9 +1661,9 @@ packageWithName original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "ecosystem"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Package"),
-              Core.projectionField = (Core.Name "ecosystem")})))),
+              Core.projectionField = (Core.Name "ecosystem")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
@@ -1671,9 +1671,9 @@ packageWithName original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "purl"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Package"),
-              Core.projectionField = (Core.Name "purl")})))),
+              Core.projectionField = (Core.Name "purl")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 packageWithPurl :: Phantoms.TTerm Schema.Package -> Phantoms.TTerm (Maybe Schema.Url) -> Phantoms.TTerm Schema.Package
@@ -1684,16 +1684,16 @@ packageWithPurl original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "ecosystem"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Package"),
-              Core.projectionField = (Core.Name "ecosystem")})))),
+              Core.projectionField = (Core.Name "ecosystem")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Package"),
-              Core.projectionField = (Core.Name "name")})))),
+              Core.projectionField = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "purl"),
@@ -1714,9 +1714,9 @@ reference type_ url =
 referenceType :: Phantoms.TTerm Schema.Reference -> Phantoms.TTerm Schema.ReferenceType
 referenceType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.osv.schema.Reference"),
-        Core.projectionField = (Core.Name "type")})))),
+        Core.projectionField = (Core.Name "type")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 referenceType_ :: Phantoms.TTerm String -> Phantoms.TTerm Schema.ReferenceType
@@ -1728,9 +1728,9 @@ referenceType_ x =
 referenceUrl :: Phantoms.TTerm Schema.Reference -> Phantoms.TTerm Schema.Url
 referenceUrl x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.osv.schema.Reference"),
-        Core.projectionField = (Core.Name "url")})))),
+        Core.projectionField = (Core.Name "url")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 referenceWithType :: Phantoms.TTerm Schema.Reference -> Phantoms.TTerm Schema.ReferenceType -> Phantoms.TTerm Schema.Reference
@@ -1744,9 +1744,9 @@ referenceWithType original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "url"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Reference"),
-              Core.projectionField = (Core.Name "url")})))),
+              Core.projectionField = (Core.Name "url")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 referenceWithUrl :: Phantoms.TTerm Schema.Reference -> Phantoms.TTerm Schema.Url -> Phantoms.TTerm Schema.Reference
@@ -1757,9 +1757,9 @@ referenceWithUrl original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Reference"),
-              Core.projectionField = (Core.Name "type")})))),
+              Core.projectionField = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "url"),
@@ -1780,9 +1780,9 @@ severity type_ score =
 severityScore :: Phantoms.TTerm Schema.Severity -> Phantoms.TTerm Schema.SeverityScore
 severityScore x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.osv.schema.Severity"),
-        Core.projectionField = (Core.Name "score")})))),
+        Core.projectionField = (Core.Name "score")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 severityScore_ :: Phantoms.TTerm String -> Phantoms.TTerm Schema.SeverityScore
@@ -1794,9 +1794,9 @@ severityScore_ x =
 severityType :: Phantoms.TTerm Schema.Severity -> Phantoms.TTerm Schema.SeverityType
 severityType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.osv.schema.Severity"),
-        Core.projectionField = (Core.Name "type")})))),
+        Core.projectionField = (Core.Name "type")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 severityType_ :: Phantoms.TTerm String -> Phantoms.TTerm Schema.SeverityType
@@ -1813,9 +1813,9 @@ severityWithScore original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Severity"),
-              Core.projectionField = (Core.Name "type")})))),
+              Core.projectionField = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "score"),
@@ -1832,9 +1832,9 @@ severityWithType original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "score"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.Severity"),
-              Core.projectionField = (Core.Name "score")})))),
+              Core.projectionField = (Core.Name "score")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 timestamp :: Phantoms.TTerm String -> Phantoms.TTerm Schema.Timestamp
@@ -1846,79 +1846,79 @@ timestamp x =
 unEcosystem :: Phantoms.TTerm Schema.Ecosystem -> Phantoms.TTerm String
 unEcosystem x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.osv.schema.Ecosystem")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.osv.schema.Ecosystem")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unId :: Phantoms.TTerm Schema.Id -> Phantoms.TTerm String
 unId x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.osv.schema.Id")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.osv.schema.Id")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unMarkdown :: Phantoms.TTerm Schema.Markdown -> Phantoms.TTerm String
 unMarkdown x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.osv.schema.Markdown")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.osv.schema.Markdown")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unOsvVersion :: Phantoms.TTerm Schema.OsvVersion -> Phantoms.TTerm String
 unOsvVersion x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.osv.schema.OsvVersion")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.osv.schema.OsvVersion")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unReferenceType :: Phantoms.TTerm Schema.ReferenceType -> Phantoms.TTerm String
 unReferenceType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.osv.schema.ReferenceType")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.osv.schema.ReferenceType")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unSeverityScore :: Phantoms.TTerm Schema.SeverityScore -> Phantoms.TTerm String
 unSeverityScore x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.osv.schema.SeverityScore")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.osv.schema.SeverityScore")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unSeverityType :: Phantoms.TTerm Schema.SeverityType -> Phantoms.TTerm String
 unSeverityType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.osv.schema.SeverityType")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.osv.schema.SeverityType")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unTimestamp :: Phantoms.TTerm Schema.Timestamp -> Phantoms.TTerm String
 unTimestamp x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.osv.schema.Timestamp")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.osv.schema.Timestamp")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unUrl :: Phantoms.TTerm Schema.Url -> Phantoms.TTerm String
 unUrl x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.osv.schema.Url")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.osv.schema.Url")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unVersion :: Phantoms.TTerm Schema.Version -> Phantoms.TTerm String
 unVersion x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.osv.schema.Version")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.osv.schema.Version")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unVersionOrStar :: Phantoms.TTerm Schema.VersionOrStar -> Phantoms.TTerm String
 unVersionOrStar x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.osv.schema.VersionOrStar")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.osv.schema.VersionOrStar")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unVersionOrZero :: Phantoms.TTerm Schema.VersionOrZero -> Phantoms.TTerm String
 unVersionOrZero x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.osv.schema.VersionOrZero")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.osv.schema.VersionOrZero")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unVersionType :: Phantoms.TTerm Schema.VersionType -> Phantoms.TTerm String
 unVersionType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.osv.schema.VersionType")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.osv.schema.VersionType")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 url :: Phantoms.TTerm String -> Phantoms.TTerm Schema.Url
@@ -1963,25 +1963,25 @@ versionRange type_ repo events =
 versionRangeEvents :: Phantoms.TTerm Schema.VersionRange -> Phantoms.TTerm [Schema.Event]
 versionRangeEvents x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.osv.schema.VersionRange"),
-        Core.projectionField = (Core.Name "events")})))),
+        Core.projectionField = (Core.Name "events")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 versionRangeRepo :: Phantoms.TTerm Schema.VersionRange -> Phantoms.TTerm (Maybe Schema.Url)
 versionRangeRepo x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.osv.schema.VersionRange"),
-        Core.projectionField = (Core.Name "repo")})))),
+        Core.projectionField = (Core.Name "repo")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 versionRangeType :: Phantoms.TTerm Schema.VersionRange -> Phantoms.TTerm Schema.VersionType
 versionRangeType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.osv.schema.VersionRange"),
-        Core.projectionField = (Core.Name "type")})))),
+        Core.projectionField = (Core.Name "type")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 versionRangeWithEvents :: Phantoms.TTerm Schema.VersionRange -> Phantoms.TTerm [Schema.Event] -> Phantoms.TTerm Schema.VersionRange
@@ -1992,16 +1992,16 @@ versionRangeWithEvents original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.VersionRange"),
-              Core.projectionField = (Core.Name "type")})))),
+              Core.projectionField = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "repo"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.VersionRange"),
-              Core.projectionField = (Core.Name "repo")})))),
+              Core.projectionField = (Core.Name "repo")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "events"),
@@ -2015,9 +2015,9 @@ versionRangeWithRepo original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.VersionRange"),
-              Core.projectionField = (Core.Name "type")})))),
+              Core.projectionField = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "repo"),
@@ -2025,9 +2025,9 @@ versionRangeWithRepo original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "events"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.VersionRange"),
-              Core.projectionField = (Core.Name "events")})))),
+              Core.projectionField = (Core.Name "events")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 versionRangeWithType :: Phantoms.TTerm Schema.VersionRange -> Phantoms.TTerm Schema.VersionType -> Phantoms.TTerm Schema.VersionRange
@@ -2041,16 +2041,16 @@ versionRangeWithType original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "repo"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.VersionRange"),
-              Core.projectionField = (Core.Name "repo")})))),
+              Core.projectionField = (Core.Name "repo")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "events"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.osv.schema.VersionRange"),
-              Core.projectionField = (Core.Name "events")})))),
+              Core.projectionField = (Core.Name "events")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 versionType :: Phantoms.TTerm String -> Phantoms.TTerm Schema.VersionType

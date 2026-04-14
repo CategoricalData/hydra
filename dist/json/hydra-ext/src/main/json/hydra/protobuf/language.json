@@ -251,64 +251,55 @@
                   {
                     "name": "typePredicate",
                     "term": {
-                      "function": {
-                        "lambda": {
-                          "body": {
-                            "application": {
-                              "argument": {"variable": "typ"},
-                              "function": {
-                                "function": {
-                                  "elimination": {
-                                    "union": {
-                                      "cases": [
-                                        {
-                                          "name": "map",
-                                          "term": {
-                                            "function": {
-                                              "lambda": {
-                                                "body": {
-                                                  "let": {
-                                                    "bindings": [
+                      "lambda": {
+                        "body": {
+                          "application": {
+                            "argument": {"variable": "typ"},
+                            "function": {
+                              "cases": {
+                                "cases": [
+                                  {
+                                    "name": "map",
+                                    "term": {
+                                      "lambda": {
+                                        "body": {
+                                          "let": {
+                                            "bindings": [
+                                              {
+                                                "name": "valuesType",
+                                                "term": {
+                                                  "application": {
+                                                    "argument": {"variable": "mt"},
+                                                    "function": {"project": {"field": "values", "typeName": "hydra.core.MapType"}}}},
+                                                "type": {"type": {"variable": "hydra.core.Type"}, "variables": []}},
+                                              {
+                                                "name": "stripped",
+                                                "term": {
+                                                  "application": {
+                                                    "argument": {"variable": "valuesType"},
+                                                    "function": {"variable": "hydra.strip.deannotateType"}}},
+                                                "type": {"type": {"variable": "hydra.core.Type"}, "variables": []}}],
+                                            "body": {
+                                              "application": {
+                                                "argument": {"variable": "stripped"},
+                                                "function": {
+                                                  "cases": {
+                                                    "cases": [
                                                       {
-                                                        "name": "valuesType",
+                                                        "name": "maybe",
                                                         "term": {
-                                                          "application": {
-                                                            "argument": {"variable": "mt"},
-                                                            "function": {
-                                                              "function": {
-                                                                "elimination": {"record": {"field": "values", "typeName": "hydra.core.MapType"}}}}}},
-                                                        "type": {"type": {"variable": "hydra.core.Type"}, "variables": []}},
-                                                      {
-                                                        "name": "stripped",
-                                                        "term": {
-                                                          "application": {
-                                                            "argument": {"variable": "valuesType"},
-                                                            "function": {"variable": "hydra.strip.deannotateType"}}},
-                                                        "type": {"type": {"variable": "hydra.core.Type"}, "variables": []}}],
-                                                    "body": {
-                                                      "application": {
-                                                        "argument": {"variable": "stripped"},
-                                                        "function": {
-                                                          "function": {
-                                                            "elimination": {
-                                                              "union": {
-                                                                "cases": [
-                                                                  {
-                                                                    "name": "maybe",
-                                                                    "term": {
-                                                                      "function": {
-                                                                        "lambda": {
-                                                                          "body": {"literal": {"boolean": false}},
-                                                                          "domain": {"variable": "hydra.core.Type"},
-                                                                          "parameter": "_"}}}}],
-                                                                "default": {"literal": {"boolean": true}},
-                                                                "typeName": "hydra.core.Type"}}}}}}}},
-                                                "domain": {"variable": "hydra.core.MapType"},
-                                                "parameter": "mt"}}}}],
-                                      "default": {"literal": {"boolean": true}},
-                                      "typeName": "hydra.core.Type"}}}}}},
-                          "domain": {"variable": "hydra.core.Type"},
-                          "parameter": "typ"}}},
+                                                          "lambda": {
+                                                            "body": {"literal": {"boolean": false}},
+                                                            "domain": {"variable": "hydra.core.Type"},
+                                                            "parameter": "_"}}}],
+                                                    "default": {"literal": {"boolean": true}},
+                                                    "typeName": "hydra.core.Type"}}}}}},
+                                        "domain": {"variable": "hydra.core.MapType"},
+                                        "parameter": "mt"}}}],
+                                "default": {"literal": {"boolean": true}},
+                                "typeName": "hydra.core.Type"}}}},
+                        "domain": {"variable": "hydra.core.Type"},
+                        "parameter": "typ"}},
                     "type": {
                       "type": {
                         "function": {

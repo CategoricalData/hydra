@@ -70,129 +70,129 @@ atlasAttributeDef name typeName isOptional cardinality valuesMinCount valuesMaxC
 atlasAttributeDefCardinality :: Phantoms.TTerm Atlas.AtlasAttributeDef -> Phantoms.TTerm (Maybe Atlas.AtlasAttributeDef_Cardinality)
 atlasAttributeDefCardinality x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-        Core.projectionField = (Core.Name "cardinality")})))),
+        Core.projectionField = (Core.Name "cardinality")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 atlasAttributeDefConstraints :: Phantoms.TTerm Atlas.AtlasAttributeDef -> Phantoms.TTerm [Atlas.AtlasConstraintDef]
 atlasAttributeDefConstraints x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-        Core.projectionField = (Core.Name "constraints")})))),
+        Core.projectionField = (Core.Name "constraints")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 atlasAttributeDefDefaultValue :: Phantoms.TTerm Atlas.AtlasAttributeDef -> Phantoms.TTerm (Maybe String)
 atlasAttributeDefDefaultValue x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-        Core.projectionField = (Core.Name "defaultValue")})))),
+        Core.projectionField = (Core.Name "defaultValue")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 atlasAttributeDefDescription :: Phantoms.TTerm Atlas.AtlasAttributeDef -> Phantoms.TTerm (Maybe String)
 atlasAttributeDefDescription x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-        Core.projectionField = (Core.Name "description")})))),
+        Core.projectionField = (Core.Name "description")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 atlasAttributeDefDisplayName :: Phantoms.TTerm Atlas.AtlasAttributeDef -> Phantoms.TTerm (Maybe String)
 atlasAttributeDefDisplayName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-        Core.projectionField = (Core.Name "displayName")})))),
+        Core.projectionField = (Core.Name "displayName")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 atlasAttributeDefIncludeInNotification :: Phantoms.TTerm Atlas.AtlasAttributeDef -> Phantoms.TTerm Bool
 atlasAttributeDefIncludeInNotification x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-        Core.projectionField = (Core.Name "includeInNotification")})))),
+        Core.projectionField = (Core.Name "includeInNotification")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 atlasAttributeDefIndexType :: Phantoms.TTerm Atlas.AtlasAttributeDef -> Phantoms.TTerm (Maybe Atlas.AtlasAttributeDef_IndexType)
 atlasAttributeDefIndexType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-        Core.projectionField = (Core.Name "indexType")})))),
+        Core.projectionField = (Core.Name "indexType")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 atlasAttributeDefIsIndexable :: Phantoms.TTerm Atlas.AtlasAttributeDef -> Phantoms.TTerm Bool
 atlasAttributeDefIsIndexable x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-        Core.projectionField = (Core.Name "isIndexable")})))),
+        Core.projectionField = (Core.Name "isIndexable")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 atlasAttributeDefIsOptional :: Phantoms.TTerm Atlas.AtlasAttributeDef -> Phantoms.TTerm Bool
 atlasAttributeDefIsOptional x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-        Core.projectionField = (Core.Name "isOptional")})))),
+        Core.projectionField = (Core.Name "isOptional")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 atlasAttributeDefIsUnique :: Phantoms.TTerm Atlas.AtlasAttributeDef -> Phantoms.TTerm Bool
 atlasAttributeDefIsUnique x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-        Core.projectionField = (Core.Name "isUnique")})))),
+        Core.projectionField = (Core.Name "isUnique")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 atlasAttributeDefName :: Phantoms.TTerm Atlas.AtlasAttributeDef -> Phantoms.TTerm (Maybe String)
 atlasAttributeDefName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-        Core.projectionField = (Core.Name "name")})))),
+        Core.projectionField = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 atlasAttributeDefOptions :: Phantoms.TTerm Atlas.AtlasAttributeDef -> Phantoms.TTerm (M.Map String String)
 atlasAttributeDefOptions x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-        Core.projectionField = (Core.Name "options")})))),
+        Core.projectionField = (Core.Name "options")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 atlasAttributeDefSearchWeight :: Phantoms.TTerm Atlas.AtlasAttributeDef -> Phantoms.TTerm Int
 atlasAttributeDefSearchWeight x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-        Core.projectionField = (Core.Name "searchWeight")})))),
+        Core.projectionField = (Core.Name "searchWeight")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 atlasAttributeDefTypeName :: Phantoms.TTerm Atlas.AtlasAttributeDef -> Phantoms.TTerm (Maybe String)
 atlasAttributeDefTypeName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-        Core.projectionField = (Core.Name "typeName")})))),
+        Core.projectionField = (Core.Name "typeName")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 atlasAttributeDefValuesMaxCount :: Phantoms.TTerm Atlas.AtlasAttributeDef -> Phantoms.TTerm Int
 atlasAttributeDefValuesMaxCount x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-        Core.projectionField = (Core.Name "valuesMaxCount")})))),
+        Core.projectionField = (Core.Name "valuesMaxCount")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 atlasAttributeDefValuesMinCount :: Phantoms.TTerm Atlas.AtlasAttributeDef -> Phantoms.TTerm Int
 atlasAttributeDefValuesMinCount x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-        Core.projectionField = (Core.Name "valuesMinCount")})))),
+        Core.projectionField = (Core.Name "valuesMinCount")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 atlasAttributeDefWithCardinality :: Phantoms.TTerm Atlas.AtlasAttributeDef -> Phantoms.TTerm (Maybe Atlas.AtlasAttributeDef_Cardinality) -> Phantoms.TTerm Atlas.AtlasAttributeDef
@@ -203,23 +203,23 @@ atlasAttributeDefWithCardinality original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "name")})))),
+              Core.projectionField = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeName"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "typeName")})))),
+              Core.projectionField = (Core.Name "typeName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "isOptional"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "isOptional")})))),
+              Core.projectionField = (Core.Name "isOptional")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "cardinality"),
@@ -227,86 +227,86 @@ atlasAttributeDefWithCardinality original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "valuesMinCount"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "valuesMinCount")})))),
+              Core.projectionField = (Core.Name "valuesMinCount")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "valuesMaxCount"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "valuesMaxCount")})))),
+              Core.projectionField = (Core.Name "valuesMaxCount")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "isUnique"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "isUnique")})))),
+              Core.projectionField = (Core.Name "isUnique")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "isIndexable"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "isIndexable")})))),
+              Core.projectionField = (Core.Name "isIndexable")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "includeInNotification"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "includeInNotification")})))),
+              Core.projectionField = (Core.Name "includeInNotification")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "defaultValue"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "defaultValue")})))),
+              Core.projectionField = (Core.Name "defaultValue")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "description"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "description")})))),
+              Core.projectionField = (Core.Name "description")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "searchWeight"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "searchWeight")})))),
+              Core.projectionField = (Core.Name "searchWeight")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "indexType"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "indexType")})))),
+              Core.projectionField = (Core.Name "indexType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "constraints"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "constraints")})))),
+              Core.projectionField = (Core.Name "constraints")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "options"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "options")})))),
+              Core.projectionField = (Core.Name "options")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "displayName"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "displayName")})))),
+              Core.projectionField = (Core.Name "displayName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 atlasAttributeDefWithConstraints :: Phantoms.TTerm Atlas.AtlasAttributeDef -> Phantoms.TTerm [Atlas.AtlasConstraintDef] -> Phantoms.TTerm Atlas.AtlasAttributeDef
@@ -317,93 +317,93 @@ atlasAttributeDefWithConstraints original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "name")})))),
+              Core.projectionField = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeName"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "typeName")})))),
+              Core.projectionField = (Core.Name "typeName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "isOptional"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "isOptional")})))),
+              Core.projectionField = (Core.Name "isOptional")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "cardinality"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "cardinality")})))),
+              Core.projectionField = (Core.Name "cardinality")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "valuesMinCount"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "valuesMinCount")})))),
+              Core.projectionField = (Core.Name "valuesMinCount")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "valuesMaxCount"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "valuesMaxCount")})))),
+              Core.projectionField = (Core.Name "valuesMaxCount")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "isUnique"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "isUnique")})))),
+              Core.projectionField = (Core.Name "isUnique")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "isIndexable"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "isIndexable")})))),
+              Core.projectionField = (Core.Name "isIndexable")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "includeInNotification"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "includeInNotification")})))),
+              Core.projectionField = (Core.Name "includeInNotification")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "defaultValue"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "defaultValue")})))),
+              Core.projectionField = (Core.Name "defaultValue")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "description"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "description")})))),
+              Core.projectionField = (Core.Name "description")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "searchWeight"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "searchWeight")})))),
+              Core.projectionField = (Core.Name "searchWeight")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "indexType"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "indexType")})))),
+              Core.projectionField = (Core.Name "indexType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "constraints"),
@@ -411,16 +411,16 @@ atlasAttributeDefWithConstraints original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "options"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "options")})))),
+              Core.projectionField = (Core.Name "options")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "displayName"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "displayName")})))),
+              Core.projectionField = (Core.Name "displayName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 atlasAttributeDefWithDefaultValue :: Phantoms.TTerm Atlas.AtlasAttributeDef -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Atlas.AtlasAttributeDef
@@ -431,65 +431,65 @@ atlasAttributeDefWithDefaultValue original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "name")})))),
+              Core.projectionField = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeName"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "typeName")})))),
+              Core.projectionField = (Core.Name "typeName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "isOptional"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "isOptional")})))),
+              Core.projectionField = (Core.Name "isOptional")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "cardinality"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "cardinality")})))),
+              Core.projectionField = (Core.Name "cardinality")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "valuesMinCount"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "valuesMinCount")})))),
+              Core.projectionField = (Core.Name "valuesMinCount")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "valuesMaxCount"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "valuesMaxCount")})))),
+              Core.projectionField = (Core.Name "valuesMaxCount")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "isUnique"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "isUnique")})))),
+              Core.projectionField = (Core.Name "isUnique")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "isIndexable"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "isIndexable")})))),
+              Core.projectionField = (Core.Name "isIndexable")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "includeInNotification"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "includeInNotification")})))),
+              Core.projectionField = (Core.Name "includeInNotification")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "defaultValue"),
@@ -497,44 +497,44 @@ atlasAttributeDefWithDefaultValue original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "description"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "description")})))),
+              Core.projectionField = (Core.Name "description")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "searchWeight"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "searchWeight")})))),
+              Core.projectionField = (Core.Name "searchWeight")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "indexType"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "indexType")})))),
+              Core.projectionField = (Core.Name "indexType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "constraints"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "constraints")})))),
+              Core.projectionField = (Core.Name "constraints")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "options"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "options")})))),
+              Core.projectionField = (Core.Name "options")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "displayName"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "displayName")})))),
+              Core.projectionField = (Core.Name "displayName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 atlasAttributeDefWithDescription :: Phantoms.TTerm Atlas.AtlasAttributeDef -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Atlas.AtlasAttributeDef
@@ -545,72 +545,72 @@ atlasAttributeDefWithDescription original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "name")})))),
+              Core.projectionField = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeName"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "typeName")})))),
+              Core.projectionField = (Core.Name "typeName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "isOptional"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "isOptional")})))),
+              Core.projectionField = (Core.Name "isOptional")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "cardinality"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "cardinality")})))),
+              Core.projectionField = (Core.Name "cardinality")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "valuesMinCount"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "valuesMinCount")})))),
+              Core.projectionField = (Core.Name "valuesMinCount")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "valuesMaxCount"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "valuesMaxCount")})))),
+              Core.projectionField = (Core.Name "valuesMaxCount")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "isUnique"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "isUnique")})))),
+              Core.projectionField = (Core.Name "isUnique")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "isIndexable"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "isIndexable")})))),
+              Core.projectionField = (Core.Name "isIndexable")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "includeInNotification"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "includeInNotification")})))),
+              Core.projectionField = (Core.Name "includeInNotification")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "defaultValue"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "defaultValue")})))),
+              Core.projectionField = (Core.Name "defaultValue")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "description"),
@@ -618,37 +618,37 @@ atlasAttributeDefWithDescription original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "searchWeight"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "searchWeight")})))),
+              Core.projectionField = (Core.Name "searchWeight")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "indexType"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "indexType")})))),
+              Core.projectionField = (Core.Name "indexType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "constraints"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "constraints")})))),
+              Core.projectionField = (Core.Name "constraints")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "options"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "options")})))),
+              Core.projectionField = (Core.Name "options")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "displayName"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "displayName")})))),
+              Core.projectionField = (Core.Name "displayName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 atlasAttributeDefWithDisplayName :: Phantoms.TTerm Atlas.AtlasAttributeDef -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Atlas.AtlasAttributeDef
@@ -659,107 +659,107 @@ atlasAttributeDefWithDisplayName original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "name")})))),
+              Core.projectionField = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeName"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "typeName")})))),
+              Core.projectionField = (Core.Name "typeName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "isOptional"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "isOptional")})))),
+              Core.projectionField = (Core.Name "isOptional")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "cardinality"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "cardinality")})))),
+              Core.projectionField = (Core.Name "cardinality")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "valuesMinCount"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "valuesMinCount")})))),
+              Core.projectionField = (Core.Name "valuesMinCount")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "valuesMaxCount"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "valuesMaxCount")})))),
+              Core.projectionField = (Core.Name "valuesMaxCount")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "isUnique"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "isUnique")})))),
+              Core.projectionField = (Core.Name "isUnique")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "isIndexable"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "isIndexable")})))),
+              Core.projectionField = (Core.Name "isIndexable")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "includeInNotification"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "includeInNotification")})))),
+              Core.projectionField = (Core.Name "includeInNotification")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "defaultValue"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "defaultValue")})))),
+              Core.projectionField = (Core.Name "defaultValue")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "description"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "description")})))),
+              Core.projectionField = (Core.Name "description")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "searchWeight"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "searchWeight")})))),
+              Core.projectionField = (Core.Name "searchWeight")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "indexType"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "indexType")})))),
+              Core.projectionField = (Core.Name "indexType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "constraints"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "constraints")})))),
+              Core.projectionField = (Core.Name "constraints")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "options"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "options")})))),
+              Core.projectionField = (Core.Name "options")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "displayName"),
@@ -773,58 +773,58 @@ atlasAttributeDefWithIncludeInNotification original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "name")})))),
+              Core.projectionField = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeName"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "typeName")})))),
+              Core.projectionField = (Core.Name "typeName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "isOptional"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "isOptional")})))),
+              Core.projectionField = (Core.Name "isOptional")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "cardinality"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "cardinality")})))),
+              Core.projectionField = (Core.Name "cardinality")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "valuesMinCount"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "valuesMinCount")})))),
+              Core.projectionField = (Core.Name "valuesMinCount")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "valuesMaxCount"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "valuesMaxCount")})))),
+              Core.projectionField = (Core.Name "valuesMaxCount")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "isUnique"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "isUnique")})))),
+              Core.projectionField = (Core.Name "isUnique")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "isIndexable"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "isIndexable")})))),
+              Core.projectionField = (Core.Name "isIndexable")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "includeInNotification"),
@@ -832,51 +832,51 @@ atlasAttributeDefWithIncludeInNotification original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "defaultValue"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "defaultValue")})))),
+              Core.projectionField = (Core.Name "defaultValue")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "description"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "description")})))),
+              Core.projectionField = (Core.Name "description")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "searchWeight"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "searchWeight")})))),
+              Core.projectionField = (Core.Name "searchWeight")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "indexType"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "indexType")})))),
+              Core.projectionField = (Core.Name "indexType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "constraints"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "constraints")})))),
+              Core.projectionField = (Core.Name "constraints")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "options"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "options")})))),
+              Core.projectionField = (Core.Name "options")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "displayName"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "displayName")})))),
+              Core.projectionField = (Core.Name "displayName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 atlasAttributeDefWithIndexType :: Phantoms.TTerm Atlas.AtlasAttributeDef -> Phantoms.TTerm (Maybe Atlas.AtlasAttributeDef_IndexType) -> Phantoms.TTerm Atlas.AtlasAttributeDef
@@ -887,86 +887,86 @@ atlasAttributeDefWithIndexType original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "name")})))),
+              Core.projectionField = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeName"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "typeName")})))),
+              Core.projectionField = (Core.Name "typeName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "isOptional"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "isOptional")})))),
+              Core.projectionField = (Core.Name "isOptional")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "cardinality"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "cardinality")})))),
+              Core.projectionField = (Core.Name "cardinality")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "valuesMinCount"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "valuesMinCount")})))),
+              Core.projectionField = (Core.Name "valuesMinCount")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "valuesMaxCount"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "valuesMaxCount")})))),
+              Core.projectionField = (Core.Name "valuesMaxCount")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "isUnique"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "isUnique")})))),
+              Core.projectionField = (Core.Name "isUnique")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "isIndexable"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "isIndexable")})))),
+              Core.projectionField = (Core.Name "isIndexable")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "includeInNotification"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "includeInNotification")})))),
+              Core.projectionField = (Core.Name "includeInNotification")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "defaultValue"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "defaultValue")})))),
+              Core.projectionField = (Core.Name "defaultValue")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "description"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "description")})))),
+              Core.projectionField = (Core.Name "description")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "searchWeight"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "searchWeight")})))),
+              Core.projectionField = (Core.Name "searchWeight")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "indexType"),
@@ -974,23 +974,23 @@ atlasAttributeDefWithIndexType original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "constraints"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "constraints")})))),
+              Core.projectionField = (Core.Name "constraints")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "options"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "options")})))),
+              Core.projectionField = (Core.Name "options")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "displayName"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "displayName")})))),
+              Core.projectionField = (Core.Name "displayName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 atlasAttributeDefWithIsIndexable :: Phantoms.TTerm Atlas.AtlasAttributeDef -> Phantoms.TTerm Bool -> Phantoms.TTerm Atlas.AtlasAttributeDef
@@ -1001,51 +1001,51 @@ atlasAttributeDefWithIsIndexable original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "name")})))),
+              Core.projectionField = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeName"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "typeName")})))),
+              Core.projectionField = (Core.Name "typeName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "isOptional"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "isOptional")})))),
+              Core.projectionField = (Core.Name "isOptional")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "cardinality"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "cardinality")})))),
+              Core.projectionField = (Core.Name "cardinality")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "valuesMinCount"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "valuesMinCount")})))),
+              Core.projectionField = (Core.Name "valuesMinCount")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "valuesMaxCount"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "valuesMaxCount")})))),
+              Core.projectionField = (Core.Name "valuesMaxCount")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "isUnique"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "isUnique")})))),
+              Core.projectionField = (Core.Name "isUnique")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "isIndexable"),
@@ -1053,58 +1053,58 @@ atlasAttributeDefWithIsIndexable original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "includeInNotification"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "includeInNotification")})))),
+              Core.projectionField = (Core.Name "includeInNotification")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "defaultValue"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "defaultValue")})))),
+              Core.projectionField = (Core.Name "defaultValue")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "description"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "description")})))),
+              Core.projectionField = (Core.Name "description")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "searchWeight"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "searchWeight")})))),
+              Core.projectionField = (Core.Name "searchWeight")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "indexType"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "indexType")})))),
+              Core.projectionField = (Core.Name "indexType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "constraints"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "constraints")})))),
+              Core.projectionField = (Core.Name "constraints")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "options"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "options")})))),
+              Core.projectionField = (Core.Name "options")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "displayName"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "displayName")})))),
+              Core.projectionField = (Core.Name "displayName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 atlasAttributeDefWithIsOptional :: Phantoms.TTerm Atlas.AtlasAttributeDef -> Phantoms.TTerm Bool -> Phantoms.TTerm Atlas.AtlasAttributeDef
@@ -1115,16 +1115,16 @@ atlasAttributeDefWithIsOptional original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "name")})))),
+              Core.projectionField = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeName"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "typeName")})))),
+              Core.projectionField = (Core.Name "typeName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "isOptional"),
@@ -1132,93 +1132,93 @@ atlasAttributeDefWithIsOptional original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "cardinality"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "cardinality")})))),
+              Core.projectionField = (Core.Name "cardinality")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "valuesMinCount"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "valuesMinCount")})))),
+              Core.projectionField = (Core.Name "valuesMinCount")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "valuesMaxCount"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "valuesMaxCount")})))),
+              Core.projectionField = (Core.Name "valuesMaxCount")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "isUnique"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "isUnique")})))),
+              Core.projectionField = (Core.Name "isUnique")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "isIndexable"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "isIndexable")})))),
+              Core.projectionField = (Core.Name "isIndexable")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "includeInNotification"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "includeInNotification")})))),
+              Core.projectionField = (Core.Name "includeInNotification")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "defaultValue"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "defaultValue")})))),
+              Core.projectionField = (Core.Name "defaultValue")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "description"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "description")})))),
+              Core.projectionField = (Core.Name "description")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "searchWeight"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "searchWeight")})))),
+              Core.projectionField = (Core.Name "searchWeight")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "indexType"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "indexType")})))),
+              Core.projectionField = (Core.Name "indexType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "constraints"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "constraints")})))),
+              Core.projectionField = (Core.Name "constraints")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "options"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "options")})))),
+              Core.projectionField = (Core.Name "options")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "displayName"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "displayName")})))),
+              Core.projectionField = (Core.Name "displayName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 atlasAttributeDefWithIsUnique :: Phantoms.TTerm Atlas.AtlasAttributeDef -> Phantoms.TTerm Bool -> Phantoms.TTerm Atlas.AtlasAttributeDef
@@ -1229,44 +1229,44 @@ atlasAttributeDefWithIsUnique original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "name")})))),
+              Core.projectionField = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeName"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "typeName")})))),
+              Core.projectionField = (Core.Name "typeName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "isOptional"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "isOptional")})))),
+              Core.projectionField = (Core.Name "isOptional")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "cardinality"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "cardinality")})))),
+              Core.projectionField = (Core.Name "cardinality")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "valuesMinCount"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "valuesMinCount")})))),
+              Core.projectionField = (Core.Name "valuesMinCount")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "valuesMaxCount"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "valuesMaxCount")})))),
+              Core.projectionField = (Core.Name "valuesMaxCount")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "isUnique"),
@@ -1274,65 +1274,65 @@ atlasAttributeDefWithIsUnique original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "isIndexable"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "isIndexable")})))),
+              Core.projectionField = (Core.Name "isIndexable")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "includeInNotification"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "includeInNotification")})))),
+              Core.projectionField = (Core.Name "includeInNotification")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "defaultValue"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "defaultValue")})))),
+              Core.projectionField = (Core.Name "defaultValue")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "description"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "description")})))),
+              Core.projectionField = (Core.Name "description")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "searchWeight"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "searchWeight")})))),
+              Core.projectionField = (Core.Name "searchWeight")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "indexType"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "indexType")})))),
+              Core.projectionField = (Core.Name "indexType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "constraints"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "constraints")})))),
+              Core.projectionField = (Core.Name "constraints")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "options"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "options")})))),
+              Core.projectionField = (Core.Name "options")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "displayName"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "displayName")})))),
+              Core.projectionField = (Core.Name "displayName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 atlasAttributeDefWithName :: Phantoms.TTerm Atlas.AtlasAttributeDef -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Atlas.AtlasAttributeDef
@@ -1346,107 +1346,107 @@ atlasAttributeDefWithName original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "typeName"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "typeName")})))),
+              Core.projectionField = (Core.Name "typeName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "isOptional"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "isOptional")})))),
+              Core.projectionField = (Core.Name "isOptional")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "cardinality"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "cardinality")})))),
+              Core.projectionField = (Core.Name "cardinality")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "valuesMinCount"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "valuesMinCount")})))),
+              Core.projectionField = (Core.Name "valuesMinCount")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "valuesMaxCount"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "valuesMaxCount")})))),
+              Core.projectionField = (Core.Name "valuesMaxCount")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "isUnique"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "isUnique")})))),
+              Core.projectionField = (Core.Name "isUnique")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "isIndexable"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "isIndexable")})))),
+              Core.projectionField = (Core.Name "isIndexable")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "includeInNotification"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "includeInNotification")})))),
+              Core.projectionField = (Core.Name "includeInNotification")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "defaultValue"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "defaultValue")})))),
+              Core.projectionField = (Core.Name "defaultValue")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "description"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "description")})))),
+              Core.projectionField = (Core.Name "description")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "searchWeight"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "searchWeight")})))),
+              Core.projectionField = (Core.Name "searchWeight")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "indexType"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "indexType")})))),
+              Core.projectionField = (Core.Name "indexType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "constraints"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "constraints")})))),
+              Core.projectionField = (Core.Name "constraints")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "options"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "options")})))),
+              Core.projectionField = (Core.Name "options")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "displayName"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "displayName")})))),
+              Core.projectionField = (Core.Name "displayName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 atlasAttributeDefWithOptions :: Phantoms.TTerm Atlas.AtlasAttributeDef -> Phantoms.TTerm (M.Map String String) -> Phantoms.TTerm Atlas.AtlasAttributeDef
@@ -1457,100 +1457,100 @@ atlasAttributeDefWithOptions original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "name")})))),
+              Core.projectionField = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeName"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "typeName")})))),
+              Core.projectionField = (Core.Name "typeName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "isOptional"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "isOptional")})))),
+              Core.projectionField = (Core.Name "isOptional")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "cardinality"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "cardinality")})))),
+              Core.projectionField = (Core.Name "cardinality")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "valuesMinCount"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "valuesMinCount")})))),
+              Core.projectionField = (Core.Name "valuesMinCount")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "valuesMaxCount"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "valuesMaxCount")})))),
+              Core.projectionField = (Core.Name "valuesMaxCount")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "isUnique"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "isUnique")})))),
+              Core.projectionField = (Core.Name "isUnique")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "isIndexable"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "isIndexable")})))),
+              Core.projectionField = (Core.Name "isIndexable")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "includeInNotification"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "includeInNotification")})))),
+              Core.projectionField = (Core.Name "includeInNotification")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "defaultValue"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "defaultValue")})))),
+              Core.projectionField = (Core.Name "defaultValue")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "description"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "description")})))),
+              Core.projectionField = (Core.Name "description")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "searchWeight"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "searchWeight")})))),
+              Core.projectionField = (Core.Name "searchWeight")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "indexType"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "indexType")})))),
+              Core.projectionField = (Core.Name "indexType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "constraints"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "constraints")})))),
+              Core.projectionField = (Core.Name "constraints")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "options"),
@@ -1558,9 +1558,9 @@ atlasAttributeDefWithOptions original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "displayName"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "displayName")})))),
+              Core.projectionField = (Core.Name "displayName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 atlasAttributeDefWithSearchWeight :: Phantoms.TTerm Atlas.AtlasAttributeDef -> Phantoms.TTerm Int -> Phantoms.TTerm Atlas.AtlasAttributeDef
@@ -1571,79 +1571,79 @@ atlasAttributeDefWithSearchWeight original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "name")})))),
+              Core.projectionField = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeName"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "typeName")})))),
+              Core.projectionField = (Core.Name "typeName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "isOptional"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "isOptional")})))),
+              Core.projectionField = (Core.Name "isOptional")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "cardinality"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "cardinality")})))),
+              Core.projectionField = (Core.Name "cardinality")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "valuesMinCount"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "valuesMinCount")})))),
+              Core.projectionField = (Core.Name "valuesMinCount")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "valuesMaxCount"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "valuesMaxCount")})))),
+              Core.projectionField = (Core.Name "valuesMaxCount")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "isUnique"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "isUnique")})))),
+              Core.projectionField = (Core.Name "isUnique")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "isIndexable"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "isIndexable")})))),
+              Core.projectionField = (Core.Name "isIndexable")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "includeInNotification"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "includeInNotification")})))),
+              Core.projectionField = (Core.Name "includeInNotification")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "defaultValue"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "defaultValue")})))),
+              Core.projectionField = (Core.Name "defaultValue")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "description"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "description")})))),
+              Core.projectionField = (Core.Name "description")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "searchWeight"),
@@ -1651,30 +1651,30 @@ atlasAttributeDefWithSearchWeight original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "indexType"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "indexType")})))),
+              Core.projectionField = (Core.Name "indexType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "constraints"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "constraints")})))),
+              Core.projectionField = (Core.Name "constraints")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "options"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "options")})))),
+              Core.projectionField = (Core.Name "options")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "displayName"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "displayName")})))),
+              Core.projectionField = (Core.Name "displayName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 atlasAttributeDefWithTypeName :: Phantoms.TTerm Atlas.AtlasAttributeDef -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Atlas.AtlasAttributeDef
@@ -1685,9 +1685,9 @@ atlasAttributeDefWithTypeName original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "name")})))),
+              Core.projectionField = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeName"),
@@ -1695,100 +1695,100 @@ atlasAttributeDefWithTypeName original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "isOptional"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "isOptional")})))),
+              Core.projectionField = (Core.Name "isOptional")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "cardinality"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "cardinality")})))),
+              Core.projectionField = (Core.Name "cardinality")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "valuesMinCount"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "valuesMinCount")})))),
+              Core.projectionField = (Core.Name "valuesMinCount")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "valuesMaxCount"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "valuesMaxCount")})))),
+              Core.projectionField = (Core.Name "valuesMaxCount")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "isUnique"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "isUnique")})))),
+              Core.projectionField = (Core.Name "isUnique")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "isIndexable"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "isIndexable")})))),
+              Core.projectionField = (Core.Name "isIndexable")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "includeInNotification"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "includeInNotification")})))),
+              Core.projectionField = (Core.Name "includeInNotification")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "defaultValue"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "defaultValue")})))),
+              Core.projectionField = (Core.Name "defaultValue")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "description"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "description")})))),
+              Core.projectionField = (Core.Name "description")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "searchWeight"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "searchWeight")})))),
+              Core.projectionField = (Core.Name "searchWeight")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "indexType"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "indexType")})))),
+              Core.projectionField = (Core.Name "indexType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "constraints"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "constraints")})))),
+              Core.projectionField = (Core.Name "constraints")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "options"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "options")})))),
+              Core.projectionField = (Core.Name "options")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "displayName"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "displayName")})))),
+              Core.projectionField = (Core.Name "displayName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 atlasAttributeDefWithValuesMaxCount :: Phantoms.TTerm Atlas.AtlasAttributeDef -> Phantoms.TTerm Int -> Phantoms.TTerm Atlas.AtlasAttributeDef
@@ -1799,37 +1799,37 @@ atlasAttributeDefWithValuesMaxCount original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "name")})))),
+              Core.projectionField = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeName"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "typeName")})))),
+              Core.projectionField = (Core.Name "typeName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "isOptional"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "isOptional")})))),
+              Core.projectionField = (Core.Name "isOptional")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "cardinality"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "cardinality")})))),
+              Core.projectionField = (Core.Name "cardinality")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "valuesMinCount"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "valuesMinCount")})))),
+              Core.projectionField = (Core.Name "valuesMinCount")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "valuesMaxCount"),
@@ -1837,72 +1837,72 @@ atlasAttributeDefWithValuesMaxCount original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "isUnique"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "isUnique")})))),
+              Core.projectionField = (Core.Name "isUnique")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "isIndexable"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "isIndexable")})))),
+              Core.projectionField = (Core.Name "isIndexable")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "includeInNotification"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "includeInNotification")})))),
+              Core.projectionField = (Core.Name "includeInNotification")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "defaultValue"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "defaultValue")})))),
+              Core.projectionField = (Core.Name "defaultValue")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "description"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "description")})))),
+              Core.projectionField = (Core.Name "description")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "searchWeight"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "searchWeight")})))),
+              Core.projectionField = (Core.Name "searchWeight")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "indexType"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "indexType")})))),
+              Core.projectionField = (Core.Name "indexType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "constraints"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "constraints")})))),
+              Core.projectionField = (Core.Name "constraints")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "options"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "options")})))),
+              Core.projectionField = (Core.Name "options")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "displayName"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "displayName")})))),
+              Core.projectionField = (Core.Name "displayName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 atlasAttributeDefWithValuesMinCount :: Phantoms.TTerm Atlas.AtlasAttributeDef -> Phantoms.TTerm Int -> Phantoms.TTerm Atlas.AtlasAttributeDef
@@ -1913,30 +1913,30 @@ atlasAttributeDefWithValuesMinCount original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "name")})))),
+              Core.projectionField = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeName"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "typeName")})))),
+              Core.projectionField = (Core.Name "typeName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "isOptional"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "isOptional")})))),
+              Core.projectionField = (Core.Name "isOptional")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "cardinality"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "cardinality")})))),
+              Core.projectionField = (Core.Name "cardinality")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "valuesMinCount"),
@@ -1944,79 +1944,79 @@ atlasAttributeDefWithValuesMinCount original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "valuesMaxCount"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "valuesMaxCount")})))),
+              Core.projectionField = (Core.Name "valuesMaxCount")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "isUnique"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "isUnique")})))),
+              Core.projectionField = (Core.Name "isUnique")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "isIndexable"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "isIndexable")})))),
+              Core.projectionField = (Core.Name "isIndexable")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "includeInNotification"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "includeInNotification")})))),
+              Core.projectionField = (Core.Name "includeInNotification")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "defaultValue"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "defaultValue")})))),
+              Core.projectionField = (Core.Name "defaultValue")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "description"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "description")})))),
+              Core.projectionField = (Core.Name "description")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "searchWeight"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "searchWeight")})))),
+              Core.projectionField = (Core.Name "searchWeight")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "indexType"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "indexType")})))),
+              Core.projectionField = (Core.Name "indexType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "constraints"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "constraints")})))),
+              Core.projectionField = (Core.Name "constraints")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "options"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "options")})))),
+              Core.projectionField = (Core.Name "options")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "displayName"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasAttributeDef"),
-              Core.projectionField = (Core.Name "displayName")})))),
+              Core.projectionField = (Core.Name "displayName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 atlasAttributeDef_CardinalityList :: Phantoms.TTerm Atlas.AtlasAttributeDef_Cardinality
@@ -2104,97 +2104,97 @@ atlasBaseTypeDef category guid createdBy updatedBy createTime updateTime version
 atlasBaseTypeDefCategory :: Phantoms.TTerm Atlas.AtlasBaseTypeDef -> Phantoms.TTerm (Maybe Atlas.TypeCategory)
 atlasBaseTypeDefCategory x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-        Core.projectionField = (Core.Name "category")})))),
+        Core.projectionField = (Core.Name "category")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 atlasBaseTypeDefCreateTime :: Phantoms.TTerm Atlas.AtlasBaseTypeDef -> Phantoms.TTerm (Maybe Schema.DateTime)
 atlasBaseTypeDefCreateTime x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-        Core.projectionField = (Core.Name "createTime")})))),
+        Core.projectionField = (Core.Name "createTime")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 atlasBaseTypeDefCreatedBy :: Phantoms.TTerm Atlas.AtlasBaseTypeDef -> Phantoms.TTerm (Maybe String)
 atlasBaseTypeDefCreatedBy x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-        Core.projectionField = (Core.Name "createdBy")})))),
+        Core.projectionField = (Core.Name "createdBy")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 atlasBaseTypeDefDescription :: Phantoms.TTerm Atlas.AtlasBaseTypeDef -> Phantoms.TTerm (Maybe String)
 atlasBaseTypeDefDescription x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-        Core.projectionField = (Core.Name "description")})))),
+        Core.projectionField = (Core.Name "description")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 atlasBaseTypeDefGuid :: Phantoms.TTerm Atlas.AtlasBaseTypeDef -> Phantoms.TTerm (Maybe String)
 atlasBaseTypeDefGuid x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-        Core.projectionField = (Core.Name "guid")})))),
+        Core.projectionField = (Core.Name "guid")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 atlasBaseTypeDefName :: Phantoms.TTerm Atlas.AtlasBaseTypeDef -> Phantoms.TTerm (Maybe String)
 atlasBaseTypeDefName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-        Core.projectionField = (Core.Name "name")})))),
+        Core.projectionField = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 atlasBaseTypeDefOptions :: Phantoms.TTerm Atlas.AtlasBaseTypeDef -> Phantoms.TTerm (M.Map String String)
 atlasBaseTypeDefOptions x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-        Core.projectionField = (Core.Name "options")})))),
+        Core.projectionField = (Core.Name "options")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 atlasBaseTypeDefServiceType :: Phantoms.TTerm Atlas.AtlasBaseTypeDef -> Phantoms.TTerm (Maybe String)
 atlasBaseTypeDefServiceType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-        Core.projectionField = (Core.Name "serviceType")})))),
+        Core.projectionField = (Core.Name "serviceType")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 atlasBaseTypeDefTypeVersion :: Phantoms.TTerm Atlas.AtlasBaseTypeDef -> Phantoms.TTerm (Maybe String)
 atlasBaseTypeDefTypeVersion x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-        Core.projectionField = (Core.Name "typeVersion")})))),
+        Core.projectionField = (Core.Name "typeVersion")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 atlasBaseTypeDefUpdateTime :: Phantoms.TTerm Atlas.AtlasBaseTypeDef -> Phantoms.TTerm (Maybe Schema.DateTime)
 atlasBaseTypeDefUpdateTime x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-        Core.projectionField = (Core.Name "updateTime")})))),
+        Core.projectionField = (Core.Name "updateTime")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 atlasBaseTypeDefUpdatedBy :: Phantoms.TTerm Atlas.AtlasBaseTypeDef -> Phantoms.TTerm (Maybe String)
 atlasBaseTypeDefUpdatedBy x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-        Core.projectionField = (Core.Name "updatedBy")})))),
+        Core.projectionField = (Core.Name "updatedBy")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 atlasBaseTypeDefVersion :: Phantoms.TTerm Atlas.AtlasBaseTypeDef -> Phantoms.TTerm (Maybe I.Int64)
 atlasBaseTypeDefVersion x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-        Core.projectionField = (Core.Name "version")})))),
+        Core.projectionField = (Core.Name "version")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 atlasBaseTypeDefWithCategory :: Phantoms.TTerm Atlas.AtlasBaseTypeDef -> Phantoms.TTerm (Maybe Atlas.TypeCategory) -> Phantoms.TTerm Atlas.AtlasBaseTypeDef
@@ -2208,79 +2208,79 @@ atlasBaseTypeDefWithCategory original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "guid"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "guid")})))),
+              Core.projectionField = (Core.Name "guid")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "createdBy"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "createdBy")})))),
+              Core.projectionField = (Core.Name "createdBy")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "updatedBy"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "updatedBy")})))),
+              Core.projectionField = (Core.Name "updatedBy")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "createTime"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "createTime")})))),
+              Core.projectionField = (Core.Name "createTime")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "updateTime"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "updateTime")})))),
+              Core.projectionField = (Core.Name "updateTime")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "version"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "version")})))),
+              Core.projectionField = (Core.Name "version")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "name")})))),
+              Core.projectionField = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "description"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "description")})))),
+              Core.projectionField = (Core.Name "description")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeVersion"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "typeVersion")})))),
+              Core.projectionField = (Core.Name "typeVersion")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "serviceType"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "serviceType")})))),
+              Core.projectionField = (Core.Name "serviceType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "options"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "options")})))),
+              Core.projectionField = (Core.Name "options")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 atlasBaseTypeDefWithCreateTime :: Phantoms.TTerm Atlas.AtlasBaseTypeDef -> Phantoms.TTerm (Maybe Schema.DateTime) -> Phantoms.TTerm Atlas.AtlasBaseTypeDef
@@ -2291,30 +2291,30 @@ atlasBaseTypeDefWithCreateTime original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "category"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "category")})))),
+              Core.projectionField = (Core.Name "category")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "guid"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "guid")})))),
+              Core.projectionField = (Core.Name "guid")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "createdBy"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "createdBy")})))),
+              Core.projectionField = (Core.Name "createdBy")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "updatedBy"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "updatedBy")})))),
+              Core.projectionField = (Core.Name "updatedBy")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "createTime"),
@@ -2322,51 +2322,51 @@ atlasBaseTypeDefWithCreateTime original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "updateTime"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "updateTime")})))),
+              Core.projectionField = (Core.Name "updateTime")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "version"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "version")})))),
+              Core.projectionField = (Core.Name "version")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "name")})))),
+              Core.projectionField = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "description"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "description")})))),
+              Core.projectionField = (Core.Name "description")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeVersion"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "typeVersion")})))),
+              Core.projectionField = (Core.Name "typeVersion")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "serviceType"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "serviceType")})))),
+              Core.projectionField = (Core.Name "serviceType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "options"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "options")})))),
+              Core.projectionField = (Core.Name "options")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 atlasBaseTypeDefWithCreatedBy :: Phantoms.TTerm Atlas.AtlasBaseTypeDef -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Atlas.AtlasBaseTypeDef
@@ -2377,16 +2377,16 @@ atlasBaseTypeDefWithCreatedBy original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "category"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "category")})))),
+              Core.projectionField = (Core.Name "category")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "guid"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "guid")})))),
+              Core.projectionField = (Core.Name "guid")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "createdBy"),
@@ -2394,65 +2394,65 @@ atlasBaseTypeDefWithCreatedBy original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "updatedBy"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "updatedBy")})))),
+              Core.projectionField = (Core.Name "updatedBy")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "createTime"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "createTime")})))),
+              Core.projectionField = (Core.Name "createTime")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "updateTime"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "updateTime")})))),
+              Core.projectionField = (Core.Name "updateTime")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "version"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "version")})))),
+              Core.projectionField = (Core.Name "version")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "name")})))),
+              Core.projectionField = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "description"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "description")})))),
+              Core.projectionField = (Core.Name "description")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeVersion"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "typeVersion")})))),
+              Core.projectionField = (Core.Name "typeVersion")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "serviceType"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "serviceType")})))),
+              Core.projectionField = (Core.Name "serviceType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "options"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "options")})))),
+              Core.projectionField = (Core.Name "options")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 atlasBaseTypeDefWithDescription :: Phantoms.TTerm Atlas.AtlasBaseTypeDef -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Atlas.AtlasBaseTypeDef
@@ -2463,58 +2463,58 @@ atlasBaseTypeDefWithDescription original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "category"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "category")})))),
+              Core.projectionField = (Core.Name "category")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "guid"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "guid")})))),
+              Core.projectionField = (Core.Name "guid")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "createdBy"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "createdBy")})))),
+              Core.projectionField = (Core.Name "createdBy")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "updatedBy"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "updatedBy")})))),
+              Core.projectionField = (Core.Name "updatedBy")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "createTime"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "createTime")})))),
+              Core.projectionField = (Core.Name "createTime")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "updateTime"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "updateTime")})))),
+              Core.projectionField = (Core.Name "updateTime")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "version"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "version")})))),
+              Core.projectionField = (Core.Name "version")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "name")})))),
+              Core.projectionField = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "description"),
@@ -2522,23 +2522,23 @@ atlasBaseTypeDefWithDescription original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "typeVersion"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "typeVersion")})))),
+              Core.projectionField = (Core.Name "typeVersion")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "serviceType"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "serviceType")})))),
+              Core.projectionField = (Core.Name "serviceType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "options"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "options")})))),
+              Core.projectionField = (Core.Name "options")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 atlasBaseTypeDefWithGuid :: Phantoms.TTerm Atlas.AtlasBaseTypeDef -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Atlas.AtlasBaseTypeDef
@@ -2549,9 +2549,9 @@ atlasBaseTypeDefWithGuid original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "category"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "category")})))),
+              Core.projectionField = (Core.Name "category")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "guid"),
@@ -2559,72 +2559,72 @@ atlasBaseTypeDefWithGuid original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "createdBy"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "createdBy")})))),
+              Core.projectionField = (Core.Name "createdBy")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "updatedBy"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "updatedBy")})))),
+              Core.projectionField = (Core.Name "updatedBy")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "createTime"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "createTime")})))),
+              Core.projectionField = (Core.Name "createTime")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "updateTime"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "updateTime")})))),
+              Core.projectionField = (Core.Name "updateTime")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "version"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "version")})))),
+              Core.projectionField = (Core.Name "version")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "name")})))),
+              Core.projectionField = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "description"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "description")})))),
+              Core.projectionField = (Core.Name "description")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeVersion"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "typeVersion")})))),
+              Core.projectionField = (Core.Name "typeVersion")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "serviceType"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "serviceType")})))),
+              Core.projectionField = (Core.Name "serviceType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "options"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "options")})))),
+              Core.projectionField = (Core.Name "options")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 atlasBaseTypeDefWithName :: Phantoms.TTerm Atlas.AtlasBaseTypeDef -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Atlas.AtlasBaseTypeDef
@@ -2635,51 +2635,51 @@ atlasBaseTypeDefWithName original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "category"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "category")})))),
+              Core.projectionField = (Core.Name "category")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "guid"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "guid")})))),
+              Core.projectionField = (Core.Name "guid")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "createdBy"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "createdBy")})))),
+              Core.projectionField = (Core.Name "createdBy")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "updatedBy"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "updatedBy")})))),
+              Core.projectionField = (Core.Name "updatedBy")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "createTime"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "createTime")})))),
+              Core.projectionField = (Core.Name "createTime")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "updateTime"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "updateTime")})))),
+              Core.projectionField = (Core.Name "updateTime")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "version"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "version")})))),
+              Core.projectionField = (Core.Name "version")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
@@ -2687,30 +2687,30 @@ atlasBaseTypeDefWithName original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "description"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "description")})))),
+              Core.projectionField = (Core.Name "description")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeVersion"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "typeVersion")})))),
+              Core.projectionField = (Core.Name "typeVersion")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "serviceType"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "serviceType")})))),
+              Core.projectionField = (Core.Name "serviceType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "options"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "options")})))),
+              Core.projectionField = (Core.Name "options")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 atlasBaseTypeDefWithOptions :: Phantoms.TTerm Atlas.AtlasBaseTypeDef -> Phantoms.TTerm (M.Map String String) -> Phantoms.TTerm Atlas.AtlasBaseTypeDef
@@ -2721,79 +2721,79 @@ atlasBaseTypeDefWithOptions original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "category"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "category")})))),
+              Core.projectionField = (Core.Name "category")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "guid"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "guid")})))),
+              Core.projectionField = (Core.Name "guid")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "createdBy"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "createdBy")})))),
+              Core.projectionField = (Core.Name "createdBy")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "updatedBy"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "updatedBy")})))),
+              Core.projectionField = (Core.Name "updatedBy")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "createTime"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "createTime")})))),
+              Core.projectionField = (Core.Name "createTime")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "updateTime"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "updateTime")})))),
+              Core.projectionField = (Core.Name "updateTime")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "version"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "version")})))),
+              Core.projectionField = (Core.Name "version")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "name")})))),
+              Core.projectionField = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "description"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "description")})))),
+              Core.projectionField = (Core.Name "description")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeVersion"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "typeVersion")})))),
+              Core.projectionField = (Core.Name "typeVersion")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "serviceType"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "serviceType")})))),
+              Core.projectionField = (Core.Name "serviceType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "options"),
@@ -2807,72 +2807,72 @@ atlasBaseTypeDefWithServiceType original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "category"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "category")})))),
+              Core.projectionField = (Core.Name "category")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "guid"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "guid")})))),
+              Core.projectionField = (Core.Name "guid")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "createdBy"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "createdBy")})))),
+              Core.projectionField = (Core.Name "createdBy")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "updatedBy"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "updatedBy")})))),
+              Core.projectionField = (Core.Name "updatedBy")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "createTime"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "createTime")})))),
+              Core.projectionField = (Core.Name "createTime")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "updateTime"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "updateTime")})))),
+              Core.projectionField = (Core.Name "updateTime")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "version"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "version")})))),
+              Core.projectionField = (Core.Name "version")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "name")})))),
+              Core.projectionField = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "description"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "description")})))),
+              Core.projectionField = (Core.Name "description")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeVersion"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "typeVersion")})))),
+              Core.projectionField = (Core.Name "typeVersion")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "serviceType"),
@@ -2880,9 +2880,9 @@ atlasBaseTypeDefWithServiceType original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "options"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "options")})))),
+              Core.projectionField = (Core.Name "options")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 atlasBaseTypeDefWithTypeVersion :: Phantoms.TTerm Atlas.AtlasBaseTypeDef -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Atlas.AtlasBaseTypeDef
@@ -2893,65 +2893,65 @@ atlasBaseTypeDefWithTypeVersion original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "category"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "category")})))),
+              Core.projectionField = (Core.Name "category")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "guid"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "guid")})))),
+              Core.projectionField = (Core.Name "guid")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "createdBy"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "createdBy")})))),
+              Core.projectionField = (Core.Name "createdBy")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "updatedBy"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "updatedBy")})))),
+              Core.projectionField = (Core.Name "updatedBy")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "createTime"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "createTime")})))),
+              Core.projectionField = (Core.Name "createTime")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "updateTime"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "updateTime")})))),
+              Core.projectionField = (Core.Name "updateTime")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "version"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "version")})))),
+              Core.projectionField = (Core.Name "version")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "name")})))),
+              Core.projectionField = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "description"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "description")})))),
+              Core.projectionField = (Core.Name "description")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeVersion"),
@@ -2959,16 +2959,16 @@ atlasBaseTypeDefWithTypeVersion original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "serviceType"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "serviceType")})))),
+              Core.projectionField = (Core.Name "serviceType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "options"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "options")})))),
+              Core.projectionField = (Core.Name "options")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 atlasBaseTypeDefWithUpdateTime :: Phantoms.TTerm Atlas.AtlasBaseTypeDef -> Phantoms.TTerm (Maybe Schema.DateTime) -> Phantoms.TTerm Atlas.AtlasBaseTypeDef
@@ -2979,37 +2979,37 @@ atlasBaseTypeDefWithUpdateTime original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "category"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "category")})))),
+              Core.projectionField = (Core.Name "category")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "guid"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "guid")})))),
+              Core.projectionField = (Core.Name "guid")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "createdBy"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "createdBy")})))),
+              Core.projectionField = (Core.Name "createdBy")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "updatedBy"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "updatedBy")})))),
+              Core.projectionField = (Core.Name "updatedBy")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "createTime"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "createTime")})))),
+              Core.projectionField = (Core.Name "createTime")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "updateTime"),
@@ -3017,44 +3017,44 @@ atlasBaseTypeDefWithUpdateTime original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "version"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "version")})))),
+              Core.projectionField = (Core.Name "version")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "name")})))),
+              Core.projectionField = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "description"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "description")})))),
+              Core.projectionField = (Core.Name "description")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeVersion"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "typeVersion")})))),
+              Core.projectionField = (Core.Name "typeVersion")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "serviceType"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "serviceType")})))),
+              Core.projectionField = (Core.Name "serviceType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "options"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "options")})))),
+              Core.projectionField = (Core.Name "options")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 atlasBaseTypeDefWithUpdatedBy :: Phantoms.TTerm Atlas.AtlasBaseTypeDef -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Atlas.AtlasBaseTypeDef
@@ -3065,23 +3065,23 @@ atlasBaseTypeDefWithUpdatedBy original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "category"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "category")})))),
+              Core.projectionField = (Core.Name "category")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "guid"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "guid")})))),
+              Core.projectionField = (Core.Name "guid")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "createdBy"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "createdBy")})))),
+              Core.projectionField = (Core.Name "createdBy")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "updatedBy"),
@@ -3089,58 +3089,58 @@ atlasBaseTypeDefWithUpdatedBy original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "createTime"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "createTime")})))),
+              Core.projectionField = (Core.Name "createTime")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "updateTime"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "updateTime")})))),
+              Core.projectionField = (Core.Name "updateTime")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "version"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "version")})))),
+              Core.projectionField = (Core.Name "version")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "name")})))),
+              Core.projectionField = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "description"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "description")})))),
+              Core.projectionField = (Core.Name "description")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeVersion"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "typeVersion")})))),
+              Core.projectionField = (Core.Name "typeVersion")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "serviceType"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "serviceType")})))),
+              Core.projectionField = (Core.Name "serviceType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "options"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "options")})))),
+              Core.projectionField = (Core.Name "options")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 atlasBaseTypeDefWithVersion :: Phantoms.TTerm Atlas.AtlasBaseTypeDef -> Phantoms.TTerm (Maybe I.Int64) -> Phantoms.TTerm Atlas.AtlasBaseTypeDef
@@ -3151,44 +3151,44 @@ atlasBaseTypeDefWithVersion original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "category"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "category")})))),
+              Core.projectionField = (Core.Name "category")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "guid"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "guid")})))),
+              Core.projectionField = (Core.Name "guid")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "createdBy"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "createdBy")})))),
+              Core.projectionField = (Core.Name "createdBy")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "updatedBy"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "updatedBy")})))),
+              Core.projectionField = (Core.Name "updatedBy")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "createTime"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "createTime")})))),
+              Core.projectionField = (Core.Name "createTime")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "updateTime"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "updateTime")})))),
+              Core.projectionField = (Core.Name "updateTime")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "version"),
@@ -3196,37 +3196,37 @@ atlasBaseTypeDefWithVersion original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "name")})))),
+              Core.projectionField = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "description"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "description")})))),
+              Core.projectionField = (Core.Name "description")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeVersion"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "typeVersion")})))),
+              Core.projectionField = (Core.Name "typeVersion")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "serviceType"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "serviceType")})))),
+              Core.projectionField = (Core.Name "serviceType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "options"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasBaseTypeDef"),
-              Core.projectionField = (Core.Name "options")})))),
+              Core.projectionField = (Core.Name "options")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 atlasConstraintDef :: Phantoms.TTerm (Maybe String) -> Phantoms.TTerm (M.Map String String) -> Phantoms.TTerm Atlas.AtlasConstraintDef
@@ -3244,17 +3244,17 @@ atlasConstraintDef type_ params =
 atlasConstraintDefParams :: Phantoms.TTerm Atlas.AtlasConstraintDef -> Phantoms.TTerm (M.Map String String)
 atlasConstraintDefParams x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasConstraintDef"),
-        Core.projectionField = (Core.Name "params")})))),
+        Core.projectionField = (Core.Name "params")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 atlasConstraintDefType :: Phantoms.TTerm Atlas.AtlasConstraintDef -> Phantoms.TTerm (Maybe String)
 atlasConstraintDefType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasConstraintDef"),
-        Core.projectionField = (Core.Name "type")})))),
+        Core.projectionField = (Core.Name "type")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 atlasConstraintDefWithParams :: Phantoms.TTerm Atlas.AtlasConstraintDef -> Phantoms.TTerm (M.Map String String) -> Phantoms.TTerm Atlas.AtlasConstraintDef
@@ -3265,9 +3265,9 @@ atlasConstraintDefWithParams original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasConstraintDef"),
-              Core.projectionField = (Core.Name "type")})))),
+              Core.projectionField = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "params"),
@@ -3284,9 +3284,9 @@ atlasConstraintDefWithType original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "params"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasConstraintDef"),
-              Core.projectionField = (Core.Name "params")})))),
+              Core.projectionField = (Core.Name "params")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 atlasEntityDef :: Phantoms.TTerm Atlas.AtlasStructDef -> Phantoms.TTerm (S.Set String) -> Phantoms.TTerm (S.Set String) -> Phantoms.TTerm [Atlas.AtlasRelationshipAttributeDef] -> Phantoms.TTerm (M.Map String [Atlas.AtlasAttributeDef]) -> Phantoms.TTerm Atlas.AtlasEntityDef
@@ -3313,41 +3313,41 @@ atlasEntityDef asAtlasStruct superTypes subTypes relationshipAttributeDefs busin
 atlasEntityDefAsAtlasStruct :: Phantoms.TTerm Atlas.AtlasEntityDef -> Phantoms.TTerm Atlas.AtlasStructDef
 atlasEntityDefAsAtlasStruct x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasEntityDef"),
-        Core.projectionField = (Core.Name "asAtlasStruct")})))),
+        Core.projectionField = (Core.Name "asAtlasStruct")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 atlasEntityDefBusinessAttributeDefs :: Phantoms.TTerm Atlas.AtlasEntityDef -> Phantoms.TTerm (M.Map String [Atlas.AtlasAttributeDef])
 atlasEntityDefBusinessAttributeDefs x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasEntityDef"),
-        Core.projectionField = (Core.Name "businessAttributeDefs")})))),
+        Core.projectionField = (Core.Name "businessAttributeDefs")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 atlasEntityDefRelationshipAttributeDefs :: Phantoms.TTerm Atlas.AtlasEntityDef -> Phantoms.TTerm [Atlas.AtlasRelationshipAttributeDef]
 atlasEntityDefRelationshipAttributeDefs x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasEntityDef"),
-        Core.projectionField = (Core.Name "relationshipAttributeDefs")})))),
+        Core.projectionField = (Core.Name "relationshipAttributeDefs")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 atlasEntityDefSubTypes :: Phantoms.TTerm Atlas.AtlasEntityDef -> Phantoms.TTerm (S.Set String)
 atlasEntityDefSubTypes x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasEntityDef"),
-        Core.projectionField = (Core.Name "subTypes")})))),
+        Core.projectionField = (Core.Name "subTypes")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 atlasEntityDefSuperTypes :: Phantoms.TTerm Atlas.AtlasEntityDef -> Phantoms.TTerm (S.Set String)
 atlasEntityDefSuperTypes x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasEntityDef"),
-        Core.projectionField = (Core.Name "superTypes")})))),
+        Core.projectionField = (Core.Name "superTypes")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 atlasEntityDefWithAsAtlasStruct :: Phantoms.TTerm Atlas.AtlasEntityDef -> Phantoms.TTerm Atlas.AtlasStructDef -> Phantoms.TTerm Atlas.AtlasEntityDef
@@ -3361,30 +3361,30 @@ atlasEntityDefWithAsAtlasStruct original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "superTypes"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasEntityDef"),
-              Core.projectionField = (Core.Name "superTypes")})))),
+              Core.projectionField = (Core.Name "superTypes")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "subTypes"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasEntityDef"),
-              Core.projectionField = (Core.Name "subTypes")})))),
+              Core.projectionField = (Core.Name "subTypes")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "relationshipAttributeDefs"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasEntityDef"),
-              Core.projectionField = (Core.Name "relationshipAttributeDefs")})))),
+              Core.projectionField = (Core.Name "relationshipAttributeDefs")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "businessAttributeDefs"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasEntityDef"),
-              Core.projectionField = (Core.Name "businessAttributeDefs")})))),
+              Core.projectionField = (Core.Name "businessAttributeDefs")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 atlasEntityDefWithBusinessAttributeDefs :: Phantoms.TTerm Atlas.AtlasEntityDef -> Phantoms.TTerm (M.Map String [Atlas.AtlasAttributeDef]) -> Phantoms.TTerm Atlas.AtlasEntityDef
@@ -3395,30 +3395,30 @@ atlasEntityDefWithBusinessAttributeDefs original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "asAtlasStruct"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasEntityDef"),
-              Core.projectionField = (Core.Name "asAtlasStruct")})))),
+              Core.projectionField = (Core.Name "asAtlasStruct")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "superTypes"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasEntityDef"),
-              Core.projectionField = (Core.Name "superTypes")})))),
+              Core.projectionField = (Core.Name "superTypes")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "subTypes"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasEntityDef"),
-              Core.projectionField = (Core.Name "subTypes")})))),
+              Core.projectionField = (Core.Name "subTypes")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "relationshipAttributeDefs"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasEntityDef"),
-              Core.projectionField = (Core.Name "relationshipAttributeDefs")})))),
+              Core.projectionField = (Core.Name "relationshipAttributeDefs")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "businessAttributeDefs"),
@@ -3432,23 +3432,23 @@ atlasEntityDefWithRelationshipAttributeDefs original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "asAtlasStruct"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasEntityDef"),
-              Core.projectionField = (Core.Name "asAtlasStruct")})))),
+              Core.projectionField = (Core.Name "asAtlasStruct")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "superTypes"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasEntityDef"),
-              Core.projectionField = (Core.Name "superTypes")})))),
+              Core.projectionField = (Core.Name "superTypes")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "subTypes"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasEntityDef"),
-              Core.projectionField = (Core.Name "subTypes")})))),
+              Core.projectionField = (Core.Name "subTypes")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "relationshipAttributeDefs"),
@@ -3456,9 +3456,9 @@ atlasEntityDefWithRelationshipAttributeDefs original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "businessAttributeDefs"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasEntityDef"),
-              Core.projectionField = (Core.Name "businessAttributeDefs")})))),
+              Core.projectionField = (Core.Name "businessAttributeDefs")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 atlasEntityDefWithSubTypes :: Phantoms.TTerm Atlas.AtlasEntityDef -> Phantoms.TTerm (S.Set String) -> Phantoms.TTerm Atlas.AtlasEntityDef
@@ -3469,16 +3469,16 @@ atlasEntityDefWithSubTypes original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "asAtlasStruct"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasEntityDef"),
-              Core.projectionField = (Core.Name "asAtlasStruct")})))),
+              Core.projectionField = (Core.Name "asAtlasStruct")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "superTypes"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasEntityDef"),
-              Core.projectionField = (Core.Name "superTypes")})))),
+              Core.projectionField = (Core.Name "superTypes")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "subTypes"),
@@ -3486,16 +3486,16 @@ atlasEntityDefWithSubTypes original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "relationshipAttributeDefs"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasEntityDef"),
-              Core.projectionField = (Core.Name "relationshipAttributeDefs")})))),
+              Core.projectionField = (Core.Name "relationshipAttributeDefs")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "businessAttributeDefs"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasEntityDef"),
-              Core.projectionField = (Core.Name "businessAttributeDefs")})))),
+              Core.projectionField = (Core.Name "businessAttributeDefs")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 atlasEntityDefWithSuperTypes :: Phantoms.TTerm Atlas.AtlasEntityDef -> Phantoms.TTerm (S.Set String) -> Phantoms.TTerm Atlas.AtlasEntityDef
@@ -3506,9 +3506,9 @@ atlasEntityDefWithSuperTypes original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "asAtlasStruct"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasEntityDef"),
-              Core.projectionField = (Core.Name "asAtlasStruct")})))),
+              Core.projectionField = (Core.Name "asAtlasStruct")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "superTypes"),
@@ -3516,23 +3516,23 @@ atlasEntityDefWithSuperTypes original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "subTypes"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasEntityDef"),
-              Core.projectionField = (Core.Name "subTypes")})))),
+              Core.projectionField = (Core.Name "subTypes")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "relationshipAttributeDefs"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasEntityDef"),
-              Core.projectionField = (Core.Name "relationshipAttributeDefs")})))),
+              Core.projectionField = (Core.Name "relationshipAttributeDefs")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "businessAttributeDefs"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasEntityDef"),
-              Core.projectionField = (Core.Name "businessAttributeDefs")})))),
+              Core.projectionField = (Core.Name "businessAttributeDefs")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 atlasRelationshipAttributeDef :: Phantoms.TTerm Atlas.AtlasAttributeDef -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Bool -> Phantoms.TTerm Atlas.AtlasRelationshipAttributeDef
@@ -3553,25 +3553,25 @@ atlasRelationshipAttributeDef asAtlasAttribute relationshipTypeName isLegacyAttr
 atlasRelationshipAttributeDefAsAtlasAttribute :: Phantoms.TTerm Atlas.AtlasRelationshipAttributeDef -> Phantoms.TTerm Atlas.AtlasAttributeDef
 atlasRelationshipAttributeDefAsAtlasAttribute x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasRelationshipAttributeDef"),
-        Core.projectionField = (Core.Name "asAtlasAttribute")})))),
+        Core.projectionField = (Core.Name "asAtlasAttribute")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 atlasRelationshipAttributeDefIsLegacyAttribute :: Phantoms.TTerm Atlas.AtlasRelationshipAttributeDef -> Phantoms.TTerm Bool
 atlasRelationshipAttributeDefIsLegacyAttribute x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasRelationshipAttributeDef"),
-        Core.projectionField = (Core.Name "isLegacyAttribute")})))),
+        Core.projectionField = (Core.Name "isLegacyAttribute")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 atlasRelationshipAttributeDefRelationshipTypeName :: Phantoms.TTerm Atlas.AtlasRelationshipAttributeDef -> Phantoms.TTerm (Maybe String)
 atlasRelationshipAttributeDefRelationshipTypeName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasRelationshipAttributeDef"),
-        Core.projectionField = (Core.Name "relationshipTypeName")})))),
+        Core.projectionField = (Core.Name "relationshipTypeName")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 atlasRelationshipAttributeDefWithAsAtlasAttribute :: Phantoms.TTerm Atlas.AtlasRelationshipAttributeDef -> Phantoms.TTerm Atlas.AtlasAttributeDef -> Phantoms.TTerm Atlas.AtlasRelationshipAttributeDef
@@ -3585,16 +3585,16 @@ atlasRelationshipAttributeDefWithAsAtlasAttribute original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "relationshipTypeName"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasRelationshipAttributeDef"),
-              Core.projectionField = (Core.Name "relationshipTypeName")})))),
+              Core.projectionField = (Core.Name "relationshipTypeName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "isLegacyAttribute"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasRelationshipAttributeDef"),
-              Core.projectionField = (Core.Name "isLegacyAttribute")})))),
+              Core.projectionField = (Core.Name "isLegacyAttribute")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 atlasRelationshipAttributeDefWithIsLegacyAttribute :: Phantoms.TTerm Atlas.AtlasRelationshipAttributeDef -> Phantoms.TTerm Bool -> Phantoms.TTerm Atlas.AtlasRelationshipAttributeDef
@@ -3605,16 +3605,16 @@ atlasRelationshipAttributeDefWithIsLegacyAttribute original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "asAtlasAttribute"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasRelationshipAttributeDef"),
-              Core.projectionField = (Core.Name "asAtlasAttribute")})))),
+              Core.projectionField = (Core.Name "asAtlasAttribute")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "relationshipTypeName"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasRelationshipAttributeDef"),
-              Core.projectionField = (Core.Name "relationshipTypeName")})))),
+              Core.projectionField = (Core.Name "relationshipTypeName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "isLegacyAttribute"),
@@ -3628,9 +3628,9 @@ atlasRelationshipAttributeDefWithRelationshipTypeName original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "asAtlasAttribute"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasRelationshipAttributeDef"),
-              Core.projectionField = (Core.Name "asAtlasAttribute")})))),
+              Core.projectionField = (Core.Name "asAtlasAttribute")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "relationshipTypeName"),
@@ -3638,9 +3638,9 @@ atlasRelationshipAttributeDefWithRelationshipTypeName original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "isLegacyAttribute"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasRelationshipAttributeDef"),
-              Core.projectionField = (Core.Name "isLegacyAttribute")})))),
+              Core.projectionField = (Core.Name "isLegacyAttribute")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 atlasStructDef :: Phantoms.TTerm Atlas.AtlasBaseTypeDef -> Phantoms.TTerm [Atlas.AtlasAttributeDef] -> Phantoms.TTerm Atlas.AtlasStructDef
@@ -3658,17 +3658,17 @@ atlasStructDef asAtlasBaseType attributeDefs =
 atlasStructDefAsAtlasBaseType :: Phantoms.TTerm Atlas.AtlasStructDef -> Phantoms.TTerm Atlas.AtlasBaseTypeDef
 atlasStructDefAsAtlasBaseType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasStructDef"),
-        Core.projectionField = (Core.Name "asAtlasBaseType")})))),
+        Core.projectionField = (Core.Name "asAtlasBaseType")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 atlasStructDefAttributeDefs :: Phantoms.TTerm Atlas.AtlasStructDef -> Phantoms.TTerm [Atlas.AtlasAttributeDef]
 atlasStructDefAttributeDefs x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasStructDef"),
-        Core.projectionField = (Core.Name "attributeDefs")})))),
+        Core.projectionField = (Core.Name "attributeDefs")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 atlasStructDefWithAsAtlasBaseType :: Phantoms.TTerm Atlas.AtlasStructDef -> Phantoms.TTerm Atlas.AtlasBaseTypeDef -> Phantoms.TTerm Atlas.AtlasStructDef
@@ -3682,9 +3682,9 @@ atlasStructDefWithAsAtlasBaseType original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "attributeDefs"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasStructDef"),
-              Core.projectionField = (Core.Name "attributeDefs")})))),
+              Core.projectionField = (Core.Name "attributeDefs")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 atlasStructDefWithAttributeDefs :: Phantoms.TTerm Atlas.AtlasStructDef -> Phantoms.TTerm [Atlas.AtlasAttributeDef] -> Phantoms.TTerm Atlas.AtlasStructDef
@@ -3695,9 +3695,9 @@ atlasStructDefWithAttributeDefs original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "asAtlasBaseType"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.atlas.AtlasStructDef"),
-              Core.projectionField = (Core.Name "asAtlasBaseType")})))),
+              Core.projectionField = (Core.Name "asAtlasBaseType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "attributeDefs"),

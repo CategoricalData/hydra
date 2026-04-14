@@ -459,28 +459,6 @@ typesByName =
                 (Core.Name "description", (Core.TermLiteral (Core.LiteralString "The 'right' alternative")))])}))}]),
         Core.annotatedTypeAnnotation = (M.fromList [
           (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A type which provides a choice between a 'left' type and a 'right' type")))])}))),
-      (Core.Name "hydra.core.Elimination", (Core.TypeAnnotated (Core.AnnotatedType {
-        Core.annotatedTypeBody = (Core.TypeUnion [
-          Core.FieldType {
-            Core.fieldTypeName = (Core.Name "record"),
-            Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
-              Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.core.Projection")),
-              Core.annotatedTypeAnnotation = (M.fromList [
-                (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Eliminates a record by projecting a given field")))])}))},
-          Core.FieldType {
-            Core.fieldTypeName = (Core.Name "union"),
-            Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
-              Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.core.CaseStatement")),
-              Core.annotatedTypeAnnotation = (M.fromList [
-                (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Eliminates a union term by matching over the fields of the union. This is a case statement.")))])}))},
-          Core.FieldType {
-            Core.fieldTypeName = (Core.Name "wrap"),
-            Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
-              Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.core.Name")),
-              Core.annotatedTypeAnnotation = (M.fromList [
-                (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Unwrap a wrapped term")))])}))}]),
-        Core.annotatedTypeAnnotation = (M.fromList [
-          (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A corresponding elimination for an introduction term")))])}))),
       (Core.Name "hydra.core.Field", (Core.TypeAnnotated (Core.AnnotatedType {
         Core.annotatedTypeBody = (Core.TypeRecord [
           Core.FieldType {
@@ -573,22 +551,6 @@ typesByName =
                 (Core.Name "description", (Core.TermLiteral (Core.LiteralString "The body of the lambda")))])}))}]),
         Core.annotatedTypeAnnotation = (M.fromList [
           (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A universally quantified type; the System F equivalent of a type scheme, and the type-level equivalent of a lambda term.")))])}))),
-      (Core.Name "hydra.core.Function", (Core.TypeAnnotated (Core.AnnotatedType {
-        Core.annotatedTypeBody = (Core.TypeUnion [
-          Core.FieldType {
-            Core.fieldTypeName = (Core.Name "elimination"),
-            Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
-              Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.core.Elimination")),
-              Core.annotatedTypeAnnotation = (M.fromList [
-                (Core.Name "description", (Core.TermLiteral (Core.LiteralString "An elimination for any of a few term variants")))])}))},
-          Core.FieldType {
-            Core.fieldTypeName = (Core.Name "lambda"),
-            Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
-              Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.core.Lambda")),
-              Core.annotatedTypeAnnotation = (M.fromList [
-                (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A function abstraction (lambda)")))])}))}]),
-        Core.annotatedTypeAnnotation = (M.fromList [
-          (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A function")))])}))),
       (Core.Name "hydra.core.FunctionType", (Core.TypeAnnotated (Core.AnnotatedType {
         Core.annotatedTypeBody = (Core.TypeRecord [
           Core.FieldType {
@@ -926,6 +888,12 @@ typesByName =
               Core.annotatedTypeAnnotation = (M.fromList [
                 (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A function application")))])}))},
           Core.FieldType {
+            Core.fieldTypeName = (Core.Name "cases"),
+            Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+              Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.core.CaseStatement")),
+              Core.annotatedTypeAnnotation = (M.fromList [
+                (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A union elimination; a case statement")))])}))},
+          Core.FieldType {
             Core.fieldTypeName = (Core.Name "either"),
             Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
               Core.annotatedTypeBody = (Core.TypeEither (Core.EitherType {
@@ -934,11 +902,11 @@ typesByName =
               Core.annotatedTypeAnnotation = (M.fromList [
                 (Core.Name "description", (Core.TermLiteral (Core.LiteralString "An either value")))])}))},
           Core.FieldType {
-            Core.fieldTypeName = (Core.Name "function"),
+            Core.fieldTypeName = (Core.Name "lambda"),
             Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
-              Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.core.Function")),
+              Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.core.Lambda")),
               Core.annotatedTypeAnnotation = (M.fromList [
-                (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A function term")))])}))},
+                (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A function abstraction (lambda)")))])}))},
           Core.FieldType {
             Core.fieldTypeName = (Core.Name "let"),
             Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
@@ -980,6 +948,12 @@ typesByName =
               Core.annotatedTypeAnnotation = (M.fromList [
                 (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A pair (2-tuple)")))])}))},
           Core.FieldType {
+            Core.fieldTypeName = (Core.Name "project"),
+            Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+              Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.core.Projection")),
+              Core.annotatedTypeAnnotation = (M.fromList [
+                (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A record elimination; a projection")))])}))},
+          Core.FieldType {
             Core.fieldTypeName = (Core.Name "record"),
             Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
               Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.core.Record")),
@@ -1015,6 +989,12 @@ typesByName =
               Core.annotatedTypeBody = Core.TypeUnit,
               Core.annotatedTypeAnnotation = (M.fromList [
                 (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A unit value; a term with no value")))])}))},
+          Core.FieldType {
+            Core.fieldTypeName = (Core.Name "unwrap"),
+            Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+              Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.core.Name")),
+              Core.annotatedTypeAnnotation = (M.fromList [
+                (Core.Name "description", (Core.TermLiteral (Core.LiteralString "An unwrap elimination; the inverse of a wrap")))])}))},
           Core.FieldType {
             Core.fieldTypeName = (Core.Name "variable"),
             Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {

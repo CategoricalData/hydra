@@ -26,17 +26,17 @@ cppEnvironment namespaces boundTypeVariables =
 cppEnvironmentBoundTypeVariables :: Phantoms.TTerm Environment.CppEnvironment -> Phantoms.TTerm ([Core.Name], (M.Map Core.Name String))
 cppEnvironmentBoundTypeVariables x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cpp.environment.CppEnvironment"),
-        Core.projectionField = (Core.Name "boundTypeVariables")})))),
+        Core.projectionField = (Core.Name "boundTypeVariables")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 cppEnvironmentNamespaces :: Phantoms.TTerm Environment.CppEnvironment -> Phantoms.TTerm (Packaging.Namespaces String)
 cppEnvironmentNamespaces x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.cpp.environment.CppEnvironment"),
-        Core.projectionField = (Core.Name "namespaces")})))),
+        Core.projectionField = (Core.Name "namespaces")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 cppEnvironmentWithBoundTypeVariables :: Phantoms.TTerm Environment.CppEnvironment -> Phantoms.TTerm ([Core.Name], (M.Map Core.Name String)) -> Phantoms.TTerm Environment.CppEnvironment
@@ -47,9 +47,9 @@ cppEnvironmentWithBoundTypeVariables original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "namespaces"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cpp.environment.CppEnvironment"),
-              Core.projectionField = (Core.Name "namespaces")})))),
+              Core.projectionField = (Core.Name "namespaces")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "boundTypeVariables"),
@@ -66,7 +66,7 @@ cppEnvironmentWithNamespaces original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "boundTypeVariables"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.cpp.environment.CppEnvironment"),
-              Core.projectionField = (Core.Name "boundTypeVariables")})))),
+              Core.projectionField = (Core.Name "boundTypeVariables")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))

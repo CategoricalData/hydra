@@ -192,29 +192,15 @@ def is_trivial_term(t: hydra.core.Term):
             arg = app.argument
             def _hoist_arg_body_1(v1):
                 match v1:
-                    case hydra.core.EliminationRecord():
+                    case hydra.core.TermProject():
                         return is_trivial_term(arg)
 
-                    case hydra.core.EliminationWrap():
+                    case hydra.core.TermUnwrap():
                         return is_trivial_term(arg)
 
                     case _:
                         return False
-            def _hoist_arg_body_2(v1):
-                match v1:
-                    case hydra.core.FunctionElimination(value=e):
-                        return _hoist_arg_body_1(e)
-
-                    case _:
-                        return False
-            def _hoist_arg_body_3(v1):
-                match v1:
-                    case hydra.core.TermFunction(value=f):
-                        return _hoist_arg_body_2(f)
-
-                    case _:
-                        return False
-            return _hoist_arg_body_3(fun)
+            return _hoist_arg_body_1(fun)
 
         case hydra.core.TermMaybe(value=opt):
             return hydra.lib.maybes.maybe((lambda : True), (lambda inner: is_trivial_term(inner)), opt)

@@ -193,24 +193,21 @@ analyzeFunctionTermWith_gather = define "analyzeFunctionTermWith_gather" $
   "argMode" ~> "gEnv" ~> "tparams" ~> "args" ~> "bindings" ~> "doms" ~> "tapps" ~> "t" ~>
   cases _Term (Strip.deannotateTerm @@ var "t")
     (Just $ analyzeFunctionTermWith_finish @@ var "cx" @@ var "getTC" @@ var "gEnv" @@ var "tparams" @@ var "args" @@ var "bindings" @@ var "doms" @@ var "tapps" @@ var "t") [
-    _Term_function>>: "f" ~>
-      cases _Function (var "f")
-        (Just $ analyzeFunctionTermWith_finish @@ var "cx" @@ var "getTC" @@ var "gEnv" @@ var "tparams" @@ var "args" @@ var "bindings" @@ var "doms" @@ var "tapps" @@ var "t") [
-        _Function_lambda>>: "lam" ~>
-          Logic.ifElse (var "argMode")
-            ("v" <~ Core.lambdaParameter (var "lam") $
-             "dom" <~ Maybes.maybe (Core.typeVariable (Core.name (string "_"))) identity (Core.lambdaDomain (var "lam")) $
-             "body" <~ Core.lambdaBody (var "lam") $
-             "newEnv" <~ (var "setTC" @@ (Scoping.extendGraphForLambda @@ (var "getTC" @@ var "gEnv") @@ var "lam") @@ var "gEnv") $
-             analyzeFunctionTermWith_gather @@ var "cx" @@ var "forBinding" @@ var "getTC" @@ var "setTC"
-               @@ var "argMode" @@ var "newEnv"
-               @@ var "tparams"
-               @@ (Lists.cons (var "v") (var "args"))
-               @@ var "bindings"
-               @@ (Lists.cons (var "dom") (var "doms"))
-               @@ var "tapps"
-               @@ var "body")
-            (analyzeFunctionTermWith_finish @@ var "cx" @@ var "getTC" @@ var "gEnv" @@ var "tparams" @@ var "args" @@ var "bindings" @@ var "doms" @@ var "tapps" @@ var "t")],
+    _Term_lambda>>: "lam" ~>
+      Logic.ifElse (var "argMode")
+        ("v" <~ Core.lambdaParameter (var "lam") $
+         "dom" <~ Maybes.maybe (Core.typeVariable (Core.name (string "_"))) identity (Core.lambdaDomain (var "lam")) $
+         "body" <~ Core.lambdaBody (var "lam") $
+         "newEnv" <~ (var "setTC" @@ (Scoping.extendGraphForLambda @@ (var "getTC" @@ var "gEnv") @@ var "lam") @@ var "gEnv") $
+         analyzeFunctionTermWith_gather @@ var "cx" @@ var "forBinding" @@ var "getTC" @@ var "setTC"
+           @@ var "argMode" @@ var "newEnv"
+           @@ var "tparams"
+           @@ (Lists.cons (var "v") (var "args"))
+           @@ var "bindings"
+           @@ (Lists.cons (var "dom") (var "doms"))
+           @@ var "tapps"
+           @@ var "body")
+        (analyzeFunctionTermWith_finish @@ var "cx" @@ var "getTC" @@ var "gEnv" @@ var "tparams" @@ var "args" @@ var "bindings" @@ var "doms" @@ var "tapps" @@ var "t"),
     _Term_let>>: "lt" ~>
       "newBindings" <~ Core.letBindings (var "lt") $
       "body" <~ Core.letBody (var "lt") $
@@ -362,19 +359,10 @@ isSimpleAssignment = define "isSimpleAssignment" $
       "baseTerm" <~ Pairs.first (gatherArgs @@ var "term" @@ list ([] :: [TTerm Term])) $
       cases _Term (var "baseTerm")
         (Just $ boolean True) [
-        _Term_function>>: "f" ~>
-          cases _Function (var "f")
-            (Just $ boolean True) [
-            _Function_elimination>>: "elim" ~>
-              cases _Elimination (var "elim")
-                (Just $ boolean True) [
-                _Elimination_union>>: constant (boolean False)]]]) [
+        _Term_cases>>: constant (boolean False)]) [
     _Term_annotated>>: "at" ~>
       isSimpleAssignment @@ (Core.annotatedTermBody $ var "at"),
-    _Term_function>>: "f" ~>
-      cases _Function (var "f")
-        (Just $ boolean True) [
-        _Function_lambda>>: constant (boolean False)],
+    _Term_lambda>>: constant (boolean False),
     _Term_let>>: constant (boolean False),
     _Term_typeLambda>>: constant (boolean False),
     _Term_typeApplication>>: "ta" ~>
@@ -416,12 +404,10 @@ isTailRecursiveInTailPosition = define "isTailRecursiveInTailPosition" $
                       @@ ("found" ~> "t" ~>
                         Logic.or (var "found")
                           (cases _Term (var "t") (Just false) [
-                            _Term_function>>: "f2" ~>
-                              cases _Function (var "f2") (Just false) [
-                                _Function_lambda>>: "lam" ~>
-                                  -- Any lambda in an argument disqualifies from TCO
-                                  "ignore" <~ (Core.lambdaBody $ var "lam") $
-                                  true]]))
+                            _Term_lambda>>: "lam" ~>
+                              -- Any lambda in an argument disqualifies from TCO
+                              "ignore" <~ (Core.lambdaBody $ var "lam") $
+                              true]))
                       @@ false
                       @@ var "arg"))
                 true
@@ -429,41 +415,32 @@ isTailRecursiveInTailPosition = define "isTailRecursiveInTailPosition" $
                Logic.and (var "argsNoFunc") (var "argsNoLambda"))
               -- Not a self-call: funcName must not appear anywhere in the term
               (Variables.isFreeVariableInTerm @@ var "funcName" @@ var "term"),
-          -- Function: check for case statement (union elimination)
-          _Term_function>>: "f" ~>
-            cases _Function (var "f") (Just $
-              Variables.isFreeVariableInTerm @@ var "funcName" @@ var "term") [
-              _Function_elimination>>: "e" ~>
-                cases _Elimination (var "e") (Just $
-                  Variables.isFreeVariableInTerm @@ var "funcName" @@ var "term") [
-                  _Elimination_union>>: "cs" ~>
-                    "cases_" <~ (Core.caseStatementCases $ var "cs") $
-                    "dflt" <~ (Core.caseStatementDefault $ var "cs") $
-                    -- All case branches must have funcName only in tail position
-                    "branchesOk" <~ (Lists.foldl
-                      ("ok" ~> "field" ~>
-                        Logic.and (var "ok")
-                          (isTailRecursiveInTailPosition @@ var "funcName" @@ Core.fieldTerm (var "field")))
-                      true
-                      (var "cases_")) $
-                    -- Default branch (if present) must also be tail-recursive
-                    "dfltOk" <~ (Maybes.maybe true
-                      ("d" ~> isTailRecursiveInTailPosition @@ var "funcName" @@ var "d")
-                      (var "dflt")) $
-                    -- Arguments to the case statement must NOT contain funcName
-                    "argsOk" <~ (Lists.foldl
-                      ("ok" ~> "arg" ~>
-                        Logic.and (var "ok")
-                          (Variables.isFreeVariableInTerm @@ var "funcName" @@ var "arg"))
-                      true
-                      (var "gatherArgs")) $
-                    Logic.and (Logic.and (var "branchesOk") (var "dfltOk")) (var "argsOk")]]],
+          -- Cases: case statement (union elimination)
+          _Term_cases>>: "cs" ~>
+            "cases_" <~ (Core.caseStatementCases $ var "cs") $
+            "dflt" <~ (Core.caseStatementDefault $ var "cs") $
+            -- All case branches must have funcName only in tail position
+            "branchesOk" <~ (Lists.foldl
+              ("ok" ~> "field" ~>
+                Logic.and (var "ok")
+                  (isTailRecursiveInTailPosition @@ var "funcName" @@ Core.fieldTerm (var "field")))
+              true
+              (var "cases_")) $
+            -- Default branch (if present) must also be tail-recursive
+            "dfltOk" <~ (Maybes.maybe true
+              ("d" ~> isTailRecursiveInTailPosition @@ var "funcName" @@ var "d")
+              (var "dflt")) $
+            -- Arguments to the case statement must NOT contain funcName
+            "argsOk" <~ (Lists.foldl
+              ("ok" ~> "arg" ~>
+                Logic.and (var "ok")
+                  (Variables.isFreeVariableInTerm @@ var "funcName" @@ var "arg"))
+              true
+              (var "gatherArgs")) $
+            Logic.and (Logic.and (var "branchesOk") (var "dfltOk")) (var "argsOk")],
       -- Lambda: tail position is the body
-      _Term_function>>: "f" ~>
-        cases _Function (var "f") (Just $
-          Variables.isFreeVariableInTerm @@ var "funcName" @@ var "term") [
-          _Function_lambda>>: "lam" ~>
-            isTailRecursiveInTailPosition @@ var "funcName" @@ (Core.lambdaBody $ var "lam")],
+      _Term_lambda>>: "lam" ~>
+        isTailRecursiveInTailPosition @@ var "funcName" @@ (Core.lambdaBody $ var "lam"),
       -- Let: tail position is the body; bindings must not contain funcName
       _Term_let>>: "lt" ~>
         "bindingsOk" <~ (Lists.foldl

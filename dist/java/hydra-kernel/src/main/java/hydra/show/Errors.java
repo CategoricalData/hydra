@@ -89,8 +89,23 @@ public interface Errors {
       }
 
       @Override
+      public String visit(hydra.errors.Error_.Extraction ignored) {
+        return "extraction error";
+      }
+
+      @Override
+      public String visit(hydra.errors.Error_.Inference ignored) {
+        return "inference error";
+      }
+
+      @Override
       public String visit(hydra.errors.Error_.Other v1) {
         return hydra.show.Errors.otherError((v1).value);
+      }
+
+      @Override
+      public String visit(hydra.errors.Error_.Resolution ignored) {
+        return "resolution error";
       }
 
       @Override

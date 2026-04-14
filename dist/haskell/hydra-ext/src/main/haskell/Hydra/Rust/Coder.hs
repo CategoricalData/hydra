@@ -29,59 +29,6 @@ import qualified Hydra.Variables as Variables
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Map as M
 
-encodeElimination :: t0 -> t1 -> Core.Elimination -> Maybe Core.Term -> Either Errors.Error Syntax.Expression
-encodeElimination cx g elim marg =
-    case elim of
-      Core.EliminationRecord v0 ->
-        let fname = Formatting.convertCaseCamelToLowerSnake (Core.unName (Core.projectionField v0))
-        in (Maybes.cases marg (Right (rustClosure [
-          "v"] (Syntax.ExpressionFieldAccess (Syntax.FieldAccessExpr {
-          Syntax.fieldAccessExprObject = (rustExprPath "v"),
-          Syntax.fieldAccessExprField = fname})))) (\arg -> Eithers.bind (encodeTerm cx g arg) (\sarg -> Right (Syntax.ExpressionFieldAccess (Syntax.FieldAccessExpr {
-          Syntax.fieldAccessExprObject = sarg,
-          Syntax.fieldAccessExprField = fname})))))
-      Core.EliminationUnion v0 ->
-        let tname = Formatting.capitalize (Names.localNameOf (Core.caseStatementTypeName v0))
-            caseFields = Core.caseStatementCases v0
-            defCase = Core.caseStatementDefault v0
-        in (Eithers.bind (Eithers.mapList (\cf ->
-          let cfname = Formatting.capitalize (Core.unName (Core.fieldName cf))
-              cfterm = Core.fieldTerm cf
-          in (Eithers.bind (encodeTerm cx g (Core.TermApplication (Core.Application {
-            Core.applicationFunction = cfterm,
-            Core.applicationArgument = (Core.TermVariable (Core.Name "v"))}))) (\armBody -> Right (Syntax.MatchArm {
-            Syntax.matchArmPattern = (Syntax.PatternTupleStruct (Syntax.TupleStructPattern {
-              Syntax.tupleStructPatternPath = Syntax.ExprPath {
-                Syntax.exprPathGlobal = False,
-                Syntax.exprPathSegments = [
-                  Syntax.PathSegment {
-                    Syntax.pathSegmentName = (Strings.cat2 (Strings.cat2 tname "::") cfname),
-                    Syntax.pathSegmentArguments = Syntax.GenericArgumentsNone}]},
-              Syntax.tupleStructPatternElements = [
-                Syntax.PatternIdentifier (Syntax.IdentifierPattern {
-                  Syntax.identifierPatternName = "v",
-                  Syntax.identifierPatternMutable = False,
-                  Syntax.identifierPatternAtPattern = Nothing})]})),
-            Syntax.matchArmGuard = Nothing,
-            Syntax.matchArmBody = armBody})))) caseFields) (\arms -> Eithers.bind (Maybes.cases defCase (Right arms) (\dt -> Eithers.bind (encodeTerm cx g (Core.TermApplication (Core.Application {
-          Core.applicationFunction = dt,
-          Core.applicationArgument = (Core.TermVariable (Core.Name "v"))}))) (\defBody -> Right (Lists.concat2 arms [
-          Syntax.MatchArm {
-            Syntax.matchArmPattern = Syntax.PatternWildcard,
-            Syntax.matchArmGuard = Nothing,
-            Syntax.matchArmBody = defBody}])))) (\allArms -> Maybes.cases marg (Right (rustClosure [
-          "v"] (Syntax.ExpressionMatch (Syntax.MatchExpr {
-          Syntax.matchExprScrutinee = (rustExprPath "v"),
-          Syntax.matchExprArms = allArms})))) (\arg -> Eithers.bind (encodeTerm cx g arg) (\sarg -> Right (Syntax.ExpressionMatch (Syntax.MatchExpr {
-          Syntax.matchExprScrutinee = sarg,
-          Syntax.matchExprArms = allArms})))))))
-      Core.EliminationWrap _ -> Maybes.cases marg (Right (rustClosure [
-        "v"] (Syntax.ExpressionTupleIndex (Syntax.TupleIndexExpr {
-        Syntax.tupleIndexExprTuple = (rustExprPath "v"),
-        Syntax.tupleIndexExprIndex = 0})))) (\arg -> Eithers.bind (encodeTerm cx g arg) (\sarg -> Right (Syntax.ExpressionTupleIndex (Syntax.TupleIndexExpr {
-        Syntax.tupleIndexExprTuple = sarg,
-        Syntax.tupleIndexExprIndex = 0}))))
-
 encodeEnumVariant :: t0 -> t1 -> Core.FieldType -> Either Errors.Error Syntax.EnumVariant
 encodeEnumVariant cx g ft =
 
@@ -106,15 +53,6 @@ encodeEnumVariant cx g ft =
           Syntax.enumVariantBody = (Syntax.EnumVariantBodyTuple [
             sftyp]),
           Syntax.enumVariantDoc = Nothing}))))
-
-encodeFunction :: t0 -> t1 -> Core.Function -> Either Errors.Error Syntax.Expression
-encodeFunction cx g fun =
-    case fun of
-      Core.FunctionLambda v0 ->
-        let param = Formatting.convertCaseCamelToLowerSnake (Core.unName (Core.lambdaParameter v0))
-        in (Eithers.bind (encodeTerm cx g (Core.lambdaBody v0)) (\body -> Right (rustClosure [
-          param] body)))
-      Core.FunctionElimination v0 -> encodeElimination cx g v0 Nothing
 
 encodeLiteral :: Core.Literal -> Syntax.Expression
 encodeLiteral lit =
@@ -183,6 +121,17 @@ encodeLiteralType lt =
         Core.IntegerTypeUint64 -> rustPath "u64"
       Core.LiteralTypeString -> rustPath "String"
 
+encodeProjectionElim :: t0 -> t1 -> Core.Projection -> Maybe Core.Term -> Either Errors.Error Syntax.Expression
+encodeProjectionElim cx g proj marg =
+
+      let fname = Formatting.convertCaseCamelToLowerSnake (Core.unName (Core.projectionField proj))
+      in (Maybes.cases marg (Right (rustClosure [
+        "v"] (Syntax.ExpressionFieldAccess (Syntax.FieldAccessExpr {
+        Syntax.fieldAccessExprObject = (rustExprPath "v"),
+        Syntax.fieldAccessExprField = fname})))) (\arg -> Eithers.bind (encodeTerm cx g arg) (\sarg -> Right (Syntax.ExpressionFieldAccess (Syntax.FieldAccessExpr {
+        Syntax.fieldAccessExprObject = sarg,
+        Syntax.fieldAccessExprField = fname})))))
+
 encodeStructField :: t0 -> t1 -> Core.FieldType -> Either Errors.Error Syntax.StructField
 encodeStructField cx g ft =
 
@@ -203,7 +152,13 @@ encodeTerm cx g term =
       Core.TermEither v0 -> Eithers.either (\l -> Eithers.bind (encodeTerm cx g l) (\sl -> Right (rustCall (rustExprPath "Left") [
         sl]))) (\r -> Eithers.bind (encodeTerm cx g r) (\sr -> Right (rustCall (rustExprPath "Right") [
         sr]))) v0
-      Core.TermFunction v0 -> encodeFunction cx g v0
+      Core.TermLambda v0 ->
+        let param = Formatting.convertCaseCamelToLowerSnake (Core.unName (Core.lambdaParameter v0))
+        in (Eithers.bind (encodeTerm cx g (Core.lambdaBody v0)) (\body -> Right (rustClosure [
+          param] body)))
+      Core.TermProject v0 -> encodeProjectionElim cx g v0 Nothing
+      Core.TermCases v0 -> encodeUnionElim cx g v0 Nothing
+      Core.TermUnwrap v0 -> encodeUnwrapElim cx g v0 Nothing
       Core.TermLet v0 ->
         let bindings = Core.letBindings v0
             body = Core.letBody v0
@@ -370,6 +325,53 @@ encodeTypeDefinition cx g tdef =
         Syntax.itemWithCommentsDoc = Nothing,
         Syntax.itemWithCommentsVisibility = Syntax.VisibilityPublic,
         Syntax.itemWithCommentsItem = item})))
+
+encodeUnionElim :: t0 -> t1 -> Core.CaseStatement -> Maybe Core.Term -> Either Errors.Error Syntax.Expression
+encodeUnionElim cx g cs marg =
+
+      let tname = Formatting.capitalize (Names.localNameOf (Core.caseStatementTypeName cs))
+          caseFields = Core.caseStatementCases cs
+          defCase = Core.caseStatementDefault cs
+      in (Eithers.bind (Eithers.mapList (\cf ->
+        let cfname = Formatting.capitalize (Core.unName (Core.fieldName cf))
+            cfterm = Core.fieldTerm cf
+        in (Eithers.bind (encodeTerm cx g (Core.TermApplication (Core.Application {
+          Core.applicationFunction = cfterm,
+          Core.applicationArgument = (Core.TermVariable (Core.Name "v"))}))) (\armBody -> Right (Syntax.MatchArm {
+          Syntax.matchArmPattern = (Syntax.PatternTupleStruct (Syntax.TupleStructPattern {
+            Syntax.tupleStructPatternPath = Syntax.ExprPath {
+              Syntax.exprPathGlobal = False,
+              Syntax.exprPathSegments = [
+                Syntax.PathSegment {
+                  Syntax.pathSegmentName = (Strings.cat2 (Strings.cat2 tname "::") cfname),
+                  Syntax.pathSegmentArguments = Syntax.GenericArgumentsNone}]},
+            Syntax.tupleStructPatternElements = [
+              Syntax.PatternIdentifier (Syntax.IdentifierPattern {
+                Syntax.identifierPatternName = "v",
+                Syntax.identifierPatternMutable = False,
+                Syntax.identifierPatternAtPattern = Nothing})]})),
+          Syntax.matchArmGuard = Nothing,
+          Syntax.matchArmBody = armBody})))) caseFields) (\arms -> Eithers.bind (Maybes.cases defCase (Right arms) (\dt -> Eithers.bind (encodeTerm cx g (Core.TermApplication (Core.Application {
+        Core.applicationFunction = dt,
+        Core.applicationArgument = (Core.TermVariable (Core.Name "v"))}))) (\defBody -> Right (Lists.concat2 arms [
+        Syntax.MatchArm {
+          Syntax.matchArmPattern = Syntax.PatternWildcard,
+          Syntax.matchArmGuard = Nothing,
+          Syntax.matchArmBody = defBody}])))) (\allArms -> Maybes.cases marg (Right (rustClosure [
+        "v"] (Syntax.ExpressionMatch (Syntax.MatchExpr {
+        Syntax.matchExprScrutinee = (rustExprPath "v"),
+        Syntax.matchExprArms = allArms})))) (\arg -> Eithers.bind (encodeTerm cx g arg) (\sarg -> Right (Syntax.ExpressionMatch (Syntax.MatchExpr {
+        Syntax.matchExprScrutinee = sarg,
+        Syntax.matchExprArms = allArms})))))))
+
+encodeUnwrapElim :: t0 -> t1 -> Core.Name -> Maybe Core.Term -> Either Errors.Error Syntax.Expression
+encodeUnwrapElim cx g name marg =
+    Maybes.cases marg (Right (rustClosure [
+      "v"] (Syntax.ExpressionTupleIndex (Syntax.TupleIndexExpr {
+      Syntax.tupleIndexExprTuple = (rustExprPath "v"),
+      Syntax.tupleIndexExprIndex = 0})))) (\arg -> Eithers.bind (encodeTerm cx g arg) (\sarg -> Right (Syntax.ExpressionTupleIndex (Syntax.TupleIndexExpr {
+      Syntax.tupleIndexExprTuple = sarg,
+      Syntax.tupleIndexExprIndex = 0}))))
 
 moduleToRust :: Packaging.Module -> [Packaging.Definition] -> t0 -> t1 -> Either Errors.Error (M.Map String String)
 moduleToRust mod defs cx g =

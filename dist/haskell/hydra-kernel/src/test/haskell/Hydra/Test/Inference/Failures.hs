@@ -9,7 +9,7 @@ import qualified Hydra.Inference as Inference
 import qualified Hydra.Lib.Eithers as Eithers
 import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Strings as Strings
-import qualified Hydra.Show.Core as ShowCore
+import qualified Hydra.Show.Core as Core_
 import qualified Hydra.Test.TestGraph as TestGraph
 import qualified Hydra.Testing as Testing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
@@ -50,7 +50,7 @@ arityMismatchTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#1",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermApplication (Core.Application {
                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.math.add")),
@@ -63,16 +63,16 @@ arityMismatchTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#2",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermApplication (Core.Application {
-                      Core.applicationFunction = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.applicationFunction = (Core.TermLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.Name "x"),
                         Core.lambdaDomain = Nothing,
-                        Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                        Core.lambdaBody = (Core.TermLambda (Core.Lambda {
                           Core.lambdaParameter = (Core.Name "y"),
                           Core.lambdaDomain = Nothing,
-                          Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})))}))),
+                          Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))})),
                       Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
                     Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "foo"))})),
                   Core.applicationArgument = (Core.TermLiteral (Core.LiteralBoolean True))})))),
@@ -82,7 +82,7 @@ arityMismatchTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#3",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermApplication (Core.Application {
                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.cons")),
@@ -101,7 +101,7 @@ arityMismatchTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#1",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.strings.length")),
                     Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
@@ -112,7 +112,7 @@ arityMismatchTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#2",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.logic.not")),
                     Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
@@ -123,13 +123,13 @@ arityMismatchTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#3",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermApplication (Core.Application {
-                      Core.applicationFunction = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.applicationFunction = (Core.TermLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.Name "x"),
                         Core.lambdaDomain = Nothing,
-                        Core.lambdaBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}))),
+                        Core.lambdaBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
                       Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "arg"))})),
                     Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 137)))})),
                   Core.applicationArgument = (Core.TermLiteral (Core.LiteralBoolean True))})))),
@@ -152,37 +152,37 @@ complexConstraintFailureTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#1",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "f"),
-                      Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.bindingTerm = (Core.TermLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.Name "x"),
                         Core.lambdaDomain = Nothing,
-                        Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                        Core.lambdaBody = (Core.TermLambda (Core.Lambda {
                           Core.lambdaParameter = (Core.Name "y"),
                           Core.lambdaDomain = Nothing,
-                          Core.lambdaBody = (Core.TermPair (Core.TermVariable (Core.Name "x"), (Core.TermVariable (Core.Name "y"))))})))}))),
+                          Core.lambdaBody = (Core.TermPair (Core.TermVariable (Core.Name "x"), (Core.TermVariable (Core.Name "y"))))}))})),
                       Core.bindingType = Nothing},
                     Core.Binding {
                       Core.bindingName = (Core.Name "g"),
-                      Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.bindingTerm = (Core.TermLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.Name "a"),
                         Core.lambdaDomain = Nothing,
                         Core.lambdaBody = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermApplication (Core.Application {
                             Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
                             Core.applicationArgument = (Core.TermVariable (Core.Name "a"))})),
-                          Core.applicationArgument = (Core.TermVariable (Core.Name "a"))}))}))),
+                          Core.applicationArgument = (Core.TermVariable (Core.Name "a"))}))})),
                       Core.bindingType = Nothing},
                     Core.Binding {
                       Core.bindingName = (Core.Name "h"),
                       Core.bindingTerm = (Core.TermApplication (Core.Application {
                         Core.applicationFunction = (Core.TermVariable (Core.Name "g")),
-                        Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                        Core.applicationArgument = (Core.TermLambda (Core.Lambda {
                           Core.lambdaParameter = (Core.Name "z"),
                           Core.lambdaDomain = Nothing,
-                          Core.lambdaBody = (Core.TermVariable (Core.Name "z"))})))})),
+                          Core.lambdaBody = (Core.TermVariable (Core.Name "z"))}))})),
                       Core.bindingType = Nothing}],
                   Core.letBody = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "h")),
@@ -193,30 +193,30 @@ complexConstraintFailureTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#2",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "weird"),
-                      Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.bindingTerm = (Core.TermLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.Name "f"),
                         Core.lambdaDomain = Nothing,
-                        Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                        Core.lambdaBody = (Core.TermLambda (Core.Lambda {
                           Core.lambdaParameter = (Core.Name "x"),
                           Core.lambdaDomain = Nothing,
                           Core.lambdaBody = (Core.TermApplication (Core.Application {
                             Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
                             Core.applicationArgument = (Core.TermApplication (Core.Application {
                               Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
-                              Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))})))}))),
+                              Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}))})),
                       Core.bindingType = Nothing},
                     Core.Binding {
                       Core.bindingName = (Core.Name "bad"),
                       Core.bindingTerm = (Core.TermApplication (Core.Application {
                         Core.applicationFunction = (Core.TermVariable (Core.Name "weird")),
-                        Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                        Core.applicationArgument = (Core.TermLambda (Core.Lambda {
                           Core.lambdaParameter = (Core.Name "y"),
                           Core.lambdaDomain = Nothing,
-                          Core.lambdaBody = (Core.TermPair (Core.TermVariable (Core.Name "y"), (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))))})))})),
+                          Core.lambdaBody = (Core.TermPair (Core.TermVariable (Core.Name "y"), (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))))}))})),
                       Core.bindingType = Nothing}],
                   Core.letBody = (Core.TermVariable (Core.Name "bad"))})))),
                 Testing.universalTestCaseExpected = "FAIL"})),
@@ -225,17 +225,17 @@ complexConstraintFailureTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#3",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "nested"),
-                      Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.bindingTerm = (Core.TermLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.Name "f"),
                         Core.lambdaDomain = Nothing,
-                        Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                        Core.lambdaBody = (Core.TermLambda (Core.Lambda {
                           Core.lambdaParameter = (Core.Name "g"),
                           Core.lambdaDomain = Nothing,
-                          Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                          Core.lambdaBody = (Core.TermLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "x"),
                             Core.lambdaDomain = Nothing,
                             Core.lambdaBody = (Core.TermApplication (Core.Application {
@@ -246,29 +246,29 @@ complexConstraintFailureTests =
                                   Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
                                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermVariable (Core.Name "g")),
-                                    Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}))}))})))})))}))),
+                                    Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}))}))}))}))})),
                       Core.bindingType = Nothing},
                     Core.Binding {
                       Core.bindingName = (Core.Name "int_f"),
-                      Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.bindingTerm = (Core.TermLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.Name "n"),
                         Core.lambdaDomain = Nothing,
                         Core.lambdaBody = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermApplication (Core.Application {
                             Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.math.add")),
                             Core.applicationArgument = (Core.TermVariable (Core.Name "n"))})),
-                          Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))}))}))),
+                          Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))}))})),
                       Core.bindingType = Nothing},
                     Core.Binding {
                       Core.bindingName = (Core.Name "str_g"),
-                      Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.bindingTerm = (Core.TermLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.Name "s"),
                         Core.lambdaDomain = Nothing,
                         Core.lambdaBody = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.strings.cat")),
                           Core.applicationArgument = (Core.TermList [
                             Core.TermVariable (Core.Name "s"),
-                            (Core.TermLiteral (Core.LiteralString "!"))])}))}))),
+                            (Core.TermLiteral (Core.LiteralString "!"))])}))})),
                       Core.bindingType = Nothing},
                     Core.Binding {
                       Core.bindingName = (Core.Name "bad"),
@@ -290,14 +290,14 @@ complexConstraintFailureTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#1",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "triple"),
-                      Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.bindingTerm = (Core.TermLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.Name "f"),
                         Core.lambdaDomain = Nothing,
-                        Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                        Core.lambdaBody = (Core.TermLambda (Core.Lambda {
                           Core.lambdaParameter = (Core.Name "x"),
                           Core.lambdaDomain = Nothing,
                           Core.lambdaBody = (Core.TermApplication (Core.Application {
@@ -306,29 +306,29 @@ complexConstraintFailureTests =
                               Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
                               Core.applicationArgument = (Core.TermApplication (Core.Application {
                                 Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
-                                Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}))})))}))),
+                                Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}))}))})),
                       Core.bindingType = Nothing},
                     Core.Binding {
                       Core.bindingName = (Core.Name "increment"),
-                      Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.bindingTerm = (Core.TermLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.Name "n"),
                         Core.lambdaDomain = Nothing,
                         Core.lambdaBody = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermApplication (Core.Application {
                             Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.math.add")),
                             Core.applicationArgument = (Core.TermVariable (Core.Name "n"))})),
-                          Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))}))}))),
+                          Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))}))})),
                       Core.bindingType = Nothing},
                     Core.Binding {
                       Core.bindingName = (Core.Name "stringify"),
-                      Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.bindingTerm = (Core.TermLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.Name "s"),
                         Core.lambdaDomain = Nothing,
                         Core.lambdaBody = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.strings.cat")),
                           Core.applicationArgument = (Core.TermList [
                             Core.TermVariable (Core.Name "s"),
-                            (Core.TermLiteral (Core.LiteralString "!"))])}))}))),
+                            (Core.TermLiteral (Core.LiteralString "!"))])}))})),
                       Core.bindingType = Nothing},
                     Core.Binding {
                       Core.bindingName = (Core.Name "bad"),
@@ -345,41 +345,41 @@ complexConstraintFailureTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#2",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "compose"),
-                      Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.bindingTerm = (Core.TermLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.Name "f"),
                         Core.lambdaDomain = Nothing,
-                        Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                        Core.lambdaBody = (Core.TermLambda (Core.Lambda {
                           Core.lambdaParameter = (Core.Name "g"),
                           Core.lambdaDomain = Nothing,
-                          Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                          Core.lambdaBody = (Core.TermLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "x"),
                             Core.lambdaDomain = Nothing,
                             Core.lambdaBody = (Core.TermApplication (Core.Application {
                               Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
                               Core.applicationArgument = (Core.TermApplication (Core.Application {
                                 Core.applicationFunction = (Core.TermVariable (Core.Name "g")),
-                                Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))})))})))}))),
+                                Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}))}))})),
                       Core.bindingType = Nothing},
                     Core.Binding {
                       Core.bindingName = (Core.Name "reverse_compose"),
-                      Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.bindingTerm = (Core.TermLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.Name "g"),
                         Core.lambdaDomain = Nothing,
-                        Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                        Core.lambdaBody = (Core.TermLambda (Core.Lambda {
                           Core.lambdaParameter = (Core.Name "f"),
                           Core.lambdaDomain = Nothing,
-                          Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                          Core.lambdaBody = (Core.TermLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "x"),
                             Core.lambdaDomain = Nothing,
                             Core.lambdaBody = (Core.TermApplication (Core.Application {
                               Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
                               Core.applicationArgument = (Core.TermApplication (Core.Application {
                                 Core.applicationFunction = (Core.TermVariable (Core.Name "g")),
-                                Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))})))})))}))),
+                                Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}))}))})),
                       Core.bindingType = Nothing},
                     Core.Binding {
                       Core.bindingName = (Core.Name "bad"),
@@ -411,17 +411,17 @@ constraintSolverEdgeCaseTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#1",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "complex"),
-                      Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.bindingTerm = (Core.TermLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.Name "f"),
                         Core.lambdaDomain = Nothing,
-                        Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                        Core.lambdaBody = (Core.TermLambda (Core.Lambda {
                           Core.lambdaParameter = (Core.Name "g"),
                           Core.lambdaDomain = Nothing,
-                          Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                          Core.lambdaBody = (Core.TermLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "x"),
                             Core.lambdaDomain = Nothing,
                             Core.lambdaBody = (Core.TermApplication (Core.Application {
@@ -434,21 +434,21 @@ constraintSolverEdgeCaseTests =
                                 Core.applicationFunction = (Core.TermVariable (Core.Name "g")),
                                 Core.applicationArgument = (Core.TermApplication (Core.Application {
                                   Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
-                                  Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}))})))})))}))),
+                                  Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}))}))}))})),
                       Core.bindingType = Nothing},
                     Core.Binding {
                       Core.bindingName = (Core.Name "bad"),
                       Core.bindingTerm = (Core.TermApplication (Core.Application {
                         Core.applicationFunction = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermVariable (Core.Name "complex")),
-                          Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                          Core.applicationArgument = (Core.TermLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "a"),
                             Core.lambdaDomain = Nothing,
-                            Core.lambdaBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})))})),
-                        Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                            Core.lambdaBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}))})),
+                        Core.applicationArgument = (Core.TermLambda (Core.Lambda {
                           Core.lambdaParameter = (Core.Name "b"),
                           Core.lambdaDomain = Nothing,
-                          Core.lambdaBody = (Core.TermLiteral (Core.LiteralString "foo"))})))})),
+                          Core.lambdaBody = (Core.TermLiteral (Core.LiteralString "foo"))}))})),
                       Core.bindingType = Nothing}],
                   Core.letBody = (Core.TermVariable (Core.Name "bad"))})))),
                 Testing.universalTestCaseExpected = "FAIL"})),
@@ -462,27 +462,27 @@ constraintSolverEdgeCaseTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#1",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "fix"),
-                      Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.bindingTerm = (Core.TermLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.Name "f"),
                         Core.lambdaDomain = Nothing,
                         Core.lambdaBody = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
-                          Core.applicationArgument = (Core.TermVariable (Core.Name "f"))}))}))),
+                          Core.applicationArgument = (Core.TermVariable (Core.Name "f"))}))})),
                       Core.bindingType = Nothing},
                     Core.Binding {
                       Core.bindingName = (Core.Name "bad"),
                       Core.bindingTerm = (Core.TermApplication (Core.Application {
                         Core.applicationFunction = (Core.TermVariable (Core.Name "fix")),
-                        Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                        Core.applicationArgument = (Core.TermLambda (Core.Lambda {
                           Core.lambdaParameter = (Core.Name "x"),
                           Core.lambdaDomain = Nothing,
                           Core.lambdaBody = (Core.TermApplication (Core.Application {
                             Core.applicationFunction = (Core.TermVariable (Core.Name "x")),
-                            Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))})))})),
+                            Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))})),
                       Core.bindingType = Nothing}],
                   Core.letBody = (Core.TermVariable (Core.Name "bad"))})))),
                 Testing.universalTestCaseExpected = "FAIL"})),
@@ -491,44 +491,44 @@ constraintSolverEdgeCaseTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#2",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "y"),
-                      Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.bindingTerm = (Core.TermLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.Name "f"),
                         Core.lambdaDomain = Nothing,
                         Core.lambdaBody = (Core.TermApplication (Core.Application {
-                          Core.applicationFunction = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                          Core.applicationFunction = (Core.TermLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "x"),
                             Core.lambdaDomain = Nothing,
                             Core.lambdaBody = (Core.TermApplication (Core.Application {
                               Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
                               Core.applicationArgument = (Core.TermApplication (Core.Application {
                                 Core.applicationFunction = (Core.TermVariable (Core.Name "x")),
-                                Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}))),
-                          Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                                Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))})),
+                          Core.applicationArgument = (Core.TermLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "x"),
                             Core.lambdaDomain = Nothing,
                             Core.lambdaBody = (Core.TermApplication (Core.Application {
                               Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
                               Core.applicationArgument = (Core.TermApplication (Core.Application {
                                 Core.applicationFunction = (Core.TermVariable (Core.Name "x")),
-                                Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))})))}))}))),
+                                Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}))}))})),
                       Core.bindingType = Nothing},
                     Core.Binding {
                       Core.bindingName = (Core.Name "bad"),
                       Core.bindingTerm = (Core.TermApplication (Core.Application {
                         Core.applicationFunction = (Core.TermVariable (Core.Name "y")),
-                        Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                        Core.applicationArgument = (Core.TermLambda (Core.Lambda {
                           Core.lambdaParameter = (Core.Name "rec"),
                           Core.lambdaDomain = Nothing,
-                          Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                          Core.lambdaBody = (Core.TermLambda (Core.Lambda {
                             Core.lambdaParameter = (Core.Name "n"),
                             Core.lambdaDomain = Nothing,
                             Core.lambdaBody = (Core.TermApplication (Core.Application {
                               Core.applicationFunction = (Core.TermVariable (Core.Name "rec")),
-                              Core.applicationArgument = (Core.TermVariable (Core.Name "rec"))}))})))})))})),
+                              Core.applicationArgument = (Core.TermVariable (Core.Name "rec"))}))}))}))})),
                       Core.bindingType = Nothing}],
                   Core.letBody = (Core.TermVariable (Core.Name "bad"))})))),
                 Testing.universalTestCaseExpected = "FAIL"})),
@@ -537,16 +537,16 @@ constraintSolverEdgeCaseTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#3",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "omega"),
-                      Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.bindingTerm = (Core.TermLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.Name "x"),
                         Core.lambdaDomain = Nothing,
                         Core.lambdaBody = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermVariable (Core.Name "x")),
-                          Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))),
+                          Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))})),
                       Core.bindingType = Nothing},
                     Core.Binding {
                       Core.bindingName = (Core.Name "bad"),
@@ -566,40 +566,40 @@ constraintSolverEdgeCaseTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#1",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "a"),
-                      Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.bindingTerm = (Core.TermLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.Name "x"),
                         Core.lambdaDomain = Nothing,
                         Core.lambdaBody = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermApplication (Core.Application {
                             Core.applicationFunction = (Core.TermVariable (Core.Name "b")),
                             Core.applicationArgument = (Core.TermVariable (Core.Name "c"))})),
-                          Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))),
+                          Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))})),
                       Core.bindingType = Nothing},
                     Core.Binding {
                       Core.bindingName = (Core.Name "b"),
-                      Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.bindingTerm = (Core.TermLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.Name "y"),
                         Core.lambdaDomain = Nothing,
                         Core.lambdaBody = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermApplication (Core.Application {
                             Core.applicationFunction = (Core.TermVariable (Core.Name "c")),
                             Core.applicationArgument = (Core.TermVariable (Core.Name "a"))})),
-                          Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}))),
+                          Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))})),
                       Core.bindingType = Nothing},
                     Core.Binding {
                       Core.bindingName = (Core.Name "c"),
-                      Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.bindingTerm = (Core.TermLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.Name "z"),
                         Core.lambdaDomain = Nothing,
                         Core.lambdaBody = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermApplication (Core.Application {
                             Core.applicationFunction = (Core.TermVariable (Core.Name "a")),
                             Core.applicationArgument = (Core.TermVariable (Core.Name "b"))})),
-                          Core.applicationArgument = (Core.TermVariable (Core.Name "z"))}))}))),
+                          Core.applicationArgument = (Core.TermVariable (Core.Name "z"))}))})),
                       Core.bindingType = Nothing}],
                   Core.letBody = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "a")),
@@ -610,18 +610,18 @@ constraintSolverEdgeCaseTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#2",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "circular"),
-                      Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.bindingTerm = (Core.TermLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.Name "f"),
                         Core.lambdaDomain = Nothing,
                         Core.lambdaBody = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermApplication (Core.Application {
                             Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
                             Core.applicationArgument = (Core.TermVariable (Core.Name "circular"))})),
-                          Core.applicationArgument = (Core.TermVariable (Core.Name "f"))}))}))),
+                          Core.applicationArgument = (Core.TermVariable (Core.Name "f"))}))})),
                       Core.bindingType = Nothing}],
                   Core.letBody = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "circular")),
@@ -645,7 +645,7 @@ invalidApplicationTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#1",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
                   Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 137)))})))),
                 Testing.universalTestCaseExpected = "FAIL"})),
@@ -654,7 +654,7 @@ invalidApplicationTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#2",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermLiteral (Core.LiteralString "foo")),
                   Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})))),
                 Testing.universalTestCaseExpected = "FAIL"})),
@@ -663,7 +663,7 @@ invalidApplicationTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#3",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermLiteral (Core.LiteralBoolean True)),
                   Core.applicationArgument = (Core.TermLiteral (Core.LiteralBoolean False))})))),
                 Testing.universalTestCaseExpected = "FAIL"})),
@@ -672,7 +672,7 @@ invalidApplicationTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#4",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 3.14))),
                   Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})))),
                 Testing.universalTestCaseExpected = "FAIL"})),
@@ -686,7 +686,7 @@ invalidApplicationTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#1",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermList [
                     Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))]),
                   Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "bar"))})))),
@@ -696,7 +696,7 @@ invalidApplicationTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#2",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermPair (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)), (Core.TermLiteral (Core.LiteralString "foo")))),
                   Core.applicationArgument = (Core.TermLiteral (Core.LiteralBoolean True))})))),
                 Testing.universalTestCaseExpected = "FAIL"})),
@@ -705,7 +705,7 @@ invalidApplicationTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#3",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermList []),
                   Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})))),
                 Testing.universalTestCaseExpected = "FAIL"})),
@@ -714,7 +714,7 @@ invalidApplicationTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#4",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermPair (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)), (Core.TermPair (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)), (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3))))))),
                   Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "index"))})))),
                 Testing.universalTestCaseExpected = "FAIL"})),
@@ -728,7 +728,7 @@ invalidApplicationTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#1",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maps.empty")),
                   Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "foo"))})))),
                 Testing.universalTestCaseExpected = "FAIL"})),
@@ -737,7 +737,7 @@ invalidApplicationTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#2",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.sets.empty")),
                   Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})))),
                 Testing.universalTestCaseExpected = "FAIL"})),
@@ -746,7 +746,7 @@ invalidApplicationTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#3",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermMaybe Nothing),
                   Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "value"))})))),
                 Testing.universalTestCaseExpected = "FAIL"})),
@@ -755,7 +755,7 @@ invalidApplicationTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#4",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermList []),
                   Core.applicationArgument = (Core.TermLiteral (Core.LiteralBoolean True))})))),
                 Testing.universalTestCaseExpected = "FAIL"})),
@@ -777,7 +777,7 @@ letBindingMismatchTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#1",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "x"),
@@ -796,14 +796,14 @@ letBindingMismatchTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#2",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "f"),
-                      Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.bindingTerm = (Core.TermLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.Name "x"),
                         Core.lambdaDomain = Nothing,
-                        Core.lambdaBody = (Core.TermLiteral (Core.LiteralString "result"))}))),
+                        Core.lambdaBody = (Core.TermLiteral (Core.LiteralString "result"))})),
                       Core.bindingType = Nothing},
                     Core.Binding {
                       Core.bindingName = (Core.Name "g"),
@@ -820,7 +820,7 @@ letBindingMismatchTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#3",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "num"),
@@ -844,7 +844,7 @@ letBindingMismatchTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#1",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "list1"),
@@ -866,7 +866,7 @@ letBindingMismatchTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#2",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "nums"),
@@ -889,7 +889,7 @@ letBindingMismatchTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#3",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "pair1"),
@@ -917,7 +917,7 @@ letBindingMismatchTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#1",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "add"),
@@ -938,17 +938,17 @@ letBindingMismatchTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#2",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "f"),
-                      Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.bindingTerm = (Core.TermLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.Name "x"),
                         Core.lambdaDomain = Nothing,
-                        Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                        Core.lambdaBody = (Core.TermLambda (Core.Lambda {
                           Core.lambdaParameter = (Core.Name "y"),
                           Core.lambdaDomain = Nothing,
-                          Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})))}))),
+                          Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))})),
                       Core.bindingType = Nothing},
                     Core.Binding {
                       Core.bindingName = (Core.Name "g"),
@@ -984,18 +984,18 @@ occurCheckTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#1",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "g"),
-                      Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.bindingTerm = (Core.TermLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.Name "h"),
                         Core.lambdaDomain = Nothing,
                         Core.lambdaBody = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermApplication (Core.Application {
                             Core.applicationFunction = (Core.TermVariable (Core.Name "g")),
                             Core.applicationArgument = (Core.TermVariable (Core.Name "g"))})),
-                          Core.applicationArgument = (Core.TermVariable (Core.Name "h"))}))}))),
+                          Core.applicationArgument = (Core.TermVariable (Core.Name "h"))}))})),
                       Core.bindingType = Nothing}],
                   Core.letBody = (Core.TermVariable (Core.Name "g"))})))),
                 Testing.universalTestCaseExpected = "FAIL"})),
@@ -1009,25 +1009,25 @@ occurCheckTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#1",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "f"),
-                      Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.bindingTerm = (Core.TermLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.Name "x"),
                         Core.lambdaDomain = Nothing,
                         Core.lambdaBody = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermVariable (Core.Name "g")),
-                          Core.applicationArgument = (Core.TermVariable (Core.Name "f"))}))}))),
+                          Core.applicationArgument = (Core.TermVariable (Core.Name "f"))}))})),
                       Core.bindingType = Nothing},
                     Core.Binding {
                       Core.bindingName = (Core.Name "g"),
-                      Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.bindingTerm = (Core.TermLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.Name "y"),
                         Core.lambdaDomain = Nothing,
                         Core.lambdaBody = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
-                          Core.applicationArgument = (Core.TermVariable (Core.Name "g"))}))}))),
+                          Core.applicationArgument = (Core.TermVariable (Core.Name "g"))}))})),
                       Core.bindingType = Nothing}],
                   Core.letBody = (Core.TermVariable (Core.Name "f"))})))),
                 Testing.universalTestCaseExpected = "FAIL"})),
@@ -1036,27 +1036,27 @@ occurCheckTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#2",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "a"),
-                      Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.bindingTerm = (Core.TermLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.Name "x"),
                         Core.lambdaDomain = Nothing,
                         Core.lambdaBody = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermApplication (Core.Application {
                             Core.applicationFunction = (Core.TermVariable (Core.Name "b")),
                             Core.applicationArgument = (Core.TermVariable (Core.Name "a"))})),
-                          Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))),
+                          Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))})),
                       Core.bindingType = Nothing},
                     Core.Binding {
                       Core.bindingName = (Core.Name "b"),
-                      Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.bindingTerm = (Core.TermLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.Name "y"),
                         Core.lambdaDomain = Nothing,
                         Core.lambdaBody = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermVariable (Core.Name "a")),
-                          Core.applicationArgument = (Core.TermVariable (Core.Name "b"))}))}))),
+                          Core.applicationArgument = (Core.TermVariable (Core.Name "b"))}))})),
                       Core.bindingType = Nothing}],
                   Core.letBody = (Core.TermVariable (Core.Name "a"))})))),
                 Testing.universalTestCaseExpected = "FAIL"})),
@@ -1065,7 +1065,7 @@ occurCheckTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#3",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "cycle1"),
@@ -1075,12 +1075,12 @@ occurCheckTests =
                       Core.bindingType = Nothing},
                     Core.Binding {
                       Core.bindingName = (Core.Name "cycle2"),
-                      Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.bindingTerm = (Core.TermLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.Name "x"),
                         Core.lambdaDomain = Nothing,
                         Core.lambdaBody = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermVariable (Core.Name "cycle1")),
-                          Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))),
+                          Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))})),
                       Core.bindingType = Nothing}],
                   Core.letBody = (Core.TermVariable (Core.Name "cycle1"))})))),
                 Testing.universalTestCaseExpected = "FAIL"})),
@@ -1094,18 +1094,18 @@ occurCheckTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#1",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "omega"),
-                      Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.bindingTerm = (Core.TermLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.Name "x"),
                         Core.lambdaDomain = Nothing,
                         Core.lambdaBody = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermApplication (Core.Application {
                             Core.applicationFunction = (Core.TermVariable (Core.Name "x")),
                             Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
-                          Core.applicationArgument = (Core.TermVariable (Core.Name "omega"))}))}))),
+                          Core.applicationArgument = (Core.TermVariable (Core.Name "omega"))}))})),
                       Core.bindingType = Nothing}],
                   Core.letBody = (Core.TermVariable (Core.Name "omega"))})))),
                 Testing.universalTestCaseExpected = "FAIL"})),
@@ -1114,14 +1114,14 @@ occurCheckTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#2",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "loop"),
-                      Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.bindingTerm = (Core.TermLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.Name "x"),
                         Core.lambdaDomain = Nothing,
-                        Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                        Core.lambdaBody = (Core.TermLambda (Core.Lambda {
                           Core.lambdaParameter = (Core.Name "y"),
                           Core.lambdaDomain = Nothing,
                           Core.lambdaBody = (Core.TermApplication (Core.Application {
@@ -1130,7 +1130,7 @@ occurCheckTests =
                               Core.applicationArgument = (Core.TermApplication (Core.Application {
                                 Core.applicationFunction = (Core.TermVariable (Core.Name "x")),
                                 Core.applicationArgument = (Core.TermVariable (Core.Name "loop"))}))})),
-                            Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))})))}))),
+                            Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}))})),
                       Core.bindingType = Nothing}],
                   Core.letBody = (Core.TermVariable (Core.Name "loop"))})))),
                 Testing.universalTestCaseExpected = "FAIL"})),
@@ -1152,14 +1152,14 @@ polymorphismViolationTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#1",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "id"),
-                      Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.bindingTerm = (Core.TermLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.Name "x"),
                         Core.lambdaDomain = Nothing,
-                        Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))),
+                        Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})),
                       Core.bindingType = Nothing}],
                   Core.letBody = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermApplication (Core.Application {
@@ -1176,14 +1176,14 @@ polymorphismViolationTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#2",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "id"),
-                      Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.bindingTerm = (Core.TermLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.Name "x"),
                         Core.lambdaDomain = Nothing,
-                        Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))),
+                        Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})),
                       Core.bindingType = Nothing}],
                   Core.letBody = (Core.TermList [
                     Core.TermApplication (Core.Application {
@@ -1198,14 +1198,14 @@ polymorphismViolationTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#3",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "id"),
-                      Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.bindingTerm = (Core.TermLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.Name "x"),
                         Core.lambdaDomain = Nothing,
-                        Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))),
+                        Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})),
                       Core.bindingType = Nothing}],
                   Core.letBody = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermPair (Core.TermApplication (Core.Application {
@@ -1225,16 +1225,16 @@ polymorphismViolationTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#1",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "f"),
-                      Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.bindingTerm = (Core.TermLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.Name "x"),
                         Core.lambdaDomain = Nothing,
                         Core.lambdaBody = (Core.TermList [
                           Core.TermVariable (Core.Name "x"),
-                          (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))])}))),
+                          (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))])})),
                       Core.bindingType = Nothing}],
                   Core.letBody = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
@@ -1245,14 +1245,14 @@ polymorphismViolationTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#2",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "g"),
-                      Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.bindingTerm = (Core.TermLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.Name "x"),
                         Core.lambdaDomain = Nothing,
-                        Core.lambdaBody = (Core.TermPair (Core.TermVariable (Core.Name "x"), (Core.TermLiteral (Core.LiteralString "constant"))))}))),
+                        Core.lambdaBody = (Core.TermPair (Core.TermVariable (Core.Name "x"), (Core.TermLiteral (Core.LiteralString "constant"))))})),
                       Core.bindingType = Nothing}],
                   Core.letBody = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermApplication (Core.Application {
@@ -1273,11 +1273,11 @@ polymorphismViolationTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#3",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "h"),
-                      Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.bindingTerm = (Core.TermLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.Name "x"),
                         Core.lambdaDomain = Nothing,
                         Core.lambdaBody = (Core.TermApplication (Core.Application {
@@ -1285,7 +1285,7 @@ polymorphismViolationTests =
                             Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.cons")),
                             Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
                           Core.applicationArgument = (Core.TermList [
-                            Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0))])}))}))),
+                            Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0))])}))})),
                       Core.bindingType = Nothing}],
                   Core.letBody = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "h")),
@@ -1301,21 +1301,21 @@ polymorphismViolationTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#1",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "f"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermPair (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
                     Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}), (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
-                    Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "foo"))}))))}))))),
+                    Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "foo"))}))))})))),
                 Testing.universalTestCaseExpected = "FAIL"})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#2",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "g"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermList [
@@ -1324,14 +1324,14 @@ polymorphismViolationTests =
                       Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))}),
                     (Core.TermApplication (Core.Application {
                       Core.applicationFunction = (Core.TermVariable (Core.Name "g")),
-                      Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "bad"))}))])}))))),
+                      Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "bad"))}))])})))),
                 Testing.universalTestCaseExpected = "FAIL"})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#3",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "h"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermApplication (Core.Application {
@@ -1342,7 +1342,7 @@ polymorphismViolationTests =
                         Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}))})),
                     Core.applicationArgument = (Core.TermApplication (Core.Application {
                       Core.applicationFunction = (Core.TermVariable (Core.Name "h")),
-                      Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "error"))}))}))}))))),
+                      Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "error"))}))}))})))),
                 Testing.universalTestCaseExpected = "FAIL"})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]}],
@@ -1362,7 +1362,7 @@ primitiveTypeErrorTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#1",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermApplication (Core.Application {
                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.logic.ifElse")),
@@ -1375,7 +1375,7 @@ primitiveTypeErrorTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#2",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermApplication (Core.Application {
                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.logic.ifElse")),
@@ -1388,7 +1388,7 @@ primitiveTypeErrorTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#3",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.logic.and")),
                     Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
@@ -1399,7 +1399,7 @@ primitiveTypeErrorTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#4",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.logic.or")),
                     Core.applicationArgument = (Core.TermLiteral (Core.LiteralBoolean True))})),
@@ -1415,7 +1415,7 @@ primitiveTypeErrorTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#1",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maps.lookup")),
                     Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
@@ -1426,7 +1426,7 @@ primitiveTypeErrorTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#2",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.sets.member")),
                     Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
@@ -1438,7 +1438,7 @@ primitiveTypeErrorTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#3",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.head")),
                   Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "not a list"))})))),
                 Testing.universalTestCaseExpected = "FAIL"})),
@@ -1447,7 +1447,7 @@ primitiveTypeErrorTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#4",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maybes.fromMaybe")),
                     Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
@@ -1463,7 +1463,7 @@ primitiveTypeErrorTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#1",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.math.add")),
                     Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "not a number"))})),
@@ -1474,7 +1474,7 @@ primitiveTypeErrorTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#2",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.math.mul")),
                     Core.applicationArgument = (Core.TermLiteral (Core.LiteralBoolean True))})),
@@ -1485,7 +1485,7 @@ primitiveTypeErrorTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#3",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.math.div")),
                     Core.applicationArgument = (Core.TermList [
@@ -1497,7 +1497,7 @@ primitiveTypeErrorTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#4",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.math.mod")),
                     Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
@@ -1521,7 +1521,7 @@ recursiveTypeTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#1",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "x"),
@@ -1535,7 +1535,7 @@ recursiveTypeTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#2",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "x"),
@@ -1548,7 +1548,7 @@ recursiveTypeTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#3",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "x"),
@@ -1566,14 +1566,14 @@ recursiveTypeTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#1",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "f"),
-                      Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.bindingTerm = (Core.TermLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.Name "x"),
                         Core.lambdaDomain = Nothing,
-                        Core.lambdaBody = (Core.TermVariable (Core.Name "f"))}))),
+                        Core.lambdaBody = (Core.TermVariable (Core.Name "f"))})),
                       Core.bindingType = Nothing}],
                   Core.letBody = (Core.TermVariable (Core.Name "f"))})))),
                 Testing.universalTestCaseExpected = "FAIL"})),
@@ -1582,19 +1582,19 @@ recursiveTypeTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#2",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "f"),
-                      Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.bindingTerm = (Core.TermLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.Name "x"),
                         Core.lambdaDomain = Nothing,
-                        Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                        Core.lambdaBody = (Core.TermLambda (Core.Lambda {
                           Core.lambdaParameter = (Core.Name "y"),
                           Core.lambdaDomain = Nothing,
                           Core.lambdaBody = (Core.TermApplication (Core.Application {
                             Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
-                            Core.applicationArgument = (Core.TermVariable (Core.Name "f"))}))})))}))),
+                            Core.applicationArgument = (Core.TermVariable (Core.Name "f"))}))}))})),
                       Core.bindingType = Nothing}],
                   Core.letBody = (Core.TermVariable (Core.Name "f"))})))),
                 Testing.universalTestCaseExpected = "FAIL"})),
@@ -1603,15 +1603,15 @@ recursiveTypeTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#3",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "f"),
-                      Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.bindingTerm = (Core.TermLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.Name "x"),
                         Core.lambdaDomain = Nothing,
                         Core.lambdaBody = (Core.TermList [
-                          Core.TermVariable (Core.Name "f")])}))),
+                          Core.TermVariable (Core.Name "f")])})),
                       Core.bindingType = Nothing}],
                   Core.letBody = (Core.TermVariable (Core.Name "f"))})))),
                 Testing.universalTestCaseExpected = "FAIL"})),
@@ -1625,7 +1625,7 @@ recursiveTypeTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#1",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "x"),
@@ -1643,14 +1643,14 @@ recursiveTypeTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#2",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "a"),
-                      Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.bindingTerm = (Core.TermLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.Name "x"),
                         Core.lambdaDomain = Nothing,
-                        Core.lambdaBody = (Core.TermVariable (Core.Name "b"))}))),
+                        Core.lambdaBody = (Core.TermVariable (Core.Name "b"))})),
                       Core.bindingType = Nothing},
                     Core.Binding {
                       Core.bindingName = (Core.Name "b"),
@@ -1663,7 +1663,7 @@ recursiveTypeTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#3",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "f"),
@@ -1694,19 +1694,19 @@ selfApplicationTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#1",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "x"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "x")),
-                    Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))))),
+                    Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))})))),
                 Testing.universalTestCaseExpected = "FAIL"})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#2",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "f"),
@@ -1726,25 +1726,25 @@ selfApplicationTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#1",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "f"),
-                      Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.bindingTerm = (Core.TermLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.Name "x"),
                         Core.lambdaDomain = Nothing,
                         Core.lambdaBody = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermVariable (Core.Name "g")),
-                          Core.applicationArgument = (Core.TermVariable (Core.Name "f"))}))}))),
+                          Core.applicationArgument = (Core.TermVariable (Core.Name "f"))}))})),
                       Core.bindingType = Nothing},
                     Core.Binding {
                       Core.bindingName = (Core.Name "g"),
-                      Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.bindingTerm = (Core.TermLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.Name "y"),
                         Core.lambdaDomain = Nothing,
                         Core.lambdaBody = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermVariable (Core.Name "y")),
-                          Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}))),
+                          Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))})),
                       Core.bindingType = Nothing}],
                   Core.letBody = (Core.TermVariable (Core.Name "f"))})))),
                 Testing.universalTestCaseExpected = "FAIL"})),
@@ -1753,7 +1753,7 @@ selfApplicationTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#2",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "a"),
@@ -1763,12 +1763,12 @@ selfApplicationTests =
                       Core.bindingType = Nothing},
                     Core.Binding {
                       Core.bindingName = (Core.Name "b"),
-                      Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.bindingTerm = (Core.TermLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.Name "x"),
                         Core.lambdaDomain = Nothing,
                         Core.lambdaBody = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermVariable (Core.Name "x")),
-                          Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))),
+                          Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))})),
                       Core.bindingType = Nothing}],
                   Core.letBody = (Core.TermVariable (Core.Name "a"))})))),
                 Testing.universalTestCaseExpected = "FAIL"})),
@@ -1777,16 +1777,16 @@ selfApplicationTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#3",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "cycle"),
-                      Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.bindingTerm = (Core.TermLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.Name "f"),
                         Core.lambdaDomain = Nothing,
                         Core.lambdaBody = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
-                          Core.applicationArgument = (Core.TermVariable (Core.Name "cycle"))}))}))),
+                          Core.applicationArgument = (Core.TermVariable (Core.Name "cycle"))}))})),
                       Core.bindingType = Nothing}],
                   Core.letBody = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "cycle")),
@@ -1810,7 +1810,7 @@ typeConstructorMisuseTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#1",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.cons")),
                     Core.applicationArgument = (Core.TermList [
@@ -1822,7 +1822,7 @@ typeConstructorMisuseTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#2",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.length")),
                   Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})))),
                 Testing.universalTestCaseExpected = "FAIL"})),
@@ -1831,7 +1831,7 @@ typeConstructorMisuseTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#3",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.head")),
                   Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "not a list"))})))),
                 Testing.universalTestCaseExpected = "FAIL"})),
@@ -1840,7 +1840,7 @@ typeConstructorMisuseTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#4",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.tail")),
                   Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})))),
                 Testing.universalTestCaseExpected = "FAIL"})),
@@ -1854,7 +1854,7 @@ typeConstructorMisuseTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#1",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.strings.length")),
                   Core.applicationArgument = (Core.TermList [
                     Core.TermLiteral (Core.LiteralString "foo")])})))),
@@ -1864,7 +1864,7 @@ typeConstructorMisuseTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#2",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.strings.cat")),
                   Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})))),
                 Testing.universalTestCaseExpected = "FAIL"})),
@@ -1873,7 +1873,7 @@ typeConstructorMisuseTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#3",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.strings.fromList")),
                   Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "not a list"))})))),
                 Testing.universalTestCaseExpected = "FAIL"})),
@@ -1882,7 +1882,7 @@ typeConstructorMisuseTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#4",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.strings.toList")),
                   Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})))),
                 Testing.universalTestCaseExpected = "FAIL"})),
@@ -1896,7 +1896,7 @@ typeConstructorMisuseTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#1",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.math.add")),
                     Core.applicationArgument = (Core.TermList [
@@ -1908,7 +1908,7 @@ typeConstructorMisuseTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#2",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.math.sub")),
                     Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "not a number"))})),
@@ -1919,7 +1919,7 @@ typeConstructorMisuseTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#3",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.math.mul")),
                     Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
@@ -1930,7 +1930,7 @@ typeConstructorMisuseTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#4",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.math.div")),
                     Core.applicationArgument = (Core.TermLiteral (Core.LiteralBoolean True))})),
@@ -1954,24 +1954,24 @@ undefinedVariableTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#1",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermVariable (Core.Name "x")))),
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermVariable (Core.Name "x")))),
                 Testing.universalTestCaseExpected = "FAIL"})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#2",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "x"),
                   Core.lambdaDomain = Nothing,
-                  Core.lambdaBody = (Core.TermVariable (Core.Name "y"))}))))),
+                  Core.lambdaBody = (Core.TermVariable (Core.Name "y"))})))),
                 Testing.universalTestCaseExpected = "FAIL"})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#3",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "x"),
@@ -1989,7 +1989,7 @@ undefinedVariableTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#1",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "x"),
@@ -2002,7 +2002,7 @@ undefinedVariableTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#2",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "x"),
@@ -2019,7 +2019,7 @@ undefinedVariableTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#3",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "x"),
@@ -2041,7 +2041,7 @@ undefinedVariableTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#1",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "x"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermLet (Core.Let {
@@ -2050,14 +2050,14 @@ undefinedVariableTests =
                         Core.bindingName = (Core.Name "y"),
                         Core.bindingTerm = (Core.TermVariable (Core.Name "x")),
                         Core.bindingType = Nothing}],
-                    Core.letBody = (Core.TermVariable (Core.Name "z"))}))}))))),
+                    Core.letBody = (Core.TermVariable (Core.Name "z"))}))})))),
                 Testing.universalTestCaseExpected = "FAIL"})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#2",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "x"),
@@ -2076,14 +2076,14 @@ undefinedVariableTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#3",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "x"),
-                      Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.bindingTerm = (Core.TermLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.Name "y"),
                         Core.lambdaDomain = Nothing,
-                        Core.lambdaBody = (Core.TermVariable (Core.Name "z"))}))),
+                        Core.lambdaBody = (Core.TermVariable (Core.Name "z"))})),
                       Core.bindingType = Nothing}],
                   Core.letBody = (Core.TermVariable (Core.Name "x"))})))),
                 Testing.universalTestCaseExpected = "FAIL"})),
@@ -2105,7 +2105,7 @@ unificationFailureTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#1",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.math.add")),
                     Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
@@ -2116,7 +2116,7 @@ unificationFailureTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#2",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermList [
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermList [
                   Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)),
                   (Core.TermLiteral (Core.LiteralString "foo"))]))),
                 Testing.universalTestCaseExpected = "FAIL"})),
@@ -2125,7 +2125,7 @@ unificationFailureTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#3",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermList [
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermList [
                   Core.TermList [
                     Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))],
                   (Core.TermLiteral (Core.LiteralString "foo"))]))),
@@ -2135,7 +2135,7 @@ unificationFailureTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#4",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermPair (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)), (Core.TermLiteral (Core.LiteralString "foo")))),
                   Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "bar"))})))),
                 Testing.universalTestCaseExpected = "FAIL"})),
@@ -2149,7 +2149,7 @@ unificationFailureTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#1",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.cons")),
                     Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
@@ -2160,7 +2160,7 @@ unificationFailureTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#2",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermList [
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermList [
                   Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)),
                   (Core.TermList [
                     Core.TermLiteral (Core.LiteralString "foo")])]))),
@@ -2170,7 +2170,7 @@ unificationFailureTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#3",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermPair (Core.TermList [
                     Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))], (Core.TermList [
                     Core.TermLiteral (Core.LiteralString "foo")]))),
@@ -2181,7 +2181,7 @@ unificationFailureTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#4",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.concat")),
                   Core.applicationArgument = (Core.TermList [
                     Core.TermList [
@@ -2199,7 +2199,7 @@ unificationFailureTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#1",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermApplication (Core.Application {
                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.logic.ifElse")),
@@ -2212,7 +2212,7 @@ unificationFailureTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#2",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermApplication (Core.Application {
                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.logic.ifElse")),
@@ -2226,15 +2226,15 @@ unificationFailureTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#3",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermApplication (Core.Application {
                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.logic.ifElse")),
                       Core.applicationArgument = (Core.TermLiteral (Core.LiteralBoolean True))})),
-                    Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                    Core.applicationArgument = (Core.TermLambda (Core.Lambda {
                       Core.lambdaParameter = (Core.Name "x"),
                       Core.lambdaDomain = Nothing,
-                      Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})))})),
+                      Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))})),
                   Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})))),
                 Testing.universalTestCaseExpected = "FAIL"})),
               Testing.testCaseWithMetadataDescription = Nothing,
@@ -2247,14 +2247,14 @@ unificationFailureTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#1",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "f"),
-                      Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.bindingTerm = (Core.TermLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.Name "x"),
                         Core.lambdaDomain = Nothing,
-                        Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))),
+                        Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})),
                       Core.bindingType = Nothing}],
                   Core.letBody = (Core.TermList [
                     Core.TermApplication (Core.Application {
@@ -2269,14 +2269,14 @@ unificationFailureTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#2",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "id"),
-                      Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.bindingTerm = (Core.TermLambda (Core.Lambda {
                         Core.lambdaParameter = (Core.Name "x"),
                         Core.lambdaDomain = Nothing,
-                        Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))),
+                        Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})),
                       Core.bindingType = Nothing}],
                   Core.letBody = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermPair (Core.TermApplication (Core.Application {
@@ -2291,7 +2291,7 @@ unificationFailureTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#3",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (ShowCore.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> "FAIL") (\result -> Strings.cat2 "unexpected: " (Core_.typeScheme (Pairs.second (Pairs.first result)))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "cons"),

@@ -174,18 +174,8 @@ public interface Dependencies {
       }
 
       @Override
-      public Boolean visit(hydra.core.Term.Function v1) {
-        return (v1).value.accept(new hydra.core.Function.PartialVisitor<>() {
-          @Override
-          public Boolean otherwise(hydra.core.Function instance) {
-            return false;
-          }
-
-          @Override
-          public Boolean visit(hydra.core.Function.Lambda ignored) {
-            return true;
-          }
-        });
+      public Boolean visit(hydra.core.Term.Lambda ignored) {
+        return true;
       }
 
       @Override
@@ -215,18 +205,8 @@ public interface Dependencies {
         }
 
         @Override
-        public hydra.core.Term visit(hydra.core.Term.Function f) {
-          return (f).value.accept(new hydra.core.Function.PartialVisitor<>() {
-            @Override
-            public hydra.core.Term otherwise(hydra.core.Function instance) {
-              return (recurse).apply(original);
-            }
-
-            @Override
-            public hydra.core.Term visit(hydra.core.Function.Lambda l) {
-              return new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda((l).value.parameter, (l).value.domain, digForLambdas.get().apply((cons).apply((l).value.body)).apply((java.util.function.Function<hydra.core.Term, hydra.core.Term>) (t -> (cons).apply(t))).apply((l).value.body))));
-            }
-          });
+        public hydra.core.Term visit(hydra.core.Term.Lambda l) {
+          return new hydra.core.Term.Lambda(new hydra.core.Lambda((l).value.parameter, (l).value.domain, digForLambdas.get().apply((cons).apply((l).value.body)).apply((java.util.function.Function<hydra.core.Term, hydra.core.Term>) (t -> (cons).apply(t))).apply((l).value.body)));
         }
 
         @Override
@@ -375,37 +355,24 @@ public interface Dependencies {
         return (hydra_dependencies_simplifyTerm).apply((hydra_variables_substituteVariable).apply(var).apply((v).value).apply(body));
       }
     }))));
-    java.util.function.Function<hydra.core.Term, java.util.function.Function<hydra.core.Term, hydra.core.Term>> forLhs = (java.util.function.Function<hydra.core.Term, java.util.function.Function<hydra.core.Term, hydra.core.Term>>) (lhs -> (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (rhs -> {
-      java.util.function.Function<hydra.core.Function, hydra.core.Term> forFun = (java.util.function.Function<hydra.core.Function, hydra.core.Term>) (fun -> (fun).accept(new hydra.core.Function.PartialVisitor<>() {
-        @Override
-        public hydra.core.Term otherwise(hydra.core.Function instance) {
-          return term;
-        }
+    java.util.function.Function<hydra.core.Term, java.util.function.Function<hydra.core.Term, hydra.core.Term>> forLhs = (java.util.function.Function<hydra.core.Term, java.util.function.Function<hydra.core.Term, hydra.core.Term>>) (lhs -> (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (rhs -> (hydra_strip_deannotateTerm).apply(lhs).accept(new hydra.core.Term.PartialVisitor<>() {
+      @Override
+      public hydra.core.Term otherwise(hydra.core.Term instance) {
+        return term;
+      }
 
-        @Override
-        public hydra.core.Term visit(hydra.core.Function.Lambda l) {
-          hydra.core.Term body = (l).value.body;
-          hydra.core.Name var = (l).value.parameter;
-          return hydra.lib.logic.IfElse.lazy(
-            hydra.lib.sets.Member.apply(
-              var,
-              (hydra_variables_freeVariablesInTerm).apply(body)),
-            () -> (forRhs).apply(rhs).apply(var).apply(body),
-            () -> (hydra_dependencies_simplifyTerm).apply(body));
-        }
-      }));
-      return (hydra_strip_deannotateTerm).apply(lhs).accept(new hydra.core.Term.PartialVisitor<>() {
-        @Override
-        public hydra.core.Term otherwise(hydra.core.Term instance) {
-          return term;
-        }
-
-        @Override
-        public hydra.core.Term visit(hydra.core.Term.Function fun) {
-          return (forFun).apply((fun).value);
-        }
-      });
-    }));
+      @Override
+      public hydra.core.Term visit(hydra.core.Term.Lambda l) {
+        hydra.core.Term body = (l).value.body;
+        hydra.core.Name var = (l).value.parameter;
+        return hydra.lib.logic.IfElse.lazy(
+          hydra.lib.sets.Member.apply(
+            var,
+            (hydra_variables_freeVariablesInTerm).apply(body)),
+          () -> (forRhs).apply(rhs).apply(var).apply(body),
+          () -> (hydra_dependencies_simplifyTerm).apply(body));
+      }
+    })));
     java.util.function.Function<hydra.core.Term, hydra.core.Term> forTerm = (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
       public hydra.core.Term otherwise(hydra.core.Term instance) {
@@ -450,33 +417,18 @@ public interface Dependencies {
         }
 
         @Override
-        public java.util.Set<hydra.core.Name> visit(hydra.core.Term.Function f) {
-          return (f).value.accept(new hydra.core.Function.PartialVisitor<>() {
-            @Override
-            public java.util.Set<hydra.core.Name> otherwise(hydra.core.Function instance) {
-              return names;
-            }
+        public java.util.Set<hydra.core.Name> visit(hydra.core.Term.Cases caseStmt) {
+          return (nominal).apply((caseStmt).value.typeName);
+        }
 
-            @Override
-            public java.util.Set<hydra.core.Name> visit(hydra.core.Function.Elimination e) {
-              return (e).value.accept(new hydra.core.Elimination.PartialVisitor<>() {
-                @Override
-                public java.util.Set<hydra.core.Name> visit(hydra.core.Elimination.Record proj) {
-                  return (nominal).apply((proj).value.typeName);
-                }
+        @Override
+        public java.util.Set<hydra.core.Name> visit(hydra.core.Term.Project proj) {
+          return (nominal).apply((proj).value.typeName);
+        }
 
-                @Override
-                public java.util.Set<hydra.core.Name> visit(hydra.core.Elimination.Union caseStmt) {
-                  return (nominal).apply((caseStmt).value.typeName);
-                }
-
-                @Override
-                public java.util.Set<hydra.core.Name> visit(hydra.core.Elimination.Wrap name) {
-                  return (nominal).apply((name).value);
-                }
-              });
-            }
-          });
+        @Override
+        public java.util.Set<hydra.core.Name> visit(hydra.core.Term.Unwrap name) {
+          return (nominal).apply((name).value);
         }
 
         @Override

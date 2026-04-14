@@ -18,7 +18,8 @@ lazy val pythonLanguage: hydra.coders.Language = {
      hydra.variants.FunctionVariant.lambda))
   lazy val integerTypes: scala.collection.immutable.Set[hydra.core.IntegerType] = hydra.lib.sets.fromList[hydra.core.IntegerType](Seq(hydra.core.IntegerType.bigint))
   lazy val termVariants: scala.collection.immutable.Set[hydra.variants.TermVariant] = hydra.lib.sets.fromList[hydra.variants.TermVariant](Seq(hydra.variants.TermVariant.annotated,
-     hydra.variants.TermVariant.application, hydra.variants.TermVariant.either, hydra.variants.TermVariant.function,
+     hydra.variants.TermVariant.application, hydra.variants.TermVariant.either, hydra.variants.TermVariant.cases,
+     hydra.variants.TermVariant.lambda, hydra.variants.TermVariant.project, hydra.variants.TermVariant.unwrap,
      hydra.variants.TermVariant.let, hydra.variants.TermVariant.list, hydra.variants.TermVariant.literal,
      hydra.variants.TermVariant.map, hydra.variants.TermVariant.maybe, hydra.variants.TermVariant.pair,
      hydra.variants.TermVariant.record, hydra.variants.TermVariant.set, hydra.variants.TermVariant.typeApplication,

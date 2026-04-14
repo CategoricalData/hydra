@@ -105,7 +105,7 @@ alter_ = define "alter" $
                 (var "keyTerm"))
               (var "mapTerm")))
           -- function: insert new value (as a term-level lambda)
-          (Core.termFunction $ Core.functionLambda $ Core.lambda (wrap _Name $ string "newV") nothing $
+          (Core.termLambda $ Core.lambda (wrap _Name $ string "newV") nothing $
             Core.termApplication $ Core.application
               (Core.termApplication $ Core.application
                 (Core.termApplication $ Core.application

@@ -52,17 +52,17 @@ atomList_Multiple atom atomList =
 atomList_MultipleAtom :: Phantoms.TTerm Syntax.AtomList_Multiple -> Phantoms.TTerm Syntax.Atom
 atomList_MultipleAtom x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.datalog.syntax.AtomList_Multiple"),
-        Core.projectionField = (Core.Name "Atom")})))),
+        Core.projectionField = (Core.Name "Atom")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 atomList_MultipleAtomList :: Phantoms.TTerm Syntax.AtomList_Multiple -> Phantoms.TTerm Syntax.AtomList
 atomList_MultipleAtomList x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.datalog.syntax.AtomList_Multiple"),
-        Core.projectionField = (Core.Name "AtomList")})))),
+        Core.projectionField = (Core.Name "AtomList")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 atomList_MultipleWithAtom :: Phantoms.TTerm Syntax.AtomList_Multiple -> Phantoms.TTerm Syntax.Atom -> Phantoms.TTerm Syntax.AtomList_Multiple
@@ -76,9 +76,9 @@ atomList_MultipleWithAtom original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "AtomList"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.datalog.syntax.AtomList_Multiple"),
-              Core.projectionField = (Core.Name "AtomList")})))),
+              Core.projectionField = (Core.Name "AtomList")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 atomList_MultipleWithAtomList :: Phantoms.TTerm Syntax.AtomList_Multiple -> Phantoms.TTerm Syntax.AtomList -> Phantoms.TTerm Syntax.AtomList_Multiple
@@ -89,9 +89,9 @@ atomList_MultipleWithAtomList original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "Atom"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.datalog.syntax.AtomList_Multiple"),
-              Core.projectionField = (Core.Name "Atom")})))),
+              Core.projectionField = (Core.Name "Atom")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "AtomList"),
@@ -100,17 +100,17 @@ atomList_MultipleWithAtomList original newVal =
 atomRelation :: Phantoms.TTerm Syntax.Atom -> Phantoms.TTerm Syntax.Relation
 atomRelation x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.datalog.syntax.Atom"),
-        Core.projectionField = (Core.Name "Relation")})))),
+        Core.projectionField = (Core.Name "Relation")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 atomTermList :: Phantoms.TTerm Syntax.Atom -> Phantoms.TTerm Syntax.TermList
 atomTermList x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.datalog.syntax.Atom"),
-        Core.projectionField = (Core.Name "TermList")})))),
+        Core.projectionField = (Core.Name "TermList")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 atomWithRelation :: Phantoms.TTerm Syntax.Atom -> Phantoms.TTerm Syntax.Relation -> Phantoms.TTerm Syntax.Atom
@@ -124,9 +124,9 @@ atomWithRelation original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "TermList"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.datalog.syntax.Atom"),
-              Core.projectionField = (Core.Name "TermList")})))),
+              Core.projectionField = (Core.Name "TermList")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 atomWithTermList :: Phantoms.TTerm Syntax.Atom -> Phantoms.TTerm Syntax.TermList -> Phantoms.TTerm Syntax.Atom
@@ -137,9 +137,9 @@ atomWithTermList original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "Relation"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.datalog.syntax.Atom"),
-              Core.projectionField = (Core.Name "Relation")})))),
+              Core.projectionField = (Core.Name "Relation")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "TermList"),
@@ -182,17 +182,17 @@ constantList_Multiple constant constantList =
 constantList_MultipleConstant :: Phantoms.TTerm Syntax.ConstantList_Multiple -> Phantoms.TTerm Syntax.Constant
 constantList_MultipleConstant x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.datalog.syntax.ConstantList_Multiple"),
-        Core.projectionField = (Core.Name "Constant")})))),
+        Core.projectionField = (Core.Name "Constant")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 constantList_MultipleConstantList :: Phantoms.TTerm Syntax.ConstantList_Multiple -> Phantoms.TTerm Syntax.ConstantList
 constantList_MultipleConstantList x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.datalog.syntax.ConstantList_Multiple"),
-        Core.projectionField = (Core.Name "ConstantList")})))),
+        Core.projectionField = (Core.Name "ConstantList")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 constantList_MultipleWithConstant :: Phantoms.TTerm Syntax.ConstantList_Multiple -> Phantoms.TTerm Syntax.Constant -> Phantoms.TTerm Syntax.ConstantList_Multiple
@@ -206,9 +206,9 @@ constantList_MultipleWithConstant original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "ConstantList"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.datalog.syntax.ConstantList_Multiple"),
-              Core.projectionField = (Core.Name "ConstantList")})))),
+              Core.projectionField = (Core.Name "ConstantList")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 constantList_MultipleWithConstantList :: Phantoms.TTerm Syntax.ConstantList_Multiple -> Phantoms.TTerm Syntax.ConstantList -> Phantoms.TTerm Syntax.ConstantList_Multiple
@@ -219,9 +219,9 @@ constantList_MultipleWithConstantList original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "Constant"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.datalog.syntax.ConstantList_Multiple"),
-              Core.projectionField = (Core.Name "Constant")})))),
+              Core.projectionField = (Core.Name "Constant")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "ConstantList"),
@@ -242,17 +242,17 @@ fact relation constantList =
 factConstantList :: Phantoms.TTerm Syntax.Fact -> Phantoms.TTerm Syntax.ConstantList
 factConstantList x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.datalog.syntax.Fact"),
-        Core.projectionField = (Core.Name "ConstantList")})))),
+        Core.projectionField = (Core.Name "ConstantList")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 factRelation :: Phantoms.TTerm Syntax.Fact -> Phantoms.TTerm Syntax.Relation
 factRelation x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.datalog.syntax.Fact"),
-        Core.projectionField = (Core.Name "Relation")})))),
+        Core.projectionField = (Core.Name "Relation")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 factWithConstantList :: Phantoms.TTerm Syntax.Fact -> Phantoms.TTerm Syntax.ConstantList -> Phantoms.TTerm Syntax.Fact
@@ -263,9 +263,9 @@ factWithConstantList original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "Relation"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.datalog.syntax.Fact"),
-              Core.projectionField = (Core.Name "Relation")})))),
+              Core.projectionField = (Core.Name "Relation")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "ConstantList"),
@@ -282,9 +282,9 @@ factWithRelation original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "ConstantList"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.datalog.syntax.Fact"),
-              Core.projectionField = (Core.Name "ConstantList")})))),
+              Core.projectionField = (Core.Name "ConstantList")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 program :: Phantoms.TTerm [Syntax.Program_Elmt] -> Phantoms.TTerm Syntax.Program
@@ -330,17 +330,17 @@ rule atom atomList =
 ruleAtom :: Phantoms.TTerm Syntax.Rule -> Phantoms.TTerm Syntax.Atom
 ruleAtom x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.datalog.syntax.Rule"),
-        Core.projectionField = (Core.Name "Atom")})))),
+        Core.projectionField = (Core.Name "Atom")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 ruleAtomList :: Phantoms.TTerm Syntax.Rule -> Phantoms.TTerm Syntax.AtomList
 ruleAtomList x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.datalog.syntax.Rule"),
-        Core.projectionField = (Core.Name "AtomList")})))),
+        Core.projectionField = (Core.Name "AtomList")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 ruleWithAtom :: Phantoms.TTerm Syntax.Rule -> Phantoms.TTerm Syntax.Atom -> Phantoms.TTerm Syntax.Rule
@@ -354,9 +354,9 @@ ruleWithAtom original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "AtomList"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.datalog.syntax.Rule"),
-              Core.projectionField = (Core.Name "AtomList")})))),
+              Core.projectionField = (Core.Name "AtomList")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 ruleWithAtomList :: Phantoms.TTerm Syntax.Rule -> Phantoms.TTerm Syntax.AtomList -> Phantoms.TTerm Syntax.Rule
@@ -367,9 +367,9 @@ ruleWithAtomList original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "Atom"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.datalog.syntax.Rule"),
-              Core.projectionField = (Core.Name "Atom")})))),
+              Core.projectionField = (Core.Name "Atom")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "AtomList"),
@@ -414,17 +414,17 @@ termList_Multiple term termList =
 termList_MultipleTerm :: Phantoms.TTerm Syntax.TermList_Multiple -> Phantoms.TTerm Syntax.Term
 termList_MultipleTerm x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.datalog.syntax.TermList_Multiple"),
-        Core.projectionField = (Core.Name "Term")})))),
+        Core.projectionField = (Core.Name "Term")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 termList_MultipleTermList :: Phantoms.TTerm Syntax.TermList_Multiple -> Phantoms.TTerm Syntax.TermList
 termList_MultipleTermList x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.datalog.syntax.TermList_Multiple"),
-        Core.projectionField = (Core.Name "TermList")})))),
+        Core.projectionField = (Core.Name "TermList")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 termList_MultipleWithTerm :: Phantoms.TTerm Syntax.TermList_Multiple -> Phantoms.TTerm Syntax.Term -> Phantoms.TTerm Syntax.TermList_Multiple
@@ -438,9 +438,9 @@ termList_MultipleWithTerm original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "TermList"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.datalog.syntax.TermList_Multiple"),
-              Core.projectionField = (Core.Name "TermList")})))),
+              Core.projectionField = (Core.Name "TermList")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 termList_MultipleWithTermList :: Phantoms.TTerm Syntax.TermList_Multiple -> Phantoms.TTerm Syntax.TermList -> Phantoms.TTerm Syntax.TermList_Multiple
@@ -451,9 +451,9 @@ termList_MultipleWithTermList original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "Term"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.datalog.syntax.TermList_Multiple"),
-              Core.projectionField = (Core.Name "Term")})))),
+              Core.projectionField = (Core.Name "Term")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "TermList"),
@@ -470,25 +470,25 @@ termVariable x =
 unConstant :: Phantoms.TTerm Syntax.Constant -> Phantoms.TTerm String
 unConstant x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.datalog.syntax.Constant")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.datalog.syntax.Constant")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unProgram :: Phantoms.TTerm Syntax.Program -> Phantoms.TTerm [Syntax.Program_Elmt]
 unProgram x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.datalog.syntax.Program")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.datalog.syntax.Program")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unRelation :: Phantoms.TTerm Syntax.Relation -> Phantoms.TTerm String
 unRelation x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.datalog.syntax.Relation")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.datalog.syntax.Relation")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unVariable :: Phantoms.TTerm Syntax.Variable -> Phantoms.TTerm String
 unVariable x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.datalog.syntax.Variable")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.datalog.syntax.Variable")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 variable :: Phantoms.TTerm String -> Phantoms.TTerm Syntax.Variable

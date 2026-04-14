@@ -254,16 +254,10 @@ findTablesInTerm = define "findTablesInTerm" $
     Rewriting.foldOverTerm @@ Coders.traversalOrderPre
       @@ ("names" ~> "t" ~>
         match _Term (Just $ var "names") [
-          _Term_function>>: "f" ~>
-            match _Function (Just $ var "names") [
-              _Function_elimination>>: "e" ~>
-                match _Elimination (Just $ var "names") [
-                  _Elimination_record>>: "proj" ~>
-                    Sets.insert
-                      (Core.unName (project _Projection _Projection_typeName @@ var "proj"))
-                      (var "names")]
-                @@ var "e"]
-            @@ var "f"]
+          _Term_project>>: "proj" ~>
+            Sets.insert
+              (Core.unName (project _Projection _Projection_typeName @@ var "proj"))
+              (var "names")]
         @@ var "t")
       @@ Sets.empty
       @@ var "term"

@@ -14,8 +14,8 @@ import qualified Data.Map as M
 temporaryTableName = "(((temp)))"
 
 replaceTableName tableName = rewriteTerm $ \recurse term -> case term of
-  TermFunction (FunctionElimination (EliminationRecord (Projection tname fname))) -> if unName tname == temporaryTableName
-    then TermFunction $ FunctionElimination $ EliminationRecord $ Projection (Name tableName) fname
+  TermProject (Projection tname fname) -> if unName tname == temporaryTableName
+    then TermProject $ Projection (Name tableName) fname
     else term
   _ -> recurse term
 

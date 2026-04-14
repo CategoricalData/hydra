@@ -56,10 +56,10 @@ trueVal = ("is_valid", Core.TermLiteral (Core.LiteralBoolean True))
 
 -- | A term: a lambda  (fun x : Z => x)
 identityTerm :: (String, Core.Term)
-identityTerm = ("identity", Core.TermFunction (Core.FunctionLambda
+identityTerm = ("identity", Core.TermLambda
   (Core.Lambda (Core.Name "x")
     (Just (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeBigint)))
-    (Core.TermVariable (Core.Name "x")))))
+    (Core.TermVariable (Core.Name "x"))))
 
 -- | A list term: [1, 2, 3]
 sampleList :: (String, Core.Term)

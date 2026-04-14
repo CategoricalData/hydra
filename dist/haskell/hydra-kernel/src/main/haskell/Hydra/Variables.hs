@@ -32,12 +32,9 @@ freeTypeVariablesInTerm term0 =
                     let recurse = getAll vars
                         dflt = allOf (Lists.map recurse (Rewriting.subterms term))
                     in case term of
-                      Core.TermFunction v0 -> case v0 of
-                        Core.FunctionElimination _ -> dflt
-                        Core.FunctionLambda v1 ->
-                          let domt = Maybes.maybe Sets.empty (tryType vars) (Core.lambdaDomain v1)
-                          in (Sets.union domt (recurse (Core.lambdaBody v1)))
-                        _ -> dflt
+                      Core.TermLambda v0 ->
+                        let domt = Maybes.maybe Sets.empty (tryType vars) (Core.lambdaDomain v0)
+                        in (Sets.union domt (recurse (Core.lambdaBody v0)))
                       Core.TermLet v0 ->
                         let forBinding =
                                 \b ->
@@ -55,9 +52,7 @@ freeVariablesInTerm term =
 
       let dfltVars = \_ -> Lists.foldl (\s -> \t -> Sets.union s (freeVariablesInTerm t)) Sets.empty (Rewriting.subterms term)
       in case term of
-        Core.TermFunction v0 -> case v0 of
-          Core.FunctionLambda v1 -> Sets.delete (Core.lambdaParameter v1) (freeVariablesInTerm (Core.lambdaBody v1))
-          _ -> dfltVars ()
+        Core.TermLambda v0 -> Sets.delete (Core.lambdaParameter v0) (freeVariablesInTerm (Core.lambdaBody v0))
         Core.TermLet v0 -> Sets.difference (dfltVars ()) (Sets.fromList (Lists.map Core.bindingName (Core.letBindings v0)))
         Core.TermVariable v0 -> Sets.singleton v0
         _ -> dfltVars ()
@@ -134,15 +129,12 @@ normalizeTypeVariablesInTerm term =
                         boundVars = Pairs.second sb
                         rewrite =
                                 \recurse -> \term2 -> case term2 of
-                                  Core.TermFunction v0 -> case v0 of
-                                    Core.FunctionElimination _ -> recurse term2
-                                    Core.FunctionLambda v1 ->
-                                      let domain = Core.lambdaDomain v1
-                                      in (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                                        Core.lambdaParameter = (Core.lambdaParameter v1),
-                                        Core.lambdaDomain = (Maybes.map (substType subst) domain),
-                                        Core.lambdaBody = (rewriteWithSubst ((subst, boundVars), next) (Core.lambdaBody v1))})))
-                                    _ -> recurse term2
+                                  Core.TermLambda v0 ->
+                                    let domain = Core.lambdaDomain v0
+                                    in (Core.TermLambda (Core.Lambda {
+                                      Core.lambdaParameter = (Core.lambdaParameter v0),
+                                      Core.lambdaDomain = (Maybes.map (substType subst) domain),
+                                      Core.lambdaBody = (rewriteWithSubst ((subst, boundVars), next) (Core.lambdaBody v0))}))
                                   Core.TermLet v0 ->
                                     let bindings0 = Core.letBindings v0
                                         body0 = Core.letBody v0
@@ -210,11 +202,9 @@ replaceFreeTermVariable vold tnew term =
 
       let rewrite =
               \recurse -> \t -> case t of
-                Core.TermFunction v0 -> case v0 of
-                  Core.FunctionLambda v1 ->
-                    let v = Core.lambdaParameter v1
-                    in (Logic.ifElse (Equality.equal v vold) t (recurse t))
-                  _ -> recurse t
+                Core.TermLambda v0 ->
+                  let v = Core.lambdaParameter v0
+                  in (Logic.ifElse (Equality.equal v vold) t (recurse t))
                 Core.TermVariable v0 -> Logic.ifElse (Equality.equal v0 vold) tnew (Core.TermVariable v0)
                 _ -> recurse t
       in (Rewriting.rewriteTerm rewrite term)
@@ -256,12 +246,10 @@ substituteTypeVariablesInTerm subst term =
           stSchemeOpt = \mts -> Maybes.map stScheme mts
           replace =
                   \recurse -> \t -> case t of
-                    Core.TermFunction v0 -> case v0 of
-                      Core.FunctionLambda v1 -> Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                        Core.lambdaParameter = (Core.lambdaParameter v1),
-                        Core.lambdaDomain = (stOpt (Core.lambdaDomain v1)),
-                        Core.lambdaBody = (recurse (Core.lambdaBody v1))}))
-                      _ -> recurse t
+                    Core.TermLambda v0 -> Core.TermLambda (Core.Lambda {
+                      Core.lambdaParameter = (Core.lambdaParameter v0),
+                      Core.lambdaDomain = (stOpt (Core.lambdaDomain v0)),
+                      Core.lambdaBody = (recurse (Core.lambdaBody v0))})
                     Core.TermLet v0 ->
                       let mapBinding =
                               \b -> Core.Binding {
@@ -290,9 +278,7 @@ substituteVariable from to term =
       let replace =
               \recurse -> \term2 -> case term2 of
                 Core.TermVariable v0 -> Core.TermVariable (Logic.ifElse (Equality.equal v0 from) to v0)
-                Core.TermFunction v0 -> case v0 of
-                  Core.FunctionLambda v1 -> Logic.ifElse (Equality.equal (Core.lambdaParameter v1) from) term2 (recurse term2)
-                  _ -> recurse term2
+                Core.TermLambda v0 -> Logic.ifElse (Equality.equal (Core.lambdaParameter v0) from) term2 (recurse term2)
                 _ -> recurse term2
       in (Rewriting.rewriteTerm replace term)
 
@@ -303,9 +289,7 @@ substituteVariables subst term =
       let replace =
               \recurse -> \term2 -> case term2 of
                 Core.TermVariable v0 -> Core.TermVariable (Maybes.fromMaybe v0 (Maps.lookup v0 subst))
-                Core.TermFunction v0 -> case v0 of
-                  Core.FunctionLambda v1 -> Maybes.maybe (recurse term2) (\_ -> term2) (Maps.lookup (Core.lambdaParameter v1) subst)
-                  _ -> recurse term2
+                Core.TermLambda v0 -> Maybes.maybe (recurse term2) (\_ -> term2) (Maps.lookup (Core.lambdaParameter v0) subst)
                 _ -> recurse term2
       in (Rewriting.rewriteTerm replace term)
 
@@ -319,22 +303,20 @@ unshadowVariables term0 =
                 in (Logic.ifElse (Maps.member candidate m) (freshName base (Math.add i 1) m) candidate)
           f =
                   \recurse -> \m -> \term -> case term of
-                    Core.TermFunction v0 -> case v0 of
-                      Core.FunctionLambda v1 ->
-                        let v = Core.lambdaParameter v1
-                            domain = Core.lambdaDomain v1
-                            body = Core.lambdaBody v1
-                        in (Logic.ifElse (Maps.member v m) (
-                          let v2 = freshName v 2 m
-                              m2 = Maps.insert v v2 (Maps.insert v2 v2 m)
-                          in (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                            Core.lambdaParameter = v2,
-                            Core.lambdaDomain = domain,
-                            Core.lambdaBody = (f recurse m2 body)})))) (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                          Core.lambdaParameter = v,
+                    Core.TermLambda v0 ->
+                      let v = Core.lambdaParameter v0
+                          domain = Core.lambdaDomain v0
+                          body = Core.lambdaBody v0
+                      in (Logic.ifElse (Maps.member v m) (
+                        let v2 = freshName v 2 m
+                            m2 = Maps.insert v v2 (Maps.insert v2 v2 m)
+                        in (Core.TermLambda (Core.Lambda {
+                          Core.lambdaParameter = v2,
                           Core.lambdaDomain = domain,
-                          Core.lambdaBody = (f recurse (Maps.insert v v m) body)}))))
-                      _ -> recurse m term
+                          Core.lambdaBody = (f recurse m2 body)}))) (Core.TermLambda (Core.Lambda {
+                        Core.lambdaParameter = v,
+                        Core.lambdaDomain = domain,
+                        Core.lambdaBody = (f recurse (Maps.insert v v m) body)})))
                     Core.TermLet v0 ->
                       let m2 =
                               Lists.foldl (\acc -> \b ->

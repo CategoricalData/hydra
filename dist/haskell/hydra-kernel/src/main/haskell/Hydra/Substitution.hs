@@ -120,16 +120,11 @@ substTypesInTerm subst term0 =
       let rewrite =
               \recurse -> \term ->
                 let dflt = recurse term
-                    forFunction =
-                            \f -> case f of
-                              Core.FunctionElimination _ -> dflt
-                              Core.FunctionLambda v0 -> forLambda v0
-                              _ -> dflt
                     forLambda =
-                            \l -> Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                            \l -> Core.TermLambda (Core.Lambda {
                               Core.lambdaParameter = (Core.lambdaParameter l),
                               Core.lambdaDomain = (Maybes.map (substInType subst) (Core.lambdaDomain l)),
-                              Core.lambdaBody = (substTypesInTerm subst (Core.lambdaBody l))}))
+                              Core.lambdaBody = (substTypesInTerm subst (Core.lambdaBody l))})
                     forLet =
                             \l ->
                               let rewriteBinding =
@@ -152,7 +147,7 @@ substTypesInTerm subst term0 =
                                 Core.typeLambdaParameter = param,
                                 Core.typeLambdaBody = (substTypesInTerm subst2 (Core.typeLambdaBody ta))}))
                 in case term of
-                  Core.TermFunction v0 -> forFunction v0
+                  Core.TermLambda v0 -> forLambda v0
                   Core.TermLet v0 -> forLet v0
                   Core.TermTypeApplication v0 -> forTypeApplication v0
                   Core.TermTypeLambda v0 -> forTypeLambda v0
@@ -190,10 +185,10 @@ substituteInTerm subst term0 =
                             \l ->
                               let v = Core.lambdaParameter l
                                   subst2 = Typing.TermSubst (Maps.delete v s)
-                              in (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                              in (Core.TermLambda (Core.Lambda {
                                 Core.lambdaParameter = v,
                                 Core.lambdaDomain = (Core.lambdaDomain l),
-                                Core.lambdaBody = (substituteInTerm subst2 (Core.lambdaBody l))})))
+                                Core.lambdaBody = (substituteInTerm subst2 (Core.lambdaBody l))}))
                         withLet =
                                 \lt ->
                                   let bindings = Core.letBindings lt
@@ -208,9 +203,7 @@ substituteInTerm subst term0 =
                                     Core.letBindings = (Lists.map rewriteBinding bindings),
                                     Core.letBody = (substituteInTerm subst2 (Core.letBody lt))}))
                     in case term of
-                      Core.TermFunction v0 -> case v0 of
-                        Core.FunctionLambda v1 -> withLambda v1
-                        _ -> recurse term
+                      Core.TermLambda v0 -> withLambda v0
                       Core.TermLet v0 -> withLet v0
                       Core.TermVariable v0 -> Maybes.maybe (recurse term) (\sterm -> sterm) (Maps.lookup v0 s)
                       _ -> recurse term

@@ -198,7 +198,7 @@ substituteInTerm = define "substituteInTerm" $
       "withLambda">: lambda "l" $ lets [
         "v">: Core.lambdaParameter $ var "l",
         "subst2">: Typing.termSubst $ Maps.delete (var "v") (var "s")] $
-        Core.termFunction $ Core.functionLambda $
+        Core.termLambda $
           Core.lambda (var "v") (Core.lambdaDomain $ var "l") (substituteInTerm @@ var "subst2" @@ (Core.lambdaBody $ var "l")),
       "withLet">: lambda "lt" $ lets [
         "bindings">: Core.letBindings $ var "lt",
@@ -213,9 +213,7 @@ substituteInTerm = define "substituteInTerm" $
           (substituteInTerm @@ var "subst2" @@ (Core.letBody $ var "lt"))] $
       cases _Term (var "term")
         (Just $ var "recurse" @@ var "term") [
-        _Term_function>>: lambda "fun" $ cases _Function (var "fun")
-          (Just $ var "recurse" @@ var "term") [
-          _Function_lambda>>: "l" ~> var "withLambda" @@ var "l"],
+        _Term_lambda>>: "l" ~> var "withLambda" @@ var "l",
         _Term_let>>: "l" ~> var "withLet" @@ var "l",
         _Term_variable>>: lambda "name" $ Maybes.maybe
           (var "recurse" @@ var "term")
@@ -271,11 +269,7 @@ substTypesInTerm = define "substTypesInTerm" $
   "subst" ~> "term0" ~> lets [
     "rewrite">: lambdas ["recurse", "term"] $ lets [
       "dflt">: var "recurse" @@ var "term",
-      "forFunction">: lambda "f" $ cases _Function (var "f")
-        (Just $ var "dflt") [
-        _Function_elimination>>: "e" ~> var "dflt",
-        _Function_lambda>>: "l" ~> var "forLambda" @@ var "l"],
-      "forLambda">: lambda "l" $ Core.termFunction $ Core.functionLambda $ Core.lambda
+      "forLambda">: lambda "l" $ Core.termLambda $ Core.lambda
         (Core.lambdaParameter $ var "l")
         (Maybes.map (substInType @@ var "subst") $ Core.lambdaDomain $ var "l")
         (substTypesInTerm @@ var "subst" @@ (Core.lambdaBody $ var "l")),
@@ -299,7 +293,7 @@ substTypesInTerm = define "substTypesInTerm" $
           (substTypesInTerm @@ var "subst2" @@ (Core.typeLambdaBody $ var "ta"))] $
       cases _Term (var "term")
         (Just $ var "dflt") [
-        _Term_function>>: "f" ~> var "forFunction" @@ var "f",
+        _Term_lambda>>: "l" ~> var "forLambda" @@ var "l",
         _Term_let>>: "l" ~> var "forLet" @@ var "l",
         _Term_typeApplication>>: "ta" ~> var "forTypeApplication" @@ var "ta",
         _Term_typeLambda>>: "tl" ~> var "forTypeLambda" @@ var "tl"]] $

@@ -118,7 +118,18 @@ cppLanguage = define "cppLanguage" $
   "termVariants">: Sets.fromList $ list [
     Variants.termVariantApplication,
     Variants.termVariantEither,      -- std::variant<Left, Right> with left/right semantics
-    Variants.termVariantFunction,
+
+    Variants.termVariantCases,
+
+    Variants.termVariantLambda,
+
+    Variants.termVariantProject,
+
+    Variants.termVariantUnwrap,
+
+    Variants.termVariantTypeApplication,
+
+    Variants.termVariantTypeLambda,
     Variants.termVariantLet,
     Variants.termVariantList,        -- std::vector
     Variants.termVariantLiteral,
