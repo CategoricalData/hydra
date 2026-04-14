@@ -45,8 +45,12 @@ import Hydra.Coq.Language (coqLanguage)
 import qualified Hydra.Json.Model as Json
 import qualified Hydra.Json.Writer as JsonWriter
 
+import Control.Monad (when)
+import qualified Data.List as L
 import qualified Data.Map as M
+import qualified System.Directory as SD
 import qualified System.FilePath as FP
+import qualified System.IO as SIO
 
 
 -- | Options for JSON Schema code generation (was previously in Staging module)
@@ -180,5 +184,100 @@ writeEmacsLisp = generateSources (moduleToLispDialect LispSyntax.DialectEmacsLis
 -- First argument: output directory
 -- Second argument: universe modules (all modules for type/term resolution)
 -- Third argument: modules to transform and generate
+--
+-- After generation, walks the output directory and wraps long lines in each
+-- generated .scala file via 'wrapLongScalaLines'. This avoids the Scala
+-- compiler's memory issues on extremely long single-line expressions, and
+-- replaces the previously-external break-long-lines.py post-processor.
 writeScala :: FP.FilePath -> [Module] -> [Module] -> IO Int
-writeScala = generateSources moduleToScala scalaLanguage True True False False
+writeScala basePath universeMods mods = do
+  n <- generateSources moduleToScala scalaLanguage True True False False basePath universeMods mods
+  wrapLongLinesInScalaTree basePath
+  return n
+
+-- | Soft maximum line length for generated source files in any target
+--   language. Lines longer than this are broken at the first eligible break
+--   point; segments below this length are left intact even if they could be
+--   broken further. The target is readability first; the secondary goal is
+--   to keep individual lines short enough that downstream compilers do not
+--   blow their stacks on a single megaline.
+maxLineLength :: Int
+maxLineLength = 120
+
+-- | Once the current segment exceeds this length, the next ',' is a break
+--   point. Smaller than 'maxLineLength' so that the post-break continuation
+--   has room before the next forced wrap.
+commaBreakThreshold :: Int
+commaBreakThreshold = 80
+
+-- | Once the current segment exceeds this length, '=>' immediately after
+--   a ')' becomes a break point.
+arrowBreakThreshold :: Int
+arrowBreakThreshold = 60
+
+-- | Walk a directory tree and wrap long lines in every .scala file.
+wrapLongLinesInScalaTree :: FP.FilePath -> IO ()
+wrapLongLinesInScalaTree dir = do
+    exists <- SD.doesDirectoryExist dir
+    when exists $ do
+      entries <- SD.listDirectory dir
+      mapM_ visit entries
+  where
+    visit name = do
+      let path = dir FP.</> name
+      isDir <- SD.doesDirectoryExist path
+      if isDir
+        then wrapLongLinesInScalaTree path
+        else when (FP.takeExtension path == ".scala") $ do
+          -- Read strictly to release the file handle before writing back.
+          contents <- SIO.withFile path SIO.ReadMode $ \h -> do
+            cs <- SIO.hGetContents h
+            length cs `seq` return cs
+          let wrapped = wrapLongScalaText contents
+          when (wrapped /= contents) (writeFile path wrapped)
+
+-- | Apply line-wrapping to every line in a Scala source file. Lines under
+--   the max length pass through unchanged; long lines are broken at safe
+--   points (commas outside string literals, when the segment is long).
+wrapLongScalaText :: String -> String
+wrapLongScalaText = unlines . fmap wrapLongScalaLine . lines
+
+-- | Break a single long line at safe break points. If the line is short
+--   enough, returns it unchanged. Otherwise walks character-by-character,
+--   tracking string-literal state, and breaks at:
+--     * a ',' after the current segment exceeds 'commaBreakThreshold' chars
+--     * '=>' immediately after ')' (lambda body), after the current segment
+--       exceeds 'arrowBreakThreshold' chars
+wrapLongScalaLine :: String -> String
+wrapLongScalaLine line
+  | length line <= maxLineLength = line
+  | otherwise =
+      let indent = takeWhile (== ' ') line
+          commaCont = indent ++ "  "
+          arrowCont = indent ++ "    "
+          (segments, lastSeg) = scan line "" [] False '\NUL' commaCont arrowCont
+          allSegments = if null lastSeg then segments else segments ++ [lastSeg]
+      in if length allSegments <= 1
+           then line
+           else L.intercalate "\n" allSegments
+  where
+    scan :: String -> String -> [String] -> Bool -> Char -> String -> String -> ([String], String)
+    scan [] cur acc _ _ _ _ = (acc, cur)
+    scan (c:rest) cur acc inString prevChar commaCont arrowCont =
+      let cur' = cur ++ [c]
+          inString' = if c == '"' && prevChar /= '\\'
+                        then not inString
+                        else inString
+          isArrowStart = not inString' && c == '=' && case rest of
+                           ('>':_) -> True
+                           _       -> False
+          arrowAfterParen = isArrowStart && prevChar == ')' && length cur' > arrowBreakThreshold
+          shouldBreakComma = c == ',' && not inString' && length cur' > commaBreakThreshold
+      in if arrowAfterParen
+           then -- consume '>', emit segment "...=>", continue with arrow indent
+                let cur'' = cur' ++ ['>']
+                    rest' = drop 1 rest
+                in scan rest' arrowCont (acc ++ [cur'']) inString' '>' commaCont arrowCont
+           else if shouldBreakComma
+             then scan rest commaCont (acc ++ [cur']) inString' c commaCont arrowCont
+             else scan rest cur' acc inString' c commaCont arrowCont

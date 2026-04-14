@@ -19,7 +19,8 @@ import hydra.paths.*
 import hydra.typing.*
 
 def allEqual[T0](els: Seq[T0]): Boolean =
-  hydra.lib.logic.ifElse[Boolean](hydra.lib.lists.`null`[T0](els))(true)(hydra.lib.lists.foldl[Boolean, T0]((b: Boolean) =>
+  hydra.lib.logic.ifElse[Boolean](hydra.lib.lists.`null`[T0](els))(true)(hydra.lib.lists.foldl[Boolean,
+     T0]((b: Boolean) =>
   (t: T0) =>
   hydra.lib.logic.and(b)(hydra.lib.equality.equal[T0](t)(hydra.lib.lists.head[T0](els))))(true)(hydra.lib.lists.tail[T0](els)))
 
@@ -36,14 +37,17 @@ def applyTypeArgumentsToType[T0](cx: T0)(tx: hydra.graph.Graph)(typeArgs: Seq[hy
       }
     }
     case _ => Left(hydra.errors.Error.extraction(hydra.errors.ExtractionError.unexpectedShape(hydra.errors.UnexpectedShapeError("forall type",
-       hydra.lib.strings.cat(Seq(hydra.show.core.`type`(t), ". Trying to apply ", hydra.lib.literals.showInt32(hydra.lib.lists.length[hydra.core.Type](typeArgs)),
-       " type args: ", hydra.formatting.showList(hydra.show.core.`type`)(typeArgs), ". Context has vars: {",
-       hydra.lib.strings.intercalate(", ")(hydra.lib.lists.map[hydra.core.Name, scala.Predef.String]((x) => x)(hydra.lib.maps.keys[hydra.core.Name,
-       hydra.core.TypeScheme](tx.boundTypes))), "}"))))))
+       hydra.lib.strings.cat(Seq(hydra.show.core.`type`(t), ". Trying to apply ",
+       hydra.lib.literals.showInt32(hydra.lib.lists.length[hydra.core.Type](typeArgs)),
+       " type args: ", hydra.formatting.showList(hydra.show.core.`type`)(typeArgs),
+       ". Context has vars: {", hydra.lib.strings.intercalate(", ")(hydra.lib.lists.map[hydra.core.Name,
+       scala.Predef.String]((x) => x)(hydra.lib.maps.keys[hydra.core.Name, hydra.core.TypeScheme](tx.boundTypes))),
+       "}"))))))
   nonnull
 })
 
-def checkForUnboundTypeVariables[T0](cx: T0)(tx: hydra.graph.Graph)(term0: hydra.core.Term): Either[hydra.errors.Error, Unit] =
+def checkForUnboundTypeVariables[T0](cx: T0)(tx: hydra.graph.Graph)(term0: hydra.core.Term): Either[hydra.errors.Error,
+   Unit] =
   {
   lazy val svars: scala.collection.immutable.Set[hydra.core.Name] = hydra.lib.sets.fromList[hydra.core.Name](hydra.lib.maps.keys[hydra.core.Name,
      hydra.core.TypeScheme](tx.schemaTypes))
@@ -51,8 +55,8 @@ def checkForUnboundTypeVariables[T0](cx: T0)(tx: hydra.graph.Graph)(term0: hydra
      Unit] =
     {
     def recurse(v1: hydra.core.Term): Either[hydra.errors.Error, Unit] = checkRecursive(vars)(trace)(lbinding)(v1)
-    lazy val dflt: Either[hydra.errors.Error, Unit] = hydra.lib.eithers.bind[hydra.errors.Error, Seq[Unit],
-       Unit](hydra.lib.eithers.mapList[hydra.core.Term, Unit, hydra.errors.Error](recurse)(hydra.rewriting.subterms(term)))((_x: Seq[Unit]) => Right(()))
+    lazy val dflt: Either[hydra.errors.Error, Unit] = hydra.lib.eithers.bind[hydra.errors.Error,
+       Seq[Unit], Unit](hydra.lib.eithers.mapList[hydra.core.Term, Unit, hydra.errors.Error](recurse)(hydra.rewriting.subterms(term)))((_x: Seq[Unit]) => Right(()))
     def check(typ: hydra.core.Type): Either[hydra.errors.Error, Unit] =
       {
       lazy val freevars: scala.collection.immutable.Set[hydra.core.Name] = hydra.variables.freeVariablesInType(typ)
@@ -64,8 +68,8 @@ def checkForUnboundTypeVariables[T0](cx: T0)(tx: hydra.graph.Graph)(term0: hydra
       hydra.lib.eithers.bind[hydra.errors.Error, Option[Unit], Unit](hydra.lib.eithers.mapMaybe[hydra.core.Type,
          Unit, hydra.errors.Error](check)(m))((_x: Option[Unit]) => Right(()))
     term match
-      case hydra.core.Term.lambda(v_Term_lambda_l) => hydra.lib.eithers.bind[hydra.errors.Error, Unit,
-         Unit](checkOptional(v_Term_lambda_l.domain))((_x: Unit) => recurse(v_Term_lambda_l.body))
+      case hydra.core.Term.lambda(v_Term_lambda_l) => hydra.lib.eithers.bind[hydra.errors.Error,
+         Unit, Unit](checkOptional(v_Term_lambda_l.domain))((_x: Unit) => recurse(v_Term_lambda_l.body))
       case hydra.core.Term.let(v_Term_let_l) => {
         def forBinding(b: hydra.core.Binding): Either[hydra.errors.Error, Unit] =
           {
@@ -90,11 +94,12 @@ def checkForUnboundTypeVariables[T0](cx: T0)(tx: hydra.graph.Graph)(term0: hydra
 
 def checkNominalApplication(cx: hydra.context.Context)(tx: hydra.graph.Graph)(tname: hydra.core.Name)(typeArgs: Seq[hydra.core.Type]): Either[hydra.errors.Error,
    Tuple2[Unit, hydra.context.Context]] =
-  hydra.lib.eithers.bind[hydra.errors.Error, Tuple2[hydra.core.TypeScheme, hydra.context.Context], Tuple2[Unit,
-     hydra.context.Context]](hydra.resolution.requireSchemaType(cx)(tx.schemaTypes)(tname))((result: Tuple2[hydra.core.TypeScheme,
+  hydra.lib.eithers.bind[hydra.errors.Error, Tuple2[hydra.core.TypeScheme, hydra.context.Context],
+     Tuple2[Unit, hydra.context.Context]](hydra.resolution.requireSchemaType(cx)(tx.schemaTypes)(tname))((result: Tuple2[hydra.core.TypeScheme,
      hydra.context.Context]) =>
   {
-  lazy val schemaType: hydra.core.TypeScheme = hydra.lib.pairs.first[hydra.core.TypeScheme, hydra.context.Context](result)
+  lazy val schemaType: hydra.core.TypeScheme = hydra.lib.pairs.first[hydra.core.TypeScheme,
+     hydra.context.Context](result)
   {
     lazy val cx2: hydra.context.Context = hydra.lib.pairs.second[hydra.core.TypeScheme, hydra.context.Context](result)
     {
@@ -112,22 +117,25 @@ def checkNominalApplication(cx: hydra.context.Context)(tx: hydra.graph.Graph)(tn
   }
 })
 
-def checkSameType[T0](cx: T0)(tx: hydra.graph.Graph)(desc: scala.Predef.String)(types: Seq[hydra.core.Type]): Either[hydra.errors.Error, hydra.core.Type] =
+def checkSameType[T0](cx: T0)(tx: hydra.graph.Graph)(desc: scala.Predef.String)(types: Seq[hydra.core.Type]): Either[hydra.errors.Error,
+   hydra.core.Type] =
   hydra.lib.logic.ifElse[Either[hydra.errors.Error, hydra.core.Type]](hydra.checking.typesAllEffectivelyEqual(tx)(types))(Right(hydra.lib.lists.head[hydra.core.Type](types)))(Left(hydra.errors.Error.checking(hydra.error.checking.CheckingError.unequalTypes(hydra.error.checking.UnequalTypesError(types,
      desc)))))
 
-def checkType(cx: hydra.context.Context)(tx: hydra.graph.Graph)(term: hydra.core.Term)(typ: hydra.core.Type): Either[hydra.errors.Error, Unit] =
+def checkType(cx: hydra.context.Context)(tx: hydra.graph.Graph)(term: hydra.core.Term)(typ: hydra.core.Type): Either[hydra.errors.Error,
+   Unit] =
   {
   lazy val vars: scala.collection.immutable.Set[hydra.core.Name] = (tx.typeVariables)
   hydra.lib.logic.ifElse[Either[hydra.errors.Error, Unit]](hydra.constants.debugInference)(hydra.lib.eithers.bind[hydra.errors.Error,
-     hydra.core.Type, Unit](hydra.lib.eithers.map[Tuple2[hydra.core.Type, hydra.context.Context], hydra.core.Type,
-     hydra.errors.Error]((_p: Tuple2[hydra.core.Type, hydra.context.Context]) =>
+     hydra.core.Type, Unit](hydra.lib.eithers.map[Tuple2[hydra.core.Type, hydra.context.Context],
+     hydra.core.Type, hydra.errors.Error]((_p: Tuple2[hydra.core.Type, hydra.context.Context]) =>
     hydra.lib.pairs.first[hydra.core.Type, hydra.context.Context](_p))(hydra.checking.typeOf(cx)(tx)(Seq())(term)))((t0: hydra.core.Type) =>
     hydra.lib.logic.ifElse[Either[hydra.errors.Error, Unit]](hydra.checking.typesEffectivelyEqual(tx)(t0)(typ))(Right(()))(Left(hydra.errors.Error.checking(hydra.error.checking.CheckingError.typeMismatch(hydra.error.checking.TypeMismatchError(typ,
        t0)))))))(Right(()))
 }
 
-def checkTypeSubst[T0](cx: T0)(tx: hydra.graph.Graph)(subst: hydra.typing.TypeSubst): Either[hydra.errors.Error, hydra.typing.TypeSubst] =
+def checkTypeSubst[T0](cx: T0)(tx: hydra.graph.Graph)(subst: hydra.typing.TypeSubst): Either[hydra.errors.Error,
+   hydra.typing.TypeSubst] =
   {
   lazy val s: Map[hydra.core.Name, hydra.core.Type] = subst
   lazy val vars: scala.collection.immutable.Set[hydra.core.Name] = hydra.lib.sets.fromList[hydra.core.Name](hydra.lib.maps.keys[hydra.core.Name,
@@ -144,10 +152,11 @@ def checkTypeSubst[T0](cx: T0)(tx: hydra.graph.Graph)(subst: hydra.typing.TypeSu
     hydra.lib.maybes.maybe[Boolean, hydra.core.TypeScheme](false)(isNominal)(hydra.lexical.dereferenceSchemaType(v)(tx.schemaTypes)))(hydra.lib.sets.toList[hydra.core.Name](suspectVars)))
   lazy val badPairs: Seq[Tuple2[hydra.core.Name, hydra.core.Type]] = hydra.lib.lists.filter[Tuple2[hydra.core.Name,
      hydra.core.Type]]((p: Tuple2[hydra.core.Name, hydra.core.Type]) =>
-    hydra.lib.sets.member[hydra.core.Name](hydra.lib.pairs.first[hydra.core.Name, hydra.core.Type](p))(badVars))(hydra.lib.maps.toList[hydra.core.Name,
-       hydra.core.Type](s))
+    hydra.lib.sets.member[hydra.core.Name](hydra.lib.pairs.first[hydra.core.Name,
+       hydra.core.Type](p))(badVars))(hydra.lib.maps.toList[hydra.core.Name, hydra.core.Type](s))
   def printPair(p: Tuple2[hydra.core.Name, hydra.core.Type]): scala.Predef.String =
-    hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.pairs.first[hydra.core.Name, hydra.core.Type](p))(" --> "))(hydra.show.core.`type`(hydra.lib.pairs.second[hydra.core.Name,
+    hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.pairs.first[hydra.core.Name,
+       hydra.core.Type](p))(" --> "))(hydra.show.core.`type`(hydra.lib.pairs.second[hydra.core.Name,
        hydra.core.Type](p)))
   hydra.lib.logic.ifElse[Either[hydra.errors.Error, hydra.typing.TypeSubst]](hydra.lib.sets.`null`[hydra.core.Name](badVars))(Right(subst))(Left(hydra.errors.Error.checking(hydra.error.checking.CheckingError.incorrectUnification(hydra.error.checking.IncorrectUnificationError(subst)))))
 }
@@ -163,10 +172,12 @@ def containsInScopeTypeVars(tx: hydra.graph.Graph)(t: hydra.core.Type): Boolean 
 
 def normalizeTypeFreeVars(typ: hydra.core.Type): hydra.core.Type =
   {
-  def collectVars(acc: Map[hydra.core.Name, hydra.core.Name])(t: hydra.core.Type): Map[hydra.core.Name, hydra.core.Name] =
+  def collectVars(acc: Map[hydra.core.Name, hydra.core.Name])(t: hydra.core.Type): Map[hydra.core.Name,
+     hydra.core.Name] =
     t match
-    case hydra.core.Type.variable(v_Type_variable_v) => hydra.lib.logic.ifElse[Map[hydra.core.Name, hydra.core.Name]](hydra.lib.maps.member[hydra.core.Name,
-       hydra.core.Name](v_Type_variable_v)(acc))(acc)(hydra.lib.maps.insert[hydra.core.Name, hydra.core.Name](v_Type_variable_v)(hydra.lib.strings.cat2("_tv")(hydra.lib.literals.showInt32(hydra.lib.maps.size[hydra.core.Name,
+    case hydra.core.Type.variable(v_Type_variable_v) => hydra.lib.logic.ifElse[Map[hydra.core.Name,
+       hydra.core.Name]](hydra.lib.maps.member[hydra.core.Name, hydra.core.Name](v_Type_variable_v)(acc))(acc)(hydra.lib.maps.insert[hydra.core.Name,
+       hydra.core.Name](v_Type_variable_v)(hydra.lib.strings.cat2("_tv")(hydra.lib.literals.showInt32(hydra.lib.maps.size[hydra.core.Name,
        hydra.core.Name](acc))))(acc))
     case _ => acc
   lazy val subst: Map[hydra.core.Name, hydra.core.Name] = hydra.rewriting.foldOverType(hydra.coders.TraversalOrder.pre)(collectVars)(hydra.lib.maps.empty[hydra.core.Name,
@@ -179,13 +190,15 @@ def toFContext(cx: hydra.graph.Graph): Map[hydra.core.Name, hydra.core.Type] =
 
 def typeListsEffectivelyEqual(tx: hydra.graph.Graph)(tlist1: Seq[hydra.core.Type])(tlist2: Seq[hydra.core.Type]): Boolean =
   hydra.lib.logic.ifElse[Boolean](hydra.lib.equality.equal[Int](hydra.lib.lists.length[hydra.core.Type](tlist1))(hydra.lib.lists.length[hydra.core.Type](tlist2)))(hydra.lib.lists.foldl[Boolean,
-     Boolean](hydra.lib.logic.and)(true)(hydra.lib.lists.zipWith[hydra.core.Type, hydra.core.Type, Boolean]((v1: hydra.core.Type) =>
+     Boolean](hydra.lib.logic.and)(true)(hydra.lib.lists.zipWith[hydra.core.Type,
+     hydra.core.Type, Boolean]((v1: hydra.core.Type) =>
   (v2: hydra.core.Type) => hydra.checking.typesEffectivelyEqual(tx)(v1)(v2))(tlist1)(tlist2)))(false)
 
 def typeOf(cx: hydra.context.Context)(tx: hydra.graph.Graph)(typeArgs: Seq[hydra.core.Type])(term: hydra.core.Term): Either[hydra.errors.Error,
    Tuple2[hydra.core.Type, hydra.context.Context]] =
   {
-  lazy val cx1: hydra.context.Context = hydra.context.Context(hydra.lib.lists.cons[scala.Predef.String]("typeOf")(cx.trace), (cx.messages), (cx.other))
+  lazy val cx1: hydra.context.Context = hydra.context.Context(hydra.lib.lists.cons[scala.Predef.String]("typeOf")(cx.trace),
+     (cx.messages), (cx.other))
   term match
     case hydra.core.Term.annotated(v_Term_annotated_v1) => hydra.checking.typeOfAnnotatedTerm(cx1)(tx)(typeArgs)(v_Term_annotated_v1)
     case hydra.core.Term.application(v_Term_application_v1) => hydra.checking.typeOfApplication(cx1)(tx)(typeArgs)(v_Term_application_v1)
@@ -227,7 +240,8 @@ def typeOfApplication(cx: hydra.context.Context)(tx: hydra.graph.Graph)(typeArgs
       lazy val dom: hydra.core.Type = (v_Type_function_ft.domain)
       {
         lazy val cod: hydra.core.Type = (v_Type_function_ft.codomain)
-        hydra.lib.logic.ifElse[Either[hydra.errors.Error, Tuple2[hydra.core.Type, hydra.context.Context]]](hydra.checking.typesEffectivelyEqual(tx)(dom)(targ))(Right(Tuple2(cod,
+        hydra.lib.logic.ifElse[Either[hydra.errors.Error, Tuple2[hydra.core.Type,
+           hydra.context.Context]]](hydra.checking.typesEffectivelyEqual(tx)(dom)(targ))(Right(Tuple2(cod,
            cx0)))(Left(hydra.errors.Error.checking(hydra.error.checking.CheckingError.typeMismatch(hydra.error.checking.TypeMismatchError(dom,
            targ)))))
       }
@@ -237,33 +251,37 @@ def typeOfApplication(cx: hydra.context.Context)(tx: hydra.graph.Graph)(typeArgs
       {
         lazy val freshN: hydra.core.Name = hydra.lib.pairs.first[hydra.core.Name, hydra.context.Context](nameResult)
         {
-          lazy val cx1: hydra.context.Context = hydra.lib.pairs.second[hydra.core.Name, hydra.context.Context](nameResult)
+          lazy val cx1: hydra.context.Context = hydra.lib.pairs.second[hydra.core.Name,
+             hydra.context.Context](nameResult)
           Right(Tuple2(hydra.core.Type.variable(freshN), cx1))
         }
       }
     }
     case _ => Left(hydra.errors.Error.checking(hydra.error.checking.CheckingError.notAFunctionType(hydra.error.checking.NotAFunctionTypeError(tfun))))
-  hydra.lib.eithers.bind[hydra.errors.Error, Tuple2[hydra.core.Type, hydra.context.Context], Tuple2[hydra.core.Type,
-     hydra.context.Context]](hydra.checking.typeOf(cx)(tx)(Seq())(fun))((result1: Tuple2[hydra.core.Type,
+  hydra.lib.eithers.bind[hydra.errors.Error, Tuple2[hydra.core.Type, hydra.context.Context],
+     Tuple2[hydra.core.Type, hydra.context.Context]](hydra.checking.typeOf(cx)(tx)(Seq())(fun))((result1: Tuple2[hydra.core.Type,
      hydra.context.Context]) =>
     {
     lazy val tfun: hydra.core.Type = hydra.lib.pairs.first[hydra.core.Type, hydra.context.Context](result1)
     {
       lazy val cx2: hydra.context.Context = hydra.lib.pairs.second[hydra.core.Type, hydra.context.Context](result1)
-      hydra.lib.eithers.bind[hydra.errors.Error, Tuple2[hydra.core.Type, hydra.context.Context], Tuple2[hydra.core.Type,
-         hydra.context.Context]](hydra.checking.typeOf(cx2)(tx)(Seq())(arg))((result2: Tuple2[hydra.core.Type,
+      hydra.lib.eithers.bind[hydra.errors.Error, Tuple2[hydra.core.Type, hydra.context.Context],
+         Tuple2[hydra.core.Type, hydra.context.Context]](hydra.checking.typeOf(cx2)(tx)(Seq())(arg))((result2: Tuple2[hydra.core.Type,
          hydra.context.Context]) =>
         {
         lazy val targ: hydra.core.Type = hydra.lib.pairs.first[hydra.core.Type, hydra.context.Context](result2)
         {
           lazy val cx3: hydra.context.Context = hydra.lib.pairs.second[hydra.core.Type, hydra.context.Context](result2)
-          hydra.lib.eithers.bind[hydra.errors.Error, Tuple2[hydra.core.Type, hydra.context.Context], Tuple2[hydra.core.Type,
-             hydra.context.Context]](tryType(cx3)(tfun)(targ))((result3: Tuple2[hydra.core.Type, hydra.context.Context]) =>
+          hydra.lib.eithers.bind[hydra.errors.Error, Tuple2[hydra.core.Type, hydra.context.Context],
+             Tuple2[hydra.core.Type, hydra.context.Context]](tryType(cx3)(tfun)(targ))((result3: Tuple2[hydra.core.Type,
+             hydra.context.Context]) =>
             {
             lazy val t: hydra.core.Type = hydra.lib.pairs.first[hydra.core.Type, hydra.context.Context](result3)
             {
-              lazy val cx4: hydra.context.Context = hydra.lib.pairs.second[hydra.core.Type, hydra.context.Context](result3)
-              hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Type, Tuple2[hydra.core.Type, hydra.context.Context]](hydra.checking.applyTypeArgumentsToType(cx4)(tx)(typeArgs)(t))((applied: hydra.core.Type) => Right(Tuple2(applied,
+              lazy val cx4: hydra.context.Context = hydra.lib.pairs.second[hydra.core.Type,
+                 hydra.context.Context](result3)
+              hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Type, Tuple2[hydra.core.Type,
+                 hydra.context.Context]](hydra.checking.applyTypeArgumentsToType(cx4)(tx)(typeArgs)(t))((applied: hydra.core.Type) => Right(Tuple2(applied,
                  cx4)))
             }
           })
@@ -280,36 +298,43 @@ def typeOfCaseStatement(cx: hydra.context.Context)(tx: hydra.graph.Graph)(typeAr
   lazy val dflt: Option[hydra.core.Term] = (cs.default)
   lazy val cases: Seq[hydra.core.Field] = (cs.cases)
   lazy val cterms: Seq[hydra.core.Term] = hydra.lib.lists.map[hydra.core.Field, hydra.core.Term]((x: hydra.core.Field) => (x.term))(cases)
-  hydra.lib.eithers.bind[hydra.errors.Error, Option[Tuple2[hydra.core.Type, hydra.context.Context]], Tuple2[hydra.core.Type,
-     hydra.context.Context]](hydra.lib.eithers.mapMaybe[hydra.core.Term, Tuple2[hydra.core.Type, hydra.context.Context],
-     hydra.errors.Error]((e: hydra.core.Term) => hydra.checking.typeOf(cx)(tx)(Seq())(e))(dflt))((dfltResult: Option[Tuple2[hydra.core.Type,
+  hydra.lib.eithers.bind[hydra.errors.Error, Option[Tuple2[hydra.core.Type, hydra.context.Context]],
+     Tuple2[hydra.core.Type, hydra.context.Context]](hydra.lib.eithers.mapMaybe[hydra.core.Term,
+     Tuple2[hydra.core.Type, hydra.context.Context], hydra.errors.Error]((e: hydra.core.Term) => hydra.checking.typeOf(cx)(tx)(Seq())(e))(dflt))((dfltResult: Option[Tuple2[hydra.core.Type,
      hydra.context.Context]]) =>
     {
-    lazy val tdflt: Option[hydra.core.Type] = hydra.lib.maybes.map[Tuple2[hydra.core.Type, hydra.context.Context],
-       hydra.core.Type](hydra.lib.pairs.first[hydra.core.Type, hydra.context.Context])(dfltResult)
+    lazy val tdflt: Option[hydra.core.Type] = hydra.lib.maybes.map[Tuple2[hydra.core.Type,
+       hydra.context.Context], hydra.core.Type](hydra.lib.pairs.first[hydra.core.Type,
+       hydra.context.Context])(dfltResult)
     {
-      lazy val cx2: hydra.context.Context = hydra.lib.maybes.maybe[hydra.context.Context, Tuple2[hydra.core.Type,
-         hydra.context.Context]](cx)(hydra.lib.pairs.second[hydra.core.Type, hydra.context.Context])(dfltResult)
+      lazy val cx2: hydra.context.Context = hydra.lib.maybes.maybe[hydra.context.Context,
+         Tuple2[hydra.core.Type, hydra.context.Context]](cx)(hydra.lib.pairs.second[hydra.core.Type,
+         hydra.context.Context])(dfltResult)
       {
-        lazy val foldResult: Either[hydra.errors.Error, Tuple2[Seq[hydra.core.Type], hydra.context.Context]] = hydra.lib.lists.foldl[Either[hydra.errors.Error,
+        lazy val foldResult: Either[hydra.errors.Error, Tuple2[Seq[hydra.core.Type],
+           hydra.context.Context]] = hydra.lib.lists.foldl[Either[hydra.errors.Error,
            Tuple2[Seq[hydra.core.Type], hydra.context.Context]], hydra.core.Term]((acc: Either[hydra.errors.Error,
            Tuple2[Seq[hydra.core.Type], hydra.context.Context]]) =>
           (term: hydra.core.Term) =>
-          hydra.lib.eithers.bind[hydra.errors.Error, Tuple2[Seq[hydra.core.Type], hydra.context.Context],
-             Tuple2[Seq[hydra.core.Type], hydra.context.Context]](acc)((accR: Tuple2[Seq[hydra.core.Type],
+          hydra.lib.eithers.bind[hydra.errors.Error, Tuple2[Seq[hydra.core.Type],
+             hydra.context.Context], Tuple2[Seq[hydra.core.Type], hydra.context.Context]](acc)((accR: Tuple2[Seq[hydra.core.Type],
              hydra.context.Context]) =>
           {
-          lazy val types: Seq[hydra.core.Type] = hydra.lib.pairs.first[Seq[hydra.core.Type], hydra.context.Context](accR)
+          lazy val types: Seq[hydra.core.Type] = hydra.lib.pairs.first[Seq[hydra.core.Type],
+             hydra.context.Context](accR)
           {
-            lazy val cxA: hydra.context.Context = hydra.lib.pairs.second[Seq[hydra.core.Type], hydra.context.Context](accR)
+            lazy val cxA: hydra.context.Context = hydra.lib.pairs.second[Seq[hydra.core.Type],
+               hydra.context.Context](accR)
             hydra.lib.eithers.bind[hydra.errors.Error, Tuple2[hydra.core.Type, hydra.context.Context],
                Tuple2[Seq[hydra.core.Type], hydra.context.Context]](hydra.checking.typeOf(cxA)(tx)(Seq())(term))((tResult: Tuple2[hydra.core.Type,
                hydra.context.Context]) =>
               {
               lazy val t: hydra.core.Type = hydra.lib.pairs.first[hydra.core.Type, hydra.context.Context](tResult)
               {
-                lazy val cxB: hydra.context.Context = hydra.lib.pairs.second[hydra.core.Type, hydra.context.Context](tResult)
-                Right(Tuple2(hydra.lib.lists.concat2[hydra.core.Type](types)(hydra.lib.lists.pure[hydra.core.Type](t)), cxB))
+                lazy val cxB: hydra.context.Context = hydra.lib.pairs.second[hydra.core.Type,
+                   hydra.context.Context](tResult)
+                Right(Tuple2(hydra.lib.lists.concat2[hydra.core.Type](types)(hydra.lib.lists.pure[hydra.core.Type](t)),
+                   cxB))
               }
             })
           }
@@ -318,34 +343,41 @@ def typeOfCaseStatement(cx: hydra.context.Context)(tx: hydra.graph.Graph)(typeAr
            Tuple2[hydra.core.Type, hydra.context.Context]](foldResult)((foldR: Tuple2[Seq[hydra.core.Type],
            hydra.context.Context]) =>
           {
-          lazy val tcterms: Seq[hydra.core.Type] = hydra.lib.pairs.first[Seq[hydra.core.Type], hydra.context.Context](foldR)
+          lazy val tcterms: Seq[hydra.core.Type] = hydra.lib.pairs.first[Seq[hydra.core.Type],
+             hydra.context.Context](foldR)
           {
-            lazy val cx3: hydra.context.Context = hydra.lib.pairs.second[Seq[hydra.core.Type], hydra.context.Context](foldR)
+            lazy val cx3: hydra.context.Context = hydra.lib.pairs.second[Seq[hydra.core.Type],
+               hydra.context.Context](foldR)
             {
-              lazy val fcodsResult: Either[hydra.errors.Error, Tuple2[Seq[hydra.core.Type], hydra.context.Context]] = hydra.lib.lists.foldl[Either[hydra.errors.Error,
+              lazy val fcodsResult: Either[hydra.errors.Error, Tuple2[Seq[hydra.core.Type],
+                 hydra.context.Context]] = hydra.lib.lists.foldl[Either[hydra.errors.Error,
                  Tuple2[Seq[hydra.core.Type], hydra.context.Context]], hydra.core.Type]((acc: Either[hydra.errors.Error,
                  Tuple2[Seq[hydra.core.Type], hydra.context.Context]]) =>
                 (t: hydra.core.Type) =>
-                hydra.lib.eithers.bind[hydra.errors.Error, Tuple2[Seq[hydra.core.Type], hydra.context.Context],
-                   Tuple2[Seq[hydra.core.Type], hydra.context.Context]](acc)((accR: Tuple2[Seq[hydra.core.Type],
+                hydra.lib.eithers.bind[hydra.errors.Error, Tuple2[Seq[hydra.core.Type],
+                   hydra.context.Context], Tuple2[Seq[hydra.core.Type], hydra.context.Context]](acc)((accR: Tuple2[Seq[hydra.core.Type],
                    hydra.context.Context]) =>
                 {
-                lazy val cods: Seq[hydra.core.Type] = hydra.lib.pairs.first[Seq[hydra.core.Type], hydra.context.Context](accR)
-                hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.FunctionType, Tuple2[Seq[hydra.core.Type],
-                   hydra.context.Context]](hydra.extract.core.functionType(t))((ft: hydra.core.FunctionType) =>
-                  Right(Tuple2(hydra.lib.lists.concat2[hydra.core.Type](cods)(hydra.lib.lists.pure[hydra.core.Type](ft.codomain)), cx3)))
+                lazy val cods: Seq[hydra.core.Type] = hydra.lib.pairs.first[Seq[hydra.core.Type],
+                   hydra.context.Context](accR)
+                hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.FunctionType,
+                   Tuple2[Seq[hydra.core.Type], hydra.context.Context]](hydra.extract.core.functionType(t))((ft: hydra.core.FunctionType) =>
+                  Right(Tuple2(hydra.lib.lists.concat2[hydra.core.Type](cods)(hydra.lib.lists.pure[hydra.core.Type](ft.codomain)),
+                     cx3)))
               }))(Right(Tuple2(Seq(), cx3)))(tcterms)
-              hydra.lib.eithers.bind[hydra.errors.Error, Tuple2[Seq[hydra.core.Type], hydra.context.Context],
-                 Tuple2[hydra.core.Type, hydra.context.Context]](fcodsResult)((fcodsR: Tuple2[Seq[hydra.core.Type],
+              hydra.lib.eithers.bind[hydra.errors.Error, Tuple2[Seq[hydra.core.Type],
+                 hydra.context.Context], Tuple2[hydra.core.Type, hydra.context.Context]](fcodsResult)((fcodsR: Tuple2[Seq[hydra.core.Type],
                  hydra.context.Context]) =>
                 {
-                lazy val fcods: Seq[hydra.core.Type] = hydra.lib.pairs.first[Seq[hydra.core.Type], hydra.context.Context](fcodsR)
+                lazy val fcods: Seq[hydra.core.Type] = hydra.lib.pairs.first[Seq[hydra.core.Type],
+                   hydra.context.Context](fcodsR)
                 {
                   lazy val cods: Seq[hydra.core.Type] = hydra.lib.maybes.cat[hydra.core.Type](hydra.lib.lists.cons[Option[hydra.core.Type]](tdflt)(hydra.lib.lists.map[hydra.core.Type,
                      Option[hydra.core.Type]](hydra.lib.maybes.pure[hydra.core.Type])(fcods)))
                   hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Type, Tuple2[hydra.core.Type,
                      hydra.context.Context]](hydra.checking.checkSameType(cx3)(tx)("case branches")(cods))((cod: hydra.core.Type) =>
-                    Right(Tuple2(hydra.core.Type.function(hydra.core.FunctionType(hydra.resolution.nominalApplication(tname)(typeArgs), cod)), cx3)))
+                    Right(Tuple2(hydra.core.Type.function(hydra.core.FunctionType(hydra.resolution.nominalApplication(tname)(typeArgs),
+                       cod)), cx3)))
                 }
               })
             }
@@ -362,24 +394,26 @@ def typeOfEither(cx: hydra.context.Context)(tx: hydra.graph.Graph)(typeArgs: Seq
   lazy val n: Int = hydra.lib.lists.length[hydra.core.Type](typeArgs)
   hydra.lib.logic.ifElse[Either[hydra.errors.Error, Tuple2[hydra.core.Type, hydra.context.Context]]](hydra.lib.equality.equal[Int](n)(2))(hydra.lib.eithers.either[hydra.core.Term,
      hydra.core.Term, Either[hydra.errors.Error, Tuple2[hydra.core.Type, hydra.context.Context]]]((leftTerm: hydra.core.Term) =>
-    hydra.lib.eithers.bind[hydra.errors.Error, Tuple2[hydra.core.Type, hydra.context.Context], Tuple2[hydra.core.Type,
-       hydra.context.Context]](hydra.checking.typeOf(cx)(tx)(Seq())(leftTerm))((result: Tuple2[hydra.core.Type,
+    hydra.lib.eithers.bind[hydra.errors.Error, Tuple2[hydra.core.Type, hydra.context.Context],
+       Tuple2[hydra.core.Type, hydra.context.Context]](hydra.checking.typeOf(cx)(tx)(Seq())(leftTerm))((result: Tuple2[hydra.core.Type,
        hydra.context.Context]) =>
     {
     lazy val leftType: hydra.core.Type = hydra.lib.pairs.first[hydra.core.Type, hydra.context.Context](result)
     {
       lazy val cx2: hydra.context.Context = hydra.lib.pairs.second[hydra.core.Type, hydra.context.Context](result)
-      Right(Tuple2(hydra.core.Type.either(hydra.core.EitherType(leftType, hydra.lib.lists.at[hydra.core.Type](1)(typeArgs))), cx2))
+      Right(Tuple2(hydra.core.Type.either(hydra.core.EitherType(leftType, hydra.lib.lists.at[hydra.core.Type](1)(typeArgs))),
+         cx2))
     }
   }))((rightTerm: hydra.core.Term) =>
-    hydra.lib.eithers.bind[hydra.errors.Error, Tuple2[hydra.core.Type, hydra.context.Context], Tuple2[hydra.core.Type,
-       hydra.context.Context]](hydra.checking.typeOf(cx)(tx)(Seq())(rightTerm))((result: Tuple2[hydra.core.Type,
+    hydra.lib.eithers.bind[hydra.errors.Error, Tuple2[hydra.core.Type, hydra.context.Context],
+       Tuple2[hydra.core.Type, hydra.context.Context]](hydra.checking.typeOf(cx)(tx)(Seq())(rightTerm))((result: Tuple2[hydra.core.Type,
        hydra.context.Context]) =>
     {
     lazy val rightType: hydra.core.Type = hydra.lib.pairs.first[hydra.core.Type, hydra.context.Context](result)
     {
       lazy val cx2: hydra.context.Context = hydra.lib.pairs.second[hydra.core.Type, hydra.context.Context](result)
-      Right(Tuple2(hydra.core.Type.either(hydra.core.EitherType(hydra.lib.lists.at[hydra.core.Type](0)(typeArgs), rightType)), cx2))
+      Right(Tuple2(hydra.core.Type.either(hydra.core.EitherType(hydra.lib.lists.at[hydra.core.Type](0)(typeArgs),
+         rightType)), cx2))
     }
   }))(et))(Left(hydra.errors.Error.checking(hydra.error.checking.CheckingError.typeArityMismatch(hydra.error.checking.TypeArityMismatchError(hydra.core.Type.either(hydra.core.EitherType(hydra.core.Type.unit,
      hydra.core.Type.unit)), 2, n, typeArgs)))))
@@ -392,20 +426,23 @@ def typeOfInjection(cx: hydra.context.Context)(tx: hydra.graph.Graph)(typeArgs: 
   lazy val field: hydra.core.Field = (injection.field)
   lazy val fname: hydra.core.Name = (field.name)
   lazy val fterm: hydra.core.Term = (field.term)
-  hydra.lib.eithers.bind[hydra.errors.Error, Tuple2[hydra.core.TypeScheme, hydra.context.Context], Tuple2[hydra.core.Type,
-     hydra.context.Context]](hydra.resolution.requireSchemaType(cx)(tx.schemaTypes)(tname))((schemaResult: Tuple2[hydra.core.TypeScheme,
+  hydra.lib.eithers.bind[hydra.errors.Error, Tuple2[hydra.core.TypeScheme, hydra.context.Context],
+     Tuple2[hydra.core.Type, hydra.context.Context]](hydra.resolution.requireSchemaType(cx)(tx.schemaTypes)(tname))((schemaResult: Tuple2[hydra.core.TypeScheme,
      hydra.context.Context]) =>
     {
-    lazy val schemaType: hydra.core.TypeScheme = hydra.lib.pairs.first[hydra.core.TypeScheme, hydra.context.Context](schemaResult)
+    lazy val schemaType: hydra.core.TypeScheme = hydra.lib.pairs.first[hydra.core.TypeScheme,
+       hydra.context.Context](schemaResult)
     {
-      lazy val cx2: hydra.context.Context = hydra.lib.pairs.second[hydra.core.TypeScheme, hydra.context.Context](schemaResult)
+      lazy val cx2: hydra.context.Context = hydra.lib.pairs.second[hydra.core.TypeScheme,
+         hydra.context.Context](schemaResult)
       {
         lazy val svars: Seq[hydra.core.Name] = (schemaType.variables)
         {
           lazy val sbody: hydra.core.Type = (schemaType.`type`)
           hydra.lib.eithers.bind[hydra.errors.Error, Seq[hydra.core.FieldType], Tuple2[hydra.core.Type,
              hydra.context.Context]](hydra.extract.core.unionType(tname)(sbody))((sfields: Seq[hydra.core.FieldType]) =>
-            hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Type, Tuple2[hydra.core.Type, hydra.context.Context]](hydra.resolution.findFieldType(cx2)(fname)(sfields))((ftyp: hydra.core.Type) =>
+            hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Type, Tuple2[hydra.core.Type,
+               hydra.context.Context]](hydra.resolution.findFieldType(cx2)(fname)(sfields))((ftyp: hydra.core.Type) =>
             Right(Tuple2(hydra.resolution.nominalApplication(tname)(typeArgs), cx2))))
         }
       }
@@ -419,15 +456,16 @@ def typeOfLambda(cx: hydra.context.Context)(tx: hydra.graph.Graph)(typeArgs: Seq
   lazy val v: hydra.core.Name = (l.parameter)
   lazy val mdom: Option[hydra.core.Type] = (l.domain)
   lazy val body: hydra.core.Term = (l.body)
-  hydra.lib.eithers.bind[hydra.errors.Error, Tuple2[hydra.core.Type, hydra.context.Context], Tuple2[hydra.core.Type,
-     hydra.context.Context]](hydra.lib.maybes.maybe[Either[hydra.errors.Error, Tuple2[hydra.core.Type,
-     hydra.context.Context]], hydra.core.Type](Left(hydra.errors.Error.checking(hydra.error.checking.CheckingError.untypedLambda(hydra.error.checking.UntypedLambdaError()))))((dom: hydra.core.Type) =>
+  hydra.lib.eithers.bind[hydra.errors.Error, Tuple2[hydra.core.Type, hydra.context.Context],
+     Tuple2[hydra.core.Type, hydra.context.Context]](hydra.lib.maybes.maybe[Either[hydra.errors.Error,
+     Tuple2[hydra.core.Type, hydra.context.Context]], hydra.core.Type](Left(hydra.errors.Error.checking(hydra.error.checking.CheckingError.untypedLambda(hydra.error.checking.UntypedLambdaError()))))((dom: hydra.core.Type) =>
     {
     lazy val types2: Map[hydra.core.Name, hydra.core.TypeScheme] = hydra.lib.maps.insert[hydra.core.Name,
        hydra.core.TypeScheme](v)(hydra.scoping.fTypeToTypeScheme(dom))(tx.boundTypes)
-    hydra.lib.eithers.bind[hydra.errors.Error, Tuple2[hydra.core.Type, hydra.context.Context], Tuple2[hydra.core.Type,
-       hydra.context.Context]](hydra.checking.typeOf(cx)(hydra.graph.Graph(tx.boundTerms, types2, (tx.classConstraints),
-       (tx.lambdaVariables), (tx.metadata), (tx.primitives), (tx.schemaTypes), (tx.typeVariables)))(Seq())(body))((codResult: Tuple2[hydra.core.Type,
+    hydra.lib.eithers.bind[hydra.errors.Error, Tuple2[hydra.core.Type, hydra.context.Context],
+       Tuple2[hydra.core.Type, hydra.context.Context]](hydra.checking.typeOf(cx)(hydra.graph.Graph(tx.boundTerms,
+       types2, (tx.classConstraints), (tx.lambdaVariables), (tx.metadata), (tx.primitives),
+       (tx.schemaTypes), (tx.typeVariables)))(Seq())(body))((codResult: Tuple2[hydra.core.Type,
        hydra.context.Context]) =>
       {
       lazy val cod: hydra.core.Type = hydra.lib.pairs.first[hydra.core.Type, hydra.context.Context](codResult)
@@ -441,7 +479,8 @@ def typeOfLambda(cx: hydra.context.Context)(tx: hydra.graph.Graph)(typeArgs: Seq
     lazy val tbody: hydra.core.Type = hydra.lib.pairs.first[hydra.core.Type, hydra.context.Context](tbodyResult)
     {
       lazy val cx3: hydra.context.Context = hydra.lib.pairs.second[hydra.core.Type, hydra.context.Context](tbodyResult)
-      hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Type, Tuple2[hydra.core.Type, hydra.context.Context]](hydra.checking.applyTypeArgumentsToType(cx3)(tx)(typeArgs)(tbody))((applied: hydra.core.Type) => Right(Tuple2(applied,
+      hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Type, Tuple2[hydra.core.Type,
+         hydra.context.Context]](hydra.checking.applyTypeArgumentsToType(cx3)(tx)(typeArgs)(tbody))((applied: hydra.core.Type) => Right(Tuple2(applied,
          cx3)))
     }
   })
@@ -452,38 +491,43 @@ def typeOfLet(cx: hydra.context.Context)(tx: hydra.graph.Graph)(typeArgs: Seq[hy
   {
   lazy val bs: Seq[hydra.core.Binding] = (letTerm.bindings)
   lazy val body: hydra.core.Term = (letTerm.body)
-  lazy val bnames: Seq[hydra.core.Name] = hydra.lib.lists.map[hydra.core.Binding, hydra.core.Name]((x: hydra.core.Binding) => (x.name))(bs)
+  lazy val bnames: Seq[hydra.core.Name] = hydra.lib.lists.map[hydra.core.Binding,
+     hydra.core.Name]((x: hydra.core.Binding) => (x.name))(bs)
   def bindingType(b: hydra.core.Binding): Either[hydra.errors.Error, hydra.core.Type] =
     hydra.lib.maybes.maybe[Either[hydra.errors.Error, hydra.core.Type], hydra.core.TypeScheme](Left(hydra.errors.Error.checking(hydra.error.checking.CheckingError.untypedLetBinding(hydra.error.checking.UntypedLetBindingError(b)))))((ts: hydra.core.TypeScheme) => Right(hydra.scoping.typeSchemeToFType(ts)))(b.`type`)
   lazy val btypesResult: Either[hydra.errors.Error, Tuple2[Seq[hydra.core.Type], Unit]] = hydra.lib.lists.foldl[Either[hydra.errors.Error,
-     Tuple2[Seq[hydra.core.Type], Unit]], hydra.core.Binding]((acc: Either[hydra.errors.Error, Tuple2[Seq[hydra.core.Type],
-     Unit]]) =>
+     Tuple2[Seq[hydra.core.Type], Unit]], hydra.core.Binding]((acc: Either[hydra.errors.Error,
+     Tuple2[Seq[hydra.core.Type], Unit]]) =>
     (b: hydra.core.Binding) =>
-    hydra.lib.eithers.bind[hydra.errors.Error, Tuple2[Seq[hydra.core.Type], Unit], Tuple2[Seq[hydra.core.Type],
-       Unit]](acc)((accR: Tuple2[Seq[hydra.core.Type], Unit]) =>
+    hydra.lib.eithers.bind[hydra.errors.Error, Tuple2[Seq[hydra.core.Type], Unit],
+       Tuple2[Seq[hydra.core.Type], Unit]](acc)((accR: Tuple2[Seq[hydra.core.Type],
+       Unit]) =>
     {
     lazy val types: Seq[hydra.core.Type] = hydra.lib.pairs.first[Seq[hydra.core.Type], Unit](accR)
-    hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Type, Tuple2[Seq[hydra.core.Type], Unit]](bindingType(b))((btype: hydra.core.Type) =>
+    hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Type, Tuple2[Seq[hydra.core.Type],
+       Unit]](bindingType(b))((btype: hydra.core.Type) =>
       Right(Tuple2(hydra.lib.lists.concat2[hydra.core.Type](types)(hydra.lib.lists.pure[hydra.core.Type](btype)), ())))
   }))(Right(Tuple2(Seq(), ())))(bs)
   hydra.lib.eithers.bind[hydra.errors.Error, Tuple2[Seq[hydra.core.Type], Unit], Tuple2[hydra.core.Type,
-     hydra.context.Context]](btypesResult)((btypesR: Tuple2[Seq[hydra.core.Type], Unit]) =>
+     hydra.context.Context]](btypesResult)((btypesR: Tuple2[Seq[hydra.core.Type],
+     Unit]) =>
     {
     lazy val btypes: Seq[hydra.core.Type] = hydra.lib.pairs.first[Seq[hydra.core.Type], Unit](btypesR)
     {
       lazy val tx2: hydra.graph.Graph = hydra.graph.Graph(tx.boundTerms, hydra.lib.maps.union[hydra.core.Name,
          hydra.core.TypeScheme](hydra.lib.maps.fromList[hydra.core.Name, hydra.core.TypeScheme](hydra.lib.lists.zip[hydra.core.Name,
          hydra.core.TypeScheme](bnames)(hydra.lib.lists.map[hydra.core.Type, hydra.core.TypeScheme](hydra.scoping.fTypeToTypeScheme)(btypes))))(tx.boundTypes),
-         (tx.classConstraints), (tx.lambdaVariables), (tx.metadata), (tx.primitives), (tx.schemaTypes),
-         (tx.typeVariables))
-      hydra.lib.eithers.bind[hydra.errors.Error, Tuple2[hydra.core.Type, hydra.context.Context], Tuple2[hydra.core.Type,
-         hydra.context.Context]](hydra.checking.typeOf(cx)(tx2)(Seq())(body))((tResult: Tuple2[hydra.core.Type,
+         (tx.classConstraints), (tx.lambdaVariables), (tx.metadata), (tx.primitives),
+         (tx.schemaTypes), (tx.typeVariables))
+      hydra.lib.eithers.bind[hydra.errors.Error, Tuple2[hydra.core.Type, hydra.context.Context],
+         Tuple2[hydra.core.Type, hydra.context.Context]](hydra.checking.typeOf(cx)(tx2)(Seq())(body))((tResult: Tuple2[hydra.core.Type,
          hydra.context.Context]) =>
         {
         lazy val t: hydra.core.Type = hydra.lib.pairs.first[hydra.core.Type, hydra.context.Context](tResult)
         {
           lazy val cx2: hydra.context.Context = hydra.lib.pairs.second[hydra.core.Type, hydra.context.Context](tResult)
-          hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Type, Tuple2[hydra.core.Type, hydra.context.Context]](hydra.checking.applyTypeArgumentsToType(cx2)(tx)(typeArgs)(t))((applied: hydra.core.Type) => Right(Tuple2(applied,
+          hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Type, Tuple2[hydra.core.Type,
+             hydra.context.Context]](hydra.checking.applyTypeArgumentsToType(cx2)(tx)(typeArgs)(t))((applied: hydra.core.Type) => Right(Tuple2(applied,
              cx2)))
         }
       })
@@ -501,14 +545,15 @@ def typeOfList(cx: hydra.context.Context)(tx: hydra.graph.Graph)(typeArgs: Seq[h
      Tuple2[Seq[hydra.core.Type], hydra.context.Context]], hydra.core.Term]((acc: Either[hydra.errors.Error,
      Tuple2[Seq[hydra.core.Type], hydra.context.Context]]) =>
     (term: hydra.core.Term) =>
-    hydra.lib.eithers.bind[hydra.errors.Error, Tuple2[Seq[hydra.core.Type], hydra.context.Context], Tuple2[Seq[hydra.core.Type],
-       hydra.context.Context]](acc)((accR: Tuple2[Seq[hydra.core.Type], hydra.context.Context]) =>
+    hydra.lib.eithers.bind[hydra.errors.Error, Tuple2[Seq[hydra.core.Type], hydra.context.Context],
+       Tuple2[Seq[hydra.core.Type], hydra.context.Context]](acc)((accR: Tuple2[Seq[hydra.core.Type],
+       hydra.context.Context]) =>
     {
     lazy val types: Seq[hydra.core.Type] = hydra.lib.pairs.first[Seq[hydra.core.Type], hydra.context.Context](accR)
     {
       lazy val cxA: hydra.context.Context = hydra.lib.pairs.second[Seq[hydra.core.Type], hydra.context.Context](accR)
-      hydra.lib.eithers.bind[hydra.errors.Error, Tuple2[hydra.core.Type, hydra.context.Context], Tuple2[Seq[hydra.core.Type],
-         hydra.context.Context]](hydra.checking.typeOf(cxA)(tx)(Seq())(term))((tResult: Tuple2[hydra.core.Type,
+      hydra.lib.eithers.bind[hydra.errors.Error, Tuple2[hydra.core.Type, hydra.context.Context],
+         Tuple2[Seq[hydra.core.Type], hydra.context.Context]](hydra.checking.typeOf(cxA)(tx)(Seq())(term))((tResult: Tuple2[hydra.core.Type,
          hydra.context.Context]) =>
         {
         lazy val t: hydra.core.Type = hydra.lib.pairs.first[hydra.core.Type, hydra.context.Context](tResult)
@@ -519,13 +564,15 @@ def typeOfList(cx: hydra.context.Context)(tx: hydra.graph.Graph)(typeArgs: Seq[h
       })
     }
   }))(Right(Tuple2(Seq(), cx)))(els)
-  hydra.lib.eithers.bind[hydra.errors.Error, Tuple2[Seq[hydra.core.Type], hydra.context.Context], Tuple2[hydra.core.Type,
-     hydra.context.Context]](foldResult)((foldR: Tuple2[Seq[hydra.core.Type], hydra.context.Context]) =>
+  hydra.lib.eithers.bind[hydra.errors.Error, Tuple2[Seq[hydra.core.Type], hydra.context.Context],
+     Tuple2[hydra.core.Type, hydra.context.Context]](foldResult)((foldR: Tuple2[Seq[hydra.core.Type],
+     hydra.context.Context]) =>
     {
     lazy val eltypes: Seq[hydra.core.Type] = hydra.lib.pairs.first[Seq[hydra.core.Type], hydra.context.Context](foldR)
     {
       lazy val cx2: hydra.context.Context = hydra.lib.pairs.second[Seq[hydra.core.Type], hydra.context.Context](foldR)
-      hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Type, Tuple2[hydra.core.Type, hydra.context.Context]](hydra.checking.checkSameType(cx2)(tx)("list elements")(eltypes))((unifiedType: hydra.core.Type) => Right(Tuple2(hydra.core.Type.list(unifiedType),
+      hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Type, Tuple2[hydra.core.Type,
+         hydra.context.Context]](hydra.checking.checkSameType(cx2)(tx)("list elements")(eltypes))((unifiedType: hydra.core.Type) => Right(Tuple2(hydra.core.Type.list(unifiedType),
          cx2)))
     }
   })
@@ -535,21 +582,27 @@ def typeOfLiteral[T0](cx: T0)(tx: hydra.graph.Graph)(typeArgs: Seq[hydra.core.Ty
    Tuple2[hydra.core.Type, T0]] =
   {
   lazy val t: hydra.core.Type = hydra.core.Type.literal(hydra.reflect.literalType(lit))
-  hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Type, Tuple2[hydra.core.Type, T0]](hydra.checking.applyTypeArgumentsToType(cx)(tx)(typeArgs)(t))((applied: hydra.core.Type) => Right(Tuple2(applied,
+  hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Type, Tuple2[hydra.core.Type,
+     T0]](hydra.checking.applyTypeArgumentsToType(cx)(tx)(typeArgs)(t))((applied: hydra.core.Type) => Right(Tuple2(applied,
      cx)))
 }
 
 def typeOfMap(cx: hydra.context.Context)(tx: hydra.graph.Graph)(typeArgs: Seq[hydra.core.Type])(m: Map[hydra.core.Term,
    hydra.core.Term]): Either[hydra.errors.Error, Tuple2[hydra.core.Type, hydra.context.Context]] =
   hydra.lib.logic.ifElse[Either[hydra.errors.Error, Tuple2[hydra.core.Type, hydra.context.Context]]](hydra.lib.maps.`null`[hydra.core.Term,
-     hydra.core.Term](m))(hydra.lib.logic.ifElse[Either[hydra.errors.Error, Tuple2[hydra.core.Type, hydra.context.Context]]](hydra.lib.equality.equal[Int](hydra.lib.lists.length[hydra.core.Type](typeArgs))(2))(Right(Tuple2(hydra.core.Type.map(hydra.core.MapType(hydra.lib.lists.at[hydra.core.Type](0)(typeArgs),
+     hydra.core.Term](m))(hydra.lib.logic.ifElse[Either[hydra.errors.Error, Tuple2[hydra.core.Type,
+     hydra.context.Context]]](hydra.lib.equality.equal[Int](hydra.lib.lists.length[hydra.core.Type](typeArgs))(2))(Right(Tuple2(hydra.core.Type.map(hydra.core.MapType(hydra.lib.lists.at[hydra.core.Type](0)(typeArgs),
      hydra.lib.lists.at[hydra.core.Type](1)(typeArgs))), cx)))(Left(hydra.errors.Error.checking(hydra.error.checking.CheckingError.typeArityMismatch(hydra.error.checking.TypeArityMismatchError(hydra.core.Type.map(hydra.core.MapType(hydra.core.Type.unit,
-     hydra.core.Type.unit)), 2, hydra.lib.lists.length[hydra.core.Type](typeArgs), typeArgs))))))({
-  lazy val pairs: Seq[Tuple2[hydra.core.Term, hydra.core.Term]] = hydra.lib.maps.toList[hydra.core.Term, hydra.core.Term](m)
+     hydra.core.Type.unit)), 2, hydra.lib.lists.length[hydra.core.Type](typeArgs),
+     typeArgs))))))({
+  lazy val pairs: Seq[Tuple2[hydra.core.Term, hydra.core.Term]] = hydra.lib.maps.toList[hydra.core.Term,
+     hydra.core.Term](m)
   {
-    lazy val keyFoldResult: Either[hydra.errors.Error, Tuple2[Seq[hydra.core.Type], hydra.context.Context]] = hydra.lib.lists.foldl[Either[hydra.errors.Error,
-       Tuple2[Seq[hydra.core.Type], hydra.context.Context]], Tuple2[hydra.core.Term, hydra.core.Term]]((acc: Either[hydra.errors.Error,
-       Tuple2[Seq[hydra.core.Type], hydra.context.Context]]) =>
+    lazy val keyFoldResult: Either[hydra.errors.Error, Tuple2[Seq[hydra.core.Type],
+       hydra.context.Context]] = hydra.lib.lists.foldl[Either[hydra.errors.Error,
+       Tuple2[Seq[hydra.core.Type], hydra.context.Context]], Tuple2[hydra.core.Term,
+       hydra.core.Term]]((acc: Either[hydra.errors.Error, Tuple2[Seq[hydra.core.Type],
+       hydra.context.Context]]) =>
       (p: Tuple2[hydra.core.Term, hydra.core.Term]) =>
       hydra.lib.eithers.bind[hydra.errors.Error, Tuple2[Seq[hydra.core.Type], hydra.context.Context],
          Tuple2[Seq[hydra.core.Type], hydra.context.Context]](acc)((accR: Tuple2[Seq[hydra.core.Type],
@@ -558,58 +611,74 @@ def typeOfMap(cx: hydra.context.Context)(tx: hydra.graph.Graph)(typeArgs: Seq[hy
       lazy val types: Seq[hydra.core.Type] = hydra.lib.pairs.first[Seq[hydra.core.Type], hydra.context.Context](accR)
       {
         lazy val cxA: hydra.context.Context = hydra.lib.pairs.second[Seq[hydra.core.Type], hydra.context.Context](accR)
-        hydra.lib.eithers.bind[hydra.errors.Error, Tuple2[hydra.core.Type, hydra.context.Context], Tuple2[Seq[hydra.core.Type],
-           hydra.context.Context]](hydra.checking.typeOf(cxA)(tx)(Seq())(hydra.lib.pairs.first[hydra.core.Term,
+        hydra.lib.eithers.bind[hydra.errors.Error, Tuple2[hydra.core.Type, hydra.context.Context],
+           Tuple2[Seq[hydra.core.Type], hydra.context.Context]](hydra.checking.typeOf(cxA)(tx)(Seq())(hydra.lib.pairs.first[hydra.core.Term,
            hydra.core.Term](p)))((tResult: Tuple2[hydra.core.Type, hydra.context.Context]) =>
           {
           lazy val t: hydra.core.Type = hydra.lib.pairs.first[hydra.core.Type, hydra.context.Context](tResult)
           {
-            lazy val cxB: hydra.context.Context = hydra.lib.pairs.second[hydra.core.Type, hydra.context.Context](tResult)
-            Right(Tuple2(hydra.lib.lists.concat2[hydra.core.Type](types)(hydra.lib.lists.pure[hydra.core.Type](t)), cxB))
+            lazy val cxB: hydra.context.Context = hydra.lib.pairs.second[hydra.core.Type,
+               hydra.context.Context](tResult)
+            Right(Tuple2(hydra.lib.lists.concat2[hydra.core.Type](types)(hydra.lib.lists.pure[hydra.core.Type](t)),
+               cxB))
           }
         })
       }
     }))(Right(Tuple2(Seq(), cx)))(pairs)
-    hydra.lib.eithers.bind[hydra.errors.Error, Tuple2[Seq[hydra.core.Type], hydra.context.Context], Tuple2[hydra.core.Type,
-       hydra.context.Context]](keyFoldResult)((keyFoldR: Tuple2[Seq[hydra.core.Type], hydra.context.Context]) =>
+    hydra.lib.eithers.bind[hydra.errors.Error, Tuple2[Seq[hydra.core.Type], hydra.context.Context],
+       Tuple2[hydra.core.Type, hydra.context.Context]](keyFoldResult)((keyFoldR: Tuple2[Seq[hydra.core.Type],
+       hydra.context.Context]) =>
       {
-      lazy val keyTypes: Seq[hydra.core.Type] = hydra.lib.pairs.first[Seq[hydra.core.Type], hydra.context.Context](keyFoldR)
+      lazy val keyTypes: Seq[hydra.core.Type] = hydra.lib.pairs.first[Seq[hydra.core.Type],
+         hydra.context.Context](keyFoldR)
       {
-        lazy val cx2: hydra.context.Context = hydra.lib.pairs.second[Seq[hydra.core.Type], hydra.context.Context](keyFoldR)
-        hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Type, Tuple2[hydra.core.Type, hydra.context.Context]](hydra.checking.checkSameType(cx2)(tx)("map keys")(keyTypes))((kt: hydra.core.Type) =>
+        lazy val cx2: hydra.context.Context = hydra.lib.pairs.second[Seq[hydra.core.Type],
+           hydra.context.Context](keyFoldR)
+        hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Type, Tuple2[hydra.core.Type,
+           hydra.context.Context]](hydra.checking.checkSameType(cx2)(tx)("map keys")(keyTypes))((kt: hydra.core.Type) =>
           {
-          lazy val valFoldResult: Either[hydra.errors.Error, Tuple2[Seq[hydra.core.Type], hydra.context.Context]] = hydra.lib.lists.foldl[Either[hydra.errors.Error,
-             Tuple2[Seq[hydra.core.Type], hydra.context.Context]], Tuple2[hydra.core.Term, hydra.core.Term]]((acc: Either[hydra.errors.Error,
-             Tuple2[Seq[hydra.core.Type], hydra.context.Context]]) =>
+          lazy val valFoldResult: Either[hydra.errors.Error, Tuple2[Seq[hydra.core.Type],
+             hydra.context.Context]] = hydra.lib.lists.foldl[Either[hydra.errors.Error,
+             Tuple2[Seq[hydra.core.Type], hydra.context.Context]], Tuple2[hydra.core.Term,
+             hydra.core.Term]]((acc: Either[hydra.errors.Error, Tuple2[Seq[hydra.core.Type],
+             hydra.context.Context]]) =>
             (p: Tuple2[hydra.core.Term, hydra.core.Term]) =>
-            hydra.lib.eithers.bind[hydra.errors.Error, Tuple2[Seq[hydra.core.Type], hydra.context.Context],
-               Tuple2[Seq[hydra.core.Type], hydra.context.Context]](acc)((accR: Tuple2[Seq[hydra.core.Type],
+            hydra.lib.eithers.bind[hydra.errors.Error, Tuple2[Seq[hydra.core.Type],
+               hydra.context.Context], Tuple2[Seq[hydra.core.Type], hydra.context.Context]](acc)((accR: Tuple2[Seq[hydra.core.Type],
                hydra.context.Context]) =>
             {
-            lazy val types: Seq[hydra.core.Type] = hydra.lib.pairs.first[Seq[hydra.core.Type], hydra.context.Context](accR)
+            lazy val types: Seq[hydra.core.Type] = hydra.lib.pairs.first[Seq[hydra.core.Type],
+               hydra.context.Context](accR)
             {
-              lazy val cxA: hydra.context.Context = hydra.lib.pairs.second[Seq[hydra.core.Type], hydra.context.Context](accR)
+              lazy val cxA: hydra.context.Context = hydra.lib.pairs.second[Seq[hydra.core.Type],
+                 hydra.context.Context](accR)
               hydra.lib.eithers.bind[hydra.errors.Error, Tuple2[hydra.core.Type, hydra.context.Context],
                  Tuple2[Seq[hydra.core.Type], hydra.context.Context]](hydra.checking.typeOf(cxA)(tx)(Seq())(hydra.lib.pairs.second[hydra.core.Term,
                  hydra.core.Term](p)))((tResult: Tuple2[hydra.core.Type, hydra.context.Context]) =>
                 {
                 lazy val t: hydra.core.Type = hydra.lib.pairs.first[hydra.core.Type, hydra.context.Context](tResult)
                 {
-                  lazy val cxB: hydra.context.Context = hydra.lib.pairs.second[hydra.core.Type, hydra.context.Context](tResult)
-                  Right(Tuple2(hydra.lib.lists.concat2[hydra.core.Type](types)(hydra.lib.lists.pure[hydra.core.Type](t)), cxB))
+                  lazy val cxB: hydra.context.Context = hydra.lib.pairs.second[hydra.core.Type,
+                     hydra.context.Context](tResult)
+                  Right(Tuple2(hydra.lib.lists.concat2[hydra.core.Type](types)(hydra.lib.lists.pure[hydra.core.Type](t)),
+                     cxB))
                 }
               })
             }
           }))(Right(Tuple2(Seq(), cx2)))(pairs)
-          hydra.lib.eithers.bind[hydra.errors.Error, Tuple2[Seq[hydra.core.Type], hydra.context.Context],
-             Tuple2[hydra.core.Type, hydra.context.Context]](valFoldResult)((valFoldR: Tuple2[Seq[hydra.core.Type],
+          hydra.lib.eithers.bind[hydra.errors.Error, Tuple2[Seq[hydra.core.Type],
+             hydra.context.Context], Tuple2[hydra.core.Type, hydra.context.Context]](valFoldResult)((valFoldR: Tuple2[Seq[hydra.core.Type],
              hydra.context.Context]) =>
             {
-            lazy val valTypes: Seq[hydra.core.Type] = hydra.lib.pairs.first[Seq[hydra.core.Type], hydra.context.Context](valFoldR)
+            lazy val valTypes: Seq[hydra.core.Type] = hydra.lib.pairs.first[Seq[hydra.core.Type],
+               hydra.context.Context](valFoldR)
             {
-              lazy val cx3: hydra.context.Context = hydra.lib.pairs.second[Seq[hydra.core.Type], hydra.context.Context](valFoldR)
-              hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Type, Tuple2[hydra.core.Type, hydra.context.Context]](hydra.checking.checkSameType(cx3)(tx)("map values")(valTypes))((vt: hydra.core.Type) =>
-                hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Type, Tuple2[hydra.core.Type, hydra.context.Context]](hydra.checking.applyTypeArgumentsToType(cx3)(tx)(typeArgs)(hydra.core.Type.map(hydra.core.MapType(kt,
+              lazy val cx3: hydra.context.Context = hydra.lib.pairs.second[Seq[hydra.core.Type],
+                 hydra.context.Context](valFoldR)
+              hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Type, Tuple2[hydra.core.Type,
+                 hydra.context.Context]](hydra.checking.checkSameType(cx3)(tx)("map values")(valTypes))((vt: hydra.core.Type) =>
+                hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Type, Tuple2[hydra.core.Type,
+                   hydra.context.Context]](hydra.checking.applyTypeArgumentsToType(cx3)(tx)(typeArgs)(hydra.core.Type.map(hydra.core.MapType(kt,
                    vt))))((applied: hydra.core.Type) => Right(Tuple2(applied, cx3))))
             }
           })
@@ -629,8 +698,8 @@ def typeOfMaybe(cx: hydra.context.Context)(tx: hydra.graph.Graph)(typeArgs: Seq[
        1, n, typeArgs)))))
   }
   def forJust(term: hydra.core.Term): Either[hydra.errors.Error, Tuple2[hydra.core.Type, hydra.context.Context]] =
-    hydra.lib.eithers.bind[hydra.errors.Error, Tuple2[hydra.core.Type, hydra.context.Context], Tuple2[hydra.core.Type,
-       hydra.context.Context]](hydra.checking.typeOf(cx)(tx)(Seq())(term))((tResult: Tuple2[hydra.core.Type,
+    hydra.lib.eithers.bind[hydra.errors.Error, Tuple2[hydra.core.Type, hydra.context.Context],
+       Tuple2[hydra.core.Type, hydra.context.Context]](hydra.checking.typeOf(cx)(tx)(Seq())(term))((tResult: Tuple2[hydra.core.Type,
        hydra.context.Context]) =>
     {
     lazy val termType: hydra.core.Type = hydra.lib.pairs.first[hydra.core.Type, hydra.context.Context](tResult)
@@ -638,12 +707,14 @@ def typeOfMaybe(cx: hydra.context.Context)(tx: hydra.graph.Graph)(typeArgs: Seq[
       lazy val cx2: hydra.context.Context = hydra.lib.pairs.second[hydra.core.Type, hydra.context.Context](tResult)
       {
         lazy val t: hydra.core.Type = hydra.core.Type.maybe(termType)
-        hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Type, Tuple2[hydra.core.Type, hydra.context.Context]](hydra.checking.applyTypeArgumentsToType(cx2)(tx)(typeArgs)(t))((applied: hydra.core.Type) => Right(Tuple2(applied,
+        hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Type, Tuple2[hydra.core.Type,
+           hydra.context.Context]](hydra.checking.applyTypeArgumentsToType(cx2)(tx)(typeArgs)(t))((applied: hydra.core.Type) => Right(Tuple2(applied,
            cx2)))
       }
     }
   })
-  hydra.lib.maybes.maybe[Either[hydra.errors.Error, Tuple2[hydra.core.Type, hydra.context.Context]], hydra.core.Term](forNothing)(forJust)(mt)
+  hydra.lib.maybes.maybe[Either[hydra.errors.Error, Tuple2[hydra.core.Type, hydra.context.Context]],
+     hydra.core.Term](forNothing)(forJust)(mt)
 }
 
 def typeOfPair(cx: hydra.context.Context)(tx: hydra.graph.Graph)(typeArgs: Seq[hydra.core.Type])(p: Tuple2[hydra.core.Term,
@@ -654,20 +725,22 @@ def typeOfPair(cx: hydra.context.Context)(tx: hydra.graph.Graph)(typeArgs: Seq[h
     lazy val pairFst: hydra.core.Term = hydra.lib.pairs.first[hydra.core.Term, hydra.core.Term](p)
     {
       lazy val pairSnd: hydra.core.Term = hydra.lib.pairs.second[hydra.core.Term, hydra.core.Term](p)
-      hydra.lib.eithers.bind[hydra.errors.Error, Tuple2[hydra.core.Type, hydra.context.Context], Tuple2[hydra.core.Type,
-         hydra.context.Context]](hydra.checking.typeOf(cx)(tx)(Seq())(pairFst))((result1: Tuple2[hydra.core.Type,
+      hydra.lib.eithers.bind[hydra.errors.Error, Tuple2[hydra.core.Type, hydra.context.Context],
+         Tuple2[hydra.core.Type, hydra.context.Context]](hydra.checking.typeOf(cx)(tx)(Seq())(pairFst))((result1: Tuple2[hydra.core.Type,
          hydra.context.Context]) =>
         {
         lazy val firstType: hydra.core.Type = hydra.lib.pairs.first[hydra.core.Type, hydra.context.Context](result1)
         {
           lazy val cx2: hydra.context.Context = hydra.lib.pairs.second[hydra.core.Type, hydra.context.Context](result1)
-          hydra.lib.eithers.bind[hydra.errors.Error, Tuple2[hydra.core.Type, hydra.context.Context], Tuple2[hydra.core.Type,
-             hydra.context.Context]](hydra.checking.typeOf(cx2)(tx)(Seq())(pairSnd))((result2: Tuple2[hydra.core.Type,
+          hydra.lib.eithers.bind[hydra.errors.Error, Tuple2[hydra.core.Type, hydra.context.Context],
+             Tuple2[hydra.core.Type, hydra.context.Context]](hydra.checking.typeOf(cx2)(tx)(Seq())(pairSnd))((result2: Tuple2[hydra.core.Type,
              hydra.context.Context]) =>
             {
-            lazy val secondType: hydra.core.Type = hydra.lib.pairs.first[hydra.core.Type, hydra.context.Context](result2)
+            lazy val secondType: hydra.core.Type = hydra.lib.pairs.first[hydra.core.Type,
+               hydra.context.Context](result2)
             {
-              lazy val cx3: hydra.context.Context = hydra.lib.pairs.second[hydra.core.Type, hydra.context.Context](result2)
+              lazy val cx3: hydra.context.Context = hydra.lib.pairs.second[hydra.core.Type,
+                 hydra.context.Context](result2)
               Right(Tuple2(hydra.core.Type.pair(hydra.core.PairType(firstType, secondType)), cx3))
             }
           })
@@ -681,19 +754,24 @@ def typeOfPair(cx: hydra.context.Context)(tx: hydra.graph.Graph)(typeArgs: Seq[h
 def typeOfPrimitive(cx: hydra.context.Context)(tx: hydra.graph.Graph)(typeArgs: Seq[hydra.core.Type])(name: hydra.core.Name): Either[hydra.errors.Error,
    Tuple2[hydra.core.Type, hydra.context.Context]] =
   {
-  lazy val rawTs: Option[hydra.core.TypeScheme] = hydra.lib.maybes.map[hydra.graph.Primitive, hydra.core.TypeScheme]((_p: hydra.graph.Primitive) => (_p.`type`))(hydra.lib.maps.lookup[hydra.core.Name,
+  lazy val rawTs: Option[hydra.core.TypeScheme] = hydra.lib.maybes.map[hydra.graph.Primitive,
+     hydra.core.TypeScheme]((_p: hydra.graph.Primitive) => (_p.`type`))(hydra.lib.maps.lookup[hydra.core.Name,
      hydra.graph.Primitive](name)(tx.primitives))
-  hydra.lib.maybes.maybe[Either[hydra.errors.Error, Tuple2[hydra.core.Type, hydra.context.Context]], hydra.core.TypeScheme](Left(hydra.errors.Error.undefinedTermVariable(hydra.error.core.UndefinedTermVariableError(Seq(),
+  hydra.lib.maybes.maybe[Either[hydra.errors.Error, Tuple2[hydra.core.Type, hydra.context.Context]],
+     hydra.core.TypeScheme](Left(hydra.errors.Error.undefinedTermVariable(hydra.error.core.UndefinedTermVariableError(Seq(),
      name))))((tsRaw: hydra.core.TypeScheme) =>
     {
     lazy val instResult: Tuple2[hydra.core.TypeScheme, hydra.context.Context] = hydra.resolution.instantiateTypeScheme(cx)(tsRaw)
     {
-      lazy val ts: hydra.core.TypeScheme = hydra.lib.pairs.first[hydra.core.TypeScheme, hydra.context.Context](instResult)
+      lazy val ts: hydra.core.TypeScheme = hydra.lib.pairs.first[hydra.core.TypeScheme,
+         hydra.context.Context](instResult)
       {
-        lazy val cx2: hydra.context.Context = hydra.lib.pairs.second[hydra.core.TypeScheme, hydra.context.Context](instResult)
+        lazy val cx2: hydra.context.Context = hydra.lib.pairs.second[hydra.core.TypeScheme,
+           hydra.context.Context](instResult)
         {
           lazy val t: hydra.core.Type = hydra.scoping.typeSchemeToFType(ts)
-          hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Type, Tuple2[hydra.core.Type, hydra.context.Context]](hydra.checking.applyTypeArgumentsToType(cx2)(tx)(typeArgs)(t))((applied: hydra.core.Type) => Right(Tuple2(applied,
+          hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Type, Tuple2[hydra.core.Type,
+             hydra.context.Context]](hydra.checking.applyTypeArgumentsToType(cx2)(tx)(typeArgs)(t))((applied: hydra.core.Type) => Right(Tuple2(applied,
              cx2)))
         }
       }
@@ -706,26 +784,30 @@ def typeOfProjection(cx: hydra.context.Context)(tx: hydra.graph.Graph)(typeArgs:
   {
   lazy val tname: hydra.core.Name = (p.typeName)
   lazy val fname: hydra.core.Name = (p.field)
-  hydra.lib.eithers.bind[hydra.errors.Error, Tuple2[hydra.core.TypeScheme, hydra.context.Context], Tuple2[hydra.core.Type,
-     hydra.context.Context]](hydra.resolution.requireSchemaType(cx)(tx.schemaTypes)(tname))((schemaResult: Tuple2[hydra.core.TypeScheme,
+  hydra.lib.eithers.bind[hydra.errors.Error, Tuple2[hydra.core.TypeScheme, hydra.context.Context],
+     Tuple2[hydra.core.Type, hydra.context.Context]](hydra.resolution.requireSchemaType(cx)(tx.schemaTypes)(tname))((schemaResult: Tuple2[hydra.core.TypeScheme,
      hydra.context.Context]) =>
     {
-    lazy val schemaType: hydra.core.TypeScheme = hydra.lib.pairs.first[hydra.core.TypeScheme, hydra.context.Context](schemaResult)
+    lazy val schemaType: hydra.core.TypeScheme = hydra.lib.pairs.first[hydra.core.TypeScheme,
+       hydra.context.Context](schemaResult)
     {
-      lazy val cx2: hydra.context.Context = hydra.lib.pairs.second[hydra.core.TypeScheme, hydra.context.Context](schemaResult)
+      lazy val cx2: hydra.context.Context = hydra.lib.pairs.second[hydra.core.TypeScheme,
+         hydra.context.Context](schemaResult)
       {
         lazy val svars: Seq[hydra.core.Name] = (schemaType.variables)
         {
           lazy val sbody: hydra.core.Type = (schemaType.`type`)
           hydra.lib.eithers.bind[hydra.errors.Error, Seq[hydra.core.FieldType], Tuple2[hydra.core.Type,
              hydra.context.Context]](hydra.extract.core.recordType(tname)(sbody))((sfields: Seq[hydra.core.FieldType]) =>
-            hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Type, Tuple2[hydra.core.Type, hydra.context.Context]](hydra.resolution.findFieldType(cx2)(fname)(sfields))((ftyp: hydra.core.Type) =>
+            hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Type, Tuple2[hydra.core.Type,
+               hydra.context.Context]](hydra.resolution.findFieldType(cx2)(fname)(sfields))((ftyp: hydra.core.Type) =>
             {
-            lazy val subst: hydra.typing.TypeSubst = hydra.lib.maps.fromList[hydra.core.Name, hydra.core.Type](hydra.lib.lists.zip[hydra.core.Name,
-               hydra.core.Type](svars)(typeArgs))
+            lazy val subst: hydra.typing.TypeSubst = hydra.lib.maps.fromList[hydra.core.Name,
+               hydra.core.Type](hydra.lib.lists.zip[hydra.core.Name, hydra.core.Type](svars)(typeArgs))
             {
               lazy val sftyp: hydra.core.Type = hydra.substitution.substInType(subst)(ftyp)
-              Right(Tuple2(hydra.core.Type.function(hydra.core.FunctionType(hydra.resolution.nominalApplication(tname)(typeArgs), sftyp)), cx2))
+              Right(Tuple2(hydra.core.Type.function(hydra.core.FunctionType(hydra.resolution.nominalApplication(tname)(typeArgs),
+                 sftyp)), cx2))
             }
           }))
         }
@@ -743,14 +825,15 @@ def typeOfRecord(cx: hydra.context.Context)(tx: hydra.graph.Graph)(typeArgs: Seq
      Tuple2[Seq[hydra.core.Type], hydra.context.Context]], hydra.core.Term]((acc: Either[hydra.errors.Error,
      Tuple2[Seq[hydra.core.Type], hydra.context.Context]]) =>
     (term: hydra.core.Term) =>
-    hydra.lib.eithers.bind[hydra.errors.Error, Tuple2[Seq[hydra.core.Type], hydra.context.Context], Tuple2[Seq[hydra.core.Type],
-       hydra.context.Context]](acc)((accR: Tuple2[Seq[hydra.core.Type], hydra.context.Context]) =>
+    hydra.lib.eithers.bind[hydra.errors.Error, Tuple2[Seq[hydra.core.Type], hydra.context.Context],
+       Tuple2[Seq[hydra.core.Type], hydra.context.Context]](acc)((accR: Tuple2[Seq[hydra.core.Type],
+       hydra.context.Context]) =>
     {
     lazy val types: Seq[hydra.core.Type] = hydra.lib.pairs.first[Seq[hydra.core.Type], hydra.context.Context](accR)
     {
       lazy val cxA: hydra.context.Context = hydra.lib.pairs.second[Seq[hydra.core.Type], hydra.context.Context](accR)
-      hydra.lib.eithers.bind[hydra.errors.Error, Tuple2[hydra.core.Type, hydra.context.Context], Tuple2[Seq[hydra.core.Type],
-         hydra.context.Context]](hydra.checking.typeOf(cxA)(tx)(Seq())(term))((tResult: Tuple2[hydra.core.Type,
+      hydra.lib.eithers.bind[hydra.errors.Error, Tuple2[hydra.core.Type, hydra.context.Context],
+         Tuple2[Seq[hydra.core.Type], hydra.context.Context]](hydra.checking.typeOf(cxA)(tx)(Seq())(term))((tResult: Tuple2[hydra.core.Type,
          hydra.context.Context]) =>
         {
         lazy val t: hydra.core.Type = hydra.lib.pairs.first[hydra.core.Type, hydra.context.Context](tResult)
@@ -761,8 +844,9 @@ def typeOfRecord(cx: hydra.context.Context)(tx: hydra.graph.Graph)(typeArgs: Seq
       })
     }
   }))(Right(Tuple2(Seq(), cx)))(hydra.lib.lists.map[hydra.core.Field, hydra.core.Term]((x: hydra.core.Field) => (x.term))(fields))
-  hydra.lib.eithers.bind[hydra.errors.Error, Tuple2[Seq[hydra.core.Type], hydra.context.Context], Tuple2[hydra.core.Type,
-     hydra.context.Context]](foldResult)((foldR: Tuple2[Seq[hydra.core.Type], hydra.context.Context]) =>
+  hydra.lib.eithers.bind[hydra.errors.Error, Tuple2[Seq[hydra.core.Type], hydra.context.Context],
+     Tuple2[hydra.core.Type, hydra.context.Context]](foldResult)((foldR: Tuple2[Seq[hydra.core.Type],
+     hydra.context.Context]) =>
     {
     lazy val cx2: hydra.context.Context = hydra.lib.pairs.second[Seq[hydra.core.Type], hydra.context.Context](foldR)
     Right(Tuple2(hydra.resolution.nominalApplication(tname)(typeArgs), cx2))
@@ -779,14 +863,15 @@ def typeOfSet(cx: hydra.context.Context)(tx: hydra.graph.Graph)(typeArgs: Seq[hy
      Tuple2[Seq[hydra.core.Type], hydra.context.Context]], hydra.core.Term]((acc: Either[hydra.errors.Error,
      Tuple2[Seq[hydra.core.Type], hydra.context.Context]]) =>
     (term: hydra.core.Term) =>
-    hydra.lib.eithers.bind[hydra.errors.Error, Tuple2[Seq[hydra.core.Type], hydra.context.Context], Tuple2[Seq[hydra.core.Type],
-       hydra.context.Context]](acc)((accR: Tuple2[Seq[hydra.core.Type], hydra.context.Context]) =>
+    hydra.lib.eithers.bind[hydra.errors.Error, Tuple2[Seq[hydra.core.Type], hydra.context.Context],
+       Tuple2[Seq[hydra.core.Type], hydra.context.Context]](acc)((accR: Tuple2[Seq[hydra.core.Type],
+       hydra.context.Context]) =>
     {
     lazy val types: Seq[hydra.core.Type] = hydra.lib.pairs.first[Seq[hydra.core.Type], hydra.context.Context](accR)
     {
       lazy val cxA: hydra.context.Context = hydra.lib.pairs.second[Seq[hydra.core.Type], hydra.context.Context](accR)
-      hydra.lib.eithers.bind[hydra.errors.Error, Tuple2[hydra.core.Type, hydra.context.Context], Tuple2[Seq[hydra.core.Type],
-         hydra.context.Context]](hydra.checking.typeOf(cxA)(tx)(Seq())(term))((tResult: Tuple2[hydra.core.Type,
+      hydra.lib.eithers.bind[hydra.errors.Error, Tuple2[hydra.core.Type, hydra.context.Context],
+         Tuple2[Seq[hydra.core.Type], hydra.context.Context]](hydra.checking.typeOf(cxA)(tx)(Seq())(term))((tResult: Tuple2[hydra.core.Type,
          hydra.context.Context]) =>
         {
         lazy val t: hydra.core.Type = hydra.lib.pairs.first[hydra.core.Type, hydra.context.Context](tResult)
@@ -797,21 +882,24 @@ def typeOfSet(cx: hydra.context.Context)(tx: hydra.graph.Graph)(typeArgs: Seq[hy
       })
     }
   }))(Right(Tuple2(Seq(), cx)))(hydra.lib.sets.toList[hydra.core.Term](els))
-  hydra.lib.eithers.bind[hydra.errors.Error, Tuple2[Seq[hydra.core.Type], hydra.context.Context], Tuple2[hydra.core.Type,
-     hydra.context.Context]](foldResult)((foldR: Tuple2[Seq[hydra.core.Type], hydra.context.Context]) =>
+  hydra.lib.eithers.bind[hydra.errors.Error, Tuple2[Seq[hydra.core.Type], hydra.context.Context],
+     Tuple2[hydra.core.Type, hydra.context.Context]](foldResult)((foldR: Tuple2[Seq[hydra.core.Type],
+     hydra.context.Context]) =>
     {
     lazy val eltypes: Seq[hydra.core.Type] = hydra.lib.pairs.first[Seq[hydra.core.Type], hydra.context.Context](foldR)
     {
       lazy val cx2: hydra.context.Context = hydra.lib.pairs.second[Seq[hydra.core.Type], hydra.context.Context](foldR)
-      hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Type, Tuple2[hydra.core.Type, hydra.context.Context]](hydra.checking.checkSameType(cx2)(tx)("set elements")(eltypes))((unifiedType: hydra.core.Type) => Right(Tuple2(hydra.core.Type.set(unifiedType),
+      hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Type, Tuple2[hydra.core.Type,
+         hydra.context.Context]](hydra.checking.checkSameType(cx2)(tx)("set elements")(eltypes))((unifiedType: hydra.core.Type) => Right(Tuple2(hydra.core.Type.set(unifiedType),
          cx2)))
     }
   })
 })
 
-def typeOfTerm(cx: hydra.context.Context)(g: hydra.graph.Graph)(term: hydra.core.Term): Either[hydra.errors.Error, hydra.core.Type] =
-  hydra.lib.eithers.map[Tuple2[hydra.core.Type, hydra.context.Context], hydra.core.Type, hydra.errors.Error](hydra.lib.pairs.first[hydra.core.Type,
-     hydra.context.Context])(hydra.checking.typeOf(cx)(g)(Seq())(term))
+def typeOfTerm(cx: hydra.context.Context)(g: hydra.graph.Graph)(term: hydra.core.Term): Either[hydra.errors.Error,
+   hydra.core.Type] =
+  hydra.lib.eithers.map[Tuple2[hydra.core.Type, hydra.context.Context], hydra.core.Type,
+     hydra.errors.Error](hydra.lib.pairs.first[hydra.core.Type, hydra.context.Context])(hydra.checking.typeOf(cx)(g)(Seq())(term))
 
 def typeOfTypeApplication(cx: hydra.context.Context)(tx: hydra.graph.Graph)(typeArgs: Seq[hydra.core.Type])(tyapp: hydra.core.TypeApplicationTerm): Either[hydra.errors.Error,
    Tuple2[hydra.core.Type, hydra.context.Context]] =
@@ -827,45 +915,53 @@ def typeOfTypeLambda(cx: hydra.context.Context)(tx: hydra.graph.Graph)(typeArgs:
   lazy val v: hydra.core.Name = (tl.parameter)
   lazy val body: hydra.core.Term = (tl.body)
   lazy val vars: scala.collection.immutable.Set[hydra.core.Name] = (tx.typeVariables)
-  lazy val tx2: hydra.graph.Graph = hydra.graph.Graph(tx.boundTerms, (tx.boundTypes), (tx.classConstraints),
-     (tx.lambdaVariables), (tx.metadata), (tx.primitives), (tx.schemaTypes), hydra.lib.sets.insert[hydra.core.Name](v)(vars))
-  hydra.lib.eithers.bind[hydra.errors.Error, Tuple2[hydra.core.Type, hydra.context.Context], Tuple2[hydra.core.Type,
-     hydra.context.Context]](hydra.checking.typeOf(cx)(tx2)(Seq())(body))((result1: Tuple2[hydra.core.Type,
+  lazy val tx2: hydra.graph.Graph = hydra.graph.Graph(tx.boundTerms, (tx.boundTypes),
+     (tx.classConstraints), (tx.lambdaVariables), (tx.metadata), (tx.primitives),
+     (tx.schemaTypes), hydra.lib.sets.insert[hydra.core.Name](v)(vars))
+  hydra.lib.eithers.bind[hydra.errors.Error, Tuple2[hydra.core.Type, hydra.context.Context],
+     Tuple2[hydra.core.Type, hydra.context.Context]](hydra.checking.typeOf(cx)(tx2)(Seq())(body))((result1: Tuple2[hydra.core.Type,
      hydra.context.Context]) =>
     {
     lazy val t1: hydra.core.Type = hydra.lib.pairs.first[hydra.core.Type, hydra.context.Context](result1)
     {
       lazy val cx2: hydra.context.Context = hydra.lib.pairs.second[hydra.core.Type, hydra.context.Context](result1)
-      hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Type, Tuple2[hydra.core.Type, hydra.context.Context]](hydra.checking.applyTypeArgumentsToType(cx2)(tx)(typeArgs)(hydra.core.Type.forall(hydra.core.ForallType(v,
+      hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Type, Tuple2[hydra.core.Type,
+         hydra.context.Context]](hydra.checking.applyTypeArgumentsToType(cx2)(tx)(typeArgs)(hydra.core.Type.forall(hydra.core.ForallType(v,
          t1))))((applied: hydra.core.Type) => Right(Tuple2(applied, cx2)))
     }
   })
 }
 
-def typeOfUnit[T0](cx: T0)(tx: hydra.graph.Graph)(typeArgs: Seq[hydra.core.Type]): Either[hydra.errors.Error, Tuple2[hydra.core.Type, T0]] =
-  hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Type, Tuple2[hydra.core.Type, T0]](hydra.checking.applyTypeArgumentsToType(cx)(tx)(typeArgs)(hydra.core.Type.unit))((applied: hydra.core.Type) => Right(Tuple2(applied,
+def typeOfUnit[T0](cx: T0)(tx: hydra.graph.Graph)(typeArgs: Seq[hydra.core.Type]): Either[hydra.errors.Error,
+   Tuple2[hydra.core.Type, T0]] =
+  hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Type, Tuple2[hydra.core.Type,
+     T0]](hydra.checking.applyTypeArgumentsToType(cx)(tx)(typeArgs)(hydra.core.Type.unit))((applied: hydra.core.Type) => Right(Tuple2(applied,
      cx)))
 
 def typeOfUnwrap(cx: hydra.context.Context)(tx: hydra.graph.Graph)(typeArgs: Seq[hydra.core.Type])(tname: hydra.core.Name): Either[hydra.errors.Error,
    Tuple2[hydra.core.Type, hydra.context.Context]] =
-  hydra.lib.eithers.bind[hydra.errors.Error, Tuple2[hydra.core.TypeScheme, hydra.context.Context], Tuple2[hydra.core.Type,
-     hydra.context.Context]](hydra.resolution.requireSchemaType(cx)(tx.schemaTypes)(tname))((schemaResult: Tuple2[hydra.core.TypeScheme,
+  hydra.lib.eithers.bind[hydra.errors.Error, Tuple2[hydra.core.TypeScheme, hydra.context.Context],
+     Tuple2[hydra.core.Type, hydra.context.Context]](hydra.resolution.requireSchemaType(cx)(tx.schemaTypes)(tname))((schemaResult: Tuple2[hydra.core.TypeScheme,
      hydra.context.Context]) =>
   {
-  lazy val schemaType: hydra.core.TypeScheme = hydra.lib.pairs.first[hydra.core.TypeScheme, hydra.context.Context](schemaResult)
+  lazy val schemaType: hydra.core.TypeScheme = hydra.lib.pairs.first[hydra.core.TypeScheme,
+     hydra.context.Context](schemaResult)
   {
-    lazy val cx2: hydra.context.Context = hydra.lib.pairs.second[hydra.core.TypeScheme, hydra.context.Context](schemaResult)
+    lazy val cx2: hydra.context.Context = hydra.lib.pairs.second[hydra.core.TypeScheme,
+       hydra.context.Context](schemaResult)
     {
       lazy val svars: Seq[hydra.core.Name] = (schemaType.variables)
       {
         lazy val sbody: hydra.core.Type = (schemaType.`type`)
-        hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Type, Tuple2[hydra.core.Type, hydra.context.Context]](hydra.extract.core.wrappedType(tname)(sbody))((wrapped: hydra.core.Type) =>
+        hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Type, Tuple2[hydra.core.Type,
+           hydra.context.Context]](hydra.extract.core.wrappedType(tname)(sbody))((wrapped: hydra.core.Type) =>
           {
-          lazy val subst: hydra.typing.TypeSubst = hydra.lib.maps.fromList[hydra.core.Name, hydra.core.Type](hydra.lib.lists.zip[hydra.core.Name,
-             hydra.core.Type](svars)(typeArgs))
+          lazy val subst: hydra.typing.TypeSubst = hydra.lib.maps.fromList[hydra.core.Name,
+             hydra.core.Type](hydra.lib.lists.zip[hydra.core.Name, hydra.core.Type](svars)(typeArgs))
           {
             lazy val swrapped: hydra.core.Type = hydra.substitution.substInType(subst)(wrapped)
-            Right(Tuple2(hydra.core.Type.function(hydra.core.FunctionType(hydra.resolution.nominalApplication(tname)(typeArgs), swrapped)), cx2))
+            Right(Tuple2(hydra.core.Type.function(hydra.core.FunctionType(hydra.resolution.nominalApplication(tname)(typeArgs),
+               swrapped)), cx2))
           }
         })
       }
@@ -876,7 +972,8 @@ def typeOfUnwrap(cx: hydra.context.Context)(tx: hydra.graph.Graph)(typeArgs: Seq
 def typeOfVariable(cx: hydra.context.Context)(tx: hydra.graph.Graph)(typeArgs: Seq[hydra.core.Type])(name: hydra.core.Name): Either[hydra.errors.Error,
    Tuple2[hydra.core.Type, hydra.context.Context]] =
   {
-  lazy val rawTypeScheme: Option[hydra.core.TypeScheme] = hydra.lib.maps.lookup[hydra.core.Name, hydra.core.TypeScheme](name)(tx.boundTypes)
+  lazy val rawTypeScheme: Option[hydra.core.TypeScheme] = hydra.lib.maps.lookup[hydra.core.Name,
+     hydra.core.TypeScheme](name)(tx.boundTypes)
   def forScheme(ts: hydra.core.TypeScheme): Either[hydra.errors.Error, Tuple2[hydra.core.Type, hydra.context.Context]] =
     {
     lazy val tResult: Tuple2[hydra.core.Type, hydra.context.Context] = hydra.lib.logic.ifElse[Tuple2[hydra.core.Type,
@@ -884,11 +981,13 @@ def typeOfVariable(cx: hydra.context.Context)(tx: hydra.graph.Graph)(typeArgs: S
        cx))
     lazy val t: hydra.core.Type = hydra.lib.pairs.first[hydra.core.Type, hydra.context.Context](tResult)
     lazy val cx2: hydra.context.Context = hydra.lib.pairs.second[hydra.core.Type, hydra.context.Context](tResult)
-    hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Type, Tuple2[hydra.core.Type, hydra.context.Context]](hydra.checking.applyTypeArgumentsToType(cx2)(tx)(typeArgs)(t))((applied: hydra.core.Type) => Right(Tuple2(applied,
+    hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Type, Tuple2[hydra.core.Type,
+       hydra.context.Context]](hydra.checking.applyTypeArgumentsToType(cx2)(tx)(typeArgs)(t))((applied: hydra.core.Type) => Right(Tuple2(applied,
        cx2)))
   }
-  hydra.lib.maybes.maybe[Either[hydra.errors.Error, Tuple2[hydra.core.Type, hydra.context.Context]], hydra.core.TypeScheme](hydra.lib.maybes.maybe[Either[hydra.errors.Error,
-     Tuple2[hydra.core.Type, hydra.context.Context]], hydra.core.TypeScheme](Left(hydra.errors.Error.untypedTermVariable(hydra.error.core.UntypedTermVariableError(Seq(),
+  hydra.lib.maybes.maybe[Either[hydra.errors.Error, Tuple2[hydra.core.Type, hydra.context.Context]],
+     hydra.core.TypeScheme](hydra.lib.maybes.maybe[Either[hydra.errors.Error, Tuple2[hydra.core.Type,
+     hydra.context.Context]], hydra.core.TypeScheme](Left(hydra.errors.Error.untypedTermVariable(hydra.error.core.UntypedTermVariableError(Seq(),
      name))))(forScheme)(hydra.lib.maybes.map[hydra.graph.Primitive, hydra.core.TypeScheme]((_p: hydra.graph.Primitive) => (_p.`type`))(hydra.lib.maps.lookup[hydra.core.Name,
      hydra.graph.Primitive](name)(tx.primitives))))(forScheme)(rawTypeScheme)
 }
@@ -898,8 +997,8 @@ def typeOfWrappedTerm(cx: hydra.context.Context)(tx: hydra.graph.Graph)(typeArgs
   {
   lazy val tname: hydra.core.Name = (wt.typeName)
   lazy val body: hydra.core.Term = (wt.body)
-  hydra.lib.eithers.bind[hydra.errors.Error, Tuple2[hydra.core.Type, hydra.context.Context], Tuple2[hydra.core.Type,
-     hydra.context.Context]](hydra.checking.typeOf(cx)(tx)(Seq())(body))((result: Tuple2[hydra.core.Type,
+  hydra.lib.eithers.bind[hydra.errors.Error, Tuple2[hydra.core.Type, hydra.context.Context],
+     Tuple2[hydra.core.Type, hydra.context.Context]](hydra.checking.typeOf(cx)(tx)(Seq())(body))((result: Tuple2[hydra.core.Type,
      hydra.context.Context]) =>
     {
     lazy val cx2: hydra.context.Context = hydra.lib.pairs.second[hydra.core.Type, hydra.context.Context](result)

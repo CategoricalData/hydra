@@ -104,7 +104,8 @@ def removeTypesFromTerm(term: hydra.core.Term): hydra.core.Term =
     lazy val rewritten: hydra.core.Term = recurse(term2)
     def stripBinding(b: hydra.core.Binding): hydra.core.Binding = hydra.core.Binding(b.name, (b.term), None)
     rewritten match
-      case hydra.core.Term.lambda(v_Term_lambda_l) => hydra.core.Term.lambda(hydra.core.Lambda(v_Term_lambda_l.parameter, None, (v_Term_lambda_l.body)))
+      case hydra.core.Term.lambda(v_Term_lambda_l) => hydra.core.Term.lambda(hydra.core.Lambda(v_Term_lambda_l.parameter,
+         None, (v_Term_lambda_l.body)))
       case hydra.core.Term.let(v_Term_let_lt) => hydra.core.Term.let(hydra.core.Let(hydra.lib.lists.map[hydra.core.Binding,
          hydra.core.Binding](stripBinding)(v_Term_let_lt.bindings), (v_Term_let_lt.body)))
       case hydra.core.Term.typeApplication(v_Term_typeApplication_tt) => (v_Term_typeApplication_tt.body)

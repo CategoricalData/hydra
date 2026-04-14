@@ -17,8 +17,8 @@ lazy val javaLanguage: hydra.coders.Language = {
   lazy val functionVariants: scala.collection.immutable.Set[hydra.variants.FunctionVariant] = hydra.lib.sets.fromList[hydra.variants.FunctionVariant](Seq(hydra.variants.FunctionVariant.elimination,
      hydra.variants.FunctionVariant.lambda))
   lazy val integerTypes: scala.collection.immutable.Set[hydra.core.IntegerType] = hydra.lib.sets.fromList[hydra.core.IntegerType](Seq(hydra.core.IntegerType.bigint,
-     hydra.core.IntegerType.int8, hydra.core.IntegerType.int16, hydra.core.IntegerType.int32, hydra.core.IntegerType.int64,
-     hydra.core.IntegerType.uint16))
+     hydra.core.IntegerType.int8, hydra.core.IntegerType.int16, hydra.core.IntegerType.int32,
+     hydra.core.IntegerType.int64, hydra.core.IntegerType.uint16))
   lazy val termVariants: scala.collection.immutable.Set[hydra.variants.TermVariant] = hydra.lib.sets.fromList[hydra.variants.TermVariant](Seq(hydra.variants.TermVariant.application,
      hydra.variants.TermVariant.either, hydra.variants.TermVariant.cases, hydra.variants.TermVariant.lambda,
      hydra.variants.TermVariant.project, hydra.variants.TermVariant.unwrap, hydra.variants.TermVariant.typeApplication,
@@ -35,38 +35,45 @@ lazy val javaLanguage: hydra.coders.Language = {
      hydra.variants.TypeVariant.unit, hydra.variants.TypeVariant.variable, hydra.variants.TypeVariant.void,
      hydra.variants.TypeVariant.wrap))
   def typePredicate[T0](_x: T0): Boolean = true
-  hydra.coders.Language("hydra.java", hydra.coders.LanguageConstraints(eliminationVariants, literalVariants,
-     floatTypes, functionVariants, integerTypes, termVariants, typeVariants, typePredicate))
+  hydra.coders.Language("hydra.java", hydra.coders.LanguageConstraints(eliminationVariants,
+     literalVariants, floatTypes, functionVariants, integerTypes, termVariants, typeVariants,
+     typePredicate))
 }
 
 lazy val javaMaxTupleLength: Int = 9
 
 lazy val reservedWords: scala.collection.immutable.Set[scala.Predef.String] = {
   lazy val specialNames: Seq[scala.Predef.String] = Seq("Elements")
-  lazy val classNames: Seq[scala.Predef.String] = Seq("AbstractMethodError", "Appendable", "ArithmeticException",
-     "ArrayIndexOutOfBoundsException", "ArrayStoreException", "AssertionError", "AutoCloseable", "Boolean",
-     "BootstrapMethodError", "Byte", "CharSequence", "Character", "Class", "ClassCastException", "ClassCircularityError",
+  lazy val classNames: Seq[scala.Predef.String] = Seq("AbstractMethodError", "Appendable",
+     "ArithmeticException", "ArrayIndexOutOfBoundsException", "ArrayStoreException",
+     "AssertionError", "AutoCloseable", "Boolean", "BootstrapMethodError", "Byte",
+     "CharSequence", "Character", "Class", "ClassCastException", "ClassCircularityError",
      "ClassFormatError", "ClassLoader", "ClassNotFoundException", "ClassValue", "CloneNotSupportedException",
      "Cloneable", "Comparable", "Compiler", "Deprecated", "Double", "Enum", "EnumConstantNotPresentException",
-     "Error", "Exception", "ExceptionInInitializerError", "Float", "IllegalAccessError", "IllegalAccessException",
-     "IllegalArgumentException", "IllegalMonitorStateException", "IllegalStateException", "IllegalThreadStateException",
-     "IncompatibleClassChangeError", "IndexOutOfBoundsException", "InheritableThreadLocal", "InstantiationError",
-     "InstantiationException", "Integer", "InternalError", "InterruptedException", "Iterable", "LinkageError",
-     "Long", "Math", "NegativeArraySizeException", "NoClassDefFoundError", "NoSuchFieldError", "NoSuchFieldException",
-     "NoSuchMethodError", "NoSuchMethodException", "NullPointerException", "Number", "NumberFormatException",
-     "Object", "OutOfMemoryError", "Override", "Package", "Process", "ProcessBuilder", "Readable", "ReflectiveOperationException",
-     "Runnable", "Runtime", "RuntimeException", "RuntimePermission", "SafeVarargs", "SecurityException",
-     "SecurityManager", "Short", "StackOverflowError", "StackTraceElement", "StrictMath", "String", "StringBuffer",
-     "StringBuilder", "StringIndexOutOfBoundsException", "SuppressWarnings", "System", "Thread", "ThreadDeath",
-     "ThreadGroup", "ThreadLocal", "Throwable", "TypeNotPresentException", "UnknownError", "UnsatisfiedLinkError",
-     "UnsupportedClassVersionError", "UnsupportedOperationException", "VerifyError", "VirtualMachineError",
-     "Void")
-  lazy val keywords: Seq[scala.Predef.String] = Seq("abstract", "assert", "boolean", "break", "byte",
-     "case", "catch", "char", "class", "const", "continue", "default", "do", "double", "else", "enum",
-     "extends", "final", "finally", "float", "for", "goto", "if", "implements", "import", "instanceof",
-     "int", "interface", "long", "native", "new", "package", "private", "protected", "public", "return",
-     "short", "static", "strictfp", "super", "switch", "synchronized", "this", "throw", "throws", "transient",
-     "try", "void", "volatile", "while")
+     "Error", "Exception", "ExceptionInInitializerError", "Float", "IllegalAccessError",
+     "IllegalAccessException", "IllegalArgumentException", "IllegalMonitorStateException",
+     "IllegalStateException", "IllegalThreadStateException", "IncompatibleClassChangeError",
+     "IndexOutOfBoundsException", "InheritableThreadLocal", "InstantiationError",
+     "InstantiationException", "Integer", "InternalError", "InterruptedException",
+     "Iterable", "LinkageError", "Long", "Math", "NegativeArraySizeException", "NoClassDefFoundError",
+     "NoSuchFieldError", "NoSuchFieldException", "NoSuchMethodError", "NoSuchMethodException",
+     "NullPointerException", "Number", "NumberFormatException", "Object", "OutOfMemoryError",
+     "Override", "Package", "Process", "ProcessBuilder", "Readable", "ReflectiveOperationException",
+     "Runnable", "Runtime", "RuntimeException", "RuntimePermission", "SafeVarargs",
+     "SecurityException", "SecurityManager", "Short", "StackOverflowError", "StackTraceElement",
+     "StrictMath", "String", "StringBuffer", "StringBuilder", "StringIndexOutOfBoundsException",
+     "SuppressWarnings", "System", "Thread", "ThreadDeath", "ThreadGroup", "ThreadLocal",
+     "Throwable", "TypeNotPresentException", "UnknownError", "UnsatisfiedLinkError",
+     "UnsupportedClassVersionError", "UnsupportedOperationException", "VerifyError",
+     "VirtualMachineError", "Void")
+  lazy val keywords: Seq[scala.Predef.String] = Seq("abstract", "assert", "boolean",
+     "break", "byte", "case", "catch", "char", "class", "const", "continue", "default",
+     "do", "double", "else", "enum", "extends", "final", "finally", "float", "for",
+     "goto", "if", "implements", "import", "instanceof", "int", "interface", "long",
+     "native", "new", "package", "private", "protected", "public", "return", "short",
+     "static", "strictfp", "super", "switch", "synchronized", "this", "throw", "throws",
+     "transient", "try", "void", "volatile", "while")
   lazy val literals: Seq[scala.Predef.String] = Seq("false", "null", "true")
-  hydra.lib.sets.fromList[scala.Predef.String](hydra.lib.lists.concat[scala.Predef.String](Seq(specialNames, classNames, keywords, literals)))
+  hydra.lib.sets.fromList[scala.Predef.String](hydra.lib.lists.concat[scala.Predef.String](Seq(specialNames,
+     classNames, keywords, literals)))
 }

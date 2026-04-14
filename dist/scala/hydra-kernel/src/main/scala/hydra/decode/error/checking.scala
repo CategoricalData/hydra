@@ -6,7 +6,8 @@ import hydra.error.checking.*
 
 import hydra.errors.*
 
-def checkingError(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.DecodingError, hydra.error.checking.CheckingError] =
+def checkingError(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.DecodingError,
+   hydra.error.checking.CheckingError] =
   hydra.lib.eithers.either[hydra.errors.DecodingError, hydra.core.Term, Either[hydra.errors.DecodingError,
      hydra.error.checking.CheckingError]]((err: hydra.errors.DecodingError) => Left(err))((stripped: hydra.core.Term) =>
   stripped match
@@ -14,7 +15,8 @@ def checkingError(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.err
     lazy val field: hydra.core.Field = (v_Term_inject_inj.field)
     lazy val fname: hydra.core.Name = (field.name)
     lazy val fterm: hydra.core.Term = (field.term)
-    lazy val variantMap: Map[hydra.core.Name, (hydra.core.Term => Either[hydra.errors.DecodingError, hydra.error.checking.CheckingError])] = hydra.lib.maps.fromList[hydra.core.Name,
+    lazy val variantMap: Map[hydra.core.Name, (hydra.core.Term => Either[hydra.errors.DecodingError,
+       hydra.error.checking.CheckingError])] = hydra.lib.maps.fromList[hydra.core.Name,
        (hydra.core.Term) => Either[hydra.errors.DecodingError, hydra.error.checking.CheckingError]](Seq(Tuple2("incorrectUnification",
        (input: hydra.core.Term) =>
       hydra.lib.eithers.map[hydra.error.checking.IncorrectUnificationError, hydra.error.checking.CheckingError,
@@ -38,8 +40,8 @@ def checkingError(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.err
       hydra.lib.eithers.map[hydra.error.checking.UnboundTypeVariablesError, hydra.error.checking.CheckingError,
          hydra.errors.DecodingError]((t: hydra.error.checking.UnboundTypeVariablesError) => hydra.error.checking.CheckingError.unboundTypeVariables(t))(hydra.decode.error.checking.unboundTypeVariablesError(cx)(input))),
          Tuple2("undefinedTermVariable", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[hydra.error.checking.UndefinedTermVariableCheckingError, hydra.error.checking.CheckingError,
-         hydra.errors.DecodingError]((t: hydra.error.checking.UndefinedTermVariableCheckingError) => hydra.error.checking.CheckingError.undefinedTermVariable(t))(hydra.decode.error.checking.undefinedTermVariableCheckingError(cx)(input))),
+      hydra.lib.eithers.map[hydra.error.checking.UndefinedTermVariableCheckingError,
+         hydra.error.checking.CheckingError, hydra.errors.DecodingError]((t: hydra.error.checking.UndefinedTermVariableCheckingError) => hydra.error.checking.CheckingError.undefinedTermVariable(t))(hydra.decode.error.checking.undefinedTermVariableCheckingError(cx)(input))),
          Tuple2("unequalTypes", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[hydra.error.checking.UnequalTypesError, hydra.error.checking.CheckingError,
          hydra.errors.DecodingError]((t: hydra.error.checking.UnequalTypesError) => hydra.error.checking.CheckingError.unequalTypes(t))(hydra.decode.error.checking.unequalTypesError(cx)(input))),
@@ -53,16 +55,18 @@ def checkingError(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.err
       hydra.lib.eithers.map[hydra.error.checking.UntypedLetBindingError, hydra.error.checking.CheckingError,
          hydra.errors.DecodingError]((t: hydra.error.checking.UntypedLetBindingError) => hydra.error.checking.CheckingError.untypedLetBinding(t))(hydra.decode.error.checking.untypedLetBindingError(cx)(input))),
          Tuple2("untypedTermVariable", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[hydra.error.checking.UntypedTermVariableCheckingError, hydra.error.checking.CheckingError,
-         hydra.errors.DecodingError]((t: hydra.error.checking.UntypedTermVariableCheckingError) => hydra.error.checking.CheckingError.untypedTermVariable(t))(hydra.decode.error.checking.untypedTermVariableCheckingError(cx)(input)))))
-    hydra.lib.maybes.maybe[Either[hydra.errors.DecodingError, hydra.error.checking.CheckingError], (hydra.core.Term) => Either[hydra.errors.DecodingError,
-       hydra.error.checking.CheckingError]](Left(hydra.lib.strings.cat(Seq("no such field ", fname, " in union"))))((f: (hydra.core.Term => Either[hydra.errors.DecodingError,
-       hydra.error.checking.CheckingError])) => f(fterm))(hydra.lib.maps.lookup[hydra.core.Name, (hydra.core.Term) => Either[hydra.errors.DecodingError,
-       hydra.error.checking.CheckingError]](fname)(variantMap))
+      hydra.lib.eithers.map[hydra.error.checking.UntypedTermVariableCheckingError,
+         hydra.error.checking.CheckingError, hydra.errors.DecodingError]((t: hydra.error.checking.UntypedTermVariableCheckingError) => hydra.error.checking.CheckingError.untypedTermVariable(t))(hydra.decode.error.checking.untypedTermVariableCheckingError(cx)(input)))))
+    hydra.lib.maybes.maybe[Either[hydra.errors.DecodingError, hydra.error.checking.CheckingError],
+       (hydra.core.Term) => Either[hydra.errors.DecodingError, hydra.error.checking.CheckingError]](Left(hydra.lib.strings.cat(Seq("no such field ",
+       fname, " in union"))))((f: (hydra.core.Term => Either[hydra.errors.DecodingError,
+       hydra.error.checking.CheckingError])) => f(fterm))(hydra.lib.maps.lookup[hydra.core.Name,
+       (hydra.core.Term) => Either[hydra.errors.DecodingError, hydra.error.checking.CheckingError]](fname)(variantMap))
   }
   case _ => Left("expected union"))(hydra.extract.core.stripWithDecodingError(cx)(raw))
 
-def incorrectUnificationError(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.DecodingError, hydra.error.checking.IncorrectUnificationError] =
+def incorrectUnificationError(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.DecodingError,
+   hydra.error.checking.IncorrectUnificationError] =
   hydra.lib.eithers.either[hydra.errors.DecodingError, hydra.core.Term, Either[hydra.errors.DecodingError,
      hydra.error.checking.IncorrectUnificationError]]((err: hydra.errors.DecodingError) => Left(err))((stripped: hydra.core.Term) =>
   stripped match
@@ -73,7 +77,8 @@ def incorrectUnificationError(cx: hydra.graph.Graph)(raw: hydra.core.Term): Eith
   }
   case _ => Left("expected record"))(hydra.extract.core.stripWithDecodingError(cx)(raw))
 
-def notAForallTypeError(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.DecodingError, hydra.error.checking.NotAForallTypeError] =
+def notAForallTypeError(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.DecodingError,
+   hydra.error.checking.NotAForallTypeError] =
   hydra.lib.eithers.either[hydra.errors.DecodingError, hydra.core.Term, Either[hydra.errors.DecodingError,
      hydra.error.checking.NotAForallTypeError]]((err: hydra.errors.DecodingError) => Left(err))((stripped: hydra.core.Term) =>
   stripped match
@@ -87,7 +92,8 @@ def notAForallTypeError(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hyd
   }
   case _ => Left("expected record"))(hydra.extract.core.stripWithDecodingError(cx)(raw))
 
-def notAFunctionTypeError(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.DecodingError, hydra.error.checking.NotAFunctionTypeError] =
+def notAFunctionTypeError(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.DecodingError,
+   hydra.error.checking.NotAFunctionTypeError] =
   hydra.lib.eithers.either[hydra.errors.DecodingError, hydra.core.Term, Either[hydra.errors.DecodingError,
      hydra.error.checking.NotAFunctionTypeError]]((err: hydra.errors.DecodingError) => Left(err))((stripped: hydra.core.Term) =>
   stripped match
@@ -98,7 +104,8 @@ def notAFunctionTypeError(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[h
   }
   case _ => Left("expected record"))(hydra.extract.core.stripWithDecodingError(cx)(raw))
 
-def otherCheckingError(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.DecodingError, hydra.error.checking.OtherCheckingError] =
+def otherCheckingError(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.DecodingError,
+   hydra.error.checking.OtherCheckingError] =
   hydra.lib.eithers.either[hydra.errors.DecodingError, hydra.core.Term, Either[hydra.errors.DecodingError,
      hydra.error.checking.OtherCheckingError]]((err: hydra.errors.DecodingError) => Left(err))((stripped: hydra.core.Term) =>
   stripped match
@@ -118,7 +125,8 @@ def otherCheckingError(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydr
   }
   case _ => Left("expected record"))(hydra.extract.core.stripWithDecodingError(cx)(raw))
 
-def typeArityMismatchError(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.DecodingError, hydra.error.checking.TypeArityMismatchError] =
+def typeArityMismatchError(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.DecodingError,
+   hydra.error.checking.TypeArityMismatchError] =
   hydra.lib.eithers.either[hydra.errors.DecodingError, hydra.core.Term, Either[hydra.errors.DecodingError,
      hydra.error.checking.TypeArityMismatchError]]((err: hydra.errors.DecodingError) => Left(err))((stripped: hydra.core.Term) =>
   stripped match
@@ -150,11 +158,13 @@ def typeArityMismatchError(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[
       hydra.lib.eithers.bind[hydra.errors.DecodingError, Seq[hydra.core.Type], hydra.error.checking.TypeArityMismatchError](hydra.extract.core.requireField("typeArguments")((v1: hydra.graph.Graph) =>
       (v2: hydra.core.Term) =>
       hydra.extract.core.decodeList(hydra.decode.core.`type`)(v1)(v2))(fieldMap)(cx))((field_typeArguments: Seq[hydra.core.Type]) =>
-      Right(hydra.error.checking.TypeArityMismatchError(field_type, field_expectedArity, field_actualArity, field_typeArguments))))))
+      Right(hydra.error.checking.TypeArityMismatchError(field_type, field_expectedArity,
+         field_actualArity, field_typeArguments))))))
   }
   case _ => Left("expected record"))(hydra.extract.core.stripWithDecodingError(cx)(raw))
 
-def typeMismatchError(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.DecodingError, hydra.error.checking.TypeMismatchError] =
+def typeMismatchError(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.DecodingError,
+   hydra.error.checking.TypeMismatchError] =
   hydra.lib.eithers.either[hydra.errors.DecodingError, hydra.core.Term, Either[hydra.errors.DecodingError,
      hydra.error.checking.TypeMismatchError]]((err: hydra.errors.DecodingError) => Left(err))((stripped: hydra.core.Term) =>
   stripped match
@@ -166,7 +176,8 @@ def typeMismatchError(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra
   }
   case _ => Left("expected record"))(hydra.extract.core.stripWithDecodingError(cx)(raw))
 
-def unboundTypeVariablesError(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.DecodingError, hydra.error.checking.UnboundTypeVariablesError] =
+def unboundTypeVariablesError(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.DecodingError,
+   hydra.error.checking.UnboundTypeVariablesError] =
   hydra.lib.eithers.either[hydra.errors.DecodingError, hydra.core.Term, Either[hydra.errors.DecodingError,
      hydra.error.checking.UnboundTypeVariablesError]]((err: hydra.errors.DecodingError) => Left(err))((stripped: hydra.core.Term) =>
   stripped match
@@ -193,7 +204,8 @@ def undefinedTermVariableCheckingError(cx: hydra.graph.Graph)(raw: hydra.core.Te
   }
   case _ => Left("expected record"))(hydra.extract.core.stripWithDecodingError(cx)(raw))
 
-def unequalTypesError(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.DecodingError, hydra.error.checking.UnequalTypesError] =
+def unequalTypesError(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.DecodingError,
+   hydra.error.checking.UnequalTypesError] =
   hydra.lib.eithers.either[hydra.errors.DecodingError, hydra.core.Term, Either[hydra.errors.DecodingError,
      hydra.error.checking.UnequalTypesError]]((err: hydra.errors.DecodingError) => Left(err))((stripped: hydra.core.Term) =>
   stripped match
@@ -222,12 +234,14 @@ def unsupportedTermVariantError(cx: hydra.graph.Graph)(raw: hydra.core.Term): Ei
   stripped match
   case hydra.core.Term.record(v_Term_record_record) => {
     lazy val fieldMap: Map[hydra.core.Name, hydra.core.Term] = hydra.extract.core.toFieldMap(v_Term_record_record)
-    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.variants.TermVariant, hydra.error.checking.UnsupportedTermVariantError](hydra.extract.core.requireField("termVariant")(hydra.decode.variants.termVariant)(fieldMap)(cx))((field_termVariant: hydra.variants.TermVariant) =>
+    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.variants.TermVariant,
+       hydra.error.checking.UnsupportedTermVariantError](hydra.extract.core.requireField("termVariant")(hydra.decode.variants.termVariant)(fieldMap)(cx))((field_termVariant: hydra.variants.TermVariant) =>
       Right(hydra.error.checking.UnsupportedTermVariantError(field_termVariant)))
   }
   case _ => Left("expected record"))(hydra.extract.core.stripWithDecodingError(cx)(raw))
 
-def untypedLambdaError(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.DecodingError, hydra.error.checking.UntypedLambdaError] =
+def untypedLambdaError(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.DecodingError,
+   hydra.error.checking.UntypedLambdaError] =
   hydra.lib.eithers.either[hydra.errors.DecodingError, hydra.core.Term, Either[hydra.errors.DecodingError,
      hydra.error.checking.UntypedLambdaError]]((err: hydra.errors.DecodingError) => Left(err))((stripped: hydra.core.Term) =>
   stripped match
@@ -237,7 +251,8 @@ def untypedLambdaError(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydr
   }
   case _ => Left("expected record"))(hydra.extract.core.stripWithDecodingError(cx)(raw))
 
-def untypedLetBindingError(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.DecodingError, hydra.error.checking.UntypedLetBindingError] =
+def untypedLetBindingError(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.DecodingError,
+   hydra.error.checking.UntypedLetBindingError] =
   hydra.lib.eithers.either[hydra.errors.DecodingError, hydra.core.Term, Either[hydra.errors.DecodingError,
      hydra.error.checking.UntypedLetBindingError]]((err: hydra.errors.DecodingError) => Left(err))((stripped: hydra.core.Term) =>
   stripped match

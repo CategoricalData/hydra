@@ -10,7 +10,8 @@ import hydra.errors.*
 
 import hydra.graph.*
 
-def aggregateAnnotations[T0, T1, T2, T3](getValue: (T0 => Option[T1]))(getX: (T1 => T0))(getAnns: (T1 => Map[T2, T3]))(t: T0): Map[T2, T3] =
+def aggregateAnnotations[T0, T1, T2, T3](getValue: (T0 => Option[T1]))(getX: (T1 => T0))(getAnns: (T1 => Map[T2,
+   T3]))(t: T0): Map[T2, T3] =
   {
   def toPairs(rest: Seq[Seq[Tuple2[T2, T3]]])(t2: T0): Seq[Seq[Tuple2[T2, T3]]] =
     hydra.lib.maybes.maybe[Seq[Seq[Tuple2[T2, T3]]], T1](rest)((yy: T1) =>
@@ -24,15 +25,18 @@ def commentsFromBinding[T0](cx: T0)(g: hydra.graph.Graph)(b: hydra.core.Binding)
 def commentsFromFieldType[T0](cx: T0)(g: hydra.graph.Graph)(ft: hydra.core.FieldType): Either[hydra.errors.Error,
    Option[scala.Predef.String]] = hydra.annotations.getTypeDescription(cx)(g)(ft.`type`)
 
-def debugIf(cx: hydra.context.Context)(debugId: scala.Predef.String)(message: scala.Predef.String): Either[hydra.errors.Error, Unit] =
+def debugIf(cx: hydra.context.Context)(debugId: scala.Predef.String)(message: scala.Predef.String): Either[hydra.errors.Error,
+   Unit] =
   hydra.lib.eithers.bind[hydra.errors.Error, Option[scala.Predef.String], Unit](hydra.annotations.getDebugId(cx))((mid: Option[scala.Predef.String]) =>
   hydra.lib.logic.ifElse[Either[hydra.errors.Error, Unit]](hydra.lib.equality.equal[Option[scala.Predef.String]](mid)(Some(debugId)))(Left(hydra.errors.Error.other(message)))(Right(())))
 
-def failOnFlag(cx: hydra.context.Context)(flag: hydra.core.Name)(msg: scala.Predef.String): Either[hydra.errors.Error, Unit] =
+def failOnFlag(cx: hydra.context.Context)(flag: hydra.core.Name)(msg: scala.Predef.String): Either[hydra.errors.Error,
+   Unit] =
   hydra.lib.eithers.bind[hydra.errors.Error, Boolean, Unit](hydra.annotations.hasFlag(cx)(flag))((`val`: Boolean) =>
   hydra.lib.logic.ifElse[Either[hydra.errors.Error, Unit]](`val`)(Left(hydra.errors.Error.other(msg)))(Right(())))
 
-def getAttr(key: hydra.core.Name)(cx: hydra.context.Context): Option[hydra.core.Term] = hydra.lib.maps.lookup[hydra.core.Name, hydra.core.Term](key)(cx.other)
+def getAttr(key: hydra.core.Name)(cx: hydra.context.Context): Option[hydra.core.Term] = hydra.lib.maps.lookup[hydra.core.Name,
+   hydra.core.Term](key)(cx.other)
 
 def getAttrWithDefault(key: hydra.core.Name)(`def`: hydra.core.Term)(cx: hydra.context.Context): hydra.core.Term =
   hydra.lib.maybes.fromMaybe[hydra.core.Term](`def`)(hydra.annotations.getAttr(key)(cx))
@@ -48,22 +52,27 @@ def getCount(key: hydra.core.Name)(cx: hydra.context.Context): Int =
   case _ => 0)(hydra.lib.maps.lookup[hydra.core.Name, hydra.core.Term](key)(cx.other))
 
 def getDebugId(cx: hydra.context.Context): Either[hydra.errors.Error, Option[scala.Predef.String]] =
-  hydra.lib.maybes.maybe[Either[hydra.errors.Error, Option[scala.Predef.String]], hydra.core.Term](Right(None))((term: hydra.core.Term) =>
+  hydra.lib.maybes.maybe[Either[hydra.errors.Error, Option[scala.Predef.String]],
+     hydra.core.Term](Right(None))((term: hydra.core.Term) =>
   hydra.lib.eithers.map[scala.Predef.String, Option[scala.Predef.String], hydra.errors.Error](hydra.lib.maybes.pure[scala.Predef.String])(hydra.extract.core.string(hydra.graph.Graph(hydra.lib.maps.empty[hydra.core.Name,
-     hydra.core.Term], hydra.lib.maps.empty[hydra.core.Name, hydra.core.TypeScheme], hydra.lib.maps.empty[hydra.core.Name,
-     hydra.core.TypeVariableMetadata], hydra.lib.sets.empty[hydra.core.Name], hydra.lib.maps.empty[hydra.core.Name,
-     hydra.core.Term], hydra.lib.maps.empty[hydra.core.Name, hydra.graph.Primitive], hydra.lib.maps.empty[hydra.core.Name,
-     hydra.core.TypeScheme], hydra.lib.sets.empty[hydra.core.Name]))(term)))(hydra.annotations.getAttr(hydra.constants.key_debugId)(cx))
+     hydra.core.Term], hydra.lib.maps.empty[hydra.core.Name, hydra.core.TypeScheme],
+     hydra.lib.maps.empty[hydra.core.Name, hydra.core.TypeVariableMetadata], hydra.lib.sets.empty[hydra.core.Name],
+     hydra.lib.maps.empty[hydra.core.Name, hydra.core.Term], hydra.lib.maps.empty[hydra.core.Name,
+     hydra.graph.Primitive], hydra.lib.maps.empty[hydra.core.Name, hydra.core.TypeScheme],
+     hydra.lib.sets.empty[hydra.core.Name]))(term)))(hydra.annotations.getAttr(hydra.constants.key_debugId)(cx))
 
-def getDescription[T0](cx: T0)(graph: hydra.graph.Graph)(anns: Map[hydra.core.Name, hydra.core.Term]): Either[hydra.errors.Error, Option[scala.Predef.String]] =
-  hydra.lib.maybes.maybe[Either[hydra.errors.Error, Option[scala.Predef.String]], hydra.core.Term](Right(None))((term: hydra.core.Term) =>
+def getDescription[T0](cx: T0)(graph: hydra.graph.Graph)(anns: Map[hydra.core.Name,
+   hydra.core.Term]): Either[hydra.errors.Error, Option[scala.Predef.String]] =
+  hydra.lib.maybes.maybe[Either[hydra.errors.Error, Option[scala.Predef.String]],
+     hydra.core.Term](Right(None))((term: hydra.core.Term) =>
   hydra.lib.eithers.map[scala.Predef.String, Option[scala.Predef.String], hydra.errors.Error](hydra.lib.maybes.pure[scala.Predef.String])(hydra.extract.core.string(graph)(term)))(hydra.lib.maps.lookup[hydra.core.Name,
      hydra.core.Term]("description")(anns))
 
 def getTermAnnotation(key: hydra.core.Name)(term: hydra.core.Term): Option[hydra.core.Term] =
   hydra.lib.maps.lookup[hydra.core.Name, hydra.core.Term](key)(hydra.annotations.termAnnotationInternal(term))
 
-def getTermDescription[T0](cx: T0)(graph: hydra.graph.Graph)(term: hydra.core.Term): Either[hydra.errors.Error, Option[scala.Predef.String]] =
+def getTermDescription[T0](cx: T0)(graph: hydra.graph.Graph)(term: hydra.core.Term): Either[hydra.errors.Error,
+   Option[scala.Predef.String]] =
   {
   def peel(t: hydra.core.Term): hydra.core.Term =
     t match
@@ -73,8 +82,10 @@ def getTermDescription[T0](cx: T0)(graph: hydra.graph.Graph)(term: hydra.core.Te
   hydra.annotations.getDescription(cx)(graph)(hydra.annotations.termAnnotationInternal(peel(term)))
 }
 
-def getType(graph: hydra.graph.Graph)(anns: Map[hydra.core.Name, hydra.core.Term]): Either[hydra.errors.DecodingError, Option[hydra.core.Type]] =
-  hydra.lib.maybes.maybe[Either[hydra.errors.DecodingError, Option[hydra.core.Type]], hydra.core.Term](Right(None))((dat: hydra.core.Term) =>
+def getType(graph: hydra.graph.Graph)(anns: Map[hydra.core.Name, hydra.core.Term]): Either[hydra.errors.DecodingError,
+   Option[hydra.core.Type]] =
+  hydra.lib.maybes.maybe[Either[hydra.errors.DecodingError, Option[hydra.core.Type]],
+     hydra.core.Term](Right(None))((dat: hydra.core.Term) =>
   hydra.lib.eithers.map[hydra.core.Type, Option[hydra.core.Type], hydra.errors.DecodingError](hydra.lib.maybes.pure[hydra.core.Type])(hydra.decode.core.`type`(graph)(dat)))(hydra.lib.maps.lookup[hydra.core.Name,
      hydra.core.Term](hydra.constants.key_type)(anns))
 
@@ -87,20 +98,23 @@ def getTypeClasses[T0](cx: T0)(graph: hydra.graph.Graph)(term: hydra.core.Term):
   def decodeClass(term2: hydra.core.Term): Either[hydra.errors.Error, hydra.classes.TypeClass] =
     {
     lazy val byName: Map[hydra.core.Name, hydra.classes.TypeClass] = hydra.lib.maps.fromList[hydra.core.Name,
-       hydra.classes.TypeClass](Seq(Tuple2("equality", hydra.classes.TypeClass.equality), Tuple2("ordering",
-       hydra.classes.TypeClass.ordering)))
+       hydra.classes.TypeClass](Seq(Tuple2("equality", hydra.classes.TypeClass.equality),
+       Tuple2("ordering", hydra.classes.TypeClass.ordering)))
     hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Name, hydra.classes.TypeClass](hydra.extract.core.unitVariant("hydra.classes.TypeClass")(graph)(term2))((fn: hydra.core.Name) =>
-      hydra.lib.maybes.maybe[Either[hydra.errors.Error, hydra.classes.TypeClass], hydra.classes.TypeClass](Left(hydra.errors.Error.extraction(hydra.errors.ExtractionError.unexpectedShape(hydra.errors.UnexpectedShapeError("type class",
+      hydra.lib.maybes.maybe[Either[hydra.errors.Error, hydra.classes.TypeClass],
+         hydra.classes.TypeClass](Left(hydra.errors.Error.extraction(hydra.errors.ExtractionError.unexpectedShape(hydra.errors.UnexpectedShapeError("type class",
          hydra.show.core.term(term2))))))((x: hydra.classes.TypeClass) => Right(x))(hydra.lib.maps.lookup[hydra.core.Name,
          hydra.classes.TypeClass](fn)(byName)))
   }
   hydra.lib.maybes.maybe[Either[hydra.errors.Error, Map[hydra.core.Name, scala.collection.immutable.Set[hydra.classes.TypeClass]]],
      hydra.core.Term](Right(hydra.lib.maps.empty[hydra.core.Name, scala.collection.immutable.Set[hydra.classes.TypeClass]]))((term2: hydra.core.Term) =>
     hydra.extract.core.map((t: hydra.core.Term) =>
-    hydra.lib.eithers.bimap[hydra.errors.DecodingError, hydra.core.Name, hydra.errors.Error, hydra.core.Name]((de: hydra.errors.DecodingError) => hydra.errors.Error.decoding(de))((x: hydra.core.Name) => x)(hydra.decode.core.name(graph)(t)))((v1: hydra.core.Term) => hydra.extract.core.setOf(decodeClass)(graph)(v1))(graph)(term2))(hydra.annotations.getTermAnnotation(hydra.constants.key_classes)(term))
+    hydra.lib.eithers.bimap[hydra.errors.DecodingError, hydra.core.Name, hydra.errors.Error,
+       hydra.core.Name]((de: hydra.errors.DecodingError) => hydra.errors.Error.decoding(de))((x: hydra.core.Name) => x)(hydra.decode.core.name(graph)(t)))((v1: hydra.core.Term) => hydra.extract.core.setOf(decodeClass)(graph)(v1))(graph)(term2))(hydra.annotations.getTermAnnotation(hydra.constants.key_classes)(term))
 }
 
-def getTypeDescription[T0](cx: T0)(graph: hydra.graph.Graph)(typ: hydra.core.Type): Either[hydra.errors.Error, Option[scala.Predef.String]] =
+def getTypeDescription[T0](cx: T0)(graph: hydra.graph.Graph)(typ: hydra.core.Type): Either[hydra.errors.Error,
+   Option[scala.Predef.String]] =
   hydra.annotations.getDescription(cx)(graph)(hydra.annotations.typeAnnotationInternal(typ))
 
 def hasDescription[T0](anns: Map[hydra.core.Name, T0]): Boolean =
@@ -109,11 +123,12 @@ def hasDescription[T0](anns: Map[hydra.core.Name, T0]): Boolean =
 def hasFlag(cx: hydra.context.Context)(flag: hydra.core.Name): Either[hydra.errors.Error, Boolean] =
   {
   lazy val term: hydra.core.Term = hydra.annotations.getAttrWithDefault(flag)(hydra.core.Term.literal(hydra.core.Literal.boolean(false)))(cx)
-  hydra.extract.core.boolean(hydra.graph.Graph(hydra.lib.maps.empty[hydra.core.Name, hydra.core.Term],
-     hydra.lib.maps.empty[hydra.core.Name, hydra.core.TypeScheme], hydra.lib.maps.empty[hydra.core.Name,
-     hydra.core.TypeVariableMetadata], hydra.lib.sets.empty[hydra.core.Name], hydra.lib.maps.empty[hydra.core.Name,
-     hydra.core.Term], hydra.lib.maps.empty[hydra.core.Name, hydra.graph.Primitive], hydra.lib.maps.empty[hydra.core.Name,
-     hydra.core.TypeScheme], hydra.lib.sets.empty[hydra.core.Name]))(term)
+  hydra.extract.core.boolean(hydra.graph.Graph(hydra.lib.maps.empty[hydra.core.Name,
+     hydra.core.Term], hydra.lib.maps.empty[hydra.core.Name, hydra.core.TypeScheme],
+     hydra.lib.maps.empty[hydra.core.Name, hydra.core.TypeVariableMetadata], hydra.lib.sets.empty[hydra.core.Name],
+     hydra.lib.maps.empty[hydra.core.Name, hydra.core.Term], hydra.lib.maps.empty[hydra.core.Name,
+     hydra.graph.Primitive], hydra.lib.maps.empty[hydra.core.Name, hydra.core.TypeScheme],
+     hydra.lib.sets.empty[hydra.core.Name]))(term)
 }
 
 def hasTypeDescription(typ: hydra.core.Type): Boolean = hydra.annotations.hasDescription(hydra.annotations.typeAnnotationInternal(typ))
@@ -150,7 +165,8 @@ def normalizeTypeAnnotations(typ: hydra.core.Type): hydra.core.Type =
 }
 
 def putAttr(key: hydra.core.Name)(`val`: hydra.core.Term)(cx: hydra.context.Context): hydra.context.Context =
-  hydra.context.Context(cx.trace, (cx.messages), hydra.lib.maps.insert[hydra.core.Name, hydra.core.Term](key)(`val`)(cx.other))
+  hydra.context.Context(cx.trace, (cx.messages), hydra.lib.maps.insert[hydra.core.Name,
+     hydra.core.Term](key)(`val`)(cx.other))
 
 def putCount(key: hydra.core.Name)(count: Int)(cx: hydra.context.Context): hydra.context.Context =
   hydra.annotations.putAttr(key)(hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(count))))(cx)
@@ -158,9 +174,11 @@ def putCount(key: hydra.core.Name)(count: Int)(cx: hydra.context.Context): hydra
 def resetCount(key: hydra.core.Name)(cx: hydra.context.Context): hydra.context.Context =
   hydra.annotations.putAttr(key)(hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(0))))(cx)
 
-def setAnnotation[T0, T1](key: T0)(`val`: Option[T1])(m: Map[T0, T1]): Map[T0, T1] = hydra.lib.maps.alter[T1, T0]((_x: Option[T1]) => `val`)(key)(m)
+def setAnnotation[T0, T1](key: T0)(`val`: Option[T1])(m: Map[T0, T1]): Map[T0, T1] = hydra.lib.maps.alter[T1,
+   T0]((_x: Option[T1]) => `val`)(key)(m)
 
-def setDescription(d: Option[scala.Predef.String])(v1: Map[hydra.core.Name, hydra.core.Term]): Map[hydra.core.Name, hydra.core.Term] =
+def setDescription(d: Option[scala.Predef.String])(v1: Map[hydra.core.Name, hydra.core.Term]): Map[hydra.core.Name,
+   hydra.core.Term] =
   hydra.annotations.setAnnotation(hydra.constants.key_description)(hydra.lib.maybes.map[scala.Predef.String,
      hydra.core.Term]((`arg_`: scala.Predef.String) => hydra.core.Term.literal(hydra.core.Literal.string(`arg_`)))(d))(v1)
 
@@ -176,8 +194,10 @@ def setTermDescription(d: Option[scala.Predef.String])(v1: hydra.core.Term): hyd
   hydra.annotations.setTermAnnotation(hydra.constants.key_description)(hydra.lib.maybes.map[scala.Predef.String,
      hydra.core.Term]((s: scala.Predef.String) => hydra.core.Term.literal(hydra.core.Literal.string(s)))(d))(v1)
 
-def setType(mt: Option[hydra.core.Type])(v1: Map[hydra.core.Name, hydra.core.Term]): Map[hydra.core.Name, hydra.core.Term] =
-  hydra.annotations.setAnnotation(hydra.constants.key_type)(hydra.lib.maybes.map[hydra.core.Type, hydra.core.Term](hydra.encode.core.`type`)(mt))(v1)
+def setType(mt: Option[hydra.core.Type])(v1: Map[hydra.core.Name, hydra.core.Term]): Map[hydra.core.Name,
+   hydra.core.Term] =
+  hydra.annotations.setAnnotation(hydra.constants.key_type)(hydra.lib.maybes.map[hydra.core.Type,
+     hydra.core.Term](hydra.encode.core.`type`)(mt))(v1)
 
 def setTypeAnnotation(key: hydra.core.Name)(`val`: Option[hydra.core.Term])(typ: hydra.core.Type): hydra.core.Type =
   {
@@ -195,7 +215,8 @@ def setTypeClasses(m: Map[hydra.core.Name, scala.collection.immutable.Set[hydra.
        hydra.core.Field("equality", hydra.core.Term.unit)))
     case hydra.classes.TypeClass.ordering => hydra.core.Term.inject(hydra.core.Injection("hydra.classes.TypeClass",
        hydra.core.Field("ordering", hydra.core.Term.unit)))
-  def encodePair(nameClasses: Tuple2[hydra.core.Name, scala.collection.immutable.Set[hydra.classes.TypeClass]]): Tuple2[hydra.core.Term, hydra.core.Term] =
+  def encodePair(nameClasses: Tuple2[hydra.core.Name, scala.collection.immutable.Set[hydra.classes.TypeClass]]): Tuple2[hydra.core.Term,
+     hydra.core.Term] =
     {
     lazy val name: hydra.core.Name = hydra.lib.pairs.first[hydra.core.Name, scala.collection.immutable.Set[hydra.classes.TypeClass]](nameClasses)
     lazy val classes: scala.collection.immutable.Set[hydra.classes.TypeClass] = hydra.lib.pairs.second[hydra.core.Name,
@@ -206,7 +227,8 @@ def setTypeClasses(m: Map[hydra.core.Name, scala.collection.immutable.Set[hydra.
   lazy val encoded: Option[hydra.core.Term] = hydra.lib.logic.ifElse[Option[hydra.core.Term]](hydra.lib.maps.`null`[hydra.core.Name,
      scala.collection.immutable.Set[hydra.classes.TypeClass]](m))(None)(Some(hydra.core.Term.map(hydra.lib.maps.fromList[hydra.core.Term,
      hydra.core.Term](hydra.lib.lists.map[Tuple2[hydra.core.Name, scala.collection.immutable.Set[hydra.classes.TypeClass]],
-     Tuple2[hydra.core.Term, hydra.core.Term]](encodePair)(hydra.lib.maps.toList[hydra.core.Name, scala.collection.immutable.Set[hydra.classes.TypeClass]](m))))))
+     Tuple2[hydra.core.Term, hydra.core.Term]](encodePair)(hydra.lib.maps.toList[hydra.core.Name,
+     scala.collection.immutable.Set[hydra.classes.TypeClass]](m))))))
   hydra.annotations.setTermAnnotation(hydra.constants.key_classes)(encoded)(term)
 }
 
@@ -232,7 +254,7 @@ def typeAnnotationInternal(typ: hydra.core.Type): Map[hydra.core.Name, hydra.cor
   hydra.annotations.aggregateAnnotations(getAnn)((at: hydra.core.AnnotatedType) => (at.body))((at: hydra.core.AnnotatedType) => (at.annotation))(typ)
 }
 
-def whenFlag[T0](cx: hydra.context.Context)(flag: hydra.core.Name)(ethen: Either[hydra.errors.Error, T0])(eelse: Either[hydra.errors.Error,
-   T0]): Either[hydra.errors.Error, T0] =
+def whenFlag[T0](cx: hydra.context.Context)(flag: hydra.core.Name)(ethen: Either[hydra.errors.Error,
+   T0])(eelse: Either[hydra.errors.Error, T0]): Either[hydra.errors.Error, T0] =
   hydra.lib.eithers.bind[hydra.errors.Error, Boolean, T0](hydra.annotations.hasFlag(cx)(flag))((b: Boolean) =>
   hydra.lib.logic.ifElse[Either[hydra.errors.Error, T0]](b)(ethen)(eelse))

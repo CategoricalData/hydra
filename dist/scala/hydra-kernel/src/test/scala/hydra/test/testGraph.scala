@@ -6,7 +6,7 @@ import hydra.packaging.*
 
 lazy val testContext: hydra.context.Context = hydra.lexical.emptyContext
 
-lazy val testGraph: hydra.graph.Graph = hydra.TestSuiteRunner.buildTestGraph()
+lazy val testGraph: hydra.graph.Graph = hydra.lexical.emptyGraph
 
 lazy val testNamespace: hydra.packaging.Namespace = "testGraph"
 

@@ -1,0 +1,6 @@
+{
+  "name": "hydra-coq",
+  "description": "Coq coder for Hydra: generates Coq code from Hydra type and term modules (generation-only target)",
+  "sourceLanguage": "haskell",
+  "dependencies": ["hydra-kernel"]
+}

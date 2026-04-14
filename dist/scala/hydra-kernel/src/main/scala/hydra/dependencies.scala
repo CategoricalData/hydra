@@ -8,7 +8,8 @@ import hydra.errors.*
 
 import hydra.packaging.*
 
-def definitionsWithDependencies[T0](cx: T0)(graph: hydra.graph.Graph)(original: Seq[hydra.core.Binding]): Either[hydra.errors.Error, Seq[hydra.core.Binding]] =
+def definitionsWithDependencies[T0](cx: T0)(graph: hydra.graph.Graph)(original: Seq[hydra.core.Binding]): Either[hydra.errors.Error,
+   Seq[hydra.core.Binding]] =
   {
   def depNames(el: hydra.core.Binding): Seq[hydra.core.Name] =
     hydra.lib.sets.toList[hydra.core.Name](hydra.dependencies.termDependencyNames(true)(false)(false)(el.term))
@@ -31,14 +32,18 @@ def flattenLetTerms(term: hydra.core.Term): hydra.core.Term =
         {
           lazy val ann: Map[hydra.core.Name, hydra.core.Term] = (v_Term_annotated_at.annotation)
           {
-            lazy val recursive: Tuple2[hydra.core.Binding, Seq[hydra.core.Binding]] = rewriteBinding(hydra.core.Binding(key0, val1, t))
+            lazy val recursive: Tuple2[hydra.core.Binding, Seq[hydra.core.Binding]] = rewriteBinding(hydra.core.Binding(key0,
+               val1, t))
             {
-              lazy val innerBinding: hydra.core.Binding = hydra.lib.pairs.first[hydra.core.Binding, Seq[hydra.core.Binding]](recursive)
+              lazy val innerBinding: hydra.core.Binding = hydra.lib.pairs.first[hydra.core.Binding,
+                 Seq[hydra.core.Binding]](recursive)
               {
-                lazy val deps: Seq[hydra.core.Binding] = hydra.lib.pairs.second[hydra.core.Binding, Seq[hydra.core.Binding]](recursive)
+                lazy val deps: Seq[hydra.core.Binding] = hydra.lib.pairs.second[hydra.core.Binding,
+                   Seq[hydra.core.Binding]](recursive)
                 {
                   lazy val val2: hydra.core.Term = (innerBinding.term)
-                  Tuple2(hydra.core.Binding(key0, hydra.core.Term.annotated(hydra.core.AnnotatedTerm(val2, ann)), t), deps)
+                  Tuple2(hydra.core.Binding(key0, hydra.core.Term.annotated(hydra.core.AnnotatedTerm(val2,
+                     ann)), t), deps)
                 }
               }
             }
@@ -54,7 +59,8 @@ def flattenLetTerms(term: hydra.core.Term): hydra.core.Term =
             {
               def qualify(n: hydra.core.Name): hydra.core.Name = hydra.lib.strings.cat2(prefix)(n)
               {
-                def toSubstPair(b: hydra.core.Binding): Tuple2[hydra.core.Name, hydra.core.Name] = Tuple2(b.name, qualify(b.name))
+                def toSubstPair(b: hydra.core.Binding): Tuple2[hydra.core.Name, hydra.core.Name] = Tuple2(b.name,
+                   qualify(b.name))
                 {
                   lazy val subst: Map[hydra.core.Name, hydra.core.Name] = hydra.lib.maps.fromList[hydra.core.Name,
                      hydra.core.Name](hydra.lib.lists.map[hydra.core.Binding, Tuple2[hydra.core.Name,
@@ -64,8 +70,10 @@ def flattenLetTerms(term: hydra.core.Term): hydra.core.Term =
                     {
                       lazy val newBody: hydra.core.Term = replaceVars(body1)
                       {
-                        def newBinding(b: hydra.core.Binding): hydra.core.Binding = hydra.core.Binding(qualify(b.name), replaceVars(b.term), (b.`type`))
-                        Tuple2(hydra.core.Binding(key0, newBody, t), hydra.lib.lists.map[hydra.core.Binding, hydra.core.Binding](newBinding)(bindings1))
+                        def newBinding(b: hydra.core.Binding): hydra.core.Binding = hydra.core.Binding(qualify(b.name),
+                           replaceVars(b.term), (b.`type`))
+                        Tuple2(hydra.core.Binding(key0, newBody, t), hydra.lib.lists.map[hydra.core.Binding,
+                           hydra.core.Binding](newBinding)(bindings1))
                       }
                     }
                   }
@@ -77,7 +85,8 @@ def flattenLetTerms(term: hydra.core.Term): hydra.core.Term =
       }
       case _ => Tuple2(hydra.core.Binding(key0, val0, t), Seq())
   }
-  def flattenBodyLet(bindings: Seq[hydra.core.Binding])(body: hydra.core.Term): Tuple2[Seq[hydra.core.Binding], hydra.core.Term] =
+  def flattenBodyLet(bindings: Seq[hydra.core.Binding])(body: hydra.core.Term): Tuple2[Seq[hydra.core.Binding],
+     hydra.core.Term] =
     body match
     case hydra.core.Term.let(v_Term_let_innerLt) => {
       lazy val innerBindings: Seq[hydra.core.Binding] = (v_Term_let_innerLt.bindings)
@@ -97,16 +106,19 @@ def flattenLetTerms(term: hydra.core.Term): hydra.core.Term =
           lazy val body: hydra.core.Term = (v_Term_let_lt.body)
           {
             def forResult[T1](hr: Tuple2[T1, Seq[T1]]): Seq[T1] =
-              hydra.lib.lists.concat2[T1](hydra.lib.pairs.second[T1, Seq[T1]](hr))(hydra.lib.lists.pure[T1](hydra.lib.pairs.first[T1, Seq[T1]](hr)))
+              hydra.lib.lists.concat2[T1](hydra.lib.pairs.second[T1, Seq[T1]](hr))(hydra.lib.lists.pure[T1](hydra.lib.pairs.first[T1,
+                 Seq[T1]](hr)))
             {
               lazy val flattenedBindings: Seq[hydra.core.Binding] = hydra.lib.lists.concat[hydra.core.Binding](hydra.lib.lists.map[hydra.core.Binding,
                  Seq[hydra.core.Binding]]((`arg_`: hydra.core.Binding) => forResult(rewriteBinding(`arg_`)))(bindings))
               {
                 lazy val merged: Tuple2[Seq[hydra.core.Binding], hydra.core.Term] = flattenBodyLet(flattenedBindings)(body)
                 {
-                  lazy val newBindings: Seq[hydra.core.Binding] = hydra.lib.pairs.first[Seq[hydra.core.Binding], hydra.core.Term](merged)
+                  lazy val newBindings: Seq[hydra.core.Binding] = hydra.lib.pairs.first[Seq[hydra.core.Binding],
+                     hydra.core.Term](merged)
                   {
-                    lazy val newBody: hydra.core.Term = hydra.lib.pairs.second[Seq[hydra.core.Binding], hydra.core.Term](merged)
+                    lazy val newBody: hydra.core.Term = hydra.lib.pairs.second[Seq[hydra.core.Binding],
+                       hydra.core.Term](merged)
                     hydra.core.Term.let(hydra.core.Let(newBindings, newBody))
                   }
                 }
@@ -120,9 +132,11 @@ def flattenLetTerms(term: hydra.core.Term): hydra.core.Term =
   hydra.rewriting.rewriteTerm(flatten)(term)
 }
 
-def inlineType(schema: Map[hydra.core.Name, hydra.core.Type])(typ: hydra.core.Type): Either[hydra.errors.Error, hydra.core.Type] =
+def inlineType(schema: Map[hydra.core.Name, hydra.core.Type])(typ: hydra.core.Type): Either[hydra.errors.Error,
+   hydra.core.Type] =
   {
-  def f[T0](recurse: (T0 => Either[hydra.errors.Error, hydra.core.Type]))(typ2: T0): Either[hydra.errors.Error, hydra.core.Type] =
+  def f[T0](recurse: (T0 => Either[hydra.errors.Error, hydra.core.Type]))(typ2: T0): Either[hydra.errors.Error,
+     hydra.core.Type] =
     {
     def afterRecurse(tr: hydra.core.Type): Either[hydra.errors.Error, hydra.core.Type] =
       tr match
@@ -145,8 +159,10 @@ def liftLambdaAboveLet(term0: hydra.core.Term): hydra.core.Term =
   {
   def rewrite(recurse: (hydra.core.Term => hydra.core.Term))(term: hydra.core.Term): hydra.core.Term =
     {
-    def rewriteBinding(b: hydra.core.Binding): hydra.core.Binding = hydra.core.Binding(b.name, rewrite(recurse)(b.term), (b.`type`))
-    def rewriteBindings(bs: Seq[hydra.core.Binding]): Seq[hydra.core.Binding] = hydra.lib.lists.map[hydra.core.Binding, hydra.core.Binding](rewriteBinding)(bs)
+    def rewriteBinding(b: hydra.core.Binding): hydra.core.Binding = hydra.core.Binding(b.name,
+       rewrite(recurse)(b.term), (b.`type`))
+    def rewriteBindings(bs: Seq[hydra.core.Binding]): Seq[hydra.core.Binding] = hydra.lib.lists.map[hydra.core.Binding,
+       hydra.core.Binding](rewriteBinding)(bs)
     def digForLambdas(original: hydra.core.Term)(cons: (hydra.core.Term => hydra.core.Term))(term2: hydra.core.Term): hydra.core.Term =
       term2 match
       case hydra.core.Term.annotated(v_Term_annotated_at) => digForLambdas(original)((t: hydra.core.Term) =>
@@ -167,8 +183,8 @@ def liftLambdaAboveLet(term0: hydra.core.Term): hydra.core.Term =
 def pruneLet(l: hydra.core.Let): hydra.core.Let =
   {
   lazy val bindingMap: Map[hydra.core.Name, hydra.core.Term] = hydra.lib.maps.fromList[hydra.core.Name,
-     hydra.core.Term](hydra.lib.lists.map[hydra.core.Binding, Tuple2[hydra.core.Name, hydra.core.Term]]((b: hydra.core.Binding) => Tuple2(b.name,
-     (b.term)))(l.bindings))
+     hydra.core.Term](hydra.lib.lists.map[hydra.core.Binding, Tuple2[hydra.core.Name,
+     hydra.core.Term]]((b: hydra.core.Binding) => Tuple2(b.name, (b.term)))(l.bindings))
   lazy val rootName: hydra.core.Name = "[[[root]]]"
   def adj(n: hydra.core.Name): scala.collection.immutable.Set[hydra.core.Name] =
     hydra.lib.sets.intersection[hydra.core.Name](hydra.lib.sets.fromList[hydra.core.Name](hydra.lib.maps.keys[hydra.core.Name,
@@ -277,13 +293,16 @@ def toShortNames(original: Seq[hydra.core.Name]): Map[hydra.core.Name, hydra.cor
     hydra.lib.maps.insert[scala.Predef.String, scala.collection.immutable.Set[hydra.core.Name]](local)(hydra.lib.sets.insert[hydra.core.Name](name)(group))(acc)
   }
   def groupNamesByLocal(names: Seq[hydra.core.Name]): Map[scala.Predef.String, scala.collection.immutable.Set[hydra.core.Name]] =
-    hydra.lib.lists.foldl[Map[scala.Predef.String, scala.collection.immutable.Set[hydra.core.Name]], hydra.core.Name](addName)(hydra.lib.maps.empty[scala.Predef.String,
-       scala.collection.immutable.Set[hydra.core.Name]])(names)
+    hydra.lib.lists.foldl[Map[scala.Predef.String, scala.collection.immutable.Set[hydra.core.Name]],
+       hydra.core.Name](addName)(hydra.lib.maps.empty[scala.Predef.String, scala.collection.immutable.Set[hydra.core.Name]])(names)
   lazy val groups: Map[scala.Predef.String, scala.collection.immutable.Set[hydra.core.Name]] = groupNamesByLocal(original)
-  def renameGroup[T0](localNames: Tuple2[scala.Predef.String, scala.collection.immutable.Set[T0]]): Seq[Tuple2[T0, hydra.core.Name]] =
+  def renameGroup[T0](localNames: Tuple2[scala.Predef.String, scala.collection.immutable.Set[T0]]): Seq[Tuple2[T0,
+     hydra.core.Name]] =
     {
-    lazy val local: scala.Predef.String = hydra.lib.pairs.first[scala.Predef.String, scala.collection.immutable.Set[T0]](localNames)
-    lazy val names: scala.collection.immutable.Set[T0] = hydra.lib.pairs.second[scala.Predef.String, scala.collection.immutable.Set[T0]](localNames)
+    lazy val local: scala.Predef.String = hydra.lib.pairs.first[scala.Predef.String,
+       scala.collection.immutable.Set[T0]](localNames)
+    lazy val names: scala.collection.immutable.Set[T0] = hydra.lib.pairs.second[scala.Predef.String,
+       scala.collection.immutable.Set[T0]](localNames)
     def rangeFrom(start: Int): Seq[Int] = hydra.lib.lists.cons[Int](start)(rangeFrom(hydra.lib.math.add(start)(1)))
     def rename[T1](name: T1)(i: Int): Tuple2[T1, hydra.core.Name] =
       Tuple2(name, hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.equality.gt[Int](i)(1))(hydra.lib.strings.cat2(local)(hydra.lib.literals.showInt32(i)))(local))
@@ -295,9 +314,11 @@ def toShortNames(original: Seq[hydra.core.Name]): Map[hydra.core.Name, hydra.cor
      scala.collection.immutable.Set[hydra.core.Name]](groups))))
 }
 
-def topologicalSortBindingMap(bindingMap: Map[hydra.core.Name, hydra.core.Term]): Seq[Seq[Tuple2[hydra.core.Name, hydra.core.Term]]] =
+def topologicalSortBindingMap(bindingMap: Map[hydra.core.Name, hydra.core.Term]): Seq[Seq[Tuple2[hydra.core.Name,
+   hydra.core.Term]]] =
   {
-  lazy val bindings: Seq[Tuple2[hydra.core.Name, hydra.core.Term]] = hydra.lib.maps.toList[hydra.core.Name, hydra.core.Term](bindingMap)
+  lazy val bindings: Seq[Tuple2[hydra.core.Name, hydra.core.Term]] = hydra.lib.maps.toList[hydra.core.Name,
+     hydra.core.Term](bindingMap)
   lazy val keys: scala.collection.immutable.Set[hydra.core.Name] = hydra.lib.sets.fromList[hydra.core.Name](hydra.lib.lists.map[Tuple2[hydra.core.Name,
      hydra.core.Term], hydra.core.Name](hydra.lib.pairs.first[hydra.core.Name, hydra.core.Term])(bindings))
   def hasTypeAnnotation(term: hydra.core.Term): Boolean =
@@ -322,7 +343,8 @@ def topologicalSortBindings(els: Seq[hydra.core.Binding]): Either[Seq[Seq[hydra.
   {
   def adjlist(e: hydra.core.Binding): Tuple2[hydra.core.Name, Seq[hydra.core.Name]] =
     Tuple2(e.name, hydra.lib.sets.toList[hydra.core.Name](hydra.dependencies.termDependencyNames(false)(true)(true)(e.term)))
-  hydra.sorting.topologicalSort(hydra.lib.lists.map[hydra.core.Binding, Tuple2[hydra.core.Name, Seq[hydra.core.Name]]](adjlist)(els))
+  hydra.sorting.topologicalSort(hydra.lib.lists.map[hydra.core.Binding, Tuple2[hydra.core.Name,
+     Seq[hydra.core.Name]]](adjlist)(els))
 }
 
 def topologicalSortTypeDefinitions(defs: Seq[hydra.packaging.TypeDefinition]): Seq[Seq[hydra.packaging.TypeDefinition]] =
@@ -330,12 +352,14 @@ def topologicalSortTypeDefinitions(defs: Seq[hydra.packaging.TypeDefinition]): S
   def toPair(`def`: hydra.packaging.TypeDefinition): Tuple2[hydra.core.Name, Seq[hydra.core.Name]] =
     Tuple2(`def`.name, hydra.lib.sets.toList[hydra.core.Name](hydra.dependencies.typeDependencyNames(false)(`def`.`type`.`type`)))
   lazy val nameToDef: Map[hydra.core.Name, hydra.packaging.TypeDefinition] = hydra.lib.maps.fromList[hydra.core.Name,
-     hydra.packaging.TypeDefinition](hydra.lib.lists.map[hydra.packaging.TypeDefinition, Tuple2[hydra.core.Name,
-     hydra.packaging.TypeDefinition]]((d: hydra.packaging.TypeDefinition) => Tuple2(d.name, d))(defs))
+     hydra.packaging.TypeDefinition](hydra.lib.lists.map[hydra.packaging.TypeDefinition,
+     Tuple2[hydra.core.Name, hydra.packaging.TypeDefinition]]((d: hydra.packaging.TypeDefinition) => Tuple2(d.name,
+     d))(defs))
   lazy val sorted: Seq[Seq[hydra.core.Name]] = hydra.sorting.topologicalSortComponents(hydra.lib.lists.map[hydra.packaging.TypeDefinition,
      Tuple2[hydra.core.Name, Seq[hydra.core.Name]]](toPair)(defs))
   hydra.lib.lists.map[Seq[hydra.core.Name], Seq[hydra.packaging.TypeDefinition]]((names: Seq[hydra.core.Name]) =>
-    hydra.lib.maybes.cat[hydra.packaging.TypeDefinition](hydra.lib.lists.map[hydra.core.Name, Option[hydra.packaging.TypeDefinition]]((n: hydra.core.Name) =>
+    hydra.lib.maybes.cat[hydra.packaging.TypeDefinition](hydra.lib.lists.map[hydra.core.Name,
+       Option[hydra.packaging.TypeDefinition]]((n: hydra.core.Name) =>
     hydra.lib.maps.lookup[hydra.core.Name, hydra.packaging.TypeDefinition](n)(nameToDef))(names)))(sorted)
 }
 

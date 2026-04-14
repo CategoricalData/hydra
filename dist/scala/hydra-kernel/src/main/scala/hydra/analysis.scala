@@ -15,8 +15,9 @@ def addNamesToNamespaces[T0](encodeNamespace: (hydra.packaging.Namespace => T0))
   lazy val nss: scala.collection.immutable.Set[hydra.packaging.Namespace] = hydra.lib.sets.fromList[hydra.packaging.Namespace](hydra.lib.maybes.cat[hydra.packaging.Namespace](hydra.lib.lists.map[hydra.core.Name,
      Option[hydra.packaging.Namespace]](hydra.names.namespaceOf)(hydra.lib.sets.toList[hydra.core.Name](names))))
   def toPair(ns: hydra.packaging.Namespace): Tuple2[hydra.packaging.Namespace, T0] = Tuple2(ns, encodeNamespace(ns))
-  hydra.packaging.Namespaces(ns0.focus, hydra.lib.maps.union[hydra.packaging.Namespace, T0](ns0.mapping)(hydra.lib.maps.fromList[hydra.packaging.Namespace,
-     T0](hydra.lib.lists.map[hydra.packaging.Namespace, Tuple2[hydra.packaging.Namespace, T0]](toPair)(hydra.lib.sets.toList[hydra.packaging.Namespace](nss)))))
+  hydra.packaging.Namespaces(ns0.focus, hydra.lib.maps.union[hydra.packaging.Namespace,
+     T0](ns0.mapping)(hydra.lib.maps.fromList[hydra.packaging.Namespace, T0](hydra.lib.lists.map[hydra.packaging.Namespace,
+     Tuple2[hydra.packaging.Namespace, T0]](toPair)(hydra.lib.sets.toList[hydra.packaging.Namespace](nss)))))
 }
 
 def analyzeFunctionTerm[T0, T1](cx: hydra.context.Context)(getTC: (T0 => hydra.graph.Graph))(setTC: (hydra.graph.Graph => T0 => T0))(env: T0)(term: hydra.core.Term): Either[T1,
@@ -32,19 +33,22 @@ def analyzeFunctionTermWith[T0, T1](cx: hydra.context.Context)(forBinding: (hydr
 def analyzeFunctionTermWith_finish[T0, T1](cx: hydra.context.Context)(getTC: (T0 => hydra.graph.Graph))(fEnv: T0)(tparams: Seq[hydra.core.Name])(args: Seq[hydra.core.Name])(bindings: Seq[hydra.core.Binding])(doms: Seq[hydra.core.Type])(tapps: Seq[hydra.core.Type])(body: hydra.core.Term): Either[T1,
    hydra.typing.FunctionStructure[T0]] =
   {
-  lazy val bodyWithTapps: hydra.core.Term = hydra.lib.lists.foldl[hydra.core.Term, hydra.core.Type]((trm: hydra.core.Term) =>
+  lazy val bodyWithTapps: hydra.core.Term = hydra.lib.lists.foldl[hydra.core.Term,
+     hydra.core.Type]((trm: hydra.core.Term) =>
     (typ: hydra.core.Type) =>
     hydra.core.Term.typeApplication(hydra.core.TypeApplicationTerm(trm, typ)))(body)(tapps)
-  lazy val mcod: Option[hydra.core.Type] = hydra.lib.eithers.either[hydra.errors.Error, hydra.core.Type,
-     Option[hydra.core.Type]]((_x: hydra.errors.Error) => None)((c: hydra.core.Type) => Some(c))(hydra.checking.typeOfTerm(cx)(getTC(fEnv))(bodyWithTapps))
-  Right(hydra.typing.FunctionStructure(hydra.lib.lists.reverse[hydra.core.Name](tparams), hydra.lib.lists.reverse[hydra.core.Name](args),
-     bindings, bodyWithTapps, hydra.lib.lists.reverse[hydra.core.Type](doms), mcod, fEnv))
+  lazy val mcod: Option[hydra.core.Type] = hydra.lib.eithers.either[hydra.errors.Error,
+     hydra.core.Type, Option[hydra.core.Type]]((_x: hydra.errors.Error) => None)((c: hydra.core.Type) => Some(c))(hydra.checking.typeOfTerm(cx)(getTC(fEnv))(bodyWithTapps))
+  Right(hydra.typing.FunctionStructure(hydra.lib.lists.reverse[hydra.core.Name](tparams),
+     hydra.lib.lists.reverse[hydra.core.Name](args), bindings, bodyWithTapps, hydra.lib.lists.reverse[hydra.core.Type](doms),
+     mcod, fEnv))
 }
 
 def analyzeFunctionTermWith_gather[T0, T1](cx: hydra.context.Context)(forBinding: (hydra.graph.Graph => hydra.core.Binding => Option[hydra.core.Term]))(getTC: (T0 => hydra.graph.Graph))(setTC: (hydra.graph.Graph => T0 => T0))(argMode: Boolean)(gEnv: T0)(tparams: Seq[hydra.core.Name])(args: Seq[hydra.core.Name])(bindings: Seq[hydra.core.Binding])(doms: Seq[hydra.core.Type])(tapps: Seq[hydra.core.Type])(t: hydra.core.Term): Either[T1,
    hydra.typing.FunctionStructure[T0]] =
   hydra.strip.deannotateTerm(t) match
-  case hydra.core.Term.lambda(v_Term_lambda_lam) => hydra.lib.logic.ifElse[Either[T1, hydra.typing.FunctionStructure[T0]]](argMode)({
+  case hydra.core.Term.lambda(v_Term_lambda_lam) => hydra.lib.logic.ifElse[Either[T1,
+     hydra.typing.FunctionStructure[T0]]](argMode)({
     lazy val v: hydra.core.Name = (v_Term_lambda_lam.parameter)
     {
       lazy val dom: hydra.core.Type = hydra.lib.maybes.maybe[hydra.core.Type, hydra.core.Type](hydra.core.Type.variable("_"))((`x_`: hydra.core.Type) => `x_`)(v_Term_lambda_lam.domain)
@@ -209,7 +213,8 @@ def isTailRecursiveInTailPosition(funcName: hydra.core.Name)(term: hydra.core.Te
     case hydra.core.Term.application(v_Term_application_app) => {
       lazy val gathered: Tuple2[Seq[hydra.core.Term], hydra.core.Term] = hydra.analysis.gatherApplications(stripped)
       {
-        lazy val gatherArgs: Seq[hydra.core.Term] = hydra.lib.pairs.first[Seq[hydra.core.Term], hydra.core.Term](gathered)
+        lazy val gatherArgs: Seq[hydra.core.Term] = hydra.lib.pairs.first[Seq[hydra.core.Term],
+           hydra.core.Term](gathered)
         {
           lazy val gatherFun: hydra.core.Term = hydra.lib.pairs.second[Seq[hydra.core.Term], hydra.core.Term](gathered)
           {
@@ -299,14 +304,15 @@ def moduleDependencyNamespaces[T0](cx: T0)(graph: hydra.graph.Graph)(binds: Bool
         lazy val dataTerm: hydra.core.Term = hydra.annotations.normalizeTermAnnotations(hydra.core.Term.annotated(hydra.core.AnnotatedTerm(hydra.encode.core.`type`(v_Definition_type_td.`type`.`type`),
            hydra.lib.maps.fromList[hydra.core.Name, hydra.core.Term](Seq(Tuple2(hydra.constants.key_type,
            schemaTerm))))))
-        hydra.core.Binding(v_Definition_type_td.name, dataTerm, Some(hydra.core.TypeScheme(Seq(), hydra.core.Type.variable("hydra.core.Type"), None)))
+        hydra.core.Binding(v_Definition_type_td.name, dataTerm, Some(hydra.core.TypeScheme(Seq(),
+           hydra.core.Type.variable("hydra.core.Type"), None)))
       }
     })
     case hydra.packaging.Definition.term(v_Definition_term_td) => Some(hydra.core.Binding(v_Definition_term_td.name,
        (v_Definition_term_td.term), (v_Definition_term_td.`type`)))
     case _ => None)(mod.definitions))
-  hydra.lib.eithers.map[scala.collection.immutable.Set[hydra.packaging.Namespace], scala.collection.immutable.Set[hydra.packaging.Namespace],
-     hydra.errors.Error]((deps: scala.collection.immutable.Set[hydra.packaging.Namespace]) =>
+  hydra.lib.eithers.map[scala.collection.immutable.Set[hydra.packaging.Namespace],
+     scala.collection.immutable.Set[hydra.packaging.Namespace], hydra.errors.Error]((deps: scala.collection.immutable.Set[hydra.packaging.Namespace]) =>
     hydra.lib.sets.delete[hydra.packaging.Namespace](mod.namespace)(deps))(hydra.analysis.dependencyNamespaces(cx)(graph)(binds)(withPrims)(withNoms)(withSchema)(allBindings))
 }
 
@@ -314,6 +320,7 @@ def namespacesForDefinitions[T0](encodeNamespace: (hydra.packaging.Namespace => 
   {
   lazy val nss: scala.collection.immutable.Set[hydra.packaging.Namespace] = hydra.lib.sets.delete[hydra.packaging.Namespace](focusNs)(hydra.analysis.definitionDependencyNamespaces(defs))
   def toPair(ns: hydra.packaging.Namespace): Tuple2[hydra.packaging.Namespace, T0] = Tuple2(ns, encodeNamespace(ns))
-  hydra.packaging.Namespaces(toPair(focusNs), hydra.lib.maps.fromList[hydra.packaging.Namespace, T0](hydra.lib.lists.map[hydra.packaging.Namespace,
-     Tuple2[hydra.packaging.Namespace, T0]](toPair)(hydra.lib.sets.toList[hydra.packaging.Namespace](nss))))
+  hydra.packaging.Namespaces(toPair(focusNs), hydra.lib.maps.fromList[hydra.packaging.Namespace,
+     T0](hydra.lib.lists.map[hydra.packaging.Namespace, Tuple2[hydra.packaging.Namespace,
+     T0]](toPair)(hydra.lib.sets.toList[hydra.packaging.Namespace](nss))))
 }

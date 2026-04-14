@@ -10,7 +10,8 @@ def applicationToExpr(d: hydra.lisp.syntax.Dialect)(app: hydra.lisp.syntax.Appli
   {
   lazy val funExpr: hydra.lisp.syntax.Expression = (app.function)
   lazy val fun: hydra.ast.Expr = hydra.lisp.serde.expressionToExpr(d)(funExpr)
-  lazy val args: Seq[hydra.ast.Expr] = hydra.lib.lists.map[hydra.lisp.syntax.Expression, hydra.ast.Expr]((v1: hydra.lisp.syntax.Expression) => hydra.lisp.serde.expressionToExpr(d)(v1))(app.arguments)
+  lazy val args: Seq[hydra.ast.Expr] = hydra.lib.lists.map[hydra.lisp.syntax.Expression,
+     hydra.ast.Expr]((v1: hydra.lisp.syntax.Expression) => hydra.lisp.serde.expressionToExpr(d)(v1))(app.arguments)
   lazy val needsFuncall: Boolean = d match
     case hydra.lisp.syntax.Dialect.emacsLisp => funExpr match
       case hydra.lisp.syntax.Expression.variable(v_Expression_variable_s) => false
@@ -26,12 +27,15 @@ def caseExpressionToExpr(d: hydra.lisp.syntax.Dialect)(caseExpr: hydra.lisp.synt
   lazy val scrutinee: hydra.ast.Expr = hydra.lisp.serde.expressionToExpr(d)(caseExpr.scrutinee)
   lazy val clauses: Seq[hydra.lisp.syntax.CaseClause] = (caseExpr.clauses)
   lazy val dflt: Option[hydra.lisp.syntax.Expression] = (caseExpr.default)
-  lazy val clauseExprs: Seq[hydra.ast.Expr] = hydra.lib.lists.map[hydra.lisp.syntax.CaseClause, hydra.ast.Expr]((c: hydra.lisp.syntax.CaseClause) =>
+  lazy val clauseExprs: Seq[hydra.ast.Expr] = hydra.lib.lists.map[hydra.lisp.syntax.CaseClause,
+     hydra.ast.Expr]((c: hydra.lisp.syntax.CaseClause) =>
     hydra.serialization.parens(hydra.serialization.spaceSep(Seq(hydra.serialization.parens(hydra.serialization.spaceSep(hydra.lib.lists.map[hydra.lisp.syntax.Expression,
        hydra.ast.Expr]((v1: hydra.lisp.syntax.Expression) => hydra.lisp.serde.expressionToExpr(d)(v1))(c.keys))),
        hydra.lisp.serde.expressionToExpr(d)(c.body)))))(clauses)
-  lazy val defaultPart: Seq[hydra.ast.Expr] = hydra.lib.maybes.maybe[Seq[hydra.ast.Expr], hydra.lisp.syntax.Expression](Seq())((e: hydra.lisp.syntax.Expression) =>
-    Seq(hydra.serialization.parens(hydra.serialization.spaceSep(Seq(hydra.serialization.cst("else"), hydra.lisp.serde.expressionToExpr(d)(e))))))(dflt)
+  lazy val defaultPart: Seq[hydra.ast.Expr] = hydra.lib.maybes.maybe[Seq[hydra.ast.Expr],
+     hydra.lisp.syntax.Expression](Seq())((e: hydra.lisp.syntax.Expression) =>
+    Seq(hydra.serialization.parens(hydra.serialization.spaceSep(Seq(hydra.serialization.cst("else"),
+       hydra.lisp.serde.expressionToExpr(d)(e))))))(dflt)
   hydra.serialization.parens(hydra.serialization.spaceSep(hydra.lib.lists.concat[hydra.ast.Expr](Seq(Seq(hydra.serialization.cst("case"),
      scrutinee), clauseExprs, defaultPart))))
 }
@@ -51,35 +55,45 @@ def condExpressionToExpr(d: hydra.lisp.syntax.Dialect)(condExpr: hydra.lisp.synt
       lazy val clauseExprs: Seq[hydra.ast.Expr] = hydra.lib.lists.concat[hydra.ast.Expr](hydra.lib.lists.map[hydra.lisp.syntax.CondClause,
          Seq[hydra.ast.Expr]]((c: hydra.lisp.syntax.CondClause) =>
         Seq(hydra.lisp.serde.expressionToExpr(d)(c.condition), hydra.lisp.serde.expressionToExpr(d)(c.body)))(clauses))
-      lazy val defaultPart: Seq[hydra.ast.Expr] = hydra.lib.maybes.maybe[Seq[hydra.ast.Expr], hydra.lisp.syntax.Expression](Seq())((e: hydra.lisp.syntax.Expression) =>
+      lazy val defaultPart: Seq[hydra.ast.Expr] = hydra.lib.maybes.maybe[Seq[hydra.ast.Expr],
+         hydra.lisp.syntax.Expression](Seq())((e: hydra.lisp.syntax.Expression) =>
         Seq(hydra.serialization.cst(":else"), hydra.lisp.serde.expressionToExpr(d)(e)))(dflt)
       hydra.serialization.parens(hydra.serialization.spaceSep(hydra.lib.lists.concat[hydra.ast.Expr](Seq(Seq(hydra.serialization.cst("cond")),
          clauseExprs, defaultPart))))
     }
     case hydra.lisp.syntax.Dialect.emacsLisp => {
-      lazy val clauseExprs: Seq[hydra.ast.Expr] = hydra.lib.lists.map[hydra.lisp.syntax.CondClause, hydra.ast.Expr]((c: hydra.lisp.syntax.CondClause) =>
+      lazy val clauseExprs: Seq[hydra.ast.Expr] = hydra.lib.lists.map[hydra.lisp.syntax.CondClause,
+         hydra.ast.Expr]((c: hydra.lisp.syntax.CondClause) =>
         hydra.serialization.parens(hydra.serialization.spaceSep(Seq(hydra.lisp.serde.expressionToExpr(d)(c.condition),
            hydra.lisp.serde.expressionToExpr(d)(c.body)))))(clauses)
-      lazy val defaultPart: Seq[hydra.ast.Expr] = hydra.lib.maybes.maybe[Seq[hydra.ast.Expr], hydra.lisp.syntax.Expression](Seq())((e: hydra.lisp.syntax.Expression) =>
-        Seq(hydra.serialization.parens(hydra.serialization.spaceSep(Seq(hydra.serialization.cst("t"), hydra.lisp.serde.expressionToExpr(d)(e))))))(dflt)
+      lazy val defaultPart: Seq[hydra.ast.Expr] = hydra.lib.maybes.maybe[Seq[hydra.ast.Expr],
+         hydra.lisp.syntax.Expression](Seq())((e: hydra.lisp.syntax.Expression) =>
+        Seq(hydra.serialization.parens(hydra.serialization.spaceSep(Seq(hydra.serialization.cst("t"),
+           hydra.lisp.serde.expressionToExpr(d)(e))))))(dflt)
       hydra.serialization.parens(hydra.serialization.spaceSep(hydra.lib.lists.concat[hydra.ast.Expr](Seq(Seq(hydra.serialization.cst("cond")),
          clauseExprs, defaultPart))))
     }
     case hydra.lisp.syntax.Dialect.commonLisp => {
-      lazy val clauseExprs: Seq[hydra.ast.Expr] = hydra.lib.lists.map[hydra.lisp.syntax.CondClause, hydra.ast.Expr]((c: hydra.lisp.syntax.CondClause) =>
+      lazy val clauseExprs: Seq[hydra.ast.Expr] = hydra.lib.lists.map[hydra.lisp.syntax.CondClause,
+         hydra.ast.Expr]((c: hydra.lisp.syntax.CondClause) =>
         hydra.serialization.parens(hydra.serialization.spaceSep(Seq(hydra.lisp.serde.expressionToExpr(d)(c.condition),
            hydra.lisp.serde.expressionToExpr(d)(c.body)))))(clauses)
-      lazy val defaultPart: Seq[hydra.ast.Expr] = hydra.lib.maybes.maybe[Seq[hydra.ast.Expr], hydra.lisp.syntax.Expression](Seq())((e: hydra.lisp.syntax.Expression) =>
-        Seq(hydra.serialization.parens(hydra.serialization.spaceSep(Seq(hydra.serialization.cst("t"), hydra.lisp.serde.expressionToExpr(d)(e))))))(dflt)
+      lazy val defaultPart: Seq[hydra.ast.Expr] = hydra.lib.maybes.maybe[Seq[hydra.ast.Expr],
+         hydra.lisp.syntax.Expression](Seq())((e: hydra.lisp.syntax.Expression) =>
+        Seq(hydra.serialization.parens(hydra.serialization.spaceSep(Seq(hydra.serialization.cst("t"),
+           hydra.lisp.serde.expressionToExpr(d)(e))))))(dflt)
       hydra.serialization.parens(hydra.serialization.spaceSep(hydra.lib.lists.concat[hydra.ast.Expr](Seq(Seq(hydra.serialization.cst("cond")),
          clauseExprs, defaultPart))))
     }
     case hydra.lisp.syntax.Dialect.scheme => {
-      lazy val clauseExprs: Seq[hydra.ast.Expr] = hydra.lib.lists.map[hydra.lisp.syntax.CondClause, hydra.ast.Expr]((c: hydra.lisp.syntax.CondClause) =>
+      lazy val clauseExprs: Seq[hydra.ast.Expr] = hydra.lib.lists.map[hydra.lisp.syntax.CondClause,
+         hydra.ast.Expr]((c: hydra.lisp.syntax.CondClause) =>
         hydra.serialization.parens(hydra.serialization.spaceSep(Seq(hydra.lisp.serde.expressionToExpr(d)(c.condition),
            hydra.lisp.serde.expressionToExpr(d)(c.body)))))(clauses)
-      lazy val defaultPart: Seq[hydra.ast.Expr] = hydra.lib.maybes.maybe[Seq[hydra.ast.Expr], hydra.lisp.syntax.Expression](Seq())((e: hydra.lisp.syntax.Expression) =>
-        Seq(hydra.serialization.parens(hydra.serialization.spaceSep(Seq(hydra.serialization.cst("else"), hydra.lisp.serde.expressionToExpr(d)(e))))))(dflt)
+      lazy val defaultPart: Seq[hydra.ast.Expr] = hydra.lib.maybes.maybe[Seq[hydra.ast.Expr],
+         hydra.lisp.syntax.Expression](Seq())((e: hydra.lisp.syntax.Expression) =>
+        Seq(hydra.serialization.parens(hydra.serialization.spaceSep(Seq(hydra.serialization.cst("else"),
+           hydra.lisp.serde.expressionToExpr(d)(e))))))(dflt)
       hydra.serialization.parens(hydra.serialization.spaceSep(hydra.lib.lists.concat[hydra.ast.Expr](Seq(Seq(hydra.serialization.cst("cond")),
          clauseExprs, defaultPart))))
     }
@@ -89,7 +103,8 @@ def constantDefinitionToExpr(d: hydra.lisp.syntax.Dialect)(cdef: hydra.lisp.synt
   {
   lazy val name: hydra.ast.Expr = hydra.lisp.serde.symbolToExpr(cdef.name)
   lazy val value: hydra.ast.Expr = hydra.lisp.serde.expressionToExpr(d)(cdef.value)
-  hydra.serialization.parens(hydra.serialization.spaceSep(Seq(hydra.serialization.cst(hydra.lisp.serde.defconstKeyword(d)), name, value)))
+  hydra.serialization.parens(hydra.serialization.spaceSep(Seq(hydra.serialization.cst(hydra.lisp.serde.defconstKeyword(d)),
+     name, value)))
 }
 
 def defKeyword(d: hydra.lisp.syntax.Dialect): scala.Predef.String =
@@ -131,14 +146,17 @@ def doExpressionToExpr(d: hydra.lisp.syntax.Dialect)(doExpr: hydra.lisp.syntax.D
      hydra.ast.Expr]((v1: hydra.lisp.syntax.Expression) => hydra.lisp.serde.expressionToExpr(d)(v1))(doExpr.expressions))))
 }
 
-def docstringToExpr(ds: hydra.lisp.syntax.Docstring): hydra.ast.Expr = hydra.serialization.cst(hydra.lib.strings.cat(Seq(";; ", ds)))
+def docstringToExpr(ds: hydra.lisp.syntax.Docstring): hydra.ast.Expr = hydra.serialization.cst(hydra.lib.strings.cat(Seq(";; ",
+   ds)))
 
 def exportDeclarationToExpr(d: hydra.lisp.syntax.Dialect)(edecl: hydra.lisp.syntax.ExportDeclaration): hydra.ast.Expr =
   {
-  lazy val syms: Seq[hydra.ast.Expr] = hydra.lib.lists.map[hydra.lisp.syntax.Symbol, hydra.ast.Expr](hydra.lisp.serde.symbolToExpr)(edecl.symbols)
+  lazy val syms: Seq[hydra.ast.Expr] = hydra.lib.lists.map[hydra.lisp.syntax.Symbol,
+     hydra.ast.Expr](hydra.lisp.serde.symbolToExpr)(edecl.symbols)
   d match
     case hydra.lisp.syntax.Dialect.clojure => hydra.serialization.cst("")
-    case hydra.lisp.syntax.Dialect.emacsLisp => hydra.serialization.newlineSep(hydra.lib.lists.map[hydra.ast.Expr, hydra.ast.Expr]((s: hydra.ast.Expr) =>
+    case hydra.lisp.syntax.Dialect.emacsLisp => hydra.serialization.newlineSep(hydra.lib.lists.map[hydra.ast.Expr,
+       hydra.ast.Expr]((s: hydra.ast.Expr) =>
       hydra.serialization.parens(hydra.serialization.spaceSep(Seq(hydra.serialization.cst("provide"),
          hydra.serialization.noSep(Seq(hydra.serialization.cst("'"), s))))))(syms))
     case hydra.lisp.syntax.Dialect.commonLisp => hydra.serialization.parens(hydra.serialization.spaceSep(hydra.lib.lists.concat2[hydra.ast.Expr](Seq(hydra.serialization.cst(":export")))(hydra.lib.lists.map[hydra.ast.Expr,
@@ -241,16 +259,20 @@ def formatLispFloat(d: hydra.lisp.syntax.Dialect)(v: BigDecimal): scala.Predef.S
 def functionDefinitionToExpr(d: hydra.lisp.syntax.Dialect)(fdef: hydra.lisp.syntax.FunctionDefinition): hydra.ast.Expr =
   {
   lazy val name: hydra.ast.Expr = hydra.lisp.serde.symbolToExpr(fdef.name)
-  lazy val params: Seq[hydra.ast.Expr] = hydra.lib.lists.map[hydra.lisp.syntax.Symbol, hydra.ast.Expr](hydra.lisp.serde.symbolToExpr)(fdef.params)
-  lazy val body: Seq[hydra.ast.Expr] = hydra.lib.lists.map[hydra.lisp.syntax.Expression, hydra.ast.Expr]((v1: hydra.lisp.syntax.Expression) => hydra.lisp.serde.expressionToExpr(d)(v1))(fdef.body)
+  lazy val params: Seq[hydra.ast.Expr] = hydra.lib.lists.map[hydra.lisp.syntax.Symbol,
+     hydra.ast.Expr](hydra.lisp.serde.symbolToExpr)(fdef.params)
+  lazy val body: Seq[hydra.ast.Expr] = hydra.lib.lists.map[hydra.lisp.syntax.Expression,
+     hydra.ast.Expr]((v1: hydra.lisp.syntax.Expression) => hydra.lisp.serde.expressionToExpr(d)(v1))(fdef.body)
   d match
     case hydra.lisp.syntax.Dialect.clojure => hydra.serialization.parens(hydra.serialization.spaceSep(hydra.lib.lists.concat[hydra.ast.Expr](Seq(Seq(hydra.serialization.cst("defn"),
        name), Seq(hydra.serialization.brackets(hydra.serialization.squareBrackets)(hydra.serialization.inlineStyle)(hydra.serialization.spaceSep(params))),
        body))))
     case hydra.lisp.syntax.Dialect.emacsLisp => hydra.serialization.parens(hydra.serialization.spaceSep(hydra.lib.lists.concat[hydra.ast.Expr](Seq(Seq(hydra.serialization.cst("defun"),
-       name), Seq(hydra.serialization.parens(hydra.serialization.spaceSep(params))), body))))
+       name), Seq(hydra.serialization.parens(hydra.serialization.spaceSep(params))),
+       body))))
     case hydra.lisp.syntax.Dialect.commonLisp => hydra.serialization.parens(hydra.serialization.spaceSep(hydra.lib.lists.concat[hydra.ast.Expr](Seq(Seq(hydra.serialization.cst("defun"),
-       name), Seq(hydra.serialization.parens(hydra.serialization.spaceSep(params))), body))))
+       name), Seq(hydra.serialization.parens(hydra.serialization.spaceSep(params))),
+       body))))
     case hydra.lisp.syntax.Dialect.scheme => hydra.serialization.parens(hydra.serialization.spaceSep(hydra.lib.lists.concat[hydra.ast.Expr](Seq(Seq(hydra.serialization.cst("define")),
        Seq(hydra.serialization.parens(hydra.serialization.spaceSep(hydra.lib.lists.concat2[hydra.ast.Expr](Seq(name))(params)))),
        body))))
@@ -261,7 +283,8 @@ def ifExpressionToExpr(d: hydra.lisp.syntax.Dialect)(ifExpr: hydra.lisp.syntax.I
   lazy val cond: hydra.ast.Expr = hydra.lisp.serde.expressionToExpr(d)(ifExpr.condition)
   lazy val `then`: hydra.ast.Expr = hydra.lisp.serde.expressionToExpr(d)(ifExpr.`then`)
   lazy val `else`: Option[hydra.lisp.syntax.Expression] = (ifExpr.`else`)
-  lazy val elsePart: Seq[hydra.ast.Expr] = hydra.lib.maybes.maybe[Seq[hydra.ast.Expr], hydra.lisp.syntax.Expression](Seq())((e: hydra.lisp.syntax.Expression) => Seq(hydra.lisp.serde.expressionToExpr(d)(e)))(`else`)
+  lazy val elsePart: Seq[hydra.ast.Expr] = hydra.lib.maybes.maybe[Seq[hydra.ast.Expr],
+     hydra.lisp.syntax.Expression](Seq())((e: hydra.lisp.syntax.Expression) => Seq(hydra.lisp.serde.expressionToExpr(d)(e)))(`else`)
   hydra.serialization.parens(hydra.serialization.spaceSep(hydra.lib.lists.concat[hydra.ast.Expr](Seq(Seq(hydra.serialization.cst("if"),
      cond, `then`), elsePart))))
 }
@@ -285,8 +308,10 @@ def keywordToExpr(d: hydra.lisp.syntax.Dialect)(k: hydra.lisp.syntax.Keyword): h
   lazy val name: scala.Predef.String = (k.name)
   lazy val ns: Option[scala.Predef.String] = (k.namespace)
   d match
-    case hydra.lisp.syntax.Dialect.scheme => hydra.serialization.noSep(Seq(hydra.serialization.cst("'"), hydra.serialization.cst(name)))
-    case _ => hydra.serialization.cst(hydra.lib.maybes.maybe[scala.Predef.String, scala.Predef.String](hydra.lib.strings.cat2(":")(name))((n: scala.Predef.String) => hydra.lib.strings.cat(Seq(n,
+    case hydra.lisp.syntax.Dialect.scheme => hydra.serialization.noSep(Seq(hydra.serialization.cst("'"),
+       hydra.serialization.cst(name)))
+    case _ => hydra.serialization.cst(hydra.lib.maybes.maybe[scala.Predef.String,
+       scala.Predef.String](hydra.lib.strings.cat2(":")(name))((n: scala.Predef.String) => hydra.lib.strings.cat(Seq(n,
        "/:", name)))(ns))
 }
 
@@ -299,12 +324,15 @@ def lambdaKeyword(d: hydra.lisp.syntax.Dialect): scala.Predef.String =
 
 def lambdaToExpr(d: hydra.lisp.syntax.Dialect)(lam: hydra.lisp.syntax.Lambda): hydra.ast.Expr =
   {
-  lazy val params: Seq[hydra.ast.Expr] = hydra.lib.lists.map[hydra.lisp.syntax.Symbol, hydra.ast.Expr](hydra.lisp.serde.symbolToExpr)(lam.params)
-  lazy val body: Seq[hydra.ast.Expr] = hydra.lib.lists.map[hydra.lisp.syntax.Expression, hydra.ast.Expr]((v1: hydra.lisp.syntax.Expression) => hydra.lisp.serde.expressionToExpr(d)(v1))(lam.body)
+  lazy val params: Seq[hydra.ast.Expr] = hydra.lib.lists.map[hydra.lisp.syntax.Symbol,
+     hydra.ast.Expr](hydra.lisp.serde.symbolToExpr)(lam.params)
+  lazy val body: Seq[hydra.ast.Expr] = hydra.lib.lists.map[hydra.lisp.syntax.Expression,
+     hydra.ast.Expr]((v1: hydra.lisp.syntax.Expression) => hydra.lisp.serde.expressionToExpr(d)(v1))(lam.body)
   lazy val mname: Option[hydra.lisp.syntax.Symbol] = (lam.name)
   lazy val kw: scala.Predef.String = hydra.lisp.serde.lambdaKeyword(d)
   d match
-    case hydra.lisp.syntax.Dialect.clojure => hydra.lib.maybes.maybe[hydra.ast.Expr, hydra.lisp.syntax.Symbol](hydra.serialization.parens(hydra.serialization.spaceSep(hydra.lib.lists.concat[hydra.ast.Expr](Seq(Seq(hydra.serialization.cst(kw)),
+    case hydra.lisp.syntax.Dialect.clojure => hydra.lib.maybes.maybe[hydra.ast.Expr,
+       hydra.lisp.syntax.Symbol](hydra.serialization.parens(hydra.serialization.spaceSep(hydra.lib.lists.concat[hydra.ast.Expr](Seq(Seq(hydra.serialization.cst(kw)),
        Seq(hydra.serialization.brackets(hydra.serialization.squareBrackets)(hydra.serialization.inlineStyle)(hydra.serialization.spaceSep(params))),
        body)))))((sym: hydra.lisp.syntax.Symbol) =>
       hydra.serialization.parens(hydra.serialization.spaceSep(hydra.lib.lists.concat[hydra.ast.Expr](Seq(Seq(hydra.serialization.cst(kw),
@@ -322,7 +350,8 @@ def letExpressionToExpr(d: hydra.lisp.syntax.Dialect)(letExpr: hydra.lisp.syntax
   {
   lazy val kind: hydra.lisp.syntax.LetKind = (letExpr.kind)
   lazy val bindings: Seq[hydra.lisp.syntax.LetBinding] = (letExpr.bindings)
-  lazy val body: Seq[hydra.ast.Expr] = hydra.lib.lists.map[hydra.lisp.syntax.Expression, hydra.ast.Expr]((v1: hydra.lisp.syntax.Expression) => hydra.lisp.serde.expressionToExpr(d)(v1))(letExpr.body)
+  lazy val body: Seq[hydra.ast.Expr] = hydra.lib.lists.map[hydra.lisp.syntax.Expression,
+     hydra.ast.Expr]((v1: hydra.lisp.syntax.Expression) => hydra.lisp.serde.expressionToExpr(d)(v1))(letExpr.body)
   lazy val bindingPairs: Seq[Tuple2[hydra.ast.Expr, hydra.ast.Expr]] = hydra.lib.lists.map[hydra.lisp.syntax.LetBinding,
      Tuple2[hydra.ast.Expr, hydra.ast.Expr]]((b: hydra.lisp.syntax.LetBinding) =>
     b match
@@ -335,50 +364,56 @@ def letExpressionToExpr(d: hydra.lisp.syntax.Dialect)(letExpr: hydra.lisp.syntax
       case hydra.lisp.syntax.LetKind.recursive => hydra.serialization.parens(hydra.serialization.spaceSep(hydra.lib.lists.concat[hydra.ast.Expr](Seq(Seq(hydra.serialization.cst("let")),
          Seq(hydra.serialization.brackets(hydra.serialization.squareBrackets)(hydra.serialization.inlineStyle)(hydra.serialization.spaceSep(hydra.lib.lists.concat[hydra.ast.Expr](hydra.lib.lists.map[Tuple2[hydra.ast.Expr,
          hydra.ast.Expr], Seq[hydra.ast.Expr]]((p: Tuple2[hydra.ast.Expr, hydra.ast.Expr]) =>
-        Seq(hydra.lib.pairs.first[hydra.ast.Expr, hydra.ast.Expr](p), hydra.lib.pairs.second[hydra.ast.Expr, hydra.ast.Expr](p)))(bindingPairs))))), body))))
+        Seq(hydra.lib.pairs.first[hydra.ast.Expr, hydra.ast.Expr](p), hydra.lib.pairs.second[hydra.ast.Expr,
+           hydra.ast.Expr](p)))(bindingPairs))))), body))))
       case hydra.lisp.syntax.LetKind.parallel => hydra.serialization.parens(hydra.serialization.spaceSep(hydra.lib.lists.concat[hydra.ast.Expr](Seq(Seq(hydra.serialization.cst("let")),
          Seq(hydra.serialization.brackets(hydra.serialization.squareBrackets)(hydra.serialization.inlineStyle)(hydra.serialization.spaceSep(hydra.lib.lists.concat[hydra.ast.Expr](hydra.lib.lists.map[Tuple2[hydra.ast.Expr,
          hydra.ast.Expr], Seq[hydra.ast.Expr]]((p: Tuple2[hydra.ast.Expr, hydra.ast.Expr]) =>
-        Seq(hydra.lib.pairs.first[hydra.ast.Expr, hydra.ast.Expr](p), hydra.lib.pairs.second[hydra.ast.Expr, hydra.ast.Expr](p)))(bindingPairs))))), body))))
+        Seq(hydra.lib.pairs.first[hydra.ast.Expr, hydra.ast.Expr](p), hydra.lib.pairs.second[hydra.ast.Expr,
+           hydra.ast.Expr](p)))(bindingPairs))))), body))))
       case hydra.lisp.syntax.LetKind.sequential => hydra.serialization.parens(hydra.serialization.spaceSep(hydra.lib.lists.concat[hydra.ast.Expr](Seq(Seq(hydra.serialization.cst("let")),
          Seq(hydra.serialization.brackets(hydra.serialization.squareBrackets)(hydra.serialization.inlineStyle)(hydra.serialization.spaceSep(hydra.lib.lists.concat[hydra.ast.Expr](hydra.lib.lists.map[Tuple2[hydra.ast.Expr,
          hydra.ast.Expr], Seq[hydra.ast.Expr]]((p: Tuple2[hydra.ast.Expr, hydra.ast.Expr]) =>
-        Seq(hydra.lib.pairs.first[hydra.ast.Expr, hydra.ast.Expr](p), hydra.lib.pairs.second[hydra.ast.Expr, hydra.ast.Expr](p)))(bindingPairs))))), body))))
+        Seq(hydra.lib.pairs.first[hydra.ast.Expr, hydra.ast.Expr](p), hydra.lib.pairs.second[hydra.ast.Expr,
+           hydra.ast.Expr](p)))(bindingPairs))))), body))))
     case hydra.lisp.syntax.Dialect.emacsLisp => {
       lazy val kw: scala.Predef.String = kind match
         case hydra.lisp.syntax.LetKind.parallel => "let"
         case hydra.lisp.syntax.LetKind.sequential => "let*"
         case hydra.lisp.syntax.LetKind.recursive => "letrec"
-      lazy val bindingExprs: Seq[hydra.ast.Expr] = hydra.lib.lists.map[Tuple2[hydra.ast.Expr, hydra.ast.Expr],
-         hydra.ast.Expr]((p: Tuple2[hydra.ast.Expr, hydra.ast.Expr]) =>
+      lazy val bindingExprs: Seq[hydra.ast.Expr] = hydra.lib.lists.map[Tuple2[hydra.ast.Expr,
+         hydra.ast.Expr], hydra.ast.Expr]((p: Tuple2[hydra.ast.Expr, hydra.ast.Expr]) =>
         hydra.serialization.parens(hydra.serialization.spaceSep(Seq(hydra.lib.pairs.first[hydra.ast.Expr,
            hydra.ast.Expr](p), hydra.lib.pairs.second[hydra.ast.Expr, hydra.ast.Expr](p)))))(bindingPairs)
       hydra.serialization.parens(hydra.serialization.spaceSep(hydra.lib.lists.concat[hydra.ast.Expr](Seq(Seq(hydra.serialization.cst(kw)),
-         Seq(hydra.serialization.parens(hydra.serialization.spaceSep(bindingExprs))), body))))
+         Seq(hydra.serialization.parens(hydra.serialization.spaceSep(bindingExprs))),
+         body))))
     }
     case hydra.lisp.syntax.Dialect.commonLisp => {
       lazy val kw: scala.Predef.String = kind match
         case hydra.lisp.syntax.LetKind.parallel => "let"
         case hydra.lisp.syntax.LetKind.sequential => "let*"
         case hydra.lisp.syntax.LetKind.recursive => "letrec"
-      lazy val bindingExprs: Seq[hydra.ast.Expr] = hydra.lib.lists.map[Tuple2[hydra.ast.Expr, hydra.ast.Expr],
-         hydra.ast.Expr]((p: Tuple2[hydra.ast.Expr, hydra.ast.Expr]) =>
+      lazy val bindingExprs: Seq[hydra.ast.Expr] = hydra.lib.lists.map[Tuple2[hydra.ast.Expr,
+         hydra.ast.Expr], hydra.ast.Expr]((p: Tuple2[hydra.ast.Expr, hydra.ast.Expr]) =>
         hydra.serialization.parens(hydra.serialization.spaceSep(Seq(hydra.lib.pairs.first[hydra.ast.Expr,
            hydra.ast.Expr](p), hydra.lib.pairs.second[hydra.ast.Expr, hydra.ast.Expr](p)))))(bindingPairs)
       hydra.serialization.parens(hydra.serialization.spaceSep(hydra.lib.lists.concat[hydra.ast.Expr](Seq(Seq(hydra.serialization.cst(kw)),
-         Seq(hydra.serialization.parens(hydra.serialization.spaceSep(bindingExprs))), body))))
+         Seq(hydra.serialization.parens(hydra.serialization.spaceSep(bindingExprs))),
+         body))))
     }
     case hydra.lisp.syntax.Dialect.scheme => {
       lazy val kw: scala.Predef.String = kind match
         case hydra.lisp.syntax.LetKind.parallel => "let"
         case hydra.lisp.syntax.LetKind.sequential => "let*"
         case hydra.lisp.syntax.LetKind.recursive => "letrec"
-      lazy val bindingExprs: Seq[hydra.ast.Expr] = hydra.lib.lists.map[Tuple2[hydra.ast.Expr, hydra.ast.Expr],
-         hydra.ast.Expr]((p: Tuple2[hydra.ast.Expr, hydra.ast.Expr]) =>
+      lazy val bindingExprs: Seq[hydra.ast.Expr] = hydra.lib.lists.map[Tuple2[hydra.ast.Expr,
+         hydra.ast.Expr], hydra.ast.Expr]((p: Tuple2[hydra.ast.Expr, hydra.ast.Expr]) =>
         hydra.serialization.parens(hydra.serialization.spaceSep(Seq(hydra.lib.pairs.first[hydra.ast.Expr,
            hydra.ast.Expr](p), hydra.lib.pairs.second[hydra.ast.Expr, hydra.ast.Expr](p)))))(bindingPairs)
       hydra.serialization.parens(hydra.serialization.spaceSep(hydra.lib.lists.concat[hydra.ast.Expr](Seq(Seq(hydra.serialization.cst(kw)),
-         Seq(hydra.serialization.parens(hydra.serialization.spaceSep(bindingExprs))), body))))
+         Seq(hydra.serialization.parens(hydra.serialization.spaceSep(bindingExprs))),
+         body))))
     }
 }
 
@@ -391,7 +426,8 @@ def listKeyword(d: hydra.lisp.syntax.Dialect): scala.Predef.String =
 
 def listLiteralToExpr(d: hydra.lisp.syntax.Dialect)(ll: hydra.lisp.syntax.ListLiteral): hydra.ast.Expr =
   {
-  lazy val elems: Seq[hydra.ast.Expr] = hydra.lib.lists.map[hydra.lisp.syntax.Expression, hydra.ast.Expr]((v1: hydra.lisp.syntax.Expression) => hydra.lisp.serde.expressionToExpr(d)(v1))(ll.elements)
+  lazy val elems: Seq[hydra.ast.Expr] = hydra.lib.lists.map[hydra.lisp.syntax.Expression,
+     hydra.ast.Expr]((v1: hydra.lisp.syntax.Expression) => hydra.lisp.serde.expressionToExpr(d)(v1))(ll.elements)
   lazy val quoted: Boolean = (ll.quoted)
   hydra.lib.logic.ifElse[hydra.ast.Expr](quoted)(hydra.serialization.noSep(Seq(hydra.serialization.cst("'"),
      hydra.serialization.parens(hydra.serialization.spaceSep(elems)))))(hydra.serialization.parens(hydra.serialization.spaceSep(hydra.lib.lists.concat2[hydra.ast.Expr](Seq(hydra.serialization.cst(hydra.lisp.serde.listKeyword(d))))(elems))))
@@ -465,16 +501,20 @@ def literalToExpr(d: hydra.lisp.syntax.Dialect)(lit: hydra.lisp.syntax.Literal):
 def macroDefinitionToExpr(d: hydra.lisp.syntax.Dialect)(mdef: hydra.lisp.syntax.MacroDefinition): hydra.ast.Expr =
   {
   lazy val name: hydra.ast.Expr = hydra.lisp.serde.symbolToExpr(mdef.name)
-  lazy val params: Seq[hydra.ast.Expr] = hydra.lib.lists.map[hydra.lisp.syntax.Symbol, hydra.ast.Expr](hydra.lisp.serde.symbolToExpr)(mdef.params)
-  lazy val body: Seq[hydra.ast.Expr] = hydra.lib.lists.map[hydra.lisp.syntax.Expression, hydra.ast.Expr]((v1: hydra.lisp.syntax.Expression) => hydra.lisp.serde.expressionToExpr(d)(v1))(mdef.body)
+  lazy val params: Seq[hydra.ast.Expr] = hydra.lib.lists.map[hydra.lisp.syntax.Symbol,
+     hydra.ast.Expr](hydra.lisp.serde.symbolToExpr)(mdef.params)
+  lazy val body: Seq[hydra.ast.Expr] = hydra.lib.lists.map[hydra.lisp.syntax.Expression,
+     hydra.ast.Expr]((v1: hydra.lisp.syntax.Expression) => hydra.lisp.serde.expressionToExpr(d)(v1))(mdef.body)
   d match
     case hydra.lisp.syntax.Dialect.clojure => hydra.serialization.parens(hydra.serialization.spaceSep(hydra.lib.lists.concat[hydra.ast.Expr](Seq(Seq(hydra.serialization.cst("defmacro"),
        name), Seq(hydra.serialization.brackets(hydra.serialization.squareBrackets)(hydra.serialization.inlineStyle)(hydra.serialization.spaceSep(params))),
        body))))
     case hydra.lisp.syntax.Dialect.emacsLisp => hydra.serialization.parens(hydra.serialization.spaceSep(hydra.lib.lists.concat[hydra.ast.Expr](Seq(Seq(hydra.serialization.cst("defmacro"),
-       name), Seq(hydra.serialization.parens(hydra.serialization.spaceSep(params))), body))))
+       name), Seq(hydra.serialization.parens(hydra.serialization.spaceSep(params))),
+       body))))
     case hydra.lisp.syntax.Dialect.commonLisp => hydra.serialization.parens(hydra.serialization.spaceSep(hydra.lib.lists.concat[hydra.ast.Expr](Seq(Seq(hydra.serialization.cst("defmacro"),
-       name), Seq(hydra.serialization.parens(hydra.serialization.spaceSep(params))), body))))
+       name), Seq(hydra.serialization.parens(hydra.serialization.spaceSep(params))),
+       body))))
     case hydra.lisp.syntax.Dialect.scheme => hydra.serialization.parens(hydra.serialization.spaceSep(hydra.lib.lists.concat[hydra.ast.Expr](Seq(Seq(hydra.serialization.cst("define-syntax"),
        name), body))))
 }
@@ -498,8 +538,8 @@ def mapLiteralToExpr(d: hydra.lisp.syntax.Dialect)(ml: hydra.lisp.syntax.MapLite
          hydra.serialization.cst("."), hydra.lisp.serde.expressionToExpr(d)(e.value)))))(entries)))))
     case hydra.lisp.syntax.Dialect.scheme => hydra.serialization.parens(hydra.serialization.spaceSep(hydra.lib.lists.concat2[hydra.ast.Expr](Seq(hydra.serialization.cst("list")))(hydra.lib.lists.map[hydra.lisp.syntax.MapEntry,
        hydra.ast.Expr]((e: hydra.lisp.syntax.MapEntry) =>
-      hydra.serialization.parens(hydra.serialization.spaceSep(Seq(hydra.serialization.cst("cons"), hydra.lisp.serde.expressionToExpr(d)(e.key),
-         hydra.lisp.serde.expressionToExpr(d)(e.value)))))(entries))))
+      hydra.serialization.parens(hydra.serialization.spaceSep(Seq(hydra.serialization.cst("cons"),
+         hydra.lisp.serde.expressionToExpr(d)(e.key), hydra.lisp.serde.expressionToExpr(d)(e.value)))))(entries))))
 }
 
 def moduleDeclarationToExpr(d: hydra.lisp.syntax.Dialect)(mdecl: hydra.lisp.syntax.ModuleDeclaration): hydra.ast.Expr =
@@ -527,7 +567,8 @@ def nilExpr(d: hydra.lisp.syntax.Dialect): hydra.ast.Expr =
   case hydra.lisp.syntax.Dialect.scheme => hydra.serialization.cst("'()")
 
 def notExpressionToExpr(d: hydra.lisp.syntax.Dialect)(notExpr: hydra.lisp.syntax.NotExpression): hydra.ast.Expr =
-  hydra.serialization.parens(hydra.serialization.spaceSep(Seq(hydra.serialization.cst("not"), hydra.lisp.serde.expressionToExpr(d)(notExpr.expression))))
+  hydra.serialization.parens(hydra.serialization.spaceSep(Seq(hydra.serialization.cst("not"),
+     hydra.lisp.serde.expressionToExpr(d)(notExpr.expression))))
 
 def orExpressionToExpr(d: hydra.lisp.syntax.Dialect)(orExpr: hydra.lisp.syntax.OrExpression): hydra.ast.Expr =
   hydra.serialization.parens(hydra.serialization.spaceSep(hydra.lib.lists.concat2[hydra.ast.Expr](Seq(hydra.serialization.cst("or")))(hydra.lib.lists.map[hydra.lisp.syntax.Expression,
@@ -548,10 +589,12 @@ def programToExpr(prog: hydra.lisp.syntax.Program): hydra.ast.Expr =
      Seq[hydra.ast.Expr]]((edecl: hydra.lisp.syntax.ExportDeclaration) =>
     hydra.lib.lists.map[hydra.lisp.syntax.Symbol, hydra.ast.Expr](hydra.lisp.serde.symbolToExpr)(edecl.symbols))(exports))
   d match
-    case hydra.lisp.syntax.Dialect.clojure => hydra.lib.maybes.maybe[hydra.ast.Expr, hydra.lisp.syntax.ModuleDeclaration](hydra.serialization.doubleNewlineSep(formPart))((m: hydra.lisp.syntax.ModuleDeclaration) =>
+    case hydra.lisp.syntax.Dialect.clojure => hydra.lib.maybes.maybe[hydra.ast.Expr,
+       hydra.lisp.syntax.ModuleDeclaration](hydra.serialization.doubleNewlineSep(formPart))((m: hydra.lisp.syntax.ModuleDeclaration) =>
       {
       lazy val nameStr: scala.Predef.String = (m.name)
-      lazy val requireClauses: Seq[hydra.ast.Expr] = hydra.lib.lists.map[scala.Predef.String, hydra.ast.Expr]((imp: scala.Predef.String) =>
+      lazy val requireClauses: Seq[hydra.ast.Expr] = hydra.lib.lists.map[scala.Predef.String,
+         hydra.ast.Expr]((imp: scala.Predef.String) =>
         hydra.serialization.brackets(hydra.serialization.squareBrackets)(hydra.serialization.inlineStyle)(hydra.serialization.spaceSep(Seq(hydra.serialization.cst(imp),
            hydra.serialization.cst(":refer"), hydra.serialization.cst(":all")))))(importNames)
       lazy val nsForm: hydra.ast.Expr = hydra.lib.logic.ifElse[hydra.ast.Expr](hydra.lib.lists.`null`[hydra.ast.Expr](requireClauses))(hydra.serialization.parens(hydra.serialization.spaceSep(Seq(hydra.serialization.cst("ns"),
@@ -570,28 +613,34 @@ def programToExpr(prog: hydra.lisp.syntax.Program): hydra.ast.Expr =
         })(forms))
         {
           lazy val declareForm: Seq[hydra.ast.Expr] = hydra.lib.logic.ifElse[Seq[hydra.ast.Expr]](hydra.lib.lists.`null`[hydra.ast.Expr](varNames))(Seq())(Seq(hydra.serialization.parens(hydra.serialization.spaceSep(hydra.lib.lists.concat2[hydra.ast.Expr](Seq(hydra.serialization.cst("declare")))(varNames)))))
-          hydra.serialization.doubleNewlineSep(hydra.lib.lists.concat[hydra.ast.Expr](Seq(Seq(nsForm), declareForm, formPart)))
+          hydra.serialization.doubleNewlineSep(hydra.lib.lists.concat[hydra.ast.Expr](Seq(Seq(nsForm),
+             declareForm, formPart)))
         }
       }
     })(modDecl)
-    case hydra.lisp.syntax.Dialect.emacsLisp => hydra.lib.maybes.maybe[hydra.ast.Expr, hydra.lisp.syntax.ModuleDeclaration](hydra.serialization.doubleNewlineSep(formPart))((m: hydra.lisp.syntax.ModuleDeclaration) =>
+    case hydra.lisp.syntax.Dialect.emacsLisp => hydra.lib.maybes.maybe[hydra.ast.Expr,
+       hydra.lisp.syntax.ModuleDeclaration](hydra.serialization.doubleNewlineSep(formPart))((m: hydra.lisp.syntax.ModuleDeclaration) =>
       {
       lazy val nameStr: scala.Predef.String = (m.name)
       lazy val requireClLib: hydra.ast.Expr = hydra.serialization.parens(hydra.serialization.spaceSep(Seq(hydra.serialization.cst("require"),
          hydra.serialization.noSep(Seq(hydra.serialization.cst("'"), hydra.serialization.cst("cl-lib"))))))
-      lazy val requireImports: Seq[hydra.ast.Expr] = hydra.lib.lists.map[scala.Predef.String, hydra.ast.Expr]((imp: scala.Predef.String) =>
+      lazy val requireImports: Seq[hydra.ast.Expr] = hydra.lib.lists.map[scala.Predef.String,
+         hydra.ast.Expr]((imp: scala.Predef.String) =>
         hydra.serialization.parens(hydra.serialization.spaceSep(Seq(hydra.serialization.cst("require"),
            hydra.serialization.noSep(Seq(hydra.serialization.cst("'"), hydra.serialization.cst(imp)))))))(importNames)
       lazy val provideForm: hydra.ast.Expr = hydra.serialization.parens(hydra.serialization.spaceSep(Seq(hydra.serialization.cst("provide"),
          hydra.serialization.noSep(Seq(hydra.serialization.cst("'"), hydra.serialization.cst(nameStr))))))
-      hydra.serialization.doubleNewlineSep(hydra.lib.lists.concat[hydra.ast.Expr](Seq(Seq(requireClLib), requireImports, formPart, Seq(provideForm))))
+      hydra.serialization.doubleNewlineSep(hydra.lib.lists.concat[hydra.ast.Expr](Seq(Seq(requireClLib),
+         requireImports, formPart, Seq(provideForm))))
     })(modDecl)
-    case hydra.lisp.syntax.Dialect.commonLisp => hydra.lib.maybes.maybe[hydra.ast.Expr, hydra.lisp.syntax.ModuleDeclaration](hydra.serialization.doubleNewlineSep(formPart))((m: hydra.lisp.syntax.ModuleDeclaration) =>
+    case hydra.lisp.syntax.Dialect.commonLisp => hydra.lib.maybes.maybe[hydra.ast.Expr,
+       hydra.lisp.syntax.ModuleDeclaration](hydra.serialization.doubleNewlineSep(formPart))((m: hydra.lisp.syntax.ModuleDeclaration) =>
       {
       lazy val nameStr: scala.Predef.String = (m.name)
       lazy val colonName: scala.Predef.String = hydra.lib.strings.cat2(":")(nameStr)
       lazy val useClause: hydra.ast.Expr = hydra.serialization.parens(hydra.serialization.spaceSep(hydra.lib.lists.concat2[hydra.ast.Expr](Seq(hydra.serialization.cst(":use"),
-         hydra.serialization.cst(":cl")))(hydra.lib.lists.map[scala.Predef.String, hydra.ast.Expr]((imp: scala.Predef.String) => hydra.serialization.cst(hydra.lib.strings.cat2(":")(imp)))(importNames))))
+         hydra.serialization.cst(":cl")))(hydra.lib.lists.map[scala.Predef.String,
+         hydra.ast.Expr]((imp: scala.Predef.String) => hydra.serialization.cst(hydra.lib.strings.cat2(":")(imp)))(importNames))))
       lazy val exportClause: Seq[hydra.ast.Expr] = hydra.lib.logic.ifElse[Seq[hydra.ast.Expr]](hydra.lib.lists.`null`[hydra.ast.Expr](exportSyms))(Seq())(Seq(hydra.serialization.parens(hydra.serialization.spaceSep(hydra.lib.lists.concat2[hydra.ast.Expr](Seq(hydra.serialization.cst(":export")))(hydra.lib.lists.map[hydra.ast.Expr,
          hydra.ast.Expr]((s: hydra.ast.Expr) =>
         hydra.serialization.noSep(Seq(hydra.serialization.cst(":"), s)))(exportSyms))))))
@@ -599,19 +648,23 @@ def programToExpr(prog: hydra.lisp.syntax.Program): hydra.ast.Expr =
          hydra.serialization.cst(colonName)))), Seq(useClause), exportClause))))
       lazy val inpkgForm: hydra.ast.Expr = hydra.serialization.parens(hydra.serialization.spaceSep(Seq(hydra.serialization.cst("in-package"),
          hydra.serialization.cst(colonName))))
-      hydra.serialization.doubleNewlineSep(hydra.lib.lists.concat[hydra.ast.Expr](Seq(Seq(defpkgForm, inpkgForm), formPart)))
+      hydra.serialization.doubleNewlineSep(hydra.lib.lists.concat[hydra.ast.Expr](Seq(Seq(defpkgForm,
+         inpkgForm), formPart)))
     })(modDecl)
-    case hydra.lisp.syntax.Dialect.scheme => hydra.lib.maybes.maybe[hydra.ast.Expr, hydra.lisp.syntax.ModuleDeclaration](hydra.serialization.doubleNewlineSep(formPart))((m: hydra.lisp.syntax.ModuleDeclaration) =>
+    case hydra.lisp.syntax.Dialect.scheme => hydra.lib.maybes.maybe[hydra.ast.Expr,
+       hydra.lisp.syntax.ModuleDeclaration](hydra.serialization.doubleNewlineSep(formPart))((m: hydra.lisp.syntax.ModuleDeclaration) =>
       {
       lazy val nameStr: scala.Predef.String = (m.name)
-      lazy val nameParts: Seq[scala.Predef.String] = hydra.lib.lists.map[scala.Predef.String, scala.Predef.String]((p: scala.Predef.String) => hydra.formatting.convertCaseCamelToLowerSnake(p))(hydra.lib.strings.splitOn(".")(nameStr))
+      lazy val nameParts: Seq[scala.Predef.String] = hydra.lib.lists.map[scala.Predef.String,
+         scala.Predef.String]((p: scala.Predef.String) => hydra.formatting.convertCaseCamelToLowerSnake(p))(hydra.lib.strings.splitOn(".")(nameStr))
       lazy val nameExpr: hydra.ast.Expr = hydra.serialization.parens(hydra.serialization.spaceSep(hydra.lib.lists.map[scala.Predef.String,
          hydra.ast.Expr]((p: scala.Predef.String) => hydra.serialization.cst(p))(nameParts)))
       lazy val domainImportExprs: Seq[hydra.ast.Expr] = hydra.lib.lists.map[hydra.lisp.syntax.ImportDeclaration,
          hydra.ast.Expr]((idecl: hydra.lisp.syntax.ImportDeclaration) =>
         {
         lazy val nsName: scala.Predef.String = (idecl.module)
-        lazy val nsParts: Seq[scala.Predef.String] = hydra.lib.lists.map[scala.Predef.String, scala.Predef.String]((p: scala.Predef.String) => hydra.formatting.convertCaseCamelToLowerSnake(p))(hydra.lib.strings.splitOn(".")(nsName))
+        lazy val nsParts: Seq[scala.Predef.String] = hydra.lib.lists.map[scala.Predef.String,
+           scala.Predef.String]((p: scala.Predef.String) => hydra.formatting.convertCaseCamelToLowerSnake(p))(hydra.lib.strings.splitOn(".")(nsName))
         hydra.serialization.parens(hydra.serialization.spaceSep(hydra.lib.lists.map[scala.Predef.String,
            hydra.ast.Expr]((p: scala.Predef.String) => hydra.serialization.cst(p))(nsParts)))
       })(imports)
@@ -630,7 +683,8 @@ def programToExpr(prog: hydra.lisp.syntax.Program): hydra.ast.Expr =
 def recordTypeDefinitionToExpr(d: hydra.lisp.syntax.Dialect)(rdef: hydra.lisp.syntax.RecordTypeDefinition): hydra.ast.Expr =
   {
   lazy val name: hydra.ast.Expr = hydra.lisp.serde.symbolToExpr(rdef.name)
-  lazy val fields: Seq[hydra.ast.Expr] = hydra.lib.lists.map[hydra.lisp.syntax.FieldDefinition, hydra.ast.Expr]((f: hydra.lisp.syntax.FieldDefinition) => hydra.lisp.serde.symbolToExpr(f.name))(rdef.fields)
+  lazy val fields: Seq[hydra.ast.Expr] = hydra.lib.lists.map[hydra.lisp.syntax.FieldDefinition,
+     hydra.ast.Expr]((f: hydra.lisp.syntax.FieldDefinition) => hydra.lisp.serde.symbolToExpr(f.name))(rdef.fields)
   d match
     case hydra.lisp.syntax.Dialect.clojure => {
       lazy val nameStr: scala.Predef.String = (rdef.name)
@@ -655,9 +709,10 @@ def recordTypeDefinitionToExpr(d: hydra.lisp.syntax.Dialect)(rdef: hydra.lisp.sy
       lazy val constructor: hydra.ast.Expr = hydra.serialization.parens(hydra.serialization.spaceSep(hydra.lib.lists.concat2[hydra.ast.Expr](Seq(hydra.serialization.cst(hydra.lib.strings.cat2("make-")(nameStr))))(hydra.lib.lists.map[scala.Predef.String,
          hydra.ast.Expr]((fn: scala.Predef.String) => hydra.serialization.cst(fn))(fieldNames))))
       lazy val predicate: hydra.ast.Expr = hydra.serialization.cst(hydra.lib.strings.cat2(nameStr)("?"))
-      lazy val accessors: Seq[hydra.ast.Expr] = hydra.lib.lists.map[scala.Predef.String, hydra.ast.Expr]((fn: scala.Predef.String) =>
-        hydra.serialization.parens(hydra.serialization.spaceSep(Seq(hydra.serialization.cst(fn), hydra.serialization.cst(hydra.lib.strings.cat(Seq(nameStr,
-           "-", fn)))))))(fieldNames)
+      lazy val accessors: Seq[hydra.ast.Expr] = hydra.lib.lists.map[scala.Predef.String,
+         hydra.ast.Expr]((fn: scala.Predef.String) =>
+        hydra.serialization.parens(hydra.serialization.spaceSep(Seq(hydra.serialization.cst(fn),
+           hydra.serialization.cst(hydra.lib.strings.cat(Seq(nameStr, "-", fn)))))))(fieldNames)
       hydra.serialization.parens(hydra.serialization.spaceSep(hydra.lib.lists.concat[hydra.ast.Expr](Seq(Seq(hydra.serialization.cst("define-record-type"),
          name, constructor, predicate), accessors))))
     }
@@ -671,7 +726,8 @@ def sExpressionToExpr(sexpr: hydra.lisp.syntax.SExpression): hydra.ast.Expr =
 
 def setLiteralToExpr(d: hydra.lisp.syntax.Dialect)(sl: hydra.lisp.syntax.SetLiteral): hydra.ast.Expr =
   {
-  lazy val elems: Seq[hydra.ast.Expr] = hydra.lib.lists.map[hydra.lisp.syntax.Expression, hydra.ast.Expr]((v1: hydra.lisp.syntax.Expression) => hydra.lisp.serde.expressionToExpr(d)(v1))(sl.elements)
+  lazy val elems: Seq[hydra.ast.Expr] = hydra.lib.lists.map[hydra.lisp.syntax.Expression,
+     hydra.ast.Expr]((v1: hydra.lisp.syntax.Expression) => hydra.lisp.serde.expressionToExpr(d)(v1))(sl.elements)
   d match
     case hydra.lisp.syntax.Dialect.clojure => hydra.serialization.noSep(Seq(hydra.serialization.cst("#"),
        hydra.serialization.brackets(hydra.serialization.curlyBraces)(hydra.serialization.inlineStyle)(hydra.serialization.spaceSep(elems))))
@@ -696,8 +752,10 @@ def topLevelFormWithCommentsToExpr(d: hydra.lisp.syntax.Dialect)(fwc: hydra.lisp
   lazy val mdoc: Option[hydra.lisp.syntax.Docstring] = (fwc.doc)
   lazy val mcomment: Option[hydra.lisp.syntax.Comment] = (fwc.comment)
   lazy val form: hydra.lisp.syntax.TopLevelForm = (fwc.form)
-  lazy val docPart: Seq[hydra.ast.Expr] = hydra.lib.maybes.maybe[Seq[hydra.ast.Expr], hydra.lisp.syntax.Docstring](Seq())((ds: hydra.lisp.syntax.Docstring) => Seq(hydra.lisp.serde.docstringToExpr(ds)))(mdoc)
-  lazy val commentPart: Seq[hydra.ast.Expr] = hydra.lib.maybes.maybe[Seq[hydra.ast.Expr], hydra.lisp.syntax.Comment](Seq())((c: hydra.lisp.syntax.Comment) => Seq(hydra.lisp.serde.commentToExpr(c)))(mcomment)
+  lazy val docPart: Seq[hydra.ast.Expr] = hydra.lib.maybes.maybe[Seq[hydra.ast.Expr],
+     hydra.lisp.syntax.Docstring](Seq())((ds: hydra.lisp.syntax.Docstring) => Seq(hydra.lisp.serde.docstringToExpr(ds)))(mdoc)
+  lazy val commentPart: Seq[hydra.ast.Expr] = hydra.lib.maybes.maybe[Seq[hydra.ast.Expr],
+     hydra.lisp.syntax.Comment](Seq())((c: hydra.lisp.syntax.Comment) => Seq(hydra.lisp.serde.commentToExpr(c)))(mcomment)
   lazy val formExpr: hydra.ast.Expr = hydra.lisp.serde.topLevelFormToExpr(d)(form)
   hydra.serialization.newlineSep(hydra.lib.lists.concat[hydra.ast.Expr](Seq(commentPart, docPart, Seq(formExpr))))
 }
@@ -713,7 +771,8 @@ def variableDefinitionToExpr(d: hydra.lisp.syntax.Dialect)(vdef: hydra.lisp.synt
   {
   lazy val name: hydra.ast.Expr = hydra.lisp.serde.symbolToExpr(vdef.name)
   lazy val value: hydra.ast.Expr = hydra.lisp.serde.expressionToExpr(d)(vdef.value)
-  hydra.serialization.parens(hydra.serialization.spaceSep(Seq(hydra.serialization.cst(hydra.lisp.serde.defKeyword(d)), name, value)))
+  hydra.serialization.parens(hydra.serialization.spaceSep(Seq(hydra.serialization.cst(hydra.lisp.serde.defKeyword(d)),
+     name, value)))
 }
 
 def variableReferenceToExpr(d: hydra.lisp.syntax.Dialect)(vref: hydra.lisp.syntax.VariableReference): hydra.ast.Expr =
@@ -729,7 +788,8 @@ def variableReferenceToExpr(d: hydra.lisp.syntax.Dialect)(vref: hydra.lisp.synta
 
 def vectorLiteralToExpr(d: hydra.lisp.syntax.Dialect)(vl: hydra.lisp.syntax.VectorLiteral): hydra.ast.Expr =
   {
-  lazy val elems: Seq[hydra.ast.Expr] = hydra.lib.lists.map[hydra.lisp.syntax.Expression, hydra.ast.Expr]((v1: hydra.lisp.syntax.Expression) => hydra.lisp.serde.expressionToExpr(d)(v1))(vl.elements)
+  lazy val elems: Seq[hydra.ast.Expr] = hydra.lib.lists.map[hydra.lisp.syntax.Expression,
+     hydra.ast.Expr]((v1: hydra.lisp.syntax.Expression) => hydra.lisp.serde.expressionToExpr(d)(v1))(vl.elements)
   d match
     case hydra.lisp.syntax.Dialect.clojure => hydra.serialization.brackets(hydra.serialization.squareBrackets)(hydra.serialization.inlineStyle)(hydra.serialization.spaceSep(elems))
     case hydra.lisp.syntax.Dialect.emacsLisp => hydra.serialization.brackets(hydra.serialization.squareBrackets)(hydra.serialization.inlineStyle)(hydra.serialization.spaceSep(elems))

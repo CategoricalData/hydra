@@ -27,7 +27,8 @@ enum IndentStyle :
    case allLines(value: scala.Predef.String) extends IndentStyle
    case subsequentLines(value: scala.Predef.String) extends IndentStyle
 
-case class Op(symbol: hydra.ast.Symbol, padding: hydra.ast.Padding, precedence: hydra.ast.Precedence, associativity: hydra.ast.Associativity)
+case class Op(symbol: hydra.ast.Symbol, padding: hydra.ast.Padding, precedence: hydra.ast.Precedence,
+   associativity: hydra.ast.Associativity)
 
 case class OpExpr(op: hydra.ast.Op, lhs: hydra.ast.Expr, rhs: hydra.ast.Expr)
 

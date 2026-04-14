@@ -67,19 +67,24 @@ def inferenceError(v1: hydra.errors.InferenceError): hydra.core.Term =
      hydra.core.Field("unification", hydra.encode.errors.unificationInferenceError(v_InferenceError_unification_y))))
 
 def multipleBindingsError(x: hydra.errors.MultipleBindingsError): hydra.core.Term =
-  hydra.core.Term.record(hydra.core.Record("hydra.errors.MultipleBindingsError", Seq(hydra.core.Field("name", hydra.encode.core.name(x.name)))))
+  hydra.core.Term.record(hydra.core.Record("hydra.errors.MultipleBindingsError", Seq(hydra.core.Field("name",
+     hydra.encode.core.name(x.name)))))
 
 def multipleFieldsError(x: hydra.errors.MultipleFieldsError): hydra.core.Term =
-  hydra.core.Term.record(hydra.core.Record("hydra.errors.MultipleFieldsError", Seq(hydra.core.Field("fieldName", hydra.encode.core.name(x.fieldName)))))
+  hydra.core.Term.record(hydra.core.Record("hydra.errors.MultipleFieldsError", Seq(hydra.core.Field("fieldName",
+     hydra.encode.core.name(x.fieldName)))))
 
 def noMatchingFieldError(x: hydra.errors.NoMatchingFieldError): hydra.core.Term =
-  hydra.core.Term.record(hydra.core.Record("hydra.errors.NoMatchingFieldError", Seq(hydra.core.Field("fieldName", hydra.encode.core.name(x.fieldName)))))
+  hydra.core.Term.record(hydra.core.Record("hydra.errors.NoMatchingFieldError", Seq(hydra.core.Field("fieldName",
+     hydra.encode.core.name(x.fieldName)))))
 
 def noSuchBindingError(x: hydra.errors.NoSuchBindingError): hydra.core.Term =
-  hydra.core.Term.record(hydra.core.Record("hydra.errors.NoSuchBindingError", Seq(hydra.core.Field("name", hydra.encode.core.name(x.name)))))
+  hydra.core.Term.record(hydra.core.Record("hydra.errors.NoSuchBindingError", Seq(hydra.core.Field("name",
+     hydra.encode.core.name(x.name)))))
 
 def noSuchPrimitiveError(x: hydra.errors.NoSuchPrimitiveError): hydra.core.Term =
-  hydra.core.Term.record(hydra.core.Record("hydra.errors.NoSuchPrimitiveError", Seq(hydra.core.Field("name", hydra.encode.core.name(x.name)))))
+  hydra.core.Term.record(hydra.core.Record("hydra.errors.NoSuchPrimitiveError", Seq(hydra.core.Field("name",
+     hydra.encode.core.name(x.name)))))
 
 def notEnoughCasesError[T0](_x: T0): hydra.core.Term = hydra.core.Term.unit
 
@@ -91,7 +96,8 @@ def otherInferenceError(x: hydra.errors.OtherInferenceError): hydra.core.Term =
      hydra.encode.paths.subtermPath(x.path)), hydra.core.Field("message", hydra.core.Term.literal(hydra.core.Literal.string(x.message))))))
 
 def otherResolutionError(x: hydra.errors.OtherResolutionError): hydra.core.Term =
-  hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.errors.OtherResolutionError", hydra.core.Term.literal(hydra.core.Literal.string(x))))
+  hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.errors.OtherResolutionError",
+     hydra.core.Term.literal(hydra.core.Literal.string(x))))
 
 def resolutionError(v1: hydra.errors.ResolutionError): hydra.core.Term =
   v1 match
@@ -108,7 +114,8 @@ def resolutionError(v1: hydra.errors.ResolutionError): hydra.core.Term =
 
 def unexpectedShapeError(x: hydra.errors.UnexpectedShapeError): hydra.core.Term =
   hydra.core.Term.record(hydra.core.Record("hydra.errors.UnexpectedShapeError", Seq(hydra.core.Field("expected",
-     hydra.core.Term.literal(hydra.core.Literal.string(x.expected))), hydra.core.Field("actual", hydra.core.Term.literal(hydra.core.Literal.string(x.actual))))))
+     hydra.core.Term.literal(hydra.core.Literal.string(x.expected))), hydra.core.Field("actual",
+     hydra.core.Term.literal(hydra.core.Literal.string(x.actual))))))
 
 def unificationError(x: hydra.errors.UnificationError): hydra.core.Term =
   hydra.core.Term.record(hydra.core.Record("hydra.errors.UnificationError", Seq(hydra.core.Field("leftType",
@@ -116,5 +123,6 @@ def unificationError(x: hydra.errors.UnificationError): hydra.core.Term =
      hydra.core.Field("message", hydra.core.Term.literal(hydra.core.Literal.string(x.message))))))
 
 def unificationInferenceError(x: hydra.errors.UnificationInferenceError): hydra.core.Term =
-  hydra.core.Term.record(hydra.core.Record("hydra.errors.UnificationInferenceError", Seq(hydra.core.Field("path",
-     hydra.encode.paths.subtermPath(x.path)), hydra.core.Field("cause", hydra.encode.errors.unificationError(x.cause)))))
+  hydra.core.Term.record(hydra.core.Record("hydra.errors.UnificationInferenceError",
+     Seq(hydra.core.Field("path", hydra.encode.paths.subtermPath(x.path)), hydra.core.Field("cause",
+     hydra.encode.errors.unificationError(x.cause)))))

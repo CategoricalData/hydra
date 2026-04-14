@@ -24,7 +24,8 @@ lazy val jsonExponentPart: hydra.parsing.Parser[Option[scala.Predef.String]] = h
   hydra.parsers.bind(hydra.parsers.optional(hydra.parsers.satisfy((c: Int) =>
   hydra.lib.logic.or(hydra.lib.equality.equal[Int](c)(43))(hydra.lib.equality.equal[Int](c)(45)))))((sign: Option[Int]) =>
   hydra.parsers.map((digits: scala.Predef.String) =>
-  hydra.lib.strings.cat2(hydra.lib.strings.cat2("e")(hydra.lib.maybes.maybe[scala.Predef.String, Int]("")((`arg_`: Int) =>
+  hydra.lib.strings.cat2(hydra.lib.strings.cat2("e")(hydra.lib.maybes.maybe[scala.Predef.String,
+     Int]("")((`arg_`: Int) =>
   hydra.lib.strings.fromList(hydra.lib.lists.pure[Int](`arg_`)))(sign)))(digits))(hydra.json.parser.digits))))
 
 lazy val jsonFractionPart: hydra.parsing.Parser[Option[scala.Predef.String]] = hydra.parsers.optional(hydra.parsers.bind(hydra.parsers.char(46))((_x: Int) =>
@@ -49,10 +50,12 @@ lazy val jsonNumber: hydra.parsing.Parser[hydra.json.model.Value] = hydra.json.p
   lazy val numStr: scala.Predef.String = hydra.lib.strings.cat2(hydra.lib.strings.cat2(intPart)(hydra.lib.maybes.maybe[scala.Predef.String,
      scala.Predef.String]("")(hydra.lib.equality.identity[scala.Predef.String])(fracPart)))(hydra.lib.maybes.maybe[scala.Predef.String,
      scala.Predef.String]("")(hydra.lib.equality.identity[scala.Predef.String])(expPart))
-  hydra.parsers.pure(hydra.json.model.Value.number(hydra.lib.maybes.maybe[BigDecimal, BigDecimal](BigDecimal(0.0))(hydra.lib.equality.identity[BigDecimal])(hydra.lib.literals.readBigfloat(numStr))))
+  hydra.parsers.pure(hydra.json.model.Value.number(hydra.lib.maybes.maybe[BigDecimal,
+     BigDecimal](BigDecimal(0.0))(hydra.lib.equality.identity[BigDecimal])(hydra.lib.literals.readBigfloat(numStr))))
 }))))
 
-lazy val jsonObject: hydra.parsing.Parser[hydra.json.model.Value] = hydra.parsers.map((`arg_`: Seq[Tuple2[scala.Predef.String, hydra.json.model.Value]]) =>
+lazy val jsonObject: hydra.parsing.Parser[hydra.json.model.Value] = hydra.parsers.map((`arg_`: Seq[Tuple2[scala.Predef.String,
+   hydra.json.model.Value]]) =>
   hydra.json.model.Value.`object`(hydra.lib.maps.fromList[scala.Predef.String, hydra.json.model.Value](`arg_`)))(hydra.parsers.between(hydra.json.parser.token(hydra.parsers.char(123)))(hydra.json.parser.token(hydra.parsers.char(125)))(hydra.parsers.sepBy(hydra.json.parser.jsonKeyValue)(hydra.json.parser.token(hydra.parsers.char(44)))))
 
 lazy val jsonString: hydra.parsing.Parser[hydra.json.model.Value] = hydra.json.parser.token(hydra.parsers.bind(hydra.parsers.char(34))((_x: Int) =>
@@ -64,8 +67,8 @@ lazy val jsonStringChar: hydra.parsing.Parser[Int] = hydra.parsers.alt(hydra.par
   hydra.lib.logic.and(hydra.lib.logic.not(hydra.lib.equality.equal[Int](c)(34)))(hydra.lib.logic.not(hydra.lib.equality.equal[Int](c)(92)))))
 
 lazy val jsonValue: hydra.parsing.Parser[hydra.json.model.Value] = hydra.parsers.choice(Seq(hydra.json.parser.jsonNull,
-   hydra.json.parser.jsonBool, hydra.json.parser.jsonNumber, hydra.json.parser.jsonString, hydra.json.parser.jsonArray,
-   hydra.json.parser.jsonObject))
+   hydra.json.parser.jsonBool, hydra.json.parser.jsonNumber, hydra.json.parser.jsonString,
+   hydra.json.parser.jsonArray, hydra.json.parser.jsonObject))
 
 def parseJson(input: scala.Predef.String): hydra.parsing.ParseResult[hydra.json.model.Value] =
   hydra.parsers.bind(hydra.json.parser.whitespace)((_x: Unit) =>

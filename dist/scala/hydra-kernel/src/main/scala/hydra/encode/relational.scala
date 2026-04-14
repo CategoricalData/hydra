@@ -13,8 +13,9 @@ def columnSchema[T0](t: (T0 => hydra.core.Term))(x: hydra.relational.ColumnSchem
 
 def foreignKey(x: hydra.relational.ForeignKey): hydra.core.Term =
   hydra.core.Term.record(hydra.core.Record("hydra.relational.ForeignKey", Seq(hydra.core.Field("foreignRelation",
-     hydra.encode.relational.relationName(x.foreignRelation)), hydra.core.Field("keys", hydra.core.Term.map(hydra.lib.maps.bimap[hydra.relational.ColumnName,
-     hydra.core.Term, hydra.relational.ColumnName, hydra.core.Term](hydra.encode.relational.columnName)(hydra.encode.relational.columnName)(x.keys))))))
+     hydra.encode.relational.relationName(x.foreignRelation)), hydra.core.Field("keys",
+     hydra.core.Term.map(hydra.lib.maps.bimap[hydra.relational.ColumnName, hydra.core.Term,
+     hydra.relational.ColumnName, hydra.core.Term](hydra.encode.relational.columnName)(hydra.encode.relational.columnName)(x.keys))))))
 
 def primaryKey(x: hydra.relational.PrimaryKey): hydra.core.Term =
   hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.relational.PrimaryKey", hydra.core.Term.list(hydra.lib.lists.map[hydra.relational.ColumnName,
@@ -38,7 +39,9 @@ def relationSchema[T0](t: (T0 => hydra.core.Term))(x: hydra.relational.RelationS
 def relationship[T0](v: (T0 => hydra.core.Term))(x: hydra.relational.Relationship[T0]): hydra.core.Term =
   hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.relational.Relationship", hydra.core.Term.set(hydra.lib.sets.map[Map[hydra.relational.ColumnName,
      T0], hydra.core.Term]((m: Map[hydra.relational.ColumnName, T0]) =>
-  hydra.core.Term.map(hydra.lib.maps.bimap[hydra.relational.ColumnName, hydra.core.Term, T0, hydra.core.Term](hydra.encode.relational.columnName)(v)(m)))(x))))
+  hydra.core.Term.map(hydra.lib.maps.bimap[hydra.relational.ColumnName, hydra.core.Term,
+     T0, hydra.core.Term](hydra.encode.relational.columnName)(v)(m)))(x))))
 
 def row[T0](v: (T0 => hydra.core.Term))(x: hydra.relational.Row[T0]): hydra.core.Term =
-  hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.relational.Row", hydra.core.Term.list(hydra.lib.lists.map[T0, hydra.core.Term](v)(x))))
+  hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.relational.Row", hydra.core.Term.list(hydra.lib.lists.map[T0,
+     hydra.core.Term](v)(x))))
