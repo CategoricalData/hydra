@@ -38,6 +38,7 @@ _FunctionVariant_lambda = Core.Name "lambda"
 data LiteralVariant =
   LiteralVariantBinary  |
   LiteralVariantBoolean  |
+  LiteralVariantDecimal  |
   LiteralVariantFloat  |
   LiteralVariantInteger  |
   LiteralVariantString
@@ -48,6 +49,8 @@ _LiteralVariant = Core.Name "hydra.variants.LiteralVariant"
 _LiteralVariant_binary = Core.Name "binary"
 
 _LiteralVariant_boolean = Core.Name "boolean"
+
+_LiteralVariant_decimal = Core.Name "decimal"
 
 _LiteralVariant_float = Core.Name "float"
 

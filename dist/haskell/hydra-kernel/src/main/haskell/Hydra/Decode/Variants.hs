@@ -61,6 +61,7 @@ literalVariant cx raw =
                     Maps.fromList [
                       (Core.Name "binary", (\input -> Eithers.map (\t -> Variants.LiteralVariantBinary) (ExtractCore.decodeUnit cx input))),
                       (Core.Name "boolean", (\input -> Eithers.map (\t -> Variants.LiteralVariantBoolean) (ExtractCore.decodeUnit cx input))),
+                      (Core.Name "decimal", (\input -> Eithers.map (\t -> Variants.LiteralVariantDecimal) (ExtractCore.decodeUnit cx input))),
                       (Core.Name "float", (\input -> Eithers.map (\t -> Variants.LiteralVariantFloat) (ExtractCore.decodeUnit cx input))),
                       (Core.Name "integer", (\input -> Eithers.map (\t -> Variants.LiteralVariantInteger) (ExtractCore.decodeUnit cx input))),
                       (Core.Name "string", (\input -> Eithers.map (\t -> Variants.LiteralVariantString) (ExtractCore.decodeUnit cx input)))]

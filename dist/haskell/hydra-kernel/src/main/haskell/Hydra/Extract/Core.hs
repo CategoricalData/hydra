@@ -25,6 +25,7 @@ import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pur
 import qualified Data.ByteString as B
 import qualified Data.Int as I
 import qualified Data.Map as M
+import qualified Data.Scientific as Sci
 import qualified Data.Set as S
 
 -- | Extract an arbitrary-precision floating-point value from a term
@@ -77,6 +78,19 @@ booleanLiteral v =
       Core.LiteralBoolean v0 -> Right v0
       _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
         Errors.unexpectedShapeErrorExpected = "boolean",
+        Errors.unexpectedShapeErrorActual = (ShowCore.literal v)})))
+
+-- | Extract an arbitrary-precision decimal value from a term
+decimal :: Graph.Graph -> Core.Term -> Either Errors.Error Sci.Scientific
+decimal graph t = Eithers.bind (literal graph t) (\l -> decimalLiteral l)
+
+-- | Extract a decimal literal from a Literal value
+decimalLiteral :: Core.Literal -> Either Errors.Error Sci.Scientific
+decimalLiteral v =
+    case v of
+      Core.LiteralDecimal v0 -> Right v0
+      _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
+        Errors.unexpectedShapeErrorExpected = "decimal",
         Errors.unexpectedShapeErrorActual = (ShowCore.literal v)})))
 
 -- | Extract a specific case handler from a case statement term

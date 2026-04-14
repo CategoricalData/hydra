@@ -10,6 +10,7 @@ import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pur
 import qualified Data.ByteString as B
 import qualified Data.Int as I
 import qualified Data.Map as M
+import qualified Data.Scientific as Sci
 import qualified Data.Set as S
 
 annotatedTerm :: Phantoms.TTerm Core.Term -> Phantoms.TTerm (M.Map Core.Name Core.Term) -> Phantoms.TTerm Core.AnnotatedTerm
@@ -1204,6 +1205,14 @@ literalBoolean x =
         Core.fieldName = (Core.Name "boolean"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
+literalDecimal :: Phantoms.TTerm Sci.Scientific -> Phantoms.TTerm Core.Literal
+literalDecimal x =
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.core.Literal"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "decimal"),
+        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+
 literalFloat :: Phantoms.TTerm Core.FloatValue -> Phantoms.TTerm Core.Literal
 literalFloat x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
@@ -1242,6 +1251,14 @@ literalTypeBoolean =
       Core.injectionTypeName = (Core.Name "hydra.core.LiteralType"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "boolean"),
+        Core.fieldTerm = Core.TermUnit}}))
+
+literalTypeDecimal :: Phantoms.TTerm Core.LiteralType
+literalTypeDecimal =
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.core.LiteralType"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "decimal"),
         Core.fieldTerm = Core.TermUnit}}))
 
 literalTypeFloat :: Phantoms.TTerm Core.FloatType -> Phantoms.TTerm Core.LiteralType

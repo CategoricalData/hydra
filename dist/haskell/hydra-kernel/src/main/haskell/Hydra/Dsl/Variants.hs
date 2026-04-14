@@ -65,6 +65,14 @@ literalVariantBoolean =
         Core.fieldName = (Core.Name "boolean"),
         Core.fieldTerm = Core.TermUnit}}))
 
+literalVariantDecimal :: Phantoms.TTerm Variants.LiteralVariant
+literalVariantDecimal =
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.variants.LiteralVariant"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "decimal"),
+        Core.fieldTerm = Core.TermUnit}}))
+
 literalVariantFloat :: Phantoms.TTerm Variants.LiteralVariant
 literalVariantFloat =
     Phantoms.TTerm (Core.TermInject (Core.Injection {

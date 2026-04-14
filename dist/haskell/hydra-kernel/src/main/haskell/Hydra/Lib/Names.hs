@@ -251,6 +251,9 @@ literalsBigfloatToFloat64 = Core.Name "hydra.lib.literals.bigfloatToFloat64"
 literalsBigintToBigfloat :: Core.Name
 literalsBigintToBigfloat = Core.Name "hydra.lib.literals.bigintToBigfloat"
 
+literalsBigintToDecimal :: Core.Name
+literalsBigintToDecimal = Core.Name "hydra.lib.literals.bigintToDecimal"
+
 literalsBigintToInt16 :: Core.Name
 literalsBigintToInt16 = Core.Name "hydra.lib.literals.bigintToInt16"
 
@@ -281,11 +284,26 @@ literalsBinaryToBytes = Core.Name "hydra.lib.literals.binaryToBytes"
 literalsBinaryToString :: Core.Name
 literalsBinaryToString = Core.Name "hydra.lib.literals.binaryToString"
 
+literalsDecimalToBigint :: Core.Name
+literalsDecimalToBigint = Core.Name "hydra.lib.literals.decimalToBigint"
+
+literalsDecimalToFloat32 :: Core.Name
+literalsDecimalToFloat32 = Core.Name "hydra.lib.literals.decimalToFloat32"
+
+literalsDecimalToFloat64 :: Core.Name
+literalsDecimalToFloat64 = Core.Name "hydra.lib.literals.decimalToFloat64"
+
 literalsFloat32ToBigfloat :: Core.Name
 literalsFloat32ToBigfloat = Core.Name "hydra.lib.literals.float32ToBigfloat"
 
+literalsFloat32ToDecimal :: Core.Name
+literalsFloat32ToDecimal = Core.Name "hydra.lib.literals.float32ToDecimal"
+
 literalsFloat64ToBigfloat :: Core.Name
 literalsFloat64ToBigfloat = Core.Name "hydra.lib.literals.float64ToBigfloat"
+
+literalsFloat64ToDecimal :: Core.Name
+literalsFloat64ToDecimal = Core.Name "hydra.lib.literals.float64ToDecimal"
 
 literalsInt16ToBigint :: Core.Name
 literalsInt16ToBigint = Core.Name "hydra.lib.literals.int16ToBigint"
@@ -307,6 +325,9 @@ literalsReadBigint = Core.Name "hydra.lib.literals.readBigint"
 
 literalsReadBoolean :: Core.Name
 literalsReadBoolean = Core.Name "hydra.lib.literals.readBoolean"
+
+literalsReadDecimal :: Core.Name
+literalsReadDecimal = Core.Name "hydra.lib.literals.readDecimal"
 
 literalsReadFloat32 :: Core.Name
 literalsReadFloat32 = Core.Name "hydra.lib.literals.readFloat32"
@@ -349,6 +370,9 @@ literalsShowBigint = Core.Name "hydra.lib.literals.showBigint"
 
 literalsShowBoolean :: Core.Name
 literalsShowBoolean = Core.Name "hydra.lib.literals.showBoolean"
+
+literalsShowDecimal :: Core.Name
+literalsShowDecimal = Core.Name "hydra.lib.literals.showDecimal"
 
 literalsShowFloat32 :: Core.Name
 literalsShowFloat32 = Core.Name "hydra.lib.literals.showFloat32"

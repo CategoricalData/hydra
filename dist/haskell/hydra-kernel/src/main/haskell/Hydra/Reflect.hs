@@ -111,6 +111,7 @@ literalType x =
     case x of
       Core.LiteralBinary _ -> Core.LiteralTypeBinary
       Core.LiteralBoolean _ -> Core.LiteralTypeBoolean
+      Core.LiteralDecimal _ -> Core.LiteralTypeDecimal
       Core.LiteralFloat v0 -> (\injected_ -> Core.LiteralTypeFloat injected_) (floatValueType v0)
       Core.LiteralInteger v0 -> (\injected_ -> Core.LiteralTypeInteger injected_) (integerValueType v0)
       Core.LiteralString _ -> Core.LiteralTypeString
@@ -121,6 +122,7 @@ literalTypeVariant x =
     case x of
       Core.LiteralTypeBinary -> Variants.LiteralVariantBinary
       Core.LiteralTypeBoolean -> Variants.LiteralVariantBoolean
+      Core.LiteralTypeDecimal -> Variants.LiteralVariantDecimal
       Core.LiteralTypeFloat _ -> Variants.LiteralVariantFloat
       Core.LiteralTypeInteger _ -> Variants.LiteralVariantInteger
       Core.LiteralTypeString -> Variants.LiteralVariantString
@@ -131,7 +133,8 @@ literalTypes =
     Lists.concat [
       [
         Core.LiteralTypeBinary,
-        Core.LiteralTypeBoolean],
+        Core.LiteralTypeBoolean,
+        Core.LiteralTypeDecimal],
       (Lists.map (\x -> Core.LiteralTypeFloat x) floatTypes),
       (Lists.map (\x -> Core.LiteralTypeInteger x) integerTypes),
       [
@@ -147,6 +150,7 @@ literalVariants =
     [
       Variants.LiteralVariantBinary,
       Variants.LiteralVariantBoolean,
+      Variants.LiteralVariantDecimal,
       Variants.LiteralVariantFloat,
       Variants.LiteralVariantInteger,
       Variants.LiteralVariantString]

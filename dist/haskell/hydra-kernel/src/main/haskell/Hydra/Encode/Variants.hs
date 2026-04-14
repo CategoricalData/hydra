@@ -54,6 +54,11 @@ literalVariant x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "boolean"),
           Core.fieldTerm = Core.TermUnit}})
+      Variants.LiteralVariantDecimal -> Core.TermInject (Core.Injection {
+        Core.injectionTypeName = (Core.Name "hydra.variants.LiteralVariant"),
+        Core.injectionField = Core.Field {
+          Core.fieldName = (Core.Name "decimal"),
+          Core.fieldTerm = Core.TermUnit}})
       Variants.LiteralVariantFloat -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.variants.LiteralVariant"),
         Core.injectionField = Core.Field {
