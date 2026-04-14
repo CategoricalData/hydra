@@ -9,7 +9,6 @@
 -- excluded from mainModules, preserving the exclusions from
 -- heads/haskell/Sources/Ext.hs:
 --
---   * Graphql.Coder, Graphql.Serde — commented out (reason unclear; likely WIP)
 --   * Go.Serde — WIP, incomplete module
 
 module Hydra.Sources.Ext.Manifest (
@@ -38,7 +37,9 @@ import qualified Hydra.Sources.Csharp.Syntax as CsharpSyntax
 import qualified Hydra.Sources.Delta.Parquet as DeltaParquet
 import qualified Hydra.Sources.Go.Language as GoLanguage
 import qualified Hydra.Sources.Go.Syntax as GoSyntax
+import qualified Hydra.Sources.Graphql.Coder as GraphqlCoder
 import qualified Hydra.Sources.Graphql.Language as GraphqlLanguage
+import qualified Hydra.Sources.Graphql.Serde as GraphqlSerde
 import qualified Hydra.Sources.Graphql.Syntax as GraphqlSyntax
 import qualified Hydra.Sources.Json.Schema as JsonSchema
 import qualified Hydra.Sources.Json.Schema.Coder as JsonSchemaCoder
@@ -103,7 +104,9 @@ mainModules = [
   GeoJson.module_,
   GoLanguage.module_,
   GoSyntax.module_,
+  GraphqlCoder.module_,
   GraphqlLanguage.module_,
+  GraphqlSerde.module_,
   GraphqlSyntax.module_,
   IanaRelations.module_,
   JsonSchema.module_,
