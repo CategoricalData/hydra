@@ -86,6 +86,34 @@ info() {
     echo "$1" >&2
 }
 
+# Fail (or warn) if the selected JDK is an x86_64 build running under Rosetta 2
+# on an Apple Silicon host. Such JDKs are ~20x slower than a native arm64 JDK
+# and produce bogus benchmark timings. Set HYDRA_ALLOW_ROSETTA_JDK=1 to opt in
+# (e.g. if the environment genuinely has no native JDK available); in that case
+# the helper emits a warning and returns success.
+#
+# Usage: check_native_jdk          # fatal (exit 1) on Rosetta, unless opted in
+#        check_native_jdk --warn   # warn only, never fail
+check_native_jdk() {
+    local mode="${1:-}"
+    [ "$(uname -s)" = "Darwin" ] || return 0
+    [ "$(uname -m)" = "arm64" ] || return 0
+    local java_cmd="${JAVA_HOME:+$JAVA_HOME/bin/}java"
+    command -v "$java_cmd" >/dev/null 2>&1 || return 0
+    file "$(command -v "$java_cmd")" | grep -q x86_64 || return 0
+    local version
+    version="$("$java_cmd" -version 2>&1 | head -1)"
+    if [ "$mode" = "--warn" ] || [ "${HYDRA_ALLOW_ROSETTA_JDK:-}" = "1" ]; then
+        warn "x86_64 JDK detected on Apple Silicon. This runs under Rosetta 2 and will be ~20x slower than a native arm64 JDK."
+        warn "Current JDK: $version"
+        return 0
+    fi
+    echo "ERROR: x86_64 JDK detected on Apple Silicon (runs under Rosetta 2, ~20x slower than a native arm64 JDK)." >&2
+    echo "  Current JDK: $version" >&2
+    echo "  Point JAVA_HOME at a native arm64 JDK and retry, or set HYDRA_ALLOW_ROSETTA_JDK=1 to proceed anyway." >&2
+    exit 1
+}
+
 # ---------------------------------------------------------------------------
 # Portability helpers
 # ---------------------------------------------------------------------------

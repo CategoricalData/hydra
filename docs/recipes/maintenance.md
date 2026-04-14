@@ -296,6 +296,118 @@ stale strings into every downstream language.
 
 ---
 
+## Checking for design violations
+
+Hydra's design principles keep hand-written and generated code strictly separated
+and keep host-specific workarounds out of generated code.
+These principles drift under pressure: a bug in a generator is easy to paper over
+with a `sed` patch, and a one-off utility is easy to drop into `packages/` or `dist/`
+rather than fixing the right abstraction.
+Periodically scan the repository for violations and fix them at the source.
+
+The core principles (see CLAUDE.md and the
+[Code organization](https://github.com/CategoricalData/hydra/wiki/Code-organization) wiki page):
+
+1. **No post-generation patches.** Generated code (anything under `dist/`) must
+   match what the generator produces. If the output is wrong, fix the generator.
+   The only exception is a deliberate bootstrap patch that will be overwritten by
+   the next regeneration — document it as such.
+2. **No hand-written files under `dist/`.** If a file needs to live alongside
+   generated artifacts (because tests import it from that location), write it
+   under `heads/` and copy it in from a sync script.
+3. **No host-specific code under `packages/`.** Packages hold DSL-based module
+   definitions plus source-language helpers for writing them. Host-specific
+   runtimes and utilities belong in `heads/`, except for `bindings/` which is
+   explicitly for host-specific third-party integrations.
+4. **Generated files have the "do not edit" header.** If you see a file under
+   `dist/` without the header, it is either hand-written (violation) or the
+   generator is missing the header (bug in the generator).
+
+### Procedure
+
+**Check 1: post-generation patches in sync scripts.**
+Sync scripts are the most common place violations hide.
+Grep for the patterns that indicate patches:
+
+```bash
+grep -rn "sed_inplace\|sed -i\|Post-process\|Patch\|patching\|post-process" \
+  bin/ heads/haskell/bin/ demos/bootstrapping/bin/ 2>/dev/null \
+  | grep -v "test\|grep" \
+  | grep -vE ":\s*#"
+```
+
+Every match is a potential violation.
+For each, ask:
+- **Is this fixing the generator, or working around it?**
+  A patch that renames `case macro(` to `` case `macro`( `` is working around
+  a missing keyword-escape in the Scala code generator.
+  The generator should emit the backticks in the first place.
+- **Is this copying a hand-written file into `dist/`?**
+  That is principle 2; the canonical copy must live in `heads/`.
+  Copying *into* `dist/` is acceptable; hand-writing *in* `dist/` is not.
+- **Is this a deliberate bootstrap patch?**
+  Bootstrap patches are explicitly allowed but must be overwritten by the next
+  regeneration.
+  A `sed` patch that runs on every sync is not a bootstrap patch — it means
+  the generator is broken.
+
+Track the list of accepted post-generation patches.
+Each one is tech debt against the corresponding generator.
+Record new ones in the relevant issue, not silently.
+
+**Check 2: hand-written files under `dist/`.**
+Every file in `dist/` should have the generated-file header.
+Scan for files that don't:
+
+```bash
+for f in $(find dist -type f \
+  \( -name '*.hs' -o -name '*.java' -o -name '*.py' -o -name '*.scala' \
+     -o -name '*.clj' -o -name '*.lisp' -o -name '*.el' -o -name '*.scm' \) 2>/dev/null); do
+  if ! head -5 "$f" | grep -q 'automatically generated'; then
+    echo "$f"
+  fi
+done
+```
+
+Any output is a file that should either be generated (fix the generator to emit
+the header) or be moved to `heads/` and copied in by a sync script (principle 2).
+
+**Check 3: host-specific code under `packages/`.**
+Every file in `packages/` should either be a Hydra DSL module or a
+source-language helper used to write one.
+Spot-check by sampling `find packages -name '*.hs'`;
+any `.hs` file that doesn't import `Hydra.Kernel` or `Hydra.Sources.*`
+and doesn't serve as a DSL helper is suspicious.
+Also check non-Haskell files under `packages/` (e.g., `.java`, `.py`, `.scala`),
+which are even more likely to be violations.
+
+**Check 4: rule-of-three for inline patches.**
+If the same type of patch appears in multiple sync scripts (e.g., "escape the
+`macro` keyword" and "escape the `type` keyword"), that is a signal the
+generator is missing a whole class of handling, not just one edge case.
+Fix it at the generator level.
+
+### Known accepted patches
+
+These patches are currently in place and have open or implied issues tracking
+them as generator bugs:
+
+- `heads/haskell/bin/sync-scala.sh`: escapes the Scala `macro` reserved keyword,
+  and rewrites bare inference type variables to `Any`. The Scala coder should
+  emit these directly.
+- `heads/haskell/bin/sync-java.sh`: patches `hydra/lisp/Coder.java` to rewrite
+  a `PartialVisitor` type parameter that the Java coder infers incorrectly.
+- `heads/haskell/bin/sync-python.sh`: patches `test_graph.py` to replace
+  empty `test_graph` / `test_context` assignments with a `__getattr__` shim
+  that lazily imports a hand-written `test_env.py`. This works around an
+  unsupported polymorphic type in the Python test generator.
+
+When adding a new accepted patch, document it here and open an issue against
+the generator.
+When removing a patch (because the generator was fixed), update this list too.
+
+---
+
 ## Checking coding style
 
 The [coding style guide](https://github.com/CategoricalData/hydra/wiki/Coding-style)
@@ -622,12 +734,15 @@ To run all checks in sequence (invoked via `/maintenance()` in CLAUDE.md):
 
 1. Scan for non-source files; remove or untrack as appropriate; update `.gitignore`.
 2. Find stale generated files across all implementations; delete confirmed orphans.
-3. Check coding style (definition ordering) across all Source modules; fix violations.
-4. Verify primitive consistency (coverage, `forall` variable ordering, documentation).
-5. Check `.cabal`/`package.yaml` exposed-modules for stale entries.
-6. Verify JSON kernel freshness via `heads/haskell/bin/verify-json-kernel.sh`.
-7. Check Python `__init__.py` freshness.
-8. Review user documentation for accuracy, broken links, and small improvements.
+3. Check for design violations (post-generation patches, hand-written files under
+   `dist/`, host-specific code under `packages/`); fix at the generator or move
+   to `heads/`.
+4. Check coding style (definition ordering) across all Source modules; fix violations.
+5. Verify primitive consistency (coverage, `forall` variable ordering, documentation).
+6. Check `.cabal`/`package.yaml` exposed-modules for stale entries.
+7. Verify JSON kernel freshness via `heads/haskell/bin/verify-json-kernel.sh`.
+8. Check Python `__init__.py` freshness.
+9. Review user documentation for accuracy, broken links, and small improvements.
 
 After all checks, present a summary of findings and changes to the user.
 If any changes affect Source modules (e.g., definition reordering),
@@ -644,6 +759,7 @@ If no changes affect generated files or tests, skip the sync.
 |-------|------------|
 | Non-source file scan | After branch merges, periodically |
 | Stale generated files | After refactoring (renames, deletes, splits) |
+| Design violations | Periodically, before release, after adding sync-script patches |
 | Coding style | After large changes, before release |
 | Primitive consistency | After adding/changing primitives, after adding a new implementation |
 | Test parity | After sync-all, after benchmarking runs |
