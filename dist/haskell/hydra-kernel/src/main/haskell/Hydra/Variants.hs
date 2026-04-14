@@ -7,7 +7,7 @@ module Hydra.Variants where
 import qualified Hydra.Core as Core
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 
--- | The identifier of an elimination constructor
+-- | The identifier of an elimination constructor (legacy)
 data EliminationVariant =
   EliminationVariantRecord  |
   EliminationVariantUnion  |
@@ -22,7 +22,7 @@ _EliminationVariant_union = Core.Name "union"
 
 _EliminationVariant_wrap = Core.Name "wrap"
 
--- | The identifier of a function constructor
+-- | The identifier of a function constructor (legacy)
 data FunctionVariant =
   FunctionVariantElimination  |
   FunctionVariantLambda
@@ -59,20 +59,23 @@ _LiteralVariant_string = Core.Name "string"
 data TermVariant =
   TermVariantAnnotated  |
   TermVariantApplication  |
+  TermVariantCases  |
   TermVariantEither  |
-  TermVariantFunction  |
+  TermVariantLambda  |
   TermVariantLet  |
   TermVariantList  |
   TermVariantLiteral  |
   TermVariantMap  |
   TermVariantMaybe  |
   TermVariantPair  |
+  TermVariantProject  |
   TermVariantRecord  |
   TermVariantSet  |
   TermVariantTypeApplication  |
   TermVariantTypeLambda  |
   TermVariantUnion  |
   TermVariantUnit  |
+  TermVariantUnwrap  |
   TermVariantVariable  |
   TermVariantWrap
   deriving (Eq, Ord, Read, Show)
@@ -83,9 +86,11 @@ _TermVariant_annotated = Core.Name "annotated"
 
 _TermVariant_application = Core.Name "application"
 
+_TermVariant_cases = Core.Name "cases"
+
 _TermVariant_either = Core.Name "either"
 
-_TermVariant_function = Core.Name "function"
+_TermVariant_lambda = Core.Name "lambda"
 
 _TermVariant_let = Core.Name "let"
 
@@ -99,6 +104,8 @@ _TermVariant_maybe = Core.Name "maybe"
 
 _TermVariant_pair = Core.Name "pair"
 
+_TermVariant_project = Core.Name "project"
+
 _TermVariant_record = Core.Name "record"
 
 _TermVariant_set = Core.Name "set"
@@ -110,6 +117,8 @@ _TermVariant_typeLambda = Core.Name "typeLambda"
 _TermVariant_union = Core.Name "union"
 
 _TermVariant_unit = Core.Name "unit"
+
+_TermVariant_unwrap = Core.Name "unwrap"
 
 _TermVariant_variable = Core.Name "variable"
 

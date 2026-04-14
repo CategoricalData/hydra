@@ -13,50 +13,46 @@
                     "@value": {
                       "literal": {"string": "Decode a JSON array using a decoder for elements"}}}],
                 "body": {
-                  "function": {
-                    "lambda": {
-                      "body": {
-                        "function": {
-                          "elimination": {
-                            "union": {
-                              "cases": [
-                                {
-                                  "name": "array",
-                                  "term": {
+                  "lambda": {
+                    "body": {
+                      "cases": {
+                        "cases": [
+                          {
+                            "name": "array",
+                            "term": {
+                              "lambda": {
+                                "body": {
+                                  "application": {
+                                    "argument": {"variable": "a"},
                                     "function": {
-                                      "lambda": {
-                                        "body": {
-                                          "application": {
-                                            "argument": {"variable": "a"},
-                                            "function": {
-                                              "application": {
-                                                "argument": {"variable": "decodeElem"},
-                                                "function": {
+                                      "application": {
+                                        "argument": {"variable": "decodeElem"},
+                                        "function": {
+                                          "typeApplication": {
+                                            "body": {
+                                              "typeApplication": {
+                                                "body": {
                                                   "typeApplication": {
-                                                    "body": {
-                                                      "typeApplication": {
-                                                        "body": {
-                                                          "typeApplication": {
-                                                            "body": {"variable": "hydra.lib.eithers.mapList"},
-                                                            "type": {"variable": "hydra.json.model.Value"}}},
-                                                        "type": {"variable": "t0"}}},
-                                                    "type": {"literal": {"string": {}}}}}}}}},
-                                        "domain": {"list": {"variable": "hydra.json.model.Value"}},
-                                        "parameter": "a"}}}}],
-                              "default": {
-                                "typeApplication": {
-                                  "body": {
-                                    "typeApplication": {
-                                      "body": {"either": {"@left": {"literal": {"string": "expected an array"}}}},
-                                      "type": {"literal": {"string": {}}}}},
-                                  "type": {"list": {"variable": "t0"}}}},
-                              "typeName": "hydra.json.model.Value"}}}},
-                      "domain": {
-                        "function": {
-                          "codomain": {
-                            "either": {"left": {"literal": {"string": {}}}, "right": {"variable": "t0"}}},
-                          "domain": {"variable": "hydra.json.model.Value"}}},
-                      "parameter": "decodeElem"}}}}},
+                                                    "body": {"variable": "hydra.lib.eithers.mapList"},
+                                                    "type": {"variable": "hydra.json.model.Value"}}},
+                                                "type": {"variable": "t0"}}},
+                                            "type": {"literal": {"string": {}}}}}}}}},
+                                "domain": {"list": {"variable": "hydra.json.model.Value"}},
+                                "parameter": "a"}}}],
+                        "default": {
+                          "typeApplication": {
+                            "body": {
+                              "typeApplication": {
+                                "body": {"either": {"@left": {"literal": {"string": "expected an array"}}}},
+                                "type": {"literal": {"string": {}}}}},
+                            "type": {"list": {"variable": "t0"}}}},
+                        "typeName": "hydra.json.model.Value"}},
+                    "domain": {
+                      "function": {
+                        "codomain": {
+                          "either": {"left": {"literal": {"string": {}}}, "right": {"variable": "t0"}}},
+                        "domain": {"variable": "hydra.json.model.Value"}}},
+                    "parameter": "decodeElem"}}}},
             "parameter": "t0"}},
         "type": {
           "type": {
@@ -84,32 +80,29 @@
                 "@key": "description",
                 "@value": {"literal": {"string": "Decode a JSON boolean value"}}}],
             "body": {
-              "function": {
-                "elimination": {
-                  "union": {
-                    "cases": [
-                      {
-                        "name": "boolean",
-                        "term": {
-                          "function": {
-                            "lambda": {
-                              "body": {
-                                "typeApplication": {
-                                  "body": {
-                                    "typeApplication": {
-                                      "body": {"either": {"@right": {"variable": "b"}}},
-                                      "type": {"literal": {"string": {}}}}},
-                                  "type": {"literal": {"boolean": {}}}}},
-                              "domain": {"literal": {"boolean": {}}},
-                              "parameter": "b"}}}}],
-                    "default": {
-                      "typeApplication": {
+              "cases": {
+                "cases": [
+                  {
+                    "name": "boolean",
+                    "term": {
+                      "lambda": {
                         "body": {
                           "typeApplication": {
-                            "body": {"either": {"@left": {"literal": {"string": "expected a boolean"}}}},
-                            "type": {"literal": {"string": {}}}}},
-                        "type": {"literal": {"boolean": {}}}}},
-                    "typeName": "hydra.json.model.Value"}}}}}},
+                            "body": {
+                              "typeApplication": {
+                                "body": {"either": {"@right": {"variable": "b"}}},
+                                "type": {"literal": {"string": {}}}}},
+                            "type": {"literal": {"boolean": {}}}}},
+                        "domain": {"literal": {"boolean": {}}},
+                        "parameter": "b"}}}],
+                "default": {
+                  "typeApplication": {
+                    "body": {
+                      "typeApplication": {
+                        "body": {"either": {"@left": {"literal": {"string": "expected a boolean"}}}},
+                        "type": {"literal": {"string": {}}}}},
+                    "type": {"literal": {"boolean": {}}}}},
+                "typeName": "hydra.json.model.Value"}}}},
         "type": {
           "type": {
             "function": {
@@ -133,100 +126,96 @@
                         "@key": "description",
                         "@value": {"literal": {"string": "Decode a required field from a JSON object"}}}],
                     "body": {
-                      "function": {
-                        "lambda": {
-                          "body": {
-                            "function": {
+                      "lambda": {
+                        "body": {
+                          "lambda": {
+                            "body": {
                               "lambda": {
                                 "body": {
-                                  "function": {
-                                    "lambda": {
-                                      "body": {
-                                        "application": {
-                                          "argument": {
-                                            "application": {
-                                              "argument": {
-                                                "function": {
-                                                  "lambda": {
+                                  "application": {
+                                    "argument": {
+                                      "application": {
+                                        "argument": {
+                                          "lambda": {
+                                            "body": {
+                                              "typeApplication": {
+                                                "body": {
+                                                  "typeApplication": {
+                                                    "body": {"either": {"@right": {"variable": "f"}}},
+                                                    "type": {"literal": {"string": {}}}}},
+                                                "type": {"variable": "t1"}}},
+                                            "domain": {"variable": "t1"},
+                                            "parameter": "f"}},
+                                        "function": {
+                                          "application": {
+                                            "argument": {
+                                              "typeApplication": {
+                                                "body": {
+                                                  "typeApplication": {
                                                     "body": {
+                                                      "either": {
+                                                        "@left": {
+                                                          "application": {
+                                                            "argument": {"variable": "name"},
+                                                            "function": {
+                                                              "application": {
+                                                                "argument": {"literal": {"string": "missing field: "}},
+                                                                "function": {"variable": "hydra.lib.strings.cat2"}}}}}}},
+                                                    "type": {"literal": {"string": {}}}}},
+                                                "type": {"variable": "t1"}}},
+                                            "function": {
+                                              "typeApplication": {
+                                                "body": {
+                                                  "typeApplication": {
+                                                    "body": {"variable": "hydra.lib.maybes.maybe"},
+                                                    "type": {
+                                                      "either": {"left": {"literal": {"string": {}}}, "right": {"variable": "t1"}}}}},
+                                                "type": {"variable": "t1"}}}}}}},
+                                    "function": {
+                                      "application": {
+                                        "argument": {
+                                          "application": {
+                                            "argument": {"variable": "m"},
+                                            "function": {
+                                              "application": {
+                                                "argument": {"variable": "name"},
+                                                "function": {
+                                                  "application": {
+                                                    "argument": {"variable": "decodeValue"},
+                                                    "function": {
                                                       "typeApplication": {
                                                         "body": {
                                                           "typeApplication": {
-                                                            "body": {"either": {"@right": {"variable": "f"}}},
-                                                            "type": {"literal": {"string": {}}}}},
-                                                        "type": {"variable": "t1"}}},
-                                                    "domain": {"variable": "t1"},
-                                                    "parameter": "f"}}},
-                                              "function": {
-                                                "application": {
-                                                  "argument": {
-                                                    "typeApplication": {
-                                                      "body": {
-                                                        "typeApplication": {
-                                                          "body": {
-                                                            "either": {
-                                                              "@left": {
-                                                                "application": {
-                                                                  "argument": {"variable": "name"},
-                                                                  "function": {
-                                                                    "application": {
-                                                                      "argument": {"literal": {"string": "missing field: "}},
-                                                                      "function": {"variable": "hydra.lib.strings.cat2"}}}}}}},
-                                                          "type": {"literal": {"string": {}}}}},
-                                                      "type": {"variable": "t1"}}},
-                                                  "function": {
-                                                    "typeApplication": {
-                                                      "body": {
-                                                        "typeApplication": {
-                                                          "body": {"variable": "hydra.lib.maybes.maybe"},
-                                                          "type": {
-                                                            "either": {"left": {"literal": {"string": {}}}, "right": {"variable": "t1"}}}}},
-                                                      "type": {"variable": "t1"}}}}}}},
-                                          "function": {
-                                            "application": {
-                                              "argument": {
-                                                "application": {
-                                                  "argument": {"variable": "m"},
-                                                  "function": {
-                                                    "application": {
-                                                      "argument": {"variable": "name"},
-                                                      "function": {
-                                                        "application": {
-                                                          "argument": {"variable": "decodeValue"},
-                                                          "function": {
-                                                            "typeApplication": {
-                                                              "body": {
-                                                                "typeApplication": {
-                                                                  "body": {
-                                                                    "typeApplication": {
-                                                                      "body": {
-                                                                        "typeApplication": {
-                                                                          "body": {"variable": "hydra.json.decoding.decodeOptionalField"},
-                                                                          "type": {"variable": "t0"}}},
-                                                                      "type": {"literal": {"string": {}}}}},
-                                                                  "type": {"variable": "t1"}}},
-                                                              "type": {"literal": {"string": {}}}}}}}}}}},
-                                              "function": {
-                                                "typeApplication": {
-                                                  "body": {
-                                                    "typeApplication": {
-                                                      "body": {
-                                                        "typeApplication": {
-                                                          "body": {"variable": "hydra.lib.eithers.bind"},
-                                                          "type": {"literal": {"string": {}}}}},
-                                                      "type": {"maybe": {"variable": "t1"}}}},
-                                                  "type": {"variable": "t1"}}}}}}},
-                                      "domain": {
-                                        "map": {"keys": {"literal": {"string": {}}}, "values": {"variable": "t0"}}},
-                                      "parameter": "m"}}},
-                                "domain": {"literal": {"string": {}}},
-                                "parameter": "name"}}},
-                          "domain": {
-                            "function": {
-                              "codomain": {
-                                "either": {"left": {"literal": {"string": {}}}, "right": {"variable": "t1"}}},
-                              "domain": {"variable": "t0"}}},
-                          "parameter": "decodeValue"}}}}},
+                                                            "body": {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {"variable": "hydra.json.decoding.decodeOptionalField"},
+                                                                    "type": {"variable": "t0"}}},
+                                                                "type": {"literal": {"string": {}}}}},
+                                                            "type": {"variable": "t1"}}},
+                                                        "type": {"literal": {"string": {}}}}}}}}}}},
+                                        "function": {
+                                          "typeApplication": {
+                                            "body": {
+                                              "typeApplication": {
+                                                "body": {
+                                                  "typeApplication": {
+                                                    "body": {"variable": "hydra.lib.eithers.bind"},
+                                                    "type": {"literal": {"string": {}}}}},
+                                                "type": {"maybe": {"variable": "t1"}}}},
+                                            "type": {"variable": "t1"}}}}}}},
+                                "domain": {
+                                  "map": {"keys": {"literal": {"string": {}}}, "values": {"variable": "t0"}}},
+                                "parameter": "m"}},
+                            "domain": {"literal": {"string": {}}},
+                            "parameter": "name"}},
+                        "domain": {
+                          "function": {
+                            "codomain": {
+                              "either": {"left": {"literal": {"string": {}}}, "right": {"variable": "t1"}}},
+                            "domain": {"variable": "t0"}}},
+                        "parameter": "decodeValue"}}}},
                 "parameter": "t1"}},
             "parameter": "t0"}},
         "type": {
@@ -257,41 +246,38 @@
                 "@key": "description",
                 "@value": {"literal": {"string": "Decode a JSON object value"}}}],
             "body": {
-              "function": {
-                "elimination": {
-                  "union": {
-                    "cases": [
-                      {
-                        "name": "object",
-                        "term": {
-                          "function": {
-                            "lambda": {
-                              "body": {
-                                "typeApplication": {
-                                  "body": {
-                                    "typeApplication": {
-                                      "body": {"either": {"@right": {"variable": "o"}}},
-                                      "type": {"literal": {"string": {}}}}},
-                                  "type": {
-                                    "map": {
-                                      "keys": {"literal": {"string": {}}},
-                                      "values": {"variable": "hydra.json.model.Value"}}}}},
-                              "domain": {
-                                "map": {
-                                  "keys": {"literal": {"string": {}}},
-                                  "values": {"variable": "hydra.json.model.Value"}}},
-                              "parameter": "o"}}}}],
-                    "default": {
-                      "typeApplication": {
+              "cases": {
+                "cases": [
+                  {
+                    "name": "object",
+                    "term": {
+                      "lambda": {
                         "body": {
                           "typeApplication": {
-                            "body": {"either": {"@left": {"literal": {"string": "expected an object"}}}},
-                            "type": {"literal": {"string": {}}}}},
-                        "type": {
+                            "body": {
+                              "typeApplication": {
+                                "body": {"either": {"@right": {"variable": "o"}}},
+                                "type": {"literal": {"string": {}}}}},
+                            "type": {
+                              "map": {
+                                "keys": {"literal": {"string": {}}},
+                                "values": {"variable": "hydra.json.model.Value"}}}}},
+                        "domain": {
                           "map": {
                             "keys": {"literal": {"string": {}}},
-                            "values": {"variable": "hydra.json.model.Value"}}}}},
-                    "typeName": "hydra.json.model.Value"}}}}}},
+                            "values": {"variable": "hydra.json.model.Value"}}},
+                        "parameter": "o"}}}],
+                "default": {
+                  "typeApplication": {
+                    "body": {
+                      "typeApplication": {
+                        "body": {"either": {"@left": {"literal": {"string": "expected an object"}}}},
+                        "type": {"literal": {"string": {}}}}},
+                    "type": {
+                      "map": {
+                        "keys": {"literal": {"string": {}}},
+                        "values": {"variable": "hydra.json.model.Value"}}}}},
+                "typeName": "hydra.json.model.Value"}}}},
         "type": {
           "type": {
             "function": {
@@ -322,89 +308,84 @@
                                 "@key": "description",
                                 "@value": {"literal": {"string": "Decode an optional field from a JSON object"}}}],
                             "body": {
-                              "function": {
-                                "lambda": {
-                                  "body": {
-                                    "function": {
+                              "lambda": {
+                                "body": {
+                                  "lambda": {
+                                    "body": {
                                       "lambda": {
                                         "body": {
-                                          "function": {
-                                            "lambda": {
-                                              "body": {
-                                                "application": {
-                                                  "argument": {
-                                                    "application": {
-                                                      "argument": {"variable": "m"},
-                                                      "function": {
-                                                        "application": {
-                                                          "argument": {"variable": "name"},
-                                                          "function": {
-                                                            "typeApplication": {
-                                                              "body": {
-                                                                "typeApplication": {
-                                                                  "body": {"variable": "hydra.lib.maps.lookup"},
-                                                                  "type": {"variable": "t3"}}},
-                                                              "type": {"variable": "t0"}}}}}}},
-                                                  "function": {
-                                                    "application": {
-                                                      "argument": {
+                                          "application": {
+                                            "argument": {
+                                              "application": {
+                                                "argument": {"variable": "m"},
+                                                "function": {
+                                                  "application": {
+                                                    "argument": {"variable": "name"},
+                                                    "function": {
+                                                      "typeApplication": {
+                                                        "body": {
+                                                          "typeApplication": {
+                                                            "body": {"variable": "hydra.lib.maps.lookup"},
+                                                            "type": {"variable": "t3"}}},
+                                                        "type": {"variable": "t0"}}}}}}},
+                                            "function": {
+                                              "application": {
+                                                "argument": {
+                                                  "lambda": {
+                                                    "body": {
+                                                      "application": {
+                                                        "argument": {
+                                                          "application": {
+                                                            "argument": {"variable": "v"},
+                                                            "function": {"variable": "decodeValue"}}},
                                                         "function": {
-                                                          "lambda": {
-                                                            "body": {
-                                                              "application": {
-                                                                "argument": {
-                                                                  "application": {
-                                                                    "argument": {"variable": "v"},
-                                                                    "function": {"variable": "decodeValue"}}},
-                                                                "function": {
-                                                                  "application": {
-                                                                    "argument": {
-                                                                      "function": {
-                                                                        "lambda": {
-                                                                          "body": {"maybe": {"variable": "x"}},
-                                                                          "domain": {"variable": "t2"},
-                                                                          "parameter": "x"}}},
-                                                                    "function": {
+                                                          "application": {
+                                                            "argument": {
+                                                              "lambda": {
+                                                                "body": {"maybe": {"variable": "x"}},
+                                                                "domain": {"variable": "t2"},
+                                                                "parameter": "x"}},
+                                                            "function": {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
                                                                       "typeApplication": {
-                                                                        "body": {
-                                                                          "typeApplication": {
-                                                                            "body": {
-                                                                              "typeApplication": {
-                                                                                "body": {"variable": "hydra.lib.eithers.map"},
-                                                                                "type": {"variable": "t2"}}},
-                                                                            "type": {"maybe": {"variable": "t2"}}}},
-                                                                        "type": {"variable": "t1"}}}}}}},
-                                                            "domain": {"variable": "t0"},
-                                                            "parameter": "v"}}},
-                                                      "function": {
-                                                        "application": {
-                                                          "argument": {
-                                                            "typeApplication": {
-                                                              "body": {
-                                                                "typeApplication": {
-                                                                  "body": {
-                                                                    "either": {
-                                                                      "@right": {
-                                                                        "typeApplication": {"body": {"maybe": null}, "type": {"variable": "t2"}}}}},
-                                                                  "type": {"variable": "t1"}}},
-                                                              "type": {"maybe": {"variable": "t2"}}}},
-                                                          "function": {
-                                                            "typeApplication": {
-                                                              "body": {
-                                                                "typeApplication": {
-                                                                  "body": {"variable": "hydra.lib.maybes.maybe"},
-                                                                  "type": {
-                                                                    "either": {"left": {"variable": "t1"}, "right": {"maybe": {"variable": "t2"}}}}}},
-                                                              "type": {"variable": "t0"}}}}}}}}},
-                                              "domain": {"map": {"keys": {"variable": "t3"}, "values": {"variable": "t0"}}},
-                                              "parameter": "m"}}},
-                                        "domain": {"variable": "t3"},
-                                        "parameter": "name"}}},
-                                  "domain": {
-                                    "function": {
-                                      "codomain": {"either": {"left": {"variable": "t1"}, "right": {"variable": "t2"}}},
-                                      "domain": {"variable": "t0"}}},
-                                  "parameter": "decodeValue"}}}}},
+                                                                        "body": {"variable": "hydra.lib.eithers.map"},
+                                                                        "type": {"variable": "t2"}}},
+                                                                    "type": {"maybe": {"variable": "t2"}}}},
+                                                                "type": {"variable": "t1"}}}}}}},
+                                                    "domain": {"variable": "t0"},
+                                                    "parameter": "v"}},
+                                                "function": {
+                                                  "application": {
+                                                    "argument": {
+                                                      "typeApplication": {
+                                                        "body": {
+                                                          "typeApplication": {
+                                                            "body": {
+                                                              "either": {
+                                                                "@right": {
+                                                                  "typeApplication": {"body": {"maybe": null}, "type": {"variable": "t2"}}}}},
+                                                            "type": {"variable": "t1"}}},
+                                                        "type": {"maybe": {"variable": "t2"}}}},
+                                                    "function": {
+                                                      "typeApplication": {
+                                                        "body": {
+                                                          "typeApplication": {
+                                                            "body": {"variable": "hydra.lib.maybes.maybe"},
+                                                            "type": {
+                                                              "either": {"left": {"variable": "t1"}, "right": {"maybe": {"variable": "t2"}}}}}},
+                                                        "type": {"variable": "t0"}}}}}}}}},
+                                        "domain": {"map": {"keys": {"variable": "t3"}, "values": {"variable": "t0"}}},
+                                        "parameter": "m"}},
+                                    "domain": {"variable": "t3"},
+                                    "parameter": "name"}},
+                                "domain": {
+                                  "function": {
+                                    "codomain": {"either": {"left": {"variable": "t1"}, "right": {"variable": "t2"}}},
+                                    "domain": {"variable": "t0"}}},
+                                "parameter": "decodeValue"}}}},
                         "parameter": "t3"}},
                     "parameter": "t2"}},
                 "parameter": "t1"}},
@@ -436,32 +417,29 @@
                 "@key": "description",
                 "@value": {"literal": {"string": "Decode a JSON string value"}}}],
             "body": {
-              "function": {
-                "elimination": {
-                  "union": {
-                    "cases": [
-                      {
-                        "name": "string",
-                        "term": {
-                          "function": {
-                            "lambda": {
-                              "body": {
-                                "typeApplication": {
-                                  "body": {
-                                    "typeApplication": {
-                                      "body": {"either": {"@right": {"variable": "s"}}},
-                                      "type": {"literal": {"string": {}}}}},
-                                  "type": {"literal": {"string": {}}}}},
-                              "domain": {"literal": {"string": {}}},
-                              "parameter": "s"}}}}],
-                    "default": {
-                      "typeApplication": {
+              "cases": {
+                "cases": [
+                  {
+                    "name": "string",
+                    "term": {
+                      "lambda": {
                         "body": {
                           "typeApplication": {
-                            "body": {"either": {"@left": {"literal": {"string": "expected a string"}}}},
+                            "body": {
+                              "typeApplication": {
+                                "body": {"either": {"@right": {"variable": "s"}}},
+                                "type": {"literal": {"string": {}}}}},
                             "type": {"literal": {"string": {}}}}},
+                        "domain": {"literal": {"string": {}}},
+                        "parameter": "s"}}}],
+                "default": {
+                  "typeApplication": {
+                    "body": {
+                      "typeApplication": {
+                        "body": {"either": {"@left": {"literal": {"string": "expected a string"}}}},
                         "type": {"literal": {"string": {}}}}},
-                    "typeName": "hydra.json.model.Value"}}}}}},
+                    "type": {"literal": {"string": {}}}}},
+                "typeName": "hydra.json.model.Value"}}}},
         "type": {
           "type": {
             "function": {

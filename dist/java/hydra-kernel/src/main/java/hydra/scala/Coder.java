@@ -15,28 +15,18 @@ public interface Coder {
       }
 
       @Override
-      public hydra.core.Term visit(hydra.core.Term.Function f) {
-        return (f).value.accept(new hydra.core.Function.PartialVisitor<>() {
-          @Override
-          public hydra.core.Term otherwise(hydra.core.Function instance) {
-            return new hydra.core.Term.Application(new hydra.core.Application(fterm, new hydra.core.Term.Variable(avar)));
-          }
-
-          @Override
-          public hydra.core.Term visit(hydra.core.Function.Lambda lam) {
-            hydra.core.Term lamBody = (lam).value.body;
-            hydra.core.Name lamParam = (lam).value.parameter;
-            return hydra.lib.logic.IfElse.lazy(
-              hydra.Variables.isFreeVariableInTerm(
-                lamParam,
-                lamBody),
-              () -> lamBody,
-              () -> hydra.Variables.substituteVariable(
-                lamParam,
-                avar,
-                lamBody));
-          }
-        });
+      public hydra.core.Term visit(hydra.core.Term.Lambda lam) {
+        hydra.core.Term lamBody = (lam).value.body;
+        hydra.core.Name lamParam = (lam).value.parameter;
+        return hydra.lib.logic.IfElse.lazy(
+          hydra.Variables.isFreeVariableInTerm(
+            lamParam,
+            lamBody),
+          () -> lamBody,
+          () -> hydra.Variables.substituteVariable(
+            lamParam,
+            avar,
+            lamBody));
       }
     });
   }
@@ -117,29 +107,19 @@ public interface Coder {
       }
 
       @Override
-      public String visit(hydra.core.Term.Function fn) {
-        return (fn).value.accept(new hydra.core.Function.PartialVisitor<>() {
-          @Override
-          public String otherwise(hydra.core.Function instance) {
-            return "";
-          }
-
-          @Override
-          public String visit(hydra.core.Function.Lambda lam) {
-            String rawName = (lam).value.parameter.value;
-            hydra.util.Lazy<String> safeName = new hydra.util.Lazy<>(() -> hydra.lib.strings.FromList.apply(hydra.lib.lists.Map.apply(
-              (java.util.function.Function<Integer, Integer>) (c -> hydra.lib.logic.IfElse.lazy(
-                hydra.lib.equality.Equal.apply(
-                  c,
-                  39),
-                () -> 95,
-                () -> c)),
-              hydra.lib.strings.ToList.apply(rawName))));
-            return hydra.lib.strings.Cat2.apply(
-              "_",
-              safeName.get());
-          }
-        });
+      public String visit(hydra.core.Term.Lambda lam) {
+        String rawName = (lam).value.parameter.value;
+        hydra.util.Lazy<String> safeName = new hydra.util.Lazy<>(() -> hydra.lib.strings.FromList.apply(hydra.lib.lists.Map.apply(
+          (java.util.function.Function<Integer, Integer>) (c -> hydra.lib.logic.IfElse.lazy(
+            hydra.lib.equality.Equal.apply(
+              c,
+              39),
+            () -> 95,
+            () -> c)),
+          hydra.lib.strings.ToList.apply(rawName))));
+        return hydra.lib.strings.Cat2.apply(
+          "_",
+          safeName.get());
       }
     }));
     hydra.util.Lazy<String> shortTypeName = new hydra.util.Lazy<>(() -> hydra.lib.lists.Last.apply(hydra.lib.strings.SplitOn.apply(
@@ -164,23 +144,13 @@ public interface Coder {
       }
 
       @Override
-      public Boolean visit(hydra.core.Term.Function fn) {
-        return (fn).value.accept(new hydra.core.Function.PartialVisitor<>() {
-          @Override
-          public Boolean otherwise(hydra.core.Function instance) {
-            return true;
-          }
-
-          @Override
-          public Boolean visit(hydra.core.Function.Lambda lam) {
-            return hydra.lib.maybes.Maybe.applyLazy(
-              () -> true,
-              (java.util.function.Function<hydra.core.Type, Boolean>) (dom -> hydra.lib.equality.Equal.apply(
-                dom,
-                new hydra.core.Type.Unit())),
-              (lam).value.domain);
-          }
-        });
+      public Boolean visit(hydra.core.Term.Lambda lam) {
+        return hydra.lib.maybes.Maybe.applyLazy(
+          () -> true,
+          (java.util.function.Function<hydra.core.Type, Boolean>) (dom -> hydra.lib.equality.Equal.apply(
+            dom,
+            new hydra.core.Type.Unit())),
+          (lam).value.domain);
       }
     }));
     hydra.util.Lazy<Boolean> isUnit = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.applyLazy(
@@ -191,31 +161,21 @@ public interface Coder {
         }
 
         @Override
-        public Boolean visit(hydra.core.Term.Function fn) {
-          return (fn).value.accept(new hydra.core.Function.PartialVisitor<>() {
-            @Override
-            public Boolean otherwise(hydra.core.Function instance) {
-              return false;
-            }
-
-            @Override
-            public Boolean visit(hydra.core.Function.Lambda lam) {
-              hydra.core.Term lamBody = (lam).value.body;
-              hydra.core.Name lamParam = (lam).value.parameter;
-              Boolean bodyIgnoresParam = hydra.Variables.isFreeVariableInTerm(
-                lamParam,
-                lamBody);
-              hydra.util.Lazy<Boolean> domIsUnit = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.applyLazy(
-                () -> false,
-                (java.util.function.Function<hydra.core.Type, Boolean>) (dom -> hydra.lib.equality.Equal.apply(
-                  dom,
-                  new hydra.core.Type.Unit())),
-                (lam).value.domain));
-              return hydra.lib.logic.Or.apply(
-                domIsUnit.get(),
-                bodyIgnoresParam);
-            }
-          });
+        public Boolean visit(hydra.core.Term.Lambda lam) {
+          hydra.core.Term lamBody = (lam).value.body;
+          hydra.core.Name lamParam = (lam).value.parameter;
+          Boolean bodyIgnoresParam = hydra.Variables.isFreeVariableInTerm(
+            lamParam,
+            lamBody);
+          hydra.util.Lazy<Boolean> domIsUnit = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.applyLazy(
+            () -> false,
+            (java.util.function.Function<hydra.core.Type, Boolean>) (dom -> hydra.lib.equality.Equal.apply(
+              dom,
+              new hydra.core.Type.Unit())),
+            (lam).value.domain));
+          return hydra.lib.logic.Or.apply(
+            domIsUnit.get(),
+            bodyIgnoresParam);
         }
 
         @Override
@@ -350,15 +310,15 @@ public interface Coder {
           }))))));
   }
 
-  static <T0> hydra.util.Either<hydra.errors.Error_, hydra.scala.syntax.Data> encodeFunction(T0 cx, hydra.graph.Graph g, java.util.Map<hydra.core.Name, hydra.core.Term> meta, hydra.core.Function fun, hydra.util.Maybe<hydra.core.Term> arg) {
-    return (fun).accept(new hydra.core.Function.PartialVisitor<>() {
+  static <T0> hydra.util.Either<hydra.errors.Error_, hydra.scala.syntax.Data> encodeFunction(T0 cx, hydra.graph.Graph g, java.util.Map<hydra.core.Name, hydra.core.Term> meta, hydra.core.Term funTerm, hydra.util.Maybe<hydra.core.Term> arg) {
+    return hydra.Strip.deannotateAndDetypeTerm(funTerm).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
-      public hydra.util.Either<hydra.errors.Error_, hydra.scala.syntax.Data> otherwise(hydra.core.Function instance) {
+      public hydra.util.Either<hydra.errors.Error_, hydra.scala.syntax.Data> otherwise(hydra.core.Term instance) {
         return hydra.util.Either.<hydra.errors.Error_, hydra.scala.syntax.Data>left(new hydra.errors.Error_.Other(new hydra.errors.OtherError("unsupported function")));
       }
 
       @Override
-      public hydra.util.Either<hydra.errors.Error_, hydra.scala.syntax.Data> visit(hydra.core.Function.Lambda lam) {
+      public hydra.util.Either<hydra.errors.Error_, hydra.scala.syntax.Data> visit(hydra.core.Term.Lambda lam) {
         hydra.core.Term body = (lam).value.body;
         hydra.util.Maybe<hydra.core.Type> rawMdom = (lam).value.domain;
         hydra.util.Lazy<hydra.util.Maybe<hydra.core.Type>> mdom = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Bind.apply(
@@ -405,129 +365,119 @@ public interface Coder {
       }
 
       @Override
-      public hydra.util.Either<hydra.errors.Error_, hydra.scala.syntax.Data> visit(hydra.core.Function.Elimination e) {
-        return (e).value.accept(new hydra.core.Elimination.PartialVisitor<>() {
-          @Override
-          public hydra.util.Either<hydra.errors.Error_, hydra.scala.syntax.Data> otherwise(hydra.core.Elimination instance) {
-            return hydra.util.Either.<hydra.errors.Error_, hydra.scala.syntax.Data>left(new hydra.errors.Error_.Other(new hydra.errors.OtherError("unsupported elimination")));
-          }
+      public hydra.util.Either<hydra.errors.Error_, hydra.scala.syntax.Data> visit(hydra.core.Term.Unwrap name) {
+        return hydra.lib.maybes.Maybe.applyLazy(
+          () -> hydra.lib.eithers.Bind.apply(
+            hydra.scala.Coder.<T0>findSdom(
+              cx,
+              g,
+              meta),
+            (java.util.function.Function<hydra.util.Maybe<hydra.scala.syntax.Type>, hydra.util.Either<hydra.errors.Error_, hydra.scala.syntax.Data>>) (sdom -> hydra.util.Either.<hydra.errors.Error_, hydra.scala.syntax.Data>right(hydra.scala.Utils.slambda(
+              "x",
+              hydra.scala.Utils.sname("x"),
+              sdom)))),
+          (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.Error_, hydra.scala.syntax.Data>>) (a -> hydra.scala.Coder.<T0>encodeTerm(
+            cx,
+            g,
+            a)),
+          arg);
+      }
 
-          @Override
-          public hydra.util.Either<hydra.errors.Error_, hydra.scala.syntax.Data> visit(hydra.core.Elimination.Wrap name) {
-            return hydra.lib.maybes.Maybe.applyLazy(
+      @Override
+      public hydra.util.Either<hydra.errors.Error_, hydra.scala.syntax.Data> visit(hydra.core.Term.Project proj) {
+        String fname = hydra.scala.Utils.scalaEscapeName((proj).value.field.value);
+        String pv = "x";
+        hydra.core.Name typeName = (proj).value.typeName;
+        return hydra.lib.maybes.Maybe.applyLazy(
+          () -> hydra.lib.eithers.Bind.apply(
+            hydra.lib.eithers.Either.apply(
+              (java.util.function.Function<hydra.errors.Error_, hydra.util.Either<hydra.errors.Error_, hydra.util.Maybe<hydra.scala.syntax.Type>>>) (ignored -> hydra.lib.eithers.Bind.apply(
+                hydra.scala.Coder.encodeType(
+                  cx,
+                  g,
+                  new hydra.core.Type.Variable(typeName)),
+                (java.util.function.Function<hydra.scala.syntax.Type, hydra.util.Either<hydra.errors.Error_, hydra.util.Maybe<hydra.scala.syntax.Type>>>) (st -> hydra.util.Either.<hydra.errors.Error_, hydra.util.Maybe<hydra.scala.syntax.Type>>right(hydra.util.Maybe.just(st))))),
+              (java.util.function.Function<hydra.util.Maybe<hydra.scala.syntax.Type>, hydra.util.Either<hydra.errors.Error_, hydra.util.Maybe<hydra.scala.syntax.Type>>>) (msdom -> hydra.lib.maybes.Maybe.applyLazy(
+                () -> hydra.lib.eithers.Bind.apply(
+                  hydra.scala.Coder.encodeType(
+                    cx,
+                    g,
+                    new hydra.core.Type.Variable(typeName)),
+                  (java.util.function.Function<hydra.scala.syntax.Type, hydra.util.Either<hydra.errors.Error_, hydra.util.Maybe<hydra.scala.syntax.Type>>>) (st -> hydra.util.Either.<hydra.errors.Error_, hydra.util.Maybe<hydra.scala.syntax.Type>>right(hydra.util.Maybe.just(st)))),
+                (java.util.function.Function<hydra.scala.syntax.Type, hydra.util.Either<hydra.errors.Error_, hydra.util.Maybe<hydra.scala.syntax.Type>>>) (sdom -> hydra.util.Either.<hydra.errors.Error_, hydra.util.Maybe<hydra.scala.syntax.Type>>right(hydra.util.Maybe.just(sdom))),
+                msdom)),
+              hydra.scala.Coder.<T0>findSdom(
+                cx,
+                g,
+                meta)),
+            (java.util.function.Function<hydra.util.Maybe<hydra.scala.syntax.Type>, hydra.util.Either<hydra.errors.Error_, hydra.scala.syntax.Data>>) (msdom -> hydra.util.Either.<hydra.errors.Error_, hydra.scala.syntax.Data>right(hydra.scala.Utils.slambda(
+              pv,
+              new hydra.scala.syntax.Data.Ref(new hydra.scala.syntax.Data_Ref.Select(new hydra.scala.syntax.Data_Select(hydra.scala.Utils.sname(pv), new hydra.scala.syntax.Data_Name(new hydra.scala.syntax.PredefString(fname))))),
+              msdom)))),
+          (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.Error_, hydra.scala.syntax.Data>>) (a -> hydra.lib.eithers.Bind.apply(
+            hydra.scala.Coder.<T0>encodeTerm(
+              cx,
+              g,
+              a),
+            (java.util.function.Function<hydra.scala.syntax.Data, hydra.util.Either<hydra.errors.Error_, hydra.scala.syntax.Data>>) (sa -> hydra.util.Either.<hydra.errors.Error_, hydra.scala.syntax.Data>right(new hydra.scala.syntax.Data.Ref(new hydra.scala.syntax.Data_Ref.Select(new hydra.scala.syntax.Data_Select(sa, new hydra.scala.syntax.Data_Name(new hydra.scala.syntax.PredefString(fname))))))))),
+          arg);
+      }
+
+      @Override
+      public hydra.util.Either<hydra.errors.Error_, hydra.scala.syntax.Data> visit(hydra.core.Term.Cases cs) {
+        java.util.List<hydra.core.Field> cases = (cs).value.cases;
+        hydra.util.Maybe<hydra.core.Term> dflt = (cs).value.default_;
+        hydra.core.Name tname = (cs).value.typeName;
+        hydra.core.Type dom = new hydra.core.Type.Variable(tname);
+        hydra.util.Lazy<java.util.Map<hydra.core.Name, hydra.core.Type>> ftypes = new hydra.util.Lazy<>(() -> hydra.lib.eithers.Either.apply(
+          (java.util.function.Function<hydra.errors.Error_, java.util.Map<hydra.core.Name, hydra.core.Type>>) (ignored -> (java.util.Map<hydra.core.Name, hydra.core.Type>) ((java.util.Map<hydra.core.Name, hydra.core.Type>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Type>apply()))),
+          (java.util.function.Function<java.util.Map<hydra.core.Name, hydra.core.Type>, java.util.Map<hydra.core.Name, hydra.core.Type>>) (x_ -> x_),
+          hydra.Resolution.<T0>fieldTypes(
+            cx,
+            g,
+            dom)));
+        hydra.util.Lazy<hydra.util.Maybe<hydra.core.Name>> sn = new hydra.util.Lazy<>(() -> hydra.scala.Utils.nameOfType(
+          g,
+          dom));
+        String v = "v";
+        return hydra.lib.eithers.Bind.apply(
+          hydra.lib.eithers.MapList.apply(
+            (java.util.function.Function<hydra.core.Field, hydra.util.Either<hydra.errors.Error_, hydra.scala.syntax.Case>>) (f -> hydra.scala.Coder.<T0>encodeCase(
+              cx,
+              g,
+              ftypes.get(),
+              sn.get(),
+              f)),
+            cases),
+          (java.util.function.Function<java.util.List<hydra.scala.syntax.Case>, hydra.util.Either<hydra.errors.Error_, hydra.scala.syntax.Data>>) (fieldCases -> hydra.lib.eithers.Bind.apply(
+            hydra.lib.maybes.Maybe.applyLazy(
+              () -> hydra.util.Either.<hydra.errors.Error_, java.util.List<hydra.scala.syntax.Case>>right(fieldCases),
+              (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.Error_, java.util.List<hydra.scala.syntax.Case>>>) (dfltTerm -> hydra.lib.eithers.Bind.apply(
+                hydra.scala.Coder.<T0>encodeTerm(
+                  cx,
+                  g,
+                  dfltTerm),
+                (java.util.function.Function<hydra.scala.syntax.Data, hydra.util.Either<hydra.errors.Error_, java.util.List<hydra.scala.syntax.Case>>>) (sdflt -> hydra.util.Either.<hydra.errors.Error_, java.util.List<hydra.scala.syntax.Case>>right(hydra.lib.lists.Concat2.apply(
+                  fieldCases,
+                  java.util.Arrays.asList(new hydra.scala.syntax.Case(new hydra.scala.syntax.Pat.Wildcard(), (hydra.util.Maybe<hydra.scala.syntax.Data>) (hydra.util.Maybe.<hydra.scala.syntax.Data>nothing()), sdflt))))))),
+              dflt),
+            (java.util.function.Function<java.util.List<hydra.scala.syntax.Case>, hydra.util.Either<hydra.errors.Error_, hydra.scala.syntax.Data>>) (scases -> hydra.lib.maybes.Maybe.applyLazy(
               () -> hydra.lib.eithers.Bind.apply(
                 hydra.scala.Coder.<T0>findSdom(
                   cx,
                   g,
                   meta),
                 (java.util.function.Function<hydra.util.Maybe<hydra.scala.syntax.Type>, hydra.util.Either<hydra.errors.Error_, hydra.scala.syntax.Data>>) (sdom -> hydra.util.Either.<hydra.errors.Error_, hydra.scala.syntax.Data>right(hydra.scala.Utils.slambda(
-                  "x",
-                  hydra.scala.Utils.sname("x"),
+                  v,
+                  new hydra.scala.syntax.Data.Match(new hydra.scala.syntax.Data_Match(hydra.scala.Utils.sname(v), scases)),
                   sdom)))),
-              (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.Error_, hydra.scala.syntax.Data>>) (a -> hydra.scala.Coder.<T0>encodeTerm(
-                cx,
-                g,
-                a)),
-              arg);
-          }
-
-          @Override
-          public hydra.util.Either<hydra.errors.Error_, hydra.scala.syntax.Data> visit(hydra.core.Elimination.Record proj) {
-            String fname = hydra.scala.Utils.scalaEscapeName((proj).value.field.value);
-            String pv = "x";
-            hydra.core.Name typeName = (proj).value.typeName;
-            return hydra.lib.maybes.Maybe.applyLazy(
-              () -> hydra.lib.eithers.Bind.apply(
-                hydra.lib.eithers.Either.apply(
-                  (java.util.function.Function<hydra.errors.Error_, hydra.util.Either<hydra.errors.Error_, hydra.util.Maybe<hydra.scala.syntax.Type>>>) (ignored -> hydra.lib.eithers.Bind.apply(
-                    hydra.scala.Coder.encodeType(
-                      cx,
-                      g,
-                      new hydra.core.Type.Variable(typeName)),
-                    (java.util.function.Function<hydra.scala.syntax.Type, hydra.util.Either<hydra.errors.Error_, hydra.util.Maybe<hydra.scala.syntax.Type>>>) (st -> hydra.util.Either.<hydra.errors.Error_, hydra.util.Maybe<hydra.scala.syntax.Type>>right(hydra.util.Maybe.just(st))))),
-                  (java.util.function.Function<hydra.util.Maybe<hydra.scala.syntax.Type>, hydra.util.Either<hydra.errors.Error_, hydra.util.Maybe<hydra.scala.syntax.Type>>>) (msdom -> hydra.lib.maybes.Maybe.applyLazy(
-                    () -> hydra.lib.eithers.Bind.apply(
-                      hydra.scala.Coder.encodeType(
-                        cx,
-                        g,
-                        new hydra.core.Type.Variable(typeName)),
-                      (java.util.function.Function<hydra.scala.syntax.Type, hydra.util.Either<hydra.errors.Error_, hydra.util.Maybe<hydra.scala.syntax.Type>>>) (st -> hydra.util.Either.<hydra.errors.Error_, hydra.util.Maybe<hydra.scala.syntax.Type>>right(hydra.util.Maybe.just(st)))),
-                    (java.util.function.Function<hydra.scala.syntax.Type, hydra.util.Either<hydra.errors.Error_, hydra.util.Maybe<hydra.scala.syntax.Type>>>) (sdom -> hydra.util.Either.<hydra.errors.Error_, hydra.util.Maybe<hydra.scala.syntax.Type>>right(hydra.util.Maybe.just(sdom))),
-                    msdom)),
-                  hydra.scala.Coder.<T0>findSdom(
-                    cx,
-                    g,
-                    meta)),
-                (java.util.function.Function<hydra.util.Maybe<hydra.scala.syntax.Type>, hydra.util.Either<hydra.errors.Error_, hydra.scala.syntax.Data>>) (msdom -> hydra.util.Either.<hydra.errors.Error_, hydra.scala.syntax.Data>right(hydra.scala.Utils.slambda(
-                  pv,
-                  new hydra.scala.syntax.Data.Ref(new hydra.scala.syntax.Data_Ref.Select(new hydra.scala.syntax.Data_Select(hydra.scala.Utils.sname(pv), new hydra.scala.syntax.Data_Name(new hydra.scala.syntax.PredefString(fname))))),
-                  msdom)))),
               (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.Error_, hydra.scala.syntax.Data>>) (a -> hydra.lib.eithers.Bind.apply(
                 hydra.scala.Coder.<T0>encodeTerm(
                   cx,
                   g,
                   a),
-                (java.util.function.Function<hydra.scala.syntax.Data, hydra.util.Either<hydra.errors.Error_, hydra.scala.syntax.Data>>) (sa -> hydra.util.Either.<hydra.errors.Error_, hydra.scala.syntax.Data>right(new hydra.scala.syntax.Data.Ref(new hydra.scala.syntax.Data_Ref.Select(new hydra.scala.syntax.Data_Select(sa, new hydra.scala.syntax.Data_Name(new hydra.scala.syntax.PredefString(fname))))))))),
-              arg);
-          }
-
-          @Override
-          public hydra.util.Either<hydra.errors.Error_, hydra.scala.syntax.Data> visit(hydra.core.Elimination.Union cs) {
-            java.util.List<hydra.core.Field> cases = (cs).value.cases;
-            hydra.util.Maybe<hydra.core.Term> dflt = (cs).value.default_;
-            hydra.core.Name tname = (cs).value.typeName;
-            hydra.core.Type dom = new hydra.core.Type.Variable(tname);
-            hydra.util.Lazy<java.util.Map<hydra.core.Name, hydra.core.Type>> ftypes = new hydra.util.Lazy<>(() -> hydra.lib.eithers.Either.apply(
-              (java.util.function.Function<hydra.errors.Error_, java.util.Map<hydra.core.Name, hydra.core.Type>>) (ignored -> (java.util.Map<hydra.core.Name, hydra.core.Type>) ((java.util.Map<hydra.core.Name, hydra.core.Type>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Type>apply()))),
-              (java.util.function.Function<java.util.Map<hydra.core.Name, hydra.core.Type>, java.util.Map<hydra.core.Name, hydra.core.Type>>) (x_ -> x_),
-              hydra.Resolution.<T0>fieldTypes(
-                cx,
-                g,
-                dom)));
-            hydra.util.Lazy<hydra.util.Maybe<hydra.core.Name>> sn = new hydra.util.Lazy<>(() -> hydra.scala.Utils.nameOfType(
-              g,
-              dom));
-            String v = "v";
-            return hydra.lib.eithers.Bind.apply(
-              hydra.lib.eithers.MapList.apply(
-                (java.util.function.Function<hydra.core.Field, hydra.util.Either<hydra.errors.Error_, hydra.scala.syntax.Case>>) (f -> hydra.scala.Coder.<T0>encodeCase(
-                  cx,
-                  g,
-                  ftypes.get(),
-                  sn.get(),
-                  f)),
-                cases),
-              (java.util.function.Function<java.util.List<hydra.scala.syntax.Case>, hydra.util.Either<hydra.errors.Error_, hydra.scala.syntax.Data>>) (fieldCases -> hydra.lib.eithers.Bind.apply(
-                hydra.lib.maybes.Maybe.applyLazy(
-                  () -> hydra.util.Either.<hydra.errors.Error_, java.util.List<hydra.scala.syntax.Case>>right(fieldCases),
-                  (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.Error_, java.util.List<hydra.scala.syntax.Case>>>) (dfltTerm -> hydra.lib.eithers.Bind.apply(
-                    hydra.scala.Coder.<T0>encodeTerm(
-                      cx,
-                      g,
-                      dfltTerm),
-                    (java.util.function.Function<hydra.scala.syntax.Data, hydra.util.Either<hydra.errors.Error_, java.util.List<hydra.scala.syntax.Case>>>) (sdflt -> hydra.util.Either.<hydra.errors.Error_, java.util.List<hydra.scala.syntax.Case>>right(hydra.lib.lists.Concat2.apply(
-                      fieldCases,
-                      java.util.Arrays.asList(new hydra.scala.syntax.Case(new hydra.scala.syntax.Pat.Wildcard(), (hydra.util.Maybe<hydra.scala.syntax.Data>) (hydra.util.Maybe.<hydra.scala.syntax.Data>nothing()), sdflt))))))),
-                  dflt),
-                (java.util.function.Function<java.util.List<hydra.scala.syntax.Case>, hydra.util.Either<hydra.errors.Error_, hydra.scala.syntax.Data>>) (scases -> hydra.lib.maybes.Maybe.applyLazy(
-                  () -> hydra.lib.eithers.Bind.apply(
-                    hydra.scala.Coder.<T0>findSdom(
-                      cx,
-                      g,
-                      meta),
-                    (java.util.function.Function<hydra.util.Maybe<hydra.scala.syntax.Type>, hydra.util.Either<hydra.errors.Error_, hydra.scala.syntax.Data>>) (sdom -> hydra.util.Either.<hydra.errors.Error_, hydra.scala.syntax.Data>right(hydra.scala.Utils.slambda(
-                      v,
-                      new hydra.scala.syntax.Data.Match(new hydra.scala.syntax.Data_Match(hydra.scala.Utils.sname(v), scases)),
-                      sdom)))),
-                  (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.Error_, hydra.scala.syntax.Data>>) (a -> hydra.lib.eithers.Bind.apply(
-                    hydra.scala.Coder.<T0>encodeTerm(
-                      cx,
-                      g,
-                      a),
-                    (java.util.function.Function<hydra.scala.syntax.Data, hydra.util.Either<hydra.errors.Error_, hydra.scala.syntax.Data>>) (sa -> hydra.util.Either.<hydra.errors.Error_, hydra.scala.syntax.Data>right(new hydra.scala.syntax.Data.Match(new hydra.scala.syntax.Data_Match(sa, scases)))))),
-                  arg)))));
-          }
-        });
+                (java.util.function.Function<hydra.scala.syntax.Data, hydra.util.Either<hydra.errors.Error_, hydra.scala.syntax.Data>>) (sa -> hydra.util.Either.<hydra.errors.Error_, hydra.scala.syntax.Data>right(new hydra.scala.syntax.Data.Match(new hydra.scala.syntax.Data_Match(sa, scases)))))),
+              arg)))));
       }
     });
   }
@@ -856,24 +806,27 @@ public interface Coder {
           }
 
           @Override
-          public hydra.util.Either<hydra.errors.Error_, hydra.scala.syntax.Data> visit(hydra.core.Term.Function f) {
-            return (f).value.accept(new hydra.core.Function.PartialVisitor<>() {
-              @Override
-              public hydra.util.Either<hydra.errors.Error_, hydra.scala.syntax.Data> otherwise(hydra.core.Function instance) {
-                return hydra.scala.Coder.<T0>encodeTerm(
-                  cx,
-                  g,
-                  substitutedBody);
-              }
+          public hydra.util.Either<hydra.errors.Error_, hydra.scala.syntax.Data> visit(hydra.core.Term.Project ignored) {
+            return hydra.scala.Coder.<T0>encodeTerm(
+              cx,
+              g,
+              substitutedBody);
+          }
 
-              @Override
-              public hydra.util.Either<hydra.errors.Error_, hydra.scala.syntax.Data> visit(hydra.core.Function.Elimination ignored) {
-                return hydra.scala.Coder.<T0>encodeTerm(
-                  cx,
-                  g,
-                  substitutedBody);
-              }
-            });
+          @Override
+          public hydra.util.Either<hydra.errors.Error_, hydra.scala.syntax.Data> visit(hydra.core.Term.Cases ignored) {
+            return hydra.scala.Coder.<T0>encodeTerm(
+              cx,
+              g,
+              substitutedBody);
+          }
+
+          @Override
+          public hydra.util.Either<hydra.errors.Error_, hydra.scala.syntax.Data> visit(hydra.core.Term.Unwrap ignored) {
+            return hydra.scala.Coder.<T0>encodeTerm(
+              cx,
+              g,
+              substitutedBody);
           }
 
           @Override
@@ -961,10 +914,11 @@ public interface Coder {
           }
 
           @Override
-          public hydra.util.Either<hydra.errors.Error_, hydra.scala.syntax.Data> visit(hydra.core.Term.Function f) {
-            return (f).value.accept(new hydra.core.Function.PartialVisitor<>() {
+          public hydra.util.Either<hydra.errors.Error_, hydra.scala.syntax.Data> visit(hydra.core.Term.Lambda lam) {
+            hydra.core.Term lamBody = (lam).value.body;
+            return hydra.Strip.deannotateAndDetypeTerm(lamBody).accept(new hydra.core.Term.PartialVisitor<>() {
               @Override
-              public hydra.util.Either<hydra.errors.Error_, hydra.scala.syntax.Data> otherwise(hydra.core.Function instance) {
+              public hydra.util.Either<hydra.errors.Error_, hydra.scala.syntax.Data> otherwise(hydra.core.Term instance) {
                 return hydra.lib.eithers.Bind.apply(
                   hydra.scala.Coder.<T0>encodeTerm(
                     cx,
@@ -981,9 +935,9 @@ public interface Coder {
               }
 
               @Override
-              public hydra.util.Either<hydra.errors.Error_, hydra.scala.syntax.Data> visit(hydra.core.Function.Lambda lam) {
-                hydra.core.Term lamBody = (lam).value.body;
-                return hydra.Strip.deannotateAndDetypeTerm(lamBody).accept(new hydra.core.Term.PartialVisitor<>() {
+              public hydra.util.Either<hydra.errors.Error_, hydra.scala.syntax.Data> visit(hydra.core.Term.Application innerApp) {
+                hydra.core.Term innerFun = (innerApp).value.function;
+                return hydra.Strip.deannotateAndDetypeTerm(innerFun).accept(new hydra.core.Term.PartialVisitor<>() {
                   @Override
                   public hydra.util.Either<hydra.errors.Error_, hydra.scala.syntax.Data> otherwise(hydra.core.Term instance) {
                     return hydra.lib.eithers.Bind.apply(
@@ -1002,138 +956,79 @@ public interface Coder {
                   }
 
                   @Override
-                  public hydra.util.Either<hydra.errors.Error_, hydra.scala.syntax.Data> visit(hydra.core.Term.Application innerApp) {
-                    hydra.core.Term innerFun = (innerApp).value.function;
-                    return hydra.Strip.deannotateAndDetypeTerm(innerFun).accept(new hydra.core.Term.PartialVisitor<>() {
-                      @Override
-                      public hydra.util.Either<hydra.errors.Error_, hydra.scala.syntax.Data> otherwise(hydra.core.Term instance) {
-                        return hydra.lib.eithers.Bind.apply(
-                          hydra.scala.Coder.<T0>encodeTerm(
-                            cx,
-                            g,
-                            fun),
-                          (java.util.function.Function<hydra.scala.syntax.Data, hydra.util.Either<hydra.errors.Error_, hydra.scala.syntax.Data>>) (sfun -> hydra.lib.eithers.Bind.apply(
-                            hydra.scala.Coder.<T0>encodeTerm(
-                              cx,
-                              g,
-                              arg),
-                            (java.util.function.Function<hydra.scala.syntax.Data, hydra.util.Either<hydra.errors.Error_, hydra.scala.syntax.Data>>) (sarg -> hydra.util.Either.<hydra.errors.Error_, hydra.scala.syntax.Data>right(hydra.scala.Utils.sapply(
-                              sfun,
-                              java.util.Arrays.asList(sarg)))))));
-                      }
-
-                      @Override
-                      public hydra.util.Either<hydra.errors.Error_, hydra.scala.syntax.Data> visit(hydra.core.Term.Function innerF) {
-                        return (innerF).value.accept(new hydra.core.Function.PartialVisitor<>() {
-                          @Override
-                          public hydra.util.Either<hydra.errors.Error_, hydra.scala.syntax.Data> otherwise(hydra.core.Function instance) {
-                            return hydra.lib.eithers.Bind.apply(
-                              hydra.scala.Coder.<T0>encodeTerm(
-                                cx,
-                                g,
-                                fun),
-                              (java.util.function.Function<hydra.scala.syntax.Data, hydra.util.Either<hydra.errors.Error_, hydra.scala.syntax.Data>>) (sfun -> hydra.lib.eithers.Bind.apply(
-                                hydra.scala.Coder.<T0>encodeTerm(
-                                  cx,
-                                  g,
-                                  arg),
-                                (java.util.function.Function<hydra.scala.syntax.Data, hydra.util.Either<hydra.errors.Error_, hydra.scala.syntax.Data>>) (sarg -> hydra.util.Either.<hydra.errors.Error_, hydra.scala.syntax.Data>right(hydra.scala.Utils.sapply(
-                                  sfun,
-                                  java.util.Arrays.asList(sarg)))))));
-                          }
-
-                          @Override
-                          public hydra.util.Either<hydra.errors.Error_, hydra.scala.syntax.Data> visit(hydra.core.Function.Elimination innerE) {
-                            return (innerE).value.accept(new hydra.core.Elimination.PartialVisitor<>() {
-                              @Override
-                              public hydra.util.Either<hydra.errors.Error_, hydra.scala.syntax.Data> otherwise(hydra.core.Elimination instance) {
-                                return hydra.lib.eithers.Bind.apply(
-                                  hydra.scala.Coder.<T0>encodeTerm(
-                                    cx,
-                                    g,
-                                    fun),
-                                  (java.util.function.Function<hydra.scala.syntax.Data, hydra.util.Either<hydra.errors.Error_, hydra.scala.syntax.Data>>) (sfun -> hydra.lib.eithers.Bind.apply(
-                                    hydra.scala.Coder.<T0>encodeTerm(
-                                      cx,
-                                      g,
-                                      arg),
-                                    (java.util.function.Function<hydra.scala.syntax.Data, hydra.util.Either<hydra.errors.Error_, hydra.scala.syntax.Data>>) (sarg -> hydra.util.Either.<hydra.errors.Error_, hydra.scala.syntax.Data>right(hydra.scala.Utils.sapply(
-                                      sfun,
-                                      java.util.Arrays.asList(sarg)))))));
-                              }
-
-                              @Override
-                              public hydra.util.Either<hydra.errors.Error_, hydra.scala.syntax.Data> visit(hydra.core.Elimination.Union ignored) {
-                                return hydra.scala.Coder.<T0>encodeFunction(
-                                  cx,
-                                  g,
-                                  hydra.Annotations.termAnnotationInternal(innerFun),
-                                  (innerF).value,
-                                  hydra.util.Maybe.just(arg));
-                              }
-                            });
-                          }
-                        });
-                      }
-                    });
-                  }
-                });
-              }
-
-              @Override
-              public hydra.util.Either<hydra.errors.Error_, hydra.scala.syntax.Data> visit(hydra.core.Function.Elimination e) {
-                return (e).value.accept(new hydra.core.Elimination.PartialVisitor<>() {
-                  @Override
-                  public hydra.util.Either<hydra.errors.Error_, hydra.scala.syntax.Data> otherwise(hydra.core.Elimination instance) {
-                    return hydra.lib.eithers.Bind.apply(
-                      hydra.scala.Coder.<T0>encodeTerm(
-                        cx,
-                        g,
-                        fun),
-                      (java.util.function.Function<hydra.scala.syntax.Data, hydra.util.Either<hydra.errors.Error_, hydra.scala.syntax.Data>>) (sfun -> hydra.lib.eithers.Bind.apply(
-                        hydra.scala.Coder.<T0>encodeTerm(
-                          cx,
-                          g,
-                          arg),
-                        (java.util.function.Function<hydra.scala.syntax.Data, hydra.util.Either<hydra.errors.Error_, hydra.scala.syntax.Data>>) (sarg -> hydra.util.Either.<hydra.errors.Error_, hydra.scala.syntax.Data>right(hydra.scala.Utils.sapply(
-                          sfun,
-                          java.util.Arrays.asList(sarg)))))));
-                  }
-
-                  @Override
-                  public hydra.util.Either<hydra.errors.Error_, hydra.scala.syntax.Data> visit(hydra.core.Elimination.Record proj) {
-                    String fname = hydra.scala.Utils.scalaEscapeName((proj).value.field.value);
-                    return hydra.lib.eithers.Bind.apply(
-                      hydra.scala.Coder.<T0>encodeTerm(
-                        cx,
-                        g,
-                        arg),
-                      (java.util.function.Function<hydra.scala.syntax.Data, hydra.util.Either<hydra.errors.Error_, hydra.scala.syntax.Data>>) (sarg -> hydra.util.Either.<hydra.errors.Error_, hydra.scala.syntax.Data>right(new hydra.scala.syntax.Data.Ref(new hydra.scala.syntax.Data_Ref.Select(new hydra.scala.syntax.Data_Select(sarg, new hydra.scala.syntax.Data_Name(new hydra.scala.syntax.PredefString(fname))))))));
-                  }
-
-                  @Override
-                  public hydra.util.Either<hydra.errors.Error_, hydra.scala.syntax.Data> visit(hydra.core.Elimination.Union ignored) {
+                  public hydra.util.Either<hydra.errors.Error_, hydra.scala.syntax.Data> visit(hydra.core.Term.Cases ignored) {
                     return hydra.scala.Coder.<T0>encodeFunction(
                       cx,
                       g,
-                      hydra.Annotations.termAnnotationInternal(fun),
-                      (f).value,
+                      hydra.Annotations.termAnnotationInternal(innerFun),
+                      innerFun,
                       hydra.util.Maybe.just(arg));
                   }
                 });
               }
             });
           }
+
+          @Override
+          public hydra.util.Either<hydra.errors.Error_, hydra.scala.syntax.Data> visit(hydra.core.Term.Project proj) {
+            String fname = hydra.scala.Utils.scalaEscapeName((proj).value.field.value);
+            return hydra.lib.eithers.Bind.apply(
+              hydra.scala.Coder.<T0>encodeTerm(
+                cx,
+                g,
+                arg),
+              (java.util.function.Function<hydra.scala.syntax.Data, hydra.util.Either<hydra.errors.Error_, hydra.scala.syntax.Data>>) (sarg -> hydra.util.Either.<hydra.errors.Error_, hydra.scala.syntax.Data>right(new hydra.scala.syntax.Data.Ref(new hydra.scala.syntax.Data_Ref.Select(new hydra.scala.syntax.Data_Select(sarg, new hydra.scala.syntax.Data_Name(new hydra.scala.syntax.PredefString(fname))))))));
+          }
+
+          @Override
+          public hydra.util.Either<hydra.errors.Error_, hydra.scala.syntax.Data> visit(hydra.core.Term.Cases ignored) {
+            return hydra.scala.Coder.<T0>encodeFunction(
+              cx,
+              g,
+              hydra.Annotations.termAnnotationInternal(fun),
+              fun,
+              hydra.util.Maybe.just(arg));
+          }
         });
       }
 
       @Override
-      public hydra.util.Either<hydra.errors.Error_, hydra.scala.syntax.Data> visit(hydra.core.Term.Function f) {
+      public hydra.util.Either<hydra.errors.Error_, hydra.scala.syntax.Data> visit(hydra.core.Term.Lambda ignored) {
         return hydra.scala.Coder.<T0>encodeFunction(
           cx,
           g,
           hydra.Annotations.termAnnotationInternal(term),
-          (f).value,
+          term,
+          (hydra.util.Maybe<hydra.core.Term>) (hydra.util.Maybe.<hydra.core.Term>nothing()));
+      }
+
+      @Override
+      public hydra.util.Either<hydra.errors.Error_, hydra.scala.syntax.Data> visit(hydra.core.Term.Project ignored) {
+        return hydra.scala.Coder.<T0>encodeFunction(
+          cx,
+          g,
+          hydra.Annotations.termAnnotationInternal(term),
+          term,
+          (hydra.util.Maybe<hydra.core.Term>) (hydra.util.Maybe.<hydra.core.Term>nothing()));
+      }
+
+      @Override
+      public hydra.util.Either<hydra.errors.Error_, hydra.scala.syntax.Data> visit(hydra.core.Term.Cases ignored) {
+        return hydra.scala.Coder.<T0>encodeFunction(
+          cx,
+          g,
+          hydra.Annotations.termAnnotationInternal(term),
+          term,
+          (hydra.util.Maybe<hydra.core.Term>) (hydra.util.Maybe.<hydra.core.Term>nothing()));
+      }
+
+      @Override
+      public hydra.util.Either<hydra.errors.Error_, hydra.scala.syntax.Data> visit(hydra.core.Term.Unwrap ignored) {
+        return hydra.scala.Coder.<T0>encodeFunction(
+          cx,
+          g,
+          hydra.Annotations.termAnnotationInternal(term),
+          term,
           (hydra.util.Maybe<hydra.core.Term>) (hydra.util.Maybe.<hydra.core.Term>nothing()));
       }
 
@@ -2039,18 +1934,8 @@ public interface Coder {
       }
 
       @Override
-      public hydra.core.Term visit(hydra.core.Term.Function f) {
-        return (f).value.accept(new hydra.core.Function.PartialVisitor<>() {
-          @Override
-          public hydra.core.Term otherwise(hydra.core.Function instance) {
-            return t;
-          }
-
-          @Override
-          public hydra.core.Term visit(hydra.core.Function.Lambda lam) {
-            return hydra.scala.Coder.extractBody((lam).value.body);
-          }
-        });
+      public hydra.core.Term visit(hydra.core.Term.Lambda lam) {
+        return hydra.scala.Coder.extractBody((lam).value.body);
       }
 
       @Override
@@ -2118,18 +2003,8 @@ public interface Coder {
       }
 
       @Override
-      public java.util.List<hydra.core.Binding> visit(hydra.core.Term.Function f) {
-        return (f).value.accept(new hydra.core.Function.PartialVisitor<>() {
-          @Override
-          public java.util.List<hydra.core.Binding> otherwise(hydra.core.Function instance) {
-            return (java.util.List<hydra.core.Binding>) (java.util.Collections.<hydra.core.Binding>emptyList());
-          }
-
-          @Override
-          public java.util.List<hydra.core.Binding> visit(hydra.core.Function.Lambda lam) {
-            return hydra.scala.Coder.extractLetBindings((lam).value.body);
-          }
-        });
+      public java.util.List<hydra.core.Binding> visit(hydra.core.Term.Lambda lam) {
+        return hydra.scala.Coder.extractLetBindings((lam).value.body);
       }
 
       @Override
@@ -2159,20 +2034,10 @@ public interface Coder {
       }
 
       @Override
-      public java.util.List<hydra.core.Name> visit(hydra.core.Term.Function f) {
-        return (f).value.accept(new hydra.core.Function.PartialVisitor<>() {
-          @Override
-          public java.util.List<hydra.core.Name> otherwise(hydra.core.Function instance) {
-            return (java.util.List<hydra.core.Name>) (java.util.Collections.<hydra.core.Name>emptyList());
-          }
-
-          @Override
-          public java.util.List<hydra.core.Name> visit(hydra.core.Function.Lambda lam) {
-            return hydra.lib.lists.Cons.apply(
-              (lam).value.parameter,
-              hydra.scala.Coder.extractParams((lam).value.body));
-          }
-        });
+      public java.util.List<hydra.core.Name> visit(hydra.core.Term.Lambda lam) {
+        return hydra.lib.lists.Cons.apply(
+          (lam).value.parameter,
+          hydra.scala.Coder.extractParams((lam).value.body));
       }
 
       @Override
@@ -2386,28 +2251,8 @@ public interface Coder {
           }
 
           @Override
-          public hydra.core.Term visit(hydra.core.Term.Function f) {
-            return (f).value.accept(new hydra.core.Function.PartialVisitor<>() {
-              @Override
-              public hydra.core.Term otherwise(hydra.core.Function instance) {
-                return t;
-              }
-
-              @Override
-              public hydra.core.Term visit(hydra.core.Function.Elimination e) {
-                return (e).value.accept(new hydra.core.Elimination.PartialVisitor<>() {
-                  @Override
-                  public hydra.core.Term otherwise(hydra.core.Elimination instance) {
-                    return t;
-                  }
-
-                  @Override
-                  public hydra.core.Term visit(hydra.core.Elimination.Wrap ignored) {
-                    return hydra.scala.Coder.stripWrapEliminations(appArg);
-                  }
-                });
-              }
-            });
+          public hydra.core.Term visit(hydra.core.Term.Unwrap ignored) {
+            return hydra.scala.Coder.stripWrapEliminations(appArg);
           }
 
           @Override
@@ -2421,28 +2266,8 @@ public interface Coder {
               }
 
               @Override
-              public hydra.core.Term visit(hydra.core.Term.Function innerF) {
-                return (innerF).value.accept(new hydra.core.Function.PartialVisitor<>() {
-                  @Override
-                  public hydra.core.Term otherwise(hydra.core.Function instance) {
-                    return t;
-                  }
-
-                  @Override
-                  public hydra.core.Term visit(hydra.core.Function.Elimination innerE) {
-                    return (innerE).value.accept(new hydra.core.Elimination.PartialVisitor<>() {
-                      @Override
-                      public hydra.core.Term otherwise(hydra.core.Elimination instance) {
-                        return t;
-                      }
-
-                      @Override
-                      public hydra.core.Term visit(hydra.core.Elimination.Wrap ignored) {
-                        return hydra.scala.Coder.stripWrapEliminations(new hydra.core.Term.Application(new hydra.core.Application(innerArg, appArg)));
-                      }
-                    });
-                  }
-                });
+              public hydra.core.Term visit(hydra.core.Term.Unwrap ignored) {
+                return hydra.scala.Coder.stripWrapEliminations(new hydra.core.Term.Application(new hydra.core.Application(innerArg, appArg)));
               }
             });
           }

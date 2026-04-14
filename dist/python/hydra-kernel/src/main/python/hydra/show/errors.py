@@ -156,8 +156,17 @@ def error(e: hydra.errors.Error) -> str:
         case hydra.errors.ErrorDuplicateField(value=v14):
             return hydra.show.error.core.duplicate_field_error(v14)
 
+        case hydra.errors.ErrorExtraction():
+            return "extraction error"
+
+        case hydra.errors.ErrorInference():
+            return "inference error"
+
         case hydra.errors.ErrorOther(value=v15):
             return other_error(v15)
+
+        case hydra.errors.ErrorResolution():
+            return "resolution error"
 
         case hydra.errors.ErrorUndefinedField(value=v16):
             return hydra.show.error.core.undefined_field_error(v16)
@@ -178,4 +187,4 @@ def error(e: hydra.errors.Error) -> str:
             return unification_error(v111)
 
         case _:
-            raise TypeError("Unsupported Error")
+            raise AssertionError("Unreachable: all variants handled")

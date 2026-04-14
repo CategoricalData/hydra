@@ -35,46 +35,32 @@ binding el =
         " = ",
         (term t)])
 
+-- | Show a case statement as a string
+caseStatement :: Core.CaseStatement -> String
+caseStatement cs =
+
+      let tname = Core.unName (Core.caseStatementTypeName cs)
+          mdef = Core.caseStatementDefault cs
+          csCases = Core.caseStatementCases cs
+          defaultField =
+                  Maybes.maybe [] (\d -> [
+                    Core.Field {
+                      Core.fieldName = (Core.Name "[default]"),
+                      Core.fieldTerm = d}]) mdef
+          allFields =
+                  Lists.concat [
+                    csCases,
+                    defaultField]
+      in (Strings.cat [
+        "case(",
+        tname,
+        ")",
+        (fields allFields)])
+
 -- | Show an Either value using given functions for left and right
 either :: (t0 -> String) -> (t1 -> String) -> Either t0 t1 -> String
 either showA showB e =
     Eithers.either (\a -> Strings.cat2 "left(" (Strings.cat2 (showA a) ")")) (\b -> Strings.cat2 "right(" (Strings.cat2 (showB b) ")")) e
-
--- | Show an elimination as a string
-elimination :: Core.Elimination -> String
-elimination elm =
-    case elm of
-      Core.EliminationRecord v0 ->
-        let tname = Core.unName (Core.projectionTypeName v0)
-            fname = Core.unName (Core.projectionField v0)
-        in (Strings.cat [
-          "project(",
-          tname,
-          "){",
-          fname,
-          "}"])
-      Core.EliminationUnion v0 ->
-        let tname = Core.unName (Core.caseStatementTypeName v0)
-            mdef = Core.caseStatementDefault v0
-            cases = Core.caseStatementCases v0
-            defaultField =
-                    Maybes.maybe [] (\d -> [
-                      Core.Field {
-                        Core.fieldName = (Core.Name "[default]"),
-                        Core.fieldTerm = d}]) mdef
-            allFields =
-                    Lists.concat [
-                      cases,
-                      defaultField]
-        in (Strings.cat [
-          "case(",
-          tname,
-          ")",
-          (fields allFields)])
-      Core.EliminationWrap v0 -> Strings.cat [
-        "unwrap(",
-        (Core.unName v0),
-        ")"]
 
 field :: Core.Field -> String
 field field =
@@ -121,13 +107,6 @@ floatType ft =
       Core.FloatTypeBigfloat -> "bigfloat"
       Core.FloatTypeFloat32 -> "float32"
       Core.FloatTypeFloat64 -> "float64"
-
--- | Show a function as a string
-function :: Core.Function -> String
-function f =
-    case f of
-      Core.FunctionElimination v0 -> elimination v0
-      Core.FunctionLambda v0 -> lambda v0
 
 -- | Show an injection as a string
 injection :: Core.Injection -> String
@@ -256,6 +235,19 @@ pair showA showB p =
       (showB (Pairs.second p)),
       ")"]
 
+-- | Show a projection as a string
+projection :: Core.Projection -> String
+projection proj =
+
+      let tname = Core.unName (Core.projectionTypeName proj)
+          fname = Core.unName (Core.projectionField proj)
+      in (Strings.cat [
+        "project(",
+        tname,
+        "){",
+        fname,
+        "}"])
+
 -- | A placeholder for reading terms from their serialized form. Not implemented.
 readTerm :: String -> Maybe Core.Term
 readTerm s = Just (Core.TermLiteral (Core.LiteralString s))
@@ -290,6 +282,7 @@ term t =
             "(",
             (Strings.intercalate " @ " termStrs),
             ")"])
+        Core.TermCases v0 -> caseStatement v0
         Core.TermEither v0 -> Eithers.either (\l -> Strings.cat [
           "left(",
           (term l),
@@ -297,7 +290,7 @@ term t =
           "right(",
           (term r),
           ")"]) v0
-        Core.TermFunction v0 -> function v0
+        Core.TermLambda v0 -> lambda v0
         Core.TermLet v0 -> let_ v0
         Core.TermList v0 ->
           let termStrs = Lists.map term v0
@@ -326,6 +319,7 @@ term t =
           ", ",
           (term (Pairs.second v0)),
           ")"]
+        Core.TermProject v0 -> projection v0
         Core.TermRecord v0 ->
           let tname = Core.unName (Core.recordTypeName v0)
               flds = Core.recordFields v0
@@ -356,6 +350,10 @@ term t =
             "\10217"])
         Core.TermUnion v0 -> injection v0
         Core.TermUnit -> "unit"
+        Core.TermUnwrap v0 -> Strings.cat [
+          "unwrap(",
+          (Core.unName v0),
+          ")"]
         Core.TermVariable v0 -> Core.unName v0
         Core.TermWrap v0 ->
           let tname = Core.unName (Core.wrappedTermTypeName v0)

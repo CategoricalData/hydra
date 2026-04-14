@@ -36,36 +36,22 @@ T2 = TypeVar("T2")
 def term_dependency_names(binds: bool, with_prims: bool, with_noms: bool, term0: hydra.core.Term) -> frozenset[hydra.core.Name]:
     r"""Note: does not distinguish between bound and free variables; use freeVariablesInTerm for that."""
 
-    def add_names(names: frozenset[hydra.core.Name], term: hydra.core.Term):
+    def add_names(names: frozenset[hydra.core.Name], term: hydra.core.Term) -> frozenset[hydra.core.Name]:
         def nominal(name: hydra.core.Name) -> frozenset[hydra.core.Name]:
             return hydra.lib.logic.if_else(with_noms, (lambda : hydra.lib.sets.insert(name, names)), (lambda : names))
         def prim(name: hydra.core.Name) -> frozenset[hydra.core.Name]:
             return hydra.lib.logic.if_else(with_prims, (lambda : hydra.lib.sets.insert(name, names)), (lambda : names))
         def var(name: hydra.core.Name) -> frozenset[hydra.core.Name]:
             return hydra.lib.logic.if_else(binds, (lambda : hydra.lib.sets.insert(name, names)), (lambda : names))
-        def _hoist_var_body_1(v1):
-            match v1:
-                case hydra.core.EliminationRecord(value=proj):
-                    return nominal(proj.type_name)
-
-                case hydra.core.EliminationUnion(value=case_stmt):
-                    return nominal(case_stmt.type_name)
-
-                case hydra.core.EliminationWrap(value=name):
-                    return nominal(name)
-
-                case _:
-                    raise AssertionError("Unreachable: all variants handled")
-        def _hoist_var_body_2(v1):
-            match v1:
-                case hydra.core.FunctionElimination(value=e):
-                    return _hoist_var_body_1(e)
-
-                case _:
-                    return names
         match term:
-            case hydra.core.TermFunction(value=f):
-                return _hoist_var_body_2(f)
+            case hydra.core.TermCases(value=case_stmt):
+                return nominal(case_stmt.type_name)
+
+            case hydra.core.TermProject(value=proj):
+                return nominal(proj.type_name)
+
+            case hydra.core.TermUnwrap(value=name):
+                return nominal(name)
 
             case hydra.core.TermRecord(value=record):
                 return nominal(record.type_name)
@@ -73,8 +59,8 @@ def term_dependency_names(binds: bool, with_prims: bool, with_noms: bool, term0:
             case hydra.core.TermUnion(value=injection):
                 return nominal(injection.type_name)
 
-            case hydra.core.TermVariable(value=name):
-                return var(name)
+            case hydra.core.TermVariable(value=name2):
+                return var(name2)
 
             case hydra.core.TermWrap(value=wrapped_term):
                 return nominal(wrapped_term.type_name)
@@ -194,18 +180,13 @@ def inline_type(schema: FrozenDict[hydra.core.Name, hydra.core.Type], typ: hydra
         return hydra.lib.eithers.bind(recurse(typ2), (lambda tr: after_recurse(tr)))
     return hydra.rewriting.rewrite_type_m((lambda x1, x2: f(x1, x2)), typ)
 
-def is_lambda(term: hydra.core.Term):
-    while True:
-        def _hoist_hydra_dependencies_is_lambda_1(v1):
-            match v1:
-                case hydra.core.FunctionLambda():
-                    return True
+def is_lambda(term: hydra.core.Term) -> bool:
+    r"""Check whether a term is a lambda, possibly nested within let and/or annotation terms."""
 
-                case _:
-                    return False
+    while True:
         match hydra.strip.deannotate_term(term):
-            case hydra.core.TermFunction(value=_match_value):
-                return _hoist_hydra_dependencies_is_lambda_1(_match_value)
+            case hydra.core.TermLambda():
+                return True
 
             case hydra.core.TermLet(value=lt):
                 term = lt.body
@@ -222,23 +203,16 @@ def lift_lambda_above_let(term0: hydra.core.Term) -> hydra.core.Term:
             return hydra.core.Binding(b.name, rewrite(recurse, b.term), b.type)
         def rewrite_bindings(bs: frozenlist[hydra.core.Binding]) -> frozenlist[hydra.core.Binding]:
             return hydra.lib.lists.map((lambda x1: rewrite_binding(x1)), bs)
-        def dig_for_lambdas(original: hydra.core.Term, cons: Callable[[hydra.core.Term], hydra.core.Term], term2: hydra.core.Term):
-            def _hoist_dig_for_lambdas_1(cons, original, v1):
-                match v1:
-                    case hydra.core.FunctionLambda(value=l):
-                        return cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(l.parameter, l.domain, dig_for_lambdas(cons(l.body), (lambda t: cons(t)), l.body))))))
-
-                    case _:
-                        return recurse(original)
+        def dig_for_lambdas(original: hydra.core.Term, cons: Callable[[hydra.core.Term], hydra.core.Term], term2: hydra.core.Term) -> hydra.core.Term:
             match term2:
                 case hydra.core.TermAnnotated(value=at):
                     return dig_for_lambdas(original, (lambda t: cast(hydra.core.Term, hydra.core.TermAnnotated(hydra.core.AnnotatedTerm(cons(t), at.annotation)))), at.body)
 
-                case hydra.core.TermFunction(value=f):
-                    return _hoist_dig_for_lambdas_1(cons, original, f)
+                case hydra.core.TermLambda(value=l):
+                    return cast(hydra.core.Term, hydra.core.TermLambda(hydra.core.Lambda(l.parameter, l.domain, dig_for_lambdas(cons(l.body), (lambda t: cons(t)), l.body))))
 
-                case hydra.core.TermLet(value=l):
-                    return dig_for_lambdas(original, (lambda t: cons(cast(hydra.core.Term, hydra.core.TermLet(hydra.core.Let(rewrite_bindings(l.bindings), t))))), l.body)
+                case hydra.core.TermLet(value=l2):
+                    return dig_for_lambdas(original, (lambda t: cons(cast(hydra.core.Term, hydra.core.TermLet(hydra.core.Let(rewrite_bindings(l2.bindings), t))))), l2.body)
 
                 case _:
                     return recurse(original)
@@ -323,25 +297,16 @@ def simplify_term(term: hydra.core.Term) -> hydra.core.Term:
                         return term2
             return _hoist_for_rhs_1(body, var, hydra.strip.deannotate_term(rhs))
         def for_lhs(lhs: hydra.core.Term, rhs: hydra.core.Term):
-            def for_fun(fun: hydra.core.Function):
-                def _hoist_for_fun_1(v1):
-                    match v1:
-                        case hydra.core.FunctionLambda(value=l):
-                            var = l.parameter
-                            body = l.body
-                            return hydra.lib.logic.if_else(hydra.lib.sets.member(var, hydra.variables.free_variables_in_term(body)), (lambda : for_rhs(rhs, var, body)), (lambda : simplify_term(body)))
-
-                        case _:
-                            return term2
-                return _hoist_for_fun_1(fun)
-            def _hoist_for_fun_body_1(v1):
+            def _hoist_for_lhs_1(rhs, v1):
                 match v1:
-                    case hydra.core.TermFunction(value=fun):
-                        return for_fun(fun)
+                    case hydra.core.TermLambda(value=l):
+                        var = l.parameter
+                        body = l.body
+                        return hydra.lib.logic.if_else(hydra.lib.sets.member(var, hydra.variables.free_variables_in_term(body)), (lambda : for_rhs(rhs, var, body)), (lambda : simplify_term(body)))
 
                     case _:
                         return term2
-            return _hoist_for_fun_body_1(hydra.strip.deannotate_term(lhs))
+            return _hoist_for_lhs_1(rhs, hydra.strip.deannotate_term(lhs))
         def for_term(stripped: hydra.core.Term):
             def _hoist_for_term_1(v1):
                 match v1:

@@ -10,15 +10,7 @@ import qualified Hydra.Util as Util
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 
--- | Find the elimination inject (constructor) for a given elimination term
-eliminationVariant :: Core.Elimination -> Variants.EliminationVariant
-eliminationVariant x =
-    case x of
-      Core.EliminationRecord _ -> Variants.EliminationVariantRecord
-      Core.EliminationUnion _ -> Variants.EliminationVariantUnion
-      Core.EliminationWrap _ -> Variants.EliminationVariantWrap
-
--- | All elimination variants (constructors), in a canonical order
+-- | All elimination variants (constructors), in a canonical order (legacy)
 eliminationVariants :: [Variants.EliminationVariant]
 eliminationVariants =
     [
@@ -50,14 +42,7 @@ floatValueType x =
       Core.FloatValueFloat32 _ -> Core.FloatTypeFloat32
       Core.FloatValueFloat64 _ -> Core.FloatTypeFloat64
 
--- | Find the function inject (constructor) for a given function
-functionVariant :: Core.Function -> Variants.FunctionVariant
-functionVariant x =
-    case x of
-      Core.FunctionElimination _ -> Variants.FunctionVariantElimination
-      Core.FunctionLambda _ -> Variants.FunctionVariantLambda
-
--- | All function variants (constructors), in a canonical order
+-- | All function variants (constructors), in a canonical order (legacy)
 functionVariants :: [Variants.FunctionVariant]
 functionVariants =
     [
@@ -172,20 +157,23 @@ termVariant x =
     case x of
       Core.TermAnnotated _ -> Variants.TermVariantAnnotated
       Core.TermApplication _ -> Variants.TermVariantApplication
+      Core.TermCases _ -> Variants.TermVariantCases
       Core.TermEither _ -> Variants.TermVariantEither
-      Core.TermFunction _ -> Variants.TermVariantFunction
+      Core.TermLambda _ -> Variants.TermVariantLambda
       Core.TermLet _ -> Variants.TermVariantLet
       Core.TermList _ -> Variants.TermVariantList
       Core.TermLiteral _ -> Variants.TermVariantLiteral
       Core.TermMap _ -> Variants.TermVariantMap
       Core.TermMaybe _ -> Variants.TermVariantMaybe
       Core.TermPair _ -> Variants.TermVariantPair
+      Core.TermProject _ -> Variants.TermVariantProject
       Core.TermRecord _ -> Variants.TermVariantRecord
       Core.TermSet _ -> Variants.TermVariantSet
       Core.TermTypeApplication _ -> Variants.TermVariantTypeApplication
       Core.TermTypeLambda _ -> Variants.TermVariantTypeLambda
       Core.TermUnion _ -> Variants.TermVariantUnion
       Core.TermUnit -> Variants.TermVariantUnit
+      Core.TermUnwrap _ -> Variants.TermVariantUnwrap
       Core.TermVariable _ -> Variants.TermVariantVariable
       Core.TermWrap _ -> Variants.TermVariantWrap
 
@@ -195,19 +183,23 @@ termVariants =
     [
       Variants.TermVariantAnnotated,
       Variants.TermVariantApplication,
+      Variants.TermVariantCases,
       Variants.TermVariantEither,
-      Variants.TermVariantFunction,
+      Variants.TermVariantLambda,
+      Variants.TermVariantLet,
       Variants.TermVariantList,
       Variants.TermVariantLiteral,
       Variants.TermVariantMap,
       Variants.TermVariantMaybe,
       Variants.TermVariantPair,
+      Variants.TermVariantProject,
       Variants.TermVariantRecord,
       Variants.TermVariantSet,
       Variants.TermVariantTypeLambda,
       Variants.TermVariantTypeApplication,
       Variants.TermVariantUnion,
       Variants.TermVariantUnit,
+      Variants.TermVariantUnwrap,
       Variants.TermVariantVariable,
       Variants.TermVariantWrap]
 

@@ -92,16 +92,13 @@ differentiateFunction = define "differentiateFunction" $
     (Just $ var "term") [  -- Non-function terms pass through unchanged
     _Term_annotated>>: "at" ~>
       differentiateFunction @@ Core.annotatedTermBody (var "at"),
-    _Term_function>>: "f" ~>
-      cases _Function (var "f") Nothing [
-        _Function_lambda>>: "l" ~>
-          "paramName" <~ Core.lambdaParameter (var "l") $
-          "body" <~ Core.lambdaBody (var "l") $
-          DeepCore.lambdaTyped
-            (var "paramName")
-            (Core.lambdaDomain $ var "l")
-            (differentiateTerm @@ var "paramName" @@ var "body"),
-        _Function_elimination>>: constant $ var "term"]]  -- Eliminations (projections etc.) are structural; pass through
+    _Term_lambda>>: "l" ~>
+      "paramName" <~ Core.lambdaParameter (var "l") $
+      "body" <~ Core.lambdaBody (var "l") $
+      DeepCore.lambdaTyped
+        (var "paramName")
+        (Core.lambdaDomain $ var "l")
+        (differentiateTerm @@ var "paramName" @@ var "body")]
 
 -- | Differentiate a term with respect to a named variable.
 --   Implements the standard rules of differential calculus as a source-to-source
@@ -160,21 +157,21 @@ differentiateTerm = define "differentiateTerm" $
 
     -- Function (lambda): d/dx(\y -> body) = \y -> d/dx(body)
     -- (The bound variable y is different from x, so we differentiate the body)
-    _Term_function>>: "f" ~>
-      cases _Function (var "f") Nothing [
-        _Function_lambda>>: "l" ~>
-          Logic.ifElse (Equality.equal (Core.lambdaParameter $ var "l") (var "dx"))
-            -- Lambda binds the differentiation variable: derivative is zero function
-            (DeepCore.lambdaTyped
-              (Core.lambdaParameter $ var "l")
-              (Core.lambdaDomain $ var "l")
-              (f64 0.0))
-            -- Lambda binds a different variable: differentiate the body
-            (DeepCore.lambdaTyped
-              (Core.lambdaParameter $ var "l")
-              (Core.lambdaDomain $ var "l")
-              (differentiateTerm @@ var "dx" @@ Core.lambdaBody (var "l"))),
-        _Function_elimination>>: constant $ f64 0.0],
+    _Term_lambda>>: "l" ~>
+      Logic.ifElse (Equality.equal (Core.lambdaParameter $ var "l") (var "dx"))
+        -- Lambda binds the differentiation variable: derivative is zero function
+        (DeepCore.lambdaTyped
+          (Core.lambdaParameter $ var "l")
+          (Core.lambdaDomain $ var "l")
+          (f64 0.0))
+        -- Lambda binds a different variable: differentiate the body
+        (DeepCore.lambdaTyped
+          (Core.lambdaParameter $ var "l")
+          (Core.lambdaDomain $ var "l")
+          (differentiateTerm @@ var "dx" @@ Core.lambdaBody (var "l"))),
+    _Term_cases>>: constant $ f64 0.0,
+    _Term_project>>: constant $ f64 0.0,
+    _Term_unwrap>>: constant $ f64 0.0,
 
     -- Let: differentiate bindings and body
     _Term_let>>: "l" ~>

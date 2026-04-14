@@ -5,7 +5,7 @@ package hydra.variants;
 import java.io.Serializable;
 
 /**
- * The identifier of a function constructor
+ * The identifier of a function constructor (legacy)
  */
 public abstract class FunctionVariant implements Serializable, Comparable<FunctionVariant> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.variants.FunctionVariant");

@@ -113,7 +113,14 @@ pythonLanguage = define "pythonLanguage" $
       Variants.termVariantAnnotated,
       Variants.termVariantApplication,
       Variants.termVariantEither,
-      Variants.termVariantFunction,
+
+      Variants.termVariantCases,
+
+      Variants.termVariantLambda,
+
+      Variants.termVariantProject,
+
+      Variants.termVariantUnwrap,
       Variants.termVariantLet,
       Variants.termVariantList,
       Variants.termVariantLiteral,

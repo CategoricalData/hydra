@@ -9,8 +9,7 @@ import Hydra.Kernel hiding (
   generalize, inferGraphTypes, inferInGraphContext, inferMany,
   inferTypeOf, inferTypeOfAnnotatedTerm, inferTypeOfApplication,
   inferTypeOfCaseStatement, inferTypeOfCollection,
-  inferTypeOfEither, inferTypeOfElimination,
-  inferTypeOfFunction, inferTypeOfInjection,
+  inferTypeOfEither, inferTypeOfInjection,
   inferTypeOfLambda, inferTypeOfLet, inferTypeOfLetNormalized,
   inferTypeOfList, inferTypeOfLiteral,
   inferTypeOfMap, inferTypeOfOptional,
@@ -120,8 +119,6 @@ module_ = Module ns definitions
       toDefinition inferTypeOfCaseStatement,
       toDefinition inferTypeOfCollection,
       toDefinition inferTypeOfEither,
-      toDefinition inferTypeOfElimination,
-      toDefinition inferTypeOfFunction,
       toDefinition inferTypeOfInjection,
       toDefinition inferTypeOfLambda,
       toDefinition inferTypeOfLet,
@@ -586,8 +583,7 @@ inferTypeOfCaseStatement = define "inferTypeOfCaseStatement" $
     @@ ("subst" ~> yieldWithConstraints
       @@ var "fcx5"
       @@ (buildTypeApplicationTerm @@ var "svars"
-          @@ (Core.termFunction $ Core.functionElimination $ Core.eliminationUnion $
-            Core.caseStatement (var "tname") (Maybes.map (unaryFunction Typing.inferenceResultTerm) $ var "dfltResult") $
+          @@ (Core.termCases $ Core.caseStatement (var "tname") (Maybes.map (unaryFunction Typing.inferenceResultTerm) $ var "dfltResult") $
             Lists.zipWith ("n" ~> "t" ~> Core.field (var "n") (var "t")) (var "fnames") (var "iterms")))
       @@ (Core.typeFunction $ Core.functionType
           (Resolution.nominalApplication @@ var "tname" @@ Lists.map (unaryFunction Core.typeVariable) (var "svars"))
@@ -674,23 +670,6 @@ inferTypeOfEither = define "inferTypeOfEither" $
       right (yieldChecked @@ var "fcx3" @@ var "termWithBothTypes" @@ var "eitherType" @@ var "subst"))
     (var "e")
 
-inferTypeOfElimination :: TTermDefinition (Context -> Graph -> Elimination -> Prelude.Either Error InferenceResult)
-inferTypeOfElimination = define "inferTypeOfElimination" $
-  doc "Infer the type of an elimination (Either version)" $
-  "fcx" ~> "cx" ~> "elm" ~>
-  cases _Elimination (var "elm") Nothing [
-    _Elimination_record>>: "p" ~> inferTypeOfProjection @@ var "fcx" @@ var "cx" @@ var "p",
-    _Elimination_union>>: "c" ~> inferTypeOfCaseStatement @@ var "fcx" @@ var "cx" @@ var "c",
-    _Elimination_wrap>>: "tname" ~> inferTypeOfUnwrap @@ var "fcx" @@ var "cx" @@ var "tname"]
-
-inferTypeOfFunction :: TTermDefinition (Context -> Graph -> Function -> Prelude.Either Error InferenceResult)
-inferTypeOfFunction = define "inferTypeOfFunction" $
-  doc "Infer the type of a function (Either version)" $
-  "fcx" ~> "cx" ~> "f" ~>
-  cases _Function (var "f") Nothing [
-    _Function_elimination>>: "elm" ~> inferTypeOfElimination @@ var "fcx" @@ var "cx" @@ var "elm",
-    _Function_lambda>>: "l" ~> inferTypeOfLambda @@ var "fcx" @@ var "cx" @@ var "l"]
-
 inferTypeOfInjection :: TTermDefinition (Context -> Graph -> Injection -> Prelude.Either Error InferenceResult)
 inferTypeOfInjection = define "inferTypeOfInjection" $
   doc "Infer the type of a union injection (Either version)" $
@@ -738,7 +717,7 @@ inferTypeOfLambda = define "inferTypeOfLambda" $
   "icod" <~ Typing.inferenceResultType (var "result") $
   "isubst" <~ Typing.inferenceResultSubst (var "result") $
   "rdom" <~ Substitution.substInType @@ var "isubst" @@ var "dom" $
-  "rterm" <~ Core.termFunction (Core.functionLambda $ Core.lambda (var "var") (just $ var "rdom") (var "iterm")) $
+  "rterm" <~ Core.termLambda (Core.lambda (var "var") (just $ var "rdom") (var "iterm")) $
   "rtype" <~ Core.typeFunction (Core.functionType (var "rdom") (var "icod")) $
   "vars" <~ (Sets.unions $ list [
     Variables.freeVariablesInType @@ var "rdom",
@@ -891,7 +870,7 @@ inferTypeOfProjection = define "inferTypeOfProjection" $
   right (yield
     @@ var "fcx2"
     @@ (buildTypeApplicationTerm @@ var "svars"
-      @@ (Core.termFunction $ Core.functionElimination $ Core.eliminationRecord $ Core.projection (var "tname") (var "fname")))
+      @@ (Core.termProject $ Core.projection (var "tname") (var "fname")))
     @@ (Core.typeFunction $ Core.functionType
       (Resolution.nominalApplication @@ var "tname" @@ Lists.map (unaryFunction Core.typeVariable) (var "svars"))
       (var "ftyp"))
@@ -958,20 +937,23 @@ inferTypeOfTerm = define "inferTypeOfTerm" $
   cases _Term (var "term") Nothing [
     _Term_annotated>>: "a" ~> inferTypeOfAnnotatedTerm @@ var "fcx2" @@ var "cx" @@ var "a",
     _Term_application>>: "a" ~> inferTypeOfApplication @@ var "fcx2" @@ var "cx" @@ var "a",
+    _Term_cases>>: "c" ~> inferTypeOfCaseStatement @@ var "fcx2" @@ var "cx" @@ var "c",
     _Term_either>>: "e" ~> inferTypeOfEither @@ var "fcx2" @@ var "cx" @@ var "e",
-    _Term_function>>: "f" ~> inferTypeOfFunction @@ var "fcx2" @@ var "cx" @@ var "f",
+    _Term_lambda>>: "l" ~> inferTypeOfLambda @@ var "fcx2" @@ var "cx" @@ var "l",
     _Term_let>>: "l" ~> inferTypeOfLet @@ var "fcx2" @@ var "cx" @@ var "l",
     _Term_list>>: "els" ~> inferTypeOfList @@ var "fcx2" @@ var "cx" @@ var "els",
     _Term_literal>>: "l" ~> right (inferTypeOfLiteral @@ var "fcx2" @@ var "l"),
     _Term_map>>: "m" ~> inferTypeOfMap @@ var "fcx2" @@ var "cx" @@ var "m",
     _Term_maybe>>: "m" ~> inferTypeOfOptional @@ var "fcx2" @@ var "cx" @@ var "m",
     _Term_pair>>: "p" ~> inferTypeOfPair @@ var "fcx2" @@ var "cx" @@ var "p",
+    _Term_project>>: "p" ~> inferTypeOfProjection @@ var "fcx2" @@ var "cx" @@ var "p",
     _Term_record>>: "r" ~> inferTypeOfRecord @@ var "fcx2" @@ var "cx" @@ var "r",
     _Term_set>>: "s" ~> inferTypeOfSet @@ var "fcx2" @@ var "cx" @@ var "s",
     _Term_typeApplication>>: "tt" ~> inferTypeOfTypeApplication @@ var "fcx2" @@ var "cx" @@ var "tt",
     _Term_typeLambda>>: "ta" ~> inferTypeOfTypeLambda @@ var "fcx2" @@ var "cx" @@ var "ta",
     _Term_union>>: "i" ~> inferTypeOfInjection @@ var "fcx2" @@ var "cx" @@ var "i",
     _Term_unit>>: constant $ right (inferTypeOfUnit @@ var "fcx2"),
+    _Term_unwrap>>: "tname" ~> inferTypeOfUnwrap @@ var "fcx2" @@ var "cx" @@ var "tname",
     _Term_variable>>: "name" ~> inferTypeOfVariable @@ var "fcx2" @@ var "cx" @@ var "name",
     _Term_wrap>>: "w" ~> inferTypeOfWrappedTerm @@ var "fcx2" @@ var "cx" @@ var "w"]
 
@@ -1000,7 +982,7 @@ inferTypeOfUnwrap = define "inferTypeOfUnwrap" $
   right (yield
     @@ var "fcx2"
     @@ (buildTypeApplicationTerm @@ var "svars"
-      @@ (Core.termFunction $ Core.functionElimination $ Core.eliminationWrap $ var "tname"))
+      @@ (Core.termUnwrap $ var "tname"))
     @@ (Core.typeFunction $ Core.functionType
       (Resolution.nominalApplication @@ var "tname" @@ Lists.map (unaryFunction Core.typeVariable) (var "svars"))
       (var "wtyp"))

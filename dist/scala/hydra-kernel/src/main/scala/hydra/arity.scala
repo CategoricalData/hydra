@@ -4,17 +4,15 @@ import hydra.core.*
 
 import hydra.graph.*
 
-def functionArity(v1: hydra.core.Function): Int =
-  v1 match
-  case hydra.core.Function.elimination(v_Function_elimination__) => 1
-  case hydra.core.Function.lambda(v_Function_lambda_arg_) => hydra.lib.math.add(1)(hydra.arity.termArity(`v_Function_lambda_arg_`.body))
-
 def primitiveArity(`arg_`: hydra.graph.Primitive): Int = hydra.arity.typeArity(`arg_`.`type`.`type`)
 
 def termArity(v1: hydra.core.Term): Int =
   v1 match
   case hydra.core.Term.application(v_Term_application_arg_) => hydra.lib.math.sub(hydra.arity.termArity(`v_Term_application_arg_`.function))(1)
-  case hydra.core.Term.function(v_Term_function_v12) => hydra.arity.functionArity(v_Term_function_v12)
+  case hydra.core.Term.cases(v_Term_cases__) => 1
+  case hydra.core.Term.lambda(v_Term_lambda_arg_) => hydra.lib.math.add(1)(hydra.arity.termArity(`v_Term_lambda_arg_`.body))
+  case hydra.core.Term.project(v_Term_project__) => 1
+  case hydra.core.Term.unwrap(v_Term_unwrap__) => 1
   case _ => 0
 
 def typeArity(v1: hydra.core.Type): Int =

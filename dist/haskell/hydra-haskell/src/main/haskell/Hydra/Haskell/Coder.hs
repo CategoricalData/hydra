@@ -205,21 +205,13 @@ encodeCaseExpression depth namespaces stmt scrutinee cx g =
           Syntax.caseExpressionCase = scrutinee,
           Syntax.caseExpressionAlternatives = (Lists.concat2 ecases dcases)})))))))
 
--- | Encode a Hydra function as a Haskell expression
-encodeFunction :: Int -> Packaging.Namespaces Syntax.ModuleName -> Core.Function -> t0 -> Graph.Graph -> Either Errors.Error Syntax.Expression
-encodeFunction depth namespaces fun cx g =
-    case fun of
-      Core.FunctionElimination v0 -> case v0 of
-        Core.EliminationWrap v1 -> Right (Syntax.ExpressionVariable (Utils.elementReference namespaces (Names.qname (Maybes.fromJust (Names.namespaceOf v1)) (Utils.newtypeAccessorName v1))))
-        Core.EliminationRecord v1 ->
-          let dn = Core.projectionTypeName v1
-              fname = Core.projectionField v1
-          in (Right (Syntax.ExpressionVariable (Utils.recordFieldReference namespaces dn fname)))
-        Core.EliminationUnion v1 -> Eithers.map (Utils.hslambda (Utils.rawName "x")) (encodeCaseExpression depth namespaces v1 (Utils.hsvar "x") cx g)
-      Core.FunctionLambda v0 ->
-        let v = Core.lambdaParameter v0
-            body = Core.lambdaBody v0
-        in (Eithers.bind (encodeTerm depth namespaces body cx g) (\hbody -> Right (Utils.hslambda (Utils.elementReference namespaces v) hbody)))
+-- | Encode a Hydra lambda as a Haskell expression
+encodeLambdaTerm :: Int -> Packaging.Namespaces Syntax.ModuleName -> Core.Lambda -> t0 -> Graph.Graph -> Either Errors.Error Syntax.Expression
+encodeLambdaTerm depth namespaces lam cx g =
+
+      let v = Core.lambdaParameter lam
+          body = Core.lambdaBody lam
+      in (Eithers.bind (encodeTerm depth namespaces body cx g) (\hbody -> Right (Utils.hslambda (Utils.elementReference namespaces v) hbody)))
 
 -- | Encode a Hydra literal as a Haskell expression
 encodeLiteral :: Core.Literal -> t0 -> Either Errors.Error Syntax.Expression
@@ -245,6 +237,19 @@ encodeLiteral l cx =
       _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
         Errors.unexpectedShapeErrorExpected = "supported literal",
         Errors.unexpectedShapeErrorActual = (ShowCore.literal l)})))
+
+-- | Encode a record projection as a Haskell expression
+encodeProjection :: Packaging.Namespaces Syntax.ModuleName -> Core.Projection -> Either t0 Syntax.Expression
+encodeProjection namespaces proj =
+
+      let dn = Core.projectionTypeName proj
+          fname = Core.projectionField proj
+      in (Right (Syntax.ExpressionVariable (Utils.recordFieldReference namespaces dn fname)))
+
+-- | Encode a standalone (un-applied) case statement as a Haskell lambda over a case expression
+encodeStandaloneCases :: Int -> Packaging.Namespaces Syntax.ModuleName -> Core.CaseStatement -> t0 -> Graph.Graph -> Either Errors.Error Syntax.Expression
+encodeStandaloneCases depth namespaces stmt cx g =
+    Eithers.map (Utils.hslambda (Utils.rawName "x")) (encodeCaseExpression depth namespaces stmt (Utils.hsvar "x") cx g)
 
 -- | Encode a Hydra term as a Haskell expression
 encodeTerm :: Int -> Packaging.Namespaces Syntax.ModuleName -> Core.Term -> t0 -> Graph.Graph -> Either Errors.Error Syntax.Expression
@@ -272,14 +277,13 @@ encodeTerm depth namespaces term cx g =
               arg = Core.applicationArgument v0
               deannotatedFun = Strip.deannotateTerm fun
           in case deannotatedFun of
-            Core.TermFunction v1 -> case v1 of
-              Core.FunctionElimination v2 -> case v2 of
-                Core.EliminationUnion v3 -> Eithers.bind (encode arg) (\harg -> encodeCaseExpression depth namespaces v3 harg cx g)
-                _ -> Eithers.bind (encode fun) (\hfun -> Eithers.bind (encode arg) (\harg -> Right (Utils.hsapp hfun harg)))
-              _ -> Eithers.bind (encode fun) (\hfun -> Eithers.bind (encode arg) (\harg -> Right (Utils.hsapp hfun harg)))
+            Core.TermCases v1 -> Eithers.bind (encode arg) (\harg -> encodeCaseExpression depth namespaces v1 harg cx g)
             _ -> Eithers.bind (encode fun) (\hfun -> Eithers.bind (encode arg) (\harg -> Right (Utils.hsapp hfun harg)))
+        Core.TermCases v0 -> encodeStandaloneCases depth namespaces v0 cx g
         Core.TermEither v0 -> Eithers.either (\l -> Eithers.bind (encode l) (\hl -> Right (Utils.hsapp (Utils.hsvar "Left") hl))) (\r -> Eithers.bind (encode r) (\hr -> Right (Utils.hsapp (Utils.hsvar "Right") hr))) v0
-        Core.TermFunction v0 -> encodeFunction depth namespaces v0 cx g
+        Core.TermLambda v0 -> encodeLambdaTerm depth namespaces v0 cx g
+        Core.TermProject v0 -> encodeProjection namespaces v0
+        Core.TermUnwrap v0 -> encodeUnwrap namespaces v0
         Core.TermLet v0 ->
           let collectBindings =
                   \lt ->
@@ -463,6 +467,11 @@ encodeTypeWithClassAssertions namespaces explicitClasses typ cx g =
         in (Right (Syntax.TypeCtx (Syntax.ContextType {
           Syntax.contextTypeCtx = hassert,
           Syntax.contextTypeType = htyp}))))))
+
+-- | Encode an unwrap term as a Haskell expression
+encodeUnwrap :: Packaging.Namespaces Syntax.ModuleName -> Core.Name -> Either t0 Syntax.Expression
+encodeUnwrap namespaces name =
+    Right (Syntax.ExpressionVariable (Utils.elementReference namespaces (Names.qname (Maybes.fromJust (Names.namespaceOf name)) (Utils.newtypeAccessorName name))))
 
 -- | Extend metadata by analyzing a term for standard import usage (bottom-up step function)
 extendMetaForTerm :: Environment.HaskellModuleMetadata -> Core.Term -> Environment.HaskellModuleMetadata

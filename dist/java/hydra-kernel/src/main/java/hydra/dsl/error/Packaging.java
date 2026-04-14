@@ -13,22 +13,22 @@ public interface Packaging {
   }
 
   static hydra.phantoms.TTerm<hydra.packaging.Namespace> conflictingModuleNamespaceErrorFirst(hydra.phantoms.TTerm<hydra.error.packaging.ConflictingModuleNamespaceError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.error.packaging.ConflictingModuleNamespaceError"), new hydra.core.Name("first"))))), (x).value)));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Project(new hydra.core.Projection(new hydra.core.Name("hydra.error.packaging.ConflictingModuleNamespaceError"), new hydra.core.Name("first"))), (x).value)));
   }
 
   static hydra.phantoms.TTerm<hydra.packaging.Namespace> conflictingModuleNamespaceErrorSecond(hydra.phantoms.TTerm<hydra.error.packaging.ConflictingModuleNamespaceError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.error.packaging.ConflictingModuleNamespaceError"), new hydra.core.Name("second"))))), (x).value)));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Project(new hydra.core.Projection(new hydra.core.Name("hydra.error.packaging.ConflictingModuleNamespaceError"), new hydra.core.Name("second"))), (x).value)));
   }
 
   static hydra.phantoms.TTerm<hydra.error.packaging.ConflictingModuleNamespaceError> conflictingModuleNamespaceErrorWithFirst(hydra.phantoms.TTerm<hydra.error.packaging.ConflictingModuleNamespaceError> original, hydra.phantoms.TTerm<hydra.packaging.Namespace> newVal) {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.packaging.ConflictingModuleNamespaceError"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("first"), (newVal).value),
-      new hydra.core.Field(new hydra.core.Name("second"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.error.packaging.ConflictingModuleNamespaceError"), new hydra.core.Name("second"))))), (original).value)))))));
+      new hydra.core.Field(new hydra.core.Name("second"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Project(new hydra.core.Projection(new hydra.core.Name("hydra.error.packaging.ConflictingModuleNamespaceError"), new hydra.core.Name("second"))), (original).value)))))));
   }
 
   static hydra.phantoms.TTerm<hydra.error.packaging.ConflictingModuleNamespaceError> conflictingModuleNamespaceErrorWithSecond(hydra.phantoms.TTerm<hydra.error.packaging.ConflictingModuleNamespaceError> original, hydra.phantoms.TTerm<hydra.packaging.Namespace> newVal) {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.packaging.ConflictingModuleNamespaceError"), java.util.Arrays.asList(
-      new hydra.core.Field(new hydra.core.Name("first"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.error.packaging.ConflictingModuleNamespaceError"), new hydra.core.Name("first"))))), (original).value))),
+      new hydra.core.Field(new hydra.core.Name("first"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Project(new hydra.core.Projection(new hydra.core.Name("hydra.error.packaging.ConflictingModuleNamespaceError"), new hydra.core.Name("first"))), (original).value))),
       new hydra.core.Field(new hydra.core.Name("second"), (newVal).value)))));
   }
 
@@ -41,51 +41,51 @@ public interface Packaging {
   }
 
   static hydra.phantoms.TTerm<hydra.core.Name> conflictingVariantNameErrorConflictingName(hydra.phantoms.TTerm<hydra.error.packaging.ConflictingVariantNameError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.error.packaging.ConflictingVariantNameError"), new hydra.core.Name("conflictingName"))))), (x).value)));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Project(new hydra.core.Projection(new hydra.core.Name("hydra.error.packaging.ConflictingVariantNameError"), new hydra.core.Name("conflictingName"))), (x).value)));
   }
 
   static hydra.phantoms.TTerm<hydra.packaging.Namespace> conflictingVariantNameErrorNamespace(hydra.phantoms.TTerm<hydra.error.packaging.ConflictingVariantNameError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.error.packaging.ConflictingVariantNameError"), new hydra.core.Name("namespace"))))), (x).value)));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Project(new hydra.core.Projection(new hydra.core.Name("hydra.error.packaging.ConflictingVariantNameError"), new hydra.core.Name("namespace"))), (x).value)));
   }
 
   static hydra.phantoms.TTerm<hydra.core.Name> conflictingVariantNameErrorTypeName(hydra.phantoms.TTerm<hydra.error.packaging.ConflictingVariantNameError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.error.packaging.ConflictingVariantNameError"), new hydra.core.Name("typeName"))))), (x).value)));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Project(new hydra.core.Projection(new hydra.core.Name("hydra.error.packaging.ConflictingVariantNameError"), new hydra.core.Name("typeName"))), (x).value)));
   }
 
   static hydra.phantoms.TTerm<hydra.core.Name> conflictingVariantNameErrorVariantName(hydra.phantoms.TTerm<hydra.error.packaging.ConflictingVariantNameError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.error.packaging.ConflictingVariantNameError"), new hydra.core.Name("variantName"))))), (x).value)));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Project(new hydra.core.Projection(new hydra.core.Name("hydra.error.packaging.ConflictingVariantNameError"), new hydra.core.Name("variantName"))), (x).value)));
   }
 
   static hydra.phantoms.TTerm<hydra.error.packaging.ConflictingVariantNameError> conflictingVariantNameErrorWithConflictingName(hydra.phantoms.TTerm<hydra.error.packaging.ConflictingVariantNameError> original, hydra.phantoms.TTerm<hydra.core.Name> newVal) {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.packaging.ConflictingVariantNameError"), java.util.Arrays.asList(
-      new hydra.core.Field(new hydra.core.Name("namespace"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.error.packaging.ConflictingVariantNameError"), new hydra.core.Name("namespace"))))), (original).value))),
-      new hydra.core.Field(new hydra.core.Name("typeName"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.error.packaging.ConflictingVariantNameError"), new hydra.core.Name("typeName"))))), (original).value))),
-      new hydra.core.Field(new hydra.core.Name("variantName"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.error.packaging.ConflictingVariantNameError"), new hydra.core.Name("variantName"))))), (original).value))),
+      new hydra.core.Field(new hydra.core.Name("namespace"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Project(new hydra.core.Projection(new hydra.core.Name("hydra.error.packaging.ConflictingVariantNameError"), new hydra.core.Name("namespace"))), (original).value))),
+      new hydra.core.Field(new hydra.core.Name("typeName"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Project(new hydra.core.Projection(new hydra.core.Name("hydra.error.packaging.ConflictingVariantNameError"), new hydra.core.Name("typeName"))), (original).value))),
+      new hydra.core.Field(new hydra.core.Name("variantName"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Project(new hydra.core.Projection(new hydra.core.Name("hydra.error.packaging.ConflictingVariantNameError"), new hydra.core.Name("variantName"))), (original).value))),
       new hydra.core.Field(new hydra.core.Name("conflictingName"), (newVal).value)))));
   }
 
   static hydra.phantoms.TTerm<hydra.error.packaging.ConflictingVariantNameError> conflictingVariantNameErrorWithNamespace(hydra.phantoms.TTerm<hydra.error.packaging.ConflictingVariantNameError> original, hydra.phantoms.TTerm<hydra.packaging.Namespace> newVal) {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.packaging.ConflictingVariantNameError"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("namespace"), (newVal).value),
-      new hydra.core.Field(new hydra.core.Name("typeName"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.error.packaging.ConflictingVariantNameError"), new hydra.core.Name("typeName"))))), (original).value))),
-      new hydra.core.Field(new hydra.core.Name("variantName"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.error.packaging.ConflictingVariantNameError"), new hydra.core.Name("variantName"))))), (original).value))),
-      new hydra.core.Field(new hydra.core.Name("conflictingName"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.error.packaging.ConflictingVariantNameError"), new hydra.core.Name("conflictingName"))))), (original).value)))))));
+      new hydra.core.Field(new hydra.core.Name("typeName"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Project(new hydra.core.Projection(new hydra.core.Name("hydra.error.packaging.ConflictingVariantNameError"), new hydra.core.Name("typeName"))), (original).value))),
+      new hydra.core.Field(new hydra.core.Name("variantName"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Project(new hydra.core.Projection(new hydra.core.Name("hydra.error.packaging.ConflictingVariantNameError"), new hydra.core.Name("variantName"))), (original).value))),
+      new hydra.core.Field(new hydra.core.Name("conflictingName"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Project(new hydra.core.Projection(new hydra.core.Name("hydra.error.packaging.ConflictingVariantNameError"), new hydra.core.Name("conflictingName"))), (original).value)))))));
   }
 
   static hydra.phantoms.TTerm<hydra.error.packaging.ConflictingVariantNameError> conflictingVariantNameErrorWithTypeName(hydra.phantoms.TTerm<hydra.error.packaging.ConflictingVariantNameError> original, hydra.phantoms.TTerm<hydra.core.Name> newVal) {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.packaging.ConflictingVariantNameError"), java.util.Arrays.asList(
-      new hydra.core.Field(new hydra.core.Name("namespace"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.error.packaging.ConflictingVariantNameError"), new hydra.core.Name("namespace"))))), (original).value))),
+      new hydra.core.Field(new hydra.core.Name("namespace"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Project(new hydra.core.Projection(new hydra.core.Name("hydra.error.packaging.ConflictingVariantNameError"), new hydra.core.Name("namespace"))), (original).value))),
       new hydra.core.Field(new hydra.core.Name("typeName"), (newVal).value),
-      new hydra.core.Field(new hydra.core.Name("variantName"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.error.packaging.ConflictingVariantNameError"), new hydra.core.Name("variantName"))))), (original).value))),
-      new hydra.core.Field(new hydra.core.Name("conflictingName"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.error.packaging.ConflictingVariantNameError"), new hydra.core.Name("conflictingName"))))), (original).value)))))));
+      new hydra.core.Field(new hydra.core.Name("variantName"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Project(new hydra.core.Projection(new hydra.core.Name("hydra.error.packaging.ConflictingVariantNameError"), new hydra.core.Name("variantName"))), (original).value))),
+      new hydra.core.Field(new hydra.core.Name("conflictingName"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Project(new hydra.core.Projection(new hydra.core.Name("hydra.error.packaging.ConflictingVariantNameError"), new hydra.core.Name("conflictingName"))), (original).value)))))));
   }
 
   static hydra.phantoms.TTerm<hydra.error.packaging.ConflictingVariantNameError> conflictingVariantNameErrorWithVariantName(hydra.phantoms.TTerm<hydra.error.packaging.ConflictingVariantNameError> original, hydra.phantoms.TTerm<hydra.core.Name> newVal) {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.packaging.ConflictingVariantNameError"), java.util.Arrays.asList(
-      new hydra.core.Field(new hydra.core.Name("namespace"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.error.packaging.ConflictingVariantNameError"), new hydra.core.Name("namespace"))))), (original).value))),
-      new hydra.core.Field(new hydra.core.Name("typeName"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.error.packaging.ConflictingVariantNameError"), new hydra.core.Name("typeName"))))), (original).value))),
+      new hydra.core.Field(new hydra.core.Name("namespace"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Project(new hydra.core.Projection(new hydra.core.Name("hydra.error.packaging.ConflictingVariantNameError"), new hydra.core.Name("namespace"))), (original).value))),
+      new hydra.core.Field(new hydra.core.Name("typeName"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Project(new hydra.core.Projection(new hydra.core.Name("hydra.error.packaging.ConflictingVariantNameError"), new hydra.core.Name("typeName"))), (original).value))),
       new hydra.core.Field(new hydra.core.Name("variantName"), (newVal).value),
-      new hydra.core.Field(new hydra.core.Name("conflictingName"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.error.packaging.ConflictingVariantNameError"), new hydra.core.Name("conflictingName"))))), (original).value)))))));
+      new hydra.core.Field(new hydra.core.Name("conflictingName"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Project(new hydra.core.Projection(new hydra.core.Name("hydra.error.packaging.ConflictingVariantNameError"), new hydra.core.Name("conflictingName"))), (original).value)))))));
   }
 
   static hydra.phantoms.TTerm<hydra.error.packaging.DefinitionNotInModuleNamespaceError> definitionNotInModuleNamespaceError(hydra.phantoms.TTerm<hydra.packaging.Namespace> namespace, hydra.phantoms.TTerm<hydra.core.Name> name) {
@@ -95,23 +95,23 @@ public interface Packaging {
   }
 
   static hydra.phantoms.TTerm<hydra.core.Name> definitionNotInModuleNamespaceErrorName(hydra.phantoms.TTerm<hydra.error.packaging.DefinitionNotInModuleNamespaceError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.error.packaging.DefinitionNotInModuleNamespaceError"), new hydra.core.Name("name"))))), (x).value)));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Project(new hydra.core.Projection(new hydra.core.Name("hydra.error.packaging.DefinitionNotInModuleNamespaceError"), new hydra.core.Name("name"))), (x).value)));
   }
 
   static hydra.phantoms.TTerm<hydra.packaging.Namespace> definitionNotInModuleNamespaceErrorNamespace(hydra.phantoms.TTerm<hydra.error.packaging.DefinitionNotInModuleNamespaceError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.error.packaging.DefinitionNotInModuleNamespaceError"), new hydra.core.Name("namespace"))))), (x).value)));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Project(new hydra.core.Projection(new hydra.core.Name("hydra.error.packaging.DefinitionNotInModuleNamespaceError"), new hydra.core.Name("namespace"))), (x).value)));
   }
 
   static hydra.phantoms.TTerm<hydra.error.packaging.DefinitionNotInModuleNamespaceError> definitionNotInModuleNamespaceErrorWithName(hydra.phantoms.TTerm<hydra.error.packaging.DefinitionNotInModuleNamespaceError> original, hydra.phantoms.TTerm<hydra.core.Name> newVal) {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.packaging.DefinitionNotInModuleNamespaceError"), java.util.Arrays.asList(
-      new hydra.core.Field(new hydra.core.Name("namespace"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.error.packaging.DefinitionNotInModuleNamespaceError"), new hydra.core.Name("namespace"))))), (original).value))),
+      new hydra.core.Field(new hydra.core.Name("namespace"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Project(new hydra.core.Projection(new hydra.core.Name("hydra.error.packaging.DefinitionNotInModuleNamespaceError"), new hydra.core.Name("namespace"))), (original).value))),
       new hydra.core.Field(new hydra.core.Name("name"), (newVal).value)))));
   }
 
   static hydra.phantoms.TTerm<hydra.error.packaging.DefinitionNotInModuleNamespaceError> definitionNotInModuleNamespaceErrorWithNamespace(hydra.phantoms.TTerm<hydra.error.packaging.DefinitionNotInModuleNamespaceError> original, hydra.phantoms.TTerm<hydra.packaging.Namespace> newVal) {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.packaging.DefinitionNotInModuleNamespaceError"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("namespace"), (newVal).value),
-      new hydra.core.Field(new hydra.core.Name("name"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.error.packaging.DefinitionNotInModuleNamespaceError"), new hydra.core.Name("name"))))), (original).value)))))));
+      new hydra.core.Field(new hydra.core.Name("name"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Project(new hydra.core.Projection(new hydra.core.Name("hydra.error.packaging.DefinitionNotInModuleNamespaceError"), new hydra.core.Name("name"))), (original).value)))))));
   }
 
   static hydra.phantoms.TTerm<hydra.error.packaging.DuplicateDefinitionNameError> duplicateDefinitionNameError(hydra.phantoms.TTerm<hydra.packaging.Namespace> namespace, hydra.phantoms.TTerm<hydra.core.Name> name) {
@@ -121,23 +121,23 @@ public interface Packaging {
   }
 
   static hydra.phantoms.TTerm<hydra.core.Name> duplicateDefinitionNameErrorName(hydra.phantoms.TTerm<hydra.error.packaging.DuplicateDefinitionNameError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.error.packaging.DuplicateDefinitionNameError"), new hydra.core.Name("name"))))), (x).value)));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Project(new hydra.core.Projection(new hydra.core.Name("hydra.error.packaging.DuplicateDefinitionNameError"), new hydra.core.Name("name"))), (x).value)));
   }
 
   static hydra.phantoms.TTerm<hydra.packaging.Namespace> duplicateDefinitionNameErrorNamespace(hydra.phantoms.TTerm<hydra.error.packaging.DuplicateDefinitionNameError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.error.packaging.DuplicateDefinitionNameError"), new hydra.core.Name("namespace"))))), (x).value)));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Project(new hydra.core.Projection(new hydra.core.Name("hydra.error.packaging.DuplicateDefinitionNameError"), new hydra.core.Name("namespace"))), (x).value)));
   }
 
   static hydra.phantoms.TTerm<hydra.error.packaging.DuplicateDefinitionNameError> duplicateDefinitionNameErrorWithName(hydra.phantoms.TTerm<hydra.error.packaging.DuplicateDefinitionNameError> original, hydra.phantoms.TTerm<hydra.core.Name> newVal) {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.packaging.DuplicateDefinitionNameError"), java.util.Arrays.asList(
-      new hydra.core.Field(new hydra.core.Name("namespace"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.error.packaging.DuplicateDefinitionNameError"), new hydra.core.Name("namespace"))))), (original).value))),
+      new hydra.core.Field(new hydra.core.Name("namespace"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Project(new hydra.core.Projection(new hydra.core.Name("hydra.error.packaging.DuplicateDefinitionNameError"), new hydra.core.Name("namespace"))), (original).value))),
       new hydra.core.Field(new hydra.core.Name("name"), (newVal).value)))));
   }
 
   static hydra.phantoms.TTerm<hydra.error.packaging.DuplicateDefinitionNameError> duplicateDefinitionNameErrorWithNamespace(hydra.phantoms.TTerm<hydra.error.packaging.DuplicateDefinitionNameError> original, hydra.phantoms.TTerm<hydra.packaging.Namespace> newVal) {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.packaging.DuplicateDefinitionNameError"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("namespace"), (newVal).value),
-      new hydra.core.Field(new hydra.core.Name("name"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.error.packaging.DuplicateDefinitionNameError"), new hydra.core.Name("name"))))), (original).value)))))));
+      new hydra.core.Field(new hydra.core.Name("name"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Project(new hydra.core.Projection(new hydra.core.Name("hydra.error.packaging.DuplicateDefinitionNameError"), new hydra.core.Name("name"))), (original).value)))))));
   }
 
   static hydra.phantoms.TTerm<hydra.error.packaging.DuplicateModuleNamespaceError> duplicateModuleNamespaceError(hydra.phantoms.TTerm<hydra.packaging.Namespace> namespace) {
@@ -145,7 +145,7 @@ public interface Packaging {
   }
 
   static hydra.phantoms.TTerm<hydra.packaging.Namespace> duplicateModuleNamespaceErrorNamespace(hydra.phantoms.TTerm<hydra.error.packaging.DuplicateModuleNamespaceError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.error.packaging.DuplicateModuleNamespaceError"), new hydra.core.Name("namespace"))))), (x).value)));
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Project(new hydra.core.Projection(new hydra.core.Name("hydra.error.packaging.DuplicateModuleNamespaceError"), new hydra.core.Name("namespace"))), (x).value)));
   }
 
   static hydra.phantoms.TTerm<hydra.error.packaging.DuplicateModuleNamespaceError> duplicateModuleNamespaceErrorWithNamespace(hydra.phantoms.TTerm<hydra.error.packaging.DuplicateModuleNamespaceError> original, hydra.phantoms.TTerm<hydra.packaging.Namespace> newVal) {

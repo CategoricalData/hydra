@@ -70,14 +70,16 @@ module_ = Module ns definitions
       toDefinition dialectConstructorPrefix,
       toDefinition dialectEqual,
       toDefinition encodeApplication,
-      toDefinition encodeElimination,
       toDefinition encodeFieldDef,
-      toDefinition encodeFunction,
+      toDefinition encodeLambdaTerm,
       toDefinition encodeLetAsLambdaApp,
       toDefinition encodeLetAsNative,
       toDefinition encodeLiteral,
+      toDefinition encodeProjectionElim,
       toDefinition encodeTerm,
       toDefinition encodeTermDefinition,
+      toDefinition encodeUnionElim,
+      toDefinition encodeUnwrapElim,
       toDefinition encodeType,
       toDefinition encodeTypeBody,
       toDefinition encodeTypeDefinition,
@@ -204,14 +206,12 @@ encodeApplication = def "encodeApplication" $
                   -- Not a special primitive — encode normally
                   (var "normal")))])]
 
--- | Encode a Hydra elimination as a Lisp expression.
--- Takes an optional argument for applied eliminations.
-encodeElimination :: TTermDefinition (L.Dialect -> Context -> Graph -> Elimination -> Maybe Term -> Either Error L.Expression)
-encodeElimination = def "encodeElimination" $
-  "dialect" ~> "cx" ~> "g" ~> lambda "elim" $ lambda "marg" $
-    cases _Elimination (var "elim") Nothing [
+-- | Encode a Hydra record projection as a Lisp expression.
+-- Takes an optional argument for applied projections.
+encodeProjectionElim :: TTermDefinition (L.Dialect -> Context -> Graph -> Projection -> Maybe Term -> Either Error L.Expression)
+encodeProjectionElim = def "encodeProjectionElim" $
+  "dialect" ~> "cx" ~> "g" ~> lambda "proj" $ lambda "marg" $
       -- Record projection: (:field record) or (record-type-field record)
-      _Elimination_record>>: lambda "proj" $
         "fname" <~ (Formatting.convertCaseCamelToLowerSnake @@ Core.unName (Core.projectionField (var "proj"))) $
         "tname" <~ (qualifiedSnakeName @@ Core.projectionTypeName (var "proj")) $
         Maybes.cases (var "marg")
@@ -228,10 +228,14 @@ encodeElimination = def "encodeElimination" $
                 record L._FieldAccess [
                   L._FieldAccess_recordType>>: wrap L._Symbol (var "tname"),
                   L._FieldAccess_field>>: wrap L._Symbol (var "fname"),
-                  L._FieldAccess_target>>: var "sarg"])),
+                  L._FieldAccess_target>>: var "sarg"]))
 
+-- | Encode a Hydra case statement (union elimination) as a Lisp expression.
+-- Takes an optional argument for applied case statements.
+encodeUnionElim :: TTermDefinition (L.Dialect -> Context -> Graph -> CaseStatement -> Maybe Term -> Either Error L.Expression)
+encodeUnionElim = def "encodeUnionElim" $
+  "dialect" ~> "cx" ~> "g" ~> lambda "cs" $ lambda "marg" $
       -- Union elimination: cond dispatch on tagged values
-      _Elimination_union>>: lambda "cs" $
         "tname" <~ (Names.localNameOf @@ Core.caseStatementTypeName (var "cs")) $
         "caseFields" <~ Core.caseStatementCases (var "cs") $
         "defCase" <~ Core.caseStatementDefault (var "cs") $
@@ -274,15 +278,19 @@ encodeElimination = def "encodeElimination" $
           (lambda "arg" $
             "sarg" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "arg") $
               -- Applied: ((lambda (__m) ((lambda (__mv) (cond ...)) (second __m))) sarg)
-              right (lispApp @@ (lispLambdaExpr @@ list [string "match_target"] @@ var "innerExpr") @@ list [var "sarg"])),
+              right (lispApp @@ (lispLambdaExpr @@ list [string "match_target"] @@ var "innerExpr") @@ list [var "sarg"]))
 
+-- | Encode a Hydra wrap elimination (unwrap) as a Lisp expression.
+-- Takes an optional argument for applied unwraps.
+encodeUnwrapElim :: TTermDefinition (L.Dialect -> Context -> Graph -> Name -> Maybe Term -> Either Error L.Expression)
+encodeUnwrapElim = def "encodeUnwrapElim" $
+  "dialect" ~> "cx" ~> "g" ~> lambda "name" $ lambda "marg" $
       -- Wrap elimination: transparent unwrap
-      _Elimination_wrap>>: lambda "name" $
         Maybes.cases (var "marg")
           -- Unapplied: identity function
           (right (lispLambdaExpr @@ list [string "v"] @@ (lispVar @@ string "v")))
           (lambda "arg" $
-            encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "arg")]
+            encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "arg")
 
 -- | Encode a Hydra field type as a Lisp field definition
 encodeFieldDef :: TTermDefinition (FieldType -> L.FieldDefinition)
@@ -293,17 +301,13 @@ encodeFieldDef = def "encodeFieldDef" $
         L._FieldDefinition_name>>: wrap L._Symbol (Formatting.convertCaseCamelToLowerSnake @@ var "fname"),
         L._FieldDefinition_defaultValue>>: nothing]
 
--- | Encode a Hydra function as a Lisp expression
-encodeFunction :: TTermDefinition (L.Dialect -> Context -> Graph -> Function -> Either Error L.Expression)
-encodeFunction = def "encodeFunction" $
-  "dialect" ~> "cx" ~> "g" ~> lambda "fun" $
-    cases _Function (var "fun") Nothing [
-      _Function_lambda>>: lambda "lam" $
-        "param" <~ (Formatting.convertCaseCamelOrUnderscoreToLowerSnake @@ (Formatting.sanitizeWithUnderscores @@ LispLanguageSource.lispReservedWords @@ Core.unName (Core.lambdaParameter (var "lam")))) $
-        "body" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ Core.lambdaBody (var "lam")) $
-          right (lispLambdaExpr @@ list [var "param"] @@ var "body"),
-      _Function_elimination>>: lambda "elim" $
-        encodeElimination @@ var "dialect" @@ var "cx" @@ var "g" @@ var "elim" @@ nothing]
+-- | Encode a Hydra lambda as a Lisp expression
+encodeLambdaTerm :: TTermDefinition (L.Dialect -> Context -> Graph -> Lambda -> Either Error L.Expression)
+encodeLambdaTerm = def "encodeLambdaTerm" $
+  "dialect" ~> "cx" ~> "g" ~> lambda "lam" $
+    "param" <~ (Formatting.convertCaseCamelOrUnderscoreToLowerSnake @@ (Formatting.sanitizeWithUnderscores @@ LispLanguageSource.lispReservedWords @@ Core.unName (Core.lambdaParameter (var "lam")))) $
+    "body" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ Core.lambdaBody (var "lam")) $
+      right (lispLambdaExpr @@ list [var "param"] @@ var "body")
 
 -- | Encode let bindings as nested ((lambda (x) body) init) applications.
 -- Used for self-referential non-lambda bindings (Y-combinator fixpoint pattern)
@@ -363,9 +367,7 @@ encodeLetAsNative = def "encodeLetAsNative" $
           (Variables.freeVariablesInTerm @@ Core.bindingTerm (var "b"))) $
         "isLambda" <~ (cases _Term (Strip.deannotateTerm @@ Core.bindingTerm (var "b"))
           (Just $ boolean False)
-          [_Term_function>>: lambda "f" $
-            cases _Function (var "f") (Just $ boolean False)
-              [_Function_lambda>>: constant (boolean True)]]) $
+          [_Term_lambda>>: constant (boolean True)]) $
         "bval" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ Core.bindingTerm (var "b")) $
         -- Handle self-referential bindings:
         -- For Clojure: use named fn for self-reference (both lambda and eta-expanded)
@@ -564,8 +566,14 @@ encodeTerm = def "encodeTerm" $
                var "sr"]))
          (var "e"),
 
-     _Term_function>>: lambda "fun" $
-       encodeFunction @@ var "dialect" @@ var "cx" @@ var "g" @@ var "fun",
+     _Term_lambda>>: lambda "lam" $
+       encodeLambdaTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "lam",
+     _Term_project>>: lambda "proj" $
+       encodeProjectionElim @@ var "dialect" @@ var "cx" @@ var "g" @@ var "proj" @@ nothing,
+     _Term_cases>>: lambda "cs" $
+       encodeUnionElim @@ var "dialect" @@ var "cx" @@ var "g" @@ var "cs" @@ nothing,
+     _Term_unwrap>>: lambda "name" $
+       encodeUnwrapElim @@ var "dialect" @@ var "cx" @@ var "g" @@ var "name" @@ nothing,
 
      _Term_let>>: lambda "lt" $
        "bindings" <~ Core.letBindings (var "lt") $
@@ -678,23 +686,15 @@ encodeTermDefinition = def "encodeTermDefinition" $
             L._VariableDefinition_name>>: wrap L._Symbol (var "lname"),
             L._VariableDefinition_value>>: var "sterm",
             L._VariableDefinition_doc>>: nothing])))
-    [_Term_function>>: lambda "fun" $
-       cases _Function (var "fun") (Just $
-         "sterm" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "term") $
-           right (lispTopForm @@ (inject L._TopLevelForm L._TopLevelForm_variable $
-             record L._VariableDefinition [
-               L._VariableDefinition_name>>: wrap L._Symbol (var "lname"),
-               L._VariableDefinition_value>>: var "sterm",
-               L._VariableDefinition_doc>>: nothing])))
-       [_Function_lambda>>: lambda "lam" $
-          -- Encode as (def name (fn [param] body)) to avoid Clojure compile-time
-          -- symbol resolution issues with Y-combinator patterns in recursive bindings
-          "sterm" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "term") $
-            right (lispTopForm @@ (inject L._TopLevelForm L._TopLevelForm_variable $
-              record L._VariableDefinition [
-                L._VariableDefinition_name>>: wrap L._Symbol (var "lname"),
-                L._VariableDefinition_value>>: var "sterm",
-                L._VariableDefinition_doc>>: nothing]))]]
+    [_Term_lambda>>: lambda "lam" $
+       -- Encode as (def name (fn [param] body)) to avoid Clojure compile-time
+       -- symbol resolution issues with Y-combinator patterns in recursive bindings
+       "sterm" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "term") $
+         right (lispTopForm @@ (inject L._TopLevelForm L._TopLevelForm_variable $
+           record L._VariableDefinition [
+             L._VariableDefinition_name>>: wrap L._Symbol (var "lname"),
+             L._VariableDefinition_value>>: var "sterm",
+             L._VariableDefinition_doc>>: nothing]))]
 
 -- | Encode a Hydra type as a Lisp type specifier (used for type annotations)
 encodeType :: TTermDefinition (Context -> Graph -> Type -> Either Error L.TypeSpecifier)

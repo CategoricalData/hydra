@@ -208,11 +208,10 @@
                     "term": {
                       "typeLambda": {
                         "body": {
-                          "function": {
-                            "lambda": {
-                              "body": {"literal": {"boolean": true}},
-                              "domain": {"variable": "t0"},
-                              "parameter": "_"}}},
+                          "lambda": {
+                            "body": {"literal": {"boolean": true}},
+                            "domain": {"variable": "t0"},
+                            "parameter": "_"}},
                         "parameter": "t0"}},
                     "type": {
                       "type": {

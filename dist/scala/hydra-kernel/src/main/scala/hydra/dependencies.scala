@@ -137,9 +137,7 @@ def inlineType(schema: Map[hydra.core.Name, hydra.core.Type])(typ: hydra.core.Ty
 
 def isLambda(term: hydra.core.Term): Boolean =
   hydra.strip.deannotateTerm(term) match
-  case hydra.core.Term.function(v_Term_function_v1) => v_Term_function_v1 match
-    case hydra.core.Function.lambda(v_Function_lambda__) => true
-    case _ => false
+  case hydra.core.Term.lambda(v_Term_lambda__) => true
   case hydra.core.Term.let(v_Term_let_lt) => hydra.dependencies.isLambda(v_Term_let_lt.body)
   case _ => false
 
@@ -153,10 +151,8 @@ def liftLambdaAboveLet(term0: hydra.core.Term): hydra.core.Term =
       term2 match
       case hydra.core.Term.annotated(v_Term_annotated_at) => digForLambdas(original)((t: hydra.core.Term) =>
         hydra.core.Term.annotated(hydra.core.AnnotatedTerm(cons(t), (v_Term_annotated_at.annotation))))(v_Term_annotated_at.body)
-      case hydra.core.Term.function(v_Term_function_f) => v_Term_function_f match
-        case hydra.core.Function.lambda(v_Function_lambda_l) => hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda(v_Function_lambda_l.parameter,
-           (v_Function_lambda_l.domain), digForLambdas(cons(v_Function_lambda_l.body))((t: hydra.core.Term) => cons(t))(v_Function_lambda_l.body))))
-        case _ => recurse(original)
+      case hydra.core.Term.lambda(v_Term_lambda_l) => hydra.core.Term.lambda(hydra.core.Lambda(v_Term_lambda_l.parameter,
+         (v_Term_lambda_l.domain), digForLambdas(cons(v_Term_lambda_l.body))((t: hydra.core.Term) => cons(t))(v_Term_lambda_l.body)))
       case hydra.core.Term.let(v_Term_let_l) => digForLambdas(original)((t: hydra.core.Term) =>
         cons(hydra.core.Term.let(hydra.core.Let(rewriteBindings(v_Term_let_l.bindings), t))))(v_Term_let_l.body)
       case _ => recurse(original)
@@ -222,21 +218,15 @@ def simplifyTerm(term: hydra.core.Term): hydra.core.Term =
       case hydra.core.Term.variable(v_Term_variable_v) => hydra.dependencies.simplifyTerm(hydra.variables.substituteVariable(`var`)(v_Term_variable_v)(body))
       case _ => term2
     def forLhs(lhs: hydra.core.Term)(rhs: hydra.core.Term): hydra.core.Term =
-      {
-      def forFun(fun: hydra.core.Function): hydra.core.Term =
-        fun match
-        case hydra.core.Function.lambda(v_Function_lambda_l) => {
-          lazy val `var`: hydra.core.Name = (v_Function_lambda_l.parameter)
-          {
-            lazy val body: hydra.core.Term = (v_Function_lambda_l.body)
-            hydra.lib.logic.ifElse[hydra.core.Term](hydra.lib.sets.member[hydra.core.Name](`var`)(hydra.variables.freeVariablesInTerm(body)))(forRhs(rhs)(`var`)(body))(hydra.dependencies.simplifyTerm(body))
-          }
-        }
-        case _ => term2
       hydra.strip.deannotateTerm(lhs) match
-        case hydra.core.Term.function(v_Term_function_fun) => forFun(v_Term_function_fun)
-        case _ => term2
-    }
+      case hydra.core.Term.lambda(v_Term_lambda_l) => {
+        lazy val `var`: hydra.core.Name = (v_Term_lambda_l.parameter)
+        {
+          lazy val body: hydra.core.Term = (v_Term_lambda_l.body)
+          hydra.lib.logic.ifElse[hydra.core.Term](hydra.lib.sets.member[hydra.core.Name](`var`)(hydra.variables.freeVariablesInTerm(body)))(forRhs(rhs)(`var`)(body))(hydra.dependencies.simplifyTerm(body))
+        }
+      }
+      case _ => term2
     def forTerm(stripped: hydra.core.Term): hydra.core.Term =
       stripped match
       case hydra.core.Term.application(v_Term_application_app) => {
@@ -264,12 +254,9 @@ def termDependencyNames(binds: Boolean)(withPrims: Boolean)(withNoms: Boolean)(t
     def `var`(name: hydra.core.Name): scala.collection.immutable.Set[hydra.core.Name] =
       hydra.lib.logic.ifElse[scala.collection.immutable.Set[hydra.core.Name]](binds)(hydra.lib.sets.insert[hydra.core.Name](name)(names))(names)
     term match
-      case hydra.core.Term.function(v_Term_function_f) => v_Term_function_f match
-        case hydra.core.Function.elimination(v_Function_elimination_e) => v_Function_elimination_e match
-          case hydra.core.Elimination.record(v_Elimination_record_proj) => nominal(v_Elimination_record_proj.typeName)
-          case hydra.core.Elimination.union(v_Elimination_union_caseStmt) => nominal(v_Elimination_union_caseStmt.typeName)
-          case hydra.core.Elimination.wrap(v_Elimination_wrap_name) => nominal(v_Elimination_wrap_name)
-        case _ => names
+      case hydra.core.Term.cases(v_Term_cases_caseStmt) => nominal(v_Term_cases_caseStmt.typeName)
+      case hydra.core.Term.project(v_Term_project_proj) => nominal(v_Term_project_proj.typeName)
+      case hydra.core.Term.unwrap(v_Term_unwrap_name) => nominal(v_Term_unwrap_name)
       case hydra.core.Term.record(v_Term_record_record) => nominal(v_Term_record_record.typeName)
       case hydra.core.Term.union(v_Term_union_injection) => nominal(v_Term_union_injection.typeName)
       case hydra.core.Term.variable(v_Term_variable_name) => `var`(v_Term_variable_name)

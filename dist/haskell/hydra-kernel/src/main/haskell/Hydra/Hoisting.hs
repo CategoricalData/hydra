@@ -40,10 +40,10 @@ augmentBindingsWithNewFreeVars cx boundVars bindings =
                     Core.TermTypeLambda v0 -> Core.TermTypeLambda (Core.TypeLambda {
                       Core.typeLambdaParameter = (Core.typeLambdaParameter v0),
                       Core.typeLambdaBody = (wrapAfterTypeLambdas vars (Core.typeLambdaBody v0))})
-                    _ -> Lists.foldl (\t -> \p -> Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                    _ -> Lists.foldl (\t -> \p -> Core.TermLambda (Core.Lambda {
                       Core.lambdaParameter = (Pairs.first p),
                       Core.lambdaDomain = (Pairs.second p),
-                      Core.lambdaBody = t}))) term (Lists.reverse vars)
+                      Core.lambdaBody = t})) term (Lists.reverse vars)
           augment =
                   \b ->
                     let freeVars = Sets.toList (Sets.intersection boundVars (Variables.freeVariablesInTerm (Core.bindingTerm b)))
@@ -162,10 +162,10 @@ hoistLetBindingsWithPredicate isParentBinding shouldHoistBinding cx0 let0 =
                               Core.typeSchemeConstraints = (Core.typeSchemeConstraints ts)}) (Core.bindingType b)) Nothing
                     strippedTerm = Strip.stripTypeLambdas (Core.bindingTerm b)
                     termWithLambdas =
-                            Lists.foldl (\t -> \p -> Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                            Lists.foldl (\t -> \p -> Core.TermLambda (Core.Lambda {
                               Core.lambdaParameter = (Pairs.first p),
                               Core.lambdaDomain = (Maybes.map (\dom -> Strip.deannotateTypeParameters dom) (Pairs.second p)),
-                              Core.lambdaBody = t}))) strippedTerm (Lists.reverse capturedTermVarTypePairs)
+                              Core.lambdaBody = t})) strippedTerm (Lists.reverse capturedTermVarTypePairs)
                     termWithTypeLambdas =
                             Lists.foldl (\t -> \v -> Core.TermTypeLambda (Core.TypeLambda {
                               Core.typeLambdaParameter = v,
@@ -333,10 +333,10 @@ hoistSubterms shouldHoist cx0 term0 =
                                         capturedVars = Sets.toList (Sets.intersection newLambdaVars freeVars)
                                         typeMap = Maps.map Scoping.typeSchemeToFType (Graph.graphBoundTypes cxInner)
                                         wrappedTerm =
-                                                Lists.foldl (\body -> \varName -> Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                                                Lists.foldl (\body -> \varName -> Core.TermLambda (Core.Lambda {
                                                   Core.lambdaParameter = varName,
                                                   Core.lambdaDomain = (Maps.lookup varName typeMap),
-                                                  Core.lambdaBody = body}))) processedTerm (Lists.reverse capturedVars)
+                                                  Core.lambdaBody = body})) processedTerm (Lists.reverse capturedVars)
                                         reference =
                                                 Lists.foldl (\fn -> \varName -> Core.TermApplication (Core.Application {
                                                   Core.applicationFunction = fn,
@@ -405,15 +405,6 @@ isApplicationFunction acc =
       Paths.SubtermStepApplicationFunction -> True
       _ -> False
 
--- | Check if a function is a union elimination
-isEliminationUnion :: Core.Function -> Bool
-isEliminationUnion f =
-    case f of
-      Core.FunctionElimination v0 -> case v0 of
-        Core.EliminationUnion _ -> True
-        _ -> False
-      _ -> False
-
 isLambdaBody :: Paths.SubtermStep -> Bool
 isLambdaBody acc =
     case acc of
@@ -424,7 +415,7 @@ isLambdaBody acc =
 isUnionElimination :: Core.Term -> Bool
 isUnionElimination term =
     case term of
-      Core.TermFunction v0 -> isEliminationUnion v0
+      Core.TermCases _ -> True
       _ -> False
 
 -- | Check if a term is an application of a union elimination (case statement applied to an argument)

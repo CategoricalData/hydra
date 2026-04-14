@@ -138,12 +138,8 @@ isTrivialTerm t =
         let fun = Core.applicationFunction v0
             arg = Core.applicationArgument v0
         in case fun of
-          Core.TermFunction v1 -> case v1 of
-            Core.FunctionElimination v2 -> case v2 of
-              Core.EliminationRecord _ -> isTrivialTerm arg
-              Core.EliminationWrap _ -> isTrivialTerm arg
-              _ -> False
-            _ -> False
+          Core.TermProject _ -> isTrivialTerm arg
+          Core.TermUnwrap _ -> isTrivialTerm arg
           _ -> False
       Core.TermMaybe v0 -> Maybes.maybe True (\inner -> isTrivialTerm inner) v0
       Core.TermRecord v0 -> Lists.foldl (\acc -> \fld -> Logic.and acc (isTrivialTerm (Core.fieldTerm fld))) True (Core.recordFields v0)

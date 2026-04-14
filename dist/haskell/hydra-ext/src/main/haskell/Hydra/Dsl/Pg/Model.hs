@@ -31,33 +31,33 @@ adjacentEdge label id vertex properties =
 adjacentEdgeId :: Phantoms.TTerm (Model.AdjacentEdge v) -> Phantoms.TTerm v
 adjacentEdgeId x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.model.AdjacentEdge"),
-        Core.projectionField = (Core.Name "id")})))),
+        Core.projectionField = (Core.Name "id")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 adjacentEdgeLabel :: Phantoms.TTerm (Model.AdjacentEdge v) -> Phantoms.TTerm Model.EdgeLabel
 adjacentEdgeLabel x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.model.AdjacentEdge"),
-        Core.projectionField = (Core.Name "label")})))),
+        Core.projectionField = (Core.Name "label")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 adjacentEdgeProperties :: Phantoms.TTerm (Model.AdjacentEdge v) -> Phantoms.TTerm (M.Map Model.PropertyKey v)
 adjacentEdgeProperties x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.model.AdjacentEdge"),
-        Core.projectionField = (Core.Name "properties")})))),
+        Core.projectionField = (Core.Name "properties")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 adjacentEdgeVertex :: Phantoms.TTerm (Model.AdjacentEdge v) -> Phantoms.TTerm v
 adjacentEdgeVertex x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.model.AdjacentEdge"),
-        Core.projectionField = (Core.Name "vertex")})))),
+        Core.projectionField = (Core.Name "vertex")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 adjacentEdgeWithId :: Phantoms.TTerm (Model.AdjacentEdge v) -> Phantoms.TTerm v -> Phantoms.TTerm (Model.AdjacentEdge v)
@@ -68,9 +68,9 @@ adjacentEdgeWithId original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "label"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.model.AdjacentEdge"),
-              Core.projectionField = (Core.Name "label")})))),
+              Core.projectionField = (Core.Name "label")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "id"),
@@ -78,16 +78,16 @@ adjacentEdgeWithId original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "vertex"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.model.AdjacentEdge"),
-              Core.projectionField = (Core.Name "vertex")})))),
+              Core.projectionField = (Core.Name "vertex")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "properties"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.model.AdjacentEdge"),
-              Core.projectionField = (Core.Name "properties")})))),
+              Core.projectionField = (Core.Name "properties")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 adjacentEdgeWithLabel :: Phantoms.TTerm (Model.AdjacentEdge v) -> Phantoms.TTerm Model.EdgeLabel -> Phantoms.TTerm (Model.AdjacentEdge v)
@@ -101,23 +101,23 @@ adjacentEdgeWithLabel original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "id"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.model.AdjacentEdge"),
-              Core.projectionField = (Core.Name "id")})))),
+              Core.projectionField = (Core.Name "id")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "vertex"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.model.AdjacentEdge"),
-              Core.projectionField = (Core.Name "vertex")})))),
+              Core.projectionField = (Core.Name "vertex")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "properties"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.model.AdjacentEdge"),
-              Core.projectionField = (Core.Name "properties")})))),
+              Core.projectionField = (Core.Name "properties")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 adjacentEdgeWithProperties :: Phantoms.TTerm (Model.AdjacentEdge v) -> Phantoms.TTerm (M.Map Model.PropertyKey v) -> Phantoms.TTerm (Model.AdjacentEdge v)
@@ -128,23 +128,23 @@ adjacentEdgeWithProperties original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "label"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.model.AdjacentEdge"),
-              Core.projectionField = (Core.Name "label")})))),
+              Core.projectionField = (Core.Name "label")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "id"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.model.AdjacentEdge"),
-              Core.projectionField = (Core.Name "id")})))),
+              Core.projectionField = (Core.Name "id")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "vertex"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.model.AdjacentEdge"),
-              Core.projectionField = (Core.Name "vertex")})))),
+              Core.projectionField = (Core.Name "vertex")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "properties"),
@@ -158,16 +158,16 @@ adjacentEdgeWithVertex original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "label"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.model.AdjacentEdge"),
-              Core.projectionField = (Core.Name "label")})))),
+              Core.projectionField = (Core.Name "label")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "id"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.model.AdjacentEdge"),
-              Core.projectionField = (Core.Name "id")})))),
+              Core.projectionField = (Core.Name "id")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "vertex"),
@@ -175,9 +175,9 @@ adjacentEdgeWithVertex original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "properties"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.model.AdjacentEdge"),
-              Core.projectionField = (Core.Name "properties")})))),
+              Core.projectionField = (Core.Name "properties")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 directionBoth :: Phantoms.TTerm Model.Direction
@@ -236,25 +236,25 @@ edge label id out in_ properties =
 edgeId :: Phantoms.TTerm (Model.Edge v) -> Phantoms.TTerm v
 edgeId x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.model.Edge"),
-        Core.projectionField = (Core.Name "id")})))),
+        Core.projectionField = (Core.Name "id")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 edgeIn :: Phantoms.TTerm (Model.Edge v) -> Phantoms.TTerm v
 edgeIn x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.model.Edge"),
-        Core.projectionField = (Core.Name "in")})))),
+        Core.projectionField = (Core.Name "in")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 edgeLabel :: Phantoms.TTerm (Model.Edge v) -> Phantoms.TTerm Model.EdgeLabel
 edgeLabel x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.model.Edge"),
-        Core.projectionField = (Core.Name "label")})))),
+        Core.projectionField = (Core.Name "label")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 edgeLabel_ :: Phantoms.TTerm String -> Phantoms.TTerm Model.EdgeLabel
@@ -266,17 +266,17 @@ edgeLabel_ x =
 edgeOut :: Phantoms.TTerm (Model.Edge v) -> Phantoms.TTerm v
 edgeOut x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.model.Edge"),
-        Core.projectionField = (Core.Name "out")})))),
+        Core.projectionField = (Core.Name "out")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 edgeProperties :: Phantoms.TTerm (Model.Edge v) -> Phantoms.TTerm (M.Map Model.PropertyKey v)
 edgeProperties x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.model.Edge"),
-        Core.projectionField = (Core.Name "properties")})))),
+        Core.projectionField = (Core.Name "properties")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 edgeType :: Phantoms.TTerm Model.EdgeLabel -> Phantoms.TTerm t -> Phantoms.TTerm Model.VertexLabel -> Phantoms.TTerm Model.VertexLabel -> Phantoms.TTerm [Model.PropertyType t] -> Phantoms.TTerm (Model.EdgeType t)
@@ -303,41 +303,41 @@ edgeType label id out in_ properties =
 edgeTypeId :: Phantoms.TTerm (Model.EdgeType t) -> Phantoms.TTerm t
 edgeTypeId x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.model.EdgeType"),
-        Core.projectionField = (Core.Name "id")})))),
+        Core.projectionField = (Core.Name "id")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 edgeTypeIn :: Phantoms.TTerm (Model.EdgeType t) -> Phantoms.TTerm Model.VertexLabel
 edgeTypeIn x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.model.EdgeType"),
-        Core.projectionField = (Core.Name "in")})))),
+        Core.projectionField = (Core.Name "in")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 edgeTypeLabel :: Phantoms.TTerm (Model.EdgeType t) -> Phantoms.TTerm Model.EdgeLabel
 edgeTypeLabel x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.model.EdgeType"),
-        Core.projectionField = (Core.Name "label")})))),
+        Core.projectionField = (Core.Name "label")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 edgeTypeOut :: Phantoms.TTerm (Model.EdgeType t) -> Phantoms.TTerm Model.VertexLabel
 edgeTypeOut x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.model.EdgeType"),
-        Core.projectionField = (Core.Name "out")})))),
+        Core.projectionField = (Core.Name "out")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 edgeTypeProperties :: Phantoms.TTerm (Model.EdgeType t) -> Phantoms.TTerm [Model.PropertyType t]
 edgeTypeProperties x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.model.EdgeType"),
-        Core.projectionField = (Core.Name "properties")})))),
+        Core.projectionField = (Core.Name "properties")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 edgeTypeWithId :: Phantoms.TTerm (Model.EdgeType t) -> Phantoms.TTerm t -> Phantoms.TTerm (Model.EdgeType t)
@@ -348,9 +348,9 @@ edgeTypeWithId original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "label"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.model.EdgeType"),
-              Core.projectionField = (Core.Name "label")})))),
+              Core.projectionField = (Core.Name "label")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "id"),
@@ -358,23 +358,23 @@ edgeTypeWithId original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "out"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.model.EdgeType"),
-              Core.projectionField = (Core.Name "out")})))),
+              Core.projectionField = (Core.Name "out")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "in"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.model.EdgeType"),
-              Core.projectionField = (Core.Name "in")})))),
+              Core.projectionField = (Core.Name "in")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "properties"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.model.EdgeType"),
-              Core.projectionField = (Core.Name "properties")})))),
+              Core.projectionField = (Core.Name "properties")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 edgeTypeWithIn :: Phantoms.TTerm (Model.EdgeType t) -> Phantoms.TTerm Model.VertexLabel -> Phantoms.TTerm (Model.EdgeType t)
@@ -385,23 +385,23 @@ edgeTypeWithIn original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "label"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.model.EdgeType"),
-              Core.projectionField = (Core.Name "label")})))),
+              Core.projectionField = (Core.Name "label")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "id"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.model.EdgeType"),
-              Core.projectionField = (Core.Name "id")})))),
+              Core.projectionField = (Core.Name "id")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "out"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.model.EdgeType"),
-              Core.projectionField = (Core.Name "out")})))),
+              Core.projectionField = (Core.Name "out")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "in"),
@@ -409,9 +409,9 @@ edgeTypeWithIn original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "properties"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.model.EdgeType"),
-              Core.projectionField = (Core.Name "properties")})))),
+              Core.projectionField = (Core.Name "properties")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 edgeTypeWithLabel :: Phantoms.TTerm (Model.EdgeType t) -> Phantoms.TTerm Model.EdgeLabel -> Phantoms.TTerm (Model.EdgeType t)
@@ -425,30 +425,30 @@ edgeTypeWithLabel original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "id"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.model.EdgeType"),
-              Core.projectionField = (Core.Name "id")})))),
+              Core.projectionField = (Core.Name "id")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "out"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.model.EdgeType"),
-              Core.projectionField = (Core.Name "out")})))),
+              Core.projectionField = (Core.Name "out")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "in"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.model.EdgeType"),
-              Core.projectionField = (Core.Name "in")})))),
+              Core.projectionField = (Core.Name "in")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "properties"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.model.EdgeType"),
-              Core.projectionField = (Core.Name "properties")})))),
+              Core.projectionField = (Core.Name "properties")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 edgeTypeWithOut :: Phantoms.TTerm (Model.EdgeType t) -> Phantoms.TTerm Model.VertexLabel -> Phantoms.TTerm (Model.EdgeType t)
@@ -459,16 +459,16 @@ edgeTypeWithOut original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "label"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.model.EdgeType"),
-              Core.projectionField = (Core.Name "label")})))),
+              Core.projectionField = (Core.Name "label")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "id"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.model.EdgeType"),
-              Core.projectionField = (Core.Name "id")})))),
+              Core.projectionField = (Core.Name "id")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "out"),
@@ -476,16 +476,16 @@ edgeTypeWithOut original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "in"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.model.EdgeType"),
-              Core.projectionField = (Core.Name "in")})))),
+              Core.projectionField = (Core.Name "in")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "properties"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.model.EdgeType"),
-              Core.projectionField = (Core.Name "properties")})))),
+              Core.projectionField = (Core.Name "properties")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 edgeTypeWithProperties :: Phantoms.TTerm (Model.EdgeType t) -> Phantoms.TTerm [Model.PropertyType t] -> Phantoms.TTerm (Model.EdgeType t)
@@ -496,30 +496,30 @@ edgeTypeWithProperties original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "label"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.model.EdgeType"),
-              Core.projectionField = (Core.Name "label")})))),
+              Core.projectionField = (Core.Name "label")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "id"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.model.EdgeType"),
-              Core.projectionField = (Core.Name "id")})))),
+              Core.projectionField = (Core.Name "id")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "out"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.model.EdgeType"),
-              Core.projectionField = (Core.Name "out")})))),
+              Core.projectionField = (Core.Name "out")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "in"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.model.EdgeType"),
-              Core.projectionField = (Core.Name "in")})))),
+              Core.projectionField = (Core.Name "in")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "properties"),
@@ -533,9 +533,9 @@ edgeWithId original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "label"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.model.Edge"),
-              Core.projectionField = (Core.Name "label")})))),
+              Core.projectionField = (Core.Name "label")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "id"),
@@ -543,23 +543,23 @@ edgeWithId original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "out"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.model.Edge"),
-              Core.projectionField = (Core.Name "out")})))),
+              Core.projectionField = (Core.Name "out")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "in"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.model.Edge"),
-              Core.projectionField = (Core.Name "in")})))),
+              Core.projectionField = (Core.Name "in")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "properties"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.model.Edge"),
-              Core.projectionField = (Core.Name "properties")})))),
+              Core.projectionField = (Core.Name "properties")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 edgeWithIn :: Phantoms.TTerm (Model.Edge v) -> Phantoms.TTerm v -> Phantoms.TTerm (Model.Edge v)
@@ -570,23 +570,23 @@ edgeWithIn original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "label"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.model.Edge"),
-              Core.projectionField = (Core.Name "label")})))),
+              Core.projectionField = (Core.Name "label")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "id"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.model.Edge"),
-              Core.projectionField = (Core.Name "id")})))),
+              Core.projectionField = (Core.Name "id")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "out"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.model.Edge"),
-              Core.projectionField = (Core.Name "out")})))),
+              Core.projectionField = (Core.Name "out")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "in"),
@@ -594,9 +594,9 @@ edgeWithIn original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "properties"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.model.Edge"),
-              Core.projectionField = (Core.Name "properties")})))),
+              Core.projectionField = (Core.Name "properties")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 edgeWithLabel :: Phantoms.TTerm (Model.Edge v) -> Phantoms.TTerm Model.EdgeLabel -> Phantoms.TTerm (Model.Edge v)
@@ -610,30 +610,30 @@ edgeWithLabel original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "id"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.model.Edge"),
-              Core.projectionField = (Core.Name "id")})))),
+              Core.projectionField = (Core.Name "id")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "out"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.model.Edge"),
-              Core.projectionField = (Core.Name "out")})))),
+              Core.projectionField = (Core.Name "out")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "in"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.model.Edge"),
-              Core.projectionField = (Core.Name "in")})))),
+              Core.projectionField = (Core.Name "in")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "properties"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.model.Edge"),
-              Core.projectionField = (Core.Name "properties")})))),
+              Core.projectionField = (Core.Name "properties")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 edgeWithOut :: Phantoms.TTerm (Model.Edge v) -> Phantoms.TTerm v -> Phantoms.TTerm (Model.Edge v)
@@ -644,16 +644,16 @@ edgeWithOut original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "label"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.model.Edge"),
-              Core.projectionField = (Core.Name "label")})))),
+              Core.projectionField = (Core.Name "label")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "id"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.model.Edge"),
-              Core.projectionField = (Core.Name "id")})))),
+              Core.projectionField = (Core.Name "id")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "out"),
@@ -661,16 +661,16 @@ edgeWithOut original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "in"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.model.Edge"),
-              Core.projectionField = (Core.Name "in")})))),
+              Core.projectionField = (Core.Name "in")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "properties"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.model.Edge"),
-              Core.projectionField = (Core.Name "properties")})))),
+              Core.projectionField = (Core.Name "properties")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 edgeWithProperties :: Phantoms.TTerm (Model.Edge v) -> Phantoms.TTerm (M.Map Model.PropertyKey v) -> Phantoms.TTerm (Model.Edge v)
@@ -681,30 +681,30 @@ edgeWithProperties original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "label"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.model.Edge"),
-              Core.projectionField = (Core.Name "label")})))),
+              Core.projectionField = (Core.Name "label")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "id"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.model.Edge"),
-              Core.projectionField = (Core.Name "id")})))),
+              Core.projectionField = (Core.Name "id")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "out"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.model.Edge"),
-              Core.projectionField = (Core.Name "out")})))),
+              Core.projectionField = (Core.Name "out")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "in"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.model.Edge"),
-              Core.projectionField = (Core.Name "in")})))),
+              Core.projectionField = (Core.Name "in")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "properties"),
@@ -749,17 +749,17 @@ elementTree self dependencies =
 elementTreeDependencies :: Phantoms.TTerm (Model.ElementTree v) -> Phantoms.TTerm [Model.ElementTree v]
 elementTreeDependencies x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.model.ElementTree"),
-        Core.projectionField = (Core.Name "dependencies")})))),
+        Core.projectionField = (Core.Name "dependencies")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 elementTreeSelf :: Phantoms.TTerm (Model.ElementTree v) -> Phantoms.TTerm (Model.Element v)
 elementTreeSelf x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.model.ElementTree"),
-        Core.projectionField = (Core.Name "self")})))),
+        Core.projectionField = (Core.Name "self")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 elementTreeWithDependencies :: Phantoms.TTerm (Model.ElementTree v) -> Phantoms.TTerm [Model.ElementTree v] -> Phantoms.TTerm (Model.ElementTree v)
@@ -770,9 +770,9 @@ elementTreeWithDependencies original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "self"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.model.ElementTree"),
-              Core.projectionField = (Core.Name "self")})))),
+              Core.projectionField = (Core.Name "self")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "dependencies"),
@@ -789,9 +789,9 @@ elementTreeWithSelf original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "dependencies"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.model.ElementTree"),
-              Core.projectionField = (Core.Name "dependencies")})))),
+              Core.projectionField = (Core.Name "dependencies")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 elementTypeEdge :: Phantoms.TTerm (Model.EdgeType t) -> Phantoms.TTerm (Model.ElementType t)
@@ -817,17 +817,17 @@ elementTypeTree self dependencies =
 elementTypeTreeDependencies :: Phantoms.TTerm (Model.ElementTypeTree t) -> Phantoms.TTerm [Model.ElementTypeTree t]
 elementTypeTreeDependencies x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.model.ElementTypeTree"),
-        Core.projectionField = (Core.Name "dependencies")})))),
+        Core.projectionField = (Core.Name "dependencies")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 elementTypeTreeSelf :: Phantoms.TTerm (Model.ElementTypeTree t) -> Phantoms.TTerm (Model.ElementType t)
 elementTypeTreeSelf x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.model.ElementTypeTree"),
-        Core.projectionField = (Core.Name "self")})))),
+        Core.projectionField = (Core.Name "self")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 elementTypeTreeWithDependencies :: Phantoms.TTerm (Model.ElementTypeTree t) -> Phantoms.TTerm [Model.ElementTypeTree t] -> Phantoms.TTerm (Model.ElementTypeTree t)
@@ -838,9 +838,9 @@ elementTypeTreeWithDependencies original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "self"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.model.ElementTypeTree"),
-              Core.projectionField = (Core.Name "self")})))),
+              Core.projectionField = (Core.Name "self")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "dependencies"),
@@ -857,9 +857,9 @@ elementTypeTreeWithSelf original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "dependencies"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.model.ElementTypeTree"),
-              Core.projectionField = (Core.Name "dependencies")})))),
+              Core.projectionField = (Core.Name "dependencies")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 elementTypeVertex :: Phantoms.TTerm (Model.VertexType t) -> Phantoms.TTerm (Model.ElementType t)
@@ -893,9 +893,9 @@ graph vertices edges =
 graphEdges :: Ord v => (Phantoms.TTerm (Model.Graph v) -> Phantoms.TTerm (M.Map v (Model.Edge v)))
 graphEdges x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.model.Graph"),
-        Core.projectionField = (Core.Name "edges")})))),
+        Core.projectionField = (Core.Name "edges")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 graphSchema :: Phantoms.TTerm (M.Map Model.VertexLabel (Model.VertexType t)) -> Phantoms.TTerm (M.Map Model.EdgeLabel (Model.EdgeType t)) -> Phantoms.TTerm (Model.GraphSchema t)
@@ -913,17 +913,17 @@ graphSchema vertices edges =
 graphSchemaEdges :: Phantoms.TTerm (Model.GraphSchema t) -> Phantoms.TTerm (M.Map Model.EdgeLabel (Model.EdgeType t))
 graphSchemaEdges x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.model.GraphSchema"),
-        Core.projectionField = (Core.Name "edges")})))),
+        Core.projectionField = (Core.Name "edges")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 graphSchemaVertices :: Phantoms.TTerm (Model.GraphSchema t) -> Phantoms.TTerm (M.Map Model.VertexLabel (Model.VertexType t))
 graphSchemaVertices x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.model.GraphSchema"),
-        Core.projectionField = (Core.Name "vertices")})))),
+        Core.projectionField = (Core.Name "vertices")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 graphSchemaWithEdges :: Phantoms.TTerm (Model.GraphSchema t) -> Phantoms.TTerm (M.Map Model.EdgeLabel (Model.EdgeType t)) -> Phantoms.TTerm (Model.GraphSchema t)
@@ -934,9 +934,9 @@ graphSchemaWithEdges original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "vertices"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.model.GraphSchema"),
-              Core.projectionField = (Core.Name "vertices")})))),
+              Core.projectionField = (Core.Name "vertices")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "edges"),
@@ -953,17 +953,17 @@ graphSchemaWithVertices original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "edges"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.model.GraphSchema"),
-              Core.projectionField = (Core.Name "edges")})))),
+              Core.projectionField = (Core.Name "edges")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 graphVertices :: Ord v => (Phantoms.TTerm (Model.Graph v) -> Phantoms.TTerm (M.Map v (Model.Vertex v)))
 graphVertices x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.model.Graph"),
-        Core.projectionField = (Core.Name "vertices")})))),
+        Core.projectionField = (Core.Name "vertices")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 graphWithEdges :: Ord v => (Phantoms.TTerm (Model.Graph v) -> Phantoms.TTerm (M.Map v (Model.Edge v)) -> Phantoms.TTerm (Model.Graph v))
@@ -974,9 +974,9 @@ graphWithEdges original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "vertices"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.model.Graph"),
-              Core.projectionField = (Core.Name "vertices")})))),
+              Core.projectionField = (Core.Name "vertices")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "edges"),
@@ -993,9 +993,9 @@ graphWithVertices original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "edges"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.model.Graph"),
-              Core.projectionField = (Core.Name "edges")})))),
+              Core.projectionField = (Core.Name "edges")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 labelEdge :: Phantoms.TTerm Model.EdgeLabel -> Phantoms.TTerm Model.Label
@@ -1029,17 +1029,17 @@ lazyGraph vertices edges =
 lazyGraphEdges :: Phantoms.TTerm (Model.LazyGraph v) -> Phantoms.TTerm [Model.Edge v]
 lazyGraphEdges x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.model.LazyGraph"),
-        Core.projectionField = (Core.Name "edges")})))),
+        Core.projectionField = (Core.Name "edges")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 lazyGraphVertices :: Phantoms.TTerm (Model.LazyGraph v) -> Phantoms.TTerm [Model.Vertex v]
 lazyGraphVertices x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.model.LazyGraph"),
-        Core.projectionField = (Core.Name "vertices")})))),
+        Core.projectionField = (Core.Name "vertices")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 lazyGraphWithEdges :: Phantoms.TTerm (Model.LazyGraph v) -> Phantoms.TTerm [Model.Edge v] -> Phantoms.TTerm (Model.LazyGraph v)
@@ -1050,9 +1050,9 @@ lazyGraphWithEdges original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "vertices"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.model.LazyGraph"),
-              Core.projectionField = (Core.Name "vertices")})))),
+              Core.projectionField = (Core.Name "vertices")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "edges"),
@@ -1069,9 +1069,9 @@ lazyGraphWithVertices original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "edges"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.model.LazyGraph"),
-              Core.projectionField = (Core.Name "edges")})))),
+              Core.projectionField = (Core.Name "edges")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 property :: Phantoms.TTerm Model.PropertyKey -> Phantoms.TTerm v -> Phantoms.TTerm (Model.Property v)
@@ -1089,9 +1089,9 @@ property key value =
 propertyKey :: Phantoms.TTerm (Model.Property v) -> Phantoms.TTerm Model.PropertyKey
 propertyKey x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.model.Property"),
-        Core.projectionField = (Core.Name "key")})))),
+        Core.projectionField = (Core.Name "key")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 propertyKey_ :: Phantoms.TTerm String -> Phantoms.TTerm Model.PropertyKey
@@ -1118,25 +1118,25 @@ propertyType key value required =
 propertyTypeKey :: Phantoms.TTerm (Model.PropertyType t) -> Phantoms.TTerm Model.PropertyKey
 propertyTypeKey x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.model.PropertyType"),
-        Core.projectionField = (Core.Name "key")})))),
+        Core.projectionField = (Core.Name "key")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 propertyTypeRequired :: Phantoms.TTerm (Model.PropertyType t) -> Phantoms.TTerm Bool
 propertyTypeRequired x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.model.PropertyType"),
-        Core.projectionField = (Core.Name "required")})))),
+        Core.projectionField = (Core.Name "required")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 propertyTypeValue :: Phantoms.TTerm (Model.PropertyType t) -> Phantoms.TTerm t
 propertyTypeValue x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.model.PropertyType"),
-        Core.projectionField = (Core.Name "value")})))),
+        Core.projectionField = (Core.Name "value")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 propertyTypeWithKey :: Phantoms.TTerm (Model.PropertyType t) -> Phantoms.TTerm Model.PropertyKey -> Phantoms.TTerm (Model.PropertyType t)
@@ -1150,16 +1150,16 @@ propertyTypeWithKey original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "value"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.model.PropertyType"),
-              Core.projectionField = (Core.Name "value")})))),
+              Core.projectionField = (Core.Name "value")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "required"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.model.PropertyType"),
-              Core.projectionField = (Core.Name "required")})))),
+              Core.projectionField = (Core.Name "required")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 propertyTypeWithRequired :: Phantoms.TTerm (Model.PropertyType t) -> Phantoms.TTerm Bool -> Phantoms.TTerm (Model.PropertyType t)
@@ -1170,16 +1170,16 @@ propertyTypeWithRequired original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "key"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.model.PropertyType"),
-              Core.projectionField = (Core.Name "key")})))),
+              Core.projectionField = (Core.Name "key")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "value"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.model.PropertyType"),
-              Core.projectionField = (Core.Name "value")})))),
+              Core.projectionField = (Core.Name "value")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "required"),
@@ -1193,9 +1193,9 @@ propertyTypeWithValue original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "key"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.model.PropertyType"),
-              Core.projectionField = (Core.Name "key")})))),
+              Core.projectionField = (Core.Name "key")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "value"),
@@ -1203,17 +1203,17 @@ propertyTypeWithValue original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "required"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.model.PropertyType"),
-              Core.projectionField = (Core.Name "required")})))),
+              Core.projectionField = (Core.Name "required")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 propertyValue :: Phantoms.TTerm (Model.Property v) -> Phantoms.TTerm v
 propertyValue x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.model.Property"),
-        Core.projectionField = (Core.Name "value")})))),
+        Core.projectionField = (Core.Name "value")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 propertyWithKey :: Phantoms.TTerm (Model.Property v) -> Phantoms.TTerm Model.PropertyKey -> Phantoms.TTerm (Model.Property v)
@@ -1227,9 +1227,9 @@ propertyWithKey original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "value"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.model.Property"),
-              Core.projectionField = (Core.Name "value")})))),
+              Core.projectionField = (Core.Name "value")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 propertyWithValue :: Phantoms.TTerm (Model.Property v) -> Phantoms.TTerm v -> Phantoms.TTerm (Model.Property v)
@@ -1240,9 +1240,9 @@ propertyWithValue original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "key"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.model.Property"),
-              Core.projectionField = (Core.Name "key")})))),
+              Core.projectionField = (Core.Name "key")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "value"),
@@ -1251,19 +1251,19 @@ propertyWithValue original newVal =
 unEdgeLabel :: Phantoms.TTerm Model.EdgeLabel -> Phantoms.TTerm String
 unEdgeLabel x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.pg.model.EdgeLabel")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.pg.model.EdgeLabel")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unPropertyKey :: Phantoms.TTerm Model.PropertyKey -> Phantoms.TTerm String
 unPropertyKey x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.pg.model.PropertyKey")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.pg.model.PropertyKey")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unVertexLabel :: Phantoms.TTerm Model.VertexLabel -> Phantoms.TTerm String
 unVertexLabel x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.pg.model.VertexLabel")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.pg.model.VertexLabel")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 vertex :: Phantoms.TTerm Model.VertexLabel -> Phantoms.TTerm v -> Phantoms.TTerm (M.Map Model.PropertyKey v) -> Phantoms.TTerm (Model.Vertex v)
@@ -1284,17 +1284,17 @@ vertex label id properties =
 vertexId :: Phantoms.TTerm (Model.Vertex v) -> Phantoms.TTerm v
 vertexId x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.model.Vertex"),
-        Core.projectionField = (Core.Name "id")})))),
+        Core.projectionField = (Core.Name "id")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 vertexLabel :: Phantoms.TTerm (Model.Vertex v) -> Phantoms.TTerm Model.VertexLabel
 vertexLabel x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.model.Vertex"),
-        Core.projectionField = (Core.Name "label")})))),
+        Core.projectionField = (Core.Name "label")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 vertexLabel_ :: Phantoms.TTerm String -> Phantoms.TTerm Model.VertexLabel
@@ -1306,9 +1306,9 @@ vertexLabel_ x =
 vertexProperties :: Phantoms.TTerm (Model.Vertex v) -> Phantoms.TTerm (M.Map Model.PropertyKey v)
 vertexProperties x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.model.Vertex"),
-        Core.projectionField = (Core.Name "properties")})))),
+        Core.projectionField = (Core.Name "properties")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 vertexType :: Phantoms.TTerm Model.VertexLabel -> Phantoms.TTerm t -> Phantoms.TTerm [Model.PropertyType t] -> Phantoms.TTerm (Model.VertexType t)
@@ -1329,25 +1329,25 @@ vertexType label id properties =
 vertexTypeId :: Phantoms.TTerm (Model.VertexType t) -> Phantoms.TTerm t
 vertexTypeId x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.model.VertexType"),
-        Core.projectionField = (Core.Name "id")})))),
+        Core.projectionField = (Core.Name "id")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 vertexTypeLabel :: Phantoms.TTerm (Model.VertexType t) -> Phantoms.TTerm Model.VertexLabel
 vertexTypeLabel x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.model.VertexType"),
-        Core.projectionField = (Core.Name "label")})))),
+        Core.projectionField = (Core.Name "label")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 vertexTypeProperties :: Phantoms.TTerm (Model.VertexType t) -> Phantoms.TTerm [Model.PropertyType t]
 vertexTypeProperties x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.model.VertexType"),
-        Core.projectionField = (Core.Name "properties")})))),
+        Core.projectionField = (Core.Name "properties")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 vertexTypeWithId :: Phantoms.TTerm (Model.VertexType t) -> Phantoms.TTerm t -> Phantoms.TTerm (Model.VertexType t)
@@ -1358,9 +1358,9 @@ vertexTypeWithId original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "label"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.model.VertexType"),
-              Core.projectionField = (Core.Name "label")})))),
+              Core.projectionField = (Core.Name "label")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "id"),
@@ -1368,9 +1368,9 @@ vertexTypeWithId original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "properties"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.model.VertexType"),
-              Core.projectionField = (Core.Name "properties")})))),
+              Core.projectionField = (Core.Name "properties")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 vertexTypeWithLabel :: Phantoms.TTerm (Model.VertexType t) -> Phantoms.TTerm Model.VertexLabel -> Phantoms.TTerm (Model.VertexType t)
@@ -1384,16 +1384,16 @@ vertexTypeWithLabel original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "id"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.model.VertexType"),
-              Core.projectionField = (Core.Name "id")})))),
+              Core.projectionField = (Core.Name "id")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "properties"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.model.VertexType"),
-              Core.projectionField = (Core.Name "properties")})))),
+              Core.projectionField = (Core.Name "properties")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 vertexTypeWithProperties :: Phantoms.TTerm (Model.VertexType t) -> Phantoms.TTerm [Model.PropertyType t] -> Phantoms.TTerm (Model.VertexType t)
@@ -1404,16 +1404,16 @@ vertexTypeWithProperties original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "label"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.model.VertexType"),
-              Core.projectionField = (Core.Name "label")})))),
+              Core.projectionField = (Core.Name "label")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "id"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.model.VertexType"),
-              Core.projectionField = (Core.Name "id")})))),
+              Core.projectionField = (Core.Name "id")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "properties"),
@@ -1437,25 +1437,25 @@ vertexWithAdjacentEdges vertex ins outs =
 vertexWithAdjacentEdgesIns :: Phantoms.TTerm (Model.VertexWithAdjacentEdges v) -> Phantoms.TTerm [Model.AdjacentEdge v]
 vertexWithAdjacentEdgesIns x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.model.VertexWithAdjacentEdges"),
-        Core.projectionField = (Core.Name "ins")})))),
+        Core.projectionField = (Core.Name "ins")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 vertexWithAdjacentEdgesOuts :: Phantoms.TTerm (Model.VertexWithAdjacentEdges v) -> Phantoms.TTerm [Model.AdjacentEdge v]
 vertexWithAdjacentEdgesOuts x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.model.VertexWithAdjacentEdges"),
-        Core.projectionField = (Core.Name "outs")})))),
+        Core.projectionField = (Core.Name "outs")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 vertexWithAdjacentEdgesVertex :: Phantoms.TTerm (Model.VertexWithAdjacentEdges v) -> Phantoms.TTerm (Model.Vertex v)
 vertexWithAdjacentEdgesVertex x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.pg.model.VertexWithAdjacentEdges"),
-        Core.projectionField = (Core.Name "vertex")})))),
+        Core.projectionField = (Core.Name "vertex")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 vertexWithAdjacentEdgesWithIns :: Phantoms.TTerm (Model.VertexWithAdjacentEdges v) -> Phantoms.TTerm [Model.AdjacentEdge v] -> Phantoms.TTerm (Model.VertexWithAdjacentEdges v)
@@ -1466,9 +1466,9 @@ vertexWithAdjacentEdgesWithIns original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "vertex"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.model.VertexWithAdjacentEdges"),
-              Core.projectionField = (Core.Name "vertex")})))),
+              Core.projectionField = (Core.Name "vertex")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "ins"),
@@ -1476,9 +1476,9 @@ vertexWithAdjacentEdgesWithIns original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "outs"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.model.VertexWithAdjacentEdges"),
-              Core.projectionField = (Core.Name "outs")})))),
+              Core.projectionField = (Core.Name "outs")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 vertexWithAdjacentEdgesWithOuts :: Phantoms.TTerm (Model.VertexWithAdjacentEdges v) -> Phantoms.TTerm [Model.AdjacentEdge v] -> Phantoms.TTerm (Model.VertexWithAdjacentEdges v)
@@ -1489,16 +1489,16 @@ vertexWithAdjacentEdgesWithOuts original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "vertex"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.model.VertexWithAdjacentEdges"),
-              Core.projectionField = (Core.Name "vertex")})))),
+              Core.projectionField = (Core.Name "vertex")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "ins"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.model.VertexWithAdjacentEdges"),
-              Core.projectionField = (Core.Name "ins")})))),
+              Core.projectionField = (Core.Name "ins")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "outs"),
@@ -1515,16 +1515,16 @@ vertexWithAdjacentEdgesWithVertex original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "ins"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.model.VertexWithAdjacentEdges"),
-              Core.projectionField = (Core.Name "ins")})))),
+              Core.projectionField = (Core.Name "ins")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "outs"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.model.VertexWithAdjacentEdges"),
-              Core.projectionField = (Core.Name "outs")})))),
+              Core.projectionField = (Core.Name "outs")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 vertexWithId :: Phantoms.TTerm (Model.Vertex v) -> Phantoms.TTerm v -> Phantoms.TTerm (Model.Vertex v)
@@ -1535,9 +1535,9 @@ vertexWithId original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "label"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.model.Vertex"),
-              Core.projectionField = (Core.Name "label")})))),
+              Core.projectionField = (Core.Name "label")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "id"),
@@ -1545,9 +1545,9 @@ vertexWithId original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "properties"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.model.Vertex"),
-              Core.projectionField = (Core.Name "properties")})))),
+              Core.projectionField = (Core.Name "properties")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 vertexWithLabel :: Phantoms.TTerm (Model.Vertex v) -> Phantoms.TTerm Model.VertexLabel -> Phantoms.TTerm (Model.Vertex v)
@@ -1561,16 +1561,16 @@ vertexWithLabel original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "id"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.model.Vertex"),
-              Core.projectionField = (Core.Name "id")})))),
+              Core.projectionField = (Core.Name "id")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "properties"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.model.Vertex"),
-              Core.projectionField = (Core.Name "properties")})))),
+              Core.projectionField = (Core.Name "properties")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 vertexWithProperties :: Phantoms.TTerm (Model.Vertex v) -> Phantoms.TTerm (M.Map Model.PropertyKey v) -> Phantoms.TTerm (Model.Vertex v)
@@ -1581,16 +1581,16 @@ vertexWithProperties original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "label"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.model.Vertex"),
-              Core.projectionField = (Core.Name "label")})))),
+              Core.projectionField = (Core.Name "label")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "id"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.pg.model.Vertex"),
-              Core.projectionField = (Core.Name "id")})))),
+              Core.projectionField = (Core.Name "id")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "properties"),

@@ -101,20 +101,17 @@
                   {
                     "name": "types",
                     "term": {
-                      "function": {
-                        "lambda": {
-                          "body": {
-                            "application": {
-                              "argument": {"variable": "t"},
-                              "function": {
-                                "function": {
-                                  "elimination": {
-                                    "union": {
-                                      "cases": [],
-                                      "default": {"literal": {"boolean": true}},
-                                      "typeName": "hydra.core.Type"}}}}}},
-                          "domain": {"variable": "hydra.core.Type"},
-                          "parameter": "t"}}},
+                      "lambda": {
+                        "body": {
+                          "application": {
+                            "argument": {"variable": "t"},
+                            "function": {
+                              "cases": {
+                                "cases": [],
+                                "default": {"literal": {"boolean": true}},
+                                "typeName": "hydra.core.Type"}}}},
+                        "domain": {"variable": "hydra.core.Type"},
+                        "parameter": "t"}},
                     "type": {
                       "type": {
                         "function": {

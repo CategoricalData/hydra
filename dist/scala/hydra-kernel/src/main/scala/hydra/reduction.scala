@@ -47,15 +47,13 @@ def contractTerm(term: hydra.core.Term): hydra.core.Term =
         {
           lazy val rhs: hydra.core.Term = (v_Term_application_app.argument)
           hydra.strip.deannotateTerm(lhs) match
-            case hydra.core.Term.function(v_Term_function_f) => v_Term_function_f match
-              case hydra.core.Function.lambda(v_Function_lambda_l) => {
-                lazy val v: hydra.core.Name = (v_Function_lambda_l.parameter)
-                {
-                  lazy val body: hydra.core.Term = (v_Function_lambda_l.body)
-                  hydra.lib.logic.ifElse[hydra.core.Term](hydra.variables.isFreeVariableInTerm(v)(body))(body)(hydra.variables.replaceFreeTermVariable(v)(rhs)(body))
-                }
+            case hydra.core.Term.lambda(v_Term_lambda_l) => {
+              lazy val v: hydra.core.Name = (v_Term_lambda_l.parameter)
+              {
+                lazy val body: hydra.core.Term = (v_Term_lambda_l.body)
+                hydra.lib.logic.ifElse[hydra.core.Term](hydra.variables.isFreeVariableInTerm(v)(body))(body)(hydra.variables.replaceFreeTermVariable(v)(rhs)(body))
               }
-              case _ => rec
+            }
             case _ => rec
         }
       }
@@ -75,9 +73,10 @@ def etaExpandTerm(tx0: hydra.graph.Graph)(term0: hydra.core.Term): hydra.core.Te
     term match
     case hydra.core.Term.annotated(v_Term_annotated_at) => termArityWithContext(tx)(v_Term_annotated_at.body)
     case hydra.core.Term.application(v_Term_application_app) => hydra.lib.math.sub(termArityWithContext(tx)(v_Term_application_app.function))(1)
-    case hydra.core.Term.function(v_Term_function_f) => v_Term_function_f match
-      case hydra.core.Function.elimination(v_Function_elimination__) => 1
-      case hydra.core.Function.lambda(v_Function_lambda__) => 0
+    case hydra.core.Term.cases(v_Term_cases__) => 1
+    case hydra.core.Term.lambda(v_Term_lambda__) => 0
+    case hydra.core.Term.project(v_Term_project__) => 1
+    case hydra.core.Term.unwrap(v_Term_unwrap__) => 1
     case hydra.core.Term.let(v_Term_let_l) => termArityWithContext(hydra.scoping.extendGraphForLet((_x: hydra.graph.Graph) => (_2: hydra.core.Binding) => None)(tx)(v_Term_let_l))(v_Term_let_l.body)
     case hydra.core.Term.typeLambda(v_Term_typeLambda_tl) => termArityWithContext(hydra.scoping.extendGraphForTypeLambda(tx)(v_Term_typeLambda_tl))(v_Term_typeLambda_tl.body)
     case hydra.core.Term.typeApplication(v_Term_typeApplication_tat) => termArityWithContext(tx)(v_Term_typeApplication_tat.body)
@@ -139,7 +138,7 @@ def etaExpandTerm(tx0: hydra.graph.Graph)(term0: hydra.core.Term): hydra.core.Te
                       lazy val dom: Option[hydra.core.Type] = hydra.lib.pairs.second[Int, Option[hydra.core.Type]](idPair)
                       {
                         lazy val vn: hydra.core.Name = hydra.lib.strings.cat2("v")(hydra.lib.literals.showInt32(i))
-                        hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda(vn, dom, body)))
+                        hydra.core.Term.lambda(hydra.core.Lambda(vn, dom, body))
                       }
                     }
                   })(fullyApplied)(hydra.lib.lists.reverse[Tuple2[Int, Option[hydra.core.Type]]](indexedDomains))
@@ -157,7 +156,10 @@ def etaExpandTerm(tx0: hydra.graph.Graph)(term0: hydra.core.Term): hydra.core.Te
     def termHeadType(tx2: hydra.graph.Graph)(trm2: hydra.core.Term): Option[hydra.core.Type] =
       trm2 match
       case hydra.core.Term.annotated(v_Term_annotated_at2) => termHeadType(tx2)(v_Term_annotated_at2.body)
-      case hydra.core.Term.function(v_Term_function__) => None
+      case hydra.core.Term.lambda(v_Term_lambda__) => None
+      case hydra.core.Term.cases(v_Term_cases__) => None
+      case hydra.core.Term.project(v_Term_project__) => None
+      case hydra.core.Term.unwrap(v_Term_unwrap__) => None
       case hydra.core.Term.let(v_Term_let_l2) => termHeadType(hydra.scoping.extendGraphForLet((_x: hydra.graph.Graph) => (_2: hydra.core.Binding) => None)(tx2)(v_Term_let_l2))(v_Term_let_l2.body)
       case hydra.core.Term.typeLambda(v_Term_typeLambda_tl2) => termHeadType(hydra.scoping.extendGraphForTypeLambda(tx2)(v_Term_typeLambda_tl2))(v_Term_typeLambda_tl2.body)
       case hydra.core.Term.typeApplication(v_Term_typeApplication_tat2) => hydra.lib.maybes.bind[hydra.core.Type,
@@ -182,13 +184,6 @@ def etaExpandTerm(tx0: hydra.graph.Graph)(term0: hydra.core.Term): hydra.core.Te
       lazy val branchHType: Option[hydra.core.Type] = termHeadType(tx)(branchBody)
       hydra.core.Field(f.name, expand(true)(Seq())(arty)(branchHType)(branchBody))
     }
-    def forElimination(elm: hydra.core.Elimination): hydra.core.Elimination =
-      elm match
-      case hydra.core.Elimination.record(v_Elimination_record_p) => hydra.core.Elimination.record(v_Elimination_record_p)
-      case hydra.core.Elimination.union(v_Elimination_union_cs) => hydra.core.Elimination.union(hydra.core.CaseStatement(v_Elimination_union_cs.typeName,
-         hydra.lib.maybes.map[hydra.core.Term, hydra.core.Term]((t1: hydra.core.Term) => recurse(tx)(t1))(v_Elimination_union_cs.default),
-         hydra.lib.lists.map[hydra.core.Field, hydra.core.Field](forCaseBranch)(v_Elimination_union_cs.cases)))
-      case hydra.core.Elimination.wrap(v_Elimination_wrap_nm) => hydra.core.Elimination.wrap(v_Elimination_wrap_nm)
     def forMap(mp: Map[hydra.core.Term, hydra.core.Term]): Map[hydra.core.Term, hydra.core.Term] =
       {
       def forPair(pr: Tuple2[hydra.core.Term, hydra.core.Term]): Tuple2[hydra.core.Term, hydra.core.Term] =
@@ -207,37 +202,34 @@ def etaExpandTerm(tx0: hydra.graph.Graph)(term0: hydra.core.Term): hydra.core.Te
       }
       case hydra.core.Term.either(v_Term_either_e) => afterRecursion(hydra.core.Term.either(hydra.lib.eithers.either[hydra.core.Term,
          hydra.core.Term, Either[hydra.core.Term, hydra.core.Term]]((l: hydra.core.Term) => Left(recurse(tx)(l)))((r: hydra.core.Term) => Right(recurse(tx)(r)))(v_Term_either_e)))
-      case hydra.core.Term.function(v_Term_function_fn) => v_Term_function_fn match
-        case hydra.core.Function.elimination(v_Function_elimination_elm) => {
-          lazy val padElim: Boolean = v_Function_elimination_elm match
-            case hydra.core.Elimination.record(v_Elimination_record__) => false
-            case hydra.core.Elimination.union(v_Elimination_union__) => true
-            case hydra.core.Elimination.wrap(v_Elimination_wrap__) => false
+      case hydra.core.Term.cases(v_Term_cases_cs) => {
+        lazy val newCs: hydra.core.CaseStatement = hydra.core.CaseStatement(v_Term_cases_cs.typeName,
+           hydra.lib.maybes.map[hydra.core.Term, hydra.core.Term]((t1: hydra.core.Term) => recurse(tx)(t1))(v_Term_cases_cs.default),
+           hydra.lib.lists.map[hydra.core.Field, hydra.core.Field](forCaseBranch)(v_Term_cases_cs.cases))
+        {
+          lazy val elimTerm: hydra.core.Term = hydra.core.Term.cases(newCs)
           {
-            lazy val elimTerm: hydra.core.Term = hydra.core.Term.function(hydra.core.Function.elimination(forElimination(v_Function_elimination_elm)))
+            lazy val elimHeadType: Option[hydra.core.Type] = Some(hydra.core.Type.function(hydra.core.FunctionType(hydra.core.Type.variable(v_Term_cases_cs.typeName),
+               hydra.core.Type.unit)))
+            expand(true)(args)(1)(elimHeadType)(elimTerm)
+          }
+        }
+      }
+      case hydra.core.Term.project(v_Term_project_p) => expand(false)(args)(1)(None)(hydra.core.Term.project(v_Term_project_p))
+      case hydra.core.Term.unwrap(v_Term_unwrap_nm) => expand(false)(args)(1)(None)(hydra.core.Term.unwrap(v_Term_unwrap_nm))
+      case hydra.core.Term.lambda(v_Term_lambda_lm) => {
+        lazy val tx1: hydra.graph.Graph = hydra.scoping.extendGraphForLambda(tx)(v_Term_lambda_lm)
+        {
+          lazy val body: hydra.core.Term = rewriteWithArgs(Seq())(tx1)(v_Term_lambda_lm.body)
+          {
+            lazy val result: hydra.core.Term = hydra.core.Term.lambda(hydra.core.Lambda(v_Term_lambda_lm.parameter, (v_Term_lambda_lm.domain), body))
             {
-              lazy val elimHeadType: Option[hydra.core.Type] = v_Function_elimination_elm match
-                case hydra.core.Elimination.union(v_Elimination_union_cs2) => Some(hydra.core.Type.function(hydra.core.FunctionType(hydra.core.Type.variable(v_Elimination_union_cs2.typeName),
-                   hydra.core.Type.unit)))
-                case _ => None
-              expand(padElim)(args)(1)(elimHeadType)(elimTerm)
+              lazy val arty: Int = termArityWithContext(tx)(result)
+              expand(false)(args)(arty)(None)(result)
             }
           }
         }
-        case hydra.core.Function.lambda(v_Function_lambda_lm) => {
-          lazy val tx1: hydra.graph.Graph = hydra.scoping.extendGraphForLambda(tx)(v_Function_lambda_lm)
-          {
-            lazy val body: hydra.core.Term = rewriteWithArgs(Seq())(tx1)(v_Function_lambda_lm.body)
-            {
-              lazy val result: hydra.core.Term = hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda(v_Function_lambda_lm.parameter,
-                 (v_Function_lambda_lm.domain), body)))
-              {
-                lazy val arty: Int = termArityWithContext(tx)(result)
-                expand(false)(args)(arty)(None)(result)
-              }
-            }
-          }
-        }
+      }
       case hydra.core.Term.let(v_Term_let_lt) => {
         lazy val tx1: hydra.graph.Graph = hydra.scoping.extendGraphForLet((_x: hydra.graph.Graph) => (_2: hydra.core.Binding) => None)(tx)(v_Term_let_lt)
         {
@@ -319,16 +311,15 @@ def etaExpandTypedTerm(cx: hydra.context.Context)(tx0: hydra.graph.Graph)(term0:
       lazy val dflt: Either[hydra.errors.Error, Int] = hydra.lib.eithers.map[Tuple2[hydra.core.Type, hydra.context.Context],
          Int, hydra.errors.Error]((_tc: Tuple2[hydra.core.Type, hydra.context.Context]) =>
         hydra.arity.typeArity(hydra.lib.pairs.first[hydra.core.Type, hydra.context.Context](_tc)))(hydra.checking.typeOf(cx)(tx2)(Seq())(term2))
-      def forFunction(tx3: hydra.graph.Graph)(f: hydra.core.Function): Either[hydra.errors.Error, Int] =
-        f match
-        case hydra.core.Function.elimination(v_Function_elimination__) => Right(1)
-        case hydra.core.Function.lambda(v_Function_lambda_l) => {
-          lazy val txl: hydra.graph.Graph = hydra.scoping.extendGraphForLambda(tx3)(v_Function_lambda_l)
-          arityOf(txl)(v_Function_lambda_l.body)
-        }
       term2 match
         case hydra.core.Term.annotated(v_Term_annotated_at) => arityOf(tx2)(v_Term_annotated_at.body)
-        case hydra.core.Term.function(v_Term_function_f) => forFunction(tx2)(v_Term_function_f)
+        case hydra.core.Term.cases(v_Term_cases__) => Right(1)
+        case hydra.core.Term.project(v_Term_project__) => Right(1)
+        case hydra.core.Term.unwrap(v_Term_unwrap__) => Right(1)
+        case hydra.core.Term.lambda(v_Term_lambda_l) => {
+          lazy val txl: hydra.graph.Graph = hydra.scoping.extendGraphForLambda(tx2)(v_Term_lambda_l)
+          arityOf(txl)(v_Term_lambda_l.body)
+        }
         case hydra.core.Term.let(v_Term_let_l) => {
           lazy val txl: hydra.graph.Graph = hydra.scoping.extendGraphForLet((_x: hydra.graph.Graph) => (_2: hydra.core.Binding) => None)(tx2)(v_Term_let_l)
           arityOf(txl)(v_Term_let_l.body)
@@ -349,9 +340,9 @@ def etaExpandTypedTerm(cx: hydra.context.Context)(tx0: hydra.graph.Graph)(term0:
     def extraVariables(n: Int): Seq[hydra.core.Name] =
       hydra.lib.lists.map[Int, hydra.core.Name]((i: Int) => hydra.lib.strings.cat2("v")(hydra.lib.literals.showInt32(i)))(hydra.lib.math.range(1)(n))
     def pad(vars: Seq[hydra.core.Name])(body: hydra.core.Term): hydra.core.Term =
-      hydra.lib.logic.ifElse[hydra.core.Term](hydra.lib.lists.`null`[hydra.core.Name](vars))(body)(hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda(hydra.lib.lists.head[hydra.core.Name](vars),
+      hydra.lib.logic.ifElse[hydra.core.Term](hydra.lib.lists.`null`[hydra.core.Name](vars))(body)(hydra.core.Term.lambda(hydra.core.Lambda(hydra.lib.lists.head[hydra.core.Name](vars),
          None, pad(hydra.lib.lists.tail[hydra.core.Name](vars))(hydra.core.Term.application(hydra.core.Application(body,
-         hydra.core.Term.variable(hydra.lib.lists.head[hydra.core.Name](vars)))))))))
+         hydra.core.Term.variable(hydra.lib.lists.head[hydra.core.Name](vars))))))))
     def padn(n: Int)(body: hydra.core.Term): hydra.core.Term = pad(extraVariables(n))(body)
     def unwind(term2: hydra.core.Term): hydra.core.Term =
       hydra.lib.lists.foldl[hydra.core.Term, hydra.core.Type]((e: hydra.core.Term) =>
@@ -373,22 +364,21 @@ def etaExpandTypedTerm(cx: hydra.context.Context)(tx0: hydra.graph.Graph)(term0:
       {
       lazy val tname: hydra.core.Name = (cs.typeName)
       lazy val dflt: Option[hydra.core.Term] = (cs.default)
-      lazy val cases: Seq[hydra.core.Field] = (cs.cases)
+      lazy val csCases: Seq[hydra.core.Field] = (cs.cases)
       hydra.lib.eithers.bind[hydra.errors.Error, Option[hydra.core.Term], hydra.core.Term](hydra.lib.eithers.mapMaybe[hydra.core.Term,
          hydra.core.Term, hydra.errors.Error]((v1: hydra.core.Term) => rewrite(false)(false)(Seq())(recurse)(tx)(v1))(dflt))((rdflt: Option[hydra.core.Term]) =>
         hydra.lib.eithers.bind[hydra.errors.Error, Seq[hydra.core.Field], hydra.core.Term](hydra.lib.eithers.mapList[hydra.core.Field,
-           hydra.core.Field, hydra.errors.Error](forCase)(cases))((rcases: Seq[hydra.core.Field]) =>
-        Right(hydra.core.Term.function(hydra.core.Function.elimination(hydra.core.Elimination.union(hydra.core.CaseStatement(tname, rdflt, rcases)))))))
+           hydra.core.Field, hydra.errors.Error](forCase)(csCases))((rcases: Seq[hydra.core.Field]) =>
+        Right(hydra.core.Term.cases(hydra.core.CaseStatement(tname, rdflt, rcases)))))
     }
-    def forElimination(elm: hydra.core.Elimination): Either[hydra.errors.Error, hydra.core.Term] =
-      {
-      def checkBase(elm2: hydra.core.Elimination): Either[hydra.errors.Error, hydra.core.Term] =
-        elm2 match
-        case hydra.core.Elimination.union(v_Elimination_union_cs) => forCaseStatement(v_Elimination_union_cs)
-        case _ => recurse(tx)(term)
+    def forCases(cs: hydra.core.CaseStatement): Either[hydra.errors.Error, hydra.core.Term] =
       hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Term, hydra.core.Term](hydra.lib.eithers.map[hydra.core.Term,
-         hydra.core.Term, hydra.errors.Error](unwind)(checkBase(elm)))((base: hydra.core.Term) =>
-        Right(hydra.lib.logic.ifElse[hydra.core.Term](hydra.lib.logic.or(topLevel)(forced))(padn(1)(base))(base)))
+         hydra.core.Term, hydra.errors.Error](unwind)(forCaseStatement(cs)))((base: hydra.core.Term) =>
+      Right(hydra.lib.logic.ifElse[hydra.core.Term](hydra.lib.logic.or(topLevel)(forced))(padn(1)(base))(base)))
+    def forNullaryElim(elimTerm: hydra.core.Term): hydra.core.Term =
+      {
+      lazy val base: hydra.core.Term = unwind(elimTerm)
+      hydra.lib.logic.ifElse[hydra.core.Term](hydra.lib.logic.or(topLevel)(forced))(padn(1)(base))(base)
     }
     term match
       case hydra.core.Term.application(v_Term_application_a) => {
@@ -404,13 +394,13 @@ def etaExpandTypedTerm(cx: hydra.context.Context)(tx0: hydra.graph.Graph)(term0:
           })))
         }
       }
-      case hydra.core.Term.function(v_Term_function_f) => v_Term_function_f match
-        case hydra.core.Function.elimination(v_Function_elimination_elm) => forElimination(v_Function_elimination_elm)
-        case hydra.core.Function.lambda(v_Function_lambda_l) => {
-          lazy val txl: hydra.graph.Graph = hydra.scoping.extendGraphForLambda(tx)(v_Function_lambda_l)
-          hydra.lib.eithers.map[hydra.core.Term, hydra.core.Term, hydra.errors.Error](unwind)(recurse(txl)(term))
-        }
-        case _ => recurseOrForce(term)
+      case hydra.core.Term.cases(v_Term_cases_cs) => forCases(v_Term_cases_cs)
+      case hydra.core.Term.project(v_Term_project_p) => Right(forNullaryElim(hydra.core.Term.project(v_Term_project_p)))
+      case hydra.core.Term.unwrap(v_Term_unwrap_n) => Right(forNullaryElim(hydra.core.Term.unwrap(v_Term_unwrap_n)))
+      case hydra.core.Term.lambda(v_Term_lambda_l) => {
+        lazy val txl: hydra.graph.Graph = hydra.scoping.extendGraphForLambda(tx)(v_Term_lambda_l)
+        hydra.lib.eithers.map[hydra.core.Term, hydra.core.Term, hydra.errors.Error](unwind)(recurse(txl)(term))
+      }
       case hydra.core.Term.let(v_Term_let_l) => {
         lazy val txlt: hydra.graph.Graph = hydra.scoping.extendGraphForLet((_x: hydra.graph.Graph) => (_2: hydra.core.Binding) => None)(tx)(v_Term_let_l)
         recurse(txlt)(term)
@@ -431,9 +421,10 @@ def etaExpansionArity(graph: hydra.graph.Graph)(term: hydra.core.Term): Int =
   term match
   case hydra.core.Term.annotated(v_Term_annotated_at) => hydra.reduction.etaExpansionArity(graph)(v_Term_annotated_at.body)
   case hydra.core.Term.application(v_Term_application_app) => hydra.lib.math.sub(hydra.reduction.etaExpansionArity(graph)(v_Term_application_app.function))(1)
-  case hydra.core.Term.function(v_Term_function_f) => v_Term_function_f match
-    case hydra.core.Function.elimination(v_Function_elimination__) => 1
-    case hydra.core.Function.lambda(v_Function_lambda__) => 0
+  case hydra.core.Term.cases(v_Term_cases__) => 1
+  case hydra.core.Term.lambda(v_Term_lambda__) => 0
+  case hydra.core.Term.project(v_Term_project__) => 1
+  case hydra.core.Term.unwrap(v_Term_unwrap__) => 1
   case hydra.core.Term.typeLambda(v_Term_typeLambda_ta) => hydra.reduction.etaExpansionArity(graph)(v_Term_typeLambda_ta.body)
   case hydra.core.Term.typeApplication(v_Term_typeApplication_tt) => hydra.reduction.etaExpansionArity(graph)(v_Term_typeApplication_tt.body)
   case hydra.core.Term.variable(v_Term_variable_name) => hydra.lib.maybes.maybe[Int, hydra.core.TypeScheme](0)((ts: hydra.core.TypeScheme) => hydra.arity.typeArity(ts.`type`))(hydra.lib.maybes.bind[hydra.core.Binding,
@@ -466,9 +457,7 @@ def etaReduceTerm(term: hydra.core.Term): hydra.core.Term =
   term match
     case hydra.core.Term.annotated(v_Term_annotated_at) => hydra.core.Term.annotated(hydra.core.AnnotatedTerm(hydra.reduction.etaReduceTerm(v_Term_annotated_at.body),
        (v_Term_annotated_at.annotation)))
-    case hydra.core.Term.function(v_Term_function_f) => v_Term_function_f match
-      case hydra.core.Function.lambda(v_Function_lambda_l) => reduceLambda(v_Function_lambda_l)
-      case _ => noChange
+    case hydra.core.Term.lambda(v_Term_lambda_l) => reduceLambda(v_Term_lambda_l)
     case _ => noChange
 }
 
@@ -477,12 +466,8 @@ def reduceTerm(cx: hydra.context.Context)(graph: hydra.graph.Graph)(eager: Boole
   def reduce(eager2: Boolean)(v1: hydra.core.Term): Either[hydra.errors.Error, hydra.core.Term] = hydra.reduction.reduceTerm(cx)(graph)(eager2)(v1)
   def doRecurse(eager2: Boolean)(term2: hydra.core.Term): Boolean =
     {
-    def isNonLambda(f: hydra.core.Function): Boolean =
-      f match
-      case hydra.core.Function.lambda(v_Function_lambda__) => false
-      case _ => true
     lazy val isNonLambdaTerm: Boolean = term2 match
-      case hydra.core.Term.function(v_Term_function_f) => isNonLambda(v_Term_function_f)
+      case hydra.core.Term.lambda(v_Term_lambda__) => false
       case hydra.core.Term.let(v_Term_let__) => false
       case _ => true
     hydra.lib.logic.and(eager2)(isNonLambdaTerm)
@@ -493,35 +478,48 @@ def reduceTerm(cx: hydra.context.Context)(graph: hydra.graph.Graph)(eager: Boole
     hydra.lib.logic.ifElse[hydra.core.Term](hydra.lib.lists.`null`[hydra.core.Term](args))(fun)(applyToArguments(hydra.core.Term.application(hydra.core.Application(fun,
        hydra.lib.lists.head[hydra.core.Term](args))))(hydra.lib.lists.tail[hydra.core.Term](args)))
   def mapErrorToString(e: hydra.errors.Error): hydra.errors.Error = hydra.errors.Error.other(hydra.show.errors.error(e))
-  def applyElimination(elm: hydra.core.Elimination)(reducedArg: hydra.core.Term): Either[hydra.errors.Error, hydra.core.Term] =
-    elm match
-    case hydra.core.Elimination.record(v_Elimination_record_proj) => hydra.lib.eithers.bind[hydra.errors.Error,
-       Seq[hydra.core.Field], hydra.core.Term](hydra.extract.core.record(v_Elimination_record_proj.typeName)(graph)(hydra.strip.deannotateTerm(reducedArg)))((fields: Seq[hydra.core.Field]) =>
-      {
-      lazy val matchingFields: Seq[hydra.core.Field] = hydra.lib.lists.filter[hydra.core.Field]((f: hydra.core.Field) =>
-        hydra.lib.equality.equal[hydra.core.Name](f.name)(v_Elimination_record_proj.field))(fields)
-      hydra.lib.logic.ifElse[Either[hydra.errors.Error, hydra.core.Term]](hydra.lib.lists.`null`[hydra.core.Field](matchingFields))(Left(hydra.errors.Error.resolution(hydra.errors.ResolutionError.noMatchingField(hydra.errors.NoMatchingFieldError(v_Elimination_record_proj.field)))))(Right(hydra.lib.lists.head[hydra.core.Field](matchingFields).term))
-    })
-    case hydra.core.Elimination.union(v_Elimination_union_cs) => hydra.lib.eithers.bind[hydra.errors.Error,
-       hydra.core.Field, hydra.core.Term](hydra.extract.core.injection(v_Elimination_union_cs.typeName)(graph)(reducedArg))((field: hydra.core.Field) =>
-      {
-      lazy val matchingFields: Seq[hydra.core.Field] = hydra.lib.lists.filter[hydra.core.Field]((f: hydra.core.Field) =>
-        hydra.lib.equality.equal[hydra.core.Name](f.name)(field.name))(v_Elimination_union_cs.cases)
-      hydra.lib.logic.ifElse[Either[hydra.errors.Error, hydra.core.Term]](hydra.lib.lists.`null`[hydra.core.Field](matchingFields))(hydra.lib.maybes.maybe[Either[hydra.errors.Error,
-         hydra.core.Term], hydra.core.Term](Left(hydra.errors.Error.resolution(hydra.errors.ResolutionError.noMatchingField(hydra.errors.NoMatchingFieldError(field.name)))))((x: hydra.core.Term) => Right(x))(v_Elimination_union_cs.default))(Right(hydra.core.Term.application(hydra.core.Application(hydra.lib.lists.head[hydra.core.Field](matchingFields).term,
-         (field.term)))))
-    })
-    case hydra.core.Elimination.wrap(v_Elimination_wrap_name) => hydra.extract.core.wrap(v_Elimination_wrap_name)(graph)(reducedArg)
+  def applyProjection(proj: hydra.core.Projection)(reducedArg: hydra.core.Term): Either[hydra.errors.Error, hydra.core.Term] =
+    hydra.lib.eithers.bind[hydra.errors.Error, Seq[hydra.core.Field], hydra.core.Term](hydra.extract.core.record(proj.typeName)(graph)(hydra.strip.deannotateTerm(reducedArg)))((fields: Seq[hydra.core.Field]) =>
+    {
+    lazy val matchingFields: Seq[hydra.core.Field] = hydra.lib.lists.filter[hydra.core.Field]((f: hydra.core.Field) =>
+      hydra.lib.equality.equal[hydra.core.Name](f.name)(proj.field))(fields)
+    hydra.lib.logic.ifElse[Either[hydra.errors.Error, hydra.core.Term]](hydra.lib.lists.`null`[hydra.core.Field](matchingFields))(Left(hydra.errors.Error.resolution(hydra.errors.ResolutionError.noMatchingField(hydra.errors.NoMatchingFieldError(proj.field)))))(Right(hydra.lib.lists.head[hydra.core.Field](matchingFields).term))
+  })
+  def applyCases(cs: hydra.core.CaseStatement)(reducedArg: hydra.core.Term): Either[hydra.errors.Error, hydra.core.Term] =
+    hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Field, hydra.core.Term](hydra.extract.core.injection(cs.typeName)(graph)(reducedArg))((field: hydra.core.Field) =>
+    {
+    lazy val matchingFields: Seq[hydra.core.Field] = hydra.lib.lists.filter[hydra.core.Field]((f: hydra.core.Field) =>
+      hydra.lib.equality.equal[hydra.core.Name](f.name)(field.name))(cs.cases)
+    hydra.lib.logic.ifElse[Either[hydra.errors.Error, hydra.core.Term]](hydra.lib.lists.`null`[hydra.core.Field](matchingFields))(hydra.lib.maybes.maybe[Either[hydra.errors.Error,
+       hydra.core.Term], hydra.core.Term](Left(hydra.errors.Error.resolution(hydra.errors.ResolutionError.noMatchingField(hydra.errors.NoMatchingFieldError(field.name)))))((x: hydra.core.Term) => Right(x))(cs.default))(Right(hydra.core.Term.application(hydra.core.Application(hydra.lib.lists.head[hydra.core.Field](matchingFields).term,
+       (field.term)))))
+  })
   def applyIfNullary(eager2: Boolean)(original: hydra.core.Term)(args: Seq[hydra.core.Term]): Either[hydra.errors.Error, hydra.core.Term] =
     {
     lazy val stripped: hydra.core.Term = hydra.strip.deannotateTerm(original)
-    def forElimination(elm: hydra.core.Elimination)(args2: Seq[hydra.core.Term]): Either[hydra.errors.Error, hydra.core.Term] =
+    def forProjection(proj: hydra.core.Projection)(args2: Seq[hydra.core.Term]): Either[hydra.errors.Error, hydra.core.Term] =
       {
       lazy val arg: hydra.core.Term = hydra.lib.lists.head[hydra.core.Term](args2)
       lazy val remainingArgs: Seq[hydra.core.Term] = hydra.lib.lists.tail[hydra.core.Term](args2)
       hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Term, hydra.core.Term](reduceArg(eager2)(hydra.strip.deannotateTerm(arg)))((reducedArg: hydra.core.Term) =>
         hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Term, hydra.core.Term](hydra.lib.eithers.bind[hydra.errors.Error,
-           hydra.core.Term, hydra.core.Term](applyElimination(elm)(reducedArg))((v1: hydra.core.Term) => reduce(eager2)(v1)))((reducedResult: hydra.core.Term) => applyIfNullary(eager2)(reducedResult)(remainingArgs)))
+           hydra.core.Term, hydra.core.Term](applyProjection(proj)(reducedArg))((v1: hydra.core.Term) => reduce(eager2)(v1)))((reducedResult: hydra.core.Term) => applyIfNullary(eager2)(reducedResult)(remainingArgs)))
+    }
+    def forCases(cs: hydra.core.CaseStatement)(args2: Seq[hydra.core.Term]): Either[hydra.errors.Error, hydra.core.Term] =
+      {
+      lazy val arg: hydra.core.Term = hydra.lib.lists.head[hydra.core.Term](args2)
+      lazy val remainingArgs: Seq[hydra.core.Term] = hydra.lib.lists.tail[hydra.core.Term](args2)
+      hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Term, hydra.core.Term](reduceArg(eager2)(hydra.strip.deannotateTerm(arg)))((reducedArg: hydra.core.Term) =>
+        hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Term, hydra.core.Term](hydra.lib.eithers.bind[hydra.errors.Error,
+           hydra.core.Term, hydra.core.Term](applyCases(cs)(reducedArg))((v1: hydra.core.Term) => reduce(eager2)(v1)))((reducedResult: hydra.core.Term) => applyIfNullary(eager2)(reducedResult)(remainingArgs)))
+    }
+    def forUnwrap(name: hydra.core.Name)(args2: Seq[hydra.core.Term]): Either[hydra.errors.Error, hydra.core.Term] =
+      {
+      lazy val arg: hydra.core.Term = hydra.lib.lists.head[hydra.core.Term](args2)
+      lazy val remainingArgs: Seq[hydra.core.Term] = hydra.lib.lists.tail[hydra.core.Term](args2)
+      hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Term, hydra.core.Term](reduceArg(eager2)(hydra.strip.deannotateTerm(arg)))((reducedArg: hydra.core.Term) =>
+        hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Term, hydra.core.Term](hydra.lib.eithers.bind[hydra.errors.Error,
+           hydra.core.Term, hydra.core.Term](hydra.extract.core.wrap(name)(graph)(reducedArg))((v1: hydra.core.Term) => reduce(eager2)(v1)))((reducedResult: hydra.core.Term) => applyIfNullary(eager2)(reducedResult)(remainingArgs)))
     }
     def forLambda(l: hydra.core.Lambda)(args2: Seq[hydra.core.Term]): Either[hydra.errors.Error, hydra.core.Term] =
       {
@@ -547,11 +545,14 @@ def reduceTerm(cx: hydra.context.Context)(graph: hydra.graph.Graph)(eager: Boole
     }
     stripped match
       case hydra.core.Term.application(v_Term_application_app) => applyIfNullary(eager2)(v_Term_application_app.function)(hydra.lib.lists.cons[hydra.core.Term](v_Term_application_app.argument)(args))
-      case hydra.core.Term.function(v_Term_function_v1) => v_Term_function_v1 match
-        case hydra.core.Function.elimination(v_Function_elimination_elm) => hydra.lib.logic.ifElse[Either[hydra.errors.Error,
-           hydra.core.Term]](hydra.lib.lists.`null`[hydra.core.Term](args))(Right(original))(forElimination(v_Function_elimination_elm)(args))
-        case hydra.core.Function.lambda(v_Function_lambda_l) => hydra.lib.logic.ifElse[Either[hydra.errors.Error,
-           hydra.core.Term]](hydra.lib.lists.`null`[hydra.core.Term](args))(Right(original))(forLambda(v_Function_lambda_l)(args))
+      case hydra.core.Term.cases(v_Term_cases_cs) => hydra.lib.logic.ifElse[Either[hydra.errors.Error,
+         hydra.core.Term]](hydra.lib.lists.`null`[hydra.core.Term](args))(Right(original))(forCases(v_Term_cases_cs)(args))
+      case hydra.core.Term.project(v_Term_project_p) => hydra.lib.logic.ifElse[Either[hydra.errors.Error,
+         hydra.core.Term]](hydra.lib.lists.`null`[hydra.core.Term](args))(Right(original))(forProjection(v_Term_project_p)(args))
+      case hydra.core.Term.unwrap(v_Term_unwrap_n) => hydra.lib.logic.ifElse[Either[hydra.errors.Error,
+         hydra.core.Term]](hydra.lib.lists.`null`[hydra.core.Term](args))(Right(original))(forUnwrap(v_Term_unwrap_n)(args))
+      case hydra.core.Term.lambda(v_Term_lambda_l) => hydra.lib.logic.ifElse[Either[hydra.errors.Error,
+         hydra.core.Term]](hydra.lib.lists.`null`[hydra.core.Term](args))(Right(original))(forLambda(v_Term_lambda_l)(args))
       case hydra.core.Term.variable(v_Term_variable_v) => {
         lazy val mBinding: Option[hydra.core.Binding] = hydra.lexical.lookupBinding(graph)(v_Term_variable_v)
         hydra.lib.maybes.maybe[Either[hydra.errors.Error, hydra.core.Term], hydra.core.Binding]({
@@ -610,20 +611,16 @@ def termIsValue(term: hydra.core.Term): Boolean =
   def checkFields(fields: Seq[hydra.core.Field]): Boolean =
     hydra.lib.lists.foldl[Boolean, hydra.core.Field]((b: Boolean) =>
     (f: hydra.core.Field) => hydra.lib.logic.and(b)(checkField(f)))(true)(fields)
-  def functionIsValue(f: hydra.core.Function): Boolean =
-    f match
-    case hydra.core.Function.elimination(v_Function_elimination_e) => v_Function_elimination_e match
-      case hydra.core.Elimination.wrap(v_Elimination_wrap__) => true
-      case hydra.core.Elimination.record(v_Elimination_record__) => true
-      case hydra.core.Elimination.union(v_Elimination_union_cs) => hydra.lib.logic.and(checkFields(v_Elimination_union_cs.cases))(hydra.lib.maybes.maybe[Boolean,
-         hydra.core.Term](true)(hydra.reduction.termIsValue)(v_Elimination_union_cs.default))
-    case hydra.core.Function.lambda(v_Function_lambda_l) => hydra.reduction.termIsValue(v_Function_lambda_l.body)
   hydra.strip.deannotateTerm(term) match
     case hydra.core.Term.application(v_Term_application__) => false
+    case hydra.core.Term.cases(v_Term_cases_cs) => hydra.lib.logic.and(checkFields(v_Term_cases_cs.cases))(hydra.lib.maybes.maybe[Boolean,
+       hydra.core.Term](true)(hydra.reduction.termIsValue)(v_Term_cases_cs.default))
     case hydra.core.Term.either(v_Term_either_e) => hydra.lib.eithers.either[hydra.core.Term, hydra.core.Term,
        Boolean]((l: hydra.core.Term) => hydra.reduction.termIsValue(l))((r: hydra.core.Term) => hydra.reduction.termIsValue(r))(v_Term_either_e)
+    case hydra.core.Term.lambda(v_Term_lambda_l) => hydra.reduction.termIsValue(v_Term_lambda_l.body)
     case hydra.core.Term.literal(v_Term_literal__) => true
-    case hydra.core.Term.function(v_Term_function_f) => functionIsValue(v_Term_function_f)
+    case hydra.core.Term.project(v_Term_project__) => true
+    case hydra.core.Term.unwrap(v_Term_unwrap__) => true
     case hydra.core.Term.list(v_Term_list_els) => forList(v_Term_list_els)
     case hydra.core.Term.map(v_Term_map_m) => hydra.lib.lists.foldl[Boolean, Tuple2[hydra.core.Term, hydra.core.Term]]((b: Boolean) =>
       (kv: Tuple2[hydra.core.Term, hydra.core.Term]) =>

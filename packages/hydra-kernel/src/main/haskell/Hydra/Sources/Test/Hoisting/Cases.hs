@@ -88,9 +88,7 @@ hoistPredicateApplications = Phantoms.lambda "pt" $
 hoistPredicateCaseStatements :: TTerm (([SubtermStep], Term) -> Bool)
 hoistPredicateCaseStatements = Phantoms.lambda "pt" $
   Phantoms.cases _Term (Pairs.second (Phantoms.var "pt")) (Just Phantoms.false) [
-    _Term_function ~>: Phantoms.lambda "fn" $
-      Phantoms.cases _Function (Phantoms.var "fn") (Just Phantoms.false) [
-        _Function_elimination ~>: Phantoms.lambda "_" Phantoms.true]]
+    _Term_cases ~>: Phantoms.lambda "_" Phantoms.true]
 
 -- | Universal hoistSubterms test case
 hoistCase :: String -> TTerm (([SubtermStep], Term) -> Bool) -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata

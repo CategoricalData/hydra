@@ -5,7 +5,7 @@ package hydra.variants;
 import java.io.Serializable;
 
 /**
- * The identifier of an elimination constructor
+ * The identifier of an elimination constructor (legacy)
  */
 public abstract class EliminationVariant implements Serializable, Comparable<EliminationVariant> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.variants.EliminationVariant");

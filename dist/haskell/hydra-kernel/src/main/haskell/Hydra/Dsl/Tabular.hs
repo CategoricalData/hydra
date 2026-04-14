@@ -25,17 +25,17 @@ columnType name type_ =
 columnTypeName :: Phantoms.TTerm Tabular.ColumnType -> Phantoms.TTerm Relational.ColumnName
 columnTypeName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tabular.ColumnType"),
-        Core.projectionField = (Core.Name "name")})))),
+        Core.projectionField = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 columnTypeType :: Phantoms.TTerm Tabular.ColumnType -> Phantoms.TTerm Core.Type
 columnTypeType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tabular.ColumnType"),
-        Core.projectionField = (Core.Name "type")})))),
+        Core.projectionField = (Core.Name "type")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 columnTypeWithName :: Phantoms.TTerm Tabular.ColumnType -> Phantoms.TTerm Relational.ColumnName -> Phantoms.TTerm Tabular.ColumnType
@@ -49,9 +49,9 @@ columnTypeWithName original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tabular.ColumnType"),
-              Core.projectionField = (Core.Name "type")})))),
+              Core.projectionField = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 columnTypeWithType :: Phantoms.TTerm Tabular.ColumnType -> Phantoms.TTerm Core.Type -> Phantoms.TTerm Tabular.ColumnType
@@ -62,9 +62,9 @@ columnTypeWithType original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tabular.ColumnType"),
-              Core.projectionField = (Core.Name "name")})))),
+              Core.projectionField = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
@@ -97,17 +97,17 @@ table header data_ =
 tableData :: Phantoms.TTerm (Tabular.Table v) -> Phantoms.TTerm [Tabular.DataRow v]
 tableData x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tabular.Table"),
-        Core.projectionField = (Core.Name "data")})))),
+        Core.projectionField = (Core.Name "data")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 tableHeader :: Phantoms.TTerm (Tabular.Table v) -> Phantoms.TTerm (Maybe Tabular.HeaderRow)
 tableHeader x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tabular.Table"),
-        Core.projectionField = (Core.Name "header")})))),
+        Core.projectionField = (Core.Name "header")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 tableType :: Phantoms.TTerm Relational.RelationName -> Phantoms.TTerm [Tabular.ColumnType] -> Phantoms.TTerm Tabular.TableType
@@ -125,17 +125,17 @@ tableType name columns =
 tableTypeColumns :: Phantoms.TTerm Tabular.TableType -> Phantoms.TTerm [Tabular.ColumnType]
 tableTypeColumns x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tabular.TableType"),
-        Core.projectionField = (Core.Name "columns")})))),
+        Core.projectionField = (Core.Name "columns")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 tableTypeName :: Phantoms.TTerm Tabular.TableType -> Phantoms.TTerm Relational.RelationName
 tableTypeName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.tabular.TableType"),
-        Core.projectionField = (Core.Name "name")})))),
+        Core.projectionField = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 tableTypeWithColumns :: Phantoms.TTerm Tabular.TableType -> Phantoms.TTerm [Tabular.ColumnType] -> Phantoms.TTerm Tabular.TableType
@@ -146,9 +146,9 @@ tableTypeWithColumns original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tabular.TableType"),
-              Core.projectionField = (Core.Name "name")})))),
+              Core.projectionField = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "columns"),
@@ -165,9 +165,9 @@ tableTypeWithName original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "columns"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tabular.TableType"),
-              Core.projectionField = (Core.Name "columns")})))),
+              Core.projectionField = (Core.Name "columns")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 tableWithData :: Phantoms.TTerm (Tabular.Table v) -> Phantoms.TTerm [Tabular.DataRow v] -> Phantoms.TTerm (Tabular.Table v)
@@ -178,9 +178,9 @@ tableWithData original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "header"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tabular.Table"),
-              Core.projectionField = (Core.Name "header")})))),
+              Core.projectionField = (Core.Name "header")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "data"),
@@ -197,19 +197,19 @@ tableWithHeader original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "data"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.tabular.Table"),
-              Core.projectionField = (Core.Name "data")})))),
+              Core.projectionField = (Core.Name "data")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 unDataRow :: Phantoms.TTerm (Tabular.DataRow v) -> Phantoms.TTerm [Maybe v]
 unDataRow x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.tabular.DataRow")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.tabular.DataRow")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unHeaderRow :: Phantoms.TTerm Tabular.HeaderRow -> Phantoms.TTerm [String]
 unHeaderRow x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.tabular.HeaderRow")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.tabular.HeaderRow")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))

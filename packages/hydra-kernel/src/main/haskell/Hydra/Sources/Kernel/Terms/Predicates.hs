@@ -285,14 +285,10 @@ isTrivialTerm = define "isTrivialTerm" $
       "fun" <~ Core.applicationFunction (var "app") $
       "arg" <~ Core.applicationArgument (var "app") $
       cases _Term (var "fun") (Just $ boolean False) [
-        _Term_function>>: "f" ~>
-          cases _Function (var "f") (Just $ boolean False) [
-            _Function_elimination>>: "e" ~>
-              cases _Elimination (var "e") (Just $ boolean False) [
-                -- record projection: trivial if the subject is trivial
-                _Elimination_record>>: constant (isTrivialTerm @@ var "arg"),
-                -- newtype unwrap: trivial if the subject is trivial
-                _Elimination_wrap>>: constant (isTrivialTerm @@ var "arg")]]],
+        -- record projection: trivial if the subject is trivial
+        _Term_project>>: constant (isTrivialTerm @@ var "arg"),
+        -- newtype unwrap: trivial if the subject is trivial
+        _Term_unwrap>>: constant (isTrivialTerm @@ var "arg")],
     -- Maybe term (just x) where x is trivial; nothing is also trivial
     _Term_maybe>>: "opt" ~>
       Maybes.maybe (boolean True) ("inner" ~> isTrivialTerm @@ var "inner") (var "opt"),

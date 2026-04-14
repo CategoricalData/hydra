@@ -611,271 +611,271 @@ token x =
 unAnySimpleType :: Phantoms.TTerm Schema.AnySimpleType -> Phantoms.TTerm String
 unAnySimpleType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.xml.schema.AnySimpleType")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.xml.schema.AnySimpleType")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unAnyType :: Phantoms.TTerm Schema.AnyType -> Phantoms.TTerm String
 unAnyType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.xml.schema.AnyType")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.xml.schema.AnyType")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unAnyURI :: Phantoms.TTerm Schema.AnyURI -> Phantoms.TTerm String
 unAnyURI x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.xml.schema.AnyURI")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.xml.schema.AnyURI")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unBase64Binary :: Phantoms.TTerm Schema.Base64Binary -> Phantoms.TTerm String
 unBase64Binary x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.xml.schema.Base64Binary")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.xml.schema.Base64Binary")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unBoolean :: Phantoms.TTerm Schema.Boolean -> Phantoms.TTerm Bool
 unBoolean x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.xml.schema.Boolean")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.xml.schema.Boolean")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unByte :: Phantoms.TTerm Schema.Byte -> Phantoms.TTerm I.Int8
 unByte x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.xml.schema.Byte")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.xml.schema.Byte")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unConstrainingFacet :: Phantoms.TTerm Schema.ConstrainingFacet -> Phantoms.TTerm ()
 unConstrainingFacet x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.xml.schema.ConstrainingFacet")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.xml.schema.ConstrainingFacet")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unDate :: Phantoms.TTerm Schema.Date -> Phantoms.TTerm String
 unDate x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.xml.schema.Date")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.xml.schema.Date")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unDateTime :: Phantoms.TTerm Schema.DateTime -> Phantoms.TTerm String
 unDateTime x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.xml.schema.DateTime")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.xml.schema.DateTime")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unDecimal :: Phantoms.TTerm Schema.Decimal -> Phantoms.TTerm String
 unDecimal x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.xml.schema.Decimal")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.xml.schema.Decimal")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unDouble :: Phantoms.TTerm Schema.Double_ -> Phantoms.TTerm Double
 unDouble x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.xml.schema.Double")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.xml.schema.Double")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unDuration :: Phantoms.TTerm Schema.Duration -> Phantoms.TTerm String
 unDuration x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.xml.schema.Duration")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.xml.schema.Duration")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unENTITIES :: Phantoms.TTerm Schema.ENTITIES -> Phantoms.TTerm String
 unENTITIES x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.xml.schema.ENTITIES")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.xml.schema.ENTITIES")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unENTITY :: Phantoms.TTerm Schema.ENTITY -> Phantoms.TTerm String
 unENTITY x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.xml.schema.ENTITY")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.xml.schema.ENTITY")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unFloat :: Phantoms.TTerm Schema.Float_ -> Phantoms.TTerm Float
 unFloat x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.xml.schema.Float")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.xml.schema.Float")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unGDay :: Phantoms.TTerm Schema.GDay -> Phantoms.TTerm String
 unGDay x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.xml.schema.GDay")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.xml.schema.GDay")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unGMonth :: Phantoms.TTerm Schema.GMonth -> Phantoms.TTerm String
 unGMonth x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.xml.schema.GMonth")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.xml.schema.GMonth")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unGMonthDay :: Phantoms.TTerm Schema.GMonthDay -> Phantoms.TTerm String
 unGMonthDay x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.xml.schema.GMonthDay")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.xml.schema.GMonthDay")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unGYear :: Phantoms.TTerm Schema.GYear -> Phantoms.TTerm String
 unGYear x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.xml.schema.GYear")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.xml.schema.GYear")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unGYearMonth :: Phantoms.TTerm Schema.GYearMonth -> Phantoms.TTerm String
 unGYearMonth x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.xml.schema.GYearMonth")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.xml.schema.GYearMonth")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unHexBinary :: Phantoms.TTerm Schema.HexBinary -> Phantoms.TTerm String
 unHexBinary x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.xml.schema.HexBinary")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.xml.schema.HexBinary")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unID :: Phantoms.TTerm Schema.ID -> Phantoms.TTerm String
 unID x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.xml.schema.ID")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.xml.schema.ID")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unIDREF :: Phantoms.TTerm Schema.IDREF -> Phantoms.TTerm String
 unIDREF x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.xml.schema.IDREF")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.xml.schema.IDREF")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unIDREFS :: Phantoms.TTerm Schema.IDREFS -> Phantoms.TTerm String
 unIDREFS x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.xml.schema.IDREFS")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.xml.schema.IDREFS")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unInt :: Phantoms.TTerm Schema.Int_ -> Phantoms.TTerm Int
 unInt x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.xml.schema.Int")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.xml.schema.Int")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unInteger :: Phantoms.TTerm Schema.Integer_ -> Phantoms.TTerm Integer
 unInteger x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.xml.schema.Integer")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.xml.schema.Integer")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unLanguage :: Phantoms.TTerm Schema.Language -> Phantoms.TTerm String
 unLanguage x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.xml.schema.Language")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.xml.schema.Language")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unLong :: Phantoms.TTerm Schema.Long -> Phantoms.TTerm I.Int64
 unLong x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.xml.schema.Long")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.xml.schema.Long")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unNMTOKEN :: Phantoms.TTerm Schema.NMTOKEN -> Phantoms.TTerm String
 unNMTOKEN x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.xml.schema.NMTOKEN")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.xml.schema.NMTOKEN")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unNOTATION :: Phantoms.TTerm Schema.NOTATION -> Phantoms.TTerm String
 unNOTATION x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.xml.schema.NOTATION")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.xml.schema.NOTATION")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unName :: Phantoms.TTerm Schema.Name -> Phantoms.TTerm String
 unName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.xml.schema.Name")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.xml.schema.Name")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unNegativeInteger :: Phantoms.TTerm Schema.NegativeInteger -> Phantoms.TTerm Integer
 unNegativeInteger x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.xml.schema.NegativeInteger")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.xml.schema.NegativeInteger")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unNonNegativeInteger :: Phantoms.TTerm Schema.NonNegativeInteger -> Phantoms.TTerm Integer
 unNonNegativeInteger x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.xml.schema.NonNegativeInteger")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.xml.schema.NonNegativeInteger")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unNonPositiveInteger :: Phantoms.TTerm Schema.NonPositiveInteger -> Phantoms.TTerm Integer
 unNonPositiveInteger x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.xml.schema.NonPositiveInteger")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.xml.schema.NonPositiveInteger")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unNormalizedString :: Phantoms.TTerm Schema.NormalizedString -> Phantoms.TTerm String
 unNormalizedString x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.xml.schema.NormalizedString")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.xml.schema.NormalizedString")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unPositiveInteger :: Phantoms.TTerm Schema.PositiveInteger -> Phantoms.TTerm Integer
 unPositiveInteger x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.xml.schema.PositiveInteger")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.xml.schema.PositiveInteger")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unQName :: Phantoms.TTerm Schema.QName -> Phantoms.TTerm String
 unQName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.xml.schema.QName")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.xml.schema.QName")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unShort :: Phantoms.TTerm Schema.Short -> Phantoms.TTerm I.Int16
 unShort x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.xml.schema.Short")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.xml.schema.Short")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unString :: Phantoms.TTerm Schema.String_ -> Phantoms.TTerm String
 unString x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.xml.schema.String")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.xml.schema.String")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unTime :: Phantoms.TTerm Schema.Time -> Phantoms.TTerm String
 unTime x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.xml.schema.Time")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.xml.schema.Time")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unToken :: Phantoms.TTerm Schema.Token -> Phantoms.TTerm String
 unToken x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.xml.schema.Token")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.xml.schema.Token")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unUnsignedByte :: Phantoms.TTerm Schema.UnsignedByte -> Phantoms.TTerm I.Int16
 unUnsignedByte x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.xml.schema.UnsignedByte")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.xml.schema.UnsignedByte")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unUnsignedInt :: Phantoms.TTerm Schema.UnsignedInt -> Phantoms.TTerm I.Int64
 unUnsignedInt x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.xml.schema.UnsignedInt")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.xml.schema.UnsignedInt")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unUnsignedLong :: Phantoms.TTerm Schema.UnsignedLong -> Phantoms.TTerm Integer
 unUnsignedLong x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.xml.schema.UnsignedLong")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.xml.schema.UnsignedLong")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unUnsignedShort :: Phantoms.TTerm Schema.UnsignedShort -> Phantoms.TTerm Int
 unUnsignedShort x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.xml.schema.UnsignedShort")))),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.xml.schema.UnsignedShort")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unsignedByte :: Phantoms.TTerm I.Int16 -> Phantoms.TTerm Schema.UnsignedByte

@@ -4,10 +4,8 @@ import hydra.core.AnnotatedTerm;
 import hydra.core.Application;
 import hydra.core.Binding;
 import hydra.core.CaseStatement;
-import hydra.core.Elimination;
 import hydra.core.Field;
 import hydra.core.FloatValue;
-import hydra.core.Function;
 import hydra.core.Injection;
 import hydra.core.IntegerValue;
 import hydra.core.Lambda;
@@ -386,15 +384,6 @@ public interface Terms {
     // ===== Function terms =====
 
     /**
-     * Construct a function term.
-     * @param func the function
-     * @return the function term
-     */
-    static Term function(Function func) {
-        return new Term.Function(func);
-    }
-
-    /**
      * Create a lambda function with one parameter.
      * Example: lambda("x", apply(var("x"), int32(1)))
      * @param param the parameter name
@@ -402,7 +391,7 @@ public interface Terms {
      * @return the lambda term
      */
     static Term lambda(String param, Term body) {
-        return function(new Function.Lambda(new Lambda(name(param), Maybe.nothing(), body)));
+        return new Term.Lambda(new Lambda(name(param), Maybe.nothing(), body));
     }
 
     /**
@@ -465,7 +454,7 @@ public interface Terms {
      * @return the lambda term
      */
     static Term lambdaTyped(String param, Type dom, Term body) {
-        return function(new Function.Lambda(new Lambda(name(param), Maybe.just(dom), body)));
+        return new Term.Lambda(new Lambda(name(param), Maybe.just(dom), body));
     }
 
     /**
@@ -518,15 +507,6 @@ public interface Terms {
     // ===== Elimination terms =====
 
     /**
-     * Construct an elimination term.
-     * @param elim the elimination
-     * @return the elimination term
-     */
-    static Term elimination(Elimination elim) {
-        return function(new Function.Elimination(elim));
-    }
-
-    /**
      * Create a projection term for accessing record fields.
      * Example: project(name("Person"), name("firstName"))
      * @param recordName the record type name
@@ -534,7 +514,7 @@ public interface Terms {
      * @return the projection term
      */
     static Term project(Name recordName, Name fieldName) {
-        return elimination(new Elimination.Record(new Projection(recordName, fieldName)));
+        return new Term.Project(new Projection(recordName, fieldName));
     }
 
     /**
@@ -564,7 +544,7 @@ public interface Terms {
      * @return the unwrap function term
      */
     static Term unwrap(Name wrapName) {
-        return elimination(new Elimination.Wrap(wrapName));
+        return new Term.Unwrap(wrapName);
     }
 
     /**
@@ -611,7 +591,7 @@ public interface Terms {
      * @return the match term
      */
     static Term match(Name typeName, Maybe<Term> defaultCase, Field... fields) {
-        return elimination(new Elimination.Union(new CaseStatement(typeName, defaultCase, Arrays.asList(fields))));
+        return new Term.Cases(new CaseStatement(typeName, defaultCase, Arrays.asList(fields)));
     }
 
     /**
@@ -622,7 +602,7 @@ public interface Terms {
      * @return the match term
      */
     static Term match(Name typeName, Maybe<Term> defaultCase, List<Field> fields) {
-        return elimination(new Elimination.Union(new CaseStatement(typeName, defaultCase, fields)));
+        return new Term.Cases(new CaseStatement(typeName, defaultCase, fields));
     }
 
     /**

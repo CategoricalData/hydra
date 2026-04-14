@@ -121,27 +121,26 @@ arbitraryFloatValue ft = case ft of
   FloatTypeFloat64 -> FloatValueFloat64 <$> QC.arbitrary
 
 -- Note: primitive functions and data terms are not currently generated, as they require a context.
-arbitraryFunction :: FunctionType -> Int -> QC.Gen Function
-arbitraryFunction (FunctionType dom cod) n = QC.oneof $ defaults ++ domainSpecific
+arbitraryFunctionTerm :: FunctionType -> Int -> QC.Gen Term
+arbitraryFunctionTerm (FunctionType dom cod) n = QC.oneof $ defaults ++ domainSpecific
   where
     n' = decr n
     defaults = [
       -- Note: this simple lambda is a bit of a cheat. We just have to make sure we can generate at least one term
       --       for any supported function type.
-      FunctionLambda <$> (Lambda (Name "x") Nothing <$> arbitraryTerm cod n')]
+      TermLambda <$> (Lambda (Name "x") Nothing <$> arbitraryTerm cod n')]
      -- Note: two random types will rarely be equal, but it will happen occasionally with simple types
     domainSpecific = case dom of
       TypeUnion sfields -> [cs]
         where
           cs = do
             afields <- CM.mapM arbitraryCase sfields
-            return $ FunctionElimination $ EliminationUnion $ CaseStatement (Name "placeholder") Nothing afields
+            return $ TermCases $ CaseStatement (Name "placeholder") Nothing afields
           arbitraryCase (FieldType fn dom') = do
-            term <- arbitraryFunction (FunctionType dom' cod) n2
-            return $ Field fn $ TermFunction term
+            term <- arbitraryFunctionTerm (FunctionType dom' cod) n2
+            return $ Field fn term
           n2 = div n' $ L.length sfields
         -- Note: projections now require nominally-typed records
---      TypeRecord sfields -> [FunctionProjection <$> (fieldTypeName <$> QC.elements sfields) | not (L.null sfields)]
       _ -> []
 
 arbitraryIntegerValue :: IntegerType -> QC.Gen IntegerValue
@@ -178,7 +177,7 @@ arbitraryPair c g n = c <$> g n' <*> g n'
 arbitraryTerm :: Type -> Int -> QC.Gen Term
 arbitraryTerm typ n = case typ of
     TypeLiteral at -> literal <$> arbitraryLiteral at
-    TypeFunction ft -> TermFunction <$> arbitraryFunction ft n'
+    TypeFunction ft -> arbitraryFunctionTerm ft n'
     TypeList lt -> list <$> arbitraryList False (arbitraryTerm lt) n'
     TypeMap (MapType kt vt) -> TermMap <$> (M.fromList <$> arbitraryList False arbPair n')
       where

@@ -161,11 +161,15 @@
                                 "typeName": "hydra.variants.TermVariant"}},
                             {
                               "union": {
+                                "field": {"name": "cases", "term": {"unit": {}}},
+                                "typeName": "hydra.variants.TermVariant"}},
+                            {
+                              "union": {
                                 "field": {"name": "either", "term": {"unit": {}}},
                                 "typeName": "hydra.variants.TermVariant"}},
                             {
                               "union": {
-                                "field": {"name": "function", "term": {"unit": {}}},
+                                "field": {"name": "lambda", "term": {"unit": {}}},
                                 "typeName": "hydra.variants.TermVariant"}},
                             {
                               "union": {
@@ -193,6 +197,10 @@
                                 "typeName": "hydra.variants.TermVariant"}},
                             {
                               "union": {
+                                "field": {"name": "project", "term": {"unit": {}}},
+                                "typeName": "hydra.variants.TermVariant"}},
+                            {
+                              "union": {
                                 "field": {"name": "record", "term": {"unit": {}}},
                                 "typeName": "hydra.variants.TermVariant"}},
                             {
@@ -201,11 +209,23 @@
                                 "typeName": "hydra.variants.TermVariant"}},
                             {
                               "union": {
+                                "field": {"name": "typeApplication", "term": {"unit": {}}},
+                                "typeName": "hydra.variants.TermVariant"}},
+                            {
+                              "union": {
+                                "field": {"name": "typeLambda", "term": {"unit": {}}},
+                                "typeName": "hydra.variants.TermVariant"}},
+                            {
+                              "union": {
                                 "field": {"name": "union", "term": {"unit": {}}},
                                 "typeName": "hydra.variants.TermVariant"}},
                             {
                               "union": {
                                 "field": {"name": "unit", "term": {"unit": {}}},
+                                "typeName": "hydra.variants.TermVariant"}},
+                            {
+                              "union": {
+                                "field": {"name": "unwrap", "term": {"unit": {}}},
                                 "typeName": "hydra.variants.TermVariant"}},
                             {
                               "union": {
@@ -308,11 +328,10 @@
                     "term": {
                       "typeLambda": {
                         "body": {
-                          "function": {
-                            "lambda": {
-                              "body": {"literal": {"boolean": true}},
-                              "domain": {"variable": "t0"},
-                              "parameter": "_"}}},
+                          "lambda": {
+                            "body": {"literal": {"boolean": true}},
+                            "domain": {"variable": "t0"},
+                            "parameter": "_"}},
                         "parameter": "t0"}},
                     "type": {
                       "type": {

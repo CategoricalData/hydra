@@ -542,6 +542,51 @@
           "variables": []}}},
     {
       "term": {
+        "name": "hydra.dsl.variants.termVariantCases",
+        "term": {
+          "wrap": {
+            "body": {
+              "union": {
+                "field": {
+                  "name": "union",
+                  "term": {
+                    "record": {
+                      "fields": [
+                        {
+                          "name": "typeName",
+                          "term": {
+                            "wrap": {
+                              "body": {"literal": {"string": "hydra.variants.TermVariant"}},
+                              "typeName": "hydra.core.Name"}}},
+                        {
+                          "name": "field",
+                          "term": {
+                            "record": {
+                              "fields": [
+                                {
+                                  "name": "name",
+                                  "term": {
+                                    "wrap": {
+                                      "body": {"literal": {"string": "cases"}},
+                                      "typeName": "hydra.core.Name"}}},
+                                {
+                                  "name": "term",
+                                  "term": {
+                                    "union": {
+                                      "field": {"name": "unit", "term": {"unit": {}}},
+                                      "typeName": "hydra.core.Term"}}}],
+                              "typeName": "hydra.core.Field"}}}],
+                      "typeName": "hydra.core.Injection"}}},
+                "typeName": "hydra.core.Term"}},
+            "typeName": "hydra.phantoms.TTerm"}},
+        "type": {
+          "type": {
+            "application": {
+              "argument": {"variable": "hydra.variants.TermVariant"},
+              "function": {"variable": "hydra.phantoms.TTerm"}}},
+          "variables": []}}},
+    {
+      "term": {
         "name": "hydra.dsl.variants.termVariantEither",
         "term": {
           "wrap": {
@@ -587,7 +632,7 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.dsl.variants.termVariantFunction",
+        "name": "hydra.dsl.variants.termVariantLambda",
         "term": {
           "wrap": {
             "body": {
@@ -612,7 +657,7 @@
                                   "name": "name",
                                   "term": {
                                     "wrap": {
-                                      "body": {"literal": {"string": "function"}},
+                                      "body": {"literal": {"string": "lambda"}},
                                       "typeName": "hydra.core.Name"}}},
                                 {
                                   "name": "term",
@@ -902,6 +947,51 @@
           "variables": []}}},
     {
       "term": {
+        "name": "hydra.dsl.variants.termVariantProject",
+        "term": {
+          "wrap": {
+            "body": {
+              "union": {
+                "field": {
+                  "name": "union",
+                  "term": {
+                    "record": {
+                      "fields": [
+                        {
+                          "name": "typeName",
+                          "term": {
+                            "wrap": {
+                              "body": {"literal": {"string": "hydra.variants.TermVariant"}},
+                              "typeName": "hydra.core.Name"}}},
+                        {
+                          "name": "field",
+                          "term": {
+                            "record": {
+                              "fields": [
+                                {
+                                  "name": "name",
+                                  "term": {
+                                    "wrap": {
+                                      "body": {"literal": {"string": "project"}},
+                                      "typeName": "hydra.core.Name"}}},
+                                {
+                                  "name": "term",
+                                  "term": {
+                                    "union": {
+                                      "field": {"name": "unit", "term": {"unit": {}}},
+                                      "typeName": "hydra.core.Term"}}}],
+                              "typeName": "hydra.core.Field"}}}],
+                      "typeName": "hydra.core.Injection"}}},
+                "typeName": "hydra.core.Term"}},
+            "typeName": "hydra.phantoms.TTerm"}},
+        "type": {
+          "type": {
+            "application": {
+              "argument": {"variable": "hydra.variants.TermVariant"},
+              "function": {"variable": "hydra.phantoms.TTerm"}}},
+          "variables": []}}},
+    {
+      "term": {
         "name": "hydra.dsl.variants.termVariantRecord",
         "term": {
           "wrap": {
@@ -1153,6 +1243,51 @@
                                   "term": {
                                     "wrap": {
                                       "body": {"literal": {"string": "unit"}},
+                                      "typeName": "hydra.core.Name"}}},
+                                {
+                                  "name": "term",
+                                  "term": {
+                                    "union": {
+                                      "field": {"name": "unit", "term": {"unit": {}}},
+                                      "typeName": "hydra.core.Term"}}}],
+                              "typeName": "hydra.core.Field"}}}],
+                      "typeName": "hydra.core.Injection"}}},
+                "typeName": "hydra.core.Term"}},
+            "typeName": "hydra.phantoms.TTerm"}},
+        "type": {
+          "type": {
+            "application": {
+              "argument": {"variable": "hydra.variants.TermVariant"},
+              "function": {"variable": "hydra.phantoms.TTerm"}}},
+          "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.dsl.variants.termVariantUnwrap",
+        "term": {
+          "wrap": {
+            "body": {
+              "union": {
+                "field": {
+                  "name": "union",
+                  "term": {
+                    "record": {
+                      "fields": [
+                        {
+                          "name": "typeName",
+                          "term": {
+                            "wrap": {
+                              "body": {"literal": {"string": "hydra.variants.TermVariant"}},
+                              "typeName": "hydra.core.Name"}}},
+                        {
+                          "name": "field",
+                          "term": {
+                            "record": {
+                              "fields": [
+                                {
+                                  "name": "name",
+                                  "term": {
+                                    "wrap": {
+                                      "body": {"literal": {"string": "unwrap"}},
                                       "typeName": "hydra.core.Name"}}},
                                 {
                                   "name": "term",

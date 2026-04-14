@@ -2,7 +2,6 @@ package hydra.tools;
 
 import hydra.core.AnnotatedTerm;
 import hydra.core.FloatValue;
-import hydra.core.Function;
 import hydra.core.IntegerValue;
 import hydra.core.Lambda;
 import hydra.core.Literal;
@@ -83,30 +82,6 @@ public class PrettyPrinter {
             @Override
             public Consumer<StringBuilder> visit(FloatValue.Float64 instance) {
                 return sb -> sb.append(instance.value);
-            }
-        });
-    }
-
-    /**
-     * Create a consumer that renders a function.
-     *
-     * @param function the function to render
-     * @return a consumer that appends the function to a StringBuilder
-     */
-    private static  Consumer<StringBuilder> function(hydra.core.Function function) {
-        return function.accept(new Function.Visitor<Consumer<StringBuilder>>() {
-            @Override
-            public Consumer<StringBuilder> visit(Function.Elimination instance) {
-                return notImplemented("elimination");
-            }
-
-            @Override
-            public Consumer<StringBuilder> visit(Function.Lambda instance) {
-                Lambda lam = instance.value;
-                return sb -> {
-                    sb.append("\"").append(shortName(lam.parameter)).append(" -> ");
-                    term(lam.body).accept(sb);
-                };
             }
         });
     }
@@ -275,8 +250,27 @@ public class PrettyPrinter {
                 }
 
                 @Override
-                public Consumer<StringBuilder> visit(Term.Function instance) {
-                    return function(instance.value);
+                public Consumer<StringBuilder> visit(Term.Cases instance) {
+                    return notImplemented("cases");
+                }
+
+                @Override
+                public Consumer<StringBuilder> visit(Term.Lambda instance) {
+                    Lambda lam = instance.value;
+                    return sb -> {
+                        sb.append("\"").append(shortName(lam.parameter)).append(" -> ");
+                        term(lam.body).accept(sb);
+                    };
+                }
+
+                @Override
+                public Consumer<StringBuilder> visit(Term.Project instance) {
+                    return notImplemented("project");
+                }
+
+                @Override
+                public Consumer<StringBuilder> visit(Term.Unwrap instance) {
+                    return notImplemented("unwrap");
                 }
 
                 @Override

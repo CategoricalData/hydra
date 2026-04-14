@@ -86,74 +86,55 @@ public interface Analysis {
       }
 
       @Override
-      public hydra.util.Either<T1, hydra.typing.FunctionStructure<T0>> visit(hydra.core.Term.Function f) {
-        return (f).value.accept(new hydra.core.Function.PartialVisitor<>() {
-          @Override
-          public hydra.util.Either<T1, hydra.typing.FunctionStructure<T0>> otherwise(hydra.core.Function instance) {
-            return hydra.Analysis.<T0, T1>analyzeFunctionTermWith_finish(
-              cx,
-              getTC,
-              gEnv,
-              tparams,
-              args,
-              bindings,
-              doms,
-              tapps,
-              t);
-          }
-
-          @Override
-          public hydra.util.Either<T1, hydra.typing.FunctionStructure<T0>> visit(hydra.core.Function.Lambda lam) {
-            return hydra.lib.logic.IfElse.lazy(
-              argMode,
-              () -> ((java.util.function.Supplier<hydra.util.Either<T1, hydra.typing.FunctionStructure<T0>>>) (() -> {
-                hydra.core.Name v = (lam).value.parameter;
-                return ((java.util.function.Supplier<hydra.util.Either<T1, hydra.typing.FunctionStructure<T0>>>) (() -> {
-                  hydra.util.Lazy<hydra.core.Type> dom = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.applyLazy(
-                    () -> new hydra.core.Type.Variable(new hydra.core.Name("_")),
-                    (java.util.function.Function<hydra.core.Type, hydra.core.Type>) (x_ -> x_),
-                    (lam).value.domain));
-                  return ((java.util.function.Supplier<hydra.util.Either<T1, hydra.typing.FunctionStructure<T0>>>) (() -> {
-                    hydra.core.Term body = (lam).value.body;
-                    return hydra.Analysis.<T0, T1>analyzeFunctionTermWith_gather(
-                      cx,
-                      forBinding,
-                      getTC,
-                      setTC,
-                      argMode,
-                      hydra.Analysis.<T0>analyzeFunctionTermWith_gather_newEnv(
-                        gEnv,
-                        getTC,
-                        (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Lambda, hydra.graph.Graph>>) (p0 -> p1 -> hydra.Scoping.extendGraphForLambda(
-                          p0,
-                          p1)),
-                        (lam).value,
-                        setTC),
-                      tparams,
-                      hydra.lib.lists.Cons.apply(
-                        v,
-                        args),
-                      bindings,
-                      hydra.lib.lists.Cons.apply(
-                        dom.get(),
-                        doms),
-                      tapps,
-                      body);
-                  })).get();
-                })).get();
-              })).get(),
-              () -> hydra.Analysis.<T0, T1>analyzeFunctionTermWith_finish(
-                cx,
-                getTC,
-                gEnv,
-                tparams,
-                args,
-                bindings,
-                doms,
-                tapps,
-                t));
-          }
-        });
+      public hydra.util.Either<T1, hydra.typing.FunctionStructure<T0>> visit(hydra.core.Term.Lambda lam) {
+        return hydra.lib.logic.IfElse.lazy(
+          argMode,
+          () -> ((java.util.function.Supplier<hydra.util.Either<T1, hydra.typing.FunctionStructure<T0>>>) (() -> {
+            hydra.core.Name v = (lam).value.parameter;
+            return ((java.util.function.Supplier<hydra.util.Either<T1, hydra.typing.FunctionStructure<T0>>>) (() -> {
+              hydra.util.Lazy<hydra.core.Type> dom = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.applyLazy(
+                () -> new hydra.core.Type.Variable(new hydra.core.Name("_")),
+                (java.util.function.Function<hydra.core.Type, hydra.core.Type>) (x_ -> x_),
+                (lam).value.domain));
+              return ((java.util.function.Supplier<hydra.util.Either<T1, hydra.typing.FunctionStructure<T0>>>) (() -> {
+                hydra.core.Term body = (lam).value.body;
+                return hydra.Analysis.<T0, T1>analyzeFunctionTermWith_gather(
+                  cx,
+                  forBinding,
+                  getTC,
+                  setTC,
+                  argMode,
+                  hydra.Analysis.<T0>analyzeFunctionTermWith_gather_newEnv(
+                    gEnv,
+                    getTC,
+                    (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Lambda, hydra.graph.Graph>>) (p0 -> p1 -> hydra.Scoping.extendGraphForLambda(
+                      p0,
+                      p1)),
+                    (lam).value,
+                    setTC),
+                  tparams,
+                  hydra.lib.lists.Cons.apply(
+                    v,
+                    args),
+                  bindings,
+                  hydra.lib.lists.Cons.apply(
+                    dom.get(),
+                    doms),
+                  tapps,
+                  body);
+              })).get();
+            })).get();
+          })).get(),
+          () -> hydra.Analysis.<T0, T1>analyzeFunctionTermWith_finish(
+            cx,
+            getTC,
+            gEnv,
+            tparams,
+            args,
+            bindings,
+            doms,
+            tapps,
+            t));
       }
 
       @Override
@@ -462,28 +443,8 @@ public interface Analysis {
           }
 
           @Override
-          public Boolean visit(hydra.core.Term.Function f) {
-            return (f).value.accept(new hydra.core.Function.PartialVisitor<>() {
-              @Override
-              public Boolean otherwise(hydra.core.Function instance) {
-                return true;
-              }
-
-              @Override
-              public Boolean visit(hydra.core.Function.Elimination elim) {
-                return (elim).value.accept(new hydra.core.Elimination.PartialVisitor<>() {
-                  @Override
-                  public Boolean otherwise(hydra.core.Elimination instance) {
-                    return true;
-                  }
-
-                  @Override
-                  public Boolean visit(hydra.core.Elimination.Union ignored) {
-                    return false;
-                  }
-                });
-              }
-            });
+          public Boolean visit(hydra.core.Term.Cases ignored) {
+            return false;
           }
         });
       }
@@ -494,18 +455,8 @@ public interface Analysis {
       }
 
       @Override
-      public Boolean visit(hydra.core.Term.Function f) {
-        return (f).value.accept(new hydra.core.Function.PartialVisitor<>() {
-          @Override
-          public Boolean otherwise(hydra.core.Function instance) {
-            return true;
-          }
-
-          @Override
-          public Boolean visit(hydra.core.Function.Lambda ignored) {
-            return false;
-          }
-        });
+      public Boolean visit(hydra.core.Term.Lambda ignored) {
+        return false;
       }
 
       @Override
@@ -579,19 +530,9 @@ public interface Analysis {
                             }
 
                             @Override
-                            public Boolean visit(hydra.core.Term.Function f2) {
-                              return (f2).value.accept(new hydra.core.Function.PartialVisitor<>() {
-                                @Override
-                                public Boolean otherwise(hydra.core.Function instance) {
-                                  return false;
-                                }
-
-                                @Override
-                                public Boolean visit(hydra.core.Function.Lambda lam) {
-                                  hydra.core.Term ignore = (lam).value.body;
-                                  return true;
-                                }
-                              });
+                            public Boolean visit(hydra.core.Term.Lambda lam) {
+                              hydra.core.Term ignore = (lam).value.body;
+                              return true;
                             }
                           })))),
                         false,
@@ -609,81 +550,45 @@ public interface Analysis {
           }
 
           @Override
-          public Boolean visit(hydra.core.Term.Function f) {
-            return (f).value.accept(new hydra.core.Function.PartialVisitor<>() {
-              @Override
-              public Boolean otherwise(hydra.core.Function instance) {
-                return hydra.Variables.isFreeVariableInTerm(
+          public Boolean visit(hydra.core.Term.Cases cs) {
+            hydra.util.Lazy<Boolean> argsOk = new hydra.util.Lazy<>(() -> hydra.lib.lists.Foldl.apply(
+              (java.util.function.Function<Boolean, java.util.function.Function<hydra.core.Term, Boolean>>) (ok -> (java.util.function.Function<hydra.core.Term, Boolean>) (arg -> hydra.lib.logic.And.apply(
+                ok,
+                hydra.Variables.isFreeVariableInTerm(
                   funcName,
-                  term);
-              }
-
-              @Override
-              public Boolean visit(hydra.core.Function.Elimination e) {
-                return (e).value.accept(new hydra.core.Elimination.PartialVisitor<>() {
-                  @Override
-                  public Boolean otherwise(hydra.core.Elimination instance) {
-                    return hydra.Variables.isFreeVariableInTerm(
-                      funcName,
-                      term);
-                  }
-
-                  @Override
-                  public Boolean visit(hydra.core.Elimination.Union cs) {
-                    hydra.util.Lazy<Boolean> argsOk = new hydra.util.Lazy<>(() -> hydra.lib.lists.Foldl.apply(
-                      (java.util.function.Function<Boolean, java.util.function.Function<hydra.core.Term, Boolean>>) (ok -> (java.util.function.Function<hydra.core.Term, Boolean>) (arg -> hydra.lib.logic.And.apply(
-                        ok,
-                        hydra.Variables.isFreeVariableInTerm(
-                          funcName,
-                          arg)))),
-                      true,
-                      gatherArgs.get()));
-                    java.util.List<hydra.core.Field> cases_ = (cs).value.cases;
-                    hydra.util.Lazy<Boolean> branchesOk = new hydra.util.Lazy<>(() -> hydra.lib.lists.Foldl.apply(
-                      (java.util.function.Function<Boolean, java.util.function.Function<hydra.core.Field, Boolean>>) (ok -> (java.util.function.Function<hydra.core.Field, Boolean>) (field -> hydra.lib.logic.And.apply(
-                        ok,
-                        hydra.Analysis.isTailRecursiveInTailPosition(
-                          funcName,
-                          (field).term)))),
-                      true,
-                      cases_));
-                    hydra.util.Maybe<hydra.core.Term> dflt = (cs).value.default_;
-                    hydra.util.Lazy<Boolean> dfltOk = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.applyLazy(
-                      () -> true,
-                      (java.util.function.Function<hydra.core.Term, Boolean>) (d -> hydra.Analysis.isTailRecursiveInTailPosition(
-                        funcName,
-                        d)),
-                      dflt));
-                    return hydra.lib.logic.And.apply(
-                      hydra.lib.logic.And.apply(
-                        branchesOk.get(),
-                        dfltOk.get()),
-                      argsOk.get());
-                  }
-                });
-              }
-            });
+                  arg)))),
+              true,
+              gatherArgs.get()));
+            java.util.List<hydra.core.Field> cases_ = (cs).value.cases;
+            hydra.util.Lazy<Boolean> branchesOk = new hydra.util.Lazy<>(() -> hydra.lib.lists.Foldl.apply(
+              (java.util.function.Function<Boolean, java.util.function.Function<hydra.core.Field, Boolean>>) (ok -> (java.util.function.Function<hydra.core.Field, Boolean>) (field -> hydra.lib.logic.And.apply(
+                ok,
+                hydra.Analysis.isTailRecursiveInTailPosition(
+                  funcName,
+                  (field).term)))),
+              true,
+              cases_));
+            hydra.util.Maybe<hydra.core.Term> dflt = (cs).value.default_;
+            hydra.util.Lazy<Boolean> dfltOk = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.applyLazy(
+              () -> true,
+              (java.util.function.Function<hydra.core.Term, Boolean>) (d -> hydra.Analysis.isTailRecursiveInTailPosition(
+                funcName,
+                d)),
+              dflt));
+            return hydra.lib.logic.And.apply(
+              hydra.lib.logic.And.apply(
+                branchesOk.get(),
+                dfltOk.get()),
+              argsOk.get());
           }
         });
       }
 
       @Override
-      public Boolean visit(hydra.core.Term.Function f) {
-        return (f).value.accept(new hydra.core.Function.PartialVisitor<>() {
-          @Override
-          public Boolean otherwise(hydra.core.Function instance) {
-            return hydra.Variables.isFreeVariableInTerm(
-              funcName,
-              term);
-          }
-
-          @Override
-          public Boolean visit(hydra.core.Function.Lambda lam) {
-            return hydra.Analysis.isTailRecursiveInTailPosition(
-              funcName,
-              (lam).value.body);
-          }
-        });
+      public Boolean visit(hydra.core.Term.Lambda lam) {
+        return hydra.Analysis.isTailRecursiveInTailPosition(
+          funcName,
+          (lam).value.body);
       }
 
       @Override

@@ -10,13 +10,6 @@ import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Math as Math
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 
--- | Find the arity (expected number of arguments) of a function
-functionArity :: Core.Function -> Int
-functionArity x =
-    case x of
-      Core.FunctionElimination _ -> 1
-      Core.FunctionLambda v0 -> (\i -> Math.add 1 i) (termArity (Core.lambdaBody v0))
-
 -- | Find the arity (expected number of arguments) of a primitive constant or function
 primitiveArity :: Graph.Primitive -> Int
 primitiveArity arg_ = (\arg_2 -> typeArity (Core.typeSchemeType arg_2)) (Graph.primitiveType arg_)
@@ -26,7 +19,10 @@ termArity :: Core.Term -> Int
 termArity x =
     case x of
       Core.TermApplication v0 -> (\arg_2 -> (\xapp -> Math.sub xapp 1) (termArity arg_2)) (Core.applicationFunction v0)
-      Core.TermFunction v0 -> functionArity v0
+      Core.TermCases _ -> 1
+      Core.TermLambda v0 -> (\i -> Math.add 1 i) (termArity (Core.lambdaBody v0))
+      Core.TermProject _ -> 1
+      Core.TermUnwrap _ -> 1
       _ -> 0
 
 -- | Find the arity (expected number of arguments) of a type

@@ -14,9 +14,11 @@ public abstract class Term implements Serializable, Comparable<Term> {
 
   public static final hydra.core.Name APPLICATION = new hydra.core.Name("application");
 
+  public static final hydra.core.Name CASES = new hydra.core.Name("cases");
+
   public static final hydra.core.Name EITHER = new hydra.core.Name("either");
 
-  public static final hydra.core.Name FUNCTION = new hydra.core.Name("function");
+  public static final hydra.core.Name LAMBDA = new hydra.core.Name("lambda");
 
   public static final hydra.core.Name LET = new hydra.core.Name("let");
 
@@ -30,6 +32,8 @@ public abstract class Term implements Serializable, Comparable<Term> {
 
   public static final hydra.core.Name PAIR = new hydra.core.Name("pair");
 
+  public static final hydra.core.Name PROJECT = new hydra.core.Name("project");
+
   public static final hydra.core.Name RECORD = new hydra.core.Name("record");
 
   public static final hydra.core.Name SET = new hydra.core.Name("set");
@@ -41,6 +45,8 @@ public abstract class Term implements Serializable, Comparable<Term> {
   public static final hydra.core.Name UNION = new hydra.core.Name("union");
 
   public static final hydra.core.Name UNIT = new hydra.core.Name("unit");
+
+  public static final hydra.core.Name UNWRAP = new hydra.core.Name("unwrap");
 
   public static final hydra.core.Name VARIABLE = new hydra.core.Name("variable");
 
@@ -57,9 +63,11 @@ public abstract class Term implements Serializable, Comparable<Term> {
 
     R visit(Application instance) ;
 
+    R visit(Cases instance) ;
+
     R visit(Either instance) ;
 
-    R visit(Function instance) ;
+    R visit(Lambda instance) ;
 
     R visit(Let instance) ;
 
@@ -73,6 +81,8 @@ public abstract class Term implements Serializable, Comparable<Term> {
 
     R visit(Pair instance) ;
 
+    R visit(Project instance) ;
+
     R visit(Record instance) ;
 
     R visit(Set instance) ;
@@ -84,6 +94,8 @@ public abstract class Term implements Serializable, Comparable<Term> {
     R visit(Union instance) ;
 
     R visit(Unit instance) ;
+
+    R visit(Unwrap instance) ;
 
     R visit(Variable instance) ;
 
@@ -103,11 +115,15 @@ public abstract class Term implements Serializable, Comparable<Term> {
       return otherwise(instance);
     }
 
+    default R visit(Cases instance) {
+      return otherwise(instance);
+    }
+
     default R visit(Either instance) {
       return otherwise(instance);
     }
 
-    default R visit(Function instance) {
+    default R visit(Lambda instance) {
       return otherwise(instance);
     }
 
@@ -135,6 +151,10 @@ public abstract class Term implements Serializable, Comparable<Term> {
       return otherwise(instance);
     }
 
+    default R visit(Project instance) {
+      return otherwise(instance);
+    }
+
     default R visit(Record instance) {
       return otherwise(instance);
     }
@@ -156,6 +176,10 @@ public abstract class Term implements Serializable, Comparable<Term> {
     }
 
     default R visit(Unit instance) {
+      return otherwise(instance);
+    }
+
+    default R visit(Unwrap instance) {
       return otherwise(instance);
     }
 
@@ -259,6 +283,51 @@ public abstract class Term implements Serializable, Comparable<Term> {
   }
 
   /**
+   * A union elimination; a case statement
+   */
+  public static final class Cases extends hydra.core.Term implements Serializable {
+    public final hydra.core.CaseStatement value;
+
+    public Cases (hydra.core.CaseStatement value) {
+      this.value = value;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Cases)) {
+        return false;
+      }
+      Cases o = (Cases) other;
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
+    }
+
+    @Override
+    public int hashCode() {
+      return 2 * java.util.Objects.hashCode(value);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Term other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Cases o = (Cases) other;
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
+    }
+
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+
+  /**
    * An either value
    */
   public static final class Either extends hydra.core.Term implements Serializable {
@@ -304,21 +373,21 @@ public abstract class Term implements Serializable, Comparable<Term> {
   }
 
   /**
-   * A function term
+   * A function abstraction (lambda)
    */
-  public static final class Function extends hydra.core.Term implements Serializable {
-    public final hydra.core.Function value;
+  public static final class Lambda extends hydra.core.Term implements Serializable {
+    public final hydra.core.Lambda value;
 
-    public Function (hydra.core.Function value) {
+    public Lambda (hydra.core.Lambda value) {
       this.value = value;
     }
 
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof Function)) {
+      if (!(other instanceof Lambda)) {
         return false;
       }
-      Function o = (Function) other;
+      Lambda o = (Lambda) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -336,7 +405,7 @@ public abstract class Term implements Serializable, Comparable<Term> {
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Function o = (Function) other;
+      Lambda o = (Lambda) other;
       return hydra.util.Comparing.compare(
         value,
         o.value);
@@ -619,6 +688,51 @@ public abstract class Term implements Serializable, Comparable<Term> {
   }
 
   /**
+   * A record elimination; a projection
+   */
+  public static final class Project extends hydra.core.Term implements Serializable {
+    public final hydra.core.Projection value;
+
+    public Project (hydra.core.Projection value) {
+      this.value = value;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Project)) {
+        return false;
+      }
+      Project o = (Project) other;
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
+    }
+
+    @Override
+    public int hashCode() {
+      return 2 * java.util.Objects.hashCode(value);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Term other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Project o = (Project) other;
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
+    }
+
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+
+  /**
    * A record term
    */
   public static final class Record extends hydra.core.Term implements Serializable {
@@ -873,6 +987,51 @@ public abstract class Term implements Serializable, Comparable<Term> {
         return tagCmp;
       }
       return 0;
+    }
+
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+
+  /**
+   * An unwrap elimination; the inverse of a wrap
+   */
+  public static final class Unwrap extends hydra.core.Term implements Serializable {
+    public final hydra.core.Name value;
+
+    public Unwrap (hydra.core.Name value) {
+      this.value = value;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Unwrap)) {
+        return false;
+      }
+      Unwrap o = (Unwrap) other;
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
+    }
+
+    @Override
+    public int hashCode() {
+      return 2 * java.util.Objects.hashCode(value);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Term other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Unwrap o = (Unwrap) other;
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

@@ -137,26 +137,12 @@ def element_is_vertex(el: hydra.pg.model.Element[T0]):
 def find_tables_in_term(term: hydra.core.Term):
     def _hoist_hydra_demos_genpg_transform_find_tables_in_term_1(names, v1):
         match v1:
-            case hydra.core.EliminationRecord(value=proj):
+            case hydra.core.TermProject(value=proj):
                 return hydra.lib.sets.insert(proj.type_name.value, names)
 
             case _:
                 return names
-    def _hoist_hydra_demos_genpg_transform_find_tables_in_term_2(names, v1):
-        match v1:
-            case hydra.core.FunctionElimination(value=e):
-                return _hoist_hydra_demos_genpg_transform_find_tables_in_term_1(names, e)
-
-            case _:
-                return names
-    def _hoist_hydra_demos_genpg_transform_find_tables_in_term_3(names, v1):
-        match v1:
-            case hydra.core.TermFunction(value=f):
-                return _hoist_hydra_demos_genpg_transform_find_tables_in_term_2(names, f)
-
-            case _:
-                return names
-    return hydra.rewriting.fold_over_term(hydra.coders.TraversalOrder.PRE, (lambda names, t: _hoist_hydra_demos_genpg_transform_find_tables_in_term_3(names, t)), hydra.lib.sets.empty(), term)
+    return hydra.rewriting.fold_over_term(hydra.coders.TraversalOrder.PRE, (lambda names, t: _hoist_hydra_demos_genpg_transform_find_tables_in_term_1(names, t)), hydra.lib.sets.empty(), term)
 
 def find_tables_in_terms(terms: frozenlist[hydra.core.Term]) -> frozenset[str]:
     r"""Find table names referenced in multiple terms."""

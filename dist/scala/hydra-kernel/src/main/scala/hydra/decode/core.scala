@@ -102,29 +102,6 @@ def eitherType(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors
   }
   case _ => Left("expected record"))(hydra.extract.core.stripWithDecodingError(cx)(raw))
 
-def elimination(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.DecodingError, hydra.core.Elimination] =
-  hydra.lib.eithers.either[hydra.errors.DecodingError, hydra.core.Term, Either[hydra.errors.DecodingError,
-     hydra.core.Elimination]]((err: hydra.errors.DecodingError) => Left(err))((stripped: hydra.core.Term) =>
-  stripped match
-  case hydra.core.Term.union(v_Term_union_inj) => {
-    lazy val field: hydra.core.Field = (v_Term_union_inj.field)
-    lazy val fname: hydra.core.Name = (field.name)
-    lazy val fterm: hydra.core.Term = (field.term)
-    lazy val variantMap: Map[hydra.core.Name, (hydra.core.Term => Either[hydra.errors.DecodingError, hydra.core.Elimination])] = hydra.lib.maps.fromList[hydra.core.Name,
-       (hydra.core.Term) => Either[hydra.errors.DecodingError, hydra.core.Elimination]](Seq(Tuple2("record",
-       (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[hydra.core.Projection, hydra.core.Elimination, hydra.errors.DecodingError]((t: hydra.core.Projection) => hydra.core.Elimination.record(t))(hydra.decode.core.projection(cx)(input))),
-         Tuple2("union", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[hydra.core.CaseStatement, hydra.core.Elimination, hydra.errors.DecodingError]((t: hydra.core.CaseStatement) => hydra.core.Elimination.union(t))(hydra.decode.core.caseStatement(cx)(input))),
-         Tuple2("wrap", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[hydra.core.Name, hydra.core.Elimination, hydra.errors.DecodingError]((t: hydra.core.Name) => hydra.core.Elimination.wrap(t))(hydra.decode.core.name(cx)(input)))))
-    hydra.lib.maybes.maybe[Either[hydra.errors.DecodingError, hydra.core.Elimination], (hydra.core.Term) => Either[hydra.errors.DecodingError,
-       hydra.core.Elimination]](Left(hydra.lib.strings.cat(Seq("no such field ", fname, " in union"))))((f: (hydra.core.Term => Either[hydra.errors.DecodingError,
-       hydra.core.Elimination])) => f(fterm))(hydra.lib.maps.lookup[hydra.core.Name, (hydra.core.Term) => Either[hydra.errors.DecodingError,
-       hydra.core.Elimination]](fname)(variantMap))
-  }
-  case _ => Left("expected union"))(hydra.extract.core.stripWithDecodingError(cx)(raw))
-
 def field(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.DecodingError, hydra.core.Field] =
   hydra.lib.eithers.either[hydra.errors.DecodingError, hydra.core.Term, Either[hydra.errors.DecodingError,
      hydra.core.Field]]((err: hydra.errors.DecodingError) => Left(err))((stripped: hydra.core.Term) =>
@@ -228,27 +205,6 @@ def forallType(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors
          field_body))))
   }
   case _ => Left("expected record"))(hydra.extract.core.stripWithDecodingError(cx)(raw))
-
-def function(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.DecodingError, hydra.core.Function] =
-  hydra.lib.eithers.either[hydra.errors.DecodingError, hydra.core.Term, Either[hydra.errors.DecodingError,
-     hydra.core.Function]]((err: hydra.errors.DecodingError) => Left(err))((stripped: hydra.core.Term) =>
-  stripped match
-  case hydra.core.Term.union(v_Term_union_inj) => {
-    lazy val field: hydra.core.Field = (v_Term_union_inj.field)
-    lazy val fname: hydra.core.Name = (field.name)
-    lazy val fterm: hydra.core.Term = (field.term)
-    lazy val variantMap: Map[hydra.core.Name, (hydra.core.Term => Either[hydra.errors.DecodingError, hydra.core.Function])] = hydra.lib.maps.fromList[hydra.core.Name,
-       (hydra.core.Term) => Either[hydra.errors.DecodingError, hydra.core.Function]](Seq(Tuple2("elimination",
-       (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[hydra.core.Elimination, hydra.core.Function, hydra.errors.DecodingError]((t: hydra.core.Elimination) => hydra.core.Function.elimination(t))(hydra.decode.core.elimination(cx)(input))),
-         Tuple2("lambda", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[hydra.core.Lambda, hydra.core.Function, hydra.errors.DecodingError]((t: hydra.core.Lambda) => hydra.core.Function.lambda(t))(hydra.decode.core.lambda(cx)(input)))))
-    hydra.lib.maybes.maybe[Either[hydra.errors.DecodingError, hydra.core.Function], (hydra.core.Term) => Either[hydra.errors.DecodingError,
-       hydra.core.Function]](Left(hydra.lib.strings.cat(Seq("no such field ", fname, " in union"))))((f: (hydra.core.Term => Either[hydra.errors.DecodingError,
-       hydra.core.Function])) => f(fterm))(hydra.lib.maps.lookup[hydra.core.Name, (hydra.core.Term) => Either[hydra.errors.DecodingError,
-       hydra.core.Function]](fname)(variantMap))
-  }
-  case _ => Left("expected union"))(hydra.extract.core.stripWithDecodingError(cx)(raw))
 
 def functionType(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.DecodingError, hydra.core.FunctionType] =
   hydra.lib.eithers.either[hydra.errors.DecodingError, hydra.core.Term, Either[hydra.errors.DecodingError,
@@ -585,11 +541,13 @@ def term(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.Decod
       hydra.lib.eithers.map[hydra.core.AnnotatedTerm, hydra.core.Term, hydra.errors.DecodingError]((t: hydra.core.AnnotatedTerm) => hydra.core.Term.annotated(t))(hydra.decode.core.annotatedTerm(cx)(input))),
          Tuple2("application", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[hydra.core.Application, hydra.core.Term, hydra.errors.DecodingError]((t: hydra.core.Application) => hydra.core.Term.application(t))(hydra.decode.core.application(cx)(input))),
+         Tuple2("cases", (input: hydra.core.Term) =>
+      hydra.lib.eithers.map[hydra.core.CaseStatement, hydra.core.Term, hydra.errors.DecodingError]((t: hydra.core.CaseStatement) => hydra.core.Term.cases(t))(hydra.decode.core.caseStatement(cx)(input))),
          Tuple2("either", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[Either[hydra.core.Term, hydra.core.Term], hydra.core.Term, hydra.errors.DecodingError]((t: Either[hydra.core.Term,
          hydra.core.Term]) => hydra.core.Term.either(t))(hydra.extract.core.decodeEither(hydra.decode.core.term)(hydra.decode.core.term)(cx)(input))),
-         Tuple2("function", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[hydra.core.Function, hydra.core.Term, hydra.errors.DecodingError]((t: hydra.core.Function) => hydra.core.Term.function(t))(hydra.decode.core.function(cx)(input))),
+         Tuple2("lambda", (input: hydra.core.Term) =>
+      hydra.lib.eithers.map[hydra.core.Lambda, hydra.core.Term, hydra.errors.DecodingError]((t: hydra.core.Lambda) => hydra.core.Term.lambda(t))(hydra.decode.core.lambda(cx)(input))),
          Tuple2("let", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[hydra.core.Let, hydra.core.Term, hydra.errors.DecodingError]((t: hydra.core.Let) => hydra.core.Term.let(t))(hydra.decode.core.let(cx)(input))),
          Tuple2("list", (input: hydra.core.Term) =>
@@ -604,6 +562,8 @@ def term(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.Decod
          Tuple2("pair", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[Tuple2[hydra.core.Term, hydra.core.Term], hydra.core.Term, hydra.errors.DecodingError]((t: Tuple2[hydra.core.Term,
          hydra.core.Term]) => hydra.core.Term.pair(t))(hydra.extract.core.decodePair(hydra.decode.core.term)(hydra.decode.core.term)(cx)(input))),
+         Tuple2("project", (input: hydra.core.Term) =>
+      hydra.lib.eithers.map[hydra.core.Projection, hydra.core.Term, hydra.errors.DecodingError]((t: hydra.core.Projection) => hydra.core.Term.project(t))(hydra.decode.core.projection(cx)(input))),
          Tuple2("record", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[hydra.core.Record, hydra.core.Term, hydra.errors.DecodingError]((t: hydra.core.Record) => hydra.core.Term.record(t))(hydra.decode.core.record(cx)(input))),
          Tuple2("set", (input: hydra.core.Term) =>
@@ -616,6 +576,8 @@ def term(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.Decod
       hydra.lib.eithers.map[hydra.core.Injection, hydra.core.Term, hydra.errors.DecodingError]((t: hydra.core.Injection) => hydra.core.Term.union(t))(hydra.decode.core.injection(cx)(input))),
          Tuple2("unit", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[Unit, hydra.core.Term, hydra.errors.DecodingError]((t: Unit) => hydra.core.Term.unit)(hydra.extract.core.decodeUnit(cx)(input))),
+         Tuple2("unwrap", (input: hydra.core.Term) =>
+      hydra.lib.eithers.map[hydra.core.Name, hydra.core.Term, hydra.errors.DecodingError]((t: hydra.core.Name) => hydra.core.Term.unwrap(t))(hydra.decode.core.name(cx)(input))),
          Tuple2("variable", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[hydra.core.Name, hydra.core.Term, hydra.errors.DecodingError]((t: hydra.core.Name) => hydra.core.Term.variable(t))(hydra.decode.core.name(cx)(input))),
          Tuple2("wrap", (input: hydra.core.Term) =>

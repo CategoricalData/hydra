@@ -16,11 +16,6 @@ case class EitherType(left: hydra.core.Type, right: hydra.core.Type)
 
 case class PairType(first: hydra.core.Type, second: hydra.core.Type)
 
-enum Elimination :
-   case record(value: hydra.core.Projection) extends Elimination
-   case union(value: hydra.core.CaseStatement) extends Elimination
-   case wrap(value: hydra.core.Name) extends Elimination
-
 case class Field(name: hydra.core.Name, term: hydra.core.Term)
 
 case class FieldType(name: hydra.core.Name, `type`: hydra.core.Type)
@@ -36,10 +31,6 @@ enum FloatValue :
    case float64(value: Double) extends FloatValue
 
 case class ForallType(parameter: hydra.core.Name, body: hydra.core.Type)
-
-enum Function :
-   case elimination(value: hydra.core.Elimination) extends Function
-   case lambda(value: hydra.core.Lambda) extends Function
 
 case class FunctionType(domain: hydra.core.Type, codomain: hydra.core.Type)
 
@@ -96,20 +87,23 @@ case class Record(typeName: hydra.core.Name, fields: Seq[hydra.core.Field])
 enum Term :
    case annotated(value: hydra.core.AnnotatedTerm) extends Term
    case application(value: hydra.core.Application) extends Term
+   case cases(value: hydra.core.CaseStatement) extends Term
    case either(value: Either[hydra.core.Term, hydra.core.Term]) extends Term
-   case function(value: hydra.core.Function) extends Term
+   case lambda(value: hydra.core.Lambda) extends Term
    case let(value: hydra.core.Let) extends Term
    case list(value: Seq[hydra.core.Term]) extends Term
    case literal(value: hydra.core.Literal) extends Term
    case map(value: Map[hydra.core.Term, hydra.core.Term]) extends Term
    case maybe(value: Option[hydra.core.Term]) extends Term
    case pair(value: Tuple2[hydra.core.Term, hydra.core.Term]) extends Term
+   case project(value: hydra.core.Projection) extends Term
    case record(value: hydra.core.Record) extends Term
    case set(value: scala.collection.immutable.Set[hydra.core.Term]) extends Term
    case typeApplication(value: hydra.core.TypeApplicationTerm) extends Term
    case typeLambda(value: hydra.core.TypeLambda) extends Term
    case union(value: hydra.core.Injection) extends Term
    case unit extends Term
+   case unwrap(value: hydra.core.Name) extends Term
    case variable(value: hydra.core.Name) extends Term
    case wrap(value: hydra.core.WrappedTerm) extends Term
 

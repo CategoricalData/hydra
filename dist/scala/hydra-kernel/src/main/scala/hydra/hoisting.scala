@@ -19,9 +19,9 @@ def augmentBindingsWithNewFreeVars(cx: hydra.graph.Graph)(boundVars: scala.colle
        wrapAfterTypeLambdas(vars)(v_Term_typeLambda_tl.body)))
     case _ => hydra.lib.lists.foldl[hydra.core.Term, Tuple2[hydra.core.Name, Option[hydra.core.Type]]]((t: hydra.core.Term) =>
       (p: Tuple2[hydra.core.Name, Option[hydra.core.Type]]) =>
-      hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda(hydra.lib.pairs.first[hydra.core.Name,
-         Option[hydra.core.Type]](p), hydra.lib.pairs.second[hydra.core.Name, Option[hydra.core.Type]](p),
-         t))))(term)(hydra.lib.lists.reverse[Tuple2[hydra.core.Name, Option[hydra.core.Type]]](vars))
+      hydra.core.Term.lambda(hydra.core.Lambda(hydra.lib.pairs.first[hydra.core.Name, Option[hydra.core.Type]](p),
+         hydra.lib.pairs.second[hydra.core.Name, Option[hydra.core.Type]](p), t)))(term)(hydra.lib.lists.reverse[Tuple2[hydra.core.Name,
+         Option[hydra.core.Type]]](vars))
   def augment(b: hydra.core.Binding): Tuple2[hydra.core.Binding, Option[Tuple2[hydra.core.Name, hydra.core.Term]]] =
     {
     lazy val freeVars: Seq[hydra.core.Name] = hydra.lib.sets.toList[hydra.core.Name](hydra.lib.sets.intersection[hydra.core.Name](boundVars)(hydra.variables.freeVariablesInTerm(b.term)))
@@ -136,9 +136,9 @@ def hoistLetBindingsWithPredicate(isParentBinding: (hydra.core.Binding => Boolea
     lazy val strippedTerm: hydra.core.Term = hydra.strip.stripTypeLambdas(b.term)
     lazy val termWithLambdas: hydra.core.Term = hydra.lib.lists.foldl[hydra.core.Term, Tuple2[hydra.core.Name, Option[hydra.core.Type]]]((t: hydra.core.Term) =>
       (p: Tuple2[hydra.core.Name, Option[hydra.core.Type]]) =>
-      hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda(hydra.lib.pairs.first[hydra.core.Name,
-         Option[hydra.core.Type]](p), hydra.lib.maybes.map[hydra.core.Type, hydra.core.Type]((dom: hydra.core.Type) => hydra.strip.deannotateTypeParameters(dom))(hydra.lib.pairs.second[hydra.core.Name,
-         Option[hydra.core.Type]](p)), t))))(strippedTerm)(hydra.lib.lists.reverse[Tuple2[hydra.core.Name,
+      hydra.core.Term.lambda(hydra.core.Lambda(hydra.lib.pairs.first[hydra.core.Name, Option[hydra.core.Type]](p),
+         hydra.lib.maybes.map[hydra.core.Type, hydra.core.Type]((dom: hydra.core.Type) => hydra.strip.deannotateTypeParameters(dom))(hydra.lib.pairs.second[hydra.core.Name,
+         Option[hydra.core.Type]](p)), t)))(strippedTerm)(hydra.lib.lists.reverse[Tuple2[hydra.core.Name,
          Option[hydra.core.Type]]](capturedTermVarTypePairs))
     lazy val termWithTypeLambdas: hydra.core.Term = hydra.lib.lists.foldl[hydra.core.Term, hydra.core.Name]((t: hydra.core.Term) =>
       (v: hydra.core.Name) => hydra.core.Term.typeLambda(hydra.core.TypeLambda(v, t)))(termWithLambdas)(hydra.lib.lists.reverse[hydra.core.Name](hydra.lib.maybes.maybe[Seq[hydra.core.Name],
@@ -464,9 +464,8 @@ def hoistSubterms(shouldHoist: (Tuple2[Seq[hydra.paths.SubtermStep], hydra.core.
                                           lazy val wrappedTerm: hydra.core.Term = hydra.lib.lists.foldl[hydra.core.Term,
                                              hydra.core.Name]((body: hydra.core.Term) =>
                                             (varName: hydra.core.Name) =>
-                                            hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda(varName,
-                                               hydra.lib.maps.lookup[hydra.core.Name, hydra.core.Type](varName)(typeMap),
-                                               body))))(processedTerm)(hydra.lib.lists.reverse[hydra.core.Name](capturedVars))
+                                            hydra.core.Term.lambda(hydra.core.Lambda(varName, hydra.lib.maps.lookup[hydra.core.Name,
+                                               hydra.core.Type](varName)(typeMap), body)))(processedTerm)(hydra.lib.lists.reverse[hydra.core.Name](capturedVars))
                                           {
                                             lazy val reference: hydra.core.Term = hydra.lib.lists.foldl[hydra.core.Term,
                                                hydra.core.Name]((fn: hydra.core.Term) =>
@@ -554,13 +553,6 @@ def isApplicationFunction(acc: hydra.paths.SubtermStep): Boolean =
   case hydra.paths.SubtermStep.applicationFunction => true
   case _ => false
 
-def isEliminationUnion(f: hydra.core.Function): Boolean =
-  f match
-  case hydra.core.Function.elimination(v_Function_elimination_e) => v_Function_elimination_e match
-    case hydra.core.Elimination.union(v_Elimination_union__) => true
-    case _ => false
-  case _ => false
-
 def isLambdaBody(acc: hydra.paths.SubtermStep): Boolean =
   acc match
   case hydra.paths.SubtermStep.lambdaBody => true
@@ -568,7 +560,7 @@ def isLambdaBody(acc: hydra.paths.SubtermStep): Boolean =
 
 def isUnionElimination(term: hydra.core.Term): Boolean =
   term match
-  case hydra.core.Term.function(v_Term_function_f) => hydra.hoisting.isEliminationUnion(v_Term_function_f)
+  case hydra.core.Term.cases(v_Term_cases__) => true
   case _ => false
 
 def isUnionEliminationApplication(term: hydra.core.Term): Boolean =

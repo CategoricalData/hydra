@@ -348,6 +348,18 @@ def encode_literal(l: hydra.core.Literal, cx: T0):
         case _:
             return Left(cast(hydra.errors.Error, hydra.errors.ErrorExtraction(cast(hydra.errors.ExtractionError, hydra.errors.ExtractionErrorUnexpectedShape(hydra.errors.UnexpectedShapeError("supported literal", hydra.show.core.literal(l)))))))
 
+def encode_projection(namespaces: hydra.packaging.Namespaces[hydra.haskell.syntax.ModuleName], proj: hydra.core.Projection) -> Either[T0, hydra.haskell.syntax.Expression]:
+    r"""Encode a record projection as a Haskell expression."""
+
+    dn = proj.type_name
+    fname = proj.field
+    return Right(cast(hydra.haskell.syntax.Expression, hydra.haskell.syntax.ExpressionVariable(hydra.haskell.utils.record_field_reference(namespaces, dn, fname))))
+
+def encode_unwrap(namespaces: hydra.packaging.Namespaces[hydra.haskell.syntax.ModuleName], name: hydra.core.Name) -> Either[T0, hydra.haskell.syntax.Expression]:
+    r"""Encode an unwrap term as a Haskell expression."""
+
+    return Right(cast(hydra.haskell.syntax.Expression, hydra.haskell.syntax.ExpressionVariable(hydra.haskell.utils.element_reference(namespaces, hydra.names.qname(hydra.lib.maybes.from_just(hydra.names.namespace_of(name)), hydra.haskell.utils.newtype_accessor_name(name))))))
+
 def encode_case_expression(depth: int, namespaces: hydra.packaging.Namespaces[hydra.haskell.syntax.ModuleName], stmt: hydra.core.CaseStatement, scrutinee: hydra.haskell.syntax.Expression, cx: T0, g: hydra.graph.Graph) -> Either[hydra.errors.Error, hydra.haskell.syntax.Expression]:
     r"""Encode a Hydra case statement as a Haskell case expression with a given scrutinee."""
 
@@ -375,33 +387,17 @@ def encode_case_expression(depth: int, namespaces: hydra.packaging.Namespaces[hy
         return hydra.lib.eithers.bind(hydra.lib.maybes.cases(hydra.lib.maps.lookup(fn, field_map), (lambda : Left(cast(hydra.errors.Error, hydra.errors.ErrorResolution(cast(hydra.errors.ResolutionError, hydra.errors.ResolutionErrorNoMatchingField(hydra.errors.NoMatchingFieldError(fn))))))), (lambda field_type: (ft := field_type.type, no_args := (), single_arg := (cast(hydra.haskell.syntax.Pattern, hydra.haskell.syntax.PatternName(hydra.haskell.utils.raw_name(v1()))),), _hoist_ft_body_1 := (lambda v12: (lambda _: Right(no_args))(v12) if isinstance(v12, hydra.core.TypeUnit) else Right(single_arg)), _hoist_ft_body_1(hydra.strip.deannotate_type(ft)))[4])), (lambda args: (lhs := hydra.haskell.utils.application_pattern(hname(), args), hydra.lib.eithers.bind(hydra.lib.eithers.map((lambda x: hydra.haskell.syntax.CaseRhs(x)), encode_term(hydra.lib.math.add(depth, 1), namespaces, rhs_term(), cx, g)), (lambda rhs: Right(hydra.haskell.syntax.Alternative(lhs, rhs, Nothing())))))[1]))
     return hydra.lib.eithers.bind(hydra.resolution.require_union_type(cx, g, dn), (lambda rt: (to_field_map_entry := (lambda f: (f.name, f)), field_map := hydra.lib.maps.from_list(hydra.lib.lists.map((lambda x1: to_field_map_entry(x1)), rt)), hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda v1: to_alt(field_map, v1)), fields), (lambda ecases: hydra.lib.eithers.bind(hydra.lib.maybes.cases(def_, (lambda : Right(())), (lambda d: hydra.lib.eithers.bind(hydra.lib.eithers.map((lambda x: hydra.haskell.syntax.CaseRhs(x)), encode_term(depth, namespaces, d, cx, g)), (lambda cs: (lhs := cast(hydra.haskell.syntax.Pattern, hydra.haskell.syntax.PatternName(hydra.haskell.utils.raw_name(hydra.constants.ignored_variable))), alt := hydra.haskell.syntax.Alternative(lhs, cs, Nothing()), Right((alt,)))[2])))), (lambda dcases: Right(cast(hydra.haskell.syntax.Expression, hydra.haskell.syntax.ExpressionCase(hydra.haskell.syntax.CaseExpression(scrutinee, hydra.lib.lists.concat2(ecases, dcases))))))))))[2]))
 
-def encode_function(depth: int, namespaces: hydra.packaging.Namespaces[hydra.haskell.syntax.ModuleName], fun: hydra.core.Function, cx: T0, g: hydra.graph.Graph):
-    def _hoist_hydra_haskell_coder_encode_function_1(cx, depth, g, namespaces, v1):
-        match v1:
-            case hydra.core.EliminationWrap(value=name):
-                return Right(cast(hydra.haskell.syntax.Expression, hydra.haskell.syntax.ExpressionVariable(hydra.haskell.utils.element_reference(namespaces, hydra.names.qname(hydra.lib.maybes.from_just(hydra.names.namespace_of(name)), hydra.haskell.utils.newtype_accessor_name(name))))))
+def encode_lambda_term(depth: int, namespaces: hydra.packaging.Namespaces[hydra.haskell.syntax.ModuleName], lam: hydra.core.Lambda, cx: T0, g: hydra.graph.Graph) -> Either[hydra.errors.Error, hydra.haskell.syntax.Expression]:
+    r"""Encode a Hydra lambda as a Haskell expression."""
 
-            case hydra.core.EliminationRecord(value=proj):
-                dn = proj.type_name
-                fname = proj.field
-                return Right(cast(hydra.haskell.syntax.Expression, hydra.haskell.syntax.ExpressionVariable(hydra.haskell.utils.record_field_reference(namespaces, dn, fname))))
+    v = lam.parameter
+    body = lam.body
+    return hydra.lib.eithers.bind(encode_term(depth, namespaces, body, cx, g), (lambda hbody: Right(hydra.haskell.utils.hslambda(hydra.haskell.utils.element_reference(namespaces, v), hbody))))
 
-            case hydra.core.EliminationUnion(value=stmt):
-                return hydra.lib.eithers.map((lambda v12: hydra.haskell.utils.hslambda(hydra.haskell.utils.raw_name("x"), v12)), encode_case_expression(depth, namespaces, stmt, hydra.haskell.utils.hsvar("x"), cx, g))
+def encode_standalone_cases(depth: int, namespaces: hydra.packaging.Namespaces[hydra.haskell.syntax.ModuleName], stmt: hydra.core.CaseStatement, cx: T0, g: hydra.graph.Graph) -> Either[hydra.errors.Error, hydra.haskell.syntax.Expression]:
+    r"""Encode a standalone (un-applied) case statement as a Haskell lambda over a case expression."""
 
-            case _:
-                raise AssertionError("Unreachable: all variants handled")
-    match fun:
-        case hydra.core.FunctionElimination(value=e):
-            return _hoist_hydra_haskell_coder_encode_function_1(cx, depth, g, namespaces, e)
-
-        case hydra.core.FunctionLambda(value=lam):
-            v = lam.parameter
-            body = lam.body
-            return hydra.lib.eithers.bind(encode_term(depth, namespaces, body, cx, g), (lambda hbody: Right(hydra.haskell.utils.hslambda(hydra.haskell.utils.element_reference(namespaces, v), hbody))))
-
-        case _:
-            raise AssertionError("Unreachable: all variants handled")
+    return hydra.lib.eithers.map((lambda v1: hydra.haskell.utils.hslambda(hydra.haskell.utils.raw_name("x"), v1)), encode_case_expression(depth, namespaces, stmt, hydra.haskell.utils.hsvar("x"), cx, g))
 
 def encode_term(depth: int, namespaces: hydra.packaging.Namespaces[hydra.haskell.syntax.ModuleName], term: hydra.core.Term, cx: T0, g: hydra.graph.Graph):
     r"""Encode a Hydra term as a Haskell expression."""
@@ -435,32 +431,27 @@ def encode_term(depth: int, namespaces: hydra.packaging.Namespaces[hydra.haskell
                 return hydra.strip.deannotate_term(fun)
             def _hoist_fun_body_1(v1):
                 match v1:
-                    case hydra.core.EliminationUnion(value=stmt):
+                    case hydra.core.TermCases(value=stmt):
                         return hydra.lib.eithers.bind(encode(arg), (lambda harg: encode_case_expression(depth, namespaces, stmt, harg, cx, g)))
 
                     case _:
                         return hydra.lib.eithers.bind(encode(fun), (lambda hfun: hydra.lib.eithers.bind(encode(arg), (lambda harg: Right(hydra.haskell.utils.hsapp(hfun, harg))))))
-            def _hoist_fun_body_2(v1):
-                match v1:
-                    case hydra.core.FunctionElimination(value=e):
-                        return _hoist_fun_body_1(e)
+            return _hoist_fun_body_1(deannotated_fun())
 
-                    case _:
-                        return hydra.lib.eithers.bind(encode(fun), (lambda hfun: hydra.lib.eithers.bind(encode(arg), (lambda harg: Right(hydra.haskell.utils.hsapp(hfun, harg))))))
-            def _hoist_fun_body_3(v1):
-                match v1:
-                    case hydra.core.TermFunction(value=f):
-                        return _hoist_fun_body_2(f)
-
-                    case _:
-                        return hydra.lib.eithers.bind(encode(fun), (lambda hfun: hydra.lib.eithers.bind(encode(arg), (lambda harg: Right(hydra.haskell.utils.hsapp(hfun, harg))))))
-            return _hoist_fun_body_3(deannotated_fun())
+        case hydra.core.TermCases(value=stmt):
+            return encode_standalone_cases(depth, namespaces, stmt, cx, g)
 
         case hydra.core.TermEither(value=e):
             return hydra.lib.eithers.either((lambda l: hydra.lib.eithers.bind(encode(l), (lambda hl: Right(hydra.haskell.utils.hsapp(hydra.haskell.utils.hsvar("Left"), hl))))), (lambda r: hydra.lib.eithers.bind(encode(r), (lambda hr: Right(hydra.haskell.utils.hsapp(hydra.haskell.utils.hsvar("Right"), hr))))), e)
 
-        case hydra.core.TermFunction(value=f):
-            return encode_function(depth, namespaces, f, cx, g)
+        case hydra.core.TermLambda(value=lam):
+            return encode_lambda_term(depth, namespaces, lam, cx, g)
+
+        case hydra.core.TermProject(value=proj):
+            return encode_projection(namespaces, proj)
+
+        case hydra.core.TermUnwrap(value=name):
+            return encode_unwrap(namespaces, name)
 
         case hydra.core.TermLet(value=let_term):
             def collect_bindings(lt: hydra.core.Let):
@@ -559,8 +550,8 @@ def encode_term(depth: int, namespaces: hydra.packaging.Namespaces[hydra.haskell
         case hydra.core.TermUnit():
             return Right(cast(hydra.haskell.syntax.Expression, hydra.haskell.syntax.ExpressionTuple(())))
 
-        case hydra.core.TermVariable(value=name):
-            return Right(cast(hydra.haskell.syntax.Expression, hydra.haskell.syntax.ExpressionVariable(hydra.haskell.utils.element_reference(namespaces, name))))
+        case hydra.core.TermVariable(value=name2):
+            return Right(cast(hydra.haskell.syntax.Expression, hydra.haskell.syntax.ExpressionVariable(hydra.haskell.utils.element_reference(namespaces, name2))))
 
         case hydra.core.TermWrap(value=wrapped):
             tname = wrapped.type_name

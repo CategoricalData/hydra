@@ -121,7 +121,18 @@ rustLanguage = define "rustLanguage" $
       Variants.termVariantAnnotated,
       Variants.termVariantApplication,
       Variants.termVariantEither,
-      Variants.termVariantFunction,
+
+      Variants.termVariantCases,
+
+      Variants.termVariantLambda,
+
+      Variants.termVariantProject,
+
+      Variants.termVariantUnwrap,
+
+      Variants.termVariantTypeApplication,
+
+      Variants.termVariantTypeLambda,
       Variants.termVariantLet,
       Variants.termVariantList,
       Variants.termVariantLiteral,

@@ -31,7 +31,7 @@ alter cx g funTerm keyTerm mapTerm =
                   Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maps.delete")),
                   Core.applicationArgument = keyTerm})),
                 Core.applicationArgument = mapTerm}))})),
-            Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+            Core.applicationArgument = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "newV"),
               Core.lambdaDomain = Nothing,
               Core.lambdaBody = (Core.TermApplication (Core.Application {
@@ -40,7 +40,7 @@ alter cx g funTerm keyTerm mapTerm =
                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maps.insert")),
                     Core.applicationArgument = keyTerm})),
                   Core.applicationArgument = (Core.TermVariable (Core.Name "newV"))})),
-                Core.applicationArgument = mapTerm}))})))})),
+                Core.applicationArgument = mapTerm}))}))})),
           Core.applicationArgument = newVal})))
       _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
         Errors.unexpectedShapeErrorExpected = "map value",

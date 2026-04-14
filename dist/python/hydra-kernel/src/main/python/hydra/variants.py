@@ -9,7 +9,7 @@ from typing import TypeAlias, cast
 import hydra.core
 
 class EliminationVariant(Enum):
-    r"""The identifier of an elimination constructor."""
+    r"""The identifier of an elimination constructor (legacy)."""
 
     RECORD = hydra.core.Name("record")
 
@@ -20,7 +20,7 @@ class EliminationVariant(Enum):
 EliminationVariant.TYPE_ = hydra.core.Name("hydra.variants.EliminationVariant")
 
 class FunctionVariant(Enum):
-    r"""The identifier of a function constructor."""
+    r"""The identifier of a function constructor (legacy)."""
 
     ELIMINATION = hydra.core.Name("elimination")
 
@@ -50,9 +50,11 @@ class TermVariant(Enum):
 
     APPLICATION = hydra.core.Name("application")
 
+    CASES = hydra.core.Name("cases")
+
     EITHER = hydra.core.Name("either")
 
-    FUNCTION = hydra.core.Name("function")
+    LAMBDA = hydra.core.Name("lambda")
 
     LET = hydra.core.Name("let")
 
@@ -66,6 +68,8 @@ class TermVariant(Enum):
 
     PAIR = hydra.core.Name("pair")
 
+    PROJECT = hydra.core.Name("project")
+
     RECORD = hydra.core.Name("record")
 
     SET = hydra.core.Name("set")
@@ -77,6 +81,8 @@ class TermVariant(Enum):
     UNION = hydra.core.Name("union")
 
     UNIT = hydra.core.Name("unit")
+
+    UNWRAP = hydra.core.Name("unwrap")
 
     VARIABLE = hydra.core.Name("variable")
 

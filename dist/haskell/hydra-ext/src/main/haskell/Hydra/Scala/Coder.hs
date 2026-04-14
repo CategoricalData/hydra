@@ -47,14 +47,10 @@ applyVar fterm avar =
 
       let v = Core.unName avar
       in case (Strip.deannotateAndDetypeTerm fterm) of
-        Core.TermFunction v0 -> case v0 of
-          Core.FunctionLambda v1 ->
-            let lamParam = Core.lambdaParameter v1
-                lamBody = Core.lambdaBody v1
-            in (Logic.ifElse (Variables.isFreeVariableInTerm lamParam lamBody) lamBody (Variables.substituteVariable lamParam avar lamBody))
-          _ -> Core.TermApplication (Core.Application {
-            Core.applicationFunction = fterm,
-            Core.applicationArgument = (Core.TermVariable avar)})
+        Core.TermLambda v0 ->
+          let lamParam = Core.lambdaParameter v0
+              lamBody = Core.lambdaBody v0
+          in (Logic.ifElse (Variables.isFreeVariableInTerm lamParam lamBody) lamBody (Variables.substituteVariable lamParam avar lamBody))
         _ -> Core.TermApplication (Core.Application {
           Core.applicationFunction = fterm,
           Core.applicationArgument = (Core.TermVariable avar)})
@@ -95,14 +91,12 @@ encodeCase cx g ftypes sn f =
           fterm = Core.fieldTerm f
           isUnit =
                   Maybes.maybe (case (Strip.deannotateAndDetypeTerm fterm) of
-                    Core.TermFunction v0 -> case v0 of
-                      Core.FunctionLambda v1 ->
-                        let lamParam = Core.lambdaParameter v1
-                            lamBody = Core.lambdaBody v1
-                            domIsUnit = Maybes.maybe False (\dom -> Equality.equal dom Core.TypeUnit) (Core.lambdaDomain v1)
-                            bodyIgnoresParam = Variables.isFreeVariableInTerm lamParam lamBody
-                        in (Logic.or domIsUnit bodyIgnoresParam)
-                      _ -> False
+                    Core.TermLambda v0 ->
+                      let lamParam = Core.lambdaParameter v0
+                          lamBody = Core.lambdaBody v0
+                          domIsUnit = Maybes.maybe False (\dom -> Equality.equal dom Core.TypeUnit) (Core.lambdaDomain v0)
+                          bodyIgnoresParam = Variables.isFreeVariableInTerm lamParam lamBody
+                      in (Logic.or domIsUnit bodyIgnoresParam)
                     Core.TermRecord v0 -> Equality.equal (Lists.length (Core.recordFields v0)) 0
                     Core.TermUnit -> True
                     _ -> False) (\dom -> case (Strip.deannotateType dom) of
@@ -112,12 +106,10 @@ encodeCase cx g ftypes sn f =
           shortTypeName = Lists.last (Strings.splitOn "." (Maybes.maybe "x" (\n -> Core.unName n) sn))
           lamParamSuffix =
                   case (Strip.deannotateAndDetypeTerm fterm) of
-                    Core.TermFunction v0 -> case v0 of
-                      Core.FunctionLambda v1 ->
-                        let rawName = Core.unName (Core.lambdaParameter v1)
-                            safeName = Strings.fromList (Lists.map (\c -> Logic.ifElse (Equality.equal c 39) 95 c) (Strings.toList rawName))
-                        in (Strings.cat2 "_" safeName)
-                      _ -> ""
+                    Core.TermLambda v0 ->
+                      let rawName = Core.unName (Core.lambdaParameter v0)
+                          safeName = Strings.fromList (Lists.map (\c -> Logic.ifElse (Equality.equal c 39) 95 c) (Strings.toList rawName))
+                      in (Strings.cat2 "_" safeName)
                     _ -> ""
           v =
                   Core.Name (Strings.cat [
@@ -128,9 +120,7 @@ encodeCase cx g ftypes sn f =
                     lamParamSuffix])
           domainIsUnit =
                   case (Strip.deannotateAndDetypeTerm fterm) of
-                    Core.TermFunction v0 -> case v0 of
-                      Core.FunctionLambda v1 -> Maybes.maybe True (\dom -> Equality.equal dom Core.TypeUnit) (Core.lambdaDomain v1)
-                      _ -> True
+                    Core.TermLambda v0 -> Maybes.maybe True (\dom -> Equality.equal dom Core.TypeUnit) (Core.lambdaDomain v0)
                     _ -> True
           patArgs = Logic.ifElse isUnit (Logic.ifElse domainIsUnit [] [
                 Syntax.PatWildcard]) [
@@ -188,11 +178,11 @@ encodeComplexTermDef cx g lname term typ =
             Syntax.defn_DefDecltpe = (Just scod),
             Syntax.defn_DefBody = defBody}))))))))))
 
--- | Encode a Hydra function as a Scala expression
-encodeFunction :: t0 -> Graph.Graph -> M.Map Core.Name Core.Term -> Core.Function -> Maybe Core.Term -> Either Errors.Error Syntax.Data
-encodeFunction cx g meta fun arg =
-    case fun of
-      Core.FunctionLambda v0 ->
+-- | Encode a Hydra function-valued term (lambda, project, cases, or unwrap) as a Scala expression
+encodeFunction :: t0 -> Graph.Graph -> M.Map Core.Name Core.Term -> Core.Term -> Maybe Core.Term -> Either Errors.Error Syntax.Data
+encodeFunction cx g meta funTerm arg =
+    case (Strip.deannotateAndDetypeTerm funTerm) of
+      Core.TermLambda v0 ->
         let param = Core.lambdaParameter v0
             v = Utils.scalaEscapeName (Core.unName param)
             body = Core.lambdaBody v0
@@ -205,37 +195,35 @@ encodeFunction cx g meta fun arg =
                           unresolvedVars = Sets.difference unqualifiedFreeVars (Graph.graphTypeVariables g)
                       in (Logic.ifElse (Sets.null unresolvedVars) (Just dom) Nothing))
         in (Eithers.bind (encodeTerm cx g body) (\sbody -> Eithers.bind (Maybes.maybe (findSdom cx g meta) (\dom -> Eithers.bind (encodeType cx g dom) (\sdom -> Right (Just sdom))) mdom) (\sdom -> Right (Utils.slambda v sbody sdom))))
-      Core.FunctionElimination v0 -> case v0 of
-        Core.EliminationWrap _ -> Maybes.maybe (Eithers.bind (findSdom cx g meta) (\sdom -> Right (Utils.slambda "x" (Utils.sname "x") sdom))) (\a -> encodeTerm cx g a) arg
-        Core.EliminationRecord v1 ->
-          let fname = Utils.scalaEscapeName (Core.unName (Core.projectionField v1))
-              typeName = Core.projectionTypeName v1
-              pv = "x"
-          in (Maybes.maybe (Eithers.bind (Eithers.either (\_ -> Eithers.bind (encodeType cx g (Core.TypeVariable typeName)) (\st -> Right (Just st))) (\msdom -> Maybes.maybe (Eithers.bind (encodeType cx g (Core.TypeVariable typeName)) (\st -> Right (Just st))) (\sdom -> Right (Just sdom)) msdom) (findSdom cx g meta)) (\msdom -> Right (Utils.slambda pv (Syntax.DataRef (Syntax.Data_RefSelect (Syntax.Data_Select {
-            Syntax.data_SelectQual = (Utils.sname pv),
-            Syntax.data_SelectName = Syntax.Data_Name {
-              Syntax.data_NameValue = (Syntax.PredefString fname)}}))) msdom))) (\a -> Eithers.bind (encodeTerm cx g a) (\sa -> Right (Syntax.DataRef (Syntax.Data_RefSelect (Syntax.Data_Select {
-            Syntax.data_SelectQual = sa,
-            Syntax.data_SelectName = Syntax.Data_Name {
-              Syntax.data_NameValue = (Syntax.PredefString fname)}}))))) arg)
-        Core.EliminationUnion v1 ->
-          let v = "v"
-              tname = Core.caseStatementTypeName v1
-              dom = Core.TypeVariable tname
-              sn = Utils.nameOfType g dom
-              cases = Core.caseStatementCases v1
-              dflt = Core.caseStatementDefault v1
-              ftypes = Eithers.either (\_ -> Maps.empty) (\x_ -> x_) (Resolution.fieldTypes cx g dom)
-          in (Eithers.bind (Eithers.mapList (\f -> encodeCase cx g ftypes sn f) cases) (\fieldCases -> Eithers.bind (Maybes.maybe (Right fieldCases) (\dfltTerm -> Eithers.bind (encodeTerm cx g dfltTerm) (\sdflt -> Right (Lists.concat2 fieldCases [
-            Syntax.Case {
-              Syntax.casePat = Syntax.PatWildcard,
-              Syntax.caseCond = Nothing,
-              Syntax.caseBody = sdflt}]))) dflt) (\scases -> Maybes.maybe (Eithers.bind (findSdom cx g meta) (\sdom -> Right (Utils.slambda v (Syntax.DataMatch (Syntax.Data_Match {
-            Syntax.data_MatchExpr = (Utils.sname v),
-            Syntax.data_MatchCases = scases})) sdom))) (\a -> Eithers.bind (encodeTerm cx g a) (\sa -> Right (Syntax.DataMatch (Syntax.Data_Match {
-            Syntax.data_MatchExpr = sa,
-            Syntax.data_MatchCases = scases})))) arg)))
-        _ -> Left (Errors.ErrorOther (Errors.OtherError "unsupported elimination"))
+      Core.TermUnwrap _ -> Maybes.maybe (Eithers.bind (findSdom cx g meta) (\sdom -> Right (Utils.slambda "x" (Utils.sname "x") sdom))) (\a -> encodeTerm cx g a) arg
+      Core.TermProject v0 ->
+        let fname = Utils.scalaEscapeName (Core.unName (Core.projectionField v0))
+            typeName = Core.projectionTypeName v0
+            pv = "x"
+        in (Maybes.maybe (Eithers.bind (Eithers.either (\_ -> Eithers.bind (encodeType cx g (Core.TypeVariable typeName)) (\st -> Right (Just st))) (\msdom -> Maybes.maybe (Eithers.bind (encodeType cx g (Core.TypeVariable typeName)) (\st -> Right (Just st))) (\sdom -> Right (Just sdom)) msdom) (findSdom cx g meta)) (\msdom -> Right (Utils.slambda pv (Syntax.DataRef (Syntax.Data_RefSelect (Syntax.Data_Select {
+          Syntax.data_SelectQual = (Utils.sname pv),
+          Syntax.data_SelectName = Syntax.Data_Name {
+            Syntax.data_NameValue = (Syntax.PredefString fname)}}))) msdom))) (\a -> Eithers.bind (encodeTerm cx g a) (\sa -> Right (Syntax.DataRef (Syntax.Data_RefSelect (Syntax.Data_Select {
+          Syntax.data_SelectQual = sa,
+          Syntax.data_SelectName = Syntax.Data_Name {
+            Syntax.data_NameValue = (Syntax.PredefString fname)}}))))) arg)
+      Core.TermCases v0 ->
+        let v = "v"
+            tname = Core.caseStatementTypeName v0
+            dom = Core.TypeVariable tname
+            sn = Utils.nameOfType g dom
+            cases = Core.caseStatementCases v0
+            dflt = Core.caseStatementDefault v0
+            ftypes = Eithers.either (\_ -> Maps.empty) (\x_ -> x_) (Resolution.fieldTypes cx g dom)
+        in (Eithers.bind (Eithers.mapList (\f -> encodeCase cx g ftypes sn f) cases) (\fieldCases -> Eithers.bind (Maybes.maybe (Right fieldCases) (\dfltTerm -> Eithers.bind (encodeTerm cx g dfltTerm) (\sdflt -> Right (Lists.concat2 fieldCases [
+          Syntax.Case {
+            Syntax.casePat = Syntax.PatWildcard,
+            Syntax.caseCond = Nothing,
+            Syntax.caseBody = sdflt}]))) dflt) (\scases -> Maybes.maybe (Eithers.bind (findSdom cx g meta) (\sdom -> Right (Utils.slambda v (Syntax.DataMatch (Syntax.Data_Match {
+          Syntax.data_MatchExpr = (Utils.sname v),
+          Syntax.data_MatchCases = scases})) sdom))) (\a -> Eithers.bind (encodeTerm cx g a) (\sa -> Right (Syntax.DataMatch (Syntax.Data_Match {
+          Syntax.data_MatchExpr = sa,
+          Syntax.data_MatchCases = scases})))) arg)))
       _ -> Left (Errors.ErrorOther (Errors.OtherError "unsupported function"))
 
 -- | Encode a let binding as a val or def declaration. outerTypeVars are type params from the enclosing scope.
@@ -366,9 +354,9 @@ encodeTerm cx g term0 =
               bodyAfterTypeLambdas = Pairs.second tlCollected
               substitutedBody = bodyAfterTypeLambdas
           in case (Strip.deannotateTerm substitutedBody) of
-            Core.TermFunction v1 -> case v1 of
-              Core.FunctionElimination _ -> encodeTerm cx g substitutedBody
-              _ -> encodeTerm cx g substitutedBody
+            Core.TermProject _ -> encodeTerm cx g substitutedBody
+            Core.TermCases _ -> encodeTerm cx g substitutedBody
+            Core.TermUnwrap _ -> encodeTerm cx g substitutedBody
             Core.TermVariable v1 -> Maybes.cases (Maps.lookup v1 (Graph.graphPrimitives g)) (encodeTerm cx g substitutedBody) (\_prim -> Eithers.bind (Eithers.mapList (\targ -> encodeType cx g targ) typeArgs) (\stypeArgs ->
               let inScopeTypeVarNames =
                       Sets.fromList (Lists.map (\n -> Formatting.capitalize (Core.unName n)) (Sets.toList (Graph.graphTypeVariables g)))
@@ -385,39 +373,30 @@ encodeTerm cx g term0 =
           let fun = Core.applicationFunction v0
               arg = Core.applicationArgument v0
           in case (Strip.deannotateAndDetypeTerm fun) of
-            Core.TermFunction v1 -> case v1 of
-              Core.FunctionLambda v2 ->
-                let lamBody = Core.lambdaBody v2
-                in case (Strip.deannotateAndDetypeTerm lamBody) of
-                  Core.TermApplication v3 ->
-                    let innerFun = Core.applicationFunction v3
-                    in case (Strip.deannotateAndDetypeTerm innerFun) of
-                      Core.TermFunction v4 -> case v4 of
-                        Core.FunctionElimination v5 -> case v5 of
-                          Core.EliminationUnion _ -> encodeFunction cx g (Annotations.termAnnotationInternal innerFun) v4 (Just arg)
-                          _ -> Eithers.bind (encodeTerm cx g fun) (\sfun -> Eithers.bind (encodeTerm cx g arg) (\sarg -> Right (Utils.sapply sfun [
-                            sarg])))
-                        _ -> Eithers.bind (encodeTerm cx g fun) (\sfun -> Eithers.bind (encodeTerm cx g arg) (\sarg -> Right (Utils.sapply sfun [
-                          sarg])))
-                      _ -> Eithers.bind (encodeTerm cx g fun) (\sfun -> Eithers.bind (encodeTerm cx g arg) (\sarg -> Right (Utils.sapply sfun [
-                        sarg])))
-                  _ -> Eithers.bind (encodeTerm cx g fun) (\sfun -> Eithers.bind (encodeTerm cx g arg) (\sarg -> Right (Utils.sapply sfun [
-                    sarg])))
-              Core.FunctionElimination v2 -> case v2 of
-                Core.EliminationRecord v3 ->
-                  let fname = Utils.scalaEscapeName (Core.unName (Core.projectionField v3))
-                  in (Eithers.bind (encodeTerm cx g arg) (\sarg -> Right (Syntax.DataRef (Syntax.Data_RefSelect (Syntax.Data_Select {
-                    Syntax.data_SelectQual = sarg,
-                    Syntax.data_SelectName = Syntax.Data_Name {
-                      Syntax.data_NameValue = (Syntax.PredefString fname)}})))))
-                Core.EliminationUnion _ -> encodeFunction cx g (Annotations.termAnnotationInternal fun) v1 (Just arg)
+            Core.TermLambda v1 ->
+              let lamBody = Core.lambdaBody v1
+              in case (Strip.deannotateAndDetypeTerm lamBody) of
+                Core.TermApplication v2 ->
+                  let innerFun = Core.applicationFunction v2
+                  in case (Strip.deannotateAndDetypeTerm innerFun) of
+                    Core.TermCases _ -> encodeFunction cx g (Annotations.termAnnotationInternal innerFun) innerFun (Just arg)
+                    _ -> Eithers.bind (encodeTerm cx g fun) (\sfun -> Eithers.bind (encodeTerm cx g arg) (\sarg -> Right (Utils.sapply sfun [
+                      sarg])))
                 _ -> Eithers.bind (encodeTerm cx g fun) (\sfun -> Eithers.bind (encodeTerm cx g arg) (\sarg -> Right (Utils.sapply sfun [
                   sarg])))
-              _ -> Eithers.bind (encodeTerm cx g fun) (\sfun -> Eithers.bind (encodeTerm cx g arg) (\sarg -> Right (Utils.sapply sfun [
-                sarg])))
+            Core.TermProject v1 ->
+              let fname = Utils.scalaEscapeName (Core.unName (Core.projectionField v1))
+              in (Eithers.bind (encodeTerm cx g arg) (\sarg -> Right (Syntax.DataRef (Syntax.Data_RefSelect (Syntax.Data_Select {
+                Syntax.data_SelectQual = sarg,
+                Syntax.data_SelectName = Syntax.Data_Name {
+                  Syntax.data_NameValue = (Syntax.PredefString fname)}})))))
+            Core.TermCases _ -> encodeFunction cx g (Annotations.termAnnotationInternal fun) fun (Just arg)
             _ -> Eithers.bind (encodeTerm cx g fun) (\sfun -> Eithers.bind (encodeTerm cx g arg) (\sarg -> Right (Utils.sapply sfun [
               sarg])))
-        Core.TermFunction v0 -> encodeFunction cx g (Annotations.termAnnotationInternal term) v0 Nothing
+        Core.TermLambda _ -> encodeFunction cx g (Annotations.termAnnotationInternal term) term Nothing
+        Core.TermProject _ -> encodeFunction cx g (Annotations.termAnnotationInternal term) term Nothing
+        Core.TermCases _ -> encodeFunction cx g (Annotations.termAnnotationInternal term) term Nothing
+        Core.TermUnwrap _ -> encodeFunction cx g (Annotations.termAnnotationInternal term) term Nothing
         Core.TermList v0 -> Eithers.bind (Eithers.mapList (\e -> encodeTerm cx g e) v0) (\sels -> Right (Utils.sapply (Utils.sname "Seq") sels))
         Core.TermLiteral v0 -> Eithers.bind (encodeLiteral cx g v0) (\slit ->
           let litData = Syntax.DataLit slit
@@ -763,9 +742,7 @@ encodeUntypeApplicationTerm cx g term =
 extractBody :: Core.Term -> Core.Term
 extractBody t =
     case (Strip.deannotateAndDetypeTerm t) of
-      Core.TermFunction v0 -> case v0 of
-        Core.FunctionLambda v1 -> extractBody (Core.lambdaBody v1)
-        _ -> t
+      Core.TermLambda v0 -> extractBody (Core.lambdaBody v0)
       Core.TermTypeLambda v0 -> extractBody (Core.typeLambdaBody v0)
       Core.TermTypeApplication v0 -> extractBody (Core.typeApplicationTermBody v0)
       Core.TermLet v0 -> extractBody (Core.letBody v0)
@@ -791,9 +768,7 @@ extractDomains t =
 extractLetBindings :: Core.Term -> [Core.Binding]
 extractLetBindings t =
     case (Strip.deannotateAndDetypeTerm t) of
-      Core.TermFunction v0 -> case v0 of
-        Core.FunctionLambda v1 -> extractLetBindings (Core.lambdaBody v1)
-        _ -> []
+      Core.TermLambda v0 -> extractLetBindings (Core.lambdaBody v0)
       Core.TermTypeLambda v0 -> extractLetBindings (Core.typeLambdaBody v0)
       Core.TermTypeApplication v0 -> extractLetBindings (Core.typeApplicationTermBody v0)
       Core.TermLet v0 -> Lists.concat2 (Core.letBindings v0) (extractLetBindings (Core.letBody v0))
@@ -803,9 +778,7 @@ extractLetBindings t =
 extractParams :: Core.Term -> [Core.Name]
 extractParams t =
     case (Strip.deannotateAndDetypeTerm t) of
-      Core.TermFunction v0 -> case v0 of
-        Core.FunctionLambda v1 -> Lists.cons (Core.lambdaParameter v1) (extractParams (Core.lambdaBody v1))
-        _ -> []
+      Core.TermLambda v0 -> Lists.cons (Core.lambdaParameter v0) (extractParams (Core.lambdaBody v0))
       Core.TermTypeLambda v0 -> extractParams (Core.typeLambdaBody v0)
       Core.TermTypeApplication v0 -> extractParams (Core.typeApplicationTermBody v0)
       Core.TermLet v0 -> extractParams (Core.letBody v0)
@@ -905,22 +878,14 @@ stripWrapEliminations t =
         let appFun = Core.applicationFunction v0
             appArg = Core.applicationArgument v0
         in case (Strip.deannotateAndDetypeTerm appFun) of
-          Core.TermFunction v1 -> case v1 of
-            Core.FunctionElimination v2 -> case v2 of
-              Core.EliminationWrap _ -> stripWrapEliminations appArg
-              _ -> t
-            _ -> t
+          Core.TermUnwrap _ -> stripWrapEliminations appArg
           Core.TermApplication v1 ->
             let innerFun = Core.applicationFunction v1
                 innerArg = Core.applicationArgument v1
             in case (Strip.deannotateAndDetypeTerm innerFun) of
-              Core.TermFunction v2 -> case v2 of
-                Core.FunctionElimination v3 -> case v3 of
-                  Core.EliminationWrap _ -> stripWrapEliminations (Core.TermApplication (Core.Application {
-                    Core.applicationFunction = innerArg,
-                    Core.applicationArgument = appArg}))
-                  _ -> t
-                _ -> t
+              Core.TermUnwrap _ -> stripWrapEliminations (Core.TermApplication (Core.Application {
+                Core.applicationFunction = innerArg,
+                Core.applicationArgument = appArg}))
               _ -> t
           _ -> t
       _ -> t

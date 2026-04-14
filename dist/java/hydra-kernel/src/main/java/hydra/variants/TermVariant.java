@@ -14,9 +14,11 @@ public abstract class TermVariant implements Serializable, Comparable<TermVarian
 
   public static final hydra.core.Name APPLICATION = new hydra.core.Name("application");
 
+  public static final hydra.core.Name CASES = new hydra.core.Name("cases");
+
   public static final hydra.core.Name EITHER = new hydra.core.Name("either");
 
-  public static final hydra.core.Name FUNCTION = new hydra.core.Name("function");
+  public static final hydra.core.Name LAMBDA = new hydra.core.Name("lambda");
 
   public static final hydra.core.Name LET = new hydra.core.Name("let");
 
@@ -30,6 +32,8 @@ public abstract class TermVariant implements Serializable, Comparable<TermVarian
 
   public static final hydra.core.Name PAIR = new hydra.core.Name("pair");
 
+  public static final hydra.core.Name PROJECT = new hydra.core.Name("project");
+
   public static final hydra.core.Name RECORD = new hydra.core.Name("record");
 
   public static final hydra.core.Name SET = new hydra.core.Name("set");
@@ -41,6 +45,8 @@ public abstract class TermVariant implements Serializable, Comparable<TermVarian
   public static final hydra.core.Name UNION = new hydra.core.Name("union");
 
   public static final hydra.core.Name UNIT = new hydra.core.Name("unit");
+
+  public static final hydra.core.Name UNWRAP = new hydra.core.Name("unwrap");
 
   public static final hydra.core.Name VARIABLE = new hydra.core.Name("variable");
 
@@ -57,9 +63,11 @@ public abstract class TermVariant implements Serializable, Comparable<TermVarian
 
     R visit(Application instance) ;
 
+    R visit(Cases instance) ;
+
     R visit(Either instance) ;
 
-    R visit(Function instance) ;
+    R visit(Lambda instance) ;
 
     R visit(Let instance) ;
 
@@ -73,6 +81,8 @@ public abstract class TermVariant implements Serializable, Comparable<TermVarian
 
     R visit(Pair instance) ;
 
+    R visit(Project instance) ;
+
     R visit(Record instance) ;
 
     R visit(Set instance) ;
@@ -84,6 +94,8 @@ public abstract class TermVariant implements Serializable, Comparable<TermVarian
     R visit(Union instance) ;
 
     R visit(Unit instance) ;
+
+    R visit(Unwrap instance) ;
 
     R visit(Variable instance) ;
 
@@ -103,11 +115,15 @@ public abstract class TermVariant implements Serializable, Comparable<TermVarian
       return otherwise(instance);
     }
 
+    default R visit(Cases instance) {
+      return otherwise(instance);
+    }
+
     default R visit(Either instance) {
       return otherwise(instance);
     }
 
-    default R visit(Function instance) {
+    default R visit(Lambda instance) {
       return otherwise(instance);
     }
 
@@ -135,6 +151,10 @@ public abstract class TermVariant implements Serializable, Comparable<TermVarian
       return otherwise(instance);
     }
 
+    default R visit(Project instance) {
+      return otherwise(instance);
+    }
+
     default R visit(Record instance) {
       return otherwise(instance);
     }
@@ -156,6 +176,10 @@ public abstract class TermVariant implements Serializable, Comparable<TermVarian
     }
 
     default R visit(Unit instance) {
+      return otherwise(instance);
+    }
+
+    default R visit(Unwrap instance) {
       return otherwise(instance);
     }
 
@@ -238,6 +262,41 @@ public abstract class TermVariant implements Serializable, Comparable<TermVarian
     }
   }
 
+  public static final class Cases extends hydra.variants.TermVariant implements Serializable {
+    public Cases () {
+
+    }
+
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Cases)) {
+        return false;
+      }
+      Cases o = (Cases) other;
+      return true;
+    }
+
+    @Override
+    public int hashCode() {
+      return 0;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(TermVariant other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
+    }
+
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+
   public static final class Either extends hydra.variants.TermVariant implements Serializable {
     public Either () {
 
@@ -273,17 +332,17 @@ public abstract class TermVariant implements Serializable, Comparable<TermVarian
     }
   }
 
-  public static final class Function extends hydra.variants.TermVariant implements Serializable {
-    public Function () {
+  public static final class Lambda extends hydra.variants.TermVariant implements Serializable {
+    public Lambda () {
 
     }
 
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof Function)) {
+      if (!(other instanceof Lambda)) {
         return false;
       }
-      Function o = (Function) other;
+      Lambda o = (Lambda) other;
       return true;
     }
 
@@ -518,6 +577,41 @@ public abstract class TermVariant implements Serializable, Comparable<TermVarian
     }
   }
 
+  public static final class Project extends hydra.variants.TermVariant implements Serializable {
+    public Project () {
+
+    }
+
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Project)) {
+        return false;
+      }
+      Project o = (Project) other;
+      return true;
+    }
+
+    @Override
+    public int hashCode() {
+      return 0;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(TermVariant other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
+    }
+
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+
   public static final class Record extends hydra.variants.TermVariant implements Serializable {
     public Record () {
 
@@ -704,6 +798,41 @@ public abstract class TermVariant implements Serializable, Comparable<TermVarian
         return false;
       }
       Unit o = (Unit) other;
+      return true;
+    }
+
+    @Override
+    public int hashCode() {
+      return 0;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(TermVariant other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
+    }
+
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+
+  public static final class Unwrap extends hydra.variants.TermVariant implements Serializable {
+    public Unwrap () {
+
+    }
+
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Unwrap)) {
+        return false;
+      }
+      Unwrap o = (Unwrap) other;
       return true;
     }
 

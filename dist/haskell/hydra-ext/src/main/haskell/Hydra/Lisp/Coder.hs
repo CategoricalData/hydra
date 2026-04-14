@@ -90,53 +90,6 @@ encodeApplication dialect cx g rawFun rawArg =
             _ -> normal))
         _ -> normal
 
-encodeElimination :: Syntax.Dialect -> t0 -> t1 -> Core.Elimination -> Maybe Core.Term -> Either t2 Syntax.Expression
-encodeElimination dialect cx g elim marg =
-    case elim of
-      Core.EliminationRecord v0 ->
-        let fname = Formatting.convertCaseCamelToLowerSnake (Core.unName (Core.projectionField v0))
-            tname = qualifiedSnakeName (Core.projectionTypeName v0)
-        in (Maybes.cases marg (Right (lispLambdaExpr [
-          "v"] (Syntax.ExpressionFieldAccess (Syntax.FieldAccess {
-          Syntax.fieldAccessRecordType = (Syntax.Symbol tname),
-          Syntax.fieldAccessField = (Syntax.Symbol fname),
-          Syntax.fieldAccessTarget = (lispVar "v")})))) (\arg -> Eithers.bind (encodeTerm dialect cx g arg) (\sarg -> Right (Syntax.ExpressionFieldAccess (Syntax.FieldAccess {
-          Syntax.fieldAccessRecordType = (Syntax.Symbol tname),
-          Syntax.fieldAccessField = (Syntax.Symbol fname),
-          Syntax.fieldAccessTarget = sarg})))))
-      Core.EliminationUnion v0 ->
-        let tname = Names.localNameOf (Core.caseStatementTypeName v0)
-            caseFields = Core.caseStatementCases v0
-            defCase = Core.caseStatementDefault v0
-        in (Eithers.bind (Eithers.mapList (\cf ->
-          let cfname = Formatting.convertCaseCamelToLowerSnake (Core.unName (Core.fieldName cf))
-              cfterm = Core.fieldTerm cf
-              condExpr =
-                      lispApp (lispVar (dialectEqual dialect)) [
-                        lispApp (lispVar (dialectCar dialect)) [
-                          lispVar "match_target"],
-                        (lispKeyword cfname)]
-          in (Eithers.bind (encodeTerm dialect cx g (Core.TermApplication (Core.Application {
-            Core.applicationFunction = cfterm,
-            Core.applicationArgument = (Core.TermVariable (Core.Name "match_value"))}))) (\bodyExpr -> Right (Syntax.CondClause {
-            Syntax.condClauseCondition = condExpr,
-            Syntax.condClauseBody = bodyExpr})))) caseFields) (\clauses -> Eithers.bind (Maybes.cases defCase (Right Nothing) (\dt -> Eithers.bind (encodeTerm dialect cx g dt) (\defBody -> Right (Just defBody)))) (\defExpr ->
-          let condExpr =
-                  Syntax.ExpressionCond (Syntax.CondExpression {
-                    Syntax.condExpressionClauses = clauses,
-                    Syntax.condExpressionDefault = defExpr})
-              innerExpr =
-                      lispApp (lispLambdaExpr [
-                        "match_value"] condExpr) [
-                        lispApp (lispVar (dialectCadr dialect)) [
-                          lispVar "match_target"]]
-          in (Maybes.cases marg (Right (lispLambdaExpr [
-            "match_target"] innerExpr)) (\arg -> Eithers.bind (encodeTerm dialect cx g arg) (\sarg -> Right (lispApp (lispLambdaExpr [
-            "match_target"] innerExpr) [
-            sarg])))))))
-      Core.EliminationWrap _ -> Maybes.cases marg (Right (lispLambdaExpr [
-        "v"] (lispVar "v"))) (\arg -> encodeTerm dialect cx g arg)
-
 encodeFieldDef :: Core.FieldType -> Syntax.FieldDefinition
 encodeFieldDef ft =
 
@@ -145,15 +98,13 @@ encodeFieldDef ft =
         Syntax.fieldDefinitionName = (Syntax.Symbol (Formatting.convertCaseCamelToLowerSnake fname)),
         Syntax.fieldDefinitionDefaultValue = Nothing}
 
-encodeFunction :: Syntax.Dialect -> t0 -> t1 -> Core.Function -> Either t2 Syntax.Expression
-encodeFunction dialect cx g fun =
-    case fun of
-      Core.FunctionLambda v0 ->
-        let param =
-                Formatting.convertCaseCamelOrUnderscoreToLowerSnake (Formatting.sanitizeWithUnderscores Language.lispReservedWords (Core.unName (Core.lambdaParameter v0)))
-        in (Eithers.bind (encodeTerm dialect cx g (Core.lambdaBody v0)) (\body -> Right (lispLambdaExpr [
-          param] body)))
-      Core.FunctionElimination v0 -> encodeElimination dialect cx g v0 Nothing
+encodeLambdaTerm :: Syntax.Dialect -> t0 -> t1 -> Core.Lambda -> Either t2 Syntax.Expression
+encodeLambdaTerm dialect cx g lam =
+
+      let param =
+              Formatting.convertCaseCamelOrUnderscoreToLowerSnake (Formatting.sanitizeWithUnderscores Language.lispReservedWords (Core.unName (Core.lambdaParameter lam)))
+      in (Eithers.bind (encodeTerm dialect cx g (Core.lambdaBody lam)) (\body -> Right (lispLambdaExpr [
+        param] body)))
 
 encodeLetAsLambdaApp :: Syntax.Dialect -> t0 -> t1 -> [Core.Binding] -> Core.Term -> Either t2 Syntax.Expression
 encodeLetAsLambdaApp dialect cx g bindings body =
@@ -186,9 +137,7 @@ encodeLetAsNative dialect cx g bindings body =
               isSelfRef = Sets.member (Core.bindingName b) (Variables.freeVariablesInTerm (Core.bindingTerm b))
               isLambda =
                       case (Strip.deannotateTerm (Core.bindingTerm b)) of
-                        Core.TermFunction v0 -> case v0 of
-                          Core.FunctionLambda _ -> True
-                          _ -> False
+                        Core.TermLambda _ -> True
                         _ -> False
           in (Eithers.bind (encodeTerm dialect cx g (Core.bindingTerm b)) (\bval ->
             let isClojure =
@@ -276,6 +225,20 @@ encodeLiteral lit =
             Syntax.integerLiteralValue = (Literals.int32ToBigint bv),
             Syntax.integerLiteralBigint = False}))) byteValues)}))
 
+encodeProjectionElim :: Syntax.Dialect -> t0 -> t1 -> Core.Projection -> Maybe Core.Term -> Either t2 Syntax.Expression
+encodeProjectionElim dialect cx g proj marg =
+
+      let fname = Formatting.convertCaseCamelToLowerSnake (Core.unName (Core.projectionField proj))
+          tname = qualifiedSnakeName (Core.projectionTypeName proj)
+      in (Maybes.cases marg (Right (lispLambdaExpr [
+        "v"] (Syntax.ExpressionFieldAccess (Syntax.FieldAccess {
+        Syntax.fieldAccessRecordType = (Syntax.Symbol tname),
+        Syntax.fieldAccessField = (Syntax.Symbol fname),
+        Syntax.fieldAccessTarget = (lispVar "v")})))) (\arg -> Eithers.bind (encodeTerm dialect cx g arg) (\sarg -> Right (Syntax.ExpressionFieldAccess (Syntax.FieldAccess {
+        Syntax.fieldAccessRecordType = (Syntax.Symbol tname),
+        Syntax.fieldAccessField = (Syntax.Symbol fname),
+        Syntax.fieldAccessTarget = sarg})))))
+
 encodeTerm :: Syntax.Dialect -> t0 -> t1 -> Core.Term -> Either t2 Syntax.Expression
 encodeTerm dialect cx g term =
     case term of
@@ -289,7 +252,10 @@ encodeTerm dialect cx g term =
         sl]))) (\r -> Eithers.bind (encodeTerm dialect cx g r) (\sr -> Right (lispApp (lispVar "list") [
         lispKeyword "right",
         sr]))) v0
-      Core.TermFunction v0 -> encodeFunction dialect cx g v0
+      Core.TermLambda v0 -> encodeLambdaTerm dialect cx g v0
+      Core.TermProject v0 -> encodeProjectionElim dialect cx g v0 Nothing
+      Core.TermCases v0 -> encodeUnionElim dialect cx g v0 Nothing
+      Core.TermUnwrap v0 -> encodeUnwrapElim dialect cx g v0 Nothing
       Core.TermLet v0 ->
         let bindings = Core.letBindings v0
             body = Core.letBody v0
@@ -345,15 +311,10 @@ encodeTermDefinition dialect cx g tdef =
           lname = qualifiedSnakeName name
           dterm = Strip.deannotateTerm term
       in case dterm of
-        Core.TermFunction v0 -> case v0 of
-          Core.FunctionLambda _ -> Eithers.bind (encodeTerm dialect cx g term) (\sterm -> Right (lispTopForm (Syntax.TopLevelFormVariable (Syntax.VariableDefinition {
-            Syntax.variableDefinitionName = (Syntax.Symbol lname),
-            Syntax.variableDefinitionValue = sterm,
-            Syntax.variableDefinitionDoc = Nothing}))))
-          _ -> Eithers.bind (encodeTerm dialect cx g term) (\sterm -> Right (lispTopForm (Syntax.TopLevelFormVariable (Syntax.VariableDefinition {
-            Syntax.variableDefinitionName = (Syntax.Symbol lname),
-            Syntax.variableDefinitionValue = sterm,
-            Syntax.variableDefinitionDoc = Nothing}))))
+        Core.TermLambda _ -> Eithers.bind (encodeTerm dialect cx g term) (\sterm -> Right (lispTopForm (Syntax.TopLevelFormVariable (Syntax.VariableDefinition {
+          Syntax.variableDefinitionName = (Syntax.Symbol lname),
+          Syntax.variableDefinitionValue = sterm,
+          Syntax.variableDefinitionDoc = Nothing}))))
         _ -> Eithers.bind (encodeTerm dialect cx g term) (\sterm -> Right (lispTopForm (Syntax.TopLevelFormVariable (Syntax.VariableDefinition {
           Syntax.variableDefinitionName = (Syntax.Symbol lname),
           Syntax.variableDefinitionValue = sterm,
@@ -428,6 +389,44 @@ encodeTypeDefinition cx g tdef =
           lname = qualifiedSnakeName name
           dtyp = Strip.deannotateType typ
       in (encodeTypeBody lname typ dtyp)
+
+encodeUnionElim :: Syntax.Dialect -> t0 -> t1 -> Core.CaseStatement -> Maybe Core.Term -> Either t2 Syntax.Expression
+encodeUnionElim dialect cx g cs marg =
+
+      let tname = Names.localNameOf (Core.caseStatementTypeName cs)
+          caseFields = Core.caseStatementCases cs
+          defCase = Core.caseStatementDefault cs
+      in (Eithers.bind (Eithers.mapList (\cf ->
+        let cfname = Formatting.convertCaseCamelToLowerSnake (Core.unName (Core.fieldName cf))
+            cfterm = Core.fieldTerm cf
+            condExpr =
+                    lispApp (lispVar (dialectEqual dialect)) [
+                      lispApp (lispVar (dialectCar dialect)) [
+                        lispVar "match_target"],
+                      (lispKeyword cfname)]
+        in (Eithers.bind (encodeTerm dialect cx g (Core.TermApplication (Core.Application {
+          Core.applicationFunction = cfterm,
+          Core.applicationArgument = (Core.TermVariable (Core.Name "match_value"))}))) (\bodyExpr -> Right (Syntax.CondClause {
+          Syntax.condClauseCondition = condExpr,
+          Syntax.condClauseBody = bodyExpr})))) caseFields) (\clauses -> Eithers.bind (Maybes.cases defCase (Right Nothing) (\dt -> Eithers.bind (encodeTerm dialect cx g dt) (\defBody -> Right (Just defBody)))) (\defExpr ->
+        let condExpr =
+                Syntax.ExpressionCond (Syntax.CondExpression {
+                  Syntax.condExpressionClauses = clauses,
+                  Syntax.condExpressionDefault = defExpr})
+            innerExpr =
+                    lispApp (lispLambdaExpr [
+                      "match_value"] condExpr) [
+                      lispApp (lispVar (dialectCadr dialect)) [
+                        lispVar "match_target"]]
+        in (Maybes.cases marg (Right (lispLambdaExpr [
+          "match_target"] innerExpr)) (\arg -> Eithers.bind (encodeTerm dialect cx g arg) (\sarg -> Right (lispApp (lispLambdaExpr [
+          "match_target"] innerExpr) [
+          sarg])))))))
+
+encodeUnwrapElim :: Syntax.Dialect -> t0 -> t1 -> Core.Name -> Maybe Core.Term -> Either t2 Syntax.Expression
+encodeUnwrapElim dialect cx g name marg =
+    Maybes.cases marg (Right (lispLambdaExpr [
+      "v"] (lispVar "v"))) (\arg -> encodeTerm dialect cx g arg)
 
 isCasesPrimitive :: Core.Name -> Bool
 isCasesPrimitive name = Equality.equal name (Core.Name "hydra.lib.maybes.cases")

@@ -18,8 +18,6 @@
 
 (cl-defstruct hydra_core_pair_type first second)
 
-(defvar hydra_core_elimination-variants (list :record :union :wrap))
-
 (cl-defstruct hydra_core_field name term)
 
 (cl-defstruct hydra_core_field_type name type)
@@ -29,8 +27,6 @@
 (defvar hydra_core_float_value-variants (list :bigfloat :float32 :float64))
 
 (cl-defstruct hydra_core_forall_type parameter body)
-
-(defvar hydra_core_function-variants (list :elimination :lambda))
 
 (cl-defstruct hydra_core_function_type domain codomain)
 
@@ -54,7 +50,7 @@
 
 (cl-defstruct hydra_core_record type_name fields)
 
-(defvar hydra_core_term-variants (list :annotated :application :either :function :let :list :literal :map :maybe :pair :record :set :type_application :type_lambda :union :unit :variable :wrap))
+(defvar hydra_core_term-variants (list :annotated :application :cases :either :lambda :let :list :literal :map :maybe :pair :project :record :set :type_application :type_lambda :union :unit :unwrap :variable :wrap))
 
 (defvar hydra_core_type-variants (list :annotated :application :either :forall :function :list :literal :map :maybe :pair :record :set :union :unit :variable :void :wrap))
 

@@ -178,20 +178,10 @@ def remove_types_from_term(term: hydra.core.Term) -> hydra.core.Term:
             return recurse(term2)
         def strip_binding(b: hydra.core.Binding) -> hydra.core.Binding:
             return hydra.core.Binding(b.name, b.term, Nothing())
-        def _hoist_strip_binding_body_1(f, v1):
+        def _hoist_strip_binding_body_1(v1):
             match v1:
-                case hydra.core.FunctionElimination(value=e):
-                    return cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionElimination(e))))
-
-                case hydra.core.FunctionLambda(value=l):
-                    return cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(l.parameter, Nothing(), l.body)))))
-
-                case _:
-                    return cast(hydra.core.Term, hydra.core.TermFunction(f))
-        def _hoist_strip_binding_body_2(v1):
-            match v1:
-                case hydra.core.TermFunction(value=f):
-                    return _hoist_strip_binding_body_1(f, f)
+                case hydra.core.TermLambda(value=l):
+                    return cast(hydra.core.Term, hydra.core.TermLambda(hydra.core.Lambda(l.parameter, Nothing(), l.body)))
 
                 case hydra.core.TermLet(value=lt):
                     return cast(hydra.core.Term, hydra.core.TermLet(hydra.core.Let(hydra.lib.lists.map((lambda x1: strip_binding(x1)), lt.bindings), lt.body)))
@@ -204,7 +194,7 @@ def remove_types_from_term(term: hydra.core.Term) -> hydra.core.Term:
 
                 case _:
                     return rewritten()
-        return _hoist_strip_binding_body_2(rewritten())
+        return _hoist_strip_binding_body_1(rewritten())
     return hydra.rewriting.rewrite_term((lambda x1, x2: strip(x1, x2)), term)
 
 def strip_type_lambdas(t: hydra.core.Term) -> hydra.core.Term:

@@ -172,7 +172,7 @@ left term = TermEither (Left term)
 -- | Create a lambda function with one parameter
 -- Example: lambda "x" (var "x" @@ int32 1)
 lambda :: String -> Term -> Term
-lambda param body = TermFunction $ FunctionLambda $ Lambda (Name param) Nothing body
+lambda param body = TermLambda $ Lambda (Name param) Nothing body
 
 -- | Create a multi-parameter lambda function (curried)
 -- Example: lambdas ["x", "y"] (var "add" @@ var "x" @@ var "y")
@@ -185,7 +185,7 @@ lambdas params body = case params of
 -- | Create a lambda function with a given domain
 -- Example: lambdaTyped "x" Types.int32 (list [var "x"])
 lambdaTyped :: String -> Type -> Term -> Term
-lambdaTyped param dom body = TermFunction $ FunctionLambda $ Lambda (Name param) (Just dom) body
+lambdaTyped param dom body = TermLambda $ Lambda (Name param) (Just dom) body
 
 -- | Create a let term with any number of bindings
 -- Example: lets ["x">: int32 1, "y">: int32 2] (pair (var "x") (var "y"))
@@ -221,7 +221,7 @@ map = TermMap
 -- This allows handling different cases of a union type with specific logic for each variant.
 -- The optional second parameter provides a default case for any unmatched variants.
 match :: Name -> Maybe Term -> [Field] -> Term
-match tname def fields = TermFunction $ FunctionElimination $ EliminationUnion $ CaseStatement tname def fields
+match tname def fields = TermCases $ CaseStatement tname def fields
 
 -- | Create a 'Nothing' optional value
 nothing :: Term
@@ -246,7 +246,7 @@ primitive = TermVariable
 -- | Create a field projection function
 -- Example: project (Name "Person") (Name "firstName")
 project :: Name -> Name -> Term
-project tname fname = TermFunction $ FunctionElimination $ EliminationRecord $ Projection tname fname
+project tname fname = TermProject $ Projection tname fname
 
 -- | Create a record with named fields of the specified type
 -- Example: record (Name "Person") [
@@ -360,7 +360,7 @@ unit = TermUnit
 -- | Create an unwrap function for a wrapped type
 -- Example: unwrap (Name "Email")
 unwrap :: Name -> Term
-unwrap = TermFunction . FunctionElimination . EliminationWrap
+unwrap = TermUnwrap
 
 -- | Create a variable reference
 -- Example: var "x"

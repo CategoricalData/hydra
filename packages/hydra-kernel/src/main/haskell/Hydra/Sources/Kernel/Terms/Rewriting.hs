@@ -186,35 +186,6 @@ rewriteAndFoldTerm = define "rewriteAndFoldTerm" $
           (Core.bindingName $ var "binding")
           (Pairs.second $ var "r")
           (Core.bindingType $ var "binding"))) $
-    "forElimination" <~ ("val" ~> "elm" ~>
-      "r" <~ cases _Elimination (var "elm")
-        (Just $ pair (var "val") (var "elm")) [
-        _Elimination_union>>: "cs" ~>
-          "rmd" <~ Maybes.map (var "recurse" @@ var "val") (Core.caseStatementDefault $ var "cs") $
-          "val1" <~ optCases (var "rmd")
-            (var "val")
-            (unaryFunction Pairs.first) $
-          "rcases" <~ var "forFields" @@ var "val1" @@ (Core.caseStatementCases $ var "cs") $
-          pair
-            (Pairs.first $ var "rcases")
-            (Core.eliminationUnion $ Core.caseStatement
-              (Core.caseStatementTypeName $ var "cs")
-              (Maybes.map (unaryFunction Pairs.second) (var "rmd"))
-              (Pairs.second $ var "rcases"))] $
-      pair (Pairs.first $ var "r") (Pairs.second $ var "r")) $
-    "forFunction" <~ ("val" ~> "fun" ~> cases _Function (var "fun")
-      (Just $ pair (var "val") (var "fun")) [
-      _Function_elimination>>: "elm" ~>
-         "re" <~ var "forElimination" @@ var "val" @@ var "elm" $
-         pair (Pairs.first $ var "re") (Core.functionElimination (Pairs.second $ var "re")),
-      _Function_lambda>>: "l" ~>
-        "rl" <~ var "recurse" @@ var "val" @@ (Core.lambdaBody $ var "l") $
-        pair
-          (Pairs.first $ var "rl")
-          (Core.functionLambda $ Core.lambda
-            (Core.lambdaParameter $ var "l")
-            (Core.lambdaDomain $ var "l")
-            (Pairs.second $ var "rl"))]) $
     "dflt" <~ pair (var "val0") (var "term0") $
     cases _Term (var "term0")
       (Just $ var "dflt") [
@@ -231,6 +202,18 @@ rewriteAndFoldTerm = define "rewriteAndFoldTerm" $
           (Core.termApplication $ Core.application
             (Pairs.second $ var "rlhs")
             (Pairs.second $ var "rrhs")),
+      _Term_cases>>: "cs" ~>
+        "rmd" <~ Maybes.map (var "recurse" @@ var "val0") (Core.caseStatementDefault $ var "cs") $
+        "val1" <~ optCases (var "rmd")
+          (var "val0")
+          (unaryFunction Pairs.first) $
+        "rcases" <~ var "forFields" @@ var "val1" @@ (Core.caseStatementCases $ var "cs") $
+        pair
+          (Pairs.first $ var "rcases")
+          (Core.termCases $ Core.caseStatement
+            (Core.caseStatementTypeName $ var "cs")
+            (Maybes.map (unaryFunction Pairs.second) (var "rmd"))
+            (Pairs.second $ var "rcases")),
       _Term_either>>: "e" ~> Eithers.either_
         ("l" ~>
           "rl" <~ var "recurse" @@ var "val0" @@ var "l" $
@@ -239,11 +222,14 @@ rewriteAndFoldTerm = define "rewriteAndFoldTerm" $
           "rr" <~ var "recurse" @@ var "val0" @@ var "r" $
           pair (Pairs.first $ var "rr") (Core.termEither $ right $ Pairs.second $ var "rr"))
         (var "e"),
-      _Term_function>>: "f" ~> var "forSingle"
-        @@ var "forFunction"
-        @@ ("f" ~> Core.termFunction $ var "f")
-        @@ var "val0"
-        @@ var "f",
+      _Term_lambda>>: "l" ~>
+        "rl" <~ var "recurse" @@ var "val0" @@ (Core.lambdaBody $ var "l") $
+        pair
+          (Pairs.first $ var "rl")
+          (Core.termLambda $ Core.lambda
+            (Core.lambdaParameter $ var "l")
+            (Core.lambdaDomain $ var "l")
+            (Pairs.second $ var "rl")),
       _Term_let>>: "l" ~>
         "renv" <~ var "recurse" @@ var "val0" @@ (Core.letBody $ var "l") $
         var "forMany" @@ var "forBinding"
@@ -263,6 +249,7 @@ rewriteAndFoldTerm = define "rewriteAndFoldTerm" $
         "rf" <~ var "recurse" @@ var "val0" @@ (Pairs.first $ var "p") $
         "rs" <~ var "recurse" @@ (Pairs.first $ var "rf") @@ (Pairs.second $ var "p") $
         pair (Pairs.first $ var "rs") (Core.termPair $ pair (Pairs.second $ var "rf") (Pairs.second $ var "rs")),
+      _Term_project>>: "p" ~> pair (var "val0") (Core.termProject $ var "p"),
       _Term_record>>: "r" ~> var "forMany"
         @@ var "forField"
         @@ ("fields" ~> Core.termRecord $ Core.record (Core.recordTypeName $ var "r") (var "fields"))
@@ -290,6 +277,7 @@ rewriteAndFoldTerm = define "rewriteAndFoldTerm" $
           (Core.field (Core.fieldName $ Core.injectionField $ var "inj") (var "t")))
         @@ var "val0"
         @@ (Core.fieldTerm $ Core.injectionField $ var "inj"),
+      _Term_unwrap>>: "n" ~> pair (var "val0") (Core.termUnwrap $ var "n"),
       _Term_wrap>>: "wt" ~> var "forSingle"
         @@ var "recurse"
         @@ ("t" ~> Core.termWrap $ Core.wrappedTerm (Core.wrappedTermTypeName $ var "wt") (var "t"))
@@ -358,59 +346,6 @@ rewriteAndFoldTermWithPath = define "rewriteAndFoldTermWithPath" $
           (Core.bindingName $ var "binding")
           (Pairs.second $ var "r")
           (Core.bindingType $ var "binding"))) $
-    -- Helper for elimination
-    "forElimination" <~ ("val" ~> "elm" ~>
-      "r" <~ cases _Elimination (var "elm")
-        (Just $ pair (var "val") (var "elm")) [
-        _Elimination_union>>: "cs" ~>
-          "rmd" <~ Maybes.map
-            ("def" ~> var "recurse"
-              @@ Lists.concat2 (var "path") (list [Paths.subtermStepUnionCasesDefault])
-              @@ var "val"
-              @@ var "def")
-            (Core.caseStatementDefault $ var "cs") $
-          "val1" <~ optCases (var "rmd")
-            (var "val")
-            (unaryFunction Pairs.first) $
-          "rcases" <~ var "forManyWithAccessors"
-            @@ var "recurse"
-            @@ ("x" ~> var "x")
-            @@ var "val1"
-            @@ Lists.map
-              ("f" ~> pair
-                (Paths.subtermStepUnionCasesBranch $ Core.fieldName $ var "f")
-                (Core.fieldTerm $ var "f"))
-              (Core.caseStatementCases $ var "cs") $
-          pair
-            (Pairs.first $ var "rcases")
-            (Core.eliminationUnion $ Core.caseStatement
-              (Core.caseStatementTypeName $ var "cs")
-              (Maybes.map (unaryFunction Pairs.second) (var "rmd"))
-              (Lists.map
-                ("ft" ~> Core.field
-                  (Pairs.first $ var "ft")
-                  (Pairs.second $ var "ft"))
-                (Lists.zip
-                  (Lists.map (unaryFunction Core.fieldName) (Core.caseStatementCases $ var "cs"))
-                  (Pairs.second $ var "rcases"))))] $
-      pair (Pairs.first $ var "r") (Pairs.second $ var "r")) $
-    -- Helper for function
-    "forFunction" <~ ("val" ~> "fun" ~> cases _Function (var "fun")
-      (Just $ pair (var "val") (var "fun")) [
-      _Function_elimination>>: "elm" ~>
-         "re" <~ var "forElimination" @@ var "val" @@ var "elm" $
-         pair (Pairs.first $ var "re") (Core.functionElimination (Pairs.second $ var "re")),
-      _Function_lambda>>: "l" ~>
-        "rl" <~ var "recurse"
-          @@ Lists.concat2 (var "path") (list [Paths.subtermStepLambdaBody])
-          @@ var "val"
-          @@ (Core.lambdaBody $ var "l") $
-        pair
-          (Pairs.first $ var "rl")
-          (Core.functionLambda $ Core.lambda
-            (Core.lambdaParameter $ var "l")
-            (Core.lambdaDomain $ var "l")
-            (Pairs.second $ var "rl"))]) $
     "dflt" <~ pair (var "val0") (var "term0") $
     cases _Term (var "term0")
       (Just $ var "dflt") [
@@ -434,6 +369,37 @@ rewriteAndFoldTermWithPath = define "rewriteAndFoldTermWithPath" $
           (Core.termApplication $ Core.application
             (Pairs.second $ var "rlhs")
             (Pairs.second $ var "rrhs")),
+      _Term_cases>>: "cs" ~>
+        "rmd" <~ Maybes.map
+          ("def" ~> var "recurse"
+            @@ Lists.concat2 (var "path") (list [Paths.subtermStepUnionCasesDefault])
+            @@ var "val0"
+            @@ var "def")
+          (Core.caseStatementDefault $ var "cs") $
+        "val1" <~ optCases (var "rmd")
+          (var "val0")
+          (unaryFunction Pairs.first) $
+        "rcases" <~ var "forManyWithAccessors"
+          @@ var "recurse"
+          @@ ("x" ~> var "x")
+          @@ var "val1"
+          @@ Lists.map
+            ("f" ~> pair
+              (Paths.subtermStepUnionCasesBranch $ Core.fieldName $ var "f")
+              (Core.fieldTerm $ var "f"))
+            (Core.caseStatementCases $ var "cs") $
+        pair
+          (Pairs.first $ var "rcases")
+          (Core.termCases $ Core.caseStatement
+            (Core.caseStatementTypeName $ var "cs")
+            (Maybes.map (unaryFunction Pairs.second) (var "rmd"))
+            (Lists.map
+              ("ft" ~> Core.field
+                (Pairs.first $ var "ft")
+                (Pairs.second $ var "ft"))
+              (Lists.zip
+                (Lists.map (unaryFunction Core.fieldName) (Core.caseStatementCases $ var "cs"))
+                (Pairs.second $ var "rcases")))),
       _Term_either>>: "e" ~> Eithers.either_
         ("l" ~>
           "rl" <~ var "recurse"
@@ -448,9 +414,17 @@ rewriteAndFoldTermWithPath = define "rewriteAndFoldTermWithPath" $
             @@ var "r" $
           pair (Pairs.first $ var "rr") (Core.termEither $ right $ Pairs.second $ var "rr"))
         (var "e"),
-      _Term_function>>: "f" ~>
-        "rf" <~ var "forFunction" @@ var "val0" @@ var "f" $
-        pair (Pairs.first $ var "rf") (Core.termFunction $ Pairs.second $ var "rf"),
+      _Term_lambda>>: "l" ~>
+        "rl" <~ var "recurse"
+          @@ Lists.concat2 (var "path") (list [Paths.subtermStepLambdaBody])
+          @@ var "val0"
+          @@ (Core.lambdaBody $ var "l") $
+        pair
+          (Pairs.first $ var "rl")
+          (Core.termLambda $ Core.lambda
+            (Core.lambdaParameter $ var "l")
+            (Core.lambdaDomain $ var "l")
+            (Pairs.second $ var "rl")),
       _Term_let>>: "l" ~>
         "renv" <~ var "recurse"
           @@ Lists.concat2 (var "path") (list [Paths.subtermStepLetBody])
@@ -517,6 +491,7 @@ rewriteAndFoldTermWithPath = define "rewriteAndFoldTermWithPath" $
           @@ (Pairs.first $ var "rf")
           @@ (Pairs.second $ var "p") $
         pair (Pairs.first $ var "rs") (Core.termPair $ pair (Pairs.second $ var "rf") (Pairs.second $ var "rs")),
+      _Term_project>>: "p" ~> pair (var "val0") (Core.termProject $ var "p"),
       _Term_record>>: "r" ~>
         "rfields" <~ var "forManyWithAccessors"
           @@ var "recurse"
@@ -570,6 +545,7 @@ rewriteAndFoldTermWithPath = define "rewriteAndFoldTermWithPath" $
         @@ Paths.subtermStepInjectionTerm
         @@ var "val0"
         @@ (Core.fieldTerm $ Core.injectionField $ var "inj"),
+      _Term_unwrap>>: "n" ~> pair (var "val0") (Core.termUnwrap $ var "n"),
       _Term_wrap>>: "wt" ~> var "forSingleWithAccessor"
         @@ var "recurse"
         @@ ("t" ~> Core.termWrap $ Core.wrappedTerm (Core.wrappedTermTypeName $ var "wt") (var "t"))
@@ -583,19 +559,6 @@ rewriteTerm :: TTermDefinition (((Term -> Term) -> Term -> Term) -> Term -> Term
 rewriteTerm = define "rewriteTerm" $ "f" ~> "term0" ~>
   "fsub" <~ ("recurse" ~> "term" ~>
     "forField" <~ ("f" ~> Core.fieldWithTerm (var "f") (var "recurse" @@ (Core.fieldTerm $ var "f"))) $
-    "forElimination" <~ ("elm" ~> cases _Elimination (var "elm") Nothing [
-      _Elimination_record>>: "p" ~> Core.eliminationRecord (var "p"),
-      _Elimination_union>>: "cs" ~> Core.eliminationUnion $ Core.caseStatement
-        (Core.caseStatementTypeName $ var "cs")
-        (Maybes.map (var "recurse") (Core.caseStatementDefault $ var "cs"))
-        (Lists.map (var "forField") (Core.caseStatementCases $ var "cs")),
-      _Elimination_wrap>>: "name" ~> Core.eliminationWrap $ var "name"]) $
-    "forFunction" <~ ("fun" ~> cases _Function (var "fun") Nothing [
-      _Function_elimination>>: "elm" ~> Core.functionElimination $ var "forElimination" @@ var "elm",
-      _Function_lambda>>: "l" ~> Core.functionLambda $ Core.lambda
-        (Core.lambdaParameter $ var "l")
-        (Core.lambdaDomain $ var "l")
-        (var "recurse" @@ (Core.lambdaBody $ var "l"))]) $
     "forLet" <~ ("lt" ~>
       "mapBinding" <~ ("b" ~> Core.binding
         (Core.bindingName $ var "b")
@@ -614,11 +577,18 @@ rewriteTerm = define "rewriteTerm" $ "f" ~> "term0" ~>
       _Term_application>>: "a" ~> Core.termApplication $ Core.application
         (var "recurse" @@ (Core.applicationFunction $ var "a"))
         (var "recurse" @@ (Core.applicationArgument $ var "a")),
+      _Term_cases>>: "cs" ~> Core.termCases $ Core.caseStatement
+        (Core.caseStatementTypeName $ var "cs")
+        (Maybes.map (var "recurse") (Core.caseStatementDefault $ var "cs"))
+        (Lists.map (var "forField") (Core.caseStatementCases $ var "cs")),
       _Term_either>>: "e" ~> Core.termEither $ Eithers.either_
         ("l" ~> left $ var "recurse" @@ var "l")
         ("r" ~> right $ var "recurse" @@ var "r")
         (var "e"),
-      _Term_function>>: "fun" ~> Core.termFunction $ var "forFunction" @@ var "fun",
+      _Term_lambda>>: "l" ~> Core.termLambda $ Core.lambda
+        (Core.lambdaParameter $ var "l")
+        (Core.lambdaDomain $ var "l")
+        (var "recurse" @@ (Core.lambdaBody $ var "l")),
       _Term_let>>: "lt" ~> Core.termLet $ var "forLet" @@ var "lt",
       _Term_list>>: "els" ~> Core.termList $ Lists.map (var "recurse") (var "els"),
       _Term_literal>>: "v" ~> Core.termLiteral $ var "v",
@@ -627,6 +597,7 @@ rewriteTerm = define "rewriteTerm" $ "f" ~> "term0" ~>
       _Term_pair>>: "p" ~> Core.termPair $ pair
         (var "recurse" @@ (Pairs.first $ var "p"))
         (var "recurse" @@ (Pairs.second $ var "p")),
+      _Term_project>>: "p" ~> Core.termProject $ var "p",
       _Term_record>>: "r" ~> Core.termRecord $ Core.record
         (Core.recordTypeName $ var "r")
         (Lists.map (var "forField") (Core.recordFields $ var "r")),
@@ -641,6 +612,7 @@ rewriteTerm = define "rewriteTerm" $ "f" ~> "term0" ~>
         (Core.injectionTypeName $ var "i")
         (var "forField" @@ (Core.injectionField $ var "i")),
       _Term_unit>>: constant Core.termUnit,
+      _Term_unwrap>>: "n" ~> Core.termUnwrap $ var "n",
       _Term_variable>>: "v" ~> Core.termVariable $ var "v",
       _Term_wrap>>: "wt" ~> Core.termWrap $ Core.wrappedTerm
         (Core.wrappedTermTypeName $ var "wt")
@@ -672,37 +644,29 @@ rewriteTermM = define "rewriteTermM" $
         "lhs" <<~ var "recurse" @@ Core.applicationFunction (var "app") $
         "rhs" <<~ var "recurse" @@ Core.applicationArgument (var "app") $
         right $ Core.termApplication $ Core.application (var "lhs") (var "rhs"),
+      _Term_cases>>: "cs" ~>
+        "n" <~ Core.caseStatementTypeName (var "cs") $
+        "def" <~ Core.caseStatementDefault (var "cs") $
+        "csCases" <~ Core.caseStatementCases (var "cs") $
+        "rdef" <<~ Maybes.maybe (right nothing)
+          ("t" ~> Eithers.map (unaryFunction just) $ var "recurse" @@ var "t")
+          (var "def") $
+        Eithers.map
+          ("rcases" ~> Core.termCases $
+            Core.caseStatement (var "n") (var "rdef") (var "rcases"))
+          (Eithers.mapList (var "forField") (var "csCases")),
       _Term_either>>: "e" ~>
         "re" <<~ Eithers.either_
           ("l" ~> Eithers.map (unaryFunction left) $ var "recurse" @@ var "l")
           ("r" ~> Eithers.map (unaryFunction right) $ var "recurse" @@ var "r")
           (var "e") $
         right $ Core.termEither $ var "re",
-      _Term_function>>: "fun" ~>
-        "forElm" <~ ("e" ~> cases _Elimination (var "e") Nothing [
-          _Elimination_record>>: "p" ~> right $ Core.functionElimination $ Core.eliminationRecord $ var "p",
-          _Elimination_union>>: "cs" ~>
-            "n" <~ Core.caseStatementTypeName (var "cs") $
-            "def" <~ Core.caseStatementDefault (var "cs") $
-            "cases" <~ Core.caseStatementCases (var "cs") $
-            "rdef" <<~ Maybes.maybe (right nothing)
-              ("t" ~> Eithers.map (unaryFunction just) $ var "recurse" @@ var "t")
-              (var "def") $
-            Eithers.map
-              ("rcases" ~> Core.functionElimination $ Core.eliminationUnion $
-                Core.caseStatement (var "n") (var "rdef") (var "rcases"))
-              (Eithers.mapList (var "forField") (var "cases")),
-          _Elimination_wrap>>: "name" ~> right $ Core.functionElimination $ Core.eliminationWrap $ var "name"]) $
-        "forFun" <~ ("fun" ~> cases _Function (var "fun") Nothing [
-          _Function_elimination>>: "e" ~> var "forElm" @@ var "e",
-          _Function_lambda>>: "l" ~>
-            "v" <~ Core.lambdaParameter (var "l") $
-            "d" <~ Core.lambdaDomain (var "l") $
-            "body" <~ Core.lambdaBody (var "l") $
-            "rbody" <<~ var "recurse" @@ var "body" $
-            right $ Core.functionLambda $ Core.lambda (var "v") (var "d") (var "rbody")]) $
-        "rfun" <<~ var "forFun" @@ var "fun" $
-        right $ Core.termFunction $ var "rfun",
+      _Term_lambda>>: "l" ~>
+        "v" <~ Core.lambdaParameter (var "l") $
+        "d" <~ Core.lambdaDomain (var "l") $
+        "body" <~ Core.lambdaBody (var "l") $
+        "rbody" <<~ var "recurse" @@ var "body" $
+        right $ Core.termLambda $ Core.lambda (var "v") (var "d") (var "rbody"),
       _Term_let>>: "lt" ~>
         "bindings" <~ Core.letBindings (var "lt") $
         "env" <~ Core.letBody (var "lt") $
@@ -723,6 +687,7 @@ rewriteTermM = define "rewriteTermM" $
         "rf" <<~ var "recurse" @@ (Pairs.first $ var "p") $
         "rs" <<~ var "recurse" @@ (Pairs.second $ var "p") $
         right $ Core.termPair $ pair (var "rf") (var "rs"),
+      _Term_project>>: "p" ~> right $ Core.termProject $ var "p",
       _Term_record>>: "r" ~>
         "n" <~ Core.recordTypeName (var "r") $
         "fields" <~ Core.recordFields (var "r") $
@@ -747,6 +712,7 @@ rewriteTermM = define "rewriteTermM" $
           ("rfield" ~> Core.termUnion $ Core.injection (var "n") (var "rfield"))
           (var "forField" @@ var "field"),
       _Term_unit>>: constant $ right $ Core.termUnit,
+      _Term_unwrap>>: "n" ~> right $ Core.termUnwrap $ var "n",
       _Term_variable>>: "v" ~> right $ Core.termVariable $ var "v",
       _Term_wrap>>: "wt" ~>
         "name" <~ Core.wrappedTermTypeName (var "wt") $
@@ -764,19 +730,6 @@ rewriteTermWithContext = define "rewriteTermWithContext" $
   "forSubterms" <~ ("recurse0" ~> "cx" ~> "term" ~>
     "recurse" <~ var "recurse0" @@ var "cx" $
     "forField" <~ ("field" ~> Core.fieldWithTerm (var "field") (var "recurse" @@ (Core.fieldTerm $ var "field"))) $
-    "forElimination" <~ ("elm" ~> cases _Elimination (var "elm") Nothing [
-      _Elimination_record>>: "p" ~> Core.eliminationRecord (var "p"),
-      _Elimination_union>>: "cs" ~> Core.eliminationUnion $ Core.caseStatement
-        (Core.caseStatementTypeName $ var "cs")
-        (Maybes.map (var "recurse") (Core.caseStatementDefault $ var "cs"))
-        (Lists.map (var "forField") (Core.caseStatementCases $ var "cs")),
-      _Elimination_wrap>>: "name" ~> Core.eliminationWrap $ var "name"]) $
-    "forFunction" <~ ("fun" ~> cases _Function (var "fun") Nothing [
-      _Function_elimination>>: "elm" ~> Core.functionElimination $ var "forElimination" @@ var "elm",
-      _Function_lambda>>: "l" ~> Core.functionLambda $ Core.lambda
-        (Core.lambdaParameter $ var "l")
-        (Core.lambdaDomain $ var "l")
-        (var "recurse" @@ (Core.lambdaBody $ var "l"))]) $
     "forLet" <~ ("lt" ~>
       "mapBinding" <~ ("b" ~> Core.binding
         (Core.bindingName $ var "b")
@@ -795,11 +748,18 @@ rewriteTermWithContext = define "rewriteTermWithContext" $
       _Term_application>>: "a" ~> Core.termApplication $ Core.application
         (var "recurse" @@ (Core.applicationFunction $ var "a"))
         (var "recurse" @@ (Core.applicationArgument $ var "a")),
+      _Term_cases>>: "cs" ~> Core.termCases $ Core.caseStatement
+        (Core.caseStatementTypeName $ var "cs")
+        (Maybes.map (var "recurse") (Core.caseStatementDefault $ var "cs"))
+        (Lists.map (var "forField") (Core.caseStatementCases $ var "cs")),
       _Term_either>>: "e" ~> Core.termEither $ Eithers.either_
         ("l" ~> left $ var "recurse" @@ var "l")
         ("r" ~> right $ var "recurse" @@ var "r")
         (var "e"),
-      _Term_function>>: "fun" ~> Core.termFunction $ var "forFunction" @@ var "fun",
+      _Term_lambda>>: "l" ~> Core.termLambda $ Core.lambda
+        (Core.lambdaParameter $ var "l")
+        (Core.lambdaDomain $ var "l")
+        (var "recurse" @@ (Core.lambdaBody $ var "l")),
       _Term_let>>: "lt" ~> Core.termLet $ var "forLet" @@ var "lt",
       _Term_list>>: "els" ~> Core.termList $ Lists.map (var "recurse") (var "els"),
       _Term_literal>>: "v" ~> Core.termLiteral $ var "v",
@@ -808,6 +768,7 @@ rewriteTermWithContext = define "rewriteTermWithContext" $
       _Term_pair>>: "p" ~> Core.termPair $ pair
         (var "recurse" @@ (Pairs.first $ var "p"))
         (var "recurse" @@ (Pairs.second $ var "p")),
+      _Term_project>>: "p" ~> Core.termProject $ var "p",
       _Term_record>>: "r" ~> Core.termRecord $ Core.record
         (Core.recordTypeName $ var "r")
         (Lists.map (var "forField") (Core.recordFields $ var "r")),
@@ -822,6 +783,7 @@ rewriteTermWithContext = define "rewriteTermWithContext" $
         (Core.injectionTypeName $ var "i")
         (var "forField" @@ (Core.injectionField $ var "i")),
       _Term_unit>>: constant Core.termUnit,
+      _Term_unwrap>>: "n" ~> Core.termUnwrap $ var "n",
       _Term_variable>>: "v" ~> Core.termVariable $ var "v",
       _Term_wrap>>: "wt" ~> Core.termWrap $ Core.wrappedTerm
         (Core.wrappedTermTypeName $ var "wt")
@@ -843,28 +805,6 @@ rewriteTermWithContextM = define "rewriteTermWithContextM" $
       "k" <<~ var "recurse" @@ (Pairs.first $ var "kv") $
       "v" <<~ var "recurse" @@ (Pairs.second $ var "kv") $
       right $ pair (var "k") (var "v")) $
-    "forElimination" <~ ("e" ~> cases _Elimination (var "e") Nothing [
-      _Elimination_record>>: "p" ~> right $ Core.functionElimination $ Core.eliminationRecord $ var "p",
-      _Elimination_union>>: "cs" ~>
-        "n" <~ Core.caseStatementTypeName (var "cs") $
-        "def" <~ Core.caseStatementDefault (var "cs") $
-        "cases" <~ Core.caseStatementCases (var "cs") $
-        "rdef" <<~ Maybes.maybe (right nothing)
-          ("t" ~> Eithers.map (unaryFunction just) $ var "recurse" @@ var "t")
-          (var "def") $
-        Eithers.map
-          ("rcases" ~> Core.functionElimination $ Core.eliminationUnion $
-            Core.caseStatement (var "n") (var "rdef") (var "rcases"))
-          (Eithers.mapList (var "forField") (var "cases")),
-      _Elimination_wrap>>: "name" ~> right $ Core.functionElimination $ Core.eliminationWrap $ var "name"]) $
-    "forFunction" <~ ("fun" ~> cases _Function (var "fun") Nothing [
-      _Function_elimination>>: "e" ~> var "forElimination" @@ var "e",
-      _Function_lambda>>: "l" ~>
-        "v" <~ Core.lambdaParameter (var "l") $
-        "d" <~ Core.lambdaDomain (var "l") $
-        "body" <~ Core.lambdaBody (var "l") $
-        "rbody" <<~ var "recurse" @@ var "body" $
-        right $ Core.functionLambda $ Core.lambda (var "v") (var "d") (var "rbody")]) $
     "mapBinding" <~ ("b" ~>
       "v" <<~ var "recurse" @@ (Core.bindingTerm $ var "b") $
       right $ Core.binding (Core.bindingName $ var "b") (var "v") (Core.bindingType $ var "b")) $
@@ -876,15 +816,29 @@ rewriteTermWithContextM = define "rewriteTermWithContextM" $
         "lhs" <<~ var "recurse" @@ Core.applicationFunction (var "app") $
         "rhs" <<~ var "recurse" @@ Core.applicationArgument (var "app") $
         right $ Core.termApplication $ Core.application (var "lhs") (var "rhs"),
+      _Term_cases>>: "cs" ~>
+        "n" <~ Core.caseStatementTypeName (var "cs") $
+        "def" <~ Core.caseStatementDefault (var "cs") $
+        "csCases" <~ Core.caseStatementCases (var "cs") $
+        "rdef" <<~ Maybes.maybe (right nothing)
+          ("t" ~> Eithers.map (unaryFunction just) $ var "recurse" @@ var "t")
+          (var "def") $
+        Eithers.map
+          ("rcases" ~> Core.termCases $
+            Core.caseStatement (var "n") (var "rdef") (var "rcases"))
+          (Eithers.mapList (var "forField") (var "csCases")),
       _Term_either>>: "e" ~>
         "re" <<~ Eithers.either_
           ("l" ~> Eithers.map (unaryFunction left) $ var "recurse" @@ var "l")
           ("r" ~> Eithers.map (unaryFunction right) $ var "recurse" @@ var "r")
           (var "e") $
         right $ Core.termEither $ var "re",
-      _Term_function>>: "fun" ~>
-        "rfun" <<~ var "forFunction" @@ var "fun" $
-        right $ Core.termFunction $ var "rfun",
+      _Term_lambda>>: "l" ~>
+        "v" <~ Core.lambdaParameter (var "l") $
+        "d" <~ Core.lambdaDomain (var "l") $
+        "body" <~ Core.lambdaBody (var "l") $
+        "rbody" <<~ var "recurse" @@ var "body" $
+        right $ Core.termLambda $ Core.lambda (var "v") (var "d") (var "rbody"),
       _Term_let>>: "lt" ~>
         "bindings" <~ Core.letBindings (var "lt") $
         "body" <~ Core.letBody (var "lt") $
@@ -905,6 +859,7 @@ rewriteTermWithContextM = define "rewriteTermWithContextM" $
         "rfirst" <<~ var "recurse" @@ Pairs.first (var "p") $
         "rsecond" <<~ var "recurse" @@ Pairs.second (var "p") $
         right $ Core.termPair $ pair (var "rfirst") (var "rsecond"),
+      _Term_project>>: "p" ~> right $ Core.termProject $ var "p",
       _Term_record>>: "r" ~>
         "n" <~ Core.recordTypeName (var "r") $
         "fields" <~ Core.recordFields (var "r") $
@@ -929,6 +884,7 @@ rewriteTermWithContextM = define "rewriteTermWithContextM" $
           ("rfield" ~> Core.termUnion $ Core.injection (var "n") (var "rfield"))
           (var "forField" @@ var "field"),
       _Term_unit>>: constant $ right Core.termUnit,
+      _Term_unwrap>>: "n" ~> right $ Core.termUnwrap $ var "n",
       _Term_variable>>: "v" ~> right $ Core.termVariable $ var "v",
       _Term_wrap>>: "wt" ~>
         "name" <~ Core.wrappedTermTypeName (var "wt") $
@@ -1052,18 +1008,14 @@ subterms = define "subterms" $
     _Term_application>>: "p" ~> list [
       Core.applicationFunction $ var "p",
       Core.applicationArgument $ var "p"],
+    _Term_cases>>: "cs" ~> Lists.concat2
+      (Maybes.maybe (list ([] :: [TTerm Term])) ("t" ~> list [var "t"]) (Core.caseStatementDefault $ var "cs"))
+      (Lists.map (unaryFunction Core.fieldTerm) (Core.caseStatementCases $ var "cs")),
     _Term_either>>: "e" ~> Eithers.either_
       ("l" ~> list [var "l"])
       ("r" ~> list [var "r"])
       (var "e"),
-    _Term_function>>: match _Function
-      (Just $ list ([] :: [TTerm Term])) [
-      _Function_elimination>>: match _Elimination
-        (Just $ list ([] :: [TTerm Term])) [
-        _Elimination_union>>: "cs" ~> Lists.concat2
-          (Maybes.maybe (list ([] :: [TTerm Term])) ("t" ~> list [var "t"]) (Core.caseStatementDefault $ var "cs"))
-          (Lists.map (unaryFunction Core.fieldTerm) (Core.caseStatementCases $ var "cs"))],
-      _Function_lambda>>: "l" ~> list [Core.lambdaBody $ var "l"]],
+    _Term_lambda>>: "l" ~> list [Core.lambdaBody $ var "l"],
     _Term_let>>: "lt" ~> Lists.cons
       (Core.letBody $ var "lt")
       (Lists.map (unaryFunction Core.bindingTerm) (Core.letBindings $ var "lt")),
@@ -1074,12 +1026,14 @@ subterms = define "subterms" $
       (Maps.toList $ var "m"),
     _Term_maybe>>: "m" ~> Maybes.maybe (list ([] :: [TTerm Term])) ("t" ~> list [var "t"]) (var "m"),
     _Term_pair>>: "p" ~> list [Pairs.first $ var "p", Pairs.second $ var "p"],
+    _Term_project>>: constant $ list ([] :: [TTerm Term]),
     _Term_record>>: "rt" ~> Lists.map (unaryFunction Core.fieldTerm) (Core.recordFields $ var "rt"),
     _Term_set>>: "l" ~> Sets.toList $ var "l",
     _Term_typeApplication>>: "ta" ~> list [Core.typeApplicationTermBody $ var "ta"],
     _Term_typeLambda>>: "ta" ~> list [Core.typeLambdaBody $ var "ta"],
     _Term_union>>: "ut" ~> list [Core.fieldTerm $ (Core.injectionField $ var "ut")],
     _Term_unit>>: constant $ list ([] :: [TTerm Term]),
+    _Term_unwrap>>: constant $ list ([] :: [TTerm Term]),
     _Term_variable>>: constant $ list ([] :: [TTerm Term]),
     _Term_wrap>>: "n" ~> list [Core.wrappedTermBody $ var "n"]]
 
@@ -1091,19 +1045,15 @@ subtermsWithSteps = define "subtermsWithSteps" $
     _Term_application>>: "p" ~> list [
       result Paths.subtermStepApplicationFunction $ Core.applicationFunction $ var "p",
       result Paths.subtermStepApplicationArgument $ Core.applicationArgument $ var "p"],
+    _Term_cases>>: "cs" ~> Lists.concat2
+      (Maybes.maybe none
+        ("t" ~> single Paths.subtermStepUnionCasesDefault $ var "t")
+        (Core.caseStatementDefault $ var "cs"))
+      (Lists.map
+        ("f" ~> result (Paths.subtermStepUnionCasesBranch $ Core.fieldName $ var "f") $ Core.fieldTerm $ var "f")
+        (Core.caseStatementCases $ var "cs")),
     _Term_either>>: "e" ~> none, -- TODO: add steps when SubtermStep type is updated
-    _Term_function>>: match _Function
-      (Just none) [
-      _Function_elimination>>: match _Elimination
-        (Just none) [
-        _Elimination_union>>: "cs" ~> Lists.concat2
-          (Maybes.maybe none
-            ("t" ~> single Paths.subtermStepUnionCasesDefault $ var "t")
-            (Core.caseStatementDefault $ var "cs"))
-          (Lists.map
-            ("f" ~> result (Paths.subtermStepUnionCasesBranch $ Core.fieldName $ var "f") $ Core.fieldTerm $ var "f")
-            (Core.caseStatementCases $ var "cs"))],
-      _Function_lambda>>: "l" ~> single Paths.subtermStepLambdaBody $ Core.lambdaBody $ var "l"],
+    _Term_lambda>>: "l" ~> single Paths.subtermStepLambdaBody $ Core.lambdaBody $ var "l",
     _Term_let>>: "lt" ~> Lists.cons
       (result Paths.subtermStepLetBody $ Core.letBody $ var "lt")
       (Lists.map
@@ -1125,6 +1075,7 @@ subtermsWithSteps = define "subtermsWithSteps" $
       ("t" ~> single Paths.subtermStepMaybeTerm $ var "t")
       (var "m"),
     _Term_pair>>: "p" ~> none, -- TODO: add steps when SubtermStep type is updated
+    _Term_project>>: constant none,
     _Term_record>>: "rt" ~> Lists.map
       ("f" ~> result (Paths.subtermStepRecordField $ Core.fieldName $ var "f") $ Core.fieldTerm $ var "f")
       (Core.recordFields $ var "rt"),
@@ -1142,6 +1093,7 @@ subtermsWithSteps = define "subtermsWithSteps" $
       single Paths.subtermStepInjectionTerm $
       Core.fieldTerm $ (Core.injectionField $ var "ut"),
     _Term_unit>>: constant none,
+    _Term_unwrap>>: constant none,
     _Term_variable>>: constant none,
     _Term_wrap>>: "n" ~> single Paths.subtermStepWrappedTerm $ Core.wrappedTermBody $ var "n"]
   where
@@ -1192,9 +1144,7 @@ rewriteAndFoldTermWithGraph = define "rewriteAndFoldTermWithGraph" $
     "cx" <~ Pairs.second (var "valAndCx") $
     "cx1" <~ (cases _Term (var "term")
       (Just $ var "cx") [
-      _Term_function>>: "fun" ~> cases _Function (var "fun")
-        (Just $ var "cx") [
-        _Function_lambda>>: "l" ~> Scoping.extendGraphForLambda @@ var "cx" @@ var "l"],
+      _Term_lambda>>: "l" ~> Scoping.extendGraphForLambda @@ var "cx" @@ var "l",
       _Term_let>>: "l" ~> Scoping.extendGraphForLet @@ constant (constant nothing) @@ var "cx" @@ var "l",
       _Term_typeLambda>>: "tl" ~> Scoping.extendGraphForTypeLambda @@ var "cx" @@ var "tl"]) $
     "recurseForUser" <~ ("newVal" ~> "subterm" ~>
@@ -1219,9 +1169,7 @@ rewriteAndFoldTermWithGraphAndPath = define "rewriteAndFoldTermWithGraphAndPath"
     "val" <~ Pairs.second (var "cxAndVal") $
     "cx1" <~ (cases _Term (var "term")
       (Just $ var "cx") [
-      _Term_function>>: "fun" ~> cases _Function (var "fun")
-        (Just $ var "cx") [
-        _Function_lambda>>: "l" ~> Scoping.extendGraphForLambda @@ var "cx" @@ var "l"],
+      _Term_lambda>>: "l" ~> Scoping.extendGraphForLambda @@ var "cx" @@ var "l",
       _Term_let>>: "l" ~> Scoping.extendGraphForLet @@ constant (constant nothing) @@ var "cx" @@ var "l",
       _Term_typeLambda>>: "tl" ~> Scoping.extendGraphForTypeLambda @@ var "cx" @@ var "tl"]) $
     "recurseForUser" <~ ("valIn" ~> "termIn" ~>
@@ -1239,12 +1187,10 @@ rewriteTermWithGraph = define "rewriteTermWithGraph" $
   "f2" <~ ("recurse" ~> "cx" ~> "term" ~>
     "recurse1" <~ ("term" ~> var "recurse" @@ var "cx" @@ var "term") $
     cases _Term (var "term") (Just $ var "f" @@ var "recurse1" @@ var "cx" @@ var "term") [
-      _Term_function>>: "fun" ~> cases _Function (var "fun")
-        (Just $ var "f" @@ var "recurse1" @@ var "cx" @@ var "term") [
-        _Function_lambda>>: "l" ~>
-          "cx1" <~ Scoping.extendGraphForLambda @@ var "cx" @@ var "l" $
-          "recurse2" <~ ("term" ~> var "recurse" @@ var "cx1" @@ var "term") $
-          var "f" @@ var "recurse2" @@ var "cx1" @@ var "term"],
+      _Term_lambda>>: "l" ~>
+        "cx1" <~ Scoping.extendGraphForLambda @@ var "cx" @@ var "l" $
+        "recurse2" <~ ("term" ~> var "recurse" @@ var "cx1" @@ var "term") $
+        var "f" @@ var "recurse2" @@ var "cx1" @@ var "term",
       _Term_let>>: "l" ~>
         "cx1" <~ Scoping.extendGraphForLet @@ constant (constant nothing) @@ var "cx" @@ var "l" $
         "recurse2" <~ ("term" ~> var "recurse" @@ var "cx1" @@ var "term") $

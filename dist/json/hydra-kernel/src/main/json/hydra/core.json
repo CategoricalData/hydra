@@ -284,50 +284,6 @@
           "variables": []}}},
     {
       "type": {
-        "name": "hydra.core.Elimination",
-        "type": {
-          "type": {
-            "annotated": {
-              "annotation": [
-                {
-                  "@key": "description",
-                  "@value": {
-                    "literal": {"string": "A corresponding elimination for an introduction term"}}}],
-              "body": {
-                "union": [
-                  {
-                    "name": "record",
-                    "type": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "@key": "description",
-                            "@value": {
-                              "literal": {"string": "Eliminates a record by projecting a given field"}}}],
-                        "body": {"variable": "hydra.core.Projection"}}}},
-                  {
-                    "name": "union",
-                    "type": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "@key": "description",
-                            "@value": {
-                              "literal": {
-                                "string": "Eliminates a union term by matching over the fields of the union. This is a case statement."}}}],
-                        "body": {"variable": "hydra.core.CaseStatement"}}}},
-                  {
-                    "name": "wrap",
-                    "type": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Unwrap a wrapped term"}}}],
-                        "body": {"variable": "hydra.core.Name"}}}}]}}},
-          "variables": []}}},
-    {
-      "type": {
         "name": "hydra.core.Field",
         "type": {
           "type": {
@@ -500,38 +456,6 @@
                             "@key": "description",
                             "@value": {"literal": {"string": "The body of the lambda"}}}],
                         "body": {"variable": "hydra.core.Type"}}}}]}}},
-          "variables": []}}},
-    {
-      "type": {
-        "name": "hydra.core.Function",
-        "type": {
-          "type": {
-            "annotated": {
-              "annotation": [
-                {
-                  "@key": "description",
-                  "@value": {"literal": {"string": "A function"}}}],
-              "body": {
-                "union": [
-                  {
-                    "name": "elimination",
-                    "type": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "@key": "description",
-                            "@value": {
-                              "literal": {"string": "An elimination for any of a few term variants"}}}],
-                        "body": {"variable": "hydra.core.Elimination"}}}},
-                  {
-                    "name": "lambda",
-                    "type": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A function abstraction (lambda)"}}}],
-                        "body": {"variable": "hydra.core.Lambda"}}}}]}}},
           "variables": []}}},
     {
       "type": {
@@ -1122,6 +1046,15 @@
                             "@value": {"literal": {"string": "A function application"}}}],
                         "body": {"variable": "hydra.core.Application"}}}},
                   {
+                    "name": "cases",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "A union elimination; a case statement"}}}],
+                        "body": {"variable": "hydra.core.CaseStatement"}}}},
+                  {
                     "name": "either",
                     "type": {
                       "annotated": {
@@ -1134,14 +1067,14 @@
                             "left": {"variable": "hydra.core.Term"},
                             "right": {"variable": "hydra.core.Term"}}}}}},
                   {
-                    "name": "function",
+                    "name": "lambda",
                     "type": {
                       "annotated": {
                         "annotation": [
                           {
                             "@key": "description",
-                            "@value": {"literal": {"string": "A function term"}}}],
-                        "body": {"variable": "hydra.core.Function"}}}},
+                            "@value": {"literal": {"string": "A function abstraction (lambda)"}}}],
+                        "body": {"variable": "hydra.core.Lambda"}}}},
                   {
                     "name": "let",
                     "type": {
@@ -1201,6 +1134,15 @@
                             "first": {"variable": "hydra.core.Term"},
                             "second": {"variable": "hydra.core.Term"}}}}}},
                   {
+                    "name": "project",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "A record elimination; a projection"}}}],
+                        "body": {"variable": "hydra.core.Projection"}}}},
+                  {
                     "name": "record",
                     "type": {
                       "annotated": {
@@ -1254,6 +1196,16 @@
                             "@key": "description",
                             "@value": {"literal": {"string": "A unit value; a term with no value"}}}],
                         "body": {"unit": {}}}}},
+                  {
+                    "name": "unwrap",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {"string": "An unwrap elimination; the inverse of a wrap"}}}],
+                        "body": {"variable": "hydra.core.Name"}}}},
                   {
                     "name": "variable",
                     "type": {

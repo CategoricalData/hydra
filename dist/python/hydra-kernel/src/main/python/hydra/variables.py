@@ -46,36 +46,26 @@ def free_type_variables_in_term(term0: hydra.core.Term) -> frozenset[hydra.core.
         return hydra.lib.lists.foldl((lambda x1, x2: hydra.lib.sets.union(x1, x2)), hydra.lib.sets.empty(), sets)
     def try_type(tvars: frozenset[hydra.core.Name], typ: hydra.core.Type) -> frozenset[hydra.core.Name]:
         return hydra.lib.sets.difference(free_variables_in_type(typ), tvars)
-    def get_all(vars: frozenset[hydra.core.Name], term: hydra.core.Term):
+    def get_all(vars: frozenset[hydra.core.Name], term: hydra.core.Term) -> frozenset[hydra.core.Name]:
         def recurse(v1: hydra.core.Term) -> frozenset[hydra.core.Name]:
             return get_all(vars, v1)
         @lru_cache(1)
         def dflt() -> frozenset[hydra.core.Name]:
             return all_of(hydra.lib.lists.map((lambda x1: recurse(x1)), hydra.rewriting.subterms(term)))
-        def _hoist_dflt_body_1(v1):
-            match v1:
-                case hydra.core.FunctionElimination():
-                    return dflt()
-
-                case hydra.core.FunctionLambda(value=l):
-                    @lru_cache(1)
-                    def domt() -> frozenset[hydra.core.Name]:
-                        return hydra.lib.maybes.maybe((lambda : hydra.lib.sets.empty()), (lambda v12: try_type(vars, v12)), l.domain)
-                    return hydra.lib.sets.union(domt(), recurse(l.body))
-
-                case _:
-                    return dflt()
         match term:
-            case hydra.core.TermFunction(value=f):
-                return _hoist_dflt_body_1(f)
+            case hydra.core.TermLambda(value=l):
+                @lru_cache(1)
+                def domt() -> frozenset[hydra.core.Name]:
+                    return hydra.lib.maybes.maybe((lambda : hydra.lib.sets.empty()), (lambda v1: try_type(vars, v1)), l.domain)
+                return hydra.lib.sets.union(domt(), recurse(l.body))
 
-            case hydra.core.TermLet(value=l):
+            case hydra.core.TermLet(value=l2):
                 def for_binding(b: hydra.core.Binding) -> frozenset[hydra.core.Name]:
                     @lru_cache(1)
                     def new_vars() -> frozenset[hydra.core.Name]:
                         return hydra.lib.maybes.maybe((lambda : vars), (lambda ts: hydra.lib.sets.union(vars, hydra.lib.sets.from_list(ts.variables))), b.type)
                     return hydra.lib.sets.union(get_all(new_vars(), b.term), hydra.lib.maybes.maybe((lambda : hydra.lib.sets.empty()), (lambda ts: try_type(new_vars(), ts.type)), b.type))
-                return hydra.lib.sets.union(all_of(hydra.lib.lists.map((lambda x1: for_binding(x1)), l.bindings)), recurse(l.body))
+                return hydra.lib.sets.union(all_of(hydra.lib.lists.map((lambda x1: for_binding(x1)), l2.bindings)), recurse(l2.body))
 
             case hydra.core.TermTypeApplication(value=tt):
                 return hydra.lib.sets.union(try_type(vars, tt.type), recurse(tt.body))
@@ -87,24 +77,17 @@ def free_type_variables_in_term(term0: hydra.core.Term) -> frozenset[hydra.core.
                 return dflt()
     return get_all(hydra.lib.sets.empty(), term0)
 
-def free_variables_in_term(term: hydra.core.Term):
+def free_variables_in_term(term: hydra.core.Term) -> frozenset[hydra.core.Name]:
     r"""Find the free variables (i.e. variables not bound by a lambda or let) in a term."""
 
     def dflt_vars(_: T0) -> frozenset[hydra.core.Name]:
         return hydra.lib.lists.foldl((lambda s, t: hydra.lib.sets.union(s, free_variables_in_term(t))), hydra.lib.sets.empty(), hydra.rewriting.subterms(term))
-    def _hoist_dflt_vars_body_1(v1):
-        match v1:
-            case hydra.core.FunctionLambda(value=l):
-                return hydra.lib.sets.delete(l.parameter, free_variables_in_term(l.body))
-
-            case _:
-                return dflt_vars(None)
     match term:
-        case hydra.core.TermFunction(value=_match_value):
-            return _hoist_dflt_vars_body_1(_match_value)
+        case hydra.core.TermLambda(value=l):
+            return hydra.lib.sets.delete(l.parameter, free_variables_in_term(l.body))
 
-        case hydra.core.TermLet(value=l):
-            return hydra.lib.sets.difference(dflt_vars(None), hydra.lib.sets.from_list(hydra.lib.lists.map((lambda v1: v1.name), l.bindings)))
+        case hydra.core.TermLet(value=l2):
+            return hydra.lib.sets.difference(dflt_vars(None), hydra.lib.sets.from_list(hydra.lib.lists.map((lambda v1: v1.name), l2.bindings)))
 
         case hydra.core.TermVariable(value=v):
             return hydra.lib.sets.singleton(v)
@@ -185,21 +168,11 @@ def normalize_type_variables_in_term(term: hydra.core.Term) -> hydra.core.Term:
         @lru_cache(1)
         def bound_vars() -> frozenset[hydra.core.Name]:
             return hydra.lib.pairs.second(sb())
-        def rewrite(recurse: Callable[[hydra.core.Term], hydra.core.Term], term2: hydra.core.Term):
-            def _hoist_rewrite_1(recurse, term2, v1):
-                match v1:
-                    case hydra.core.FunctionElimination():
-                        return recurse(term2)
-
-                    case hydra.core.FunctionLambda(value=l):
-                        domain = l.domain
-                        return cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(l.parameter, hydra.lib.maybes.map((lambda v12: subst_type(subst(), v12)), domain), rewrite_with_subst(((subst(), bound_vars()), next()), l.body))))))
-
-                    case _:
-                        return recurse(term2)
+        def rewrite(recurse: Callable[[hydra.core.Term], hydra.core.Term], term2: hydra.core.Term) -> hydra.core.Term:
             match term2:
-                case hydra.core.TermFunction(value=_match_value):
-                    return _hoist_rewrite_1(recurse, term2, _match_value)
+                case hydra.core.TermLambda(value=l):
+                    domain = l.domain
+                    return cast(hydra.core.Term, hydra.core.TermLambda(hydra.core.Lambda(l.parameter, hydra.lib.maybes.map((lambda v1: subst_type(subst(), v1)), domain), rewrite_with_subst(((subst(), bound_vars()), next()), l.body))))
 
                 case hydra.core.TermLet(value=lt):
                     bindings0 = lt.bindings
@@ -225,18 +198,11 @@ def normalize_type_variables_in_term(term: hydra.core.Term) -> hydra.core.Term:
 def replace_free_term_variable(vold: hydra.core.Name, tnew: hydra.core.Term, term: hydra.core.Term) -> hydra.core.Term:
     r"""Replace a free variable in a term."""
 
-    def rewrite(recurse: Callable[[hydra.core.Term], hydra.core.Term], t: hydra.core.Term):
-        def _hoist_rewrite_1(recurse, t, v1):
-            match v1:
-                case hydra.core.FunctionLambda(value=l):
-                    v = l.parameter
-                    return hydra.lib.logic.if_else(hydra.lib.equality.equal(v, vold), (lambda : t), (lambda : recurse(t)))
-
-                case _:
-                    return recurse(t)
+    def rewrite(recurse: Callable[[hydra.core.Term], hydra.core.Term], t: hydra.core.Term) -> hydra.core.Term:
         match t:
-            case hydra.core.TermFunction(value=f):
-                return _hoist_rewrite_1(recurse, t, f)
+            case hydra.core.TermLambda(value=l):
+                v = l.parameter
+                return hydra.lib.logic.if_else(hydra.lib.equality.equal(v, vold), (lambda : t), (lambda : recurse(t)))
 
             case hydra.core.TermVariable(value=v):
                 return hydra.lib.logic.if_else(hydra.lib.equality.equal(v, vold), (lambda : tnew), (lambda : cast(hydra.core.Term, hydra.core.TermVariable(v))))
@@ -283,17 +249,10 @@ def substitute_type_variables_in_term(subst: FrozenDict[hydra.core.Name, hydra.c
         return hydra.core.TypeScheme(ts.variables, st(ts.type), ts.constraints)
     def st_scheme_opt(mts: Maybe[hydra.core.TypeScheme]) -> Maybe[hydra.core.TypeScheme]:
         return hydra.lib.maybes.map((lambda x1: st_scheme(x1)), mts)
-    def replace(recurse: Callable[[hydra.core.Term], hydra.core.Term], t: hydra.core.Term):
-        def _hoist_replace_1(recurse, t, v1):
-            match v1:
-                case hydra.core.FunctionLambda(value=l):
-                    return cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(l.parameter, st_opt(l.domain), recurse(l.body))))))
-
-                case _:
-                    return recurse(t)
+    def replace(recurse: Callable[[hydra.core.Term], hydra.core.Term], t: hydra.core.Term) -> hydra.core.Term:
         match t:
-            case hydra.core.TermFunction(value=_match_value):
-                return _hoist_replace_1(recurse, t, _match_value)
+            case hydra.core.TermLambda(value=l):
+                return cast(hydra.core.Term, hydra.core.TermLambda(hydra.core.Lambda(l.parameter, st_opt(l.domain), recurse(l.body))))
 
             case hydra.core.TermLet(value=lt):
                 def map_binding(b: hydra.core.Binding) -> hydra.core.Binding:
@@ -316,20 +275,13 @@ def substitute_type_variables_in_term(subst: FrozenDict[hydra.core.Name, hydra.c
 def substitute_variable(from_: hydra.core.Name, to: hydra.core.Name, term: hydra.core.Term) -> hydra.core.Term:
     r"""Substitute one variable for another in a term."""
 
-    def replace(recurse: Callable[[hydra.core.Term], hydra.core.Term], term2: hydra.core.Term):
-        def _hoist_replace_1(recurse, term2, v1):
-            match v1:
-                case hydra.core.FunctionLambda(value=l):
-                    return hydra.lib.logic.if_else(hydra.lib.equality.equal(l.parameter, from_), (lambda : term2), (lambda : recurse(term2)))
-
-                case _:
-                    return recurse(term2)
+    def replace(recurse: Callable[[hydra.core.Term], hydra.core.Term], term2: hydra.core.Term) -> hydra.core.Term:
         match term2:
             case hydra.core.TermVariable(value=x):
                 return cast(hydra.core.Term, hydra.core.TermVariable(hydra.lib.logic.if_else(hydra.lib.equality.equal(x, from_), (lambda : to), (lambda : x))))
 
-            case hydra.core.TermFunction(value=_match_value):
-                return _hoist_replace_1(recurse, term2, _match_value)
+            case hydra.core.TermLambda(value=l):
+                return hydra.lib.logic.if_else(hydra.lib.equality.equal(l.parameter, from_), (lambda : term2), (lambda : recurse(term2)))
 
             case _:
                 return recurse(term2)
@@ -338,20 +290,13 @@ def substitute_variable(from_: hydra.core.Name, to: hydra.core.Name, term: hydra
 def substitute_variables(subst: FrozenDict[hydra.core.Name, hydra.core.Name], term: hydra.core.Term) -> hydra.core.Term:
     r"""Substitute multiple variables in a term."""
 
-    def replace(recurse: Callable[[hydra.core.Term], hydra.core.Term], term2: hydra.core.Term):
-        def _hoist_replace_1(recurse, term2, v1):
-            match v1:
-                case hydra.core.FunctionLambda(value=l):
-                    return hydra.lib.maybes.maybe((lambda : recurse(term2)), (lambda _: term2), hydra.lib.maps.lookup(l.parameter, subst))
-
-                case _:
-                    return recurse(term2)
+    def replace(recurse: Callable[[hydra.core.Term], hydra.core.Term], term2: hydra.core.Term) -> hydra.core.Term:
         match term2:
             case hydra.core.TermVariable(value=n):
                 return cast(hydra.core.Term, hydra.core.TermVariable(hydra.lib.maybes.from_maybe((lambda : n), hydra.lib.maps.lookup(n, subst))))
 
-            case hydra.core.TermFunction(value=_match_value):
-                return _hoist_replace_1(recurse, term2, _match_value)
+            case hydra.core.TermLambda(value=l):
+                return hydra.lib.maybes.maybe((lambda : recurse(term2)), (lambda _: term2), hydra.lib.maps.lookup(l.parameter, subst))
 
             case _:
                 return recurse(term2)
@@ -365,20 +310,13 @@ def unshadow_variables(term0: hydra.core.Term) -> hydra.core.Term:
         def candidate() -> hydra.core.Name:
             return hydra.core.Name(hydra.lib.strings.cat2(base.value, hydra.lib.literals.show_int32(i)))
         return hydra.lib.logic.if_else(hydra.lib.maps.member(candidate(), m), (lambda : fresh_name(base, hydra.lib.math.add(i, 1), m)), (lambda : candidate()))
-    def f(recurse: Callable[[FrozenDict[hydra.core.Name, hydra.core.Name], hydra.core.Term], hydra.core.Term], m: FrozenDict[hydra.core.Name, hydra.core.Name], term: hydra.core.Term):
-        def _hoist_f_1(m, recurse, term, v1):
-            match v1:
-                case hydra.core.FunctionLambda(value=l):
-                    v = l.parameter
-                    domain = l.domain
-                    body = l.body
-                    return hydra.lib.logic.if_else(hydra.lib.maps.member(v, m), (lambda : (v2 := fresh_name(v, 2, m), (m2 := hydra.lib.maps.insert(v, v2, hydra.lib.maps.insert(v2, v2, m)), cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(v2, domain, f(recurse, m2, body)))))))[1])[1]), (lambda : cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(v, domain, f(recurse, hydra.lib.maps.insert(v, v, m), body))))))))
-
-                case _:
-                    return recurse(m, term)
+    def f(recurse: Callable[[FrozenDict[hydra.core.Name, hydra.core.Name], hydra.core.Term], hydra.core.Term], m: FrozenDict[hydra.core.Name, hydra.core.Name], term: hydra.core.Term) -> hydra.core.Term:
         match term:
-            case hydra.core.TermFunction(value=fn):
-                return _hoist_f_1(m, recurse, term, fn)
+            case hydra.core.TermLambda(value=l):
+                v = l.parameter
+                domain = l.domain
+                body = l.body
+                return hydra.lib.logic.if_else(hydra.lib.maps.member(v, m), (lambda : (v2 := fresh_name(v, 2, m), (m2 := hydra.lib.maps.insert(v, v2, hydra.lib.maps.insert(v2, v2, m)), cast(hydra.core.Term, hydra.core.TermLambda(hydra.core.Lambda(v2, domain, f(recurse, m2, body)))))[1])[1]), (lambda : cast(hydra.core.Term, hydra.core.TermLambda(hydra.core.Lambda(v, domain, f(recurse, hydra.lib.maps.insert(v, v, m), body))))))
 
             case hydra.core.TermLet(value=lt):
                 @lru_cache(1)

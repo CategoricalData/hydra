@@ -6,12 +6,6 @@ import hydra.util.*
 
 import hydra.variants.*
 
-def eliminationVariant(v1: hydra.core.Elimination): hydra.variants.EliminationVariant =
-  v1 match
-  case hydra.core.Elimination.record(v_Elimination_record__) => hydra.variants.EliminationVariant.record
-  case hydra.core.Elimination.union(v_Elimination_union__) => hydra.variants.EliminationVariant.union
-  case hydra.core.Elimination.wrap(v_Elimination_wrap__) => hydra.variants.EliminationVariant.wrap
-
 lazy val eliminationVariants: Seq[hydra.variants.EliminationVariant] = Seq(hydra.variants.EliminationVariant.record,
    hydra.variants.EliminationVariant.union, hydra.variants.EliminationVariant.wrap)
 
@@ -28,11 +22,6 @@ def floatValueType(v1: hydra.core.FloatValue): hydra.core.FloatType =
   case hydra.core.FloatValue.bigfloat(v_FloatValue_bigfloat__) => hydra.core.FloatType.bigfloat
   case hydra.core.FloatValue.float32(v_FloatValue_float32__) => hydra.core.FloatType.float32
   case hydra.core.FloatValue.float64(v_FloatValue_float64__) => hydra.core.FloatType.float64
-
-def functionVariant(v1: hydra.core.Function): hydra.variants.FunctionVariant =
-  v1 match
-  case hydra.core.Function.elimination(v_Function_elimination__) => hydra.variants.FunctionVariant.elimination
-  case hydra.core.Function.lambda(v_Function_lambda__) => hydra.variants.FunctionVariant.lambda
 
 lazy val functionVariants: Seq[hydra.variants.FunctionVariant] = Seq(hydra.variants.FunctionVariant.elimination, hydra.variants.FunctionVariant.lambda)
 
@@ -107,29 +96,34 @@ def termVariant(v1: hydra.core.Term): hydra.variants.TermVariant =
   v1 match
   case hydra.core.Term.annotated(v_Term_annotated__) => hydra.variants.TermVariant.annotated
   case hydra.core.Term.application(v_Term_application__) => hydra.variants.TermVariant.application
+  case hydra.core.Term.cases(v_Term_cases__) => hydra.variants.TermVariant.cases
   case hydra.core.Term.either(v_Term_either__) => hydra.variants.TermVariant.either
-  case hydra.core.Term.function(v_Term_function__) => hydra.variants.TermVariant.function
+  case hydra.core.Term.lambda(v_Term_lambda__) => hydra.variants.TermVariant.lambda
   case hydra.core.Term.let(v_Term_let__) => hydra.variants.TermVariant.let
   case hydra.core.Term.list(v_Term_list__) => hydra.variants.TermVariant.list
   case hydra.core.Term.literal(v_Term_literal__) => hydra.variants.TermVariant.literal
   case hydra.core.Term.map(v_Term_map__) => hydra.variants.TermVariant.map
   case hydra.core.Term.maybe(v_Term_maybe__) => hydra.variants.TermVariant.maybe
   case hydra.core.Term.pair(v_Term_pair__) => hydra.variants.TermVariant.pair
+  case hydra.core.Term.project(v_Term_project__) => hydra.variants.TermVariant.project
   case hydra.core.Term.record(v_Term_record__) => hydra.variants.TermVariant.record
   case hydra.core.Term.set(v_Term_set__) => hydra.variants.TermVariant.set
   case hydra.core.Term.typeApplication(v_Term_typeApplication__) => hydra.variants.TermVariant.typeApplication
   case hydra.core.Term.typeLambda(v_Term_typeLambda__) => hydra.variants.TermVariant.typeLambda
   case hydra.core.Term.union(v_Term_union__) => hydra.variants.TermVariant.union
   case hydra.core.Term.unit => hydra.variants.TermVariant.unit
+  case hydra.core.Term.unwrap(v_Term_unwrap__) => hydra.variants.TermVariant.unwrap
   case hydra.core.Term.variable(v_Term_variable__) => hydra.variants.TermVariant.variable
   case hydra.core.Term.wrap(v_Term_wrap__) => hydra.variants.TermVariant.wrap
 
 lazy val termVariants: Seq[hydra.variants.TermVariant] = Seq(hydra.variants.TermVariant.annotated, hydra.variants.TermVariant.application,
-   hydra.variants.TermVariant.either, hydra.variants.TermVariant.function, hydra.variants.TermVariant.list,
-   hydra.variants.TermVariant.literal, hydra.variants.TermVariant.map, hydra.variants.TermVariant.maybe,
-   hydra.variants.TermVariant.pair, hydra.variants.TermVariant.record, hydra.variants.TermVariant.set,
+   hydra.variants.TermVariant.cases, hydra.variants.TermVariant.either, hydra.variants.TermVariant.lambda,
+   hydra.variants.TermVariant.let, hydra.variants.TermVariant.list, hydra.variants.TermVariant.literal,
+   hydra.variants.TermVariant.map, hydra.variants.TermVariant.maybe, hydra.variants.TermVariant.pair,
+   hydra.variants.TermVariant.project, hydra.variants.TermVariant.record, hydra.variants.TermVariant.set,
    hydra.variants.TermVariant.typeLambda, hydra.variants.TermVariant.typeApplication, hydra.variants.TermVariant.union,
-   hydra.variants.TermVariant.unit, hydra.variants.TermVariant.variable, hydra.variants.TermVariant.wrap)
+   hydra.variants.TermVariant.unit, hydra.variants.TermVariant.unwrap, hydra.variants.TermVariant.variable,
+   hydra.variants.TermVariant.wrap)
 
 def typeVariant(v1: hydra.core.Type): hydra.variants.TypeVariant =
   v1 match

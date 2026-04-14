@@ -187,11 +187,7 @@ evaluateVertex cx g vertexSpec record =
 findTablesInTerm :: Core.Term -> S.Set String
 findTablesInTerm term =
     Rewriting.foldOverTerm Coders.TraversalOrderPre (\names -> \t -> case t of
-      Core.TermFunction v0 -> case v0 of
-        Core.FunctionElimination v1 -> case v1 of
-          Core.EliminationRecord v2 -> Sets.insert (Core.unName (Core.projectionTypeName v2)) names
-          _ -> names
-        _ -> names
+      Core.TermProject v0 -> Sets.insert (Core.unName (Core.projectionTypeName v0)) names
       _ -> names) Sets.empty term
 
 -- | Find table names referenced in multiple terms

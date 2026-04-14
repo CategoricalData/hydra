@@ -91,10 +91,12 @@ def termVariant(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.error
       hydra.lib.eithers.map[Unit, hydra.variants.TermVariant, hydra.errors.DecodingError]((t: Unit) => hydra.variants.TermVariant.annotated)(hydra.extract.core.decodeUnit(cx)(input))),
          Tuple2("application", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[Unit, hydra.variants.TermVariant, hydra.errors.DecodingError]((t: Unit) => hydra.variants.TermVariant.application)(hydra.extract.core.decodeUnit(cx)(input))),
+         Tuple2("cases", (input: hydra.core.Term) =>
+      hydra.lib.eithers.map[Unit, hydra.variants.TermVariant, hydra.errors.DecodingError]((t: Unit) => hydra.variants.TermVariant.cases)(hydra.extract.core.decodeUnit(cx)(input))),
          Tuple2("either", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[Unit, hydra.variants.TermVariant, hydra.errors.DecodingError]((t: Unit) => hydra.variants.TermVariant.either)(hydra.extract.core.decodeUnit(cx)(input))),
-         Tuple2("function", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[Unit, hydra.variants.TermVariant, hydra.errors.DecodingError]((t: Unit) => hydra.variants.TermVariant.function)(hydra.extract.core.decodeUnit(cx)(input))),
+         Tuple2("lambda", (input: hydra.core.Term) =>
+      hydra.lib.eithers.map[Unit, hydra.variants.TermVariant, hydra.errors.DecodingError]((t: Unit) => hydra.variants.TermVariant.lambda)(hydra.extract.core.decodeUnit(cx)(input))),
          Tuple2("let", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[Unit, hydra.variants.TermVariant, hydra.errors.DecodingError]((t: Unit) => hydra.variants.TermVariant.let)(hydra.extract.core.decodeUnit(cx)(input))),
          Tuple2("list", (input: hydra.core.Term) =>
@@ -107,6 +109,8 @@ def termVariant(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.error
       hydra.lib.eithers.map[Unit, hydra.variants.TermVariant, hydra.errors.DecodingError]((t: Unit) => hydra.variants.TermVariant.maybe)(hydra.extract.core.decodeUnit(cx)(input))),
          Tuple2("pair", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[Unit, hydra.variants.TermVariant, hydra.errors.DecodingError]((t: Unit) => hydra.variants.TermVariant.pair)(hydra.extract.core.decodeUnit(cx)(input))),
+         Tuple2("project", (input: hydra.core.Term) =>
+      hydra.lib.eithers.map[Unit, hydra.variants.TermVariant, hydra.errors.DecodingError]((t: Unit) => hydra.variants.TermVariant.project)(hydra.extract.core.decodeUnit(cx)(input))),
          Tuple2("record", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[Unit, hydra.variants.TermVariant, hydra.errors.DecodingError]((t: Unit) => hydra.variants.TermVariant.record)(hydra.extract.core.decodeUnit(cx)(input))),
          Tuple2("set", (input: hydra.core.Term) =>
@@ -119,6 +123,8 @@ def termVariant(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.error
       hydra.lib.eithers.map[Unit, hydra.variants.TermVariant, hydra.errors.DecodingError]((t: Unit) => hydra.variants.TermVariant.union)(hydra.extract.core.decodeUnit(cx)(input))),
          Tuple2("unit", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[Unit, hydra.variants.TermVariant, hydra.errors.DecodingError]((t: Unit) => hydra.variants.TermVariant.unit)(hydra.extract.core.decodeUnit(cx)(input))),
+         Tuple2("unwrap", (input: hydra.core.Term) =>
+      hydra.lib.eithers.map[Unit, hydra.variants.TermVariant, hydra.errors.DecodingError]((t: Unit) => hydra.variants.TermVariant.unwrap)(hydra.extract.core.decodeUnit(cx)(input))),
          Tuple2("variable", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[Unit, hydra.variants.TermVariant, hydra.errors.DecodingError]((t: Unit) => hydra.variants.TermVariant.variable)(hydra.extract.core.decodeUnit(cx)(input))),
          Tuple2("wrap", (input: hydra.core.Term) =>

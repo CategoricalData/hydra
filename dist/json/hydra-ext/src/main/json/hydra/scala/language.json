@@ -177,7 +177,27 @@
                                 "typeName": "hydra.variants.TermVariant"}},
                             {
                               "union": {
-                                "field": {"name": "function", "term": {"unit": {}}},
+                                "field": {"name": "cases", "term": {"unit": {}}},
+                                "typeName": "hydra.variants.TermVariant"}},
+                            {
+                              "union": {
+                                "field": {"name": "lambda", "term": {"unit": {}}},
+                                "typeName": "hydra.variants.TermVariant"}},
+                            {
+                              "union": {
+                                "field": {"name": "project", "term": {"unit": {}}},
+                                "typeName": "hydra.variants.TermVariant"}},
+                            {
+                              "union": {
+                                "field": {"name": "unwrap", "term": {"unit": {}}},
+                                "typeName": "hydra.variants.TermVariant"}},
+                            {
+                              "union": {
+                                "field": {"name": "typeApplication", "term": {"unit": {}}},
+                                "typeName": "hydra.variants.TermVariant"}},
+                            {
+                              "union": {
+                                "field": {"name": "typeLambda", "term": {"unit": {}}},
                                 "typeName": "hydra.variants.TermVariant"}},
                             {
                               "union": {
@@ -320,11 +340,10 @@
                     "term": {
                       "typeLambda": {
                         "body": {
-                          "function": {
-                            "lambda": {
-                              "body": {"literal": {"boolean": true}},
-                              "domain": {"variable": "t0"},
-                              "parameter": "_"}}},
+                          "lambda": {
+                            "body": {"literal": {"boolean": true}},
+                            "domain": {"variable": "t0"},
+                            "parameter": "_"}},
                         "parameter": "t0"}},
                     "type": {
                       "type": {

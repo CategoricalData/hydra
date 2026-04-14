@@ -33,10 +33,7 @@ data HydraContext = HydraContext (M.Map Core.Name Graph.Primitive)
 hydraTermToStlc :: HydraContext -> Core.Term -> Either String Expr
 hydraTermToStlc context term = case term of
     Core.TermApplication (Core.Application t1 t2) -> App <$> toStlc t1 <*> toStlc t2
-    Core.TermFunction f -> case f of
---      Core.FunctionElimination elm -> case elm of
---        EliminationRecord (Projection tname fname) -> Right $ ExprProj
-      Core.FunctionLambda (Core.Lambda (Core.Name v) _ body) -> Abs <$> pure v <*> toStlc body
+    Core.TermLambda (Core.Lambda (Core.Name v) _ body) -> Abs <$> pure v <*> toStlc body
     Core.TermVariable name -> do
       prim <- case M.lookup name prims of
         Nothing -> Left $ "no such primitive: " ++ Core.unName name
@@ -87,7 +84,7 @@ hydraTypeSchemeToStlc (Core.TypeScheme vars body _) = do
 -- | Convert a System F term expression to a Hydra term
 toTerm :: FExpr -> Core.Term
 toTerm expr = case expr of
-  FAbs v dom e -> Core.TermFunction $ Core.FunctionLambda (Core.Lambda (Core.Name v) (Just hdom) (toTerm e))
+  FAbs v dom e -> Core.TermLambda (Core.Lambda (Core.Name v) (Just hdom) (toTerm e))
     where
       hdom = Core.typeSchemeType $ toTypeScheme dom
   -- App (App (Const Pair) (nat 0)) (nat 1)

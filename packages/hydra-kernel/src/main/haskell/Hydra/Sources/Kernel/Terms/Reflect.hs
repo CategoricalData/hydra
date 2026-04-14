@@ -3,8 +3,9 @@ module Hydra.Sources.Kernel.Terms.Reflect where
 
 -- Standard imports for kernel terms modules
 import Hydra.Kernel hiding (
-  eliminationVariant, eliminationVariants, floatTypePrecision, floatTypes, floatValueType,
-  functionVariant, functionVariants, integerTypeIsSigned, integerTypePrecision, integerTypes,
+  eliminationVariants, functionVariants,
+  floatTypePrecision, floatTypes, floatValueType,
+  integerTypeIsSigned, integerTypePrecision, integerTypes,
   integerValueType, literalType, literalTypeVariant, literalTypes, literalVariant, literalVariants,
   termVariant, termVariants, typeVariant, typeVariants)
 import Hydra.Sources.Libraries
@@ -66,12 +67,10 @@ module_ = Module ns definitions
     Just ("Reflection functions for working with term, type, and literal type variants, as well as numeric precision.")
   where
     definitions = [
-      toDefinition eliminationVariant,
       toDefinition eliminationVariants,
       toDefinition floatTypePrecision,
       toDefinition floatTypes,
       toDefinition floatValueType,
-      toDefinition functionVariant,
       toDefinition functionVariants,
       toDefinition integerTypeIsSigned,
       toDefinition integerTypePrecision,
@@ -90,21 +89,23 @@ module_ = Module ns definitions
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
-eliminationVariant :: TTermDefinition (Elimination -> EliminationVariant)
-eliminationVariant = define "eliminationVariant" $
-  doc "Find the elimination inject (constructor) for a given elimination term" $
-  match _Elimination Nothing [
-    _Elimination_record>>: constant Variants.eliminationVariantRecord,
-    _Elimination_union>>: constant Variants.eliminationVariantUnion,
-    _Elimination_wrap>>: constant Variants.eliminationVariantWrap]
-
+-- Note: kept for backward compatibility with the Hydra.Coders LanguageConstraints schema,
+-- even though hydra.core.Function and hydra.core.Elimination no longer exist as of #332.
 eliminationVariants :: TTermDefinition [EliminationVariant]
 eliminationVariants = define "eliminationVariants" $
-  doc "All elimination variants (constructors), in a canonical order" $
+  doc "All elimination variants (constructors), in a canonical order (legacy)" $
   list $ injectUnit _EliminationVariant <$> [
     _EliminationVariant_record,
     _EliminationVariant_union,
     _EliminationVariant_wrap]
+
+-- Note: kept for backward compatibility with the Hydra.Coders LanguageConstraints schema.
+functionVariants :: TTermDefinition [FunctionVariant]
+functionVariants = define "functionVariants" $
+  doc "All function variants (constructors), in a canonical order (legacy)" $
+  list $ injectUnit _FunctionVariant <$> [
+    _FunctionVariant_elimination,
+    _FunctionVariant_lambda]
 
 floatTypePrecision :: TTermDefinition (FloatType -> Precision)
 floatTypePrecision = define "floatTypePrecision" $
@@ -129,20 +130,6 @@ floatValueType = define "floatValueType" $
     _FloatValue_bigfloat>>: constant Core.floatTypeBigfloat,
     _FloatValue_float32>>: constant Core.floatTypeFloat32,
     _FloatValue_float64>>: constant Core.floatTypeFloat64]
-
-functionVariant :: TTermDefinition (Function -> FunctionVariant)
-functionVariant = define "functionVariant" $
-  doc "Find the function inject (constructor) for a given function" $
-  match _Function Nothing [
-    _Function_elimination>>: constant Variants.functionVariantElimination,
-    _Function_lambda>>: constant Variants.functionVariantLambda]
-
-functionVariants :: TTermDefinition [FunctionVariant]
-functionVariants = define "functionVariants" $
-  doc "All function variants (constructors), in a canonical order" $
-  list $ injectUnit _FunctionVariant <$> [
-    _FunctionVariant_elimination,
-    _FunctionVariant_lambda]
 
 integerTypeIsSigned :: TTermDefinition (IntegerType -> Bool)
 integerTypeIsSigned = define "integerTypeIsSigned" $
@@ -253,20 +240,23 @@ termVariant = define "termVariant" $
   match _Term Nothing [
     _Term_annotated>>: constant Variants.termVariantAnnotated,
     _Term_application>>: constant Variants.termVariantApplication,
+    _Term_cases>>: constant Variants.termVariantCases,
     _Term_either>>: constant Variants.termVariantEither,
-    _Term_function>>: constant Variants.termVariantFunction,
+    _Term_lambda>>: constant Variants.termVariantLambda,
     _Term_let>>: constant Variants.termVariantLet,
     _Term_list>>: constant Variants.termVariantList,
     _Term_literal>>: constant Variants.termVariantLiteral,
     _Term_map>>: constant Variants.termVariantMap,
     _Term_maybe>>: constant Variants.termVariantMaybe,
     _Term_pair>>: constant Variants.termVariantPair,
+    _Term_project>>: constant Variants.termVariantProject,
     _Term_record>>: constant Variants.termVariantRecord,
     _Term_set>>: constant Variants.termVariantSet,
     _Term_typeApplication>>: constant Variants.termVariantTypeApplication,
     _Term_typeLambda>>: constant Variants.termVariantTypeLambda,
     _Term_union>>: constant Variants.termVariantUnion,
     _Term_unit>>: constant Variants.termVariantUnit,
+    _Term_unwrap>>: constant Variants.termVariantUnwrap,
     _Term_variable>>: constant Variants.termVariantVariable,
     _Term_wrap>>: constant Variants.termVariantWrap]
 
@@ -276,19 +266,23 @@ termVariants = define "termVariants" $
   list $ injectUnit _TermVariant <$> [
     _TermVariant_annotated,
     _TermVariant_application,
+    _TermVariant_cases,
     _TermVariant_either,
-    _TermVariant_function,
+    _TermVariant_lambda,
+    _TermVariant_let,
     _TermVariant_list,
     _TermVariant_literal,
     _TermVariant_map,
     _TermVariant_maybe,
     _TermVariant_pair,
+    _TermVariant_project,
     _TermVariant_record,
     _TermVariant_set,
     _TermVariant_typeLambda,
     _TermVariant_typeApplication,
     _TermVariant_union,
     _TermVariant_unit,
+    _TermVariant_unwrap,
     _TermVariant_variable,
     _TermVariant_wrap]
 

@@ -18,9 +18,6 @@ import hydra.lib.sets
 def name(x: hydra.core.Name) -> hydra.core.Term:
     return cast(hydra.core.Term, hydra.core.TermWrap(hydra.core.WrappedTerm(hydra.core.Name("hydra.core.Name"), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(x.value)))))))
 
-def projection(x: hydra.core.Projection) -> hydra.core.Term:
-    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.Projection"), (hydra.core.Field(hydra.core.Name("typeName"), name(x.type_name)), hydra.core.Field(hydra.core.Name("field"), name(x.field))))))
-
 def float_type(v1: hydra.core.FloatType) -> hydra.core.Term:
     match v1:
         case hydra.core.FloatType.BIGFLOAT:
@@ -156,6 +153,9 @@ def literal(v1: hydra.core.Literal) -> hydra.core.Term:
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
+def projection(x: hydra.core.Projection) -> hydra.core.Term:
+    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.Projection"), (hydra.core.Field(hydra.core.Name("typeName"), name(x.type_name)), hydra.core.Field(hydra.core.Name("field"), name(x.field))))))
+
 def annotated_term(x: hydra.core.AnnotatedTerm) -> hydra.core.Term:
     return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.AnnotatedTerm"), (hydra.core.Field(hydra.core.Name("body"), term(x.body)), hydra.core.Field(hydra.core.Name("annotation"), cast(hydra.core.Term, hydra.core.TermMap(hydra.lib.maps.bimap((lambda x1: name(x1)), (lambda x1: term(x1)), x.annotation))))))))
 
@@ -177,20 +177,6 @@ def case_statement(x: hydra.core.CaseStatement) -> hydra.core.Term:
 def either_type(x: hydra.core.EitherType) -> hydra.core.Term:
     return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.EitherType"), (hydra.core.Field(hydra.core.Name("left"), type(x.left)), hydra.core.Field(hydra.core.Name("right"), type(x.right))))))
 
-def elimination(v1: hydra.core.Elimination) -> hydra.core.Term:
-    match v1:
-        case hydra.core.EliminationRecord(value=y):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Elimination"), hydra.core.Field(hydra.core.Name("record"), projection(y)))))
-
-        case hydra.core.EliminationUnion(value=y2):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Elimination"), hydra.core.Field(hydra.core.Name("union"), case_statement(y2)))))
-
-        case hydra.core.EliminationWrap(value=y3):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Elimination"), hydra.core.Field(hydra.core.Name("wrap"), name(y3)))))
-
-        case _:
-            raise AssertionError("Unreachable: all variants handled")
-
 def field(x: hydra.core.Field) -> hydra.core.Term:
     return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.Field"), (hydra.core.Field(hydra.core.Name("name"), name(x.name)), hydra.core.Field(hydra.core.Name("term"), term(x.term))))))
 
@@ -199,17 +185,6 @@ def field_type(x: hydra.core.FieldType) -> hydra.core.Term:
 
 def forall_type(x: hydra.core.ForallType) -> hydra.core.Term:
     return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.ForallType"), (hydra.core.Field(hydra.core.Name("parameter"), name(x.parameter)), hydra.core.Field(hydra.core.Name("body"), type(x.body))))))
-
-def function(v1: hydra.core.Function) -> hydra.core.Term:
-    match v1:
-        case hydra.core.FunctionElimination(value=y):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Function"), hydra.core.Field(hydra.core.Name("elimination"), elimination(y)))))
-
-        case hydra.core.FunctionLambda(value=y2):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Function"), hydra.core.Field(hydra.core.Name("lambda"), lambda_(y2)))))
-
-        case _:
-            raise AssertionError("Unreachable: all variants handled")
 
 def function_type(x: hydra.core.FunctionType) -> hydra.core.Term:
     return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.FunctionType"), (hydra.core.Field(hydra.core.Name("domain"), type(x.domain)), hydra.core.Field(hydra.core.Name("codomain"), type(x.codomain))))))
@@ -240,53 +215,62 @@ def term(v1: hydra.core.Term) -> hydra.core.Term:
         case hydra.core.TermApplication(value=y2):
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("application"), application(y2)))))
 
-        case hydra.core.TermEither(value=y3):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("either"), cast(hydra.core.Term, hydra.core.TermEither(hydra.lib.eithers.bimap((lambda x1: term(x1)), (lambda x1: term(x1)), y3)))))))
+        case hydra.core.TermCases(value=y3):
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("cases"), case_statement(y3)))))
 
-        case hydra.core.TermFunction(value=y4):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("function"), function(y4)))))
+        case hydra.core.TermEither(value=y4):
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("either"), cast(hydra.core.Term, hydra.core.TermEither(hydra.lib.eithers.bimap((lambda x1: term(x1)), (lambda x1: term(x1)), y4)))))))
 
-        case hydra.core.TermLet(value=y5):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("let"), let(y5)))))
+        case hydra.core.TermLambda(value=y5):
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("lambda"), lambda_(y5)))))
 
-        case hydra.core.TermList(value=y6):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("list"), cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map((lambda x1: term(x1)), y6)))))))
+        case hydra.core.TermLet(value=y6):
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("let"), let(y6)))))
 
-        case hydra.core.TermLiteral(value=y7):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("literal"), literal(y7)))))
+        case hydra.core.TermList(value=y7):
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("list"), cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map((lambda x1: term(x1)), y7)))))))
 
-        case hydra.core.TermMap(value=y8):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("map"), cast(hydra.core.Term, hydra.core.TermMap(hydra.lib.maps.bimap((lambda x1: term(x1)), (lambda x1: term(x1)), y8)))))))
+        case hydra.core.TermLiteral(value=y8):
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("literal"), literal(y8)))))
 
-        case hydra.core.TermMaybe(value=y9):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("maybe"), cast(hydra.core.Term, hydra.core.TermMaybe(hydra.lib.maybes.map((lambda x1: term(x1)), y9)))))))
+        case hydra.core.TermMap(value=y9):
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("map"), cast(hydra.core.Term, hydra.core.TermMap(hydra.lib.maps.bimap((lambda x1: term(x1)), (lambda x1: term(x1)), y9)))))))
 
-        case hydra.core.TermPair(value=y10):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("pair"), cast(hydra.core.Term, hydra.core.TermPair(hydra.lib.pairs.bimap((lambda x1: term(x1)), (lambda x1: term(x1)), y10)))))))
+        case hydra.core.TermMaybe(value=y10):
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("maybe"), cast(hydra.core.Term, hydra.core.TermMaybe(hydra.lib.maybes.map((lambda x1: term(x1)), y10)))))))
 
-        case hydra.core.TermRecord(value=y11):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("record"), record(y11)))))
+        case hydra.core.TermPair(value=y11):
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("pair"), cast(hydra.core.Term, hydra.core.TermPair(hydra.lib.pairs.bimap((lambda x1: term(x1)), (lambda x1: term(x1)), y11)))))))
 
-        case hydra.core.TermSet(value=y12):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("set"), cast(hydra.core.Term, hydra.core.TermSet(hydra.lib.sets.map((lambda x1: term(x1)), y12)))))))
+        case hydra.core.TermProject(value=y12):
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("project"), projection(y12)))))
 
-        case hydra.core.TermTypeApplication(value=y13):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("typeApplication"), type_application_term(y13)))))
+        case hydra.core.TermRecord(value=y13):
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("record"), record(y13)))))
 
-        case hydra.core.TermTypeLambda(value=y14):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("typeLambda"), type_lambda(y14)))))
+        case hydra.core.TermSet(value=y14):
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("set"), cast(hydra.core.Term, hydra.core.TermSet(hydra.lib.sets.map((lambda x1: term(x1)), y14)))))))
 
-        case hydra.core.TermUnion(value=y15):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("union"), injection(y15)))))
+        case hydra.core.TermTypeApplication(value=y15):
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("typeApplication"), type_application_term(y15)))))
+
+        case hydra.core.TermTypeLambda(value=y16):
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("typeLambda"), type_lambda(y16)))))
+
+        case hydra.core.TermUnion(value=y17):
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("union"), injection(y17)))))
 
         case hydra.core.TermUnit():
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("unit"), cast(hydra.core.Term, hydra.core.TermUnit())))))
 
-        case hydra.core.TermVariable(value=y17):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("variable"), name(y17)))))
+        case hydra.core.TermUnwrap(value=y19):
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("unwrap"), name(y19)))))
 
-        case hydra.core.TermWrap(value=y18):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("wrap"), wrapped_term(y18)))))
+        case hydra.core.TermVariable(value=y20):
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("variable"), name(y20)))))
+
+        case hydra.core.TermWrap(value=y21):
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("wrap"), wrapped_term(y21)))))
 
         case _:
             raise AssertionError("Unreachable: all variants handled")

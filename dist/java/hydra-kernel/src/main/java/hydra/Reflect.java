@@ -6,25 +6,6 @@ package hydra;
  * Reflection functions for working with term, type, and literal type variants, as well as numeric precision.
  */
 public interface Reflect {
-  static hydra.variants.EliminationVariant eliminationVariant(hydra.core.Elimination v1) {
-    return (v1).accept(new hydra.core.Elimination.PartialVisitor<>() {
-      @Override
-      public hydra.variants.EliminationVariant visit(hydra.core.Elimination.Record ignored) {
-        return new hydra.variants.EliminationVariant.Record();
-      }
-
-      @Override
-      public hydra.variants.EliminationVariant visit(hydra.core.Elimination.Union ignored) {
-        return new hydra.variants.EliminationVariant.Union();
-      }
-
-      @Override
-      public hydra.variants.EliminationVariant visit(hydra.core.Elimination.Wrap ignored) {
-        return new hydra.variants.EliminationVariant.Wrap();
-      }
-    });
-  }
-
   static java.util.List<hydra.variants.EliminationVariant> eliminationVariants() {
     return java.util.Arrays.asList(
       new hydra.variants.EliminationVariant.Record(),
@@ -73,20 +54,6 @@ public interface Reflect {
       @Override
       public hydra.core.FloatType visit(hydra.core.FloatValue.Float64 ignored) {
         return new hydra.core.FloatType.Float64();
-      }
-    });
-  }
-
-  static hydra.variants.FunctionVariant functionVariant(hydra.core.Function v1) {
-    return (v1).accept(new hydra.core.Function.PartialVisitor<>() {
-      @Override
-      public hydra.variants.FunctionVariant visit(hydra.core.Function.Elimination ignored) {
-        return new hydra.variants.FunctionVariant.Elimination();
-      }
-
-      @Override
-      public hydra.variants.FunctionVariant visit(hydra.core.Function.Lambda ignored) {
-        return new hydra.variants.FunctionVariant.Lambda();
       }
     });
   }
@@ -355,13 +322,18 @@ public interface Reflect {
       }
 
       @Override
+      public hydra.variants.TermVariant visit(hydra.core.Term.Cases ignored) {
+        return new hydra.variants.TermVariant.Cases();
+      }
+
+      @Override
       public hydra.variants.TermVariant visit(hydra.core.Term.Either ignored) {
         return new hydra.variants.TermVariant.Either();
       }
 
       @Override
-      public hydra.variants.TermVariant visit(hydra.core.Term.Function ignored) {
-        return new hydra.variants.TermVariant.Function();
+      public hydra.variants.TermVariant visit(hydra.core.Term.Lambda ignored) {
+        return new hydra.variants.TermVariant.Lambda();
       }
 
       @Override
@@ -395,6 +367,11 @@ public interface Reflect {
       }
 
       @Override
+      public hydra.variants.TermVariant visit(hydra.core.Term.Project ignored) {
+        return new hydra.variants.TermVariant.Project();
+      }
+
+      @Override
       public hydra.variants.TermVariant visit(hydra.core.Term.Record ignored) {
         return new hydra.variants.TermVariant.Record();
       }
@@ -425,6 +402,11 @@ public interface Reflect {
       }
 
       @Override
+      public hydra.variants.TermVariant visit(hydra.core.Term.Unwrap ignored) {
+        return new hydra.variants.TermVariant.Unwrap();
+      }
+
+      @Override
       public hydra.variants.TermVariant visit(hydra.core.Term.Variable ignored) {
         return new hydra.variants.TermVariant.Variable();
       }
@@ -440,19 +422,23 @@ public interface Reflect {
     return java.util.Arrays.asList(
       new hydra.variants.TermVariant.Annotated(),
       new hydra.variants.TermVariant.Application(),
+      new hydra.variants.TermVariant.Cases(),
       new hydra.variants.TermVariant.Either(),
-      new hydra.variants.TermVariant.Function(),
+      new hydra.variants.TermVariant.Lambda(),
+      new hydra.variants.TermVariant.Let(),
       new hydra.variants.TermVariant.List(),
       new hydra.variants.TermVariant.Literal(),
       new hydra.variants.TermVariant.Map(),
       new hydra.variants.TermVariant.Maybe(),
       new hydra.variants.TermVariant.Pair(),
+      new hydra.variants.TermVariant.Project(),
       new hydra.variants.TermVariant.Record(),
       new hydra.variants.TermVariant.Set(),
       new hydra.variants.TermVariant.TypeLambda(),
       new hydra.variants.TermVariant.TypeApplication(),
       new hydra.variants.TermVariant.Union(),
       new hydra.variants.TermVariant.Unit(),
+      new hydra.variants.TermVariant.Unwrap(),
       new hydra.variants.TermVariant.Variable(),
       new hydra.variants.TermVariant.Wrap());
   }

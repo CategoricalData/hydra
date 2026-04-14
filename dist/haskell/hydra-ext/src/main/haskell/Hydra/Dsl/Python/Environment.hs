@@ -29,17 +29,17 @@ pyGraph graph metadata =
 pyGraphGraph :: Phantoms.TTerm Environment.PyGraph -> Phantoms.TTerm Graph.Graph
 pyGraphGraph x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PyGraph"),
-        Core.projectionField = (Core.Name "graph")})))),
+        Core.projectionField = (Core.Name "graph")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 pyGraphMetadata :: Phantoms.TTerm Environment.PyGraph -> Phantoms.TTerm Environment.PythonModuleMetadata
 pyGraphMetadata x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PyGraph"),
-        Core.projectionField = (Core.Name "metadata")})))),
+        Core.projectionField = (Core.Name "metadata")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 pyGraphWithGraph :: Phantoms.TTerm Environment.PyGraph -> Phantoms.TTerm Graph.Graph -> Phantoms.TTerm Environment.PyGraph
@@ -53,9 +53,9 @@ pyGraphWithGraph original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "metadata"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PyGraph"),
-              Core.projectionField = (Core.Name "metadata")})))),
+              Core.projectionField = (Core.Name "metadata")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 pyGraphWithMetadata :: Phantoms.TTerm Environment.PyGraph -> Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm Environment.PyGraph
@@ -66,9 +66,9 @@ pyGraphWithMetadata original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "graph"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PyGraph"),
-              Core.projectionField = (Core.Name "graph")})))),
+              Core.projectionField = (Core.Name "graph")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "metadata"),
@@ -104,57 +104,57 @@ pythonEnvironment namespaces boundTypeVariables graph nullaryBindings version sk
 pythonEnvironmentBoundTypeVariables :: Phantoms.TTerm Environment.PythonEnvironment -> Phantoms.TTerm ([Core.Name], (M.Map Core.Name Syntax.Name))
 pythonEnvironmentBoundTypeVariables x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonEnvironment"),
-        Core.projectionField = (Core.Name "boundTypeVariables")})))),
+        Core.projectionField = (Core.Name "boundTypeVariables")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 pythonEnvironmentGraph :: Phantoms.TTerm Environment.PythonEnvironment -> Phantoms.TTerm Graph.Graph
 pythonEnvironmentGraph x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonEnvironment"),
-        Core.projectionField = (Core.Name "graph")})))),
+        Core.projectionField = (Core.Name "graph")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 pythonEnvironmentInlineVariables :: Phantoms.TTerm Environment.PythonEnvironment -> Phantoms.TTerm (S.Set Core.Name)
 pythonEnvironmentInlineVariables x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonEnvironment"),
-        Core.projectionField = (Core.Name "inlineVariables")})))),
+        Core.projectionField = (Core.Name "inlineVariables")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 pythonEnvironmentNamespaces :: Phantoms.TTerm Environment.PythonEnvironment -> Phantoms.TTerm (Packaging.Namespaces Syntax.DottedName)
 pythonEnvironmentNamespaces x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonEnvironment"),
-        Core.projectionField = (Core.Name "namespaces")})))),
+        Core.projectionField = (Core.Name "namespaces")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 pythonEnvironmentNullaryBindings :: Phantoms.TTerm Environment.PythonEnvironment -> Phantoms.TTerm (S.Set Core.Name)
 pythonEnvironmentNullaryBindings x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonEnvironment"),
-        Core.projectionField = (Core.Name "nullaryBindings")})))),
+        Core.projectionField = (Core.Name "nullaryBindings")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 pythonEnvironmentSkipCasts :: Phantoms.TTerm Environment.PythonEnvironment -> Phantoms.TTerm Bool
 pythonEnvironmentSkipCasts x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonEnvironment"),
-        Core.projectionField = (Core.Name "skipCasts")})))),
+        Core.projectionField = (Core.Name "skipCasts")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 pythonEnvironmentVersion :: Phantoms.TTerm Environment.PythonEnvironment -> Phantoms.TTerm Environment.PythonVersion
 pythonEnvironmentVersion x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonEnvironment"),
-        Core.projectionField = (Core.Name "version")})))),
+        Core.projectionField = (Core.Name "version")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 pythonEnvironmentWithBoundTypeVariables :: Phantoms.TTerm Environment.PythonEnvironment -> Phantoms.TTerm ([Core.Name], (M.Map Core.Name Syntax.Name)) -> Phantoms.TTerm Environment.PythonEnvironment
@@ -165,9 +165,9 @@ pythonEnvironmentWithBoundTypeVariables original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "namespaces"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonEnvironment"),
-              Core.projectionField = (Core.Name "namespaces")})))),
+              Core.projectionField = (Core.Name "namespaces")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "boundTypeVariables"),
@@ -175,37 +175,37 @@ pythonEnvironmentWithBoundTypeVariables original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "graph"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonEnvironment"),
-              Core.projectionField = (Core.Name "graph")})))),
+              Core.projectionField = (Core.Name "graph")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "nullaryBindings"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonEnvironment"),
-              Core.projectionField = (Core.Name "nullaryBindings")})))),
+              Core.projectionField = (Core.Name "nullaryBindings")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "version"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonEnvironment"),
-              Core.projectionField = (Core.Name "version")})))),
+              Core.projectionField = (Core.Name "version")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "skipCasts"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonEnvironment"),
-              Core.projectionField = (Core.Name "skipCasts")})))),
+              Core.projectionField = (Core.Name "skipCasts")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "inlineVariables"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonEnvironment"),
-              Core.projectionField = (Core.Name "inlineVariables")})))),
+              Core.projectionField = (Core.Name "inlineVariables")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 pythonEnvironmentWithGraph :: Phantoms.TTerm Environment.PythonEnvironment -> Phantoms.TTerm Graph.Graph -> Phantoms.TTerm Environment.PythonEnvironment
@@ -216,16 +216,16 @@ pythonEnvironmentWithGraph original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "namespaces"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonEnvironment"),
-              Core.projectionField = (Core.Name "namespaces")})))),
+              Core.projectionField = (Core.Name "namespaces")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "boundTypeVariables"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonEnvironment"),
-              Core.projectionField = (Core.Name "boundTypeVariables")})))),
+              Core.projectionField = (Core.Name "boundTypeVariables")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "graph"),
@@ -233,30 +233,30 @@ pythonEnvironmentWithGraph original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "nullaryBindings"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonEnvironment"),
-              Core.projectionField = (Core.Name "nullaryBindings")})))),
+              Core.projectionField = (Core.Name "nullaryBindings")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "version"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonEnvironment"),
-              Core.projectionField = (Core.Name "version")})))),
+              Core.projectionField = (Core.Name "version")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "skipCasts"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonEnvironment"),
-              Core.projectionField = (Core.Name "skipCasts")})))),
+              Core.projectionField = (Core.Name "skipCasts")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "inlineVariables"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonEnvironment"),
-              Core.projectionField = (Core.Name "inlineVariables")})))),
+              Core.projectionField = (Core.Name "inlineVariables")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 pythonEnvironmentWithInlineVariables :: Phantoms.TTerm Environment.PythonEnvironment -> Phantoms.TTerm (S.Set Core.Name) -> Phantoms.TTerm Environment.PythonEnvironment
@@ -267,44 +267,44 @@ pythonEnvironmentWithInlineVariables original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "namespaces"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonEnvironment"),
-              Core.projectionField = (Core.Name "namespaces")})))),
+              Core.projectionField = (Core.Name "namespaces")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "boundTypeVariables"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonEnvironment"),
-              Core.projectionField = (Core.Name "boundTypeVariables")})))),
+              Core.projectionField = (Core.Name "boundTypeVariables")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "graph"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonEnvironment"),
-              Core.projectionField = (Core.Name "graph")})))),
+              Core.projectionField = (Core.Name "graph")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "nullaryBindings"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonEnvironment"),
-              Core.projectionField = (Core.Name "nullaryBindings")})))),
+              Core.projectionField = (Core.Name "nullaryBindings")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "version"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonEnvironment"),
-              Core.projectionField = (Core.Name "version")})))),
+              Core.projectionField = (Core.Name "version")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "skipCasts"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonEnvironment"),
-              Core.projectionField = (Core.Name "skipCasts")})))),
+              Core.projectionField = (Core.Name "skipCasts")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "inlineVariables"),
@@ -321,44 +321,44 @@ pythonEnvironmentWithNamespaces original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "boundTypeVariables"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonEnvironment"),
-              Core.projectionField = (Core.Name "boundTypeVariables")})))),
+              Core.projectionField = (Core.Name "boundTypeVariables")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "graph"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonEnvironment"),
-              Core.projectionField = (Core.Name "graph")})))),
+              Core.projectionField = (Core.Name "graph")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "nullaryBindings"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonEnvironment"),
-              Core.projectionField = (Core.Name "nullaryBindings")})))),
+              Core.projectionField = (Core.Name "nullaryBindings")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "version"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonEnvironment"),
-              Core.projectionField = (Core.Name "version")})))),
+              Core.projectionField = (Core.Name "version")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "skipCasts"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonEnvironment"),
-              Core.projectionField = (Core.Name "skipCasts")})))),
+              Core.projectionField = (Core.Name "skipCasts")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "inlineVariables"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonEnvironment"),
-              Core.projectionField = (Core.Name "inlineVariables")})))),
+              Core.projectionField = (Core.Name "inlineVariables")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 pythonEnvironmentWithNullaryBindings :: Phantoms.TTerm Environment.PythonEnvironment -> Phantoms.TTerm (S.Set Core.Name) -> Phantoms.TTerm Environment.PythonEnvironment
@@ -369,23 +369,23 @@ pythonEnvironmentWithNullaryBindings original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "namespaces"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonEnvironment"),
-              Core.projectionField = (Core.Name "namespaces")})))),
+              Core.projectionField = (Core.Name "namespaces")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "boundTypeVariables"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonEnvironment"),
-              Core.projectionField = (Core.Name "boundTypeVariables")})))),
+              Core.projectionField = (Core.Name "boundTypeVariables")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "graph"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonEnvironment"),
-              Core.projectionField = (Core.Name "graph")})))),
+              Core.projectionField = (Core.Name "graph")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "nullaryBindings"),
@@ -393,23 +393,23 @@ pythonEnvironmentWithNullaryBindings original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "version"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonEnvironment"),
-              Core.projectionField = (Core.Name "version")})))),
+              Core.projectionField = (Core.Name "version")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "skipCasts"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonEnvironment"),
-              Core.projectionField = (Core.Name "skipCasts")})))),
+              Core.projectionField = (Core.Name "skipCasts")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "inlineVariables"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonEnvironment"),
-              Core.projectionField = (Core.Name "inlineVariables")})))),
+              Core.projectionField = (Core.Name "inlineVariables")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 pythonEnvironmentWithSkipCasts :: Phantoms.TTerm Environment.PythonEnvironment -> Phantoms.TTerm Bool -> Phantoms.TTerm Environment.PythonEnvironment
@@ -420,37 +420,37 @@ pythonEnvironmentWithSkipCasts original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "namespaces"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonEnvironment"),
-              Core.projectionField = (Core.Name "namespaces")})))),
+              Core.projectionField = (Core.Name "namespaces")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "boundTypeVariables"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonEnvironment"),
-              Core.projectionField = (Core.Name "boundTypeVariables")})))),
+              Core.projectionField = (Core.Name "boundTypeVariables")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "graph"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonEnvironment"),
-              Core.projectionField = (Core.Name "graph")})))),
+              Core.projectionField = (Core.Name "graph")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "nullaryBindings"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonEnvironment"),
-              Core.projectionField = (Core.Name "nullaryBindings")})))),
+              Core.projectionField = (Core.Name "nullaryBindings")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "version"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonEnvironment"),
-              Core.projectionField = (Core.Name "version")})))),
+              Core.projectionField = (Core.Name "version")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "skipCasts"),
@@ -458,9 +458,9 @@ pythonEnvironmentWithSkipCasts original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "inlineVariables"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonEnvironment"),
-              Core.projectionField = (Core.Name "inlineVariables")})))),
+              Core.projectionField = (Core.Name "inlineVariables")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 pythonEnvironmentWithVersion :: Phantoms.TTerm Environment.PythonEnvironment -> Phantoms.TTerm Environment.PythonVersion -> Phantoms.TTerm Environment.PythonEnvironment
@@ -471,30 +471,30 @@ pythonEnvironmentWithVersion original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "namespaces"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonEnvironment"),
-              Core.projectionField = (Core.Name "namespaces")})))),
+              Core.projectionField = (Core.Name "namespaces")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "boundTypeVariables"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonEnvironment"),
-              Core.projectionField = (Core.Name "boundTypeVariables")})))),
+              Core.projectionField = (Core.Name "boundTypeVariables")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "graph"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonEnvironment"),
-              Core.projectionField = (Core.Name "graph")})))),
+              Core.projectionField = (Core.Name "graph")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "nullaryBindings"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonEnvironment"),
-              Core.projectionField = (Core.Name "nullaryBindings")})))),
+              Core.projectionField = (Core.Name "nullaryBindings")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "version"),
@@ -502,16 +502,16 @@ pythonEnvironmentWithVersion original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "skipCasts"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonEnvironment"),
-              Core.projectionField = (Core.Name "skipCasts")})))),
+              Core.projectionField = (Core.Name "skipCasts")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "inlineVariables"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonEnvironment"),
-              Core.projectionField = (Core.Name "inlineVariables")})))),
+              Core.projectionField = (Core.Name "inlineVariables")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 pythonModuleMetadata :: Phantoms.TTerm (Packaging.Namespaces Syntax.DottedName) -> Phantoms.TTerm (S.Set Core.Name) -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Environment.PythonModuleMetadata
@@ -589,177 +589,177 @@ pythonModuleMetadata namespaces typeVariables usesAnnotated usesCallable usesCas
 pythonModuleMetadataNamespaces :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm (Packaging.Namespaces Syntax.DottedName)
 pythonModuleMetadataNamespaces x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-        Core.projectionField = (Core.Name "namespaces")})))),
+        Core.projectionField = (Core.Name "namespaces")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 pythonModuleMetadataTypeVariables :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm (S.Set Core.Name)
 pythonModuleMetadataTypeVariables x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-        Core.projectionField = (Core.Name "typeVariables")})))),
+        Core.projectionField = (Core.Name "typeVariables")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 pythonModuleMetadataUsesAnnotated :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm Bool
 pythonModuleMetadataUsesAnnotated x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-        Core.projectionField = (Core.Name "usesAnnotated")})))),
+        Core.projectionField = (Core.Name "usesAnnotated")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 pythonModuleMetadataUsesCallable :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm Bool
 pythonModuleMetadataUsesCallable x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-        Core.projectionField = (Core.Name "usesCallable")})))),
+        Core.projectionField = (Core.Name "usesCallable")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 pythonModuleMetadataUsesCast :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm Bool
 pythonModuleMetadataUsesCast x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-        Core.projectionField = (Core.Name "usesCast")})))),
+        Core.projectionField = (Core.Name "usesCast")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 pythonModuleMetadataUsesDataclass :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm Bool
 pythonModuleMetadataUsesDataclass x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-        Core.projectionField = (Core.Name "usesDataclass")})))),
+        Core.projectionField = (Core.Name "usesDataclass")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 pythonModuleMetadataUsesDecimal :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm Bool
 pythonModuleMetadataUsesDecimal x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-        Core.projectionField = (Core.Name "usesDecimal")})))),
+        Core.projectionField = (Core.Name "usesDecimal")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 pythonModuleMetadataUsesEither :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm Bool
 pythonModuleMetadataUsesEither x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-        Core.projectionField = (Core.Name "usesEither")})))),
+        Core.projectionField = (Core.Name "usesEither")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 pythonModuleMetadataUsesEnum :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm Bool
 pythonModuleMetadataUsesEnum x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-        Core.projectionField = (Core.Name "usesEnum")})))),
+        Core.projectionField = (Core.Name "usesEnum")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 pythonModuleMetadataUsesFrozenDict :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm Bool
 pythonModuleMetadataUsesFrozenDict x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-        Core.projectionField = (Core.Name "usesFrozenDict")})))),
+        Core.projectionField = (Core.Name "usesFrozenDict")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 pythonModuleMetadataUsesFrozenList :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm Bool
 pythonModuleMetadataUsesFrozenList x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-        Core.projectionField = (Core.Name "usesFrozenList")})))),
+        Core.projectionField = (Core.Name "usesFrozenList")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 pythonModuleMetadataUsesGeneric :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm Bool
 pythonModuleMetadataUsesGeneric x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-        Core.projectionField = (Core.Name "usesGeneric")})))),
+        Core.projectionField = (Core.Name "usesGeneric")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 pythonModuleMetadataUsesJust :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm Bool
 pythonModuleMetadataUsesJust x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-        Core.projectionField = (Core.Name "usesJust")})))),
+        Core.projectionField = (Core.Name "usesJust")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 pythonModuleMetadataUsesLeft :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm Bool
 pythonModuleMetadataUsesLeft x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-        Core.projectionField = (Core.Name "usesLeft")})))),
+        Core.projectionField = (Core.Name "usesLeft")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 pythonModuleMetadataUsesLruCache :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm Bool
 pythonModuleMetadataUsesLruCache x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-        Core.projectionField = (Core.Name "usesLruCache")})))),
+        Core.projectionField = (Core.Name "usesLruCache")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 pythonModuleMetadataUsesMaybe :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm Bool
 pythonModuleMetadataUsesMaybe x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-        Core.projectionField = (Core.Name "usesMaybe")})))),
+        Core.projectionField = (Core.Name "usesMaybe")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 pythonModuleMetadataUsesName :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm Bool
 pythonModuleMetadataUsesName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-        Core.projectionField = (Core.Name "usesName")})))),
+        Core.projectionField = (Core.Name "usesName")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 pythonModuleMetadataUsesNode :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm Bool
 pythonModuleMetadataUsesNode x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-        Core.projectionField = (Core.Name "usesNode")})))),
+        Core.projectionField = (Core.Name "usesNode")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 pythonModuleMetadataUsesNothing :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm Bool
 pythonModuleMetadataUsesNothing x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-        Core.projectionField = (Core.Name "usesNothing")})))),
+        Core.projectionField = (Core.Name "usesNothing")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 pythonModuleMetadataUsesRight :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm Bool
 pythonModuleMetadataUsesRight x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-        Core.projectionField = (Core.Name "usesRight")})))),
+        Core.projectionField = (Core.Name "usesRight")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 pythonModuleMetadataUsesTypeAlias :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm Bool
 pythonModuleMetadataUsesTypeAlias x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-        Core.projectionField = (Core.Name "usesTypeAlias")})))),
+        Core.projectionField = (Core.Name "usesTypeAlias")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 pythonModuleMetadataUsesTypeVar :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm Bool
 pythonModuleMetadataUsesTypeVar x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-        Core.projectionField = (Core.Name "usesTypeVar")})))),
+        Core.projectionField = (Core.Name "usesTypeVar")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 pythonModuleMetadataWithNamespaces :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm (Packaging.Namespaces Syntax.DottedName) -> Phantoms.TTerm Environment.PythonModuleMetadata
@@ -773,149 +773,149 @@ pythonModuleMetadataWithNamespaces original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "typeVariables"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "typeVariables")})))),
+              Core.projectionField = (Core.Name "typeVariables")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesAnnotated"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesAnnotated")})))),
+              Core.projectionField = (Core.Name "usesAnnotated")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesCallable"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesCallable")})))),
+              Core.projectionField = (Core.Name "usesCallable")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesCast"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesCast")})))),
+              Core.projectionField = (Core.Name "usesCast")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesLruCache"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesLruCache")})))),
+              Core.projectionField = (Core.Name "usesLruCache")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesTypeAlias"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesTypeAlias")})))),
+              Core.projectionField = (Core.Name "usesTypeAlias")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesDataclass"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesDataclass")})))),
+              Core.projectionField = (Core.Name "usesDataclass")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesDecimal"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesDecimal")})))),
+              Core.projectionField = (Core.Name "usesDecimal")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesEither"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesEither")})))),
+              Core.projectionField = (Core.Name "usesEither")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesEnum"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesEnum")})))),
+              Core.projectionField = (Core.Name "usesEnum")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesFrozenDict"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesFrozenDict")})))),
+              Core.projectionField = (Core.Name "usesFrozenDict")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesFrozenList"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesFrozenList")})))),
+              Core.projectionField = (Core.Name "usesFrozenList")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesGeneric"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesGeneric")})))),
+              Core.projectionField = (Core.Name "usesGeneric")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesJust"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesJust")})))),
+              Core.projectionField = (Core.Name "usesJust")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesLeft"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesLeft")})))),
+              Core.projectionField = (Core.Name "usesLeft")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesMaybe"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesMaybe")})))),
+              Core.projectionField = (Core.Name "usesMaybe")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesName"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesName")})))),
+              Core.projectionField = (Core.Name "usesName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesNode"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesNode")})))),
+              Core.projectionField = (Core.Name "usesNode")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesNothing"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesNothing")})))),
+              Core.projectionField = (Core.Name "usesNothing")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesRight"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesRight")})))),
+              Core.projectionField = (Core.Name "usesRight")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesTypeVar"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesTypeVar")})))),
+              Core.projectionField = (Core.Name "usesTypeVar")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 pythonModuleMetadataWithTypeVariables :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm (S.Set Core.Name) -> Phantoms.TTerm Environment.PythonModuleMetadata
@@ -926,9 +926,9 @@ pythonModuleMetadataWithTypeVariables original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "namespaces"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "namespaces")})))),
+              Core.projectionField = (Core.Name "namespaces")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeVariables"),
@@ -936,142 +936,142 @@ pythonModuleMetadataWithTypeVariables original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "usesAnnotated"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesAnnotated")})))),
+              Core.projectionField = (Core.Name "usesAnnotated")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesCallable"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesCallable")})))),
+              Core.projectionField = (Core.Name "usesCallable")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesCast"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesCast")})))),
+              Core.projectionField = (Core.Name "usesCast")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesLruCache"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesLruCache")})))),
+              Core.projectionField = (Core.Name "usesLruCache")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesTypeAlias"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesTypeAlias")})))),
+              Core.projectionField = (Core.Name "usesTypeAlias")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesDataclass"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesDataclass")})))),
+              Core.projectionField = (Core.Name "usesDataclass")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesDecimal"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesDecimal")})))),
+              Core.projectionField = (Core.Name "usesDecimal")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesEither"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesEither")})))),
+              Core.projectionField = (Core.Name "usesEither")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesEnum"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesEnum")})))),
+              Core.projectionField = (Core.Name "usesEnum")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesFrozenDict"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesFrozenDict")})))),
+              Core.projectionField = (Core.Name "usesFrozenDict")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesFrozenList"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesFrozenList")})))),
+              Core.projectionField = (Core.Name "usesFrozenList")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesGeneric"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesGeneric")})))),
+              Core.projectionField = (Core.Name "usesGeneric")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesJust"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesJust")})))),
+              Core.projectionField = (Core.Name "usesJust")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesLeft"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesLeft")})))),
+              Core.projectionField = (Core.Name "usesLeft")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesMaybe"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesMaybe")})))),
+              Core.projectionField = (Core.Name "usesMaybe")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesName"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesName")})))),
+              Core.projectionField = (Core.Name "usesName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesNode"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesNode")})))),
+              Core.projectionField = (Core.Name "usesNode")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesNothing"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesNothing")})))),
+              Core.projectionField = (Core.Name "usesNothing")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesRight"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesRight")})))),
+              Core.projectionField = (Core.Name "usesRight")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesTypeVar"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesTypeVar")})))),
+              Core.projectionField = (Core.Name "usesTypeVar")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 pythonModuleMetadataWithUsesAnnotated :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm Bool -> Phantoms.TTerm Environment.PythonModuleMetadata
@@ -1082,16 +1082,16 @@ pythonModuleMetadataWithUsesAnnotated original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "namespaces"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "namespaces")})))),
+              Core.projectionField = (Core.Name "namespaces")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeVariables"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "typeVariables")})))),
+              Core.projectionField = (Core.Name "typeVariables")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesAnnotated"),
@@ -1099,135 +1099,135 @@ pythonModuleMetadataWithUsesAnnotated original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "usesCallable"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesCallable")})))),
+              Core.projectionField = (Core.Name "usesCallable")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesCast"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesCast")})))),
+              Core.projectionField = (Core.Name "usesCast")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesLruCache"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesLruCache")})))),
+              Core.projectionField = (Core.Name "usesLruCache")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesTypeAlias"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesTypeAlias")})))),
+              Core.projectionField = (Core.Name "usesTypeAlias")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesDataclass"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesDataclass")})))),
+              Core.projectionField = (Core.Name "usesDataclass")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesDecimal"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesDecimal")})))),
+              Core.projectionField = (Core.Name "usesDecimal")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesEither"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesEither")})))),
+              Core.projectionField = (Core.Name "usesEither")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesEnum"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesEnum")})))),
+              Core.projectionField = (Core.Name "usesEnum")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesFrozenDict"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesFrozenDict")})))),
+              Core.projectionField = (Core.Name "usesFrozenDict")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesFrozenList"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesFrozenList")})))),
+              Core.projectionField = (Core.Name "usesFrozenList")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesGeneric"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesGeneric")})))),
+              Core.projectionField = (Core.Name "usesGeneric")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesJust"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesJust")})))),
+              Core.projectionField = (Core.Name "usesJust")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesLeft"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesLeft")})))),
+              Core.projectionField = (Core.Name "usesLeft")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesMaybe"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesMaybe")})))),
+              Core.projectionField = (Core.Name "usesMaybe")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesName"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesName")})))),
+              Core.projectionField = (Core.Name "usesName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesNode"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesNode")})))),
+              Core.projectionField = (Core.Name "usesNode")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesNothing"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesNothing")})))),
+              Core.projectionField = (Core.Name "usesNothing")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesRight"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesRight")})))),
+              Core.projectionField = (Core.Name "usesRight")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesTypeVar"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesTypeVar")})))),
+              Core.projectionField = (Core.Name "usesTypeVar")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 pythonModuleMetadataWithUsesCallable :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm Bool -> Phantoms.TTerm Environment.PythonModuleMetadata
@@ -1238,23 +1238,23 @@ pythonModuleMetadataWithUsesCallable original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "namespaces"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "namespaces")})))),
+              Core.projectionField = (Core.Name "namespaces")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeVariables"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "typeVariables")})))),
+              Core.projectionField = (Core.Name "typeVariables")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesAnnotated"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesAnnotated")})))),
+              Core.projectionField = (Core.Name "usesAnnotated")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesCallable"),
@@ -1262,128 +1262,128 @@ pythonModuleMetadataWithUsesCallable original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "usesCast"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesCast")})))),
+              Core.projectionField = (Core.Name "usesCast")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesLruCache"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesLruCache")})))),
+              Core.projectionField = (Core.Name "usesLruCache")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesTypeAlias"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesTypeAlias")})))),
+              Core.projectionField = (Core.Name "usesTypeAlias")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesDataclass"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesDataclass")})))),
+              Core.projectionField = (Core.Name "usesDataclass")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesDecimal"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesDecimal")})))),
+              Core.projectionField = (Core.Name "usesDecimal")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesEither"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesEither")})))),
+              Core.projectionField = (Core.Name "usesEither")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesEnum"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesEnum")})))),
+              Core.projectionField = (Core.Name "usesEnum")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesFrozenDict"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesFrozenDict")})))),
+              Core.projectionField = (Core.Name "usesFrozenDict")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesFrozenList"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesFrozenList")})))),
+              Core.projectionField = (Core.Name "usesFrozenList")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesGeneric"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesGeneric")})))),
+              Core.projectionField = (Core.Name "usesGeneric")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesJust"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesJust")})))),
+              Core.projectionField = (Core.Name "usesJust")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesLeft"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesLeft")})))),
+              Core.projectionField = (Core.Name "usesLeft")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesMaybe"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesMaybe")})))),
+              Core.projectionField = (Core.Name "usesMaybe")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesName"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesName")})))),
+              Core.projectionField = (Core.Name "usesName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesNode"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesNode")})))),
+              Core.projectionField = (Core.Name "usesNode")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesNothing"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesNothing")})))),
+              Core.projectionField = (Core.Name "usesNothing")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesRight"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesRight")})))),
+              Core.projectionField = (Core.Name "usesRight")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesTypeVar"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesTypeVar")})))),
+              Core.projectionField = (Core.Name "usesTypeVar")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 pythonModuleMetadataWithUsesCast :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm Bool -> Phantoms.TTerm Environment.PythonModuleMetadata
@@ -1394,30 +1394,30 @@ pythonModuleMetadataWithUsesCast original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "namespaces"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "namespaces")})))),
+              Core.projectionField = (Core.Name "namespaces")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeVariables"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "typeVariables")})))),
+              Core.projectionField = (Core.Name "typeVariables")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesAnnotated"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesAnnotated")})))),
+              Core.projectionField = (Core.Name "usesAnnotated")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesCallable"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesCallable")})))),
+              Core.projectionField = (Core.Name "usesCallable")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesCast"),
@@ -1425,121 +1425,121 @@ pythonModuleMetadataWithUsesCast original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "usesLruCache"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesLruCache")})))),
+              Core.projectionField = (Core.Name "usesLruCache")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesTypeAlias"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesTypeAlias")})))),
+              Core.projectionField = (Core.Name "usesTypeAlias")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesDataclass"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesDataclass")})))),
+              Core.projectionField = (Core.Name "usesDataclass")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesDecimal"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesDecimal")})))),
+              Core.projectionField = (Core.Name "usesDecimal")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesEither"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesEither")})))),
+              Core.projectionField = (Core.Name "usesEither")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesEnum"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesEnum")})))),
+              Core.projectionField = (Core.Name "usesEnum")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesFrozenDict"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesFrozenDict")})))),
+              Core.projectionField = (Core.Name "usesFrozenDict")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesFrozenList"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesFrozenList")})))),
+              Core.projectionField = (Core.Name "usesFrozenList")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesGeneric"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesGeneric")})))),
+              Core.projectionField = (Core.Name "usesGeneric")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesJust"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesJust")})))),
+              Core.projectionField = (Core.Name "usesJust")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesLeft"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesLeft")})))),
+              Core.projectionField = (Core.Name "usesLeft")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesMaybe"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesMaybe")})))),
+              Core.projectionField = (Core.Name "usesMaybe")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesName"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesName")})))),
+              Core.projectionField = (Core.Name "usesName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesNode"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesNode")})))),
+              Core.projectionField = (Core.Name "usesNode")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesNothing"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesNothing")})))),
+              Core.projectionField = (Core.Name "usesNothing")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesRight"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesRight")})))),
+              Core.projectionField = (Core.Name "usesRight")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesTypeVar"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesTypeVar")})))),
+              Core.projectionField = (Core.Name "usesTypeVar")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 pythonModuleMetadataWithUsesDataclass :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm Bool -> Phantoms.TTerm Environment.PythonModuleMetadata
@@ -1550,51 +1550,51 @@ pythonModuleMetadataWithUsesDataclass original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "namespaces"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "namespaces")})))),
+              Core.projectionField = (Core.Name "namespaces")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeVariables"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "typeVariables")})))),
+              Core.projectionField = (Core.Name "typeVariables")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesAnnotated"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesAnnotated")})))),
+              Core.projectionField = (Core.Name "usesAnnotated")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesCallable"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesCallable")})))),
+              Core.projectionField = (Core.Name "usesCallable")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesCast"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesCast")})))),
+              Core.projectionField = (Core.Name "usesCast")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesLruCache"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesLruCache")})))),
+              Core.projectionField = (Core.Name "usesLruCache")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesTypeAlias"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesTypeAlias")})))),
+              Core.projectionField = (Core.Name "usesTypeAlias")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesDataclass"),
@@ -1602,100 +1602,100 @@ pythonModuleMetadataWithUsesDataclass original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "usesDecimal"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesDecimal")})))),
+              Core.projectionField = (Core.Name "usesDecimal")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesEither"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesEither")})))),
+              Core.projectionField = (Core.Name "usesEither")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesEnum"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesEnum")})))),
+              Core.projectionField = (Core.Name "usesEnum")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesFrozenDict"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesFrozenDict")})))),
+              Core.projectionField = (Core.Name "usesFrozenDict")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesFrozenList"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesFrozenList")})))),
+              Core.projectionField = (Core.Name "usesFrozenList")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesGeneric"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesGeneric")})))),
+              Core.projectionField = (Core.Name "usesGeneric")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesJust"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesJust")})))),
+              Core.projectionField = (Core.Name "usesJust")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesLeft"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesLeft")})))),
+              Core.projectionField = (Core.Name "usesLeft")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesMaybe"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesMaybe")})))),
+              Core.projectionField = (Core.Name "usesMaybe")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesName"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesName")})))),
+              Core.projectionField = (Core.Name "usesName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesNode"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesNode")})))),
+              Core.projectionField = (Core.Name "usesNode")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesNothing"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesNothing")})))),
+              Core.projectionField = (Core.Name "usesNothing")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesRight"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesRight")})))),
+              Core.projectionField = (Core.Name "usesRight")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesTypeVar"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesTypeVar")})))),
+              Core.projectionField = (Core.Name "usesTypeVar")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 pythonModuleMetadataWithUsesDecimal :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm Bool -> Phantoms.TTerm Environment.PythonModuleMetadata
@@ -1706,58 +1706,58 @@ pythonModuleMetadataWithUsesDecimal original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "namespaces"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "namespaces")})))),
+              Core.projectionField = (Core.Name "namespaces")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeVariables"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "typeVariables")})))),
+              Core.projectionField = (Core.Name "typeVariables")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesAnnotated"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesAnnotated")})))),
+              Core.projectionField = (Core.Name "usesAnnotated")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesCallable"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesCallable")})))),
+              Core.projectionField = (Core.Name "usesCallable")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesCast"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesCast")})))),
+              Core.projectionField = (Core.Name "usesCast")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesLruCache"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesLruCache")})))),
+              Core.projectionField = (Core.Name "usesLruCache")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesTypeAlias"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesTypeAlias")})))),
+              Core.projectionField = (Core.Name "usesTypeAlias")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesDataclass"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesDataclass")})))),
+              Core.projectionField = (Core.Name "usesDataclass")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesDecimal"),
@@ -1765,93 +1765,93 @@ pythonModuleMetadataWithUsesDecimal original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "usesEither"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesEither")})))),
+              Core.projectionField = (Core.Name "usesEither")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesEnum"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesEnum")})))),
+              Core.projectionField = (Core.Name "usesEnum")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesFrozenDict"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesFrozenDict")})))),
+              Core.projectionField = (Core.Name "usesFrozenDict")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesFrozenList"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesFrozenList")})))),
+              Core.projectionField = (Core.Name "usesFrozenList")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesGeneric"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesGeneric")})))),
+              Core.projectionField = (Core.Name "usesGeneric")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesJust"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesJust")})))),
+              Core.projectionField = (Core.Name "usesJust")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesLeft"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesLeft")})))),
+              Core.projectionField = (Core.Name "usesLeft")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesMaybe"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesMaybe")})))),
+              Core.projectionField = (Core.Name "usesMaybe")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesName"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesName")})))),
+              Core.projectionField = (Core.Name "usesName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesNode"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesNode")})))),
+              Core.projectionField = (Core.Name "usesNode")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesNothing"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesNothing")})))),
+              Core.projectionField = (Core.Name "usesNothing")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesRight"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesRight")})))),
+              Core.projectionField = (Core.Name "usesRight")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesTypeVar"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesTypeVar")})))),
+              Core.projectionField = (Core.Name "usesTypeVar")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 pythonModuleMetadataWithUsesEither :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm Bool -> Phantoms.TTerm Environment.PythonModuleMetadata
@@ -1862,65 +1862,65 @@ pythonModuleMetadataWithUsesEither original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "namespaces"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "namespaces")})))),
+              Core.projectionField = (Core.Name "namespaces")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeVariables"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "typeVariables")})))),
+              Core.projectionField = (Core.Name "typeVariables")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesAnnotated"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesAnnotated")})))),
+              Core.projectionField = (Core.Name "usesAnnotated")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesCallable"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesCallable")})))),
+              Core.projectionField = (Core.Name "usesCallable")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesCast"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesCast")})))),
+              Core.projectionField = (Core.Name "usesCast")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesLruCache"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesLruCache")})))),
+              Core.projectionField = (Core.Name "usesLruCache")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesTypeAlias"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesTypeAlias")})))),
+              Core.projectionField = (Core.Name "usesTypeAlias")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesDataclass"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesDataclass")})))),
+              Core.projectionField = (Core.Name "usesDataclass")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesDecimal"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesDecimal")})))),
+              Core.projectionField = (Core.Name "usesDecimal")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesEither"),
@@ -1928,86 +1928,86 @@ pythonModuleMetadataWithUsesEither original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "usesEnum"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesEnum")})))),
+              Core.projectionField = (Core.Name "usesEnum")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesFrozenDict"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesFrozenDict")})))),
+              Core.projectionField = (Core.Name "usesFrozenDict")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesFrozenList"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesFrozenList")})))),
+              Core.projectionField = (Core.Name "usesFrozenList")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesGeneric"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesGeneric")})))),
+              Core.projectionField = (Core.Name "usesGeneric")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesJust"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesJust")})))),
+              Core.projectionField = (Core.Name "usesJust")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesLeft"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesLeft")})))),
+              Core.projectionField = (Core.Name "usesLeft")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesMaybe"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesMaybe")})))),
+              Core.projectionField = (Core.Name "usesMaybe")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesName"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesName")})))),
+              Core.projectionField = (Core.Name "usesName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesNode"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesNode")})))),
+              Core.projectionField = (Core.Name "usesNode")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesNothing"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesNothing")})))),
+              Core.projectionField = (Core.Name "usesNothing")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesRight"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesRight")})))),
+              Core.projectionField = (Core.Name "usesRight")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesTypeVar"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesTypeVar")})))),
+              Core.projectionField = (Core.Name "usesTypeVar")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 pythonModuleMetadataWithUsesEnum :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm Bool -> Phantoms.TTerm Environment.PythonModuleMetadata
@@ -2018,72 +2018,72 @@ pythonModuleMetadataWithUsesEnum original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "namespaces"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "namespaces")})))),
+              Core.projectionField = (Core.Name "namespaces")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeVariables"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "typeVariables")})))),
+              Core.projectionField = (Core.Name "typeVariables")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesAnnotated"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesAnnotated")})))),
+              Core.projectionField = (Core.Name "usesAnnotated")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesCallable"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesCallable")})))),
+              Core.projectionField = (Core.Name "usesCallable")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesCast"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesCast")})))),
+              Core.projectionField = (Core.Name "usesCast")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesLruCache"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesLruCache")})))),
+              Core.projectionField = (Core.Name "usesLruCache")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesTypeAlias"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesTypeAlias")})))),
+              Core.projectionField = (Core.Name "usesTypeAlias")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesDataclass"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesDataclass")})))),
+              Core.projectionField = (Core.Name "usesDataclass")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesDecimal"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesDecimal")})))),
+              Core.projectionField = (Core.Name "usesDecimal")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesEither"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesEither")})))),
+              Core.projectionField = (Core.Name "usesEither")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesEnum"),
@@ -2091,79 +2091,79 @@ pythonModuleMetadataWithUsesEnum original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "usesFrozenDict"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesFrozenDict")})))),
+              Core.projectionField = (Core.Name "usesFrozenDict")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesFrozenList"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesFrozenList")})))),
+              Core.projectionField = (Core.Name "usesFrozenList")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesGeneric"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesGeneric")})))),
+              Core.projectionField = (Core.Name "usesGeneric")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesJust"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesJust")})))),
+              Core.projectionField = (Core.Name "usesJust")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesLeft"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesLeft")})))),
+              Core.projectionField = (Core.Name "usesLeft")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesMaybe"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesMaybe")})))),
+              Core.projectionField = (Core.Name "usesMaybe")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesName"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesName")})))),
+              Core.projectionField = (Core.Name "usesName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesNode"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesNode")})))),
+              Core.projectionField = (Core.Name "usesNode")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesNothing"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesNothing")})))),
+              Core.projectionField = (Core.Name "usesNothing")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesRight"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesRight")})))),
+              Core.projectionField = (Core.Name "usesRight")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesTypeVar"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesTypeVar")})))),
+              Core.projectionField = (Core.Name "usesTypeVar")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 pythonModuleMetadataWithUsesFrozenDict :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm Bool -> Phantoms.TTerm Environment.PythonModuleMetadata
@@ -2174,79 +2174,79 @@ pythonModuleMetadataWithUsesFrozenDict original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "namespaces"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "namespaces")})))),
+              Core.projectionField = (Core.Name "namespaces")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeVariables"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "typeVariables")})))),
+              Core.projectionField = (Core.Name "typeVariables")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesAnnotated"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesAnnotated")})))),
+              Core.projectionField = (Core.Name "usesAnnotated")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesCallable"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesCallable")})))),
+              Core.projectionField = (Core.Name "usesCallable")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesCast"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesCast")})))),
+              Core.projectionField = (Core.Name "usesCast")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesLruCache"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesLruCache")})))),
+              Core.projectionField = (Core.Name "usesLruCache")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesTypeAlias"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesTypeAlias")})))),
+              Core.projectionField = (Core.Name "usesTypeAlias")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesDataclass"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesDataclass")})))),
+              Core.projectionField = (Core.Name "usesDataclass")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesDecimal"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesDecimal")})))),
+              Core.projectionField = (Core.Name "usesDecimal")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesEither"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesEither")})))),
+              Core.projectionField = (Core.Name "usesEither")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesEnum"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesEnum")})))),
+              Core.projectionField = (Core.Name "usesEnum")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesFrozenDict"),
@@ -2254,72 +2254,72 @@ pythonModuleMetadataWithUsesFrozenDict original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "usesFrozenList"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesFrozenList")})))),
+              Core.projectionField = (Core.Name "usesFrozenList")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesGeneric"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesGeneric")})))),
+              Core.projectionField = (Core.Name "usesGeneric")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesJust"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesJust")})))),
+              Core.projectionField = (Core.Name "usesJust")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesLeft"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesLeft")})))),
+              Core.projectionField = (Core.Name "usesLeft")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesMaybe"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesMaybe")})))),
+              Core.projectionField = (Core.Name "usesMaybe")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesName"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesName")})))),
+              Core.projectionField = (Core.Name "usesName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesNode"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesNode")})))),
+              Core.projectionField = (Core.Name "usesNode")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesNothing"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesNothing")})))),
+              Core.projectionField = (Core.Name "usesNothing")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesRight"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesRight")})))),
+              Core.projectionField = (Core.Name "usesRight")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesTypeVar"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesTypeVar")})))),
+              Core.projectionField = (Core.Name "usesTypeVar")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 pythonModuleMetadataWithUsesFrozenList :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm Bool -> Phantoms.TTerm Environment.PythonModuleMetadata
@@ -2330,86 +2330,86 @@ pythonModuleMetadataWithUsesFrozenList original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "namespaces"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "namespaces")})))),
+              Core.projectionField = (Core.Name "namespaces")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeVariables"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "typeVariables")})))),
+              Core.projectionField = (Core.Name "typeVariables")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesAnnotated"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesAnnotated")})))),
+              Core.projectionField = (Core.Name "usesAnnotated")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesCallable"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesCallable")})))),
+              Core.projectionField = (Core.Name "usesCallable")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesCast"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesCast")})))),
+              Core.projectionField = (Core.Name "usesCast")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesLruCache"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesLruCache")})))),
+              Core.projectionField = (Core.Name "usesLruCache")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesTypeAlias"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesTypeAlias")})))),
+              Core.projectionField = (Core.Name "usesTypeAlias")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesDataclass"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesDataclass")})))),
+              Core.projectionField = (Core.Name "usesDataclass")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesDecimal"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesDecimal")})))),
+              Core.projectionField = (Core.Name "usesDecimal")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesEither"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesEither")})))),
+              Core.projectionField = (Core.Name "usesEither")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesEnum"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesEnum")})))),
+              Core.projectionField = (Core.Name "usesEnum")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesFrozenDict"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesFrozenDict")})))),
+              Core.projectionField = (Core.Name "usesFrozenDict")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesFrozenList"),
@@ -2417,65 +2417,65 @@ pythonModuleMetadataWithUsesFrozenList original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "usesGeneric"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesGeneric")})))),
+              Core.projectionField = (Core.Name "usesGeneric")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesJust"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesJust")})))),
+              Core.projectionField = (Core.Name "usesJust")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesLeft"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesLeft")})))),
+              Core.projectionField = (Core.Name "usesLeft")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesMaybe"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesMaybe")})))),
+              Core.projectionField = (Core.Name "usesMaybe")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesName"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesName")})))),
+              Core.projectionField = (Core.Name "usesName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesNode"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesNode")})))),
+              Core.projectionField = (Core.Name "usesNode")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesNothing"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesNothing")})))),
+              Core.projectionField = (Core.Name "usesNothing")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesRight"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesRight")})))),
+              Core.projectionField = (Core.Name "usesRight")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesTypeVar"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesTypeVar")})))),
+              Core.projectionField = (Core.Name "usesTypeVar")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 pythonModuleMetadataWithUsesGeneric :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm Bool -> Phantoms.TTerm Environment.PythonModuleMetadata
@@ -2486,93 +2486,93 @@ pythonModuleMetadataWithUsesGeneric original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "namespaces"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "namespaces")})))),
+              Core.projectionField = (Core.Name "namespaces")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeVariables"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "typeVariables")})))),
+              Core.projectionField = (Core.Name "typeVariables")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesAnnotated"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesAnnotated")})))),
+              Core.projectionField = (Core.Name "usesAnnotated")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesCallable"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesCallable")})))),
+              Core.projectionField = (Core.Name "usesCallable")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesCast"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesCast")})))),
+              Core.projectionField = (Core.Name "usesCast")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesLruCache"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesLruCache")})))),
+              Core.projectionField = (Core.Name "usesLruCache")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesTypeAlias"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesTypeAlias")})))),
+              Core.projectionField = (Core.Name "usesTypeAlias")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesDataclass"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesDataclass")})))),
+              Core.projectionField = (Core.Name "usesDataclass")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesDecimal"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesDecimal")})))),
+              Core.projectionField = (Core.Name "usesDecimal")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesEither"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesEither")})))),
+              Core.projectionField = (Core.Name "usesEither")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesEnum"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesEnum")})))),
+              Core.projectionField = (Core.Name "usesEnum")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesFrozenDict"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesFrozenDict")})))),
+              Core.projectionField = (Core.Name "usesFrozenDict")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesFrozenList"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesFrozenList")})))),
+              Core.projectionField = (Core.Name "usesFrozenList")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesGeneric"),
@@ -2580,58 +2580,58 @@ pythonModuleMetadataWithUsesGeneric original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "usesJust"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesJust")})))),
+              Core.projectionField = (Core.Name "usesJust")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesLeft"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesLeft")})))),
+              Core.projectionField = (Core.Name "usesLeft")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesMaybe"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesMaybe")})))),
+              Core.projectionField = (Core.Name "usesMaybe")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesName"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesName")})))),
+              Core.projectionField = (Core.Name "usesName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesNode"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesNode")})))),
+              Core.projectionField = (Core.Name "usesNode")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesNothing"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesNothing")})))),
+              Core.projectionField = (Core.Name "usesNothing")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesRight"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesRight")})))),
+              Core.projectionField = (Core.Name "usesRight")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesTypeVar"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesTypeVar")})))),
+              Core.projectionField = (Core.Name "usesTypeVar")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 pythonModuleMetadataWithUsesJust :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm Bool -> Phantoms.TTerm Environment.PythonModuleMetadata
@@ -2642,100 +2642,100 @@ pythonModuleMetadataWithUsesJust original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "namespaces"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "namespaces")})))),
+              Core.projectionField = (Core.Name "namespaces")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeVariables"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "typeVariables")})))),
+              Core.projectionField = (Core.Name "typeVariables")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesAnnotated"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesAnnotated")})))),
+              Core.projectionField = (Core.Name "usesAnnotated")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesCallable"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesCallable")})))),
+              Core.projectionField = (Core.Name "usesCallable")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesCast"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesCast")})))),
+              Core.projectionField = (Core.Name "usesCast")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesLruCache"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesLruCache")})))),
+              Core.projectionField = (Core.Name "usesLruCache")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesTypeAlias"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesTypeAlias")})))),
+              Core.projectionField = (Core.Name "usesTypeAlias")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesDataclass"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesDataclass")})))),
+              Core.projectionField = (Core.Name "usesDataclass")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesDecimal"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesDecimal")})))),
+              Core.projectionField = (Core.Name "usesDecimal")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesEither"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesEither")})))),
+              Core.projectionField = (Core.Name "usesEither")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesEnum"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesEnum")})))),
+              Core.projectionField = (Core.Name "usesEnum")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesFrozenDict"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesFrozenDict")})))),
+              Core.projectionField = (Core.Name "usesFrozenDict")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesFrozenList"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesFrozenList")})))),
+              Core.projectionField = (Core.Name "usesFrozenList")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesGeneric"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesGeneric")})))),
+              Core.projectionField = (Core.Name "usesGeneric")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesJust"),
@@ -2743,51 +2743,51 @@ pythonModuleMetadataWithUsesJust original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "usesLeft"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesLeft")})))),
+              Core.projectionField = (Core.Name "usesLeft")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesMaybe"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesMaybe")})))),
+              Core.projectionField = (Core.Name "usesMaybe")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesName"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesName")})))),
+              Core.projectionField = (Core.Name "usesName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesNode"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesNode")})))),
+              Core.projectionField = (Core.Name "usesNode")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesNothing"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesNothing")})))),
+              Core.projectionField = (Core.Name "usesNothing")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesRight"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesRight")})))),
+              Core.projectionField = (Core.Name "usesRight")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesTypeVar"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesTypeVar")})))),
+              Core.projectionField = (Core.Name "usesTypeVar")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 pythonModuleMetadataWithUsesLeft :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm Bool -> Phantoms.TTerm Environment.PythonModuleMetadata
@@ -2798,107 +2798,107 @@ pythonModuleMetadataWithUsesLeft original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "namespaces"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "namespaces")})))),
+              Core.projectionField = (Core.Name "namespaces")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeVariables"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "typeVariables")})))),
+              Core.projectionField = (Core.Name "typeVariables")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesAnnotated"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesAnnotated")})))),
+              Core.projectionField = (Core.Name "usesAnnotated")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesCallable"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesCallable")})))),
+              Core.projectionField = (Core.Name "usesCallable")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesCast"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesCast")})))),
+              Core.projectionField = (Core.Name "usesCast")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesLruCache"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesLruCache")})))),
+              Core.projectionField = (Core.Name "usesLruCache")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesTypeAlias"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesTypeAlias")})))),
+              Core.projectionField = (Core.Name "usesTypeAlias")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesDataclass"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesDataclass")})))),
+              Core.projectionField = (Core.Name "usesDataclass")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesDecimal"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesDecimal")})))),
+              Core.projectionField = (Core.Name "usesDecimal")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesEither"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesEither")})))),
+              Core.projectionField = (Core.Name "usesEither")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesEnum"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesEnum")})))),
+              Core.projectionField = (Core.Name "usesEnum")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesFrozenDict"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesFrozenDict")})))),
+              Core.projectionField = (Core.Name "usesFrozenDict")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesFrozenList"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesFrozenList")})))),
+              Core.projectionField = (Core.Name "usesFrozenList")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesGeneric"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesGeneric")})))),
+              Core.projectionField = (Core.Name "usesGeneric")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesJust"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesJust")})))),
+              Core.projectionField = (Core.Name "usesJust")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesLeft"),
@@ -2906,44 +2906,44 @@ pythonModuleMetadataWithUsesLeft original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "usesMaybe"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesMaybe")})))),
+              Core.projectionField = (Core.Name "usesMaybe")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesName"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesName")})))),
+              Core.projectionField = (Core.Name "usesName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesNode"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesNode")})))),
+              Core.projectionField = (Core.Name "usesNode")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesNothing"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesNothing")})))),
+              Core.projectionField = (Core.Name "usesNothing")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesRight"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesRight")})))),
+              Core.projectionField = (Core.Name "usesRight")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesTypeVar"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesTypeVar")})))),
+              Core.projectionField = (Core.Name "usesTypeVar")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 pythonModuleMetadataWithUsesLruCache :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm Bool -> Phantoms.TTerm Environment.PythonModuleMetadata
@@ -2954,37 +2954,37 @@ pythonModuleMetadataWithUsesLruCache original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "namespaces"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "namespaces")})))),
+              Core.projectionField = (Core.Name "namespaces")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeVariables"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "typeVariables")})))),
+              Core.projectionField = (Core.Name "typeVariables")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesAnnotated"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesAnnotated")})))),
+              Core.projectionField = (Core.Name "usesAnnotated")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesCallable"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesCallable")})))),
+              Core.projectionField = (Core.Name "usesCallable")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesCast"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesCast")})))),
+              Core.projectionField = (Core.Name "usesCast")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesLruCache"),
@@ -2992,114 +2992,114 @@ pythonModuleMetadataWithUsesLruCache original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "usesTypeAlias"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesTypeAlias")})))),
+              Core.projectionField = (Core.Name "usesTypeAlias")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesDataclass"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesDataclass")})))),
+              Core.projectionField = (Core.Name "usesDataclass")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesDecimal"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesDecimal")})))),
+              Core.projectionField = (Core.Name "usesDecimal")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesEither"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesEither")})))),
+              Core.projectionField = (Core.Name "usesEither")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesEnum"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesEnum")})))),
+              Core.projectionField = (Core.Name "usesEnum")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesFrozenDict"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesFrozenDict")})))),
+              Core.projectionField = (Core.Name "usesFrozenDict")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesFrozenList"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesFrozenList")})))),
+              Core.projectionField = (Core.Name "usesFrozenList")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesGeneric"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesGeneric")})))),
+              Core.projectionField = (Core.Name "usesGeneric")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesJust"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesJust")})))),
+              Core.projectionField = (Core.Name "usesJust")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesLeft"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesLeft")})))),
+              Core.projectionField = (Core.Name "usesLeft")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesMaybe"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesMaybe")})))),
+              Core.projectionField = (Core.Name "usesMaybe")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesName"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesName")})))),
+              Core.projectionField = (Core.Name "usesName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesNode"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesNode")})))),
+              Core.projectionField = (Core.Name "usesNode")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesNothing"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesNothing")})))),
+              Core.projectionField = (Core.Name "usesNothing")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesRight"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesRight")})))),
+              Core.projectionField = (Core.Name "usesRight")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesTypeVar"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesTypeVar")})))),
+              Core.projectionField = (Core.Name "usesTypeVar")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 pythonModuleMetadataWithUsesMaybe :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm Bool -> Phantoms.TTerm Environment.PythonModuleMetadata
@@ -3110,114 +3110,114 @@ pythonModuleMetadataWithUsesMaybe original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "namespaces"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "namespaces")})))),
+              Core.projectionField = (Core.Name "namespaces")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeVariables"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "typeVariables")})))),
+              Core.projectionField = (Core.Name "typeVariables")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesAnnotated"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesAnnotated")})))),
+              Core.projectionField = (Core.Name "usesAnnotated")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesCallable"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesCallable")})))),
+              Core.projectionField = (Core.Name "usesCallable")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesCast"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesCast")})))),
+              Core.projectionField = (Core.Name "usesCast")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesLruCache"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesLruCache")})))),
+              Core.projectionField = (Core.Name "usesLruCache")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesTypeAlias"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesTypeAlias")})))),
+              Core.projectionField = (Core.Name "usesTypeAlias")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesDataclass"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesDataclass")})))),
+              Core.projectionField = (Core.Name "usesDataclass")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesDecimal"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesDecimal")})))),
+              Core.projectionField = (Core.Name "usesDecimal")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesEither"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesEither")})))),
+              Core.projectionField = (Core.Name "usesEither")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesEnum"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesEnum")})))),
+              Core.projectionField = (Core.Name "usesEnum")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesFrozenDict"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesFrozenDict")})))),
+              Core.projectionField = (Core.Name "usesFrozenDict")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesFrozenList"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesFrozenList")})))),
+              Core.projectionField = (Core.Name "usesFrozenList")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesGeneric"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesGeneric")})))),
+              Core.projectionField = (Core.Name "usesGeneric")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesJust"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesJust")})))),
+              Core.projectionField = (Core.Name "usesJust")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesLeft"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesLeft")})))),
+              Core.projectionField = (Core.Name "usesLeft")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesMaybe"),
@@ -3225,37 +3225,37 @@ pythonModuleMetadataWithUsesMaybe original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "usesName"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesName")})))),
+              Core.projectionField = (Core.Name "usesName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesNode"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesNode")})))),
+              Core.projectionField = (Core.Name "usesNode")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesNothing"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesNothing")})))),
+              Core.projectionField = (Core.Name "usesNothing")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesRight"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesRight")})))),
+              Core.projectionField = (Core.Name "usesRight")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesTypeVar"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesTypeVar")})))),
+              Core.projectionField = (Core.Name "usesTypeVar")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 pythonModuleMetadataWithUsesName :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm Bool -> Phantoms.TTerm Environment.PythonModuleMetadata
@@ -3266,121 +3266,121 @@ pythonModuleMetadataWithUsesName original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "namespaces"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "namespaces")})))),
+              Core.projectionField = (Core.Name "namespaces")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeVariables"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "typeVariables")})))),
+              Core.projectionField = (Core.Name "typeVariables")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesAnnotated"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesAnnotated")})))),
+              Core.projectionField = (Core.Name "usesAnnotated")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesCallable"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesCallable")})))),
+              Core.projectionField = (Core.Name "usesCallable")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesCast"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesCast")})))),
+              Core.projectionField = (Core.Name "usesCast")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesLruCache"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesLruCache")})))),
+              Core.projectionField = (Core.Name "usesLruCache")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesTypeAlias"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesTypeAlias")})))),
+              Core.projectionField = (Core.Name "usesTypeAlias")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesDataclass"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesDataclass")})))),
+              Core.projectionField = (Core.Name "usesDataclass")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesDecimal"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesDecimal")})))),
+              Core.projectionField = (Core.Name "usesDecimal")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesEither"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesEither")})))),
+              Core.projectionField = (Core.Name "usesEither")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesEnum"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesEnum")})))),
+              Core.projectionField = (Core.Name "usesEnum")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesFrozenDict"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesFrozenDict")})))),
+              Core.projectionField = (Core.Name "usesFrozenDict")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesFrozenList"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesFrozenList")})))),
+              Core.projectionField = (Core.Name "usesFrozenList")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesGeneric"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesGeneric")})))),
+              Core.projectionField = (Core.Name "usesGeneric")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesJust"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesJust")})))),
+              Core.projectionField = (Core.Name "usesJust")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesLeft"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesLeft")})))),
+              Core.projectionField = (Core.Name "usesLeft")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesMaybe"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesMaybe")})))),
+              Core.projectionField = (Core.Name "usesMaybe")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesName"),
@@ -3388,30 +3388,30 @@ pythonModuleMetadataWithUsesName original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "usesNode"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesNode")})))),
+              Core.projectionField = (Core.Name "usesNode")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesNothing"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesNothing")})))),
+              Core.projectionField = (Core.Name "usesNothing")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesRight"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesRight")})))),
+              Core.projectionField = (Core.Name "usesRight")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesTypeVar"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesTypeVar")})))),
+              Core.projectionField = (Core.Name "usesTypeVar")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 pythonModuleMetadataWithUsesNode :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm Bool -> Phantoms.TTerm Environment.PythonModuleMetadata
@@ -3422,128 +3422,128 @@ pythonModuleMetadataWithUsesNode original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "namespaces"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "namespaces")})))),
+              Core.projectionField = (Core.Name "namespaces")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeVariables"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "typeVariables")})))),
+              Core.projectionField = (Core.Name "typeVariables")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesAnnotated"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesAnnotated")})))),
+              Core.projectionField = (Core.Name "usesAnnotated")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesCallable"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesCallable")})))),
+              Core.projectionField = (Core.Name "usesCallable")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesCast"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesCast")})))),
+              Core.projectionField = (Core.Name "usesCast")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesLruCache"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesLruCache")})))),
+              Core.projectionField = (Core.Name "usesLruCache")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesTypeAlias"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesTypeAlias")})))),
+              Core.projectionField = (Core.Name "usesTypeAlias")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesDataclass"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesDataclass")})))),
+              Core.projectionField = (Core.Name "usesDataclass")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesDecimal"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesDecimal")})))),
+              Core.projectionField = (Core.Name "usesDecimal")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesEither"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesEither")})))),
+              Core.projectionField = (Core.Name "usesEither")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesEnum"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesEnum")})))),
+              Core.projectionField = (Core.Name "usesEnum")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesFrozenDict"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesFrozenDict")})))),
+              Core.projectionField = (Core.Name "usesFrozenDict")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesFrozenList"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesFrozenList")})))),
+              Core.projectionField = (Core.Name "usesFrozenList")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesGeneric"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesGeneric")})))),
+              Core.projectionField = (Core.Name "usesGeneric")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesJust"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesJust")})))),
+              Core.projectionField = (Core.Name "usesJust")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesLeft"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesLeft")})))),
+              Core.projectionField = (Core.Name "usesLeft")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesMaybe"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesMaybe")})))),
+              Core.projectionField = (Core.Name "usesMaybe")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesName"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesName")})))),
+              Core.projectionField = (Core.Name "usesName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesNode"),
@@ -3551,23 +3551,23 @@ pythonModuleMetadataWithUsesNode original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "usesNothing"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesNothing")})))),
+              Core.projectionField = (Core.Name "usesNothing")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesRight"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesRight")})))),
+              Core.projectionField = (Core.Name "usesRight")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesTypeVar"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesTypeVar")})))),
+              Core.projectionField = (Core.Name "usesTypeVar")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 pythonModuleMetadataWithUsesNothing :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm Bool -> Phantoms.TTerm Environment.PythonModuleMetadata
@@ -3578,135 +3578,135 @@ pythonModuleMetadataWithUsesNothing original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "namespaces"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "namespaces")})))),
+              Core.projectionField = (Core.Name "namespaces")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeVariables"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "typeVariables")})))),
+              Core.projectionField = (Core.Name "typeVariables")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesAnnotated"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesAnnotated")})))),
+              Core.projectionField = (Core.Name "usesAnnotated")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesCallable"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesCallable")})))),
+              Core.projectionField = (Core.Name "usesCallable")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesCast"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesCast")})))),
+              Core.projectionField = (Core.Name "usesCast")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesLruCache"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesLruCache")})))),
+              Core.projectionField = (Core.Name "usesLruCache")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesTypeAlias"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesTypeAlias")})))),
+              Core.projectionField = (Core.Name "usesTypeAlias")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesDataclass"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesDataclass")})))),
+              Core.projectionField = (Core.Name "usesDataclass")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesDecimal"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesDecimal")})))),
+              Core.projectionField = (Core.Name "usesDecimal")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesEither"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesEither")})))),
+              Core.projectionField = (Core.Name "usesEither")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesEnum"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesEnum")})))),
+              Core.projectionField = (Core.Name "usesEnum")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesFrozenDict"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesFrozenDict")})))),
+              Core.projectionField = (Core.Name "usesFrozenDict")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesFrozenList"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesFrozenList")})))),
+              Core.projectionField = (Core.Name "usesFrozenList")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesGeneric"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesGeneric")})))),
+              Core.projectionField = (Core.Name "usesGeneric")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesJust"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesJust")})))),
+              Core.projectionField = (Core.Name "usesJust")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesLeft"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesLeft")})))),
+              Core.projectionField = (Core.Name "usesLeft")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesMaybe"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesMaybe")})))),
+              Core.projectionField = (Core.Name "usesMaybe")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesName"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesName")})))),
+              Core.projectionField = (Core.Name "usesName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesNode"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesNode")})))),
+              Core.projectionField = (Core.Name "usesNode")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesNothing"),
@@ -3714,16 +3714,16 @@ pythonModuleMetadataWithUsesNothing original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "usesRight"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesRight")})))),
+              Core.projectionField = (Core.Name "usesRight")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesTypeVar"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesTypeVar")})))),
+              Core.projectionField = (Core.Name "usesTypeVar")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 pythonModuleMetadataWithUsesRight :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm Bool -> Phantoms.TTerm Environment.PythonModuleMetadata
@@ -3734,142 +3734,142 @@ pythonModuleMetadataWithUsesRight original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "namespaces"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "namespaces")})))),
+              Core.projectionField = (Core.Name "namespaces")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeVariables"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "typeVariables")})))),
+              Core.projectionField = (Core.Name "typeVariables")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesAnnotated"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesAnnotated")})))),
+              Core.projectionField = (Core.Name "usesAnnotated")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesCallable"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesCallable")})))),
+              Core.projectionField = (Core.Name "usesCallable")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesCast"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesCast")})))),
+              Core.projectionField = (Core.Name "usesCast")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesLruCache"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesLruCache")})))),
+              Core.projectionField = (Core.Name "usesLruCache")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesTypeAlias"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesTypeAlias")})))),
+              Core.projectionField = (Core.Name "usesTypeAlias")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesDataclass"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesDataclass")})))),
+              Core.projectionField = (Core.Name "usesDataclass")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesDecimal"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesDecimal")})))),
+              Core.projectionField = (Core.Name "usesDecimal")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesEither"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesEither")})))),
+              Core.projectionField = (Core.Name "usesEither")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesEnum"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesEnum")})))),
+              Core.projectionField = (Core.Name "usesEnum")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesFrozenDict"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesFrozenDict")})))),
+              Core.projectionField = (Core.Name "usesFrozenDict")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesFrozenList"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesFrozenList")})))),
+              Core.projectionField = (Core.Name "usesFrozenList")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesGeneric"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesGeneric")})))),
+              Core.projectionField = (Core.Name "usesGeneric")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesJust"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesJust")})))),
+              Core.projectionField = (Core.Name "usesJust")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesLeft"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesLeft")})))),
+              Core.projectionField = (Core.Name "usesLeft")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesMaybe"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesMaybe")})))),
+              Core.projectionField = (Core.Name "usesMaybe")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesName"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesName")})))),
+              Core.projectionField = (Core.Name "usesName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesNode"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesNode")})))),
+              Core.projectionField = (Core.Name "usesNode")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesNothing"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesNothing")})))),
+              Core.projectionField = (Core.Name "usesNothing")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesRight"),
@@ -3877,9 +3877,9 @@ pythonModuleMetadataWithUsesRight original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "usesTypeVar"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesTypeVar")})))),
+              Core.projectionField = (Core.Name "usesTypeVar")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 pythonModuleMetadataWithUsesTypeAlias :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm Bool -> Phantoms.TTerm Environment.PythonModuleMetadata
@@ -3890,44 +3890,44 @@ pythonModuleMetadataWithUsesTypeAlias original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "namespaces"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "namespaces")})))),
+              Core.projectionField = (Core.Name "namespaces")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeVariables"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "typeVariables")})))),
+              Core.projectionField = (Core.Name "typeVariables")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesAnnotated"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesAnnotated")})))),
+              Core.projectionField = (Core.Name "usesAnnotated")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesCallable"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesCallable")})))),
+              Core.projectionField = (Core.Name "usesCallable")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesCast"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesCast")})))),
+              Core.projectionField = (Core.Name "usesCast")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesLruCache"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesLruCache")})))),
+              Core.projectionField = (Core.Name "usesLruCache")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesTypeAlias"),
@@ -3935,107 +3935,107 @@ pythonModuleMetadataWithUsesTypeAlias original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "usesDataclass"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesDataclass")})))),
+              Core.projectionField = (Core.Name "usesDataclass")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesDecimal"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesDecimal")})))),
+              Core.projectionField = (Core.Name "usesDecimal")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesEither"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesEither")})))),
+              Core.projectionField = (Core.Name "usesEither")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesEnum"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesEnum")})))),
+              Core.projectionField = (Core.Name "usesEnum")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesFrozenDict"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesFrozenDict")})))),
+              Core.projectionField = (Core.Name "usesFrozenDict")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesFrozenList"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesFrozenList")})))),
+              Core.projectionField = (Core.Name "usesFrozenList")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesGeneric"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesGeneric")})))),
+              Core.projectionField = (Core.Name "usesGeneric")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesJust"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesJust")})))),
+              Core.projectionField = (Core.Name "usesJust")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesLeft"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesLeft")})))),
+              Core.projectionField = (Core.Name "usesLeft")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesMaybe"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesMaybe")})))),
+              Core.projectionField = (Core.Name "usesMaybe")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesName"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesName")})))),
+              Core.projectionField = (Core.Name "usesName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesNode"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesNode")})))),
+              Core.projectionField = (Core.Name "usesNode")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesNothing"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesNothing")})))),
+              Core.projectionField = (Core.Name "usesNothing")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesRight"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesRight")})))),
+              Core.projectionField = (Core.Name "usesRight")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesTypeVar"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesTypeVar")})))),
+              Core.projectionField = (Core.Name "usesTypeVar")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 pythonModuleMetadataWithUsesTypeVar :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm Bool -> Phantoms.TTerm Environment.PythonModuleMetadata
@@ -4046,149 +4046,149 @@ pythonModuleMetadataWithUsesTypeVar original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "namespaces"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "namespaces")})))),
+              Core.projectionField = (Core.Name "namespaces")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeVariables"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "typeVariables")})))),
+              Core.projectionField = (Core.Name "typeVariables")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesAnnotated"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesAnnotated")})))),
+              Core.projectionField = (Core.Name "usesAnnotated")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesCallable"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesCallable")})))),
+              Core.projectionField = (Core.Name "usesCallable")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesCast"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesCast")})))),
+              Core.projectionField = (Core.Name "usesCast")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesLruCache"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesLruCache")})))),
+              Core.projectionField = (Core.Name "usesLruCache")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesTypeAlias"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesTypeAlias")})))),
+              Core.projectionField = (Core.Name "usesTypeAlias")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesDataclass"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesDataclass")})))),
+              Core.projectionField = (Core.Name "usesDataclass")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesDecimal"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesDecimal")})))),
+              Core.projectionField = (Core.Name "usesDecimal")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesEither"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesEither")})))),
+              Core.projectionField = (Core.Name "usesEither")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesEnum"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesEnum")})))),
+              Core.projectionField = (Core.Name "usesEnum")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesFrozenDict"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesFrozenDict")})))),
+              Core.projectionField = (Core.Name "usesFrozenDict")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesFrozenList"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesFrozenList")})))),
+              Core.projectionField = (Core.Name "usesFrozenList")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesGeneric"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesGeneric")})))),
+              Core.projectionField = (Core.Name "usesGeneric")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesJust"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesJust")})))),
+              Core.projectionField = (Core.Name "usesJust")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesLeft"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesLeft")})))),
+              Core.projectionField = (Core.Name "usesLeft")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesMaybe"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesMaybe")})))),
+              Core.projectionField = (Core.Name "usesMaybe")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesName"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesName")})))),
+              Core.projectionField = (Core.Name "usesName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesNode"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesNode")})))),
+              Core.projectionField = (Core.Name "usesNode")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesNothing"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesNothing")})))),
+              Core.projectionField = (Core.Name "usesNothing")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesRight"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
-              Core.projectionField = (Core.Name "usesRight")})))),
+              Core.projectionField = (Core.Name "usesRight")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "usesTypeVar"),

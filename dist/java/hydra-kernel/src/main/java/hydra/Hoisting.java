@@ -15,7 +15,7 @@ public interface Hoisting {
       @Override
       public hydra.core.Term otherwise(hydra.core.Term instance) {
         return hydra.lib.lists.Foldl.apply(
-          (java.util.function.Function<hydra.core.Term, java.util.function.Function<hydra.util.Pair<hydra.core.Name, hydra.util.Maybe<hydra.core.Type>>, hydra.core.Term>>) (t -> (java.util.function.Function<hydra.util.Pair<hydra.core.Name, hydra.util.Maybe<hydra.core.Type>>, hydra.core.Term>) (p -> new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(hydra.lib.pairs.First.apply(p), hydra.lib.pairs.Second.apply(p), t))))),
+          (java.util.function.Function<hydra.core.Term, java.util.function.Function<hydra.util.Pair<hydra.core.Name, hydra.util.Maybe<hydra.core.Type>>, hydra.core.Term>>) (t -> (java.util.function.Function<hydra.util.Pair<hydra.core.Name, hydra.util.Maybe<hydra.core.Type>>, hydra.core.Term>) (p -> new hydra.core.Term.Lambda(new hydra.core.Lambda(hydra.lib.pairs.First.apply(p), hydra.lib.pairs.Second.apply(p), t)))),
           term,
           hydra.lib.lists.Reverse.apply(vars));
       }
@@ -213,9 +213,9 @@ public interface Hoisting {
         capturedTermVars.get()));
       hydra.core.Term strippedTerm = hydra.Strip.stripTypeLambdas(b.get().term);
       hydra.util.Lazy<hydra.core.Term> termWithLambdas = new hydra.util.Lazy<>(() -> hydra.lib.lists.Foldl.apply(
-        (java.util.function.Function<hydra.core.Term, java.util.function.Function<hydra.util.Pair<hydra.core.Name, hydra.util.Maybe<hydra.core.Type>>, hydra.core.Term>>) (t -> (java.util.function.Function<hydra.util.Pair<hydra.core.Name, hydra.util.Maybe<hydra.core.Type>>, hydra.core.Term>) (p -> new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(hydra.lib.pairs.First.apply(p), hydra.lib.maybes.Map.apply(
+        (java.util.function.Function<hydra.core.Term, java.util.function.Function<hydra.util.Pair<hydra.core.Name, hydra.util.Maybe<hydra.core.Type>>, hydra.core.Term>>) (t -> (java.util.function.Function<hydra.util.Pair<hydra.core.Name, hydra.util.Maybe<hydra.core.Type>>, hydra.core.Term>) (p -> new hydra.core.Term.Lambda(new hydra.core.Lambda(hydra.lib.pairs.First.apply(p), hydra.lib.maybes.Map.apply(
           (java.util.function.Function<hydra.core.Type, hydra.core.Type>) (dom -> hydra.Strip.deannotateTypeParameters(dom)),
-          hydra.lib.pairs.Second.apply(p)), t))))),
+          hydra.lib.pairs.Second.apply(p)), t)))),
         strippedTerm,
         hydra.lib.lists.Reverse.apply(capturedTermVarTypePairs.get())));
       hydra.util.Lazy<hydra.core.Term> termWithTypeLambdas = new hydra.util.Lazy<>(() -> hydra.lib.lists.Foldl.apply(
@@ -530,9 +530,9 @@ public interface Hoisting {
                                     (cxInner).boundTypes));
                                   return ((java.util.function.Supplier<hydra.util.Pair<hydra.util.Pair<Integer, java.util.List<hydra.core.Binding>>, hydra.core.Term>>) (() -> {
                                     hydra.util.Lazy<hydra.core.Term> wrappedTerm = new hydra.util.Lazy<>(() -> hydra.lib.lists.Foldl.apply(
-                                      (java.util.function.Function<hydra.core.Term, java.util.function.Function<hydra.core.Name, hydra.core.Term>>) (body -> (java.util.function.Function<hydra.core.Name, hydra.core.Term>) (varName -> new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(varName, hydra.lib.maps.Lookup.apply(
+                                      (java.util.function.Function<hydra.core.Term, java.util.function.Function<hydra.core.Name, hydra.core.Term>>) (body -> (java.util.function.Function<hydra.core.Name, hydra.core.Term>) (varName -> new hydra.core.Term.Lambda(new hydra.core.Lambda(varName, hydra.lib.maps.Lookup.apply(
                                         varName,
-                                        typeMap.get()), body))))),
+                                        typeMap.get()), body)))),
                                       processedTerm.get(),
                                       hydra.lib.lists.Reverse.apply(capturedVars.get())));
                                     return ((java.util.function.Supplier<hydra.util.Pair<hydra.util.Pair<Integer, java.util.List<hydra.core.Binding>>, hydra.core.Term>>) (() -> {
@@ -704,30 +704,6 @@ public interface Hoisting {
     });
   }
 
-  static Boolean isEliminationUnion(hydra.core.Function f) {
-    return (f).accept(new hydra.core.Function.PartialVisitor<>() {
-      @Override
-      public Boolean otherwise(hydra.core.Function instance) {
-        return false;
-      }
-
-      @Override
-      public Boolean visit(hydra.core.Function.Elimination e) {
-        return (e).value.accept(new hydra.core.Elimination.PartialVisitor<>() {
-          @Override
-          public Boolean otherwise(hydra.core.Elimination instance) {
-            return false;
-          }
-
-          @Override
-          public Boolean visit(hydra.core.Elimination.Union ignored) {
-            return true;
-          }
-        });
-      }
-    });
-  }
-
   static Boolean isLambdaBody(hydra.paths.SubtermStep acc) {
     return (acc).accept(new hydra.paths.SubtermStep.PartialVisitor<>() {
       @Override
@@ -750,8 +726,8 @@ public interface Hoisting {
       }
 
       @Override
-      public Boolean visit(hydra.core.Term.Function f) {
-        return hydra.Hoisting.isEliminationUnion((f).value);
+      public Boolean visit(hydra.core.Term.Cases ignored) {
+        return true;
       }
     });
   }

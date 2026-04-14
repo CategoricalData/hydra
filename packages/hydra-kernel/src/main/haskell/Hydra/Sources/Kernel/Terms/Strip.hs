@@ -200,13 +200,10 @@ removeTypesFromTerm = define "removeTypesFromTerm" $
       nothing) $
     cases _Term (var "rewritten")
       (Just $ var "rewritten") [
-      _Term_function>>: "f" ~> cases _Function (var "f")
-        (Just $ Core.termFunction $ var "f") [
-        _Function_elimination>>: "e" ~> Core.termFunction $ Core.functionElimination $ var "e",
-        _Function_lambda>>: "l" ~> Core.termFunction $ Core.functionLambda $ Core.lambda
-          (Core.lambdaParameter $ var "l")
-          nothing
-          (Core.lambdaBody $ var "l")],
+      _Term_lambda>>: "l" ~> Core.termLambda $ Core.lambda
+        (Core.lambdaParameter $ var "l")
+        nothing
+        (Core.lambdaBody $ var "l"),
       _Term_let>>: "lt" ~> Core.termLet $ Core.let_
         (Lists.map (var "stripBinding") (Core.letBindings $ var "lt"))
         (Core.letBody $ var "lt"),

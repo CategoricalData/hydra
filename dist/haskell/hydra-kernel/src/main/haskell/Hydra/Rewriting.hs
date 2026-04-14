@@ -103,32 +103,6 @@ rewriteAndFoldTerm f term0 =
                                 Core.bindingName = (Core.bindingName binding),
                                 Core.bindingTerm = (Pairs.second r),
                                 Core.bindingType = (Core.bindingType binding)})
-                    forElimination =
-                            \val -> \elm ->
-                              let r =
-                                      case elm of
-                                        Core.EliminationUnion v0 ->
-                                          let rmd = Maybes.map (recurse val) (Core.caseStatementDefault v0)
-                                              val1 = Maybes.maybe val Pairs.first rmd
-                                              rcases = forFields val1 (Core.caseStatementCases v0)
-                                          in (Pairs.first rcases, (Core.EliminationUnion (Core.CaseStatement {
-                                            Core.caseStatementTypeName = (Core.caseStatementTypeName v0),
-                                            Core.caseStatementDefault = (Maybes.map Pairs.second rmd),
-                                            Core.caseStatementCases = (Pairs.second rcases)})))
-                                        _ -> (val, elm)
-                              in (Pairs.first r, (Pairs.second r))
-                    forFunction =
-                            \val -> \fun -> case fun of
-                              Core.FunctionElimination v0 ->
-                                let re = forElimination val v0
-                                in (Pairs.first re, (Core.FunctionElimination (Pairs.second re)))
-                              Core.FunctionLambda v0 ->
-                                let rl = recurse val (Core.lambdaBody v0)
-                                in (Pairs.first rl, (Core.FunctionLambda (Core.Lambda {
-                                  Core.lambdaParameter = (Core.lambdaParameter v0),
-                                  Core.lambdaDomain = (Core.lambdaDomain v0),
-                                  Core.lambdaBody = (Pairs.second rl)})))
-                              _ -> (val, fun)
                     dflt = (val0, term02)
                 in case term02 of
                   Core.TermAnnotated v0 -> forSingle recurse (\t -> Core.TermAnnotated (Core.AnnotatedTerm {
@@ -140,12 +114,25 @@ rewriteAndFoldTerm f term0 =
                     in (Pairs.first rrhs, (Core.TermApplication (Core.Application {
                       Core.applicationFunction = (Pairs.second rlhs),
                       Core.applicationArgument = (Pairs.second rrhs)})))
+                  Core.TermCases v0 ->
+                    let rmd = Maybes.map (recurse val0) (Core.caseStatementDefault v0)
+                        val1 = Maybes.maybe val0 Pairs.first rmd
+                        rcases = forFields val1 (Core.caseStatementCases v0)
+                    in (Pairs.first rcases, (Core.TermCases (Core.CaseStatement {
+                      Core.caseStatementTypeName = (Core.caseStatementTypeName v0),
+                      Core.caseStatementDefault = (Maybes.map Pairs.second rmd),
+                      Core.caseStatementCases = (Pairs.second rcases)})))
                   Core.TermEither v0 -> Eithers.either (\l ->
                     let rl = recurse val0 l
                     in (Pairs.first rl, (Core.TermEither (Left (Pairs.second rl))))) (\r ->
                     let rr = recurse val0 r
                     in (Pairs.first rr, (Core.TermEither (Right (Pairs.second rr))))) v0
-                  Core.TermFunction v0 -> forSingle forFunction (\f3 -> Core.TermFunction f3) val0 v0
+                  Core.TermLambda v0 ->
+                    let rl = recurse val0 (Core.lambdaBody v0)
+                    in (Pairs.first rl, (Core.TermLambda (Core.Lambda {
+                      Core.lambdaParameter = (Core.lambdaParameter v0),
+                      Core.lambdaDomain = (Core.lambdaDomain v0),
+                      Core.lambdaBody = (Pairs.second rl)})))
                   Core.TermLet v0 ->
                     let renv = recurse val0 (Core.letBody v0)
                     in (forMany forBinding (\bins -> Core.TermLet (Core.Let {
@@ -158,6 +145,7 @@ rewriteAndFoldTerm f term0 =
                     let rf = recurse val0 (Pairs.first v0)
                         rs = recurse (Pairs.first rf) (Pairs.second v0)
                     in (Pairs.first rs, (Core.TermPair (Pairs.second rf, (Pairs.second rs))))
+                  Core.TermProject v0 -> (val0, (Core.TermProject v0))
                   Core.TermRecord v0 -> forMany forField (\fields -> Core.TermRecord (Core.Record {
                     Core.recordTypeName = (Core.recordTypeName v0),
                     Core.recordFields = fields})) val0 (Core.recordFields v0)
@@ -173,6 +161,7 @@ rewriteAndFoldTerm f term0 =
                     Core.injectionField = Core.Field {
                       Core.fieldName = (Core.fieldName (Core.injectionField v0)),
                       Core.fieldTerm = t}})) val0 (Core.fieldTerm (Core.injectionField v0))
+                  Core.TermUnwrap v0 -> (val0, (Core.TermUnwrap v0))
                   Core.TermWrap v0 -> forSingle recurse (\t -> Core.TermWrap (Core.WrappedTerm {
                     Core.wrappedTermTypeName = (Core.wrappedTermTypeName v0),
                     Core.wrappedTermBody = t})) val0 (Core.wrappedTermBody v0)
@@ -190,9 +179,7 @@ rewriteAndFoldTermWithGraph f cx0 val0 term0 =
                     cx = Pairs.second valAndCx
                     cx1 =
                             case term of
-                              Core.TermFunction v0 -> case v0 of
-                                Core.FunctionLambda v1 -> Scoping.extendGraphForLambda cx v1
-                                _ -> cx
+                              Core.TermLambda v0 -> Scoping.extendGraphForLambda cx v0
                               Core.TermLet v0 -> Scoping.extendGraphForLet (\_ -> \_2 -> Nothing) cx v0
                               Core.TermTypeLambda v0 -> Scoping.extendGraphForTypeLambda cx v0
                               _ -> cx
@@ -215,9 +202,7 @@ rewriteAndFoldTermWithGraphAndPath f cx0 val0 term0 =
                     val = Pairs.second cxAndVal
                     cx1 =
                             case term of
-                              Core.TermFunction v0 -> case v0 of
-                                Core.FunctionLambda v1 -> Scoping.extendGraphForLambda cx v1
-                                _ -> cx
+                              Core.TermLambda v0 -> Scoping.extendGraphForLambda cx v0
                               Core.TermLet v0 -> Scoping.extendGraphForLet (\_ -> \_2 -> Nothing) cx v0
                               Core.TermTypeLambda v0 -> Scoping.extendGraphForTypeLambda cx v0
                               _ -> cx
@@ -273,38 +258,6 @@ rewriteAndFoldTermWithPath f term0 =
                                 Core.bindingName = (Core.bindingName binding),
                                 Core.bindingTerm = (Pairs.second r),
                                 Core.bindingType = (Core.bindingType binding)})
-                    forElimination =
-                            \val -> \elm ->
-                              let r =
-                                      case elm of
-                                        Core.EliminationUnion v0 ->
-                                          let rmd =
-                                                  Maybes.map (\def -> recurse (Lists.concat2 path [
-                                                    Paths.SubtermStepUnionCasesDefault]) val def) (Core.caseStatementDefault v0)
-                                              val1 = Maybes.maybe val Pairs.first rmd
-                                              rcases =
-                                                      forManyWithAccessors recurse (\x -> x) val1 (Lists.map (\f2 -> (Paths.SubtermStepUnionCasesBranch (Core.fieldName f2), (Core.fieldTerm f2))) (Core.caseStatementCases v0))
-                                          in (Pairs.first rcases, (Core.EliminationUnion (Core.CaseStatement {
-                                            Core.caseStatementTypeName = (Core.caseStatementTypeName v0),
-                                            Core.caseStatementDefault = (Maybes.map Pairs.second rmd),
-                                            Core.caseStatementCases = (Lists.map (\ft -> Core.Field {
-                                              Core.fieldName = (Pairs.first ft),
-                                              Core.fieldTerm = (Pairs.second ft)}) (Lists.zip (Lists.map Core.fieldName (Core.caseStatementCases v0)) (Pairs.second rcases)))})))
-                                        _ -> (val, elm)
-                              in (Pairs.first r, (Pairs.second r))
-                    forFunction =
-                            \val -> \fun -> case fun of
-                              Core.FunctionElimination v0 ->
-                                let re = forElimination val v0
-                                in (Pairs.first re, (Core.FunctionElimination (Pairs.second re)))
-                              Core.FunctionLambda v0 ->
-                                let rl = recurse (Lists.concat2 path [
-                                      Paths.SubtermStepLambdaBody]) val (Core.lambdaBody v0)
-                                in (Pairs.first rl, (Core.FunctionLambda (Core.Lambda {
-                                  Core.lambdaParameter = (Core.lambdaParameter v0),
-                                  Core.lambdaDomain = (Core.lambdaDomain v0),
-                                  Core.lambdaBody = (Pairs.second rl)})))
-                              _ -> (val, fun)
                     dflt = (val0, term02)
                 in case term02 of
                   Core.TermAnnotated v0 -> forSingleWithAccessor recurse (\t -> Core.TermAnnotated (Core.AnnotatedTerm {
@@ -318,6 +271,19 @@ rewriteAndFoldTermWithPath f term0 =
                     in (Pairs.first rrhs, (Core.TermApplication (Core.Application {
                       Core.applicationFunction = (Pairs.second rlhs),
                       Core.applicationArgument = (Pairs.second rrhs)})))
+                  Core.TermCases v0 ->
+                    let rmd =
+                            Maybes.map (\def -> recurse (Lists.concat2 path [
+                              Paths.SubtermStepUnionCasesDefault]) val0 def) (Core.caseStatementDefault v0)
+                        val1 = Maybes.maybe val0 Pairs.first rmd
+                        rcases =
+                                forManyWithAccessors recurse (\x -> x) val1 (Lists.map (\f2 -> (Paths.SubtermStepUnionCasesBranch (Core.fieldName f2), (Core.fieldTerm f2))) (Core.caseStatementCases v0))
+                    in (Pairs.first rcases, (Core.TermCases (Core.CaseStatement {
+                      Core.caseStatementTypeName = (Core.caseStatementTypeName v0),
+                      Core.caseStatementDefault = (Maybes.map Pairs.second rmd),
+                      Core.caseStatementCases = (Lists.map (\ft -> Core.Field {
+                        Core.fieldName = (Pairs.first ft),
+                        Core.fieldTerm = (Pairs.second ft)}) (Lists.zip (Lists.map Core.fieldName (Core.caseStatementCases v0)) (Pairs.second rcases)))})))
                   Core.TermEither v0 -> Eithers.either (\l ->
                     let rl = recurse (Lists.concat2 path [
                           Paths.SubtermStepSumTerm]) val0 l
@@ -325,9 +291,13 @@ rewriteAndFoldTermWithPath f term0 =
                     let rr = recurse (Lists.concat2 path [
                           Paths.SubtermStepSumTerm]) val0 r
                     in (Pairs.first rr, (Core.TermEither (Right (Pairs.second rr))))) v0
-                  Core.TermFunction v0 ->
-                    let rf = forFunction val0 v0
-                    in (Pairs.first rf, (Core.TermFunction (Pairs.second rf)))
+                  Core.TermLambda v0 ->
+                    let rl = recurse (Lists.concat2 path [
+                          Paths.SubtermStepLambdaBody]) val0 (Core.lambdaBody v0)
+                    in (Pairs.first rl, (Core.TermLambda (Core.Lambda {
+                      Core.lambdaParameter = (Core.lambdaParameter v0),
+                      Core.lambdaDomain = (Core.lambdaDomain v0),
+                      Core.lambdaBody = (Pairs.second rl)})))
                   Core.TermLet v0 ->
                     let renv = recurse (Lists.concat2 path [
                           Paths.SubtermStepLetBody]) val0 (Core.letBody v0)
@@ -363,6 +333,7 @@ rewriteAndFoldTermWithPath f term0 =
                         rs = recurse (Lists.concat2 path [
                               Paths.SubtermStepProductTerm 1]) (Pairs.first rf) (Pairs.second v0)
                     in (Pairs.first rs, (Core.TermPair (Pairs.second rf, (Pairs.second rs))))
+                  Core.TermProject v0 -> (val0, (Core.TermProject v0))
                   Core.TermRecord v0 ->
                     let rfields =
                             forManyWithAccessors recurse (\x -> x) val0 (Lists.map (\f2 -> (Paths.SubtermStepRecordField (Core.fieldName f2), (Core.fieldTerm f2))) (Core.recordFields v0))
@@ -390,6 +361,7 @@ rewriteAndFoldTermWithPath f term0 =
                     Core.injectionField = Core.Field {
                       Core.fieldName = (Core.fieldName (Core.injectionField v0)),
                       Core.fieldTerm = t}})) Paths.SubtermStepInjectionTerm val0 (Core.fieldTerm (Core.injectionField v0))
+                  Core.TermUnwrap v0 -> (val0, (Core.TermUnwrap v0))
                   Core.TermWrap v0 -> forSingleWithAccessor recurse (\t -> Core.TermWrap (Core.WrappedTerm {
                     Core.wrappedTermTypeName = (Core.wrappedTermTypeName v0),
                     Core.wrappedTermBody = t})) Paths.SubtermStepWrappedTerm val0 (Core.wrappedTermBody v0)
@@ -406,21 +378,6 @@ rewriteTerm f term0 =
                         \f2 -> Core.Field {
                           Core.fieldName = (Core.fieldName f2),
                           Core.fieldTerm = (recurse (Core.fieldTerm f2))}
-                    forElimination =
-                            \elm -> case elm of
-                              Core.EliminationRecord v0 -> Core.EliminationRecord v0
-                              Core.EliminationUnion v0 -> Core.EliminationUnion (Core.CaseStatement {
-                                Core.caseStatementTypeName = (Core.caseStatementTypeName v0),
-                                Core.caseStatementDefault = (Maybes.map recurse (Core.caseStatementDefault v0)),
-                                Core.caseStatementCases = (Lists.map forField (Core.caseStatementCases v0))})
-                              Core.EliminationWrap v0 -> Core.EliminationWrap v0
-                    forFunction =
-                            \fun -> case fun of
-                              Core.FunctionElimination v0 -> Core.FunctionElimination (forElimination v0)
-                              Core.FunctionLambda v0 -> Core.FunctionLambda (Core.Lambda {
-                                Core.lambdaParameter = (Core.lambdaParameter v0),
-                                Core.lambdaDomain = (Core.lambdaDomain v0),
-                                Core.lambdaBody = (recurse (Core.lambdaBody v0))})
                     forLet =
                             \lt ->
                               let mapBinding =
@@ -442,14 +399,22 @@ rewriteTerm f term0 =
                   Core.TermApplication v0 -> Core.TermApplication (Core.Application {
                     Core.applicationFunction = (recurse (Core.applicationFunction v0)),
                     Core.applicationArgument = (recurse (Core.applicationArgument v0))})
+                  Core.TermCases v0 -> Core.TermCases (Core.CaseStatement {
+                    Core.caseStatementTypeName = (Core.caseStatementTypeName v0),
+                    Core.caseStatementDefault = (Maybes.map recurse (Core.caseStatementDefault v0)),
+                    Core.caseStatementCases = (Lists.map forField (Core.caseStatementCases v0))})
                   Core.TermEither v0 -> Core.TermEither (Eithers.either (\l -> Left (recurse l)) (\r -> Right (recurse r)) v0)
-                  Core.TermFunction v0 -> Core.TermFunction (forFunction v0)
+                  Core.TermLambda v0 -> Core.TermLambda (Core.Lambda {
+                    Core.lambdaParameter = (Core.lambdaParameter v0),
+                    Core.lambdaDomain = (Core.lambdaDomain v0),
+                    Core.lambdaBody = (recurse (Core.lambdaBody v0))})
                   Core.TermLet v0 -> Core.TermLet (forLet v0)
                   Core.TermList v0 -> Core.TermList (Lists.map recurse v0)
                   Core.TermLiteral v0 -> Core.TermLiteral v0
                   Core.TermMap v0 -> Core.TermMap (forMap v0)
                   Core.TermMaybe v0 -> Core.TermMaybe (Maybes.map recurse v0)
                   Core.TermPair v0 -> Core.TermPair (recurse (Pairs.first v0), (recurse (Pairs.second v0)))
+                  Core.TermProject v0 -> Core.TermProject v0
                   Core.TermRecord v0 -> Core.TermRecord (Core.Record {
                     Core.recordTypeName = (Core.recordTypeName v0),
                     Core.recordFields = (Lists.map forField (Core.recordFields v0))})
@@ -464,6 +429,7 @@ rewriteTerm f term0 =
                     Core.injectionTypeName = (Core.injectionTypeName v0),
                     Core.injectionField = (forField (Core.injectionField v0))})
                   Core.TermUnit -> Core.TermUnit
+                  Core.TermUnwrap v0 -> Core.TermUnwrap v0
                   Core.TermVariable v0 -> Core.TermVariable v0
                   Core.TermWrap v0 -> Core.TermWrap (Core.WrappedTerm {
                     Core.wrappedTermTypeName = (Core.wrappedTermTypeName v0),
@@ -495,32 +461,23 @@ rewriteTermM f term0 =
                   Core.TermApplication v0 -> Eithers.bind (recurse (Core.applicationFunction v0)) (\lhs -> Eithers.bind (recurse (Core.applicationArgument v0)) (\rhs -> Right (Core.TermApplication (Core.Application {
                     Core.applicationFunction = lhs,
                     Core.applicationArgument = rhs}))))
+                  Core.TermCases v0 ->
+                    let n = Core.caseStatementTypeName v0
+                        def = Core.caseStatementDefault v0
+                        csCases = Core.caseStatementCases v0
+                    in (Eithers.bind (Maybes.maybe (Right Nothing) (\t -> Eithers.map Maybes.pure (recurse t)) def) (\rdef -> Eithers.map (\rcases -> Core.TermCases (Core.CaseStatement {
+                      Core.caseStatementTypeName = n,
+                      Core.caseStatementDefault = rdef,
+                      Core.caseStatementCases = rcases})) (Eithers.mapList forField csCases)))
                   Core.TermEither v0 -> Eithers.bind (Eithers.either (\l -> Eithers.map (\x -> Left x) (recurse l)) (\r -> Eithers.map (\x -> Right x) (recurse r)) v0) (\re -> Right (Core.TermEither re))
-                  Core.TermFunction v0 ->
-                    let forElm =
-                            \e -> case e of
-                              Core.EliminationRecord v1 -> Right (Core.FunctionElimination (Core.EliminationRecord v1))
-                              Core.EliminationUnion v1 ->
-                                let n = Core.caseStatementTypeName v1
-                                    def = Core.caseStatementDefault v1
-                                    cases = Core.caseStatementCases v1
-                                in (Eithers.bind (Maybes.maybe (Right Nothing) (\t -> Eithers.map Maybes.pure (recurse t)) def) (\rdef -> Eithers.map (\rcases -> Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
-                                  Core.caseStatementTypeName = n,
-                                  Core.caseStatementDefault = rdef,
-                                  Core.caseStatementCases = rcases}))) (Eithers.mapList forField cases)))
-                              Core.EliminationWrap v1 -> Right (Core.FunctionElimination (Core.EliminationWrap v1))
-                        forFun =
-                                \fun2 -> case fun2 of
-                                  Core.FunctionElimination v1 -> forElm v1
-                                  Core.FunctionLambda v1 ->
-                                    let v = Core.lambdaParameter v1
-                                        d = Core.lambdaDomain v1
-                                        body = Core.lambdaBody v1
-                                    in (Eithers.bind (recurse body) (\rbody -> Right (Core.FunctionLambda (Core.Lambda {
-                                      Core.lambdaParameter = v,
-                                      Core.lambdaDomain = d,
-                                      Core.lambdaBody = rbody}))))
-                    in (Eithers.bind (forFun v0) (\rfun -> Right (Core.TermFunction rfun)))
+                  Core.TermLambda v0 ->
+                    let v = Core.lambdaParameter v0
+                        d = Core.lambdaDomain v0
+                        body = Core.lambdaBody v0
+                    in (Eithers.bind (recurse body) (\rbody -> Right (Core.TermLambda (Core.Lambda {
+                      Core.lambdaParameter = v,
+                      Core.lambdaDomain = d,
+                      Core.lambdaBody = rbody}))))
                   Core.TermLet v0 ->
                     let bindings = Core.letBindings v0
                         env = Core.letBody v0
@@ -532,6 +489,7 @@ rewriteTermM f term0 =
                   Core.TermMap v0 -> Eithers.bind (Eithers.mapList forPair (Maps.toList v0)) (\pairs -> Right (Core.TermMap (Maps.fromList pairs)))
                   Core.TermMaybe v0 -> Eithers.bind (Eithers.mapMaybe recurse v0) (\rm -> Right (Core.TermMaybe rm))
                   Core.TermPair v0 -> Eithers.bind (recurse (Pairs.first v0)) (\rf -> Eithers.bind (recurse (Pairs.second v0)) (\rs -> Right (Core.TermPair (rf, rs))))
+                  Core.TermProject v0 -> Right (Core.TermProject v0)
                   Core.TermRecord v0 ->
                     let n = Core.recordTypeName v0
                         fields = Core.recordFields v0
@@ -555,6 +513,7 @@ rewriteTermM f term0 =
                       Core.injectionTypeName = n,
                       Core.injectionField = rfield})) (forField field))
                   Core.TermUnit -> Right Core.TermUnit
+                  Core.TermUnwrap v0 -> Right (Core.TermUnwrap v0)
                   Core.TermVariable v0 -> Right (Core.TermVariable v0)
                   Core.TermWrap v0 ->
                     let name = Core.wrappedTermTypeName v0
@@ -576,21 +535,6 @@ rewriteTermWithContext f cx0 term0 =
                             \field -> Core.Field {
                               Core.fieldName = (Core.fieldName field),
                               Core.fieldTerm = (recurse (Core.fieldTerm field))}
-                    forElimination =
-                            \elm -> case elm of
-                              Core.EliminationRecord v0 -> Core.EliminationRecord v0
-                              Core.EliminationUnion v0 -> Core.EliminationUnion (Core.CaseStatement {
-                                Core.caseStatementTypeName = (Core.caseStatementTypeName v0),
-                                Core.caseStatementDefault = (Maybes.map recurse (Core.caseStatementDefault v0)),
-                                Core.caseStatementCases = (Lists.map forField (Core.caseStatementCases v0))})
-                              Core.EliminationWrap v0 -> Core.EliminationWrap v0
-                    forFunction =
-                            \fun -> case fun of
-                              Core.FunctionElimination v0 -> Core.FunctionElimination (forElimination v0)
-                              Core.FunctionLambda v0 -> Core.FunctionLambda (Core.Lambda {
-                                Core.lambdaParameter = (Core.lambdaParameter v0),
-                                Core.lambdaDomain = (Core.lambdaDomain v0),
-                                Core.lambdaBody = (recurse (Core.lambdaBody v0))})
                     forLet =
                             \lt ->
                               let mapBinding =
@@ -612,14 +556,22 @@ rewriteTermWithContext f cx0 term0 =
                   Core.TermApplication v0 -> Core.TermApplication (Core.Application {
                     Core.applicationFunction = (recurse (Core.applicationFunction v0)),
                     Core.applicationArgument = (recurse (Core.applicationArgument v0))})
+                  Core.TermCases v0 -> Core.TermCases (Core.CaseStatement {
+                    Core.caseStatementTypeName = (Core.caseStatementTypeName v0),
+                    Core.caseStatementDefault = (Maybes.map recurse (Core.caseStatementDefault v0)),
+                    Core.caseStatementCases = (Lists.map forField (Core.caseStatementCases v0))})
                   Core.TermEither v0 -> Core.TermEither (Eithers.either (\l -> Left (recurse l)) (\r -> Right (recurse r)) v0)
-                  Core.TermFunction v0 -> Core.TermFunction (forFunction v0)
+                  Core.TermLambda v0 -> Core.TermLambda (Core.Lambda {
+                    Core.lambdaParameter = (Core.lambdaParameter v0),
+                    Core.lambdaDomain = (Core.lambdaDomain v0),
+                    Core.lambdaBody = (recurse (Core.lambdaBody v0))})
                   Core.TermLet v0 -> Core.TermLet (forLet v0)
                   Core.TermList v0 -> Core.TermList (Lists.map recurse v0)
                   Core.TermLiteral v0 -> Core.TermLiteral v0
                   Core.TermMap v0 -> Core.TermMap (forMap v0)
                   Core.TermMaybe v0 -> Core.TermMaybe (Maybes.map recurse v0)
                   Core.TermPair v0 -> Core.TermPair (recurse (Pairs.first v0), (recurse (Pairs.second v0)))
+                  Core.TermProject v0 -> Core.TermProject v0
                   Core.TermRecord v0 -> Core.TermRecord (Core.Record {
                     Core.recordTypeName = (Core.recordTypeName v0),
                     Core.recordFields = (Lists.map forField (Core.recordFields v0))})
@@ -634,6 +586,7 @@ rewriteTermWithContext f cx0 term0 =
                     Core.injectionTypeName = (Core.injectionTypeName v0),
                     Core.injectionField = (forField (Core.injectionField v0))})
                   Core.TermUnit -> Core.TermUnit
+                  Core.TermUnwrap v0 -> Core.TermUnwrap v0
                   Core.TermVariable v0 -> Core.TermVariable v0
                   Core.TermWrap v0 -> Core.TermWrap (Core.WrappedTerm {
                     Core.wrappedTermTypeName = (Core.wrappedTermTypeName v0),
@@ -654,29 +607,6 @@ rewriteTermWithContextM f cx0 term0 =
                               Core.fieldTerm = t}))
                     forPair =
                             \kv -> Eithers.bind (recurse (Pairs.first kv)) (\k -> Eithers.bind (recurse (Pairs.second kv)) (\v -> Right (k, v)))
-                    forElimination =
-                            \e -> case e of
-                              Core.EliminationRecord v0 -> Right (Core.FunctionElimination (Core.EliminationRecord v0))
-                              Core.EliminationUnion v0 ->
-                                let n = Core.caseStatementTypeName v0
-                                    def = Core.caseStatementDefault v0
-                                    cases = Core.caseStatementCases v0
-                                in (Eithers.bind (Maybes.maybe (Right Nothing) (\t -> Eithers.map Maybes.pure (recurse t)) def) (\rdef -> Eithers.map (\rcases -> Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
-                                  Core.caseStatementTypeName = n,
-                                  Core.caseStatementDefault = rdef,
-                                  Core.caseStatementCases = rcases}))) (Eithers.mapList forField cases)))
-                              Core.EliminationWrap v0 -> Right (Core.FunctionElimination (Core.EliminationWrap v0))
-                    forFunction =
-                            \fun -> case fun of
-                              Core.FunctionElimination v0 -> forElimination v0
-                              Core.FunctionLambda v0 ->
-                                let v = Core.lambdaParameter v0
-                                    d = Core.lambdaDomain v0
-                                    body = Core.lambdaBody v0
-                                in (Eithers.bind (recurse body) (\rbody -> Right (Core.FunctionLambda (Core.Lambda {
-                                  Core.lambdaParameter = v,
-                                  Core.lambdaDomain = d,
-                                  Core.lambdaBody = rbody}))))
                     mapBinding =
                             \b -> Eithers.bind (recurse (Core.bindingTerm b)) (\v -> Right (Core.Binding {
                               Core.bindingName = (Core.bindingName b),
@@ -689,8 +619,23 @@ rewriteTermWithContextM f cx0 term0 =
                   Core.TermApplication v0 -> Eithers.bind (recurse (Core.applicationFunction v0)) (\lhs -> Eithers.bind (recurse (Core.applicationArgument v0)) (\rhs -> Right (Core.TermApplication (Core.Application {
                     Core.applicationFunction = lhs,
                     Core.applicationArgument = rhs}))))
+                  Core.TermCases v0 ->
+                    let n = Core.caseStatementTypeName v0
+                        def = Core.caseStatementDefault v0
+                        csCases = Core.caseStatementCases v0
+                    in (Eithers.bind (Maybes.maybe (Right Nothing) (\t -> Eithers.map Maybes.pure (recurse t)) def) (\rdef -> Eithers.map (\rcases -> Core.TermCases (Core.CaseStatement {
+                      Core.caseStatementTypeName = n,
+                      Core.caseStatementDefault = rdef,
+                      Core.caseStatementCases = rcases})) (Eithers.mapList forField csCases)))
                   Core.TermEither v0 -> Eithers.bind (Eithers.either (\l -> Eithers.map (\x -> Left x) (recurse l)) (\r -> Eithers.map (\x -> Right x) (recurse r)) v0) (\re -> Right (Core.TermEither re))
-                  Core.TermFunction v0 -> Eithers.bind (forFunction v0) (\rfun -> Right (Core.TermFunction rfun))
+                  Core.TermLambda v0 ->
+                    let v = Core.lambdaParameter v0
+                        d = Core.lambdaDomain v0
+                        body = Core.lambdaBody v0
+                    in (Eithers.bind (recurse body) (\rbody -> Right (Core.TermLambda (Core.Lambda {
+                      Core.lambdaParameter = v,
+                      Core.lambdaDomain = d,
+                      Core.lambdaBody = rbody}))))
                   Core.TermLet v0 ->
                     let bindings = Core.letBindings v0
                         body = Core.letBody v0
@@ -702,6 +647,7 @@ rewriteTermWithContextM f cx0 term0 =
                   Core.TermMap v0 -> Eithers.bind (Eithers.mapList forPair (Maps.toList v0)) (\pairs -> Right (Core.TermMap (Maps.fromList pairs)))
                   Core.TermMaybe v0 -> Eithers.bind (Eithers.mapMaybe recurse v0) (\rm -> Right (Core.TermMaybe rm))
                   Core.TermPair v0 -> Eithers.bind (recurse (Pairs.first v0)) (\rfirst -> Eithers.bind (recurse (Pairs.second v0)) (\rsecond -> Right (Core.TermPair (rfirst, rsecond))))
+                  Core.TermProject v0 -> Right (Core.TermProject v0)
                   Core.TermRecord v0 ->
                     let n = Core.recordTypeName v0
                         fields = Core.recordFields v0
@@ -725,6 +671,7 @@ rewriteTermWithContextM f cx0 term0 =
                       Core.injectionTypeName = n,
                       Core.injectionField = rfield})) (forField field))
                   Core.TermUnit -> Right Core.TermUnit
+                  Core.TermUnwrap v0 -> Right (Core.TermUnwrap v0)
                   Core.TermVariable v0 -> Right (Core.TermVariable v0)
                   Core.TermWrap v0 ->
                     let name = Core.wrappedTermTypeName v0
@@ -743,12 +690,10 @@ rewriteTermWithGraph f cx0 term0 =
               \recurse -> \cx -> \term ->
                 let recurse1 = \term2 -> recurse cx term2
                 in case term of
-                  Core.TermFunction v0 -> case v0 of
-                    Core.FunctionLambda v1 ->
-                      let cx1 = Scoping.extendGraphForLambda cx v1
-                          recurse2 = \term2 -> recurse cx1 term2
-                      in (f recurse2 cx1 term)
-                    _ -> f recurse1 cx term
+                  Core.TermLambda v0 ->
+                    let cx1 = Scoping.extendGraphForLambda cx v0
+                        recurse2 = \term2 -> recurse cx1 term2
+                    in (f recurse2 cx1 term)
                   Core.TermLet v0 ->
                     let cx1 = Scoping.extendGraphForLet (\_ -> \_2 -> Nothing) cx v0
                         recurse2 = \term2 -> recurse cx1 term2
@@ -864,17 +809,13 @@ subterms x =
       Core.TermApplication v0 -> [
         Core.applicationFunction v0,
         (Core.applicationArgument v0)]
+      Core.TermCases v0 -> Lists.concat2 (Maybes.maybe [] (\t -> [
+        t]) (Core.caseStatementDefault v0)) (Lists.map Core.fieldTerm (Core.caseStatementCases v0))
       Core.TermEither v0 -> Eithers.either (\l -> [
         l]) (\r -> [
         r]) v0
-      Core.TermFunction v0 -> case v0 of
-        Core.FunctionElimination v1 -> case v1 of
-          Core.EliminationUnion v2 -> Lists.concat2 (Maybes.maybe [] (\t -> [
-            t]) (Core.caseStatementDefault v2)) (Lists.map Core.fieldTerm (Core.caseStatementCases v2))
-          _ -> []
-        Core.FunctionLambda v1 -> [
-          Core.lambdaBody v1]
-        _ -> []
+      Core.TermLambda v0 -> [
+        Core.lambdaBody v0]
       Core.TermLet v0 -> Lists.cons (Core.letBody v0) (Lists.map Core.bindingTerm (Core.letBindings v0))
       Core.TermList v0 -> v0
       Core.TermLiteral _ -> []
@@ -886,6 +827,7 @@ subterms x =
       Core.TermPair v0 -> [
         Pairs.first v0,
         (Pairs.second v0)]
+      Core.TermProject _ -> []
       Core.TermRecord v0 -> Lists.map Core.fieldTerm (Core.recordFields v0)
       Core.TermSet v0 -> Sets.toList v0
       Core.TermTypeApplication v0 -> [
@@ -895,6 +837,7 @@ subterms x =
       Core.TermUnion v0 -> [
         Core.fieldTerm (Core.injectionField v0)]
       Core.TermUnit -> []
+      Core.TermUnwrap _ -> []
       Core.TermVariable _ -> []
       Core.TermWrap v0 -> [
         Core.wrappedTermBody v0]
@@ -908,15 +851,11 @@ subtermsWithSteps x =
       Core.TermApplication v0 -> [
         (Paths.SubtermStepApplicationFunction, (Core.applicationFunction v0)),
         (Paths.SubtermStepApplicationArgument, (Core.applicationArgument v0))]
+      Core.TermCases v0 -> Lists.concat2 (Maybes.maybe [] (\t -> [
+        (Paths.SubtermStepUnionCasesDefault, t)]) (Core.caseStatementDefault v0)) (Lists.map (\f -> (Paths.SubtermStepUnionCasesBranch (Core.fieldName f), (Core.fieldTerm f))) (Core.caseStatementCases v0))
       Core.TermEither _ -> []
-      Core.TermFunction v0 -> case v0 of
-        Core.FunctionElimination v1 -> case v1 of
-          Core.EliminationUnion v2 -> Lists.concat2 (Maybes.maybe [] (\t -> [
-            (Paths.SubtermStepUnionCasesDefault, t)]) (Core.caseStatementDefault v2)) (Lists.map (\f -> (Paths.SubtermStepUnionCasesBranch (Core.fieldName f), (Core.fieldTerm f))) (Core.caseStatementCases v2))
-          _ -> []
-        Core.FunctionLambda v1 -> [
-          (Paths.SubtermStepLambdaBody, (Core.lambdaBody v1))]
-        _ -> []
+      Core.TermLambda v0 -> [
+        (Paths.SubtermStepLambdaBody, (Core.lambdaBody v0))]
       Core.TermLet v0 -> Lists.cons (Paths.SubtermStepLetBody, (Core.letBody v0)) (Lists.map (\b -> (Paths.SubtermStepLetBinding (Core.bindingName b), (Core.bindingTerm b))) (Core.letBindings v0))
       Core.TermList v0 -> Lists.map (\e -> (Paths.SubtermStepListElement 0, e)) v0
       Core.TermLiteral _ -> []
@@ -926,6 +865,7 @@ subtermsWithSteps x =
       Core.TermMaybe v0 -> Maybes.maybe [] (\t -> [
         (Paths.SubtermStepMaybeTerm, t)]) v0
       Core.TermPair _ -> []
+      Core.TermProject _ -> []
       Core.TermRecord v0 -> Lists.map (\f -> (Paths.SubtermStepRecordField (Core.fieldName f), (Core.fieldTerm f))) (Core.recordFields v0)
       Core.TermSet v0 -> Lists.map (\e -> (Paths.SubtermStepListElement 0, e)) (Sets.toList v0)
       Core.TermTypeApplication v0 -> [
@@ -935,6 +875,7 @@ subtermsWithSteps x =
       Core.TermUnion v0 -> [
         (Paths.SubtermStepInjectionTerm, (Core.fieldTerm (Core.injectionField v0)))]
       Core.TermUnit -> []
+      Core.TermUnwrap _ -> []
       Core.TermVariable _ -> []
       Core.TermWrap v0 -> [
         (Paths.SubtermStepWrappedTerm, (Core.wrappedTermBody v0))]

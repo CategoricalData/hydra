@@ -122,7 +122,18 @@ csharpLanguage = define "csharpLanguage" $
     Core.integerTypeUint64], -- ulong
   "termVariants">: Sets.fromList $ list [ -- TODO: verify whether all are supported
     Variants.termVariantApplication,
-    Variants.termVariantFunction,
+
+    Variants.termVariantCases,
+
+    Variants.termVariantLambda,
+
+    Variants.termVariantProject,
+
+    Variants.termVariantUnwrap,
+
+    Variants.termVariantTypeApplication,
+
+    Variants.termVariantTypeLambda,
     Variants.termVariantLet,
     Variants.termVariantList,
     Variants.termVariantLiteral,
