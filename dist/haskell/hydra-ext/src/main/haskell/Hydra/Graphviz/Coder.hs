@@ -19,7 +19,7 @@ import qualified Hydra.Names as Names
 import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Paths as Paths
 import qualified Hydra.Rewriting as Rewriting
-import qualified Hydra.Show.Paths as Paths_
+import qualified Hydra.Show.Paths as ShowPaths
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Map as M
 
@@ -189,7 +189,7 @@ termToDotStmts namespaces term =
                               Dot.nodeStmtId = (toNodeId selfId),
                               Dot.nodeStmtAttributes = (Just (labelAttrs nodeStyle rawLabel))})
                     toAccessorEdgeStmt =
-                            \acc -> \sty -> \i1 -> \i2 -> toEdgeStmt i1 i2 (Maybes.map (\s -> labelAttrs sty s) (Paths_.subtermStep acc))
+                            \acc -> \sty -> \i1 -> \i2 -> toEdgeStmt i1 i2 (Maybes.map (\s -> labelAttrs sty s) (ShowPaths.subtermStep acc))
                     edgeAttrs =
                             \lab -> Dot.AttrList [
                               [
@@ -269,7 +269,7 @@ termToSubtermDotGraph term =
 termToSubtermDotStmts :: M.Map Packaging.Namespace String -> Core.Term -> [Dot.Stmt]
 termToSubtermDotStmts namespaces term =
 
-      let accessorGraph = Paths_.termToSubtermGraph namespaces term
+      let accessorGraph = ShowPaths.termToSubtermGraph namespaces term
           nodes = Paths.subtermGraphNodes accessorGraph
           edges = Paths.subtermGraphEdges accessorGraph
           nodeStmt =
@@ -283,7 +283,7 @@ termToSubtermDotStmts namespaces term =
                     let lab1 = Paths.subtermNodeId (Paths.subtermEdgeSource edge)
                         lab2 = Paths.subtermNodeId (Paths.subtermEdgeTarget edge)
                         pathAccessors = Paths.unSubtermPath (Paths.subtermEdgePath edge)
-                        showPath = Strings.intercalate "/" (Maybes.cat (Lists.map Paths_.subtermStep pathAccessors))
+                        showPath = Strings.intercalate "/" (Maybes.cat (Lists.map ShowPaths.subtermStep pathAccessors))
                     in (toEdgeStmt (Dot.Id lab1) (Dot.Id lab2) (Just (Dot.AttrList [
                       [
                         labelAttr showPath]])))

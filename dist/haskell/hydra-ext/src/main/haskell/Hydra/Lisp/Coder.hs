@@ -23,7 +23,7 @@ import qualified Hydra.Lisp.Syntax as Syntax
 import qualified Hydra.Names as Names
 import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Predicates as Predicates
-import qualified Hydra.Show.Core as Core_
+import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Sorting as Sorting
 import qualified Hydra.Strip as Strip
 import qualified Hydra.Variables as Variables
@@ -378,7 +378,7 @@ encodeTypeBody lname origTyp typ =
         Syntax.topLevelFormWithCommentsDoc = Nothing,
         Syntax.topLevelFormWithCommentsComment = (Just (Syntax.Comment {
           Syntax.commentStyle = Syntax.CommentStyleLine,
-          Syntax.commentText = (Strings.cat2 (Strings.cat2 lname " = ") (Core_.type_ origTyp))})),
+          Syntax.commentText = (Strings.cat2 (Strings.cat2 lname " = ") (ShowCore.type_ origTyp))})),
         Syntax.topLevelFormWithCommentsForm = (Syntax.TopLevelFormExpression (Syntax.ExpressionLiteral Syntax.LiteralNil))})
 
 encodeTypeDefinition :: t0 -> t1 -> Packaging.TypeDefinition -> Either t2 Syntax.TopLevelFormWithComments

@@ -11,10 +11,10 @@ import qualified Hydra.Coders as Coders
 import qualified Hydra.Constants as Constants
 import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
-import qualified Hydra.Decode.Core as Core_
+import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Environment as Environment
 import qualified Hydra.Errors as Errors
-import qualified Hydra.Extract.Core as Core__
+import qualified Hydra.Extract.Core as ExtractCore
 import qualified Hydra.Formatting as Formatting
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lexical as Lexical
@@ -31,13 +31,13 @@ import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Names as Names
 import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Predicates as Predicates
-import qualified Hydra.Protobuf.Environment as Environment_
+import qualified Hydra.Protobuf.Environment as ProtobufEnvironment
 import qualified Hydra.Protobuf.Language as Language
 import qualified Hydra.Protobuf.Proto3 as Proto3
 import qualified Hydra.Protobuf.Serde as Serde
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Serialization as Serialization
-import qualified Hydra.Show.Core as Core___
+import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Strip as Strip
 import qualified Hydra.Variables as Variables
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
@@ -45,18 +45,18 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | Collect all structural type references (Either, Pair) from a list of types
-collectStructuralTypes :: [Core.Type] -> S.Set Environment_.StructuralTypeRef
+collectStructuralTypes :: [Core.Type] -> S.Set ProtobufEnvironment.StructuralTypeRef
 collectStructuralTypes types =
     Lists.foldl (\acc -> \t -> Sets.union acc (collectStructuralTypes_collectFromType t)) Sets.empty types
 
 -- | Collect structural type references from a single type
-collectStructuralTypes_collectFromType :: Core.Type -> S.Set Environment_.StructuralTypeRef
+collectStructuralTypes_collectFromType :: Core.Type -> S.Set ProtobufEnvironment.StructuralTypeRef
 collectStructuralTypes_collectFromType typ =
     Rewriting.foldOverType Coders.TraversalOrderPre (\acc -> \t ->
       let st = simplifyType t
       in case st of
-        Core.TypeEither v0 -> Sets.insert (Environment_.StructuralTypeRefEither (Core.eitherTypeLeft v0, (Core.eitherTypeRight v0))) acc
-        Core.TypePair v0 -> Sets.insert (Environment_.StructuralTypeRefPair (Core.pairTypeFirst v0, (Core.pairTypeSecond v0))) acc
+        Core.TypeEither v0 -> Sets.insert (ProtobufEnvironment.StructuralTypeRefEither (Core.eitherTypeLeft v0, (Core.eitherTypeRight v0))) acc
+        Core.TypePair v0 -> Sets.insert (ProtobufEnvironment.StructuralTypeRefPair (Core.pairTypeFirst v0, (Core.pairTypeSecond v0))) acc
         _ -> acc) Sets.empty typ
 
 -- | Construct a Protobuf file from a Hydra module and its type definitions
@@ -192,10 +192,10 @@ encodeFieldType cx g localNs ft =
           encodeType_ =
                   \cx0 -> \g0 -> \ns0 -> \typ -> case (simplifyType typ) of
                     Core.TypeEither v0 ->
-                      let ref = Environment_.StructuralTypeRefEither (Core.eitherTypeLeft v0, (Core.eitherTypeRight v0))
+                      let ref = ProtobufEnvironment.StructuralTypeRefEither (Core.eitherTypeLeft v0, (Core.eitherTypeRight v0))
                       in (Right (Proto3.FieldTypeSimple (Proto3.SimpleTypeReference (structuralTypeName ns0 ref))))
                     Core.TypePair v0 ->
-                      let ref = Environment_.StructuralTypeRefPair (Core.pairTypeFirst v0, (Core.pairTypeSecond v0))
+                      let ref = ProtobufEnvironment.StructuralTypeRefPair (Core.pairTypeFirst v0, (Core.pairTypeSecond v0))
                       in (Right (Proto3.FieldTypeSimple (Proto3.SimpleTypeReference (structuralTypeName ns0 ref))))
                     Core.TypeList v0 -> Eithers.map (\st -> Proto3.FieldTypeRepeated st) (encodeSimpleType_ cx0 g0 ns0 True v0)
                     Core.TypeSet v0 -> Eithers.map (\st -> Proto3.FieldTypeRepeated st) (encodeSimpleType_ cx0 g0 ns0 True v0)
@@ -219,8 +219,8 @@ encodeFieldType cx g localNs ft =
                       Core.TypeUnit -> Right (Proto3.SimpleTypeReference (Proto3.TypeName "google.protobuf.Empty"))
                       Core.TypeVariable v0 -> Logic.ifElse noms (forNominal v0) (Eithers.bind (Lexical.requireBinding g0 v0) (\el ->
                         let term = Core.bindingTerm el
-                        in (Eithers.bind (Eithers.bimap (\de -> Errors.ErrorOther (Errors.OtherError (Errors.unDecodingError de))) (\t -> t) (Core_.type_ g0 term)) (\resolvedTyp -> encodeSimpleType_ cx0 g0 ns0 noms resolvedTyp))))
-                      _ -> unexpectedE cx0 "simple type" (Core___.type_ (Strip.removeTypeAnnotations typ))
+                        in (Eithers.bind (Eithers.bimap (\de -> Errors.ErrorOther (Errors.OtherError (Errors.unDecodingError de))) (\t -> t) (DecodeCore.type_ g0 term)) (\resolvedTyp -> encodeSimpleType_ cx0 g0 ns0 noms resolvedTyp))))
+                      _ -> unexpectedE cx0 "simple type" (ShowCore.type_ (Strip.removeTypeAnnotations typ))
       in (Eithers.bind (findOptions cx g ftype) (\options -> Eithers.bind (encodeType_ cx g localNs ftype) (\ft_ ->
         let idxPair = Annotations.nextCount key_proto_field_index cx
             idx = Pairs.first idxPair
@@ -251,15 +251,15 @@ encodeScalarType cx lt =
       Core.LiteralTypeFloat v0 -> case v0 of
         Core.FloatTypeFloat32 -> Right Proto3.ScalarTypeFloat
         Core.FloatTypeFloat64 -> Right Proto3.ScalarTypeDouble
-        _ -> unexpectedE cx "32-bit or 64-bit floating-point type" (Core___.floatType v0)
+        _ -> unexpectedE cx "32-bit or 64-bit floating-point type" (ShowCore.floatType v0)
       Core.LiteralTypeInteger v0 -> case v0 of
         Core.IntegerTypeInt32 -> Right Proto3.ScalarTypeInt32
         Core.IntegerTypeInt64 -> Right Proto3.ScalarTypeInt64
         Core.IntegerTypeUint32 -> Right Proto3.ScalarTypeUint32
         Core.IntegerTypeUint64 -> Right Proto3.ScalarTypeUint64
-        _ -> unexpectedE cx "32-bit or 64-bit integer type" (Core___.integerType v0)
+        _ -> unexpectedE cx "32-bit or 64-bit integer type" (ShowCore.integerType v0)
       Core.LiteralTypeString -> Right Proto3.ScalarTypeString
-      _ -> unexpectedE cx "supported literal type" (Core___.literalType lt)
+      _ -> unexpectedE cx "supported literal type" (ShowCore.literalType lt)
 
 -- | Encode a Hydra literal type as a wrapped Protobuf type (for optional scalars)
 encodeScalarTypeWrapped :: t0 -> Core.LiteralType -> Either Errors.Error Proto3.SimpleType
@@ -276,15 +276,15 @@ encodeScalarTypeWrapped cx lt =
         Core.LiteralTypeFloat v0 -> case v0 of
           Core.FloatTypeFloat32 -> toType "Float"
           Core.FloatTypeFloat64 -> toType "Double"
-          _ -> unexpectedE cx "32-bit or 64-bit floating-point type" (Core___.floatType v0)
+          _ -> unexpectedE cx "32-bit or 64-bit floating-point type" (ShowCore.floatType v0)
         Core.LiteralTypeInteger v0 -> case v0 of
           Core.IntegerTypeInt32 -> toType "Int32"
           Core.IntegerTypeInt64 -> toType "Int64"
           Core.IntegerTypeUint32 -> toType "UInt32"
           Core.IntegerTypeUint64 -> toType "UInt64"
-          _ -> unexpectedE cx "32-bit or 64-bit integer type" (Core___.integerType v0)
+          _ -> unexpectedE cx "32-bit or 64-bit integer type" (ShowCore.integerType v0)
         Core.LiteralTypeString -> toType "String"
-        _ -> unexpectedE cx "supported literal type" (Core___.literalType lt)
+        _ -> unexpectedE cx "supported literal type" (ShowCore.literalType lt)
 
 -- | Encode a simple type for helper message fields
 encodeSimpleTypeForHelper :: t0 -> Packaging.Namespace -> Core.Type -> Either Errors.Error Proto3.SimpleType
@@ -297,7 +297,7 @@ encodeSimpleTypeForHelper cx localNs typ =
         Core.TypeUnion _ -> unexpectedE cx "named type reference" "anonymous union type"
         Core.TypeUnit -> Right (Proto3.SimpleTypeReference (Proto3.TypeName "google.protobuf.Empty"))
         Core.TypeVariable v0 -> forNominal v0
-        _ -> unexpectedE cx "simple type in structural type helper" (Core___.type_ (Strip.removeTypeAnnotations typ))
+        _ -> unexpectedE cx "simple type in structural type helper" (ShowCore.type_ (Strip.removeTypeAnnotations typ))
 
 -- | Encode a Hydra type name as a Protobuf type name
 encodeTypeName :: Core.Name -> Proto3.TypeName
@@ -349,7 +349,7 @@ fromEitherString :: t0 -> Either String t1 -> Either Errors.Error t1
 fromEitherString cx e = Eithers.bimap (\msg -> Errors.ErrorOther (Errors.OtherError msg)) (\a -> a) e
 
 -- | Generate a helper message definition for a structural type
-generateStructuralTypeMessage :: Context.Context -> t0 -> Packaging.Namespace -> Environment_.StructuralTypeRef -> Either Errors.Error (Proto3.Definition, Context.Context)
+generateStructuralTypeMessage :: Context.Context -> t0 -> Packaging.Namespace -> ProtobufEnvironment.StructuralTypeRef -> Either Errors.Error (Proto3.Definition, Context.Context)
 generateStructuralTypeMessage cx g localNs ref =
 
       let cx1 = Annotations.resetCount key_proto_field_index cx
@@ -366,7 +366,7 @@ generateStructuralTypeMessage cx g localNs ref =
                       Proto3.fieldNumber = idx,
                       Proto3.fieldOptions = []}, cx1_)))
       in case ref of
-        Environment_.StructuralTypeRefEither v0 ->
+        ProtobufEnvironment.StructuralTypeRefEither v0 ->
           let lt = Pairs.first v0
               rt = Pairs.second v0
           in (Eithers.bind (makeField cx2 "left" lt) (\leftResult ->
@@ -381,7 +381,7 @@ generateStructuralTypeMessage cx g localNs ref =
                   leftField,
                   rightField],
                 Proto3.messageDefinitionOptions = []}), cx4))))))
-        Environment_.StructuralTypeRefPair v0 ->
+        ProtobufEnvironment.StructuralTypeRefPair v0 ->
           let ft = Pairs.first v0
               st = Pairs.second v0
           in (Eithers.bind (makeField cx2 "first" ft) (\firstResult ->
@@ -457,7 +457,7 @@ namespaceToPackageName ns_ =
 -- | Read a boolean annotation from a type
 readBooleanAnnotation :: t0 -> Graph.Graph -> Core.Name -> Core.Type -> Either Errors.Error Bool
 readBooleanAnnotation cx g key typ =
-    Maybes.maybe (Right False) (\term -> Core__.boolean g term) (Maps.lookup key (Annotations.typeAnnotationInternal typ))
+    Maybes.maybe (Right False) (\term -> ExtractCore.boolean g term) (Maps.lookup key (Annotations.typeAnnotationInternal typ))
 
 -- | Simplify a type by removing annotations and unwrapping newtypes
 simplifyType :: Core.Type -> Core.Type
@@ -467,7 +467,7 @@ simplifyType typ =
       _ -> Strip.deannotateType typ
 
 -- | Generate a message name for a structural type reference
-structuralTypeName :: t0 -> Environment_.StructuralTypeRef -> Proto3.TypeName
+structuralTypeName :: t0 -> ProtobufEnvironment.StructuralTypeRef -> Proto3.TypeName
 structuralTypeName localNs ref =
 
       let typeSuffix =
@@ -499,12 +499,12 @@ structuralTypeName localNs ref =
                   Core.TypeMaybe _ -> "maybe"
                   _ -> "value"
       in (Proto3.TypeName (case ref of
-        Environment_.StructuralTypeRefEither v0 -> Strings.cat [
+        ProtobufEnvironment.StructuralTypeRefEither v0 -> Strings.cat [
           "Either_",
           (typeSuffix (Pairs.first v0)),
           "_",
           (typeSuffix (Pairs.second v0))]
-        Environment_.StructuralTypeRefPair v0 -> Strings.cat [
+        ProtobufEnvironment.StructuralTypeRefPair v0 -> Strings.cat [
           "Pair_",
           (typeSuffix (Pairs.first v0)),
           "_",

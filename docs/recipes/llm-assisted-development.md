@@ -5,7 +5,7 @@ effectively for generating Hydra schemas and programs.
 
 ## The Hydra lexicon
 
-The Hydra lexicon ([`docs/hydra-lexicon.txt`](../../hydra-lexicon.txt))
+The Hydra lexicon ([`docs/hydra-lexicon.txt`](../hydra-lexicon.txt))
 is a comprehensive reference file that provides LLMs with the complete API surface of Hydra's kernel and primitive
 functions.
 It contains:

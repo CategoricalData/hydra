@@ -9,7 +9,7 @@ import qualified Hydra.Errors as Errors
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Pairs as Pairs
-import qualified Hydra.Show.Core as Core_
+import qualified Hydra.Show.Core as ShowCore
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 
 -- | Interpreter-friendly alter for Map terms.
@@ -44,7 +44,7 @@ alter cx g funTerm keyTerm mapTerm =
           Core.applicationArgument = newVal})))
       _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
         Errors.unexpectedShapeErrorExpected = "map value",
-        Errors.unexpectedShapeErrorActual = (Core_.term mapTerm)})))
+        Errors.unexpectedShapeErrorActual = (ShowCore.term mapTerm)})))
 
 -- | Interpreter-friendly bimap for Map terms.
 bimap :: t0 -> t1 -> Core.Term -> Core.Term -> Core.Term -> Either Errors.Error Core.Term
@@ -62,7 +62,7 @@ bimap cx g keyFun valFun mapTerm =
             Core.applicationArgument = v})))) pairs))))
       _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
         Errors.unexpectedShapeErrorExpected = "map value",
-        Errors.unexpectedShapeErrorActual = (Core_.term mapTerm)})))
+        Errors.unexpectedShapeErrorActual = (ShowCore.term mapTerm)})))
 
 -- | Interpreter-friendly filter for Map terms.
 filter :: t0 -> t1 -> Core.Term -> Core.Term -> Either Errors.Error Core.Term
@@ -87,7 +87,7 @@ filter cx g valPred mapTerm =
                 Core.applicationArgument = (Core.TermList [])}))) pairs))}))})))
       _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
         Errors.unexpectedShapeErrorExpected = "map value",
-        Errors.unexpectedShapeErrorActual = (Core_.term mapTerm)})))
+        Errors.unexpectedShapeErrorActual = (ShowCore.term mapTerm)})))
 
 -- | Interpreter-friendly filterWithKey for Map terms.
 filterWithKey :: t0 -> t1 -> Core.Term -> Core.Term -> Either Errors.Error Core.Term
@@ -115,7 +115,7 @@ filterWithKey cx g pred mapTerm =
                 Core.applicationArgument = (Core.TermList [])}))) pairs))}))})))
       _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
         Errors.unexpectedShapeErrorExpected = "map value",
-        Errors.unexpectedShapeErrorActual = (Core_.term mapTerm)})))
+        Errors.unexpectedShapeErrorActual = (ShowCore.term mapTerm)})))
 
 -- | Interpreter-friendly findWithDefault for Map terms.
 findWithDefault :: t0 -> t1 -> Core.Term -> Core.Term -> Core.Term -> Either t2 Core.Term
@@ -144,7 +144,7 @@ map cx g valFun mapTerm =
             Core.applicationArgument = v})))) pairs))))
       _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
         Errors.unexpectedShapeErrorExpected = "map value",
-        Errors.unexpectedShapeErrorActual = (Core_.term mapTerm)})))
+        Errors.unexpectedShapeErrorActual = (ShowCore.term mapTerm)})))
 
 -- | Interpreter-friendly mapKeys for Map terms.
 mapKeys :: t0 -> t1 -> Core.Term -> Core.Term -> Either Errors.Error Core.Term
@@ -160,4 +160,4 @@ mapKeys cx g keyFun mapTerm =
             Core.applicationArgument = k}), v)) pairs))))
       _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
         Errors.unexpectedShapeErrorExpected = "map value",
-        Errors.unexpectedShapeErrorActual = (Core_.term mapTerm)})))
+        Errors.unexpectedShapeErrorActual = (ShowCore.term mapTerm)})))

@@ -10,46 +10,46 @@ import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
-import qualified Hydra.Pg.Model as Model
+import qualified Hydra.Pg.Model as PgModel
 import qualified Hydra.Pg.Rdf.Environment as Environment
 import qualified Hydra.Rdf.Syntax as Syntax
 import qualified Hydra.Rdf.Utils as Utils
-import qualified Hydra.Shacl.Model as Model_
+import qualified Hydra.Shacl.Model as ShaclModel
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 
 -- | Convert edge types into property shape constraints for a given vertex label
-edgeTypesToPropertyShapes :: t0 -> (Model.EdgeLabel -> Syntax.Iri) -> Model.VertexLabel -> [Model.EdgeType t1] -> [Model_.CommonConstraint]
+edgeTypesToPropertyShapes :: t0 -> (PgModel.EdgeLabel -> Syntax.Iri) -> PgModel.VertexLabel -> [PgModel.EdgeType t1] -> [ShaclModel.CommonConstraint]
 edgeTypesToPropertyShapes encodeVertexLabel encodeEdgeLabel vertexLabel edgeTypes =
     Lists.concat (Lists.map (\et ->
-      let outLabel = Model.edgeTypeOut et
-          matchesVertex = Equality.equal (Model.unVertexLabel outLabel) (Model.unVertexLabel vertexLabel)
+      let outLabel = PgModel.edgeTypeOut et
+          matchesVertex = Equality.equal (PgModel.unVertexLabel outLabel) (PgModel.unVertexLabel vertexLabel)
           edgeShape =
-                  Model_.CommonConstraintProperty (Sets.singleton (Model_.ReferenceAnonymous (Model_.PropertyShape {
-                    Model_.propertyShapeCommon = Model_.CommonProperties {
-                      Model_.commonPropertiesConstraints = (Sets.singleton (Model_.CommonConstraintClass (Sets.singleton (Syntax.RdfsClass ())))),
-                      Model_.commonPropertiesDeactivated = Nothing,
-                      Model_.commonPropertiesMessage = Utils.emptyLangStrings,
-                      Model_.commonPropertiesSeverity = Model_.SeverityViolation,
-                      Model_.commonPropertiesTargetClass = Sets.empty,
-                      Model_.commonPropertiesTargetNode = Sets.empty,
-                      Model_.commonPropertiesTargetObjectsOf = Sets.empty,
-                      Model_.commonPropertiesTargetSubjectsOf = Sets.empty},
-                    Model_.propertyShapeConstraints = Sets.empty,
-                    Model_.propertyShapeDefaultValue = Nothing,
-                    Model_.propertyShapeDescription = Utils.emptyLangStrings,
-                    Model_.propertyShapeName = Utils.emptyLangStrings,
-                    Model_.propertyShapeOrder = Nothing,
-                    Model_.propertyShapePath = (encodeEdgeLabel (Model.edgeTypeLabel et))})))
+                  ShaclModel.CommonConstraintProperty (Sets.singleton (ShaclModel.ReferenceAnonymous (ShaclModel.PropertyShape {
+                    ShaclModel.propertyShapeCommon = ShaclModel.CommonProperties {
+                      ShaclModel.commonPropertiesConstraints = (Sets.singleton (ShaclModel.CommonConstraintClass (Sets.singleton (Syntax.RdfsClass ())))),
+                      ShaclModel.commonPropertiesDeactivated = Nothing,
+                      ShaclModel.commonPropertiesMessage = Utils.emptyLangStrings,
+                      ShaclModel.commonPropertiesSeverity = ShaclModel.SeverityViolation,
+                      ShaclModel.commonPropertiesTargetClass = Sets.empty,
+                      ShaclModel.commonPropertiesTargetNode = Sets.empty,
+                      ShaclModel.commonPropertiesTargetObjectsOf = Sets.empty,
+                      ShaclModel.commonPropertiesTargetSubjectsOf = Sets.empty},
+                    ShaclModel.propertyShapeConstraints = Sets.empty,
+                    ShaclModel.propertyShapeDefaultValue = Nothing,
+                    ShaclModel.propertyShapeDescription = Utils.emptyLangStrings,
+                    ShaclModel.propertyShapeName = Utils.emptyLangStrings,
+                    ShaclModel.propertyShapeOrder = Nothing,
+                    ShaclModel.propertyShapePath = (encodeEdgeLabel (PgModel.edgeTypeLabel et))})))
       in (Logic.ifElse matchesVertex [
         edgeShape] [])) edgeTypes)
 
 -- | Encode a property graph edge as an RDF description
-encodeEdge :: Environment.PgRdfEnvironment t0 -> Model.Edge t0 -> Syntax.Description
+encodeEdge :: Environment.PgRdfEnvironment t0 -> PgModel.Edge t0 -> Syntax.Description
 encodeEdge env edge =
 
-      let elab = Model.edgeLabel edge
-          eout = Model.edgeOut edge
-          ein = Model.edgeIn edge
+      let elab = PgModel.edgeLabel edge
+          eout = PgModel.edgeOut edge
+          ein = PgModel.edgeIn edge
           subj = Syntax.ResourceIri (Environment.pgRdfEnvironmentEncodeVertexId env eout)
           obj = Syntax.NodeIri (Environment.pgRdfEnvironmentEncodeVertexId env ein)
           pred = Environment.pgRdfEnvironmentEncodeEdgeLabel env elab
@@ -61,11 +61,11 @@ encodeEdge env edge =
           Syntax.tripleObject = obj})))}
 
 -- | Encode a lazy property graph as an RDF graph
-encodeLazyGraph :: Environment.PgRdfEnvironment t0 -> Model.LazyGraph t0 -> Syntax.Graph
+encodeLazyGraph :: Environment.PgRdfEnvironment t0 -> PgModel.LazyGraph t0 -> Syntax.Graph
 encodeLazyGraph env lg =
 
-      let vertexDescs = Lists.map (encodeVertex env) (Model.lazyGraphVertices lg)
-          edgeDescs = Lists.map (encodeEdge env) (Model.lazyGraphEdges lg)
+      let vertexDescs = Lists.map (encodeVertex env) (PgModel.lazyGraphVertices lg)
+          edgeDescs = Lists.map (encodeEdge env) (PgModel.lazyGraphEdges lg)
           allDescs =
                   Lists.concat [
                     vertexDescs,
@@ -73,12 +73,12 @@ encodeLazyGraph env lg =
       in (Utils.descriptionsToGraph allDescs)
 
 -- | Encode a property graph vertex as an RDF description
-encodeVertex :: Environment.PgRdfEnvironment t0 -> Model.Vertex t0 -> Syntax.Description
+encodeVertex :: Environment.PgRdfEnvironment t0 -> PgModel.Vertex t0 -> Syntax.Description
 encodeVertex env vertex =
 
-      let vlab = Model.vertexLabel vertex
-          vid = Model.vertexId vertex
-          vprops = Model.vertexProperties vertex
+      let vlab = PgModel.vertexLabel vertex
+          vid = PgModel.vertexId vertex
+          vprops = PgModel.vertexProperties vertex
           subj = Syntax.ResourceIri (Environment.pgRdfEnvironmentEncodeVertexId env vid)
           rtype = Syntax.NodeIri (Environment.pgRdfEnvironmentEncodeVertexLabel env vlab)
           typeTriple =
@@ -102,95 +102,95 @@ encodeVertex env vertex =
         Syntax.descriptionGraph = (Syntax.Graph (Sets.fromList allTriples))}
 
 -- | Convert a property graph schema to a SHACL shapes graph
-graphSchemaToShapesGraph :: (t0 -> Syntax.Iri) -> (Model.VertexLabel -> Syntax.Iri) -> (Model.EdgeLabel -> Syntax.Iri) -> (Model.PropertyKey -> Syntax.Iri) -> Model.GraphSchema t0 -> Model_.ShapesGraph
+graphSchemaToShapesGraph :: (t0 -> Syntax.Iri) -> (PgModel.VertexLabel -> Syntax.Iri) -> (PgModel.EdgeLabel -> Syntax.Iri) -> (PgModel.PropertyKey -> Syntax.Iri) -> PgModel.GraphSchema t0 -> ShaclModel.ShapesGraph
 graphSchemaToShapesGraph encodeType encodeVertexLabel encodeEdgeLabel encodeKey schema =
 
-      let vertexTypes = Maps.elems (Model.graphSchemaVertices schema)
-          edgeTypes = Maps.elems (Model.graphSchemaEdges schema)
+      let vertexTypes = Maps.elems (PgModel.graphSchemaVertices schema)
+          edgeTypes = Maps.elems (PgModel.graphSchemaEdges schema)
           defs =
                   Lists.map (\vt ->
                     let baseDef = vertexTypeToNodeShape encodeType encodeVertexLabel encodeKey vt
-                        edgeShapes = edgeTypesToPropertyShapes encodeVertexLabel encodeEdgeLabel (Model.vertexTypeLabel vt) edgeTypes
-                        baseShape = Model_.definitionTarget baseDef
+                        edgeShapes = edgeTypesToPropertyShapes encodeVertexLabel encodeEdgeLabel (PgModel.vertexTypeLabel vt) edgeTypes
+                        baseShape = ShaclModel.definitionTarget baseDef
                         baseNode =
                                 case baseShape of
-                                  Model_.ShapeNode v0 -> v0
-                                  Model_.ShapeProperty _ -> Model_.NodeShape {
-                                    Model_.nodeShapeCommon = Model_.CommonProperties {
-                                      Model_.commonPropertiesConstraints = Sets.empty,
-                                      Model_.commonPropertiesDeactivated = Nothing,
-                                      Model_.commonPropertiesMessage = Utils.emptyLangStrings,
-                                      Model_.commonPropertiesSeverity = Model_.SeverityViolation,
-                                      Model_.commonPropertiesTargetClass = Sets.empty,
-                                      Model_.commonPropertiesTargetNode = Sets.empty,
-                                      Model_.commonPropertiesTargetObjectsOf = Sets.empty,
-                                      Model_.commonPropertiesTargetSubjectsOf = Sets.empty}}
-                        baseCommon = Model_.nodeShapeCommon baseNode
-                        mergedConstraints = Sets.union (Model_.commonPropertiesConstraints baseCommon) (Sets.fromList edgeShapes)
+                                  ShaclModel.ShapeNode v0 -> v0
+                                  ShaclModel.ShapeProperty _ -> ShaclModel.NodeShape {
+                                    ShaclModel.nodeShapeCommon = ShaclModel.CommonProperties {
+                                      ShaclModel.commonPropertiesConstraints = Sets.empty,
+                                      ShaclModel.commonPropertiesDeactivated = Nothing,
+                                      ShaclModel.commonPropertiesMessage = Utils.emptyLangStrings,
+                                      ShaclModel.commonPropertiesSeverity = ShaclModel.SeverityViolation,
+                                      ShaclModel.commonPropertiesTargetClass = Sets.empty,
+                                      ShaclModel.commonPropertiesTargetNode = Sets.empty,
+                                      ShaclModel.commonPropertiesTargetObjectsOf = Sets.empty,
+                                      ShaclModel.commonPropertiesTargetSubjectsOf = Sets.empty}}
+                        baseCommon = ShaclModel.nodeShapeCommon baseNode
+                        mergedConstraints = Sets.union (ShaclModel.commonPropertiesConstraints baseCommon) (Sets.fromList edgeShapes)
                         updatedCommon =
-                                Model_.CommonProperties {
-                                  Model_.commonPropertiesConstraints = mergedConstraints,
-                                  Model_.commonPropertiesDeactivated = (Model_.commonPropertiesDeactivated baseCommon),
-                                  Model_.commonPropertiesMessage = (Model_.commonPropertiesMessage baseCommon),
-                                  Model_.commonPropertiesSeverity = (Model_.commonPropertiesSeverity baseCommon),
-                                  Model_.commonPropertiesTargetClass = (Model_.commonPropertiesTargetClass baseCommon),
-                                  Model_.commonPropertiesTargetNode = (Model_.commonPropertiesTargetNode baseCommon),
-                                  Model_.commonPropertiesTargetObjectsOf = (Model_.commonPropertiesTargetObjectsOf baseCommon),
-                                  Model_.commonPropertiesTargetSubjectsOf = (Model_.commonPropertiesTargetSubjectsOf baseCommon)}
-                        updatedShape = Model_.ShapeNode (Model_.NodeShape {
-                              Model_.nodeShapeCommon = updatedCommon})
-                    in Model_.Definition {
-                      Model_.definitionIri = (Model_.definitionIri baseDef),
-                      Model_.definitionTarget = updatedShape}) vertexTypes
-      in (Model_.ShapesGraph (Sets.fromList defs))
+                                ShaclModel.CommonProperties {
+                                  ShaclModel.commonPropertiesConstraints = mergedConstraints,
+                                  ShaclModel.commonPropertiesDeactivated = (ShaclModel.commonPropertiesDeactivated baseCommon),
+                                  ShaclModel.commonPropertiesMessage = (ShaclModel.commonPropertiesMessage baseCommon),
+                                  ShaclModel.commonPropertiesSeverity = (ShaclModel.commonPropertiesSeverity baseCommon),
+                                  ShaclModel.commonPropertiesTargetClass = (ShaclModel.commonPropertiesTargetClass baseCommon),
+                                  ShaclModel.commonPropertiesTargetNode = (ShaclModel.commonPropertiesTargetNode baseCommon),
+                                  ShaclModel.commonPropertiesTargetObjectsOf = (ShaclModel.commonPropertiesTargetObjectsOf baseCommon),
+                                  ShaclModel.commonPropertiesTargetSubjectsOf = (ShaclModel.commonPropertiesTargetSubjectsOf baseCommon)}
+                        updatedShape = ShaclModel.ShapeNode (ShaclModel.NodeShape {
+                              ShaclModel.nodeShapeCommon = updatedCommon})
+                    in ShaclModel.Definition {
+                      ShaclModel.definitionIri = (ShaclModel.definitionIri baseDef),
+                      ShaclModel.definitionTarget = updatedShape}) vertexTypes
+      in (ShaclModel.ShapesGraph (Sets.fromList defs))
 
 -- | Convert a property type to a SHACL property shape
-propertyTypeToPropertyShape :: (t0 -> Syntax.Iri) -> (Model.PropertyKey -> Syntax.Iri) -> Model.PropertyType t0 -> Model_.PropertyShape
+propertyTypeToPropertyShape :: (t0 -> Syntax.Iri) -> (PgModel.PropertyKey -> Syntax.Iri) -> PgModel.PropertyType t0 -> ShaclModel.PropertyShape
 propertyTypeToPropertyShape encodeType encodeKey pt =
 
-      let key = Model.propertyTypeKey pt
+      let key = PgModel.propertyTypeKey pt
           path = encodeKey key
-          required_ = Model.propertyTypeRequired pt
-          dtIri = encodeType (Model.propertyTypeValue pt)
-          constraints = Sets.singleton (Model_.CommonConstraintDatatype dtIri)
-          propConstraints = Logic.ifElse required_ (Sets.singleton (Model_.PropertyShapeConstraintMinCount 1)) Sets.empty
-      in Model_.PropertyShape {
-        Model_.propertyShapeCommon = Model_.CommonProperties {
-          Model_.commonPropertiesConstraints = constraints,
-          Model_.commonPropertiesDeactivated = Nothing,
-          Model_.commonPropertiesMessage = Utils.emptyLangStrings,
-          Model_.commonPropertiesSeverity = Model_.SeverityViolation,
-          Model_.commonPropertiesTargetClass = Sets.empty,
-          Model_.commonPropertiesTargetNode = Sets.empty,
-          Model_.commonPropertiesTargetObjectsOf = Sets.empty,
-          Model_.commonPropertiesTargetSubjectsOf = Sets.empty},
-        Model_.propertyShapeConstraints = propConstraints,
-        Model_.propertyShapeDefaultValue = Nothing,
-        Model_.propertyShapeDescription = Utils.emptyLangStrings,
-        Model_.propertyShapeName = Utils.emptyLangStrings,
-        Model_.propertyShapeOrder = Nothing,
-        Model_.propertyShapePath = path}
+          required_ = PgModel.propertyTypeRequired pt
+          dtIri = encodeType (PgModel.propertyTypeValue pt)
+          constraints = Sets.singleton (ShaclModel.CommonConstraintDatatype dtIri)
+          propConstraints = Logic.ifElse required_ (Sets.singleton (ShaclModel.PropertyShapeConstraintMinCount 1)) Sets.empty
+      in ShaclModel.PropertyShape {
+        ShaclModel.propertyShapeCommon = ShaclModel.CommonProperties {
+          ShaclModel.commonPropertiesConstraints = constraints,
+          ShaclModel.commonPropertiesDeactivated = Nothing,
+          ShaclModel.commonPropertiesMessage = Utils.emptyLangStrings,
+          ShaclModel.commonPropertiesSeverity = ShaclModel.SeverityViolation,
+          ShaclModel.commonPropertiesTargetClass = Sets.empty,
+          ShaclModel.commonPropertiesTargetNode = Sets.empty,
+          ShaclModel.commonPropertiesTargetObjectsOf = Sets.empty,
+          ShaclModel.commonPropertiesTargetSubjectsOf = Sets.empty},
+        ShaclModel.propertyShapeConstraints = propConstraints,
+        ShaclModel.propertyShapeDefaultValue = Nothing,
+        ShaclModel.propertyShapeDescription = Utils.emptyLangStrings,
+        ShaclModel.propertyShapeName = Utils.emptyLangStrings,
+        ShaclModel.propertyShapeOrder = Nothing,
+        ShaclModel.propertyShapePath = path}
 
 -- | Convert a vertex type to a SHACL node shape definition
-vertexTypeToNodeShape :: (t0 -> Syntax.Iri) -> (Model.VertexLabel -> Syntax.Iri) -> (Model.PropertyKey -> Syntax.Iri) -> Model.VertexType t0 -> Model_.Definition Model_.Shape
+vertexTypeToNodeShape :: (t0 -> Syntax.Iri) -> (PgModel.VertexLabel -> Syntax.Iri) -> (PgModel.PropertyKey -> Syntax.Iri) -> PgModel.VertexType t0 -> ShaclModel.Definition ShaclModel.Shape
 vertexTypeToNodeShape encodeType encodeLabel encodeKey vt =
 
-      let label = Model.vertexTypeLabel vt
+      let label = PgModel.vertexTypeLabel vt
           labelIri = encodeLabel label
-          propTypes = Model.vertexTypeProperties vt
+          propTypes = PgModel.vertexTypeProperties vt
           propShapes =
-                  Lists.map (\pt -> Model_.CommonConstraintProperty (Sets.singleton (Model_.ReferenceAnonymous (propertyTypeToPropertyShape encodeType encodeKey pt)))) propTypes
+                  Lists.map (\pt -> ShaclModel.CommonConstraintProperty (Sets.singleton (ShaclModel.ReferenceAnonymous (propertyTypeToPropertyShape encodeType encodeKey pt)))) propTypes
           common =
-                  Model_.CommonProperties {
-                    Model_.commonPropertiesConstraints = (Sets.fromList propShapes),
-                    Model_.commonPropertiesDeactivated = Nothing,
-                    Model_.commonPropertiesMessage = Utils.emptyLangStrings,
-                    Model_.commonPropertiesSeverity = Model_.SeverityViolation,
-                    Model_.commonPropertiesTargetClass = (Sets.singleton (Syntax.RdfsClass ())),
-                    Model_.commonPropertiesTargetNode = Sets.empty,
-                    Model_.commonPropertiesTargetObjectsOf = Sets.empty,
-                    Model_.commonPropertiesTargetSubjectsOf = Sets.empty}
-      in Model_.Definition {
-        Model_.definitionIri = labelIri,
-        Model_.definitionTarget = (Model_.ShapeNode (Model_.NodeShape {
-          Model_.nodeShapeCommon = common}))}
+                  ShaclModel.CommonProperties {
+                    ShaclModel.commonPropertiesConstraints = (Sets.fromList propShapes),
+                    ShaclModel.commonPropertiesDeactivated = Nothing,
+                    ShaclModel.commonPropertiesMessage = Utils.emptyLangStrings,
+                    ShaclModel.commonPropertiesSeverity = ShaclModel.SeverityViolation,
+                    ShaclModel.commonPropertiesTargetClass = (Sets.singleton (Syntax.RdfsClass ())),
+                    ShaclModel.commonPropertiesTargetNode = Sets.empty,
+                    ShaclModel.commonPropertiesTargetObjectsOf = Sets.empty,
+                    ShaclModel.commonPropertiesTargetSubjectsOf = Sets.empty}
+      in ShaclModel.Definition {
+        ShaclModel.definitionIri = labelIri,
+        ShaclModel.definitionTarget = (ShaclModel.ShapeNode (ShaclModel.NodeShape {
+          ShaclModel.nodeShapeCommon = common}))}

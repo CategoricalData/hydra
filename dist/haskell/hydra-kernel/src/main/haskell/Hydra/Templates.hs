@@ -5,7 +5,7 @@
 module Hydra.Templates where
 
 import qualified Hydra.Core as Core
-import qualified Hydra.Decode.Core as Core_
+import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lib.Eithers as Eithers
@@ -24,7 +24,7 @@ graphToSchema cx graph els =
       let toPair =
               \el ->
                 let name = Core.bindingName el
-                in (Eithers.bind (Core_.type_ graph (Core.bindingTerm el)) (\t -> Right (name, t)))
+                in (Eithers.bind (DecodeCore.type_ graph (Core.bindingTerm el)) (\t -> Right (name, t)))
       in (Eithers.bind (Eithers.mapList toPair els) (\pairs -> Right (Maps.fromList pairs)))
 
 -- | Given a graph schema and a nonrecursive type, instantiate it with default values. If the minimal flag is set, the smallest possible term is produced; otherwise, exactly one subterm is produced for constructors which do not otherwise require one, e.g. in lists and optionals. The name parameter provides the element name for nominal type construction.

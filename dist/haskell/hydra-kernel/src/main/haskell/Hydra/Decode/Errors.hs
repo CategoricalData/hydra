@@ -5,12 +5,12 @@
 module Hydra.Decode.Errors where
 
 import qualified Hydra.Core as Core
-import qualified Hydra.Decode.Core as Core_
+import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Decode.Error.Checking as Checking
-import qualified Hydra.Decode.Error.Core as Core__
+import qualified Hydra.Decode.Error.Core as ErrorCore
 import qualified Hydra.Decode.Paths as Paths
 import qualified Hydra.Errors as Errors
-import qualified Hydra.Extract.Core as Core___
+import qualified Hydra.Extract.Core as ExtractCore
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lib.Eithers as Eithers
 import qualified Hydra.Lib.Maps as Maps
@@ -25,11 +25,11 @@ decodingError cx raw =
         Core.TermLiteral v1 -> case v1 of
           Core.LiteralString v2 -> Right v2
           _ -> Left (Errors.DecodingError "expected string literal")
-        _ -> Left (Errors.DecodingError "expected literal")) (Core___.stripWithDecodingError cx raw2)) (Core.wrappedTermBody v0))
-      _ -> Left (Errors.DecodingError "expected wrapped type")) (Core___.stripWithDecodingError cx raw)
+        _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx raw2)) (Core.wrappedTermBody v0))
+      _ -> Left (Errors.DecodingError "expected wrapped type")) (ExtractCore.stripWithDecodingError cx raw)
 
 emptyListError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError ()
-emptyListError cx t = Core___.decodeUnit cx t
+emptyListError cx t = ExtractCore.decodeUnit cx t
 
 error :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Errors.Error
 error cx raw =
@@ -42,23 +42,23 @@ error cx raw =
                     Maps.fromList [
                       (Core.Name "checking", (\input -> Eithers.map (\t -> Errors.ErrorChecking t) (Checking.checkingError cx input))),
                       (Core.Name "decoding", (\input -> Eithers.map (\t -> Errors.ErrorDecoding t) (decodingError cx input))),
-                      (Core.Name "duplicateBinding", (\input -> Eithers.map (\t -> Errors.ErrorDuplicateBinding t) (Core__.duplicateBindingError cx input))),
-                      (Core.Name "duplicateField", (\input -> Eithers.map (\t -> Errors.ErrorDuplicateField t) (Core__.duplicateFieldError cx input))),
+                      (Core.Name "duplicateBinding", (\input -> Eithers.map (\t -> Errors.ErrorDuplicateBinding t) (ErrorCore.duplicateBindingError cx input))),
+                      (Core.Name "duplicateField", (\input -> Eithers.map (\t -> Errors.ErrorDuplicateField t) (ErrorCore.duplicateFieldError cx input))),
                       (Core.Name "extraction", (\input -> Eithers.map (\t -> Errors.ErrorExtraction t) (extractionError cx input))),
                       (Core.Name "inference", (\input -> Eithers.map (\t -> Errors.ErrorInference t) (inferenceError cx input))),
                       (Core.Name "other", (\input -> Eithers.map (\t -> Errors.ErrorOther t) (otherError cx input))),
                       (Core.Name "resolution", (\input -> Eithers.map (\t -> Errors.ErrorResolution t) (resolutionError cx input))),
-                      (Core.Name "undefinedField", (\input -> Eithers.map (\t -> Errors.ErrorUndefinedField t) (Core__.undefinedFieldError cx input))),
-                      (Core.Name "undefinedTermVariable", (\input -> Eithers.map (\t -> Errors.ErrorUndefinedTermVariable t) (Core__.undefinedTermVariableError cx input))),
-                      (Core.Name "untypedTermVariable", (\input -> Eithers.map (\t -> Errors.ErrorUntypedTermVariable t) (Core__.untypedTermVariableError cx input))),
-                      (Core.Name "unexpectedTermVariant", (\input -> Eithers.map (\t -> Errors.ErrorUnexpectedTermVariant t) (Core__.unexpectedTermVariantError cx input))),
-                      (Core.Name "unexpectedTypeVariant", (\input -> Eithers.map (\t -> Errors.ErrorUnexpectedTypeVariant t) (Core__.unexpectedTypeVariantError cx input))),
+                      (Core.Name "undefinedField", (\input -> Eithers.map (\t -> Errors.ErrorUndefinedField t) (ErrorCore.undefinedFieldError cx input))),
+                      (Core.Name "undefinedTermVariable", (\input -> Eithers.map (\t -> Errors.ErrorUndefinedTermVariable t) (ErrorCore.undefinedTermVariableError cx input))),
+                      (Core.Name "untypedTermVariable", (\input -> Eithers.map (\t -> Errors.ErrorUntypedTermVariable t) (ErrorCore.untypedTermVariableError cx input))),
+                      (Core.Name "unexpectedTermVariant", (\input -> Eithers.map (\t -> Errors.ErrorUnexpectedTermVariant t) (ErrorCore.unexpectedTermVariantError cx input))),
+                      (Core.Name "unexpectedTypeVariant", (\input -> Eithers.map (\t -> Errors.ErrorUnexpectedTypeVariant t) (ErrorCore.unexpectedTypeVariantError cx input))),
                       (Core.Name "unification", (\input -> Eithers.map (\t -> Errors.ErrorUnification t) (unificationError cx input)))]
         in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),
           " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
-      _ -> Left (Errors.DecodingError "expected union")) (Core___.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
 
 extractionError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Errors.ExtractionError
 extractionError cx raw =
@@ -80,7 +80,7 @@ extractionError cx raw =
           "no such field ",
           (Core.unName fname),
           " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
-      _ -> Left (Errors.DecodingError "expected union")) (Core___.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
 
 inferenceError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Errors.InferenceError
 inferenceError cx raw =
@@ -98,55 +98,55 @@ inferenceError cx raw =
           "no such field ",
           (Core.unName fname),
           " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
-      _ -> Left (Errors.DecodingError "expected union")) (Core___.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
 
 multipleBindingsError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Errors.MultipleBindingsError
 multipleBindingsError cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
-        let fieldMap = Core___.toFieldMap v0
-        in (Eithers.bind (Core___.requireField "name" Core_.name fieldMap cx) (\field_name -> Right (Errors.MultipleBindingsError {
+        let fieldMap = ExtractCore.toFieldMap v0
+        in (Eithers.bind (ExtractCore.requireField "name" DecodeCore.name fieldMap cx) (\field_name -> Right (Errors.MultipleBindingsError {
           Errors.multipleBindingsErrorName = field_name})))
-      _ -> Left (Errors.DecodingError "expected record")) (Core___.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
 
 multipleFieldsError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Errors.MultipleFieldsError
 multipleFieldsError cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
-        let fieldMap = Core___.toFieldMap v0
-        in (Eithers.bind (Core___.requireField "fieldName" Core_.name fieldMap cx) (\field_fieldName -> Right (Errors.MultipleFieldsError {
+        let fieldMap = ExtractCore.toFieldMap v0
+        in (Eithers.bind (ExtractCore.requireField "fieldName" DecodeCore.name fieldMap cx) (\field_fieldName -> Right (Errors.MultipleFieldsError {
           Errors.multipleFieldsErrorFieldName = field_fieldName})))
-      _ -> Left (Errors.DecodingError "expected record")) (Core___.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
 
 noMatchingFieldError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Errors.NoMatchingFieldError
 noMatchingFieldError cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
-        let fieldMap = Core___.toFieldMap v0
-        in (Eithers.bind (Core___.requireField "fieldName" Core_.name fieldMap cx) (\field_fieldName -> Right (Errors.NoMatchingFieldError {
+        let fieldMap = ExtractCore.toFieldMap v0
+        in (Eithers.bind (ExtractCore.requireField "fieldName" DecodeCore.name fieldMap cx) (\field_fieldName -> Right (Errors.NoMatchingFieldError {
           Errors.noMatchingFieldErrorFieldName = field_fieldName})))
-      _ -> Left (Errors.DecodingError "expected record")) (Core___.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
 
 noSuchBindingError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Errors.NoSuchBindingError
 noSuchBindingError cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
-        let fieldMap = Core___.toFieldMap v0
-        in (Eithers.bind (Core___.requireField "name" Core_.name fieldMap cx) (\field_name -> Right (Errors.NoSuchBindingError {
+        let fieldMap = ExtractCore.toFieldMap v0
+        in (Eithers.bind (ExtractCore.requireField "name" DecodeCore.name fieldMap cx) (\field_name -> Right (Errors.NoSuchBindingError {
           Errors.noSuchBindingErrorName = field_name})))
-      _ -> Left (Errors.DecodingError "expected record")) (Core___.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
 
 noSuchPrimitiveError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Errors.NoSuchPrimitiveError
 noSuchPrimitiveError cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
-        let fieldMap = Core___.toFieldMap v0
-        in (Eithers.bind (Core___.requireField "name" Core_.name fieldMap cx) (\field_name -> Right (Errors.NoSuchPrimitiveError {
+        let fieldMap = ExtractCore.toFieldMap v0
+        in (Eithers.bind (ExtractCore.requireField "name" DecodeCore.name fieldMap cx) (\field_name -> Right (Errors.NoSuchPrimitiveError {
           Errors.noSuchPrimitiveErrorName = field_name})))
-      _ -> Left (Errors.DecodingError "expected record")) (Core___.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
 
 notEnoughCasesError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError ()
-notEnoughCasesError cx t = Core___.decodeUnit cx t
+notEnoughCasesError cx t = ExtractCore.decodeUnit cx t
 
 otherError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Errors.OtherError
 otherError cx raw =
@@ -155,22 +155,22 @@ otherError cx raw =
         Core.TermLiteral v1 -> case v1 of
           Core.LiteralString v2 -> Right v2
           _ -> Left (Errors.DecodingError "expected string literal")
-        _ -> Left (Errors.DecodingError "expected literal")) (Core___.stripWithDecodingError cx raw2)) (Core.wrappedTermBody v0))
-      _ -> Left (Errors.DecodingError "expected wrapped type")) (Core___.stripWithDecodingError cx raw)
+        _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx raw2)) (Core.wrappedTermBody v0))
+      _ -> Left (Errors.DecodingError "expected wrapped type")) (ExtractCore.stripWithDecodingError cx raw)
 
 otherInferenceError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Errors.OtherInferenceError
 otherInferenceError cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
-        let fieldMap = Core___.toFieldMap v0
-        in (Eithers.bind (Core___.requireField "path" Paths.subtermPath fieldMap cx) (\field_path -> Eithers.bind (Core___.requireField "message" (\cx2 -> \raw2 -> Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
+        let fieldMap = ExtractCore.toFieldMap v0
+        in (Eithers.bind (ExtractCore.requireField "path" Paths.subtermPath fieldMap cx) (\field_path -> Eithers.bind (ExtractCore.requireField "message" (\cx2 -> \raw2 -> Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
           Core.TermLiteral v1 -> case v1 of
             Core.LiteralString v2 -> Right v2
             _ -> Left (Errors.DecodingError "expected string literal")
-          _ -> Left (Errors.DecodingError "expected literal")) (Core___.stripWithDecodingError cx2 raw2)) fieldMap cx) (\field_message -> Right (Errors.OtherInferenceError {
+          _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx2 raw2)) fieldMap cx) (\field_message -> Right (Errors.OtherInferenceError {
           Errors.otherInferenceErrorPath = field_path,
           Errors.otherInferenceErrorMessage = field_message}))))
-      _ -> Left (Errors.DecodingError "expected record")) (Core___.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
 
 otherResolutionError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Errors.OtherResolutionError
 otherResolutionError cx raw =
@@ -179,8 +179,8 @@ otherResolutionError cx raw =
         Core.TermLiteral v1 -> case v1 of
           Core.LiteralString v2 -> Right v2
           _ -> Left (Errors.DecodingError "expected string literal")
-        _ -> Left (Errors.DecodingError "expected literal")) (Core___.stripWithDecodingError cx raw2)) (Core.wrappedTermBody v0))
-      _ -> Left (Errors.DecodingError "expected wrapped type")) (Core___.stripWithDecodingError cx raw)
+        _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx raw2)) (Core.wrappedTermBody v0))
+      _ -> Left (Errors.DecodingError "expected wrapped type")) (ExtractCore.stripWithDecodingError cx raw)
 
 resolutionError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Errors.ResolutionError
 resolutionError cx raw =
@@ -200,47 +200,47 @@ resolutionError cx raw =
           "no such field ",
           (Core.unName fname),
           " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
-      _ -> Left (Errors.DecodingError "expected union")) (Core___.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
 
 unexpectedShapeError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Errors.UnexpectedShapeError
 unexpectedShapeError cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
-        let fieldMap = Core___.toFieldMap v0
-        in (Eithers.bind (Core___.requireField "expected" (\cx2 -> \raw2 -> Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
+        let fieldMap = ExtractCore.toFieldMap v0
+        in (Eithers.bind (ExtractCore.requireField "expected" (\cx2 -> \raw2 -> Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
           Core.TermLiteral v1 -> case v1 of
             Core.LiteralString v2 -> Right v2
             _ -> Left (Errors.DecodingError "expected string literal")
-          _ -> Left (Errors.DecodingError "expected literal")) (Core___.stripWithDecodingError cx2 raw2)) fieldMap cx) (\field_expected -> Eithers.bind (Core___.requireField "actual" (\cx2 -> \raw2 -> Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
+          _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx2 raw2)) fieldMap cx) (\field_expected -> Eithers.bind (ExtractCore.requireField "actual" (\cx2 -> \raw2 -> Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
           Core.TermLiteral v1 -> case v1 of
             Core.LiteralString v2 -> Right v2
             _ -> Left (Errors.DecodingError "expected string literal")
-          _ -> Left (Errors.DecodingError "expected literal")) (Core___.stripWithDecodingError cx2 raw2)) fieldMap cx) (\field_actual -> Right (Errors.UnexpectedShapeError {
+          _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx2 raw2)) fieldMap cx) (\field_actual -> Right (Errors.UnexpectedShapeError {
           Errors.unexpectedShapeErrorExpected = field_expected,
           Errors.unexpectedShapeErrorActual = field_actual}))))
-      _ -> Left (Errors.DecodingError "expected record")) (Core___.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
 
 unificationError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Errors.UnificationError
 unificationError cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
-        let fieldMap = Core___.toFieldMap v0
-        in (Eithers.bind (Core___.requireField "leftType" Core_.type_ fieldMap cx) (\field_leftType -> Eithers.bind (Core___.requireField "rightType" Core_.type_ fieldMap cx) (\field_rightType -> Eithers.bind (Core___.requireField "message" (\cx2 -> \raw2 -> Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
+        let fieldMap = ExtractCore.toFieldMap v0
+        in (Eithers.bind (ExtractCore.requireField "leftType" DecodeCore.type_ fieldMap cx) (\field_leftType -> Eithers.bind (ExtractCore.requireField "rightType" DecodeCore.type_ fieldMap cx) (\field_rightType -> Eithers.bind (ExtractCore.requireField "message" (\cx2 -> \raw2 -> Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
           Core.TermLiteral v1 -> case v1 of
             Core.LiteralString v2 -> Right v2
             _ -> Left (Errors.DecodingError "expected string literal")
-          _ -> Left (Errors.DecodingError "expected literal")) (Core___.stripWithDecodingError cx2 raw2)) fieldMap cx) (\field_message -> Right (Errors.UnificationError {
+          _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx2 raw2)) fieldMap cx) (\field_message -> Right (Errors.UnificationError {
           Errors.unificationErrorLeftType = field_leftType,
           Errors.unificationErrorRightType = field_rightType,
           Errors.unificationErrorMessage = field_message})))))
-      _ -> Left (Errors.DecodingError "expected record")) (Core___.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
 
 unificationInferenceError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Errors.UnificationInferenceError
 unificationInferenceError cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
-        let fieldMap = Core___.toFieldMap v0
-        in (Eithers.bind (Core___.requireField "path" Paths.subtermPath fieldMap cx) (\field_path -> Eithers.bind (Core___.requireField "cause" unificationError fieldMap cx) (\field_cause -> Right (Errors.UnificationInferenceError {
+        let fieldMap = ExtractCore.toFieldMap v0
+        in (Eithers.bind (ExtractCore.requireField "path" Paths.subtermPath fieldMap cx) (\field_path -> Eithers.bind (ExtractCore.requireField "cause" unificationError fieldMap cx) (\field_cause -> Right (Errors.UnificationInferenceError {
           Errors.unificationInferenceErrorPath = field_path,
           Errors.unificationInferenceErrorCause = field_cause}))))
-      _ -> Left (Errors.DecodingError "expected record")) (Core___.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)

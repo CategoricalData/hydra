@@ -19,7 +19,7 @@ import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
-import qualified Hydra.Show.Core as Core_
+import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Strip as Strip
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Map as M
@@ -182,7 +182,7 @@ matchRecord graph decode term =
         Core.TermRecord v0 -> decode (Maps.fromList (Lists.map (\field -> (Core.fieldName field, (Core.fieldTerm field))) (Core.recordFields v0)))
         _ -> Left (Errors.ErrorResolution (Errors.ResolutionErrorUnexpectedShape (Errors.UnexpectedShapeError {
           Errors.unexpectedShapeErrorExpected = "record",
-          Errors.unexpectedShapeErrorActual = (Core_.term term)})))
+          Errors.unexpectedShapeErrorActual = (ShowCore.term term)})))
 
 matchUnion :: Graph.Graph -> Core.Name -> [(Core.Name, (Core.Term -> Either Errors.Error t0))] -> Core.Term -> Either Errors.Error t0
 matchUnion graph tname pairs term =
@@ -200,10 +200,10 @@ matchUnion graph tname pairs term =
                       Errors.noMatchingFieldErrorFieldName = fname})))) (\f -> f val) (Maps.lookup fname mapping))
           in (Logic.ifElse (Equality.equal (Core.unName (Core.injectionTypeName v0)) (Core.unName tname)) exp (Left (Errors.ErrorResolution (Errors.ResolutionErrorUnexpectedShape (Errors.UnexpectedShapeError {
             Errors.unexpectedShapeErrorExpected = (Strings.cat2 "injection for type " (Core.unName tname)),
-            Errors.unexpectedShapeErrorActual = (Core_.term term)})))))
+            Errors.unexpectedShapeErrorActual = (ShowCore.term term)})))))
         _ -> Left (Errors.ErrorResolution (Errors.ResolutionErrorUnexpectedShape (Errors.UnexpectedShapeError {
           Errors.unexpectedShapeErrorExpected = (Strings.cat2 "injection for type " (Core.unName tname)),
-          Errors.unexpectedShapeErrorActual = (Core_.term stripped)})))
+          Errors.unexpectedShapeErrorActual = (ShowCore.term stripped)})))
 
 matchUnitField :: t0 -> t1 -> (t0, (t2 -> Either t3 t1))
 matchUnitField fname x = (fname, (\ignored -> Right x))

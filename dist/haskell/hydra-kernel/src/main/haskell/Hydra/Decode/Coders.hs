@@ -7,7 +7,7 @@ module Hydra.Decode.Coders where
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
 import qualified Hydra.Errors as Errors
-import qualified Hydra.Extract.Core as Core_
+import qualified Hydra.Extract.Core as ExtractCore
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lib.Eithers as Eithers
 import qualified Hydra.Lib.Maps as Maps
@@ -24,13 +24,13 @@ coderDirection cx raw =
             fterm = Core.fieldTerm field
             variantMap =
                     Maps.fromList [
-                      (Core.Name "encode", (\input -> Eithers.map (\t -> Coders.CoderDirectionEncode) (Core_.decodeUnit cx input))),
-                      (Core.Name "decode", (\input -> Eithers.map (\t -> Coders.CoderDirectionDecode) (Core_.decodeUnit cx input)))]
+                      (Core.Name "encode", (\input -> Eithers.map (\t -> Coders.CoderDirectionEncode) (ExtractCore.decodeUnit cx input))),
+                      (Core.Name "decode", (\input -> Eithers.map (\t -> Coders.CoderDirectionDecode) (ExtractCore.decodeUnit cx input)))]
         in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),
           " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
-      _ -> Left (Errors.DecodingError "expected union")) (Core_.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
 
 languageName :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Coders.LanguageName
 languageName cx raw =
@@ -39,8 +39,8 @@ languageName cx raw =
         Core.TermLiteral v1 -> case v1 of
           Core.LiteralString v2 -> Right v2
           _ -> Left (Errors.DecodingError "expected string literal")
-        _ -> Left (Errors.DecodingError "expected literal")) (Core_.stripWithDecodingError cx raw2)) (Core.wrappedTermBody v0))
-      _ -> Left (Errors.DecodingError "expected wrapped type")) (Core_.stripWithDecodingError cx raw)
+        _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx raw2)) (Core.wrappedTermBody v0))
+      _ -> Left (Errors.DecodingError "expected wrapped type")) (ExtractCore.stripWithDecodingError cx raw)
 
 traversalOrder :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Coders.TraversalOrder
 traversalOrder cx raw =
@@ -51,10 +51,10 @@ traversalOrder cx raw =
             fterm = Core.fieldTerm field
             variantMap =
                     Maps.fromList [
-                      (Core.Name "pre", (\input -> Eithers.map (\t -> Coders.TraversalOrderPre) (Core_.decodeUnit cx input))),
-                      (Core.Name "post", (\input -> Eithers.map (\t -> Coders.TraversalOrderPost) (Core_.decodeUnit cx input)))]
+                      (Core.Name "pre", (\input -> Eithers.map (\t -> Coders.TraversalOrderPre) (ExtractCore.decodeUnit cx input))),
+                      (Core.Name "post", (\input -> Eithers.map (\t -> Coders.TraversalOrderPost) (ExtractCore.decodeUnit cx input)))]
         in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),
           " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
-      _ -> Left (Errors.DecodingError "expected union")) (Core_.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)

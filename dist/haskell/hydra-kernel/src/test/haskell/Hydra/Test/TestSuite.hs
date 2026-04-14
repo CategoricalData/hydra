@@ -5,13 +5,13 @@
 module Hydra.Test.TestSuite where
 
 import qualified Hydra.Test.Annotations as Annotations
-import qualified Hydra.Test.Checking.All as All
+import qualified Hydra.Test.Checking.All as CheckingAll
 import qualified Hydra.Test.Dependencies as Dependencies
 import qualified Hydra.Test.Differentiation as Differentiation
 import qualified Hydra.Test.EtaExpansion as EtaExpansion
 import qualified Hydra.Test.Formatting as Formatting
-import qualified Hydra.Test.Hoisting.All as All_
-import qualified Hydra.Test.Inference.All as All__
+import qualified Hydra.Test.Hoisting.All as HoistingAll
+import qualified Hydra.Test.Inference.All as InferenceAll
 import qualified Hydra.Test.Json.Roundtrip as Roundtrip
 import qualified Hydra.Test.Json.Writer as Writer
 import qualified Hydra.Test.Lib.Chars as Chars
@@ -34,7 +34,7 @@ import qualified Hydra.Test.Sorting as Sorting
 import qualified Hydra.Test.Strip as Strip
 import qualified Hydra.Test.Substitution as Substitution
 import qualified Hydra.Test.Unification as Unification
-import qualified Hydra.Test.Validate.All as All___
+import qualified Hydra.Test.Validate.All as ValidateAll
 import qualified Hydra.Test.Variables as Variables
 import qualified Hydra.Testing as Testing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
@@ -60,13 +60,13 @@ allTests =
         Sets.allTests,
         Strings.allTests,
         Annotations.allTests,
-        All.allTests,
+        CheckingAll.allTests,
         Dependencies.allTests,
         Differentiation.allTests,
         EtaExpansion.allTests,
         Formatting.allTests,
-        All_.allTests,
-        All__.allTests,
+        HoistingAll.allTests,
+        InferenceAll.allTests,
         Roundtrip.allTests,
         Writer.allTests,
         Reduction.allTests,
@@ -76,6 +76,6 @@ allTests =
         Strip.allTests,
         Substitution.allTests,
         Unification.allTests,
-        All___.allTests,
+        ValidateAll.allTests,
         Variables.allTests],
       Testing.testGroupCases = []}

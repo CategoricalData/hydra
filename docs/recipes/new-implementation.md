@@ -189,7 +189,7 @@ Currently, the Hydra kernel and also the language coders are written in Haskell.
 - [Python coder](https://github.com/CategoricalData/hydra/blob/main/dist/haskell/hydra-ext/src/main/haskell/Hydra/Python/Coder.hs) - Dynamic typing
 
 Note that there are also many coders for [other
-languages](https://github.com/CategoricalData/hydra/tree/main/dist/haskell/hydra-ext/src/main/haskell/Hydra/Ext)
+languages](https://github.com/CategoricalData/hydra/tree/main/dist/haskell/hydra-ext/src/main/haskell/Hydra)
 in which we do not have full Hydra implementations (Avro, Protobuf, GraphQL, etc.).
 
 ### Purpose
